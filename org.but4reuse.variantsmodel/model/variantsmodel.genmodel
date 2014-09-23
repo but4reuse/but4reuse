@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.but4reuse.variantsmodel/src" modelPluginID="org.but4reuse.variantsmodel"
+    modelName="Variantsmodel" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>variantsmodel.ecore</foreignModel>
+  <genPackages prefix="VariantsModel" basePackage="org.but4reuse" disposableProviderFactory="true"
+      multipleEditorPages="false" ecorePackage="variantsmodel.ecore#/">
+    <genClasses ecoreClass="variantsmodel.ecore#//VariantsModel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//VariantsModel/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//VariantsModel/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference variantsmodel.ecore#//VariantsModel/ownedVariants"/>
+    </genClasses>
+    <genClasses ecoreClass="variantsmodel.ecore#//Variant">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//Variant/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//Variant/variantURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//Variant/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//Variant/active"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute variantsmodel.ecore#//Variant/features"/>
+    </genClasses>
+    <genClasses ecoreClass="variantsmodel.ecore#//ComposedVariant">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference variantsmodel.ecore#//ComposedVariant/ownedVariants"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

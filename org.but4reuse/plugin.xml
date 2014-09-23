@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.but4reuse.newWizards.category"
+            name="BUT4Reuse">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.but4reuse.views.category"
+            name="BUT4Reuse">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="org.but4reuse.perspectives.But4ReusePerspective"
+            icon="icons/but4reuse.png"
+            id="org.but4reuse.perspective"
+            name="BUT4Reuse">
+      </perspective>
+   </extension>
+
+</plugin>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated variantsmodel -->
+      <wizard
+            id="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizardID"
+            name="%_UI_VariantsModelModelWizard_label"
+            class="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizard"
+            category="org.but4reuse.newWizards.category"
+            icon="icons/full/obj16/VariantsModelModelFile.gif">
+         <description>%_UI_VariantsModelModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated variantsmodel -->
+      <editor
+            id="org.but4reuse.variantsmodel.presentation.VariantsModelEditorID"
+            name="%_UI_VariantsModelEditor_label"
+            icon="icons/full/obj16/VariantsModelModelFile.gif"
+            extensions="variantsmodel"
+            class="org.but4reuse.variantsmodel.presentation.VariantsModelEditor"
+            contributorClass="org.but4reuse.variantsmodel.presentation.VariantsModelActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

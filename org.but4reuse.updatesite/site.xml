@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.but4reuse.feature_1.0.0.201409231224.jar" id="org.but4reuse.feature" version="1.0.0.201409231224">
+      <category name="BUT4Reuse"/>
+   </feature>
+   <category-def name="BUT4Reuse" label="BUT4Reuse"/>
+</site>
