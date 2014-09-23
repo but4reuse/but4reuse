@@ -1,4 +1,3 @@
-but4reuse
+BUT4Reuse
 =========
-
-Bottom Up Technologies for Reuse
+Bottom-Up Technologies for Reuse
