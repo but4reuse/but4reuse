@@ -35,7 +35,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 
 		IFolderLayout bottom = factory.createFolder("bottomRight", // NON-NLS-1
 				IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
-		//bottom.addView("org.but4reuse.input.drop.view"); // NON-NLS-1
+		bottom.addView("org.but4reuse.input.inputdropview"); // NON-NLS-1
 		//bottom.addView("org.eclipse.contribution.visualiser.views.Menu");
 		//bottom.addView("org.eclipse.contribution.visualiser.views.Visualiser");
 		bottom.addView("org.eclipse.ui.views.PropertySheet");
