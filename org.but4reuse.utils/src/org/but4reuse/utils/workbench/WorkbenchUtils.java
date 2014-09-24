@@ -26,6 +26,11 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class WorkbenchUtils {
 
+	/**
+	 * Get active editor of a given id
+	 * @param editorId
+	 * @return the editor or null if not found
+	 */
 	public static IEditorPart getActiveEditorOfAGivenId(String editorId) {
 		IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getEditorReferences();
@@ -42,6 +47,11 @@ public class WorkbenchUtils {
 		return null;
 	}
 	
+	/**
+	 * Try to force to show a view
+	 * @param viewId
+	 * @return
+	 */
 	public static IViewPart forceShowView(String viewId){
 		try {
 			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
@@ -50,6 +60,9 @@ public class WorkbenchUtils {
 		}
 	}
 	
+	/**
+	 * Refresh all workspace
+	 */
 	public static void refreshAllWorkspace(){
 		try {
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
@@ -58,6 +71,10 @@ public class WorkbenchUtils {
 		}
 	}
 	
+	/**
+	 * Open a file in its default editor
+	 * @param file
+	 */
 	public static void openInEditor(IFile file){
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
@@ -68,6 +85,11 @@ public class WorkbenchUtils {
 		}
 	}
 	
+	/**
+	 * try to get the ifile from a file that is supposed to be in the workspace
+	 * @param ifile
+	 * @return
+	 */
 	public static IFile getIFileFromFile(File file){
 		IWorkspace workspace= ResourcesPlugin.getWorkspace();    
 		IPath location= Path.fromOSString(file.getAbsolutePath()); 

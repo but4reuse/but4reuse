@@ -1,6 +1,8 @@
 package org.but4reuse.utils.files;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
@@ -18,7 +20,12 @@ import org.osgi.framework.Bundle;
  * @author jabier.martinez
  */
 public class FileUtils {
-
+	
+	/**
+	 * Try to return the expected icon for a file name
+	 * @param fileName
+	 * @return
+	 */
 	public static ImageDescriptor getIconFromFileName(String fileName){
 		if(fileName!=null && fileName.contains(".")) {
 			String extension = fileName.substring(fileName.lastIndexOf("."));
@@ -28,7 +35,7 @@ public class FileUtils {
 	}
 	
 	/**
-	 * 
+	 * Get an image from a plugin
 	 * @param pluginID
 	 * @param imagePath for example "/icons/myIcon.gif"
 	 * @return an imageDescriptor
@@ -40,7 +47,11 @@ public class FileUtils {
 		return ImageDescriptor.createFromURL(imageFileUrl);
 	}
 	
-
+	/**
+	 * Try to return a file related to a uri
+	 * @param uri
+	 * @return
+	 */
 	public static File getFile(URI uri) {
 		File file = null;
 		if (uri.getScheme().equals("file")) {
@@ -53,6 +64,11 @@ public class FileUtils {
 		return file;
 	}
 
+	/**
+	 * Create file if it does not exist
+	 * @param file
+	 * @throws IOException
+	 */
 	public static void createFile(File file) throws IOException {
 		if (!file.exists()) {
 			if (!file.getParentFile().exists()) {
@@ -60,6 +76,20 @@ public class FileUtils {
 			}
 			file.createNewFile();
 		}
+	}
+	
+	/**
+	 * Append line to file
+	 * @param file
+	 * @param text
+	 * @throws Exception
+	 */
+	public static void appendToFile(File file, String text) throws Exception {
+		BufferedWriter output;
+		output = new BufferedWriter(new FileWriter(file, true));
+		output.append(text);
+		output.newLine();
+		output.close();
 	}
 	
 }

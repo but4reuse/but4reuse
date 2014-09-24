@@ -7,8 +7,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * CSV Utils
+ * @author jabier.martinez
+ */
 public class CSVUtils {
-
+	
+	/**
+	 * export a matrix to a comma separated value (csv) file
+	 * @param uri
+	 * @param a matrix (line, columns) of objects
+	 */
 	public static void exportCSV(URI uri, List<List<?>> texts){
 		// Create csv file
 		String csvText = "";
