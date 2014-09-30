@@ -138,6 +138,14 @@ public class VariantsModelModelWizard extends Wizard implements INewWizard {
 	 * This is the initial object creation page.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VariantsModelModelWizardInitialObjectCreationPage initialObjectCreationPage;
+
+	/**
+	 * This is the initial object creation page.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	// not needed

@@ -4,6 +4,7 @@ package org.but4reuse.variantsmodel.impl;
 
 import java.util.Collection;
 
+import java.util.Date;
 import org.but4reuse.variantsmodel.Variant;
 import org.but4reuse.variantsmodel.VariantsModelPackage;
 
@@ -30,6 +31,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link org.but4reuse.variantsmodel.impl.VariantImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.but4reuse.variantsmodel.impl.VariantImpl#isActive <em>Active</em>}</li>
  *   <li>{@link org.but4reuse.variantsmodel.impl.VariantImpl#getFeatures <em>Features</em>}</li>
+ *   <li>{@link org.but4reuse.variantsmodel.impl.VariantImpl#getDate <em>Date</em>}</li>
  * </ul>
  * </p>
  *
@@ -125,6 +127,26 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 	 * @ordered
 	 */
 	protected EList<String> features;
+
+	/**
+	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date DATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDate()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date date = DATE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -246,6 +268,27 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDate(Date newDate) {
+		Date oldDate = date;
+		date = newDate;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, VariantsModelPackage.VARIANT__DATE, oldDate, date));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -259,6 +302,8 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 				return isActive();
 			case VariantsModelPackage.VARIANT__FEATURES:
 				return getFeatures();
+			case VariantsModelPackage.VARIANT__DATE:
+				return getDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -288,6 +333,9 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 				getFeatures().clear();
 				getFeatures().addAll((Collection<? extends String>)newValue);
 				return;
+			case VariantsModelPackage.VARIANT__DATE:
+				setDate((Date)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -315,6 +363,9 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 			case VariantsModelPackage.VARIANT__FEATURES:
 				getFeatures().clear();
 				return;
+			case VariantsModelPackage.VARIANT__DATE:
+				setDate(DATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -337,6 +388,8 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 				return active != ACTIVE_EDEFAULT;
 			case VariantsModelPackage.VARIANT__FEATURES:
 				return features != null && !features.isEmpty();
+			case VariantsModelPackage.VARIANT__DATE:
+				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -361,6 +414,8 @@ public class VariantImpl extends MinimalEObjectImpl.Container implements Variant
 		result.append(active);
 		result.append(", features: ");
 		result.append(features);
+		result.append(", date: ");
+		result.append(date);
 		result.append(')');
 		return result.toString();
 	}

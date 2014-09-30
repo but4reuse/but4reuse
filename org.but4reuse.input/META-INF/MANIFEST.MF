@@ -4,14 +4,20 @@ Bundle-Name: Input
 Bundle-SymbolicName: org.but4reuse.input;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.input.Activator
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
- org.eclipse.swt,
  org.eclipse.jface,
  org.eclipse.emf.common,
- org.but4reuse.variantsmodel.editor
+ org.but4reuse.utils,
+ org.eclipse.core.resources,
+ org.eclipse.emf.ecore.xmi,
+ org.but4reuse.variantsmodel,
+ org.eclipse.ui.ide,
+ org.eclipse.emf.edit,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: fr.lip6.but4reuse.utils.workbench,
- org.but4reuse.utils.workbench
 Bundle-Vendor: but4reuse.org
+Export-Package: org.but4reuse.input.views

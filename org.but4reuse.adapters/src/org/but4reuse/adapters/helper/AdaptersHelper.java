@@ -40,8 +40,7 @@ public class AdaptersHelper {
 				ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				adapters.add((IAdapter) adapterExtensionPoint
-						.createExecutableExtension("adapter"));
+				adapters.add((IAdapter) adapterExtensionPoint.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}

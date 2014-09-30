@@ -8,11 +8,14 @@
 
    <extension point="org.eclipse.ui.newWizards">
       <!-- @generated variantsmodel -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
       <wizard
             id="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizardID"
             name="%_UI_VariantsModelModelWizard_label"
             class="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizard"
-            category="org.but4reuse.newWizards.category"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
             icon="icons/full/obj16/VariantsModelModelFile.gif">
          <description>%_UI_VariantsModelModelWizard_description</description>
          <selection class="org.eclipse.core.resources.IResource"/>

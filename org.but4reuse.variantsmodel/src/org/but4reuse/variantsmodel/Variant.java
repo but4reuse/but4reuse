@@ -2,6 +2,7 @@
  */
 package org.but4reuse.variantsmodel;
 
+import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -19,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.but4reuse.variantsmodel.Variant#getDescription <em>Description</em>}</li>
  *   <li>{@link org.but4reuse.variantsmodel.Variant#isActive <em>Active</em>}</li>
  *   <li>{@link org.but4reuse.variantsmodel.Variant#getFeatures <em>Features</em>}</li>
+ *   <li>{@link org.but4reuse.variantsmodel.Variant#getDate <em>Date</em>}</li>
  * </ul>
  * </p>
  *
@@ -147,5 +149,31 @@ public interface Variant extends EObject {
 	 * @generated
 	 */
 	EList<String> getFeatures();
+
+	/**
+	 * Returns the value of the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Date</em>' attribute.
+	 * @see #setDate(Date)
+	 * @see org.but4reuse.variantsmodel.VariantsModelPackage#getVariant_Date()
+	 * @model
+	 * @generated
+	 */
+	Date getDate();
+
+	/**
+	 * Sets the value of the '{@link org.but4reuse.variantsmodel.Variant#getDate <em>Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Date</em>' attribute.
+	 * @see #getDate()
+	 * @generated
+	 */
+	void setDate(Date value);
 
 } // Variant

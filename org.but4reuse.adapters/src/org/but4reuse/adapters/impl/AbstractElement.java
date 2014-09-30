@@ -9,14 +9,16 @@ import org.but4reuse.adapters.IElement;
 
 public abstract class AbstractElement implements IElement {
 
+	private static final String MAIN_DEPENDENCY_ID = "dependency";
 	/**
 	 * Abstract IElement
 	 * 
 	 * @author jabier.martinez
 	 */
-	private Map<Object, List<Object>> owners = new HashMap<Object, List<Object>>();
-	private Map<Object, Integer> minimumOwners = new HashMap<Object, Integer>();
-	private Map<Object, Integer> maximumOwners = new HashMap<Object, Integer>();
+	private Map<Object, List<Object>> dependencies = new HashMap<Object, List<Object>>();
+	private Map<Object, Integer> minDependencies = new HashMap<Object, Integer>();
+	private Map<Object, Integer> maxDependencies = new HashMap<Object, Integer>();
+	
 
 	@Override
 	/**
@@ -33,35 +35,47 @@ public abstract class AbstractElement implements IElement {
 	}
 
 	@Override
-	public Map<Object, List<Object>> getOwners() {
-		return owners;
+	public Map<Object, List<Object>> getDependencies() {
+		return dependencies;
 	}
 
 	@Override
-	public int getMaximumOwners(Object relationID) {
-		return maximumOwners.get(relationID);
+	public int getMaxDependencies(Object dependencyID) {
+		return maxDependencies.get(dependencyID);
 	}
 
 	@Override
-	public int getMinimumOwners(Object relationID) {
-		return minimumOwners.get(relationID);
+	public int getMinDependencies(Object dependencyID) {
+		return minDependencies.get(dependencyID);
 	}
 
-	public void setMaximumOwners(Object relationID, int number) {
-		maximumOwners.put(relationID, number);
+	public void setMaximumDependencies(Object dependencyID, int number) {
+		maxDependencies.put(dependencyID, number);
 	}
 
-	public void setMinimumOwners(Object relationID, int number) {
-		minimumOwners.put(relationID, number);
+	public void setMinimumDependencies(Object dependencyID, int number) {
+		minDependencies.put(dependencyID, number);
 	}
 
-	public void addOwner(Object relationID, Object owner) {
-		List<Object> o = owners.get(relationID);
+	public void addDependency(Object dependencyID, Object dependency) {
+		List<Object> o = dependencies.get(dependencyID);
 		if (o == null) {
 			o = new ArrayList<Object>();
 		}
-		o.add(owner);
-		owners.put(relationID, o);
+		if(!o.contains(dependency)){
+			o.add(dependency);
+		}
+		dependencies.put(dependencyID, o);
 	}
-
+	
+	public void addDependency(Object dependency){
+		addDependency(MAIN_DEPENDENCY_ID, dependency);
+	}
+	
+	public void addDependencies(List<Object> dependencies){
+		for(Object dependency: dependencies){
+			addDependency(MAIN_DEPENDENCY_ID, dependency);
+		}
+	}
+	
 }

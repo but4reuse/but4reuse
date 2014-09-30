@@ -96,5 +96,14 @@ public class WorkbenchUtils {
 		IFile ifile= workspace.getRoot().getFileForLocation(location);
 		return ifile;
 	}
+	
+	/**
+	 * get File from IResource
+	 * @param iresource (including IFile)
+	 * @return File
+	 */
+	public static File getFileFromIResource(IResource resource){
+		return resource.getRawLocation().makeAbsolute().toFile();
+	}
 
 }

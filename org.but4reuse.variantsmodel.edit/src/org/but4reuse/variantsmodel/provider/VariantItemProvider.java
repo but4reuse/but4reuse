@@ -67,6 +67,7 @@ public class VariantItemProvider
 			addDescriptionPropertyDescriptor(object);
 			addActivePropertyDescriptor(object);
 			addFeaturesPropertyDescriptor(object);
+			addDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -182,6 +183,28 @@ public class VariantItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Variant_date_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Variant_date_feature", "_UI_Variant_type"),
+				 VariantsModelPackage.Literals.VARIANT__DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Variant.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -256,6 +279,7 @@ public class VariantItemProvider
 			case VariantsModelPackage.VARIANT__DESCRIPTION:
 			case VariantsModelPackage.VARIANT__ACTIVE:
 			case VariantsModelPackage.VARIANT__FEATURES:
+			case VariantsModelPackage.VARIANT__DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

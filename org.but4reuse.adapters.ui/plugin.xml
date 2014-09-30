@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.adapters.ui.showElements"
+            objectClass="org.but4reuse.variantsmodel.Variant">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowElementsAction"
+               icon="icons/show.png"
+               id="org.but4reuse.adapters.ui.action.showElements"
+               label="Show elements"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.adapters.ui.preferences.SimilarityPreferencePage"
+            id="org.but4reuse.adapters.ui.preferences.SimilarityPreferencePage"
+            name="Similarity">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.adapters.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

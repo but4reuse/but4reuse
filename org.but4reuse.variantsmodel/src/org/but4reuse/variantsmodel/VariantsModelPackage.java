@@ -176,13 +176,22 @@ public interface VariantsModelPackage extends EPackage {
 	int VARIANT__FEATURES = 4;
 
 	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VARIANT__DATE = 5;
+
+	/**
 	 * The number of structural features of the '<em>Variant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VARIANT_FEATURE_COUNT = 5;
+	int VARIANT_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Variant</em>' class.
@@ -247,6 +256,15 @@ public interface VariantsModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSED_VARIANT__FEATURES = VARIANT__FEATURES;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSED_VARIANT__DATE = VARIANT__DATE;
 
 	/**
 	 * The feature id for the '<em><b>Owned Variants</b></em>' containment reference list.
@@ -396,6 +414,17 @@ public interface VariantsModelPackage extends EPackage {
 	EAttribute getVariant_Features();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.but4reuse.variantsmodel.Variant#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see org.but4reuse.variantsmodel.Variant#getDate()
+	 * @see #getVariant()
+	 * @generated
+	 */
+	EAttribute getVariant_Date();
+
+	/**
 	 * Returns the meta object for class '{@link org.but4reuse.variantsmodel.ComposedVariant <em>Composed Variant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -530,6 +559,14 @@ public interface VariantsModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VARIANT__FEATURES = eINSTANCE.getVariant_Features();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VARIANT__DATE = eINSTANCE.getVariant_Date();
 
 		/**
 		 * The meta object literal for the '{@link org.but4reuse.variantsmodel.impl.ComposedVariantImpl <em>Composed Variant</em>}' class.

@@ -208,6 +208,15 @@ public class VariantsModelPackageImpl extends EPackageImpl implements VariantsMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVariant_Date() {
+		return (EAttribute)variantEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getComposedVariant() {
 		return composedVariantEClass;
 	}
@@ -261,6 +270,7 @@ public class VariantsModelPackageImpl extends EPackageImpl implements VariantsMo
 		createEAttribute(variantEClass, VARIANT__DESCRIPTION);
 		createEAttribute(variantEClass, VARIANT__ACTIVE);
 		createEAttribute(variantEClass, VARIANT__FEATURES);
+		createEAttribute(variantEClass, VARIANT__DATE);
 
 		composedVariantEClass = createEClass(COMPOSED_VARIANT);
 		createEReference(composedVariantEClass, COMPOSED_VARIANT__OWNED_VARIANTS);
@@ -309,6 +319,7 @@ public class VariantsModelPackageImpl extends EPackageImpl implements VariantsMo
 		initEAttribute(getVariant_Description(), ecorePackage.getEString(), "description", null, 0, 1, Variant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVariant_Active(), ecorePackage.getEBoolean(), "active", "true", 0, 1, Variant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVariant_Features(), ecorePackage.getEString(), "features", null, 0, -1, Variant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVariant_Date(), ecorePackage.getEDate(), "date", null, 0, 1, Variant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(composedVariantEClass, ComposedVariant.class, "ComposedVariant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getComposedVariant_OwnedVariants(), this.getVariant(), null, "ownedVariants", null, 0, -1, ComposedVariant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
