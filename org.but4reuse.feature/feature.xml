@@ -58,4 +58,16 @@
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="org.but4reuse.adapters"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.but4reuse.adapters.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>
