@@ -15,15 +15,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//ArtefactModel/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//ArtefactModel/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference artefactmodel.ecore#//ArtefactModel/ownedArtefacts"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//ArtefactModel/featureModelURI"/>
     </genClasses>
     <genClasses ecoreClass="artefactmodel.ecore#//Artefact">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/artefactURI"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/active"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/features"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute artefactmodel.ecore#//Artefact/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference artefactmodel.ecore#//Artefact/features"/>
     </genClasses>
     <genClasses ecoreClass="artefactmodel.ecore#//ComposedArtefact">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference artefactmodel.ecore#//ComposedArtefact/ownedArtefacts"/>

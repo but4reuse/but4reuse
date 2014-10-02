@@ -3,9 +3,6 @@
 package org.but4reuse.artefactmodel;
 
 import java.util.Date;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -20,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.but4reuse.artefactmodel.Artefact#getArtefactURI <em>Artefact URI</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.Artefact#getDescription <em>Description</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.Artefact#isActive <em>Active</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.Artefact#getFeatures <em>Features</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.Artefact#getDate <em>Date</em>}</li>
  * </ul>
  * </p>
@@ -134,22 +130,6 @@ public interface Artefact extends EObject {
 	 * @generated
 	 */
 	void setActive(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Features</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Features</em>' attribute list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Features</em>' attribute list.
-	 * @see org.but4reuse.artefactmodel.ArtefactModelPackage#getArtefact_Features()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getFeatures();
 
 	/**
 	 * Returns the value of the '<em><b>Date</b></em>' attribute.

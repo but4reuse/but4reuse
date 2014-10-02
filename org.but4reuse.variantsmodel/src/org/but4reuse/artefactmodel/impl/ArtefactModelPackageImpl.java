@@ -7,12 +7,10 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;
 import org.but4reuse.artefactmodel.ArtefactModelPackage;
 import org.but4reuse.artefactmodel.ComposedArtefact;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
@@ -145,15 +143,6 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getArtefactModel_FeatureModelURI() {
-		return (EAttribute)artefactModelEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getArtefact() {
 		return artefactEClass;
 	}
@@ -199,17 +188,8 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getArtefact_Features() {
-		return (EAttribute)artefactEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getArtefact_Date() {
-		return (EAttribute)artefactEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)artefactEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -262,14 +242,12 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__NAME);
 		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__DESCRIPTION);
 		createEReference(artefactModelEClass, ARTEFACT_MODEL__OWNED_ARTEFACTS);
-		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__FEATURE_MODEL_URI);
 
 		artefactEClass = createEClass(ARTEFACT);
 		createEAttribute(artefactEClass, ARTEFACT__NAME);
 		createEAttribute(artefactEClass, ARTEFACT__ARTEFACT_URI);
 		createEAttribute(artefactEClass, ARTEFACT__DESCRIPTION);
 		createEAttribute(artefactEClass, ARTEFACT__ACTIVE);
-		createEAttribute(artefactEClass, ARTEFACT__FEATURES);
 		createEAttribute(artefactEClass, ARTEFACT__DATE);
 
 		composedArtefactEClass = createEClass(COMPOSED_ARTEFACT);
@@ -311,14 +289,12 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 		initEAttribute(getArtefactModel_Name(), ecorePackage.getEString(), "name", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefactModel_Description(), ecorePackage.getEString(), "description", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getArtefactModel_OwnedArtefacts(), this.getArtefact(), null, "ownedArtefacts", null, 0, -1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getArtefactModel_FeatureModelURI(), ecorePackage.getEString(), "featureModelURI", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(artefactEClass, Artefact.class, "Artefact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArtefact_Name(), ecorePackage.getEString(), "name", null, 0, 1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefact_ArtefactURI(), ecorePackage.getEString(), "artefactURI", null, 0, 1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefact_Description(), ecorePackage.getEString(), "description", null, 0, 1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefact_Active(), ecorePackage.getEBoolean(), "active", "true", 0, 1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getArtefact_Features(), ecorePackage.getEString(), "features", null, 0, -1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefact_Date(), ecorePackage.getEDate(), "date", null, 0, 1, Artefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(composedArtefactEClass, ComposedArtefact.class, "ComposedArtefact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

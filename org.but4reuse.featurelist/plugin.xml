@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated featurelist -->
+      <package
+            uri="http://org.but4reuse.feature.list"
+            class="org.but4reuse.featurelist.FeatureListPackage"
+            genModel="model/featurelist.genmodel"/>
+   </extension>
+
+</plugin>

@@ -94,22 +94,13 @@ public interface ArtefactModelPackage extends EPackage {
 	int ARTEFACT_MODEL__OWNED_ARTEFACTS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Feature Model URI</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARTEFACT_MODEL__FEATURE_MODEL_URI = 3;
-
-	/**
 	 * The number of structural features of the '<em>Artefact Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTEFACT_MODEL_FEATURE_COUNT = 4;
+	int ARTEFACT_MODEL_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Artefact Model</em>' class.
@@ -167,22 +158,13 @@ public interface ArtefactModelPackage extends EPackage {
 	int ARTEFACT__ACTIVE = 3;
 
 	/**
-	 * The feature id for the '<em><b>Features</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARTEFACT__FEATURES = 4;
-
-	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTEFACT__DATE = 5;
+	int ARTEFACT__DATE = 4;
 
 	/**
 	 * The number of structural features of the '<em>Artefact</em>' class.
@@ -191,7 +173,7 @@ public interface ArtefactModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTEFACT_FEATURE_COUNT = 6;
+	int ARTEFACT_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Artefact</em>' class.
@@ -247,15 +229,6 @@ public interface ArtefactModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSED_ARTEFACT__ACTIVE = ARTEFACT__ACTIVE;
-
-	/**
-	 * The feature id for the '<em><b>Features</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMPOSED_ARTEFACT__FEATURES = ARTEFACT__FEATURES;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -338,17 +311,6 @@ public interface ArtefactModelPackage extends EPackage {
 	EReference getArtefactModel_OwnedArtefacts();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.but4reuse.artefactmodel.ArtefactModel#getFeatureModelURI <em>Feature Model URI</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Feature Model URI</em>'.
-	 * @see org.but4reuse.artefactmodel.ArtefactModel#getFeatureModelURI()
-	 * @see #getArtefactModel()
-	 * @generated
-	 */
-	EAttribute getArtefactModel_FeatureModelURI();
-
-	/**
 	 * Returns the meta object for class '{@link org.but4reuse.artefactmodel.Artefact <em>Artefact</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -401,17 +363,6 @@ public interface ArtefactModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getArtefact_Active();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link org.but4reuse.artefactmodel.Artefact#getFeatures <em>Features</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Features</em>'.
-	 * @see org.but4reuse.artefactmodel.Artefact#getFeatures()
-	 * @see #getArtefact()
-	 * @generated
-	 */
-	EAttribute getArtefact_Features();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.but4reuse.artefactmodel.Artefact#getDate <em>Date</em>}'.
@@ -503,14 +454,6 @@ public interface ArtefactModelPackage extends EPackage {
 		EReference ARTEFACT_MODEL__OWNED_ARTEFACTS = eINSTANCE.getArtefactModel_OwnedArtefacts();
 
 		/**
-		 * The meta object literal for the '<em><b>Feature Model URI</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ARTEFACT_MODEL__FEATURE_MODEL_URI = eINSTANCE.getArtefactModel_FeatureModelURI();
-
-		/**
 		 * The meta object literal for the '{@link org.but4reuse.artefactmodel.impl.ArtefactImpl <em>Artefact</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -551,14 +494,6 @@ public interface ArtefactModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ARTEFACT__ACTIVE = eINSTANCE.getArtefact_Active();
-
-		/**
-		 * The meta object literal for the '<em><b>Features</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ARTEFACT__FEATURES = eINSTANCE.getArtefact_Features();
 
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.

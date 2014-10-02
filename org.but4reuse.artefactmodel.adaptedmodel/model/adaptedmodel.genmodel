@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.but4reuse.artefactmodel.adaptedmodel/src"
+    modelPluginID="org.but4reuse.artefactmodel.adaptedmodel" modelName="AdaptedModel"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="7.0" copyrightFields="false" usedGenPackages="../../org.but4reuse.artefactmodel/model/artefactmodel.genmodel#//artefactmodel ../../org.but4reuse.featurelist/model/featurelist.genmodel#//featurelist"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>adaptedmodel.ecore</foreignModel>
+  <genPackages prefix="AdaptedModel" basePackage="org.but4reuse.artefactmodel" disposableProviderFactory="true"
+      multipleEditorPages="false" ecorePackage="adaptedmodel.ecore#/">
+    <genClasses ecoreClass="adaptedmodel.ecore#//AdaptedModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedModel/ownedBlocks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedModel/ownedAdaptedArtefacts"/>
+    </genClasses>
+    <genClasses ecoreClass="adaptedmodel.ecore#//AdaptedArtefact">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedArtefact/artefact"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedArtefact/ownedElementWrappers"/>
+    </genClasses>
+    <genClasses ecoreClass="adaptedmodel.ecore#//ElementWrapper">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adaptedmodel.ecore#//ElementWrapper/element"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//ElementWrapper/blockElements"/>
+    </genClasses>
+    <genClasses ecoreClass="adaptedmodel.ecore#//Block">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//Block/ownedBlockElements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//Block/correspondingFeature"/>
+    </genClasses>
+    <genClasses ecoreClass="adaptedmodel.ecore#//BlockElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//BlockElement/elementWrappers"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

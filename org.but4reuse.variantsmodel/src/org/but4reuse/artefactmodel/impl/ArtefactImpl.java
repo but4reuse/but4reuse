@@ -2,22 +2,13 @@
  */
 package org.but4reuse.artefactmodel.impl;
 
-import java.util.Collection;
 import java.util.Date;
-
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModelPackage;
-
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +21,6 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getArtefactURI <em>Artefact URI</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#isActive <em>Active</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getFeatures <em>Features</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDate <em>Date</em>}</li>
  * </ul>
  * </p>
@@ -117,16 +107,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	 * @ordered
 	 */
 	protected boolean active = ACTIVE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getFeatures() <em>Features</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFeatures()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<String> features;
 
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
@@ -256,18 +236,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<String> getFeatures() {
-		if (features == null) {
-			features = new EDataTypeUniqueEList<String>(String.class, this, ArtefactModelPackage.ARTEFACT__FEATURES);
-		}
-		return features;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Date getDate() {
 		return date;
 	}
@@ -300,8 +268,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 				return getDescription();
 			case ArtefactModelPackage.ARTEFACT__ACTIVE:
 				return isActive();
-			case ArtefactModelPackage.ARTEFACT__FEATURES:
-				return getFeatures();
 			case ArtefactModelPackage.ARTEFACT__DATE:
 				return getDate();
 		}
@@ -328,10 +294,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 				return;
 			case ArtefactModelPackage.ARTEFACT__ACTIVE:
 				setActive((Boolean)newValue);
-				return;
-			case ArtefactModelPackage.ARTEFACT__FEATURES:
-				getFeatures().clear();
-				getFeatures().addAll((Collection<? extends String>)newValue);
 				return;
 			case ArtefactModelPackage.ARTEFACT__DATE:
 				setDate((Date)newValue);
@@ -360,9 +322,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 			case ArtefactModelPackage.ARTEFACT__ACTIVE:
 				setActive(ACTIVE_EDEFAULT);
 				return;
-			case ArtefactModelPackage.ARTEFACT__FEATURES:
-				getFeatures().clear();
-				return;
 			case ArtefactModelPackage.ARTEFACT__DATE:
 				setDate(DATE_EDEFAULT);
 				return;
@@ -386,8 +345,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case ArtefactModelPackage.ARTEFACT__ACTIVE:
 				return active != ACTIVE_EDEFAULT;
-			case ArtefactModelPackage.ARTEFACT__FEATURES:
-				return features != null && !features.isEmpty();
 			case ArtefactModelPackage.ARTEFACT__DATE:
 				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 		}
@@ -412,8 +369,6 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 		result.append(description);
 		result.append(", active: ");
 		result.append(active);
-		result.append(", features: ");
-		result.append(features);
 		result.append(", date: ");
 		result.append(date);
 		result.append(')');

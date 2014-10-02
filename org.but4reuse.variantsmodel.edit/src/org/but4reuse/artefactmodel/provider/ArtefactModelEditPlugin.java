@@ -3,7 +3,6 @@
 package org.but4reuse.artefactmodel.provider;
 
 import org.eclipse.emf.common.EMFPlugin;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**

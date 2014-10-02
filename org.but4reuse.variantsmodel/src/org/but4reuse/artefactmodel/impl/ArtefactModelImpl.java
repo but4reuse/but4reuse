@@ -32,7 +32,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getOwnedArtefacts <em>Owned Artefacts</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getFeatureModelURI <em>Feature Model URI</em>}</li>
  * </ul>
  * </p>
  *
@@ -88,26 +87,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 	 * @ordered
 	 */
 	protected EList<Artefact> ownedArtefacts;
-
-	/**
-	 * The default value of the '{@link #getFeatureModelURI() <em>Feature Model URI</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFeatureModelURI()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String FEATURE_MODEL_URI_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getFeatureModelURI() <em>Feature Model URI</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFeatureModelURI()
-	 * @generated
-	 * @ordered
-	 */
-	protected String featureModelURI = FEATURE_MODEL_URI_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -187,27 +166,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getFeatureModelURI() {
-		return featureModelURI;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFeatureModelURI(String newFeatureModelURI) {
-		String oldFeatureModelURI = featureModelURI;
-		featureModelURI = newFeatureModelURI;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT_MODEL__FEATURE_MODEL_URI, oldFeatureModelURI, featureModelURI));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -231,8 +189,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				return getDescription();
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				return getOwnedArtefacts();
-			case ArtefactModelPackage.ARTEFACT_MODEL__FEATURE_MODEL_URI:
-				return getFeatureModelURI();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -256,9 +212,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				getOwnedArtefacts().clear();
 				getOwnedArtefacts().addAll((Collection<? extends Artefact>)newValue);
 				return;
-			case ArtefactModelPackage.ARTEFACT_MODEL__FEATURE_MODEL_URI:
-				setFeatureModelURI((String)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -280,9 +233,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				getOwnedArtefacts().clear();
 				return;
-			case ArtefactModelPackage.ARTEFACT_MODEL__FEATURE_MODEL_URI:
-				setFeatureModelURI(FEATURE_MODEL_URI_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -301,8 +251,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				return ownedArtefacts != null && !ownedArtefacts.isEmpty();
-			case ArtefactModelPackage.ARTEFACT_MODEL__FEATURE_MODEL_URI:
-				return FEATURE_MODEL_URI_EDEFAULT == null ? featureModelURI != null : !FEATURE_MODEL_URI_EDEFAULT.equals(featureModelURI);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -321,8 +269,6 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 		result.append(name);
 		result.append(", description: ");
 		result.append(description);
-		result.append(", featureModelURI: ");
-		result.append(featureModelURI);
 		result.append(')');
 		return result.toString();
 	}

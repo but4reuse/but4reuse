@@ -8,16 +8,20 @@
 
    <extension point="org.eclipse.ui.newWizards">
       <!-- @generated artefactmodel -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
       <wizard
-            category="org.but4reuse.newWizards.category"
-            class="org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizard"
-            icon="icons/full/obj16/ArtefactModelModelFile.gif"
             id="org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizardID"
-            name="%_UI_ArtefactModelModelWizard_label">
+            name="%_UI_ArtefactModelModelWizard_label"
+            class="org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/ArtefactModelModelFile.gif">
          <description>%_UI_ArtefactModelModelWizard_description</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>
+
 
    <extension point="org.eclipse.ui.editors">
       <!-- @generated artefactmodel -->
@@ -31,5 +35,6 @@
       </editor>
    </extension>
 
+null
 
 </plugin>

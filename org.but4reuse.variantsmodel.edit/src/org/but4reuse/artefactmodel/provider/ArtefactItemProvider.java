@@ -67,7 +67,6 @@ public class ArtefactItemProvider
 			addArtefactURIPropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
 			addActivePropertyDescriptor(object);
-			addFeaturesPropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -157,28 +156,6 @@ public class ArtefactItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Features feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFeaturesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Artefact_features_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Artefact_features_feature", "_UI_Artefact_type"),
-				 ArtefactModelPackage.Literals.ARTEFACT__FEATURES,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -278,7 +255,6 @@ public class ArtefactItemProvider
 			case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
 			case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
 			case ArtefactModelPackage.ARTEFACT__ACTIVE:
-			case ArtefactModelPackage.ARTEFACT__FEATURES:
 			case ArtefactModelPackage.ARTEFACT__DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

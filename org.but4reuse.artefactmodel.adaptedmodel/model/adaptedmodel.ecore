@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adaptedmodel" nsURI="http://org.but4reuse.artefact.model.adapted.model"
+    nsPrefix="org.but4reuse.artefact.model.adapted.model">
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptedModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBlocks" upperBound="-1"
+        eType="#//Block" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAdaptedArtefacts"
+        upperBound="-1" eType="#//AdaptedArtefact" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptedArtefact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artefact" eType="ecore:EClass ../../org.but4reuse.artefactmodel/model/artefactmodel.ecore#//Artefact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElementWrappers" upperBound="-1"
+        eType="#//ElementWrapper"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementWrapper">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blockElements" upperBound="-1"
+        eType="#//BlockElement" eOpposite="#//BlockElement/elementWrappers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBlockElements" upperBound="-1"
+        eType="#//BlockElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correspondingFeature" eType="ecore:EClass ../../org.but4reuse.featurelist/model/featurelist.ecore#//Feature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementWrappers" upperBound="-1"
+        eType="#//ElementWrapper" eOpposite="#//ElementWrapper/blockElements"/>
+  </eClassifiers>
+</ecore:EPackage>

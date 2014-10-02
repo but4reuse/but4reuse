@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated featurelist -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.but4reuse.featurelist.presentation.FeatureListModelWizardID"
+            name="%_UI_FeatureListModelWizard_label"
+            class="org.but4reuse.featurelist.presentation.FeatureListModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/FeatureListModelFile.gif">
+         <description>%_UI_FeatureListModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated featurelist -->
+      <editor
+            id="org.but4reuse.featurelist.presentation.FeatureListEditorID"
+            name="%_UI_FeatureListEditor_label"
+            icon="icons/full/obj16/FeatureListModelFile.gif"
+            extensions="featurelist"
+            class="org.but4reuse.featurelist.presentation.FeatureListEditor"
+            contributorClass="org.but4reuse.featurelist.presentation.FeatureListActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
