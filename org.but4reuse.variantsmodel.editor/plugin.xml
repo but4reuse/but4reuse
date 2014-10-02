@@ -7,31 +7,29 @@
 <plugin>
 
    <extension point="org.eclipse.ui.newWizards">
-      <!-- @generated variantsmodel -->
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
+      <!-- @generated artefactmodel -->
       <wizard
-            id="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizardID"
-            name="%_UI_VariantsModelModelWizard_label"
-            class="org.but4reuse.variantsmodel.presentation.VariantsModelModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/VariantsModelModelFile.gif">
-         <description>%_UI_VariantsModelModelWizard_description</description>
+            category="org.but4reuse.newWizards.category"
+            class="org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizard"
+            icon="icons/full/obj16/ArtefactModelModelFile.gif"
+            id="org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizardID"
+            name="%_UI_ArtefactModelModelWizard_label">
+         <description>%_UI_ArtefactModelModelWizard_description</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>
 
    <extension point="org.eclipse.ui.editors">
-      <!-- @generated variantsmodel -->
+      <!-- @generated artefactmodel -->
       <editor
-            id="org.but4reuse.variantsmodel.presentation.VariantsModelEditorID"
-            name="%_UI_VariantsModelEditor_label"
-            icon="icons/full/obj16/VariantsModelModelFile.gif"
-            extensions="variantsmodel"
-            class="org.but4reuse.variantsmodel.presentation.VariantsModelEditor"
-            contributorClass="org.but4reuse.variantsmodel.presentation.VariantsModelActionBarContributor">
+            id="org.but4reuse.artefactmodel.presentation.ArtefactModelEditorID"
+            name="%_UI_ArtefactModelEditor_label"
+            icon="icons/full/obj16/ArtefactModelModelFile.gif"
+            extensions="artefactmodel"
+            class="org.but4reuse.artefactmodel.presentation.ArtefactModelEditor"
+            contributorClass="org.but4reuse.artefactmodel.presentation.ArtefactModelActionBarContributor">
       </editor>
    </extension>
+
 
 </plugin>

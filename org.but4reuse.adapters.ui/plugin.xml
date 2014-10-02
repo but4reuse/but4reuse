@@ -6,7 +6,7 @@
       <objectContribution
             adaptable="false"
             id="org.but4reuse.adapters.ui.showElements"
-            objectClass="org.but4reuse.variantsmodel.Variant">
+            objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
                class="org.but4reuse.adapters.ui.actions.ShowElementsAction"
                icon="icons/show.png"

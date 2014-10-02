@@ -21,8 +21,6 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class InputDropView extends ViewPart {
 
-	public static final String EDITOR_ID = "org.but4reuse.variantsmodel.presentation.VariantsModelEditorID";
-
 	public Canvas canvas;
 	public boolean nativelyDoubleBufferedCanvas = false;
 	private static Image addImage;

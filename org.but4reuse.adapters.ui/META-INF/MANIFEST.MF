@@ -7,7 +7,7 @@ Bundle-Activator: org.but4reuse.adapters.ui.activator.Activator
 Bundle-Vendor: but4reuse.org
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
- org.but4reuse.variantsmodel,
+ org.but4reuse.artefactmodel,
  org.eclipse.swt,
  org.but4reuse.adapters,
  org.eclipse.jface,

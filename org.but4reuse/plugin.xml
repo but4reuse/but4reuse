@@ -27,7 +27,6 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="BUT4Reuse"
             class="org.but4reuse.preferences.BUT4ReusePreferencesPage"
             id="org.but4reuse.page"
             name="BUT4Reuse">

@@ -6,11 +6,12 @@
 
 <plugin>
 
+
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
-      <!-- @generated variantsmodel -->
+      <!-- @generated artefactmodel -->
       <factory
-            uri="http://org.but4reuse.variants.model"
-            class="org.but4reuse.variantsmodel.provider.VariantsModelItemProviderAdapterFactory"
+            uri="http://org.but4reuse.artefact.model"
+            class="org.but4reuse.artefactmodel.provider.ArtefactModelItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider

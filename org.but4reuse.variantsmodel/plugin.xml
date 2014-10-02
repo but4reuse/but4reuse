@@ -6,12 +6,13 @@
 
 <plugin>
 
+
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated variantsmodel -->
+      <!-- @generated artefactmodel -->
       <package
-            uri="http://org.but4reuse.variants.model"
-            class="org.but4reuse.variantsmodel.VariantsModelPackage"
-            genModel="model/variantsmodel.genmodel"/>
+            uri="http://org.but4reuse.artefact.model"
+            class="org.but4reuse.artefactmodel.ArtefactModelPackage"
+            genModel="model/artefactmodel.genmodel"/>
    </extension>
 
 </plugin>

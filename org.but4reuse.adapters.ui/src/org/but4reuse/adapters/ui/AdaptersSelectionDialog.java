@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
-import org.but4reuse.variantsmodel.Variant;
+import org.but4reuse.artefactmodel.Artefact;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -28,7 +28,7 @@ public class AdaptersSelectionDialog {
 	 * @param input
 	 *            or null (it will be used for pre-selection)
 	 */
-	public static List<IAdapter> show(String title, Variant input) {
+	public static List<IAdapter> show(String title, Artefact input) {
 		// Prepare Adapters selection dialog
 		List<IAdapter> allAdapters = AdaptersHelper.getAllAdapters();
 

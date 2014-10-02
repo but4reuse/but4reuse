@@ -3,12 +3,12 @@ package org.but4reuse.input.views;
 import java.io.File;
 import java.util.Date;
 
+import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.artefactmodel.ArtefactModelFactory;
+import org.but4reuse.artefactmodel.ArtefactModelPackage;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.but4reuse.variantsmodel.Variant;
-import org.but4reuse.variantsmodel.VariantsModel;
-import org.but4reuse.variantsmodel.VariantsModelFactory;
-import org.but4reuse.variantsmodel.VariantsModelPackage;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -30,7 +30,8 @@ import org.eclipse.ui.IWorkbenchPart;
  */
 public class ArtefactsDropTargetEffect extends DropTargetEffect {
 	
-	public static final String EDITOR_ID = "org.but4reuse.variantsmodel.presentation.VariantsModelEditorID";
+	public static final String EDITOR_ID = "org.but4reuse.artefactmodel.presentation.ArtefactModelEditorID";
+	
 	private boolean dragOver = false;
 	
 	public ArtefactsDropTargetEffect(Control control) {
@@ -53,7 +54,7 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		if (editor == null) {
 			MessageDialog
 					.openInformation(getControl().getShell(), "Info",
-							"A variants model editor must be opened to add your variants. Open or create one and try again.");
+							"An artefacts model editor must be opened to add your artefacts. Open or create one and try again.");
 			return;
 		}
 
@@ -65,7 +66,7 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 						+ URI.encodeSegment(res[i].getProject().getName(), false) + "/"
 						+ res[i].getProjectRelativePath().toOSString().replace("\\", "/");
 				Date creationDate = FileUtils.getCreationDate(WorkbenchUtils.getFileFromIResource(res[i]));
-				Command command = addVariant(editor.getEditingDomain(), uriString, creationDate);
+				Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
 				if (command != null) {
 					compoundCommand.append(command);
 				}
@@ -79,7 +80,7 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 				if (file.exists()) {
 					String uriString = file.toURI().toString();
 					Date creationDate = FileUtils.getCreationDate(file);
-					Command command = addVariant(editor.getEditingDomain(), uriString, creationDate);
+					Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
 					if (command != null) {
 						compoundCommand.append(command);
 					}
@@ -110,9 +111,9 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		getControl().redraw();
 	}
 	
-	private Command addVariant(EditingDomain editingDomain, String uriString, Date date) {
-		Variant a = VariantsModelFactory.eINSTANCE.createVariant();
-		a.setVariantURI(uriString);
+	private Command addArtefact(EditingDomain editingDomain, String uriString, Date date) {
+		Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
+		a.setArtefactURI(uriString);
 		a.setDate(date);
 		String name = uriString;
 		if(name.endsWith("/")){
@@ -121,9 +122,9 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		name = name.substring(name.lastIndexOf("/")+1, name.length());
 		a.setName(name);
 		XMIResource amr = (XMIResource) editingDomain.getResourceSet().getResources().get(0);
-		VariantsModel am = (VariantsModel) amr.getContents().get(0);
+		ArtefactModel am = (ArtefactModel) amr.getContents().get(0);
 		return AddCommand
-				.create(editingDomain, am, VariantsModelPackage.eINSTANCE.getVariantsModel_OwnedVariants(), a);
+				.create(editingDomain, am, ArtefactModelPackage.eINSTANCE.getArtefactModel_OwnedArtefacts(), a);
 	}
 
 	public boolean isDragOver() {

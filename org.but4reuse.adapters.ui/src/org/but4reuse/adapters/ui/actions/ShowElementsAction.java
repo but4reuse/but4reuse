@@ -8,8 +8,8 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
+import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
-import org.but4reuse.variantsmodel.Variant;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -22,22 +22,22 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class ShowElementsAction implements IObjectActionDelegate {
 
-	Variant variant = null;
+	Artefact artefact = null;
 	List<IAdapter> adap;
 	List<String> text = new ArrayList<String>();
 
 	@Override
 	public void run(IAction action) {
-		variant = null;
+		artefact = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
 				// Object art = ((IStructuredSelection)
 				// selection).getFirstElement();
-				if (art instanceof Variant) {
-					variant = ((Variant) art);
+				if (art instanceof Artefact) {
+					artefact = ((Artefact) art);
 
 					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Show elements", variant);
+					adap = AdaptersSelectionDialog.show("Show elements", artefact);
 
 					if (!adap.isEmpty()) {
 						// Launch Progress dialog
@@ -51,11 +51,11 @@ public class ShowElementsAction implements IObjectActionDelegate {
 										InterruptedException {
 
 									int totalWork = 1;
-									monitor.beginTask("Calculating elements of " + variant.getVariantURI(), totalWork);
+									monitor.beginTask("Calculating elements of " + artefact.getArtefactURI(), totalWork);
 
 									text.clear();
 									for (IAdapter adapter : adap) {
-										List<IElement> cps = AdaptersHelper.getElements(variant, adapter);
+										List<IElement> cps = AdaptersHelper.getElements(artefact, adapter);
 										for (IElement cp : cps) {
 											text.add(cp.getText());
 										}
@@ -70,9 +70,9 @@ public class ShowElementsAction implements IObjectActionDelegate {
 								t = t.replaceAll("\n", " ").replaceAll("\r", "");
 								sText = sText + t + "\n";
 							}
-							String name = variant.getName();
+							String name = artefact.getName();
 							if (name == null || name.length() == 0) {
-								name = variant.getVariantURI();
+								name = artefact.getArtefactURI();
 							}
 							ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent()
 									.getActiveShell(), name, text.size() + " Elements", sText);

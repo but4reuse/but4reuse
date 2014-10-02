@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.variantsmodel.ComposedVariant;
-import org.but4reuse.variantsmodel.Variant;
-import org.but4reuse.variantsmodel.VariantsModel;
+import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.artefactmodel.ComposedArtefact;
+import org.but4reuse.artefactmodel.Artefact;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -53,9 +53,9 @@ public class AdaptersHelper {
 	 * @param variantsModel
 	 * @return
 	 */
-	public static List<IAdapter> getAdapters(VariantsModel variantsModel) {
+	public static List<IAdapter> getAdapters(ArtefactModel variantsModel) {
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
-		for (Variant artefact : variantsModel.getOwnedVariants()) {
+		for (Artefact artefact : variantsModel.getOwnedArtefacts()) {
 			List<IAdapter> artefactAdapters = getAdapters(artefact);
 			return artefactAdapters;
 		}
@@ -68,15 +68,15 @@ public class AdaptersHelper {
 	 * @param artefact
 	 * @return
 	 */
-	public static List<IAdapter> getAdapters(Variant artefact) {
+	public static List<IAdapter> getAdapters(Artefact artefact) {
 		List<IAdapter> adapters = getAllAdapters();
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 		for (IAdapter adapter : adapters) {
 			if (!filteredAdapters.contains(adapter)) {
 				try {
-					if (artefact instanceof ComposedVariant) {
-						ComposedVariant ca = (ComposedVariant) artefact;
-						for (Variant ar : ca.getOwnedVariants()) {
+					if (artefact instanceof ComposedArtefact) {
+						ComposedArtefact ca = (ComposedArtefact) artefact;
+						for (Artefact ar : ca.getOwnedArtefacts()) {
 							List<IAdapter> lap = getAdapters(ar);
 							for (IAdapter adapp : lap) {
 								if (!filteredAdapters.contains(adapp)) {
@@ -85,8 +85,8 @@ public class AdaptersHelper {
 							}
 						}
 					} else {
-						if (artefact.getVariantURI() != null) {
-							URI uri = new URI(artefact.getVariantURI());
+						if (artefact.getArtefactURI() != null) {
+							URI uri = new URI(artefact.getArtefactURI());
 							if (adapter.isAdaptable(uri, null, null)) {
 								filteredAdapters.add(adapter);
 							}
@@ -108,16 +108,16 @@ public class AdaptersHelper {
 	 * @param monitor
 	 * @return
 	 */
-	public static List<List<IElement>> getElements(VariantsModel artefactModel,
+	public static List<List<IElement>> getElements(ArtefactModel artefactModel,
 			List<IAdapter> adapters, IProgressMonitor monitor) {
 		List<List<IElement>> list = new ArrayList<List<IElement>>();
 		
 		// TODO implement concurrency to improve performance
-		for (Variant artefact : artefactModel.getOwnedVariants()) {
+		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
 				String name = artefact.getName();
 				if (name == null || name.length() == 0) {
-					name = artefact.getVariantURI();
+					name = artefact.getArtefactURI();
 				}
 				monitor.subTask("Adapting: " + name);
 
@@ -132,13 +132,13 @@ public class AdaptersHelper {
 		return list;
 	}
 
-	public static List<IElement> getElements(Variant artefact,
+	public static List<IElement> getElements(Artefact artefact,
 			List<IAdapter> adapters) {
 		List<IElement> list = new ArrayList<IElement>();
 		if (artefact.isActive()) {
-			if (artefact instanceof ComposedVariant) {
-				ComposedVariant cVariant = (ComposedVariant) artefact;
-				for (Variant a : cVariant.getOwnedVariants()) {
+			if (artefact instanceof ComposedArtefact) {
+				ComposedArtefact cArtefact = (ComposedArtefact) artefact;
+				for (Artefact a : cArtefact.getOwnedArtefacts()) {
 					list.addAll(getElements(a, adapters));
 				}
 			} else {
@@ -155,11 +155,11 @@ public class AdaptersHelper {
 	 * @param artefact
 	 * @return
 	 */
-	public static List<IElement> getElements(Variant artefact,
+	public static List<IElement> getElements(Artefact artefact,
 			IAdapter adapter) {
 		List<IElement> elements = new ArrayList<IElement>();
 		try {
-			elements = adapter.adapt(new URI(artefact.getVariantURI()), null, null);
+			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null, null);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			return elements;

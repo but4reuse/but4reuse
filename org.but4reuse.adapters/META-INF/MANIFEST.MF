@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: org.but4reuse.variantsmodel
+Import-Package: org.but4reuse.artefactmodel
 Export-Package: org.but4reuse.adapters,
  org.but4reuse.adapters.helper,
  org.but4reuse.adapters.impl
