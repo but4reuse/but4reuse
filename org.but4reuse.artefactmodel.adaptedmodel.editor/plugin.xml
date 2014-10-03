@@ -8,15 +8,12 @@
 
    <extension point="org.eclipse.ui.newWizards">
       <!-- @generated adaptedmodel -->
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
       <wizard
-            id="org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelModelWizardID"
-            name="%_UI_AdaptedModelModelWizard_label"
-            class="org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/AdaptedModelModelFile.gif">
+            category="org.but4reuse.newWizards.category"
+            class="org.but4reuse.adaptedmodel.presentation.AdaptedModelModelWizard"
+            icon="icons/full/obj16/AdaptedModelModelFile.gif"
+            id="org.but4reuse.adaptedmodel.presentation.AdaptedModelModelWizardID"
+            name="%_UI_AdaptedModelModelWizard_label">
          <description>%_UI_AdaptedModelModelWizard_description</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
@@ -25,12 +22,12 @@
    <extension point="org.eclipse.ui.editors">
       <!-- @generated adaptedmodel -->
       <editor
-            id="org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelEditorID"
+            id="org.but4reuse.adaptedmodel.presentation.AdaptedModelEditorID"
             name="%_UI_AdaptedModelEditor_label"
             icon="icons/full/obj16/AdaptedModelModelFile.gif"
             extensions="adaptedmodel"
-            class="org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelEditor"
-            contributorClass="org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelActionBarContributor">
+            class="org.but4reuse.adaptedmodel.presentation.AdaptedModelEditor"
+            contributorClass="org.but4reuse.adaptedmodel.presentation.AdaptedModelActionBarContributor">
       </editor>
    </extension>
 

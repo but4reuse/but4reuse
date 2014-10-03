@@ -101,36 +101,39 @@ public class AdaptersHelper {
 		return filteredAdapters;
 	}
 
-	/**
-	 * 
-	 * @param artefactModel
-	 * @param adapters
-	 * @param monitor
-	 * @return
-	 */
-	public static List<List<IElement>> getElements(ArtefactModel artefactModel,
-			List<IAdapter> adapters, IProgressMonitor monitor) {
-		List<List<IElement>> list = new ArrayList<List<IElement>>();
-		
-		// TODO implement concurrency to improve performance
-		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
-			if (artefact.isActive()) {
-				String name = artefact.getName();
-				if (name == null || name.length() == 0) {
-					name = artefact.getArtefactURI();
-				}
-				monitor.subTask("Adapting: " + name);
 
-				list.add(getElements(artefact, adapters));
-
-				monitor.worked(1);
-				if (monitor.isCanceled()) {
-					return list;
-				}
-			}
-		}
-		return list;
-	}
+//	/**
+//	 * 
+//	 * @param artefactModel
+//	 * @param adapters
+//	 * @param monitor
+//	 * @return
+//	 */
+//	public static List<List<IElement>> getElements(ArtefactModel artefactModel,
+//			List<IAdapter> adapters, IProgressMonitor monitor) {
+//		List<List<IElement>> list = new ArrayList<List<IElement>>();
+//		
+//		// TODO implement concurrency to improve performance
+//		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
+//			if (artefact.isActive()) {
+//				String name = artefact.getName();
+//				if (name == null || name.length() == 0) {
+//					name = artefact.getArtefactURI();
+//				}
+//				monitor.subTask("Adapting: " + name);
+//
+//				list.add(getElements(artefact, adapters));
+//
+//				monitor.worked(1);
+//				if (monitor.isCanceled()) {
+//					return list;
+//				}
+//			}
+//		}
+//		return list;
+//	}
+	
+	
 
 	public static List<IElement> getElements(Artefact artefact,
 			List<IAdapter> adapters) {

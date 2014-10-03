@@ -6,6 +6,7 @@ import java.util.List;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -21,19 +22,28 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
  */
 public class AdaptersSelectionDialog {
 
+	public static List<IAdapter> show(String title, ArtefactModel input) {
+		// Calculate adapters selected by default
+		List<IAdapter> correctAdapters = AdaptersHelper.getAdapters(input);
+		return show(title, correctAdapters);
+	}
+
+	public static List<IAdapter> show(String title, Artefact input) {
+		// Calculate adapters selected by default
+		List<IAdapter> correctAdapters = AdaptersHelper.getAdapters(input);
+		return show(title, correctAdapters);
+	}
+	
 	/**
 	 * Show the dialog to the user and return the selected ones
 	 * TODO this is showing everything, even the not isApplicable ones...
 	 * @param title
-	 * @param input
+	 * @param valid adapters
 	 *            or null (it will be used for pre-selection)
 	 */
-	public static List<IAdapter> show(String title, Artefact input) {
+	public static List<IAdapter> show(String title, List<IAdapter> correctAdapters) {
 		// Prepare Adapters selection dialog
 		List<IAdapter> allAdapters = AdaptersHelper.getAllAdapters();
-
-		// Calculate adapters selected by default
-		List<IAdapter> correctAdapters = AdaptersHelper.getAdapters(input);
 
 		List<IAdapter> correctAdapters2 = new ArrayList<IAdapter>();
 		for (IAdapter ca : correctAdapters) {

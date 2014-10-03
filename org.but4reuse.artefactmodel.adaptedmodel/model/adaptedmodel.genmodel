@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.but4reuse.artefactmodel.adaptedmodel/src"
-    modelPluginID="org.but4reuse.artefactmodel.adaptedmodel" modelName="AdaptedModel"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="7.0" copyrightFields="false" usedGenPackages="../../org.but4reuse.artefactmodel/model/artefactmodel.genmodel#//artefactmodel ../../org.but4reuse.featurelist/model/featurelist.genmodel#//featurelist"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.but4reuse.adaptedmodel/src" editDirectory="/org.but4reuse.adaptedmodel.edit/src"
+    editorDirectory="/org.but4reuse.adaptedmodel.editor/src" modelPluginID="org.but4reuse.adaptedmodel"
+    modelName="AdaptedModel" editPluginClass="org.but4reuse.adaptedmodel.provider.AdaptedModelEditPlugin"
+    editorPluginClass="org.but4reuse.adaptedmodel.presentation.AdaptedModelEditorPlugin"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" testSuiteClass="org.but4reuse.adaptedmodel.tests.AdaptedModelAllTests"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0" copyrightFields="false"
+    editPluginID="org.but4reuse.adaptedmodel.edit" editorPluginID="org.but4reuse.adaptedmodel.editor"
+    usedGenPackages="../../org.but4reuse.artefactmodel/model/artefactmodel.genmodel#//artefactmodel ../../org.but4reuse.featurelist/model/featurelist.genmodel#//featurelist"
     operationReflection="true" importOrganizing="true">
   <foreignModel>adaptedmodel.ecore</foreignModel>
-  <genPackages prefix="AdaptedModel" basePackage="org.but4reuse.artefactmodel" disposableProviderFactory="true"
+  <genPackages prefix="AdaptedModel" basePackage="org.but4reuse" disposableProviderFactory="true"
       multipleEditorPages="false" ecorePackage="adaptedmodel.ecore#/">
     <genClasses ecoreClass="adaptedmodel.ecore#//AdaptedModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedModel/ownedBlocks"/>

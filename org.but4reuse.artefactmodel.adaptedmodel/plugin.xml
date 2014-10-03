@@ -9,8 +9,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated adaptedmodel -->
       <package
-            uri="http://org.but4reuse.artefact.model.adapted.model"
-            class="org.but4reuse.artefactmodel.adaptedmodel.AdaptedModelPackage"
+            uri="http://org.but4reuse.adapted.model"
+            class="org.but4reuse.adaptedmodel.AdaptedModelPackage"
             genModel="model/adaptedmodel.genmodel"/>
    </extension>
 

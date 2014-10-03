@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.but4reuse.adapters.IElement;
 
 public abstract class AbstractElement implements IElement {
@@ -76,6 +75,15 @@ public abstract class AbstractElement implements IElement {
 		for(Object dependency: dependencies){
 			addDependency(MAIN_DEPENDENCY_ID, dependency);
 		}
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof IElement) {
+			// TODO get threshold
+			return similarity((IElement) obj)==1.0;
+		}
+		return super.equals(obj);
 	}
 	
 }

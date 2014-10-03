@@ -30,5 +30,13 @@ public class LineElement extends AbstractElement {
 	public String getText() {
 		return line;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((line == null) ? 0 : line.hashCode());
+		return result;
+	}
 
 }

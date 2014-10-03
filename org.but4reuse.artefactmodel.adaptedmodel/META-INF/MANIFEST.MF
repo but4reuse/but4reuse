@@ -1,17 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.but4reuse.artefactmodel.adaptedmodel;singleton:=true
+Bundle-SymbolicName: org.but4reuse.adaptedmodel;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.but4reuse.artefactmodel.adaptedmodel,
- org.but4reuse.artefactmodel.adaptedmodel.impl,
- org.but4reuse.artefactmodel.adaptedmodel.util
+Export-Package: org.but4reuse.adaptedmodel,
+ org.but4reuse.adaptedmodel.blockcreation,
+ org.but4reuse.adaptedmodel.helpers,
+ org.but4reuse.adaptedmodel.impl,
+ org.but4reuse.adaptedmodel.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore,
  org.but4reuse.artefactmodel;visibility:=reexport,
- org.but4reuse.featurelist;visibility:=reexport
+ org.but4reuse.featurelist;visibility:=reexport,
+ org.but4reuse.adapters
 Bundle-ActivationPolicy: lazy

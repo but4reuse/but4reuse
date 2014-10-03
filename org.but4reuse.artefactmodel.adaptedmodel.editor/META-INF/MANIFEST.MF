@@ -1,17 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.but4reuse.artefactmodel.adaptedmodel.editor;singleton:=true
+Bundle-SymbolicName: org.but4reuse.adaptedmodel.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: org.but4reuse.artefactmodel.adaptedmodel.presentation.AdaptedModelEditorPlugin$Implementation
+Bundle-Activator: org.but4reuse.adaptedmodel.presentation.AdaptedModelEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.but4reuse.artefactmodel.adaptedmodel.presentation
+Export-Package: org.but4reuse.adaptedmodel.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
- org.but4reuse.artefactmodel.adaptedmodel.edit;visibility:=reexport,
+ org.but4reuse.adaptedmodel.edit;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport,

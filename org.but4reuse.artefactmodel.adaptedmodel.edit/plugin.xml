@@ -9,8 +9,8 @@
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <!-- @generated adaptedmodel -->
       <factory
-            uri="http://org.but4reuse.artefact.model.adapted.model"
-            class="org.but4reuse.artefactmodel.adaptedmodel.provider.AdaptedModelItemProviderAdapterFactory"
+            uri="http://org.but4reuse.adapted.model"
+            class="org.but4reuse.adaptedmodel.provider.AdaptedModelItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider
