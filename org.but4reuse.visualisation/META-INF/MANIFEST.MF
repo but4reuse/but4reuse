@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Visualisation
+Bundle-SymbolicName: org.but4reuse.visualisation;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.visualisation.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.utils,
+ org.eclipse.contribution.visualiser
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: org.but4reuse.visualisation,
+ org.but4reuse.visualisation.visualiser

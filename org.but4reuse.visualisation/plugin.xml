@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.contribution.visualiser.providers">
+      <provider
+            contentProviderClass="org.but4reuse.visualisation.visualiser.BlockContentProvider"
+            id="org.but4reuse.visualisation.blocks.provider"
+            markupProviderClass="org.but4reuse.visualisation.visualiser.BlockMarkupProvider"
+            name="Blocks on Artefacts">
+      </provider>
+   </extension>
+
+</plugin>
