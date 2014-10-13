@@ -40,11 +40,12 @@ public class SimilarityPreferencePage
 		IntegerFieldEditor ife = new IntegerFieldEditor(AUTOMATIC_EQUAL_THRESHOLD, "Minimum percentage for automatic equal: ",  getFieldEditorParent(), 3);
 		ife.setValidRange(0, 100);
 		addField(ife);
-		BooleanFieldEditor bfe = new BooleanFieldEditor(ASK_USER,"Ask me in case of doubt",getFieldEditorParent());
-		addField(bfe);
-		IntegerFieldEditor ife2 = new IntegerFieldEditor(ASK_USER_THRESHOLD, "Minimum percentage for asking: ",  getFieldEditorParent(), 3);
-		ife2.setValidRange(0, 100);
-		addField(ife2);
+		// TODO threshold to ask users. manual similarity
+//		BooleanFieldEditor bfe = new BooleanFieldEditor(ASK_USER,"Ask me in case of doubt",getFieldEditorParent());
+//		addField(bfe);
+//		IntegerFieldEditor ife2 = new IntegerFieldEditor(ASK_USER_THRESHOLD, "Minimum percentage for asking: ",  getFieldEditorParent(), 3);
+//		ife2.setValidRange(0, 100);
+//		addField(ife2);
 		// TODO ask a RangeSlider for automatic and "ask the user" or at least add disabled for ife2 and errors for incoherent thresholds
 	}
 

@@ -24,8 +24,7 @@ public class TextLinesAdapter implements IAdapter {
 	 */
 	public boolean isAdaptable(URI uri, IStatus status, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
-		if (file != null && file.exists() && !file.isDirectory() && file.getName().endsWith(".txt")
-				|| file.getName().endsWith(".info")) {
+		if (file != null && file.exists() && !file.isDirectory()) {
 			return true;
 		}
 		return false;

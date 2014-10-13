@@ -8,13 +8,12 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ComposedArtefact;
-import org.but4reuse.artefactmodel.Artefact;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -100,41 +99,18 @@ public class AdaptersHelper {
 		}
 		return filteredAdapters;
 	}
-
-
-//	/**
-//	 * 
-//	 * @param artefactModel
-//	 * @param adapters
-//	 * @param monitor
-//	 * @return
-//	 */
-//	public static List<List<IElement>> getElements(ArtefactModel artefactModel,
-//			List<IAdapter> adapters, IProgressMonitor monitor) {
-//		List<List<IElement>> list = new ArrayList<List<IElement>>();
-//		
-//		// TODO implement concurrency to improve performance
-//		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
-//			if (artefact.isActive()) {
-//				String name = artefact.getName();
-//				if (name == null || name.length() == 0) {
-//					name = artefact.getArtefactURI();
-//				}
-//				monitor.subTask("Adapting: " + name);
-//
-//				list.add(getElements(artefact, adapters));
-//
-//				monitor.worked(1);
-//				if (monitor.isCanceled()) {
-//					return list;
-//				}
-//			}
-//		}
-//		return list;
-//	}
-	
 	
 
+	public static List<Artefact> getActiveArtefacts(ArtefactModel artefactModel){
+		List<Artefact> activeArtefacts = new ArrayList<Artefact>();
+		for(Artefact artefact : artefactModel.getOwnedArtefacts()){
+			if(artefact.isActive()){
+				activeArtefacts .add(artefact);
+			}
+		}
+		return activeArtefacts;
+	}
+	
 	public static List<IElement> getElements(Artefact artefact,
 			List<IAdapter> adapters) {
 		List<IElement> list = new ArrayList<IElement>();

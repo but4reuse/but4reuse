@@ -1,5 +1,6 @@
 package org.but4reuse.adaptedmodel.helpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -70,14 +71,17 @@ public class AdaptedModelHelper {
 		}
 	}
 
-	public static ElementWrapper findElementWrapper(List<AdaptedArtefact> artefacts, IElement ie) {
+	
+	public static List<ElementWrapper> findElementWrappers(List<AdaptedArtefact> artefacts, IElement ie) {
+		// expensive task, it is better if you use a hashmap IElement, IElementWrappers instead
+		List<ElementWrapper> elementWrappers = new ArrayList<ElementWrapper>();
 		for(AdaptedArtefact artefact : artefacts){
 			for(ElementWrapper ew : artefact.getOwnedElementWrappers()){
-				if(ew.getElement() == ie){
-					return ew;
+				if(ew.getElement().equals(ie)){
+					elementWrappers.add(ew);
 				}
 			}
 		}
-		return null;
+		return elementWrappers;
 	}
 }

@@ -4,10 +4,10 @@
    <extension
          point="org.eclipse.contribution.visualiser.providers">
       <provider
-            contentProviderClass="org.but4reuse.visualisation.visualiser.BlockContentProvider"
-            id="org.but4reuse.visualisation.blocks.provider"
-            markupProviderClass="org.but4reuse.visualisation.visualiser.BlockMarkupProvider"
-            name="Blocks on Artefacts">
+            contentProviderClass="org.but4reuse.visualisation.visualiser.BlockElementsContentProvider"
+            id="org.but4reuse.visualisation.blockelementsonartefacts.provider"
+            markupProviderClass="org.but4reuse.visualisation.visualiser.BlockElementsMarkupProvider"
+            name="Block Elements on Artefacts">
       </provider>
    </extension>
 
