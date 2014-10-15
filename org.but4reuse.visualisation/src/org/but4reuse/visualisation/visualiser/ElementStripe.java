@@ -4,6 +4,10 @@ import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 
 // TODO add IMarker as in StripeWithMarker and handle it when clicking
+/**
+ * Element Stripe
+ * @author jabier.martinez
+ */
 public class ElementStripe extends Stripe {
 
 	private String text;

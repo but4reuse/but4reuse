@@ -41,7 +41,7 @@ public class ScrollableMessageLineColorsDialog extends TitleAreaDialog {
         gridData.grabExcessVerticalSpace = true; // Layout vertically, too! 
         gridData.verticalAlignment = GridData.FILL;
 
-        StyledText scrollable = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL);
+        StyledText scrollable = new StyledText(composite, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
         scrollable.setLayoutData(gridData);
         scrollable.setText(scrollableText);
         
@@ -51,8 +51,7 @@ public class ScrollableMessageLineColorsDialog extends TitleAreaDialog {
         		scrollable.setLineBackground(linen, 1, colors.get(ci));
         	}
         }
-        
-
+       
         return composite;
     }
 
