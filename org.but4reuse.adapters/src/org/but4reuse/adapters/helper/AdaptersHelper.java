@@ -86,7 +86,7 @@ public class AdaptersHelper {
 					} else {
 						if (artefact.getArtefactURI() != null) {
 							URI uri = new URI(artefact.getArtefactURI());
-							if (adapter.isAdaptable(uri, null, null)) {
+							if (adapter.isAdaptable(uri, null)) {
 								filteredAdapters.add(adapter);
 							}
 						}
@@ -138,7 +138,7 @@ public class AdaptersHelper {
 			IAdapter adapter) {
 		List<IElement> elements = new ArrayList<IElement>();
 		try {
-			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null, null);
+			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			return elements;

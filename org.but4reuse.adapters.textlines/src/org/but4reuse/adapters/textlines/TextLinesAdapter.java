@@ -13,7 +13,6 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 public class TextLinesAdapter implements IAdapter {
 
@@ -22,7 +21,7 @@ public class TextLinesAdapter implements IAdapter {
 	 * Files with txt or info extension
 	 * TODO use Eclipse Text Content Type (Preferences -> General -> Content Types -> Text category)
 	 */
-	public boolean isAdaptable(URI uri, IStatus status, IProgressMonitor monitor) {
+	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
 		if (file != null && file.exists() && !file.isDirectory()) {
 			return true;
@@ -34,7 +33,7 @@ public class TextLinesAdapter implements IAdapter {
 	/**
 	 * Create a LineElement from each line in the file
 	 */
-	public List<IElement> adapt(URI uri, IStatus status, IProgressMonitor monitor) {
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		try {
@@ -62,7 +61,7 @@ public class TextLinesAdapter implements IAdapter {
 	}
 
 	@Override
-	public void construct(URI uri, List<IElement> elements, IStatus status, IProgressMonitor monitor) {
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		try {
 			// Use the given file or use a default name if a folder was given
 			if (uri.toString().endsWith("/")) {

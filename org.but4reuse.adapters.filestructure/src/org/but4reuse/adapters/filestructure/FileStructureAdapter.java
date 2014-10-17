@@ -9,18 +9,18 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * File structure adapter
+ * 
  * @author jabier.martinez
  */
 public class FileStructureAdapter implements IAdapter {
 
 	URI rootURI;
-	
+
 	@Override
-	public boolean isAdaptable(URI uri, IStatus status, IProgressMonitor monitor) {
+	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		// Any folder is adaptable
 		File file = FileUtils.getFile(uri);
 		if (file != null && file.exists() && file.isDirectory()) {
@@ -30,14 +30,14 @@ public class FileStructureAdapter implements IAdapter {
 	}
 
 	@Override
-	public List<IElement> adapt(URI uri, IStatus status, IProgressMonitor monitor) {
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		List<IElement> cps = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
 		adapt(file, cps);
 		return cps;
 	}
-	
+
 	private void adapt(File file, List<IElement> cps) {
 		if (file.isDirectory()) {
 			FolderElement directoryCP = new FolderElement();
@@ -55,16 +55,20 @@ public class FileStructureAdapter implements IAdapter {
 			cps.add(fileCP);
 		}
 	}
-	
+
 	@Override
-	public void construct(URI uri, List<IElement> elements, IStatus status, IProgressMonitor monitor) {
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		// Delegate to the element construction methods
-		for (IElement element : elements){
-			if(element instanceof FolderElement){
-				((FolderElement)element).construct(uri);
-			} else if(element instanceof FileElement){
-				((FileElement)element).construct(uri);
+		for (IElement element : elements) {
+			if (!monitor.isCanceled()) {
+				monitor.subTask(element.getText());
+				if (element instanceof FolderElement) {
+					((FolderElement) element).construct(uri);
+				} else if (element instanceof FileElement) {
+					((FileElement) element).construct(uri);
+				}
 			}
+			monitor.worked(1);
 		}
 	}
 
