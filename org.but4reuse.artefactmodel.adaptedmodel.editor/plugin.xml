@@ -5,19 +5,22 @@
 
 
 <plugin>
-<!--
+
    <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated adaptedmodel -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
       <wizard
-            category="org.but4reuse.newWizards.category"
-            class="org.but4reuse.adaptedmodel.presentation.AdaptedModelModelWizard"
-            icon="icons/full/obj16/AdaptedModelModelFile.gif"
             id="org.but4reuse.adaptedmodel.presentation.AdaptedModelModelWizardID"
-            name="%_UI_AdaptedModelModelWizard_label">
+            name="%_UI_AdaptedModelModelWizard_label"
+            class="org.but4reuse.adaptedmodel.presentation.AdaptedModelModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/AdaptedModelModelFile.gif">
          <description>%_UI_AdaptedModelModelWizard_description</description>
          <selection class="org.eclipse.core.resources.IResource"/>
       </wizard>
    </extension>
--->
 
    <extension point="org.eclipse.ui.editors">
       <!-- @generated adaptedmodel -->

@@ -236,6 +236,15 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getBlock_Name() {
+		return (EAttribute)blockEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getBlockElement() {
 		return blockElementEClass;
 	}
@@ -292,6 +301,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 		blockEClass = createEClass(BLOCK);
 		createEReference(blockEClass, BLOCK__OWNED_BLOCK_ELEMENTS);
 		createEReference(blockEClass, BLOCK__CORRESPONDING_FEATURE);
+		createEAttribute(blockEClass, BLOCK__NAME);
 
 		blockElementEClass = createEClass(BLOCK_ELEMENT);
 		createEReference(blockElementEClass, BLOCK_ELEMENT__ELEMENT_WRAPPERS);
@@ -337,7 +347,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 
 		initEClass(adaptedArtefactEClass, AdaptedArtefact.class, "AdaptedArtefact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdaptedArtefact_Artefact(), theArtefactModelPackage.getArtefact(), null, "artefact", null, 0, 1, AdaptedArtefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAdaptedArtefact_OwnedElementWrappers(), this.getElementWrapper(), null, "ownedElementWrappers", null, 0, -1, AdaptedArtefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAdaptedArtefact_OwnedElementWrappers(), this.getElementWrapper(), null, "ownedElementWrappers", null, 0, -1, AdaptedArtefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(elementWrapperEClass, ElementWrapper.class, "ElementWrapper", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getElementWrapper_Element(), ecorePackage.getEJavaObject(), "element", null, 0, 1, ElementWrapper.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -346,6 +356,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 		initEClass(blockEClass, Block.class, "Block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBlock_OwnedBlockElements(), this.getBlockElement(), null, "ownedBlockElements", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBlock_CorrespondingFeature(), theFeatureListPackage.getFeature(), null, "correspondingFeature", null, 0, 1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBlock_Name(), ecorePackage.getEString(), "name", null, 0, 1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(blockElementEClass, BlockElement.class, "BlockElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBlockElement_ElementWrappers(), this.getElementWrapper(), this.getElementWrapper_BlockElements(), "elementWrappers", null, 0, -1, BlockElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

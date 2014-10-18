@@ -11,6 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Feature identification algorithm as described by Tewfik Ziadi, Luz Frias,
@@ -20,7 +21,7 @@ import org.but4reuse.adapters.IElement;
 public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 
 	@Override
-	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts) {
+	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Blocks Empty
 		List<Block> blocks = new ArrayList<Block>();

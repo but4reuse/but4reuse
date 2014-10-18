@@ -122,7 +122,7 @@ public interface AdaptedModelPackage extends EPackage {
 	int ADAPTED_ARTEFACT__ARTEFACT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Owned Element Wrappers</b></em>' reference list.
+	 * The feature id for the '<em><b>Owned Element Wrappers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -223,13 +223,22 @@ public interface AdaptedModelPackage extends EPackage {
 	int BLOCK__CORRESPONDING_FEATURE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__NAME = 2;
+
+	/**
 	 * The number of structural features of the '<em>Block</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK_FEATURE_COUNT = 2;
+	int BLOCK_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Block</em>' class.
@@ -332,10 +341,10 @@ public interface AdaptedModelPackage extends EPackage {
 	EReference getAdaptedArtefact_Artefact();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.but4reuse.adaptedmodel.AdaptedArtefact#getOwnedElementWrappers <em>Owned Element Wrappers</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.but4reuse.adaptedmodel.AdaptedArtefact#getOwnedElementWrappers <em>Owned Element Wrappers</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Owned Element Wrappers</em>'.
+	 * @return the meta object for the containment reference list '<em>Owned Element Wrappers</em>'.
 	 * @see org.but4reuse.adaptedmodel.AdaptedArtefact#getOwnedElementWrappers()
 	 * @see #getAdaptedArtefact()
 	 * @generated
@@ -405,6 +414,17 @@ public interface AdaptedModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBlock_CorrespondingFeature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.but4reuse.adaptedmodel.Block#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.but4reuse.adaptedmodel.Block#getName()
+	 * @see #getBlock()
+	 * @generated
+	 */
+	EAttribute getBlock_Name();
 
 	/**
 	 * Returns the meta object for class '{@link org.but4reuse.adaptedmodel.BlockElement <em>Block Element</em>}'.
@@ -495,7 +515,7 @@ public interface AdaptedModelPackage extends EPackage {
 		EReference ADAPTED_ARTEFACT__ARTEFACT = eINSTANCE.getAdaptedArtefact_Artefact();
 
 		/**
-		 * The meta object literal for the '<em><b>Owned Element Wrappers</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Owned Element Wrappers</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -553,6 +573,14 @@ public interface AdaptedModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BLOCK__CORRESPONDING_FEATURE = eINSTANCE.getBlock_CorrespondingFeature();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BLOCK__NAME = eINSTANCE.getBlock_Name();
 
 		/**
 		 * The meta object literal for the '{@link org.but4reuse.adaptedmodel.impl.BlockElementImpl <em>Block Element</em>}' class.
