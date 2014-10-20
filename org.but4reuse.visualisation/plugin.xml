@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.but4reuse.visualisation" name="but4reuse visualisation" schema="schema/org.but4reuse.visualisation.exsd"/>
    <extension
          point="org.eclipse.contribution.visualiser.providers">
       <provider
@@ -16,7 +17,19 @@
    <extension
          point="org.eclipse.contribution.visualiser.providers">
       <provider
-            contentProviderClass="org.but4reuse.visualisation.visualiser.featurelist.FeaturesContentProvider"
+            contentProviderClass="org.but4reuse.visualisation.visualiser.adaptedmodel.BlocksContentProvider"
+            description="Blocks on Artefacts"
+            emptyMessage="Empty. Run a feature identification or feature localization action"
+            id="org.but4reuse.visualisation.blocksonartefacts.provider"
+            markupProviderClass="org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider"
+            name="Blocks on Artefacts">
+      </provider>
+   </extension>
+
+   <extension
+         point="org.eclipse.contribution.visualiser.providers">
+      <provider
+            contentProviderClass="org.but4reuse.visualisation.visualiser.featurelist.BlocksOnFeaturesContentProvider"
             description="Features on Blocks"
             emptyMessage="Empty. Run a feature localization action"
             id="org.but4reuse.visualisation.featuresonblocks.provider"
@@ -24,4 +37,35 @@
             name="Features on Blocks">
       </provider>
    </extension>
+   
+  <extension
+         point="org.eclipse.contribution.visualiser.providers">
+      <provider
+            contentProviderClass="org.but4reuse.visualisation.visualiser.featurelist.FeaturesOnBlocksContentProvider"
+            description="Blocks on Features"
+            emptyMessage="Empty. Run a feature localization action"
+            id="org.but4reuse.visualisation.blocksonfeatures.provider"
+            markupProviderClass="org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider"
+            name="Blocks on Features">
+      </provider>
+   </extension>
+  <extension
+        point="org.but4reuse.visualisation">
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation"
+           name="Block Elements on Artefacts">
+     </visualisation>
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.adaptedmodel.BlocksOnArtefactsVisualisation"
+           name="Blocks on Artefacts">
+     </visualisation>
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.featurelist.FeaturesOnBlocksVisualisation"
+           name="Features on Blocks">
+     </visualisation>
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.featurelist.BlocksOnFeaturesVisualisation"
+           name="Blocks on Features">
+     </visualisation>
+  </extension>
 </plugin>

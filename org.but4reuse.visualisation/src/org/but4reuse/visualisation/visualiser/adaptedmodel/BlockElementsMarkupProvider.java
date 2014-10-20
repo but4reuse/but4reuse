@@ -29,13 +29,11 @@ public class BlockElementsMarkupProvider extends SimpleMarkupProvider {
 
 	public void update(AdaptedModel adaptedModel) {
 		// Update
-		int i = 0;
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			BlockMarkupKind kind = new BlockMarkupKind(block.getName());
 			kind.setBlock(block);
 			blocksAndKinds.put(block, kind);
 			addMarkupKind(kind);
-			i++;
 		}
 	}
 

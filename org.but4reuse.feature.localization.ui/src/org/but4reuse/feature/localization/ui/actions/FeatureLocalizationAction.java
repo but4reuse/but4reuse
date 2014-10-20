@@ -15,7 +15,9 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.visualisation.IVisualisation;
+import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
+import org.but4reuse.visualisation.visualiser.featurelist.BlocksOnFeaturesVisualisation;
 import org.but4reuse.visualisation.visualiser.featurelist.FeaturesOnBlocksVisualisation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -56,8 +58,9 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 
-								// Adapting each active artefact + prepare visualisation
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1;
+								// Adapting each active artefact + calculating blocks + prepare visualisations
+								List<IVisualisation> visualisations = VisualisationsHelper.getAllVisualisations();
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + visualisations.size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
@@ -69,15 +72,13 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								
+								monitor.worked(1);
 								monitor.subTask("Preparing visualisations");
-								// TODO selection of visualisations
-								IVisualisation s = new BlockElementsOnArtefactsVisualisation();
-								s.prepare(null, adaptedModel, null, monitor);
-								s.show();
 								
-								IVisualisation s2 = new FeaturesOnBlocksVisualisation();
-								s2.prepare(featureList, adaptedModel, null, monitor);
-								s2.show();
+								for(IVisualisation visualisation : visualisations){
+									visualisation.prepare(featureList, adaptedModel, null, monitor);
+									visualisation.show();
+								}
 								
 								monitor.worked(1);
 								monitor.done();
