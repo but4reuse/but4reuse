@@ -1,7 +1,6 @@
 package org.but4reuse.visualisation.visualiser.featurelist;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IGroup;
@@ -22,7 +22,6 @@ import org.eclipse.contribution.visualiser.interfaces.IMember;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleContentProvider;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleGroup;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleMember;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 
@@ -32,8 +31,6 @@ import org.eclipse.swt.widgets.Display;
  * @author jabier.martinez
  */
 public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
-
-	Map<String, String> messagePerMember = new HashMap<String, String>();
 	
 	public void reset() {
 		if (this.getAllMembers() != null) {
@@ -42,9 +39,9 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 		if (this.getAllGroups() != null) {
 			this.getAllGroups().clear();
 		}
-		messagePerMember.clear();
 	}
 
+	String message;
 
 	/**
 	 * Add the blocks as members and add the stripes
@@ -59,34 +56,38 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 		BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) BlocksOnFeaturesVisualisation
 				.getFeaturesOnBlocksProvider().getMarkupInstance();
 		Map<Block, IMarkupKind> map = markupProvider.getBlocksAndNames();
-
+		message = ",";
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			message = message + block.getName() + ",";
+		}
+		message = message.substring(0,message.length()-1);
 		// Add blocks as members
 		for (Feature feature : featureList.getOwnedFeatures()) {
 			IMember member = new SimpleMember(feature.getName());
 			// Add stripes
 			int i = 0;
-			String memberMessage = "Blocks, and percentage of the existance of the block in the artefacts that implemented this feature\n";
+			message = message + "\n" + feature.getName() + ";";
 			for (Block block : adaptedModel.getOwnedBlocks()) {
 				double percentage = percentageOfBlockInFeature(block, feature);
+				message = message + percentage + ";";
 				if (percentage > 0) {
 					List<Feature> featuresOfThisBlock = getFeaturesOfThisBlock(featureList, block);
 					String messageExtra = "";
 					for(Feature f:featuresOfThisBlock){
 						if(!f.equals(feature)){
-							messageExtra = messageExtra  + f.getName() + ", ";
+							messageExtra = messageExtra  + f.getName() + "; ";
 						}
 					}
 					if(messageExtra.length()>0){
 						messageExtra = " also found in " + messageExtra.substring(0,messageExtra.length()-2);
 					}
-					memberMessage = memberMessage + block.getName() + " -> " + new Double(percentage * 100).intValue() + "% " + messageExtra + "\n";
 					IMarkupKind blockKind = map.get(block);
 					Stripe stripe = new Stripe(blockKind, i, block.getOwnedBlockElements().size());
 					i = i + block.getOwnedBlockElements().size();
 					markupProvider.addMarkup(member.getFullname(), stripe);
 				}
 			}
-			messagePerMember.put(member.getFullname(), memberMessage);
+			message = message.substring(0,message.length()-1);
 			group.add(member);
 			member.setSize(i);
 		}
@@ -138,7 +139,8 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 	// show selected variant and block elements relation
 	public boolean processMouseclick(IMember member, boolean markupWasClicked, int buttonClicked) {
 		if (!markupWasClicked) {
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), member.getFullname(), messagePerMember.get(member.getFullname()));
+			ScrollableMessageDialog m = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(), "Features on Blocks information", "CSV file", message);
+			m.open();
 		}
 		return true;
 	}
