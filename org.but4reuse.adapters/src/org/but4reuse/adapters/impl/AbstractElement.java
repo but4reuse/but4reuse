@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.but4reuse.adapters.IElement;
+import org.eclipse.core.resources.IMarker;
 
 public abstract class AbstractElement implements IElement {
 
-	private static final String MAIN_DEPENDENCY_ID = "dependency";
+	private static final String MAIN_DEPENDENCY_ID = "depends on";
 	/**
 	 * Abstract IElement
 	 * 
@@ -17,7 +19,6 @@ public abstract class AbstractElement implements IElement {
 	private Map<Object, List<Object>> dependencies = new HashMap<Object, List<Object>>();
 	private Map<Object, Integer> minDependencies = new HashMap<Object, Integer>();
 	private Map<Object, Integer> maxDependencies = new HashMap<Object, Integer>();
-	
 
 	@Override
 	/**
@@ -27,7 +28,16 @@ public abstract class AbstractElement implements IElement {
 	public int hashCode() {
 		return 1;
 	}
-	
+
+	/**
+	 * This method is intended to be optionally overriden. It is used to automatically go
+	 * to the location of the element. See text lines adapter example.
+	 * @return the marker
+	 */
+	public IMarker getMarker() {
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		return getText();
@@ -61,29 +71,29 @@ public abstract class AbstractElement implements IElement {
 		if (o == null) {
 			o = new ArrayList<Object>();
 		}
-		if(!o.contains(dependency)){
+		if (!o.contains(dependency)) {
 			o.add(dependency);
 		}
 		dependencies.put(dependencyID, o);
 	}
-	
-	public void addDependency(Object dependency){
+
+	public void addDependency(Object dependency) {
 		addDependency(MAIN_DEPENDENCY_ID, dependency);
 	}
-	
-	public void addDependencies(List<Object> dependencies){
-		for(Object dependency: dependencies){
+
+	public void addDependencies(List<Object> dependencies) {
+		for (Object dependency : dependencies) {
 			addDependency(MAIN_DEPENDENCY_ID, dependency);
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IElement) {
 			// TODO get threshold
-			return similarity((IElement) obj)==1.0;
+			return similarity((IElement) obj) == 1.0;
 		}
 		return super.equals(obj);
 	}
-	
+
 }

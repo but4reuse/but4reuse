@@ -41,17 +41,21 @@ public class TextLinesAdapter implements IAdapter {
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
+			int lineNumber = 0;
 			while ((strLine = br.readLine()) != null) {
 				if (TAB_SEPARATED) {
 					String[] pieces = strLine.split("\t");
 					for (String piece : pieces) {
-						LineElement locCP = new LineElement(piece);
-						elements.add(locCP);
+						LineElement lineElement = new LineElement(piece);
+						lineElement.setMarkerInfo(uri,lineNumber);
+						elements.add(lineElement);
 					}
 				} else {
 					LineElement lineElement = new LineElement(strLine);
+					lineElement.setMarkerInfo(uri,lineNumber);
 					elements.add(lineElement);
 				}
+				lineNumber++;
 			}
 			in.close();
 		} catch (Exception e) {

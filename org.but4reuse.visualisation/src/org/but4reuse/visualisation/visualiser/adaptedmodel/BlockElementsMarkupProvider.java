@@ -5,16 +5,22 @@ import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.contribution.visualiser.interfaces.IMember;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleMarkupProvider;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
  * Block Elements Markup Provider
+ * 
  * @author jabier.martinez
  */
 public class BlockElementsMarkupProvider extends SimpleMarkupProvider {
@@ -49,6 +55,21 @@ public class BlockElementsMarkupProvider extends SimpleMarkupProvider {
 	public boolean processMouseclick(IMember member, Stripe stripe, int buttonClicked) {
 		String message = stripe.getToolTip();
 		MessageDialog.openInformation(Display.getCurrent().getActiveShell(), member.getName(), message);
+		if (stripe instanceof ElementStripe) {
+			IElement element = ((ElementStripe) stripe).getElement();
+			if (element instanceof AbstractElement) {
+				IMarker marker = ((AbstractElement) element).getMarker();
+				if (marker != null) {
+					WorkbenchUtils.openInEditor(marker);
+					// leave no trace
+					try {
+						marker.delete();
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 		// return false for not to recompute
 		return false;
 	}

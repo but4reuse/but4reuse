@@ -70,7 +70,7 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 					Block block = (Block) blockElement.eContainer();
 					IMarkupKind blockKind = map.get(block);
 					ElementStripe stripe = new ElementStripe(blockKind, i, 1);
-					stripe.setText(((IElement) (elementWrapper.getElement())).getText());
+					stripe.setElement((IElement) (elementWrapper.getElement()));
 					markupProvider.addMarkup(member.getFullname(), stripe);
 				}
 				i++;
@@ -119,7 +119,7 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 			for(int i=0; i<stripes.size(); i++){
 				ElementStripe stripe = (ElementStripe)stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText + ((ElementStripe)stripe).getText() + "\n";
+				sText = sText + ((ElementStripe)stripe).getElement().getText() + "\n";
 			}
 			
 			// Remove the last \n

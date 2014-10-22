@@ -129,7 +129,7 @@ public class BlocksContentProvider extends SimpleContentProvider {
 			for(int i=0; i<stripes.size(); i++){
 				ElementStripe stripe = (ElementStripe)stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText + ((ElementStripe)stripe).getText() + "\n";
+				sText = sText + ((ElementStripe)stripe).getElement().getText() + "\n";
 			}
 			
 			// Remove the last \n

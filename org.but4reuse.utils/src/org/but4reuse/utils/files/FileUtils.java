@@ -129,17 +129,18 @@ public class FileUtils {
 
 	/**
 	 * Check if a file contains a file with a given extension
+	 * 
 	 * @param file
 	 * @param extension
 	 * @return whether it is found or not
 	 */
 	public static boolean containsFileWithExtension(File file, String extension) {
-		if(getExtension(file).equals(extension)){
+		if (getExtension(file).equals(extension)) {
 			return true;
 		} else {
-			if(file.isDirectory()){
-				for(File child : file.listFiles()){
-					if(containsFileWithExtension(child,extension)){
+			if (file.isDirectory()) {
+				for (File child : file.listFiles()) {
+					if (containsFileWithExtension(child, extension)) {
 						return true;
 					}
 				}
@@ -147,17 +148,19 @@ public class FileUtils {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Get file extension
+	 * 
 	 * @param file
 	 * @return extension or empty string
 	 */
-	public static String getExtension(File file){
+	public static String getExtension(File file) {
 		int i = file.getName().lastIndexOf('.');
 		if (i > 0) {
-		    return file.getName().substring(i+1);
+			return file.getName().substring(i + 1);
 		}
 		return "";
 	}
+	
 }

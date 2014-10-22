@@ -10,3 +10,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.core.internal.resources,
+ org.eclipse.core.resources

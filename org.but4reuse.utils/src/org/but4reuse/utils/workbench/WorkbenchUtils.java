@@ -1,10 +1,13 @@
 package org.but4reuse.utils.workbench;
 
 import java.io.File;
+import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -14,9 +17,12 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
@@ -105,5 +111,40 @@ public class WorkbenchUtils {
 	public static File getFileFromIResource(IResource resource){
 		return resource.getRawLocation().makeAbsolute().toFile();
 	}
+	
+	/**
+	 * Open the editor at the location of the given marker.
+	 * @param marker
+	 */
+	public static void openInEditor(IMarker marker) {
+		IWorkbenchPage page = getActivePage();
+		try {
+			IDE.openEditor(page, marker);
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static IWorkbenchPage getActivePage() {
+		IWorkbench wb = PlatformUI.getWorkbench();
+		   IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+		   return win.getActivePage();
+	}
+	
+	/**
+	 * Convert IFile to URI
+	 * @param uri
+	 * @return the ifile or null
+	 */
+	public static IFile getIFileFromURI(URI uri) {
+		// TODO It is possible that IFile is not in the workspace, check real Location
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		URI rootUri = root.getLocationURI();
+		uri = rootUri.relativize(uri);
+		IPath path = new Path(uri.getPath());
+		path = path.removeFirstSegments(1);
+		return root.getFile(path);
+	}
+	
 
 }

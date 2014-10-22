@@ -1,5 +1,6 @@
 package org.but4reuse.visualisation.visualiser.adaptedmodel;
 
+import org.but4reuse.adapters.IElement;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 
@@ -10,7 +11,7 @@ import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
  */
 public class ElementStripe extends Stripe {
 
-	private String text;
+	private IElement element;
 	
 	public ElementStripe(IMarkupKind blockKind, int i, int j) {
 		super(blockKind,i,j);
@@ -18,14 +19,14 @@ public class ElementStripe extends Stripe {
 
 	@Override
 	public String getToolTip() {
-		return "Blocks: " + stringifyKinds() + "\n" + text;
+		return "Blocks: " + stringifyKinds() + "\n" + element.getText();
 	}
 
-	public String getText() {
-		return text;
+	public IElement getElement() {
+		return element;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setElement(IElement element) {
+		this.element = element;
 	}
 }
