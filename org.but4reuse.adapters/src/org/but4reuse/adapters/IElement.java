@@ -43,7 +43,7 @@ public interface IElement {
 	 * @return A Map of relationIDs as keys and the list of owner elements or
 	 *         objects for the element.
 	 */
-	public Map<Object, List<Object>> getDependencies();
+	public Map<String, List<Object>> getDependencies();
 
 	/**
 	 * Get minimum owners. Overwrite this method if they are constant values.
@@ -53,14 +53,14 @@ public interface IElement {
 	 * @param dependencyID
 	 * @return the minimum number of owners that a ownership relation must have
 	 */
-	public int getMinDependencies(Object dependencyID);
+	public int getMinDependencies(String dependencyID);
 
 	/**
 	 * Get maximum owners
 	 * 
 	 * @param addDependency
-	 *            (Object)
+	 *            (String)
 	 * @return the maximum number of owners that a ownership relation must have
 	 */
-	public int getMaxDependencies(Object dependencyID);
+	public int getMaxDependencies(String dependencyID);
 }

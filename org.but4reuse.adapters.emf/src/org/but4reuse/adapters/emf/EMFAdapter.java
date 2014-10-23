@@ -69,7 +69,7 @@ public class EMFAdapter implements IAdapter {
 					cp.owner = adaptedEObject;
 					cp.eAttribute = attr;
 					cp.value = o;
-					cp.addDependency(attr, ownerElement);
+					cp.addDependency(attr.getName(), ownerElement);
 					elements.add(cp);
 				}
 			}
@@ -99,7 +99,7 @@ public class EMFAdapter implements IAdapter {
 				for (EObject r : refList) {
 					element.referenced.add(r);
 				}
-				element.addDependency(ref, ownerElement);
+				element.addDependency(ref.getName(), ownerElement);
 				elements.add(element);
 			}
 		}
@@ -129,7 +129,7 @@ public class EMFAdapter implements IAdapter {
 						element.childEObject = child;
 						element.owner = adaptedEObject;
 						element.reference = childReference;
-						element.addDependency(childReference, ownerElement);
+						element.addDependency(childReference.getName(), ownerElement);
 						elements.add(element);
 						adapt(child, element.childEObject, elements);
 					}

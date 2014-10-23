@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
-import org.eclipse.core.resources.IMarker;
 
 public abstract class AbstractElement implements IElement {
 
@@ -16,9 +15,9 @@ public abstract class AbstractElement implements IElement {
 	 * 
 	 * @author jabier.martinez
 	 */
-	private Map<Object, List<Object>> dependencies = new HashMap<Object, List<Object>>();
-	private Map<Object, Integer> minDependencies = new HashMap<Object, Integer>();
-	private Map<Object, Integer> maxDependencies = new HashMap<Object, Integer>();
+	private Map<String, List<Object>> dependencies = new HashMap<String, List<Object>>();
+	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
+	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
 
 	@Override
 	/**
@@ -29,44 +28,35 @@ public abstract class AbstractElement implements IElement {
 		return 1;
 	}
 
-	/**
-	 * This method is intended to be optionally overriden. It is used to automatically go
-	 * to the location of the element. See text lines adapter example.
-	 * @return the marker
-	 */
-	public IMarker getMarker() {
-		return null;
-	}
-
 	@Override
 	public String toString() {
 		return getText();
 	}
 
 	@Override
-	public Map<Object, List<Object>> getDependencies() {
+	public Map<String, List<Object>> getDependencies() {
 		return dependencies;
 	}
 
 	@Override
-	public int getMaxDependencies(Object dependencyID) {
+	public int getMaxDependencies(String dependencyID) {
 		return maxDependencies.get(dependencyID);
 	}
 
 	@Override
-	public int getMinDependencies(Object dependencyID) {
+	public int getMinDependencies(String dependencyID) {
 		return minDependencies.get(dependencyID);
 	}
 
-	public void setMaximumDependencies(Object dependencyID, int number) {
+	public void setMaximumDependencies(String dependencyID, int number) {
 		maxDependencies.put(dependencyID, number);
 	}
 
-	public void setMinimumDependencies(Object dependencyID, int number) {
+	public void setMinimumDependencies(String dependencyID, int number) {
 		minDependencies.put(dependencyID, number);
 	}
 
-	public void addDependency(Object dependencyID, Object dependency) {
+	public void addDependency(String dependencyID, Object dependency) {
 		List<Object> o = dependencies.get(dependencyID);
 		if (o == null) {
 			o = new ArrayList<Object>();
@@ -77,12 +67,12 @@ public abstract class AbstractElement implements IElement {
 		dependencies.put(dependencyID, o);
 	}
 
-	public void addDependency(Object dependency) {
+	public void addDependency(String dependency) {
 		addDependency(MAIN_DEPENDENCY_ID, dependency);
 	}
 
-	public void addDependencies(List<Object> dependencies) {
-		for (Object dependency : dependencies) {
+	public void addDependencies(List<String> dependencies) {
+		for (String dependency : dependencies) {
 			addDependency(MAIN_DEPENDENCY_ID, dependency);
 		}
 	}

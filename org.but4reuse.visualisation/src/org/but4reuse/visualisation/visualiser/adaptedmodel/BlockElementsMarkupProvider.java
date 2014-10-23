@@ -6,7 +6,7 @@ import java.util.Map;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
@@ -57,8 +57,8 @@ public class BlockElementsMarkupProvider extends SimpleMarkupProvider {
 		MessageDialog.openInformation(Display.getCurrent().getActiveShell(), member.getName(), message);
 		if (stripe instanceof ElementStripe) {
 			IElement element = ((ElementStripe) stripe).getElement();
-			if (element instanceof AbstractElement) {
-				IMarker marker = ((AbstractElement) element).getMarker();
+			if (element instanceof IMarkerElement) {
+				IMarker marker = ((IMarkerElement) element).getMarker();
 				if (marker != null) {
 					WorkbenchUtils.openInEditor(marker);
 					// leave no trace
