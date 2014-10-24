@@ -7,6 +7,7 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -42,6 +43,14 @@ public class AdaptersSelectionDialog {
 	 *            or null (it will be used for pre-selection)
 	 */
 	public static List<IAdapter> show(String title, List<IAdapter> correctAdapters) {
+		
+		// No adapters
+		List<IAdapter> result = new ArrayList<IAdapter>();
+		if(correctAdapters.isEmpty()){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Adapters selection", "Sorry, no adapter is available for your artefact types or some problems occurred. Please, check the Problems view.");
+			return result;
+		}
+		
 		// Prepare Adapters selection dialog
 		List<IAdapter> allAdapters = AdaptersHelper.getAllAdapters();
 
@@ -72,7 +81,7 @@ public class AdaptersSelectionDialog {
 		lsd.setInitialSelections(correctAdapters2.toArray());
 		lsd.setTitle(title);
 
-		List<IAdapter> result = new ArrayList<IAdapter>();
+		
 		
 		// Open and process
 		if (lsd.open() == Window.OK && lsd.getResult() != null && lsd.getResult().length > 0) {

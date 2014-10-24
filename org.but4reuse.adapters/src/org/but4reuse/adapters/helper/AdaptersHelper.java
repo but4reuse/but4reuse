@@ -11,18 +11,20 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ComposedArtefact;
+import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
 
-
 /**
- * Adapters Helper
- * Useful methods for Adapters and Elements
+ * Adapters Helper Useful methods for Adapters and Elements
+ * 
  * @author jabier.martinez
  */
 public class AdaptersHelper {
@@ -53,23 +55,44 @@ public class AdaptersHelper {
 	 * @return
 	 */
 	public static List<IAdapter> getAdapters(ArtefactModel variantsModel) {
+		// TODO for the moment we return the super set of adapters of all
+		// artefacts but this can have problems. Now we assume that all share
+		// the same adapters.
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 		for (Artefact artefact : variantsModel.getOwnedArtefacts()) {
 			List<IAdapter> artefactAdapters = getAdapters(artefact);
-			return artefactAdapters;
+			for (IAdapter a : artefactAdapters) {
+				if (!filteredAdapters.contains(a)) {
+					filteredAdapters.add(a);
+				}
+			}
 		}
 		return filteredAdapters;
 	}
 
 	/**
-	 * TODO clean this method
+	 * Get adapters
 	 * 
 	 * @param artefact
 	 * @return
 	 */
 	public static List<IAdapter> getAdapters(Artefact artefact) {
-		List<IAdapter> adapters = getAllAdapters();
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
+
+		if (!(artefact instanceof ComposedArtefact)) {
+			// Check if URI exists, we use emf utils
+			org.eclipse.emf.common.util.URI emfuri = org.eclipse.emf.common.util.URI.createURI(artefact
+					.getArtefactURI());
+			ExtensibleURIConverterImpl conv = new ExtensibleURIConverterImpl();
+			if (!(conv.exists(emfuri, null))) {
+				// It does not exist report error
+				WorkbenchUtils.reportError(EMFUtils.getIResource(artefact.eResource()), 0, "URI not found: " + emfuri);
+				return filteredAdapters;
+			}
+		}
+
+		// TODO clean this method
+		List<IAdapter> adapters = getAllAdapters();
 		for (IAdapter adapter : adapters) {
 			if (!filteredAdapters.contains(adapter)) {
 				try {
@@ -99,20 +122,18 @@ public class AdaptersHelper {
 		}
 		return filteredAdapters;
 	}
-	
 
-	public static List<Artefact> getActiveArtefacts(ArtefactModel artefactModel){
+	public static List<Artefact> getActiveArtefacts(ArtefactModel artefactModel) {
 		List<Artefact> activeArtefacts = new ArrayList<Artefact>();
-		for(Artefact artefact : artefactModel.getOwnedArtefacts()){
-			if(artefact.isActive()){
-				activeArtefacts .add(artefact);
+		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
+			if (artefact.isActive()) {
+				activeArtefacts.add(artefact);
 			}
 		}
 		return activeArtefacts;
 	}
-	
-	public static List<IElement> getElements(Artefact artefact,
-			List<IAdapter> adapters) {
+
+	public static List<IElement> getElements(Artefact artefact, List<IAdapter> adapters) {
 		List<IElement> list = new ArrayList<IElement>();
 		if (artefact.isActive()) {
 			if (artefact instanceof ComposedArtefact) {
@@ -134,8 +155,7 @@ public class AdaptersHelper {
 	 * @param artefact
 	 * @return
 	 */
-	public static List<IElement> getElements(Artefact artefact,
-			IAdapter adapter) {
+	public static List<IElement> getElements(Artefact artefact, IAdapter adapter) {
 		List<IElement> elements = new ArrayList<IElement>();
 		try {
 			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
@@ -201,8 +221,7 @@ public class AdaptersHelper {
 						try {
 							String className = cpcon.getAttribute("element");
 							if (className.equals(element.getClass().getName())) {
-								return (IAdapter) adapterExtensionPoint
-										.createExecutableExtension("class");
+								return (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
 							}
 						} catch (CoreException e) {
 							e.printStackTrace();

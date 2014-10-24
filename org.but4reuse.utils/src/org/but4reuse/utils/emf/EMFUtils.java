@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAttribute;
@@ -16,12 +18,14 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 
 /**
  * EMF Utils
+ * 
  * @author jabier.martinez
  */
 public class EMFUtils {
-	
+
 	/**
 	 * Get EObject from URI
+	 * 
 	 * @param uri
 	 * @return the EObject behind this resource uri
 	 */
@@ -36,9 +40,10 @@ public class EMFUtils {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get the emf composedAdapterFactory
+	 * 
 	 * @return the emf composedAdapterFactory
 	 */
 	public static ComposedAdapterFactory getAllRegisteredAdapterFactories() {
@@ -47,11 +52,12 @@ public class EMFUtils {
 		factories.add(new ReflectiveItemProviderAdapterFactory());
 		return new ComposedAdapterFactory(factories);
 	}
-	
+
 	/**
 	 * Try to find a human redable name for an EObject
+	 * 
 	 * @param eObject
-	 * @return  a name
+	 * @return a name
 	 */
 	public static String getName(EObject eObject) {
 		// TODO get item provider and then getText
@@ -74,4 +80,19 @@ public class EMFUtils {
 		}
 		return name;
 	}
+
+	/**
+	 * Get an IResource from an EMF resource
+	 * @param eResource
+	 * @return the iResource
+	 */
+	public static IResource getIResource(Resource eResource) {
+		org.eclipse.emf.common.util.URI eUri = eResource.getURI();
+		if (eUri.isPlatformResource()) {
+			String platformString = eUri.toPlatformString(true);
+			return ResourcesPlugin.getWorkspace().getRoot().findMember(platformString);
+		}
+		return null;
+	}
+
 }
