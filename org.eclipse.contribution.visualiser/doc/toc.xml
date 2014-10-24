@@ -1,0 +1,11 @@
+<toc label="Visualiser Guide">
+	<topic label="Using the Visualiser" href="doc/userguide/main.html">
+		<link toc="doc/toc_using.xml" />
+	</topic>
+	<topic label="Writing a plug-in for the Visualiser" href="doc/extenderguide/main.html">
+		<link toc="doc/toc_extending.xml" />
+	</topic>
+	<topic label="Reference">
+		<link toc="doc/toc_reference.xml" />
+	</topic>
+</toc>

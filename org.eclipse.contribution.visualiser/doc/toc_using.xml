@@ -1,0 +1,7 @@
+<toc label="Using the Visualiser" href="doc/userguide/main.html">
+    <topic label="The Views" href="doc/userguide/main.html#views"/>
+	<topic label="Visualization Modes" href="doc/userguide/main.html#modes"/>		
+	<topic label="Drawing Options" href="doc/userguide/main.html#drawing" />
+	<topic label="Quick-Select Actions" href="doc/userguide/main.html#quick" />
+	<topic label="Providers" href="doc/userguide/main.html#providers" />
+</toc>

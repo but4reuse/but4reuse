@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.contribution.visualiser">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.eclipse.contribution.visualiser" id="providers" name="Visualiser Providers"/>
+      </appInfo>
+      <documentation>
+         This extension point is used to plug in to the Visualiser by specifying a provider.  Each extension must provide an implementor of &lt;FONT face=&quot;Courier New&quot; size=&quot;-1&quot;&gt;org.eclipse.contribution.visualiser.interfaces.IContentProvider&lt;/font&gt; and an implementor of &lt;FONT face=&quot;Courier New&quot; size=&quot;-1&quot;&gt;org.eclipse.contribution.visualiser.interfaces.IMarkupProvider&lt;/font&gt;.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="provider"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="provider">
+      <annotation>
+         <documentation>
+            Provider definition.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="contentProviderClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Content Provider class (must implement org.eclipse.contribution.visualiser.interface.IContentProvider).
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique ID for the provider
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Name of the provider, to be used in the Visualiser preference page.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  Description of the provider, to be used in the Visualiser preference page.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="markupProviderClass" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Markup provider class (must implement org.eclipse.contribution.visualiser.interfaces.IMarkupProvider).
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="title" type="string">
+            <annotation>
+               <documentation>
+                  Title, to be used in the Visualiser view&apos;s title.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="priority" type="string">
+            <annotation>
+               <documentation>
+                  Integer value where 0 is the lowest, stating the priority of the provider in the list on the Visualiser preference page.  This value also determines which of the available providers is selected by default.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="paletteid" type="string">
+            <annotation>
+               <documentation>
+                  If present, this defines the default palette to be used by this provider
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="emptyMessage" type="string">
+            <annotation>
+               <documentation>
+                  Empty Message - to be displayed in the Visualiser view when no data is available from the content provider.  Should ideally direct the user to how to get some data into the view (e.g. &quot;Click on something in the navigator view&quot;).
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         An example of a simple file-based provider:
+&lt;P&gt;&lt;FONT face=&quot;Courier New&quot; color=&quot;#000080&quot; size=&quot;-1&quot;&gt;&amp;lt;extension&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;id=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;file_providers&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;name=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;File Providers&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;point=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;org.eclipse.contribution.visualiser.providers&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&amp;gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;contentProvider&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;markupclass=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;org.eclipse.contribution.visualiser.interfaces.simpleImpl.FileMarkupProvider&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;name=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;File content provider&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;priority=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;0&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;description=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;Simple test provider that reads flat file to determine groups, members and marks&amp;quot;&lt;FONT color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;class=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;org.eclipse.contribution.visualiser.interfaces.simpleImpl.FileContentProvider&amp;quot;&lt;font color=&quot;#000080&quot;&gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;id=&lt;FONT color=&quot;#008000&quot;&gt;&amp;quot;filecontentprovider&amp;quot;&lt;font color=&quot;#000080&quot;&gt;&amp;gt;&lt;BR&gt;
+&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/contentProvider&amp;gt;&lt;BR&gt;
+&amp;lt;/extension&amp;gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/P&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         Several implementation examples are included with the Visualiser
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

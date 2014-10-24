@@ -1,0 +1,14 @@
+org.eclipse.contribution.visualiser
+org.eclipse.contribution.visualiser.core
+org.eclipse.contribution.visualiser.core.resources
+org.eclipse.contribution.visualiser.interfaces
+org.eclipse.contribution.visualiser.internal.help
+org.eclipse.contribution.visualiser.internal.preference
+org.eclipse.contribution.visualiser.jdtImpl
+org.eclipse.contribution.visualiser.markerImpl
+org.eclipse.contribution.visualiser.palettes
+org.eclipse.contribution.visualiser.renderers
+org.eclipse.contribution.visualiser.simpleImpl
+org.eclipse.contribution.visualiser.text
+org.eclipse.contribution.visualiser.utils
+org.eclipse.contribution.visualiser.views

@@ -1,0 +1,9 @@
+<toc label="Plugging in to the Visualiser">
+	<topic label="Background" href="doc/extenderguide/main.html#background"/>
+	<topic label="Writing a Provider" href="doc/extenderguide/main.html#provider"/>
+	<topic label="Using the extension points to register your provider" href="doc/extenderguide/main.html#register" />
+	<topic label="Other Features" href="doc/extenderguide/main.html#features"/>
+	<topic label="Renderers" href="doc/extenderguide/main.html#renderers"/>
+	<topic label="Color Palettes" href="doc/extenderguide/main.html#palettes"/>
+	<topic label="Forthcoming Providers" href="doc/extenderguide/main.html#forthcoming"/>
+</toc>
