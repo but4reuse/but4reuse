@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.preferences.PreferencesHelper;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractElement implements IElement {
 
@@ -77,13 +80,83 @@ public abstract class AbstractElement implements IElement {
 		}
 	}
 
+	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IElement) {
-			// TODO get threshold
-			return similarity((IElement) obj) == 1.0;
+			// get threshold
+			double automaticThreshold = PreferencesHelper.getAutomaticEqualThreshold();
+			double similarity = similarity((IElement) obj);
+			if (similarity >= automaticThreshold) {
+				// The similarity was greater than the equal threshold
+				return true;
+			}
+			// check if we should ask the user
+			if (!PreferencesHelper.isManualEqualActivated()) {
+				// no? ok, so it is not equal
+				return false;
+			}
+
+			// check if we should really ask
+			double manualThreshold = PreferencesHelper.getManualEqualThreshold();
+			if (similarity < manualThreshold) {
+				return false;
+			}
+
+			// ok, let's ask the user
+			boolean userDecision = manualEqual(obj);
+			return userDecision;
 		}
 		return super.equals(obj);
+	}
+
+	/**
+	 * Manual equal. Override to provide tailored comparison user interfaces for your elements
+	 * 
+	 * @return whether the element is equal to another
+	 */
+	public boolean manualEqual(Object obj) {
+		ElementTextManualComparison manualComparison = new ElementTextManualComparison(this.getText(),((IElement)obj).getText());
+		Display.getDefault().syncExec(manualComparison);
+		int buttonIndex = manualComparison.getResult();
+		if (buttonIndex == 0) {
+			return true;
+		} else if (buttonIndex ==1){
+			return false;
+		} else {
+			PreferencesHelper.setManualEqual(false);
+			return false;
+		}
+	}
+
+	public interface IManualComparison extends Runnable {
+		public int getResult();
+	};
+
+	public class ElementTextManualComparison implements IManualComparison {
+		String elementText1;
+		String elementText2;
+		int result;
+
+		public ElementTextManualComparison(String elementText1, String elementText2) {
+			this.elementText1 = elementText1;
+			this.elementText2 = elementText2;
+		}
+
+		@Override
+		public void run() {
+			// TODO implement "Always" and "Never" buttons
+			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal", null, elementText1 + "\n\n is equal to \n\n" + elementText2,
+					MessageDialog.QUESTION, new String[] { "Yes", "No" , "Deactivate manual equal" }, 0);
+			result = dialog.open();
+		}
+
+		@Override
+		public int getResult() {
+			return result;
+		}
+
 	}
 
 }

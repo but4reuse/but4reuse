@@ -10,9 +10,6 @@ public class Activator extends AbstractUIPlugin {
 	static BundleContext getContext() {
 		return context;
 	}
-	
-	// The shared instance
-	private static Activator plugin;
 
 	/*
 	 * (non-Javadoc)
@@ -20,7 +17,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
-		plugin = this;
 	}
 
 	/*
@@ -28,17 +24,8 @@ public class Activator extends AbstractUIPlugin {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
-		plugin = null;
 		Activator.context = null;
 	}
-	
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static Activator getDefault() {
-		return plugin;
-	}
+
 
 }

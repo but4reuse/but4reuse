@@ -5,6 +5,7 @@ import java.net.URI;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
+import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.textlines.utils.LevenshteinDistanceStrategy;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IFile;
@@ -41,10 +42,14 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((line == null) ? 0 : line.hashCode());
-		return result;
+		// We use the hash from the line string only if we are on identical mode
+		if (PreferencesHelper.isOnlyIdenticalMode()) {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((line == null) ? 0 : line.hashCode());
+			return result;
+		}
+		return super.hashCode();
 	}
 
 	// marker information

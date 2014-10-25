@@ -10,11 +10,14 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.common,
  org.eclipse.emf.ecore,
  org.but4reuse.artefactmodel,
- org.but4reuse.utils
+ org.but4reuse.utils,
+ org.eclipse.ui.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters,
+ org.but4reuse.adapters.activator,
  org.but4reuse.adapters.helper,
  org.but4reuse.adapters.impl,
- org.but4reuse.adapters.markers
+ org.but4reuse.adapters.markers,
+ org.but4reuse.adapters.preferences
 Import-Package: org.eclipse.core.resources

@@ -34,8 +34,15 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 		// IElement
 		Map<IElement, List<ElementWrapper>> eewmap = new HashMap<IElement, List<ElementWrapper>>();
 		for (int i = 0; i < adaptedArtefacts.size(); i++) {
+			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i+1) + "/" + adaptedArtefacts.size());
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
 			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
+				
+				// user cancel
+				if(monitor.isCanceled()){
+					return blocks;
+				}
+				
 				IElement e = (IElement) ew.getElement();
 				List<ElementWrapper> ews = eewmap.get(e);
 				if (ews == null) {
@@ -53,6 +60,8 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 			}
 		}
 
+		monitor.subTask("Block Creation. Intersections algorithm. Creating Blocks");
+		
 		// Iterate on R to create blocks with their block elements
 		while (!R.isEmpty()) {
 			List<Integer> products = findMostFrequentCP(R);
