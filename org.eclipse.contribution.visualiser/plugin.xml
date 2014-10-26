@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+     <extension-point id="providers" name="%visualiserProviders" schema="schema/providers.exsd"/>
+   <extension-point id="renderers" name="%visualiserRenderers" schema="schema/renderers.exsd"/>
+   <extension-point id="palettes" name="%visualiserPalettes" schema="schema/palettes.exsd"/>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="%Visualiser"
+            id="Visualiser">
+      </category>
+      <view
+            name="%visualiserView"
+            icon="icons/visualiser.gif"
+            category="Visualiser"
+            class="org.eclipse.contribution.visualiser.views.Visualiser"
+            id="org.eclipse.contribution.visualiser.views.Visualiser">
+      </view>
+      <view
+            name="%visualiserMenuView"
+            icon="icons/vismenu.gif"
+            category="Visualiser"
+            class="org.eclipse.contribution.visualiser.views.Menu"
+            id="org.eclipse.contribution.visualiser.views.Menu">
+      </view>
+      
+      <!-- enable this view to monitor rendering info - requires RenderingMonitorInfo aspect -->
+      <!--
+      <view
+            name="Rendering monitor"
+            icon="icons/visualiser.gif"
+            category="Visualiser"
+            class="org.eclipse.contribution.visualiser.utils.RenderingMonitor"
+            id="org.eclipse.contribution.visualiser.utils.RenderingMonitor">
+      </view>
+      -->
+   </extension>
+<!--extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="Visualiser.views.VisView">
+         </view>
+      </perspectiveExtension>
+   </extension-->
+   <extension
+         id="inbuilt_providers"
+         name="%inbuiltProviders"
+         point="org.eclipse.contribution.visualiser.providers">
+     <provider
+            markupProviderClass="org.eclipse.contribution.visualiser.simpleImpl.FileMarkupProvider"
+            name="%fileBasedProvider"
+            priority="0"
+            emptyMessage="%fileBasedProvider.emptyMessage"
+            description="%fileBasedProvider.description"
+            contentProviderClass="org.eclipse.contribution.visualiser.simpleImpl.FileContentProvider"
+            id="filecontentprovider">
+      </provider>
+      <provider
+            markupProviderClass="org.eclipse.contribution.visualiser.jdtImpl.JDTSearchResultsMarkupProvider"
+            name="%jdtSearchResultsProvider"
+            priority="5"
+            description="%jdtSearchResultsProvider.description"
+            emptyMessage="%jdtSearchResultsProvider.emptyMessage"
+            contentProviderClass="org.eclipse.contribution.visualiser.jdtImpl.JDTSearchResultsContentProvider"
+            id="jdtsearchresultscontentprovider">
+      </provider>
+      <provider
+            markupProviderClass="org.eclipse.contribution.visualiser.markerImpl.MarkerMarkupProvider"
+            name="%resourcesAndMarkersProvider"
+            priority="6"
+            emptyMessage="%resourcesAndMarkersProvider.emptyMessage"
+            description="%resourcesAndMarkersProvider.description"
+            contentProviderClass="org.eclipse.contribution.visualiser.markerImpl.ResourceContentProvider"
+            id="markercontentprovider">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="%VisualiserPreferencePage"
+            class="org.eclipse.contribution.visualiser.internal.preference.VisualiserPreferencePage"
+            id="org.eclipse.contribution.visualiser.prefspage">
+      </page>
+   </extension>
+	
+	<!-- Documentation -->
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="doc/toc.xml"
+            primary="true">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="doc/toc_using.xml">
+      </toc>
+      <toc
+            file="doc/toc_extending.xml">
+      </toc>
+      <toc
+            file="doc/toc_reference.xml">
+      </toc>
+   </extension>
+   
+ 	<extension point="org.eclipse.help.contexts"> 
+		<contexts file="contexts_Visualiser.xml" plugin="org.eclipse.contribution.visualiser"/>
+	</extension>
+
+   <extension
+         point="org.eclipse.contribution.visualiser.renderers">
+         <renderer class="org.eclipse.contribution.visualiser.renderers.ClassicVisualiserRenderer"
+             name="%Renderer.classic.name"
+             id="classic">
+         </renderer>
+         <renderer class="org.eclipse.contribution.visualiser.renderers.DefaultVisualiserRenderer"
+             name="%Renderer.default.name"
+             id="default">
+         </renderer>
+         <renderer class="org.eclipse.contribution.visualiser.renderers.GradientVisualiserRenderer"
+             name="%Renderer.gradient.name"
+             id="gradientbars">
+         </renderer>
+         <renderer class="org.eclipse.contribution.visualiser.renderers.CylinderRenderer"
+             name="%Renderer.cylinders.name"
+             id="cylinderbars">
+         </renderer>
+   </extension>
+   
+   <extension
+         point="org.eclipse.contribution.visualiser.palettes">
+         <palette class="org.eclipse.contribution.visualiser.palettes.DefaultVisualiserPalette"
+             name="%Palette.default.name"
+             id="defaultpalette">
+         </palette>
+         <palette class="org.eclipse.contribution.visualiser.palettes.BrightVisualiserPalette"
+             name="%Palette.bright.name"
+             id="brightpalette">
+         </palette>
+         <palette class="org.eclipse.contribution.visualiser.palettes.PatternVisualiserPalette"
+             name="%Palette.pattern.name"
+             id="patternpalette">
+         </palette>
+   </extension>
+</plugin>

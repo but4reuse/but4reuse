@@ -10,6 +10,14 @@
          <elements>
             <element
                   element="org.but4reuse.adapters.emf.EMFClassElement"></element>
+            <element
+                  element="org.but4reuse.adapters.emf.EMFResourceElement"></element>
+            <element
+                  element="org.but4reuse.adapters.emf.EMFAttributeElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.emf.EMFReferenceElement">
+            </element>
          </elements>
       </adapter>
    </extension>

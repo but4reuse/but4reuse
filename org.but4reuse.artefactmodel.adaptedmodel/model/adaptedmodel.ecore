@@ -10,7 +10,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="AdaptedArtefact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="artefact" eType="ecore:EClass ../../org.but4reuse.artefactmodel/model/artefactmodel.ecore#//Artefact"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElementWrappers" upperBound="-1"
-        eType="#//ElementWrapper"/>
+        eType="#//ElementWrapper" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ElementWrapper">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
@@ -21,6 +21,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBlockElements" upperBound="-1"
         eType="#//BlockElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="correspondingFeature" eType="ecore:EClass ../../org.but4reuse.featurelist/model/featurelist.ecore#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BlockElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elementWrappers" upperBound="-1"

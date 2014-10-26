@@ -6,6 +6,7 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
+import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
@@ -16,7 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AdaptedModelHelper {
 	/**
-	 * 
+	 * Adapt an artefact model to create the list of elements of each artefact
 	 * @param artefactModel
 	 * @param adapters
 	 * @param monitor
@@ -84,4 +85,24 @@ public class AdaptedModelHelper {
 		}
 		return elementWrappers;
 	}
+
+	public static List<Block> checkBlockNames(List<Block> blocks) {
+		int i = 0;
+		for(Block block : blocks){
+			if(block.getName()==null || block.getName().isEmpty()){
+				block.setName("Block " + getNumberWithZeros(i,blocks.size() - 1));
+				i++;
+			}
+		}
+		return blocks;
+	}
+	
+	public static String getNumberWithZeros(int number, int maxNumber) {
+		String _return = String.valueOf(number);
+		for (int zeros = _return.length(); zeros < String.valueOf(maxNumber).length(); zeros++) {
+			_return = "0" + _return;
+		}
+		return _return;
+	}
+
 }

@@ -11,6 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Feature identification algorithm as described by Tewfik Ziadi, Luz Frias,
@@ -20,7 +21,7 @@ import org.but4reuse.adapters.IElement;
 public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 
 	@Override
-	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts) {
+	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Blocks Empty
 		List<Block> blocks = new ArrayList<Block>();
@@ -33,8 +34,15 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 		// IElement
 		Map<IElement, List<ElementWrapper>> eewmap = new HashMap<IElement, List<ElementWrapper>>();
 		for (int i = 0; i < adaptedArtefacts.size(); i++) {
+			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i+1) + "/" + adaptedArtefacts.size());
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
 			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
+				
+				// user cancel
+				if(monitor.isCanceled()){
+					return blocks;
+				}
+				
 				IElement e = (IElement) ew.getElement();
 				List<ElementWrapper> ews = eewmap.get(e);
 				if (ews == null) {
@@ -52,6 +60,8 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 			}
 		}
 
+		monitor.subTask("Block Creation. Intersections algorithm. Creating Blocks");
+		
 		// Iterate on R to create blocks with their block elements
 		while (!R.isEmpty()) {
 			List<Integer> products = findMostFrequentCP(R);

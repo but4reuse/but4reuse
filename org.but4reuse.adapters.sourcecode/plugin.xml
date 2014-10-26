@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.sourcecode.SourceCodeAdapter"
+            icon="icons/code.gif"
+            name="Source code">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTNodeElement"></element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement"></element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
+            </element>
+         </elements>
+      </adapter>
+   </extension>
+
+</plugin>

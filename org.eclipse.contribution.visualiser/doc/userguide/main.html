@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META http-equiv="Content-Style-Type" content="text/css">
+<link rel="STYLESHEET" href="../book.css" charset="ISO-8859-1" type="text/css">
+<TITLE></TITLE>
+</HEAD>
+<BODY>
+<H1 style="text-align:center" align="center">Using the Visualiser</H1>
+
+<a name="views">
+<H2>Overview </H2></a>
+<p>The Visualiser is an extensible plugin that can be used to visualize anything that can be
+represented by bars and stripes.  It began as the Aspect Visualiser, which was a part of the popular AJDT
+plugin. It was originally created to visualize how aspects were affecting classes in a project, 
+but has since been extracted to become its own component.</p>
+<p><img src="visualiser.png" alt="The two Visualiser Views"> </p>
+<p>The Visualiser plugin has two views - the main Visualiser view, which displays
+the bar drawing, and the Visualiser Menu, which displays the 'kinds' of stripes that
+appear on the bars.  The Menu is used to activate and deactivate kinds, and to change
+the colours used. Bars in the Visualiser are given a white background if contain any stripes,
+otherwise they are dark grey.</p>
+
+<a name="modes">
+<H2>Visualization Modes</H2></a>
+<p>The data that the bars represent is structured as groups and members, where each group
+contains one or more members.  Groups cannot contain other groups.  In the AspectJ plugin, groups
+represent packages and members represent classes within that package.  The Visualiser provides 
+"Member View" where each bar represents a member, and "Group View" where each bar represensts a group.
+The size of any group is the sum of the sizes of all its members, and it can be considered
+to be a composition of all its members stacked on top of each other.  Member and Group View can 
+therefore be considered to be two diferent views on the same set of data.</p>
+
+
+<p>Member View:<br><br><img src="member_view.png" alt="Member View"> </p>
+<p>Group View:<br><br><img src="group_view.png" alt="Member View"> </p>
+
+<p>Providers can choose to give Member and Group view different names and different
+icons.  For example, AJDT describes Member View as "Class View" and Group View as "Package View" and
+gives them class and package icons accordingly.  Whichever provider you are using, the farthest right
+button will be the Member View button, and the button just left of that will be the Group View
+button.</p>
+
+<a name="drawing">
+<H2>Drawing Options</H2></a>
+<p>As well as Member and Group views, the Visualiser provides a variety of means
+of manipulating the bar drawing it produces.</p>
+<ul>
+<li><p>Deselect kinds<br><br></p><p><img src="kinds.png"><br><br></p></li>
+<li><p>Change the colours of kinds. (Click one of the buttons with a coloured square
+on to bring up a colour selection dialog for that kind).<br><br></p><p><img src="colours.png"><br><br></p></li>
+<li><p>Limit to affected bars only<br><br></p><p><img src="limit.png"><br><br></p></li>
+<li><p>Zoom in<br><br></p><p><img src="zoom.png"><br><br></li>
+<li><p>Fit to view, where the image is resized to fit the window or be the smallest it can 
+after obeying certain minimums.<br><br></p>
+	<p><img src="fit_to_view.png"><br><br></p></li>
+</ul>
+
+<p>The 'Drawing Options' tab of the Visualiser preference page allows the user to further customise the view with preferred column width and stripe height settings
+and a selection of rendering styles. <br><br></p> 
+<p><img src="preferences.png" alt="preferences page"><br><br></p></li>
+
+<a name="quick">
+<H2>Quick-Select Actions</H2></a>
+<p>Several actions have been provided to enable quick selection and de-selection of kinds being shown.
+This is particularly useful for large data sets.</p>
+<ul>
+<li><p>Select All / Select None<br><br></p>
+	<p>Selects (or deselects) all of the kinds in the Visualiser Menu.<br><br></p><p><img src="select.png"><br><br></p></li>
+<li><p>Only show..<br><br></p>
+	<p>Right click on a bar, then click "Only show colors affecting this bar".  This will activate
+	all the kinds in the menu that affect the selected bar, and de-activate all the others.<br><br></p>
+	<p><img src="onlyshow.png"></p></li>
+</ul>
+
+<a name="providers">
+<H2>Providers</H2></a>
+<p>The Visualiser has a plug-in architecture where 'providers' register using the extension point
+provided.  The Visualiser preferences page allows users to switch between providers.</p>
+<p>To open the preference page click "Window" &gt; "Preferences", then select "Visualiser"
+from the left hand menu.  Alternatively click "Preferences" from the drop-down menu in the
+Visualiser view.<br><br></p>
+
+<p><img src="preferences2.png"><br><br></p>
+
+<p>The Visualiser comes with three built-in providers:
+<ul>
+<li>a simple file provider that reads bar and stripe infromation from two files</li>
+<li>a resources and markers provider that responds to selections in the workbench and displays 
+    files as bars, with associated markers as stripes,</li>
+<li>a JDT search results provider that displays Java classes as bars and the results 
+    of the most recent Java search as stripes.</li> 
+</ul>
+</p>
+<p>To find out about writing your own provider for the Visualiser, see the 
+"<a href="../extenderguide/main.html">Writing a plug-in for the Visualiser</a>" section
+of the Visualiser help.</p>
+<p style='margin-left:36.0pt;text-indent:-18.0pt;mso-list:l0 level1 lfo1;
+tab-stops:list 36.0pt'>&nbsp;</p>
+</BODY>
+</HTML>

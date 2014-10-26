@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.localization.ui.actions.FeatureLocalizationAction"
+               icon="icons/FeatureList.gif"
+               id="org.but4reuse.feature.localization.ui.action"
+               label="Feature Localization"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

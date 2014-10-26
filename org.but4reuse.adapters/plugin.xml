@@ -2,5 +2,10 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.but4reuse.adapters" name="BUT4Reuse Adapter" schema="schema/org.but4reuse.adapters.exsd"/>
-
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.adapters.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

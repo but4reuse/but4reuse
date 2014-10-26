@@ -8,6 +8,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.but4reuse.featurelist,
+ org.but4reuse.featurelist.helpers,
  org.but4reuse.featurelist.impl,
  org.but4reuse.featurelist.util
 Require-Bundle: org.eclipse.core.runtime,

@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getOwnedBlockElements <em>Owned Block Elements</em>}</li>
  *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getCorrespondingFeature <em>Corresponding Feature</em>}</li>
+ *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getName <em>Name</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,6 +53,26 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	 * @ordered
 	 */
 	protected Feature correspondingFeature;
+
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -127,6 +148,27 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AdaptedModelPackage.BLOCK__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -149,6 +191,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURE:
 				if (resolve) return getCorrespondingFeature();
 				return basicGetCorrespondingFeature();
+			case AdaptedModelPackage.BLOCK__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -169,6 +213,9 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURE:
 				setCorrespondingFeature((Feature)newValue);
 				return;
+			case AdaptedModelPackage.BLOCK__NAME:
+				setName((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -187,6 +234,9 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURE:
 				setCorrespondingFeature((Feature)null);
 				return;
+			case AdaptedModelPackage.BLOCK__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -203,8 +253,26 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 				return ownedBlockElements != null && !ownedBlockElements.isEmpty();
 			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURE:
 				return correspondingFeature != null;
+			case AdaptedModelPackage.BLOCK__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //BlockImpl

@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Visualiser Plug-in
+Bundle-SymbolicName: org.eclipse.contribution.visualiser; singleton:=true
+Bundle-Version: 2.2.0
+Bundle-Activator: org.eclipse.contribution.visualiser.VisualiserPlugin
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Export-Package: org.eclipse.contribution.visualiser,
+ org.eclipse.contribution.visualiser.core,
+ org.eclipse.contribution.visualiser.core.resources,
+ org.eclipse.contribution.visualiser.interfaces,
+ org.eclipse.contribution.visualiser.internal.help;x-internal:=true,
+ org.eclipse.contribution.visualiser.internal.preference;x-internal:=true,
+ org.eclipse.contribution.visualiser.jdtImpl,
+ org.eclipse.contribution.visualiser.markerImpl,
+ org.eclipse.contribution.visualiser.palettes,
+ org.eclipse.contribution.visualiser.renderers,
+ org.eclipse.contribution.visualiser.simpleImpl,
+ org.eclipse.contribution.visualiser.text,
+ org.eclipse.contribution.visualiser.utils,
+ org.eclipse.contribution.visualiser.views
+Require-Bundle: org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.editors,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.jface.text,
+ org.eclipse.search,
+ org.eclipse.ui.ide,
+ org.eclipse.core.runtime,
+ org.eclipse.help
+Eclipse-AutoStart: true

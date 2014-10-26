@@ -3,18 +3,19 @@
 package org.but4reuse.adaptedmodel.impl;
 
 import java.util.Collection;
-
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModelPackage;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -42,7 +43,7 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	protected Artefact artefact;
 
 	/**
-	 * The cached value of the '{@link #getOwnedElementWrappers() <em>Owned Element Wrappers</em>}' reference list.
+	 * The cached value of the '{@link #getOwnedElementWrappers() <em>Owned Element Wrappers</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getOwnedElementWrappers()
@@ -115,9 +116,23 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	 */
 	public EList<ElementWrapper> getOwnedElementWrappers() {
 		if (ownedElementWrappers == null) {
-			ownedElementWrappers = new EObjectResolvingEList<ElementWrapper>(ElementWrapper.class, this, AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS);
+			ownedElementWrappers = new EObjectContainmentEList<ElementWrapper>(ElementWrapper.class, this, AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS);
 		}
 		return ownedElementWrappers;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+				return ((InternalEList<?>)getOwnedElementWrappers()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

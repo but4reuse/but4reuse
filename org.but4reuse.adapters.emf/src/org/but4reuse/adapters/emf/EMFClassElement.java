@@ -5,7 +5,9 @@ import java.net.URI;
 import java.util.Collections;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EFactory;
@@ -28,7 +30,7 @@ public class EMFClassElement extends AbstractElement {
 	
 	@Override
 	public String getText() {
-		return ("Class: " + childEObject.eClass().getName() + " [Owner->" + EMFAdapter.getName(owner) + "] [Ref->" + reference.getName() + "]");
+		return ("Class: " + childEObject.eClass().getName() + " [Owner->" + EMFUtils.getName(owner) + "] [Ref->" + reference.getName() + "]");
 	}
 	
 	public boolean construct(URI uri) {
@@ -61,11 +63,9 @@ public class EMFClassElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFClassElement){
 			EMFClassElement targetCP = (EMFClassElement)anotherElement;
-			// TODO
-			return 0;
-			//if(DiffMergeUtils.isEqualEObject(childEObject, targetCP.childEObject)){
-			//	return 1;
-			//}
+			if(DiffMergeUtils.isEqualEObject(childEObject, targetCP.childEObject)){
+				return 1;
+			}
 		}
 		return 0;
 	}

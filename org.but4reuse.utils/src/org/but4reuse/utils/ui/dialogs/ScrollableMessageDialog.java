@@ -34,7 +34,7 @@ public class ScrollableMessageDialog extends TitleAreaDialog {
         gridData.grabExcessVerticalSpace = true; // Layout vertically, too! 
         gridData.verticalAlignment = GridData.FILL;
 
-        Text scrollable = new Text(composite, SWT.BORDER | SWT.V_SCROLL);
+        Text scrollable = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
         scrollable.setLayoutData(gridData);
         scrollable.setText(scrollableText);
 

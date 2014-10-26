@@ -53,7 +53,7 @@ public interface AdaptedArtefact extends EObject {
 	void setArtefact(Artefact value);
 
 	/**
-	 * Returns the value of the '<em><b>Owned Element Wrappers</b></em>' reference list.
+	 * Returns the value of the '<em><b>Owned Element Wrappers</b></em>' containment reference list.
 	 * The list contents are of type {@link org.but4reuse.adaptedmodel.ElementWrapper}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -61,9 +61,9 @@ public interface AdaptedArtefact extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Owned Element Wrappers</em>' reference list.
+	 * @return the value of the '<em>Owned Element Wrappers</em>' containment reference list.
 	 * @see org.but4reuse.adaptedmodel.AdaptedModelPackage#getAdaptedArtefact_OwnedElementWrappers()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ElementWrapper> getOwnedElementWrappers();

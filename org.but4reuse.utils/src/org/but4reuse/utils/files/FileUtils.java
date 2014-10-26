@@ -12,7 +12,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Date;
 
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -67,11 +68,13 @@ public class FileUtils {
 		if (uri.getScheme().equals("file")) {
 			file = new File(uri);
 		} else if (uri.getScheme().equals("platform")) {
-			String path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
-			path = path + uri.toString().substring("platform:/resource".length());
-			file = new File(path);
+			IFile ifile = WorkbenchUtils.getIFileFromURI(uri);
+			file = WorkbenchUtils.getFileFromIResource(ifile);
 		}
-		return file;
+		if(file!=null && file.exists()){
+			return file;
+		}
+		return null;
 	}
 
 	/**
@@ -126,4 +129,41 @@ public class FileUtils {
 			return null;
 		}
 	}
+
+	/**
+	 * Check if a file contains a file with a given extension
+	 * 
+	 * @param file
+	 * @param extension
+	 * @return whether it is found or not
+	 */
+	public static boolean containsFileWithExtension(File file, String extension) {
+		if (getExtension(file).equals(extension)) {
+			return true;
+		} else {
+			if (file.isDirectory()) {
+				for (File child : file.listFiles()) {
+					if (containsFileWithExtension(child, extension)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Get file extension
+	 * 
+	 * @param file
+	 * @return extension or empty string
+	 */
+	public static String getExtension(File file) {
+		int i = file.getName().lastIndexOf('.');
+		if (i > 0) {
+			return file.getName().substring(i + 1);
+		}
+		return "";
+	}
+	
 }
