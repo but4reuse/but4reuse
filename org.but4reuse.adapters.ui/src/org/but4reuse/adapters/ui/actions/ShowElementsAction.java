@@ -20,6 +20,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * Show Elements Action
+ * @author jabier.martinez
+ */
 public class ShowElementsAction implements IObjectActionDelegate {
 
 	Artefact artefact = null;
@@ -31,8 +35,6 @@ public class ShowElementsAction implements IObjectActionDelegate {
 		artefact = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
-				// Object art = ((IStructuredSelection)
-				// selection).getFirstElement();
 				if (art instanceof Artefact) {
 					artefact = ((Artefact) art);
 
@@ -55,9 +57,9 @@ public class ShowElementsAction implements IObjectActionDelegate {
 
 									text.clear();
 									for (IAdapter adapter : adap) {
-										List<IElement> cps = AdaptersHelper.getElements(artefact, adapter);
-										for (IElement cp : cps) {
-											text.add(cp.getText());
+										List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
+										for (IElement element : elements) {
+											text.add(element.getText());
 										}
 									}
 									monitor.worked(1);

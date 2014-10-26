@@ -31,28 +31,37 @@ public class FileStructureAdapter implements IAdapter {
 
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
-		List<IElement> cps = new ArrayList<IElement>();
+		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
-		adapt(file, cps);
-		return cps;
+		// start the containment tree traversal, with null as initial container
+		adapt(file, elements, null);
+		// in elements we have the result
+		return elements;
 	}
 
-	private void adapt(File file, List<IElement> cps) {
+	private void adapt(File file, List<IElement> elements, IElement container) {
 		if (file.isDirectory()) {
-			FolderElement directoryCP = new FolderElement();
-			directoryCP.relativeURI = rootURI.relativize(file.toURI());
-			cps.add(directoryCP);
+			FolderElement folderElement = new FolderElement();
+			folderElement.relativeURI = rootURI.relativize(file.toURI());
+			// Add dependency
+			if(container!=null){
+				folderElement.addDependency(container);
+			}
+			elements.add(folderElement);
 			File[] files = file.listFiles();
 			for (File subFile : files) {
-				adapt(subFile, cps);
+				adapt(subFile, elements, folderElement);
 			}
 		} else {
-			FileElement fileCP = new FileElement();
-			fileCP.relativeURI = rootURI.relativize(file.toURI());
-			fileCP.pathToConstructByCopy = file.toPath();
-			// TODO file content
-			cps.add(fileCP);
+			FileElement fileElement = new FileElement();
+			fileElement.relativeURI = rootURI.relativize(file.toURI());
+			fileElement.pathToConstructByCopy = file.toPath();
+			// Add dependency
+			if(container!=null){
+				fileElement.addDependency(container);
+			}
+			elements.add(fileElement);
 		}
 	}
 

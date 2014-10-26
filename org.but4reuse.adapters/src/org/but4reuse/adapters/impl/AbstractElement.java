@@ -70,7 +70,7 @@ public abstract class AbstractElement implements IElement {
 		dependencies.put(dependencyID, o);
 	}
 
-	public void addDependency(String dependency) {
+	public void addDependency(Object dependency) {
 		addDependency(MAIN_DEPENDENCY_ID, dependency);
 	}
 
