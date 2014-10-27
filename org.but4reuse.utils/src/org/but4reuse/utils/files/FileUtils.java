@@ -69,9 +69,12 @@ public class FileUtils {
 			file = new File(uri);
 		} else if (uri.getScheme().equals("platform")) {
 			IFile ifile = WorkbenchUtils.getIFileFromURI(uri);
+			if(ifile==null){
+				return null;
+			}
 			file = WorkbenchUtils.getFileFromIResource(ifile);
 		}
-		if(file!=null && file.exists()){
+		if(file!=null){
 			return file;
 		}
 		return null;

@@ -141,7 +141,7 @@ public class WorkbenchUtils {
 	/**
 	 * Convert IFile to URI
 	 * 
-	 * @param uri
+	 * @param platform uri, for example platform:/resource/projectName/myFile
 	 * @return the ifile or null
 	 */
 	public static IFile getIFileFromURI(URI uri) {
@@ -150,6 +150,10 @@ public class WorkbenchUtils {
 		uri = rootUri.relativize(uri);
 		IPath path = new Path(uri.getPath());
 		path = path.removeFirstSegments(1);
+		// if the segment count is 1 then it is an IProject
+		if(path.segmentCount()==1){
+			return null;
+		}
 		return root.getFile(path);
 	}
 
