@@ -1,7 +1,10 @@
 package org.but4reuse.adapters.filestructure;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class FileStructureAdapter implements IAdapter {
 
-	URI rootURI;
+	private URI rootURI;
 
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
@@ -31,41 +34,78 @@ public class FileStructureAdapter implements IAdapter {
 
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
-		List<IElement> cps = new ArrayList<IElement>();
+		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
-		adapt(file, cps);
-		return cps;
+		// start the containment tree traversal, with null as initial container
+		adapt(file, elements, null);
+		// in elements we have the result
+		return elements;
 	}
 
-	private void adapt(File file, List<IElement> cps) {
+	/**
+	 * adapt recursively
+	 * 
+	 * @param file
+	 * @param elements
+	 * @param container
+	 */
+	private void adapt(File file, List<IElement> elements, IElement container) {
+		FileElement newElement;
+		// Distinguish between file and folder
 		if (file.isDirectory()) {
-			FolderElement directoryCP = new FolderElement();
-			directoryCP.relativeURI = rootURI.relativize(file.toURI());
-			cps.add(directoryCP);
+			newElement = new FolderElement();
+		} else {
+			newElement = new FileElement();
+		}
+
+		// Set the relevant information
+		newElement.setUri(file.toURI());
+		newElement.setRelativeURI(rootURI.relativize(file.toURI()));
+
+		// Add dependency to the parent folder
+		if (container != null) {
+			newElement.addDependency(container);
+		}
+
+		// Add to the list
+		elements.add(newElement);
+
+		// Go for the files in case of folder
+		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (File subFile : files) {
-				adapt(subFile, cps);
+				adapt(subFile, elements, newElement);
 			}
-		} else {
-			FileElement fileCP = new FileElement();
-			fileCP.relativeURI = rootURI.relativize(file.toURI());
-			fileCP.pathToConstructByCopy = file.toPath();
-			// TODO file content
-			cps.add(fileCP);
 		}
 	}
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		// Delegate to the element construction methods
 		for (IElement element : elements) {
+			// check user cancel for each element
 			if (!monitor.isCanceled()) {
+				// provide user info
 				monitor.subTask(element.getText());
-				if (element instanceof FolderElement) {
-					((FolderElement) element).construct(uri);
-				} else if (element instanceof FileElement) {
-					((FileElement) element).construct(uri);
+				if (element instanceof FileElement) {
+					FileElement fileElement = (FileElement) element;
+					try {
+						// Create parent folders structure
+						URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
+						File destinationFile = FileUtils.getFile(newDirectoryURI);
+						if (destinationFile!=null && !destinationFile.getParentFile().exists()) {
+							destinationFile.getParentFile().mkdirs();
+						}
+						if (destinationFile!=null && !destinationFile.exists()) {
+							// Copy the content. In the case of a folder, its
+							// content is not copied
+							File file = FileUtils.getFile(fileElement.getUri());
+							Files.copy(file.toPath(), destinationFile.toPath(),
+									StandardCopyOption.REPLACE_EXISTING);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			monitor.worked(1);

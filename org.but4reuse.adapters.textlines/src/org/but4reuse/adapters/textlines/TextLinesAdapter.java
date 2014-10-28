@@ -14,12 +14,15 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+/**
+ * Text Lines adapter
+ * @author jabier.martinez
+ */
 public class TextLinesAdapter implements IAdapter {
 
 	@Override
 	/**
-	 * Files with txt or info extension
-	 * TODO use Eclipse Text Content Type (Preferences -> General -> Content Types -> Text category)
+	 * TODO Maybe use Eclipse Text Content Type (Preferences -> General -> Content Types -> Text category)
 	 */
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
