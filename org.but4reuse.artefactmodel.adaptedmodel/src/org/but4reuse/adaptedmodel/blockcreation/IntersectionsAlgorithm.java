@@ -33,8 +33,9 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 		// A map from IElement to the IElementWrappers that contains similar
 		// IElement
 		Map<IElement, List<ElementWrapper>> eewmap = new HashMap<IElement, List<ElementWrapper>>();
-		for (int i = 0; i < adaptedArtefacts.size(); i++) {
-			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i+1) + "/" + adaptedArtefacts.size());
+		int n =  adaptedArtefacts.size();
+		for (int i = 0; i < n; i++) {
+			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i+1) + "/" + n);
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
 			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
 				
@@ -51,12 +52,12 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 				ews.add(ew);
 				eewmap.put(e, ews);
 
-				List<Integer> products = R.get(e);
-				if (products == null) {
-					products = new ArrayList<Integer>();
+				List<Integer> artefactIndexes = R.get(e);
+				if (artefactIndexes == null) {
+					artefactIndexes = new ArrayList<Integer>();
 				}
-				products.add(i);
-				R.put(e, products);
+				artefactIndexes.add(i);
+				R.put(e, artefactIndexes);
 			}
 		}
 
@@ -64,8 +65,11 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 		
 		// Iterate on R to create blocks with their block elements
 		while (!R.isEmpty()) {
-			List<Integer> products = findMostFrequentCP(R);
-			List<IElement> intersection = findIntersection(products, R);
+			IElement keyOfMostFrequentElement = findMostFrequentElement(R);
+			List<Integer> artefactIndexes = R.get(keyOfMostFrequentElement);
+			List<IElement> intersection = findElementsContainedInArtefactIndexes(artefactIndexes, R);
+
+			// Create Block
 			Block block = AdaptedModelFactory.eINSTANCE.createBlock();
 			for (IElement intersected : intersection) {
 				BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
@@ -74,36 +78,51 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 					be.getElementWrappers().add(ewliste);
 				}
 				block.getOwnedBlockElements().add(be);
+				
+				// Remove from R
+				R.remove(intersected);
 			}
 			blocks.add(block);
 		}
+		
+		// finished
 		return blocks;
 	}
 
-	private static List<Integer> findMostFrequentCP(Map<IElement, List<Integer>> R) {
-
-		List<Integer> result = new ArrayList<Integer>();
-
+	/**
+	 * Find most frequent element in the artefacts. 
+	 * @param a relation of all elements with the list of artefacts where it appears
+	 * @return the artefact indexes 
+	 */
+	private static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
+		IElement keyOfMostFrequent = null;
+		int sizeOfMostFrequent = -1;
+		
 		for (IElement key : R.keySet()) {
-			if (result.size() < R.get(key).size())
-				result = R.get(key);
-
+			int currentSize = R.get(key).size();
+			if (sizeOfMostFrequent < currentSize){
+				keyOfMostFrequent = key;
+				sizeOfMostFrequent = currentSize;
+			}
 		}
-		return result;
+		
+		return keyOfMostFrequent;
 	}
 
-	private static List<IElement> findIntersection(List<Integer> products, Map<IElement, List<Integer>> R) {
+	/**
+	 * Find elements that are contained in the given artefact indexes
+	 * @param artefactIndexes
+	 * @param R
+	 * @return the list of elements that are present exactly in the same artefact indexes
+	 */
+	private static List<IElement> findElementsContainedInArtefactIndexes(List<Integer> artefactIndexes, Map<IElement, List<Integer>> R) {
 
 		List<IElement> result = new ArrayList<IElement>();
 
 		for (IElement key : R.keySet()) {
-			if (R.get(key).containsAll(products)) {
+			if (R.get(key).containsAll(artefactIndexes)) {
 				result.add(key);
 			}
-		}
-
-		for (IElement fromResult : result) {
-			R.remove(fromResult);
 		}
 		return result;
 	}
