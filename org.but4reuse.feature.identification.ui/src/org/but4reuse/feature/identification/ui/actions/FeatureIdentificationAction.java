@@ -12,7 +12,6 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
-import org.but4reuse.visualisation.IVisualisation;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -50,10 +49,8 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 								
-								List<IVisualisation> visualisations = VisualisationsHelper.getAllVisualisations();
-								
 								// Adapting each active artefact + calculating blocks + prepare visualisation
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 2;
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 +  VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
@@ -68,11 +65,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								monitor.worked(1);
 								
 								monitor.subTask("Preparing visualisations");
-								
-								for(IVisualisation visualisation : visualisations){
-									visualisation.prepare(null, adaptedModel, null, monitor);
-									visualisation.show();
-								}
+								VisualisationsHelper.notifyVisualisations(null, adaptedModel, null, monitor);
 								
 								monitor.worked(1);
 								monitor.done();
