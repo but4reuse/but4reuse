@@ -49,6 +49,7 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 	 * @param adaptedModel
 	 */
 	public void update(FeatureList featureList, AdaptedModel adaptedModel) {
+		// TODO string message is temporary
 		// Update
 		IGroup group = new SimpleGroup("Artefacts");
 		this.addGroup(group);
@@ -56,9 +57,9 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 		BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) BlocksOnFeaturesVisualisation
 				.getFeaturesOnBlocksProvider().getMarkupInstance();
 		Map<Block, IMarkupKind> map = markupProvider.getBlocksAndNames();
-		message = ",";
+		message = ";";
 		for (Block block : adaptedModel.getOwnedBlocks()) {
-			message = message + block.getName() + ",";
+			message = message + block.getName() + ";";
 		}
 		message = message.substring(0,message.length()-1);
 		// Add blocks as members
