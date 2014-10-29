@@ -25,19 +25,20 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	@Override
 	public String discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
+		String result = "";
+		
+		// for binary relations we explore the matrix n*n where n is the number of blocks
 		monitor.beginTask("Binary Relation Constraints discovery",
 				new Double(Math.pow(adaptedModel.getOwnedBlocks().size(), 2)).intValue());
-
-		String result = "";
-
+		
 		// Block Level
 		// TODO feature level
 		for (int y = 0; y < adaptedModel.getOwnedBlocks().size(); y++) {
 			Block b1 = adaptedModel.getOwnedBlocks().get(y);
-			monitor.subTask("Checking relations of " + b1.getName());
 			for (int x = 0; x < adaptedModel.getOwnedBlocks().size(); x++) {
 				Block b2 = adaptedModel.getOwnedBlocks().get(x);
 				if (x != y) {
+					monitor.subTask("Checking relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
 						return result;
