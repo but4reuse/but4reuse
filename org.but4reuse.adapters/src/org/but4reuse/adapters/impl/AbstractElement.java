@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractElement implements IElement {
 
-	private static final String MAIN_DEPENDENCY_ID = "depends on";
+	public static final String MAIN_DEPENDENCY_ID = "depends on";
 	/**
 	 * Abstract IElement
 	 * 
@@ -43,11 +43,17 @@ public abstract class AbstractElement implements IElement {
 
 	@Override
 	public int getMaxDependencies(String dependencyID) {
+		if(maxDependencies.get(dependencyID)==null){
+			return Integer.MAX_VALUE;
+		}
 		return maxDependencies.get(dependencyID);
 	}
 
 	@Override
 	public int getMinDependencies(String dependencyID) {
+		if(minDependencies.get(dependencyID)==null){
+			return Integer.MIN_VALUE;
+		}
 		return minDependencies.get(dependencyID);
 	}
 
