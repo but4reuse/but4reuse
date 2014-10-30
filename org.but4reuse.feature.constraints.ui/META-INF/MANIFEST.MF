@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.feature.constraints,
  org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
- org.eclipse.swt,
- fr.lip6.but4reuse.utils
+ org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

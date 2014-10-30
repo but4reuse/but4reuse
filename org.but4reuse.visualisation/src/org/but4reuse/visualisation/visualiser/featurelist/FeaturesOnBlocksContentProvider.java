@@ -51,7 +51,7 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 	public void update(FeatureList featureList, AdaptedModel adaptedModel) {
 		// TODO string message is temporary
 		// Update
-		IGroup group = new SimpleGroup("Artefacts");
+		IGroup group = new SimpleGroup("Blocks");
 		this.addGroup(group);
 		// get the markup provider
 		BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) BlocksOnFeaturesVisualisation

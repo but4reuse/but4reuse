@@ -31,11 +31,16 @@ public class AdaptersHelper {
 
 	public static final String ADAPTERS_EXTENSIONPOINT = "org.but4reuse.adapters";
 
+	private static List<IAdapter> cache_adapters;
+	
 	/**
 	 * 
 	 * @return
 	 */
 	public static List<IAdapter> getAllAdapters() {
+		if(cache_adapters!=null){
+			return cache_adapters;
+		}
 		List<IAdapter> adapters = new ArrayList<IAdapter>();
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ADAPTERS_EXTENSIONPOINT);
@@ -46,6 +51,7 @@ public class AdaptersHelper {
 				e.printStackTrace();
 			}
 		}
+		cache_adapters = adapters;
 		return adapters;
 	}
 

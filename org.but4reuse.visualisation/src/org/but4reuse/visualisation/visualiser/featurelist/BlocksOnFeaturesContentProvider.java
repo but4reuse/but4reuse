@@ -45,7 +45,7 @@ public class BlocksOnFeaturesContentProvider extends SimpleContentProvider {
 	 */
 	public void update(FeatureList featureList, AdaptedModel adaptedModel) {
 		// Update
-		IGroup group = new SimpleGroup("Artefacts");
+		IGroup group = new SimpleGroup("Features");
 		this.addGroup(group);
 		// get the markup provider
 		FeaturesMarkupProvider markupProvider = (FeaturesMarkupProvider) FeaturesOnBlocksVisualisation.getFeaturesOnBlocksProvider().getMarkupInstance();
