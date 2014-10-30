@@ -15,7 +15,13 @@ import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-
+/**
+ * 
+ * Thread used to adapt one artefact into an adapted artefact.
+ * 
+ * @author Julien Leroux
+ *
+ */
 public class AdaptedModelThread extends Thread{
 
 	AdaptedArtefact adaptedArtefact;
@@ -23,18 +29,41 @@ public class AdaptedModelThread extends Thread{
 	Artefact artefact;
 	List<IAdapter> adapters;
 	IProgressMonitor monitor;
+	AdaptedArtefact[] tab;
+	int num;
 	
-	AdaptedModelThread(AdaptedArtefact adaptedArt, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon){
-		adaptedArtefact=adaptedArt;
+	
+	/**
+	 * 
+	 * Constructor for the thread
+	 * 
+	 * 
+	 * @param tabAdp
+	 * @param adaptedMod
+	 * @param art
+	 * @param adapts
+	 * @param mon
+	 * @param index
+	 */
+	AdaptedModelThread(AdaptedArtefact[] tabAdp, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon,int index){
+		adaptedArtefact = tabAdp[index];
+		tab = tabAdp;
 		adaptedModel=adaptedMod;
 		artefact = art;
 		adapters = adapts;
 		monitor = mon;
+		num = index;
 	}
-	
+	/**
+	 * 
+	 * Running operation of the thread wich adapts the artefact and places it on the right index in the array of adapted artefacts
+	 * 
+	 * 
+	 */
 	public void run() {
 	    
 		adaptedArtefact.setArtefact(artefact);
+		
 		
 		String name = artefact.getName();
 		if (name == null || name.length() == 0) {
@@ -48,8 +77,8 @@ public class AdaptedModelThread extends Thread{
 			ew.setElement(ele);
 			adaptedArtefact.getOwnedElementWrappers().add(ew);
 		}
+		tab[num]=adaptedArtefact;
 		
-		adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
 		monitor.worked(1);
 		if (monitor.isCanceled()) {
 			this.stop();

@@ -31,13 +31,16 @@ public class AdaptedModelHelper {
 		
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 		ArrayList<AdaptedModelThread> ListThread = new ArrayList<AdaptedModelThread>();
-		
+		int i =0;
+		AdaptedArtefact[] tabAdp = new AdaptedArtefact[artefactModel.getOwnedArtefacts().size()];
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
 				AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-				AdaptedModelThread th = new AdaptedModelThread(adaptedArtefact, adaptedModel,artefact, adapters, monitor);
+				tabAdp[i] = adaptedArtefact;
+				int index = i;
+				AdaptedModelThread th = new AdaptedModelThread(tabAdp, adaptedModel,artefact, adapters, monitor,index);
 				ListThread.add(th);
-				
+				i++;
 				
 			}
 		}
@@ -48,6 +51,13 @@ public class AdaptedModelHelper {
 		for(AdaptedModelThread th : ListThread){
 			th.join();
 		}
+		
+		for(int j=0;j<tabAdp.length;j++){
+			
+			adaptedModel.getOwnedAdaptedArtefacts().add(tabAdp[j]);
+			
+		}
+		
 		
 		//while (adaptedModel.getOwnedAdaptedArtefacts().size() != artefactModel.getOwnedArtefacts().size()){}
 		System.out.println(datestart);
