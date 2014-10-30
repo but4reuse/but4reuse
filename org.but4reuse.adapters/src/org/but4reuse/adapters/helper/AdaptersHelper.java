@@ -20,6 +20,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 
 /**
@@ -162,12 +164,14 @@ public class AdaptersHelper {
 	 * @return
 	 */
 	public static List<IElement> getElements(Artefact artefact, IAdapter adapter) {
-		List<IElement> elements = new ArrayList<IElement>();
+		List<IElement> elements = null;
 		try {
 			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			return elements;
+		}
+		if(elements==null){
+			elements = new ArrayList<IElement>();
 		}
 		return elements;
 	}
@@ -204,6 +208,9 @@ public class AdaptersHelper {
 			}
 			if (ada.getClass().equals(adapter.getClass())) {
 				String path = adapterExtensionPoint.getAttribute("icon");
+				if(path==null){
+					return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
+				}
 				Bundle bundle = Platform.getBundle(adapterExtensionPoint.getContributor().getName());
 				Path imageFilePath = new Path(path);
 				URL imageFileUrl = FileLocator.find(bundle, imageFilePath, null);
