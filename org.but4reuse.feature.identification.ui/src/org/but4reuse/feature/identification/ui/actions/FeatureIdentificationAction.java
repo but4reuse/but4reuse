@@ -10,6 +10,7 @@ import org.but4reuse.adaptedmodel.blockcreation.IntersectionsAlgorithm;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
+import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -56,6 +57,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
 								
 								monitor.subTask("Calculating existing blocks");
+								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 								// TODO selection of block creation algorithm
 								IBlockCreationAlgorithm a = new IntersectionsAlgorithm();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
