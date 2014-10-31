@@ -169,4 +169,15 @@ public class FileUtils {
 		return "";
 	}
 	
+	/**
+	 * Check if a file has a given extension
+	 * 
+	 * @param file
+	 * @param extension
+	 * @return
+	 */
+	public static boolean isExtension(File file, String extension){
+		return getExtension(file).equalsIgnoreCase(extension);
+	}
+	
 }

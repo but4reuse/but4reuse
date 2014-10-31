@@ -28,9 +28,14 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 	}
 
 	@Override
+	/**
+	 * Identical when same position and value
+	 */
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof CellElement) {
-			if (((CellElement) anotherElement).getValue().equals(value)) {
+			CellElement cellElement = (CellElement) anotherElement;
+			if (cellElement.getRow() == row && cellElement.getColumn() == column
+					&& cellElement.getValue().equals(value)) {
 				return 1;
 			}
 		}
@@ -69,6 +74,14 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 			}
 		}
 		return marker;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getColumn() {
+		return column;
 	}
 
 }

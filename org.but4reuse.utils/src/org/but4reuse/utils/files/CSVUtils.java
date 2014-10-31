@@ -18,7 +18,7 @@ public class CSVUtils {
 	 * @param uri
 	 * @param a matrix (line, columns) of objects
 	 */
-	public static void exportCSV(URI uri, List<List<?>> texts){
+	public static void exportCSV(URI uri, List<List<Object>> texts){
 		// Create csv file
 		String csvText = "";
 		for (List<?> list : texts) {
