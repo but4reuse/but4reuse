@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.but4reuse.blockcreation" name="Block Creation Algorithms" schema="schema/org.but4reuse.blockcreation.exsd"/>
+   <extension
+         point="org.but4reuse.blockcreation">
+      <blockcreation
+            class="org.but4reuse.blockcreation.impl.IntersectionsBlockCreationAlgorithm"
+            name="Intersections among artefacts">
+      </blockcreation>
+      <blockcreation
+            class="org.but4reuse.blockcreation.impl.SimilarElementsBlocksCreationAlgorithm"
+            name="Similar elements">
+      </blockcreation>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.blockcreation.helper.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

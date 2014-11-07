@@ -8,7 +8,6 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.but4reuse.adaptedmodel,
- org.but4reuse.adaptedmodel.blockcreation,
  org.but4reuse.adaptedmodel.helpers,
  org.but4reuse.adaptedmodel.impl,
  org.but4reuse.adaptedmodel.util

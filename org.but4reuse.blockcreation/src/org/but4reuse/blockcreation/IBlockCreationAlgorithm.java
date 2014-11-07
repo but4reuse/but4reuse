@@ -1,4 +1,4 @@
-package org.but4reuse.adaptedmodel.blockcreation;
+package org.but4reuse.blockcreation;
 
 import java.util.List;
 

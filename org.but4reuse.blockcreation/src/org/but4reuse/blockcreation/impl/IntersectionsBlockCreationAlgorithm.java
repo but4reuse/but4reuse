@@ -1,4 +1,4 @@
-package org.but4reuse.adaptedmodel.blockcreation;
+package org.but4reuse.blockcreation.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -18,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Marcos Aurélio Almeida da Silva and Mikal Ziane Implementation and adaptation
  * by jabier.martinez and tewfik.ziadi
  */
-public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
+public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgorithm {
 
 	@Override
 	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
@@ -94,7 +95,7 @@ public class IntersectionsAlgorithm implements IBlockCreationAlgorithm {
 	 * @param a relation of all elements with the list of artefacts where it appears
 	 * @return the artefact indexes 
 	 */
-	private static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
+	protected static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
 		IElement keyOfMostFrequent = null;
 		int sizeOfMostFrequent = -1;
 		

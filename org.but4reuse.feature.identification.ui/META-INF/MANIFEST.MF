@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
  org.but4reuse.adapters.ui,
- org.but4reuse.visualisation
+ org.but4reuse.visualisation,
+ org.but4reuse.blockcreation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
