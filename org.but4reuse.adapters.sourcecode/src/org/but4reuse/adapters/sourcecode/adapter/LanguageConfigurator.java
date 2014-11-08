@@ -2,8 +2,7 @@ package org.but4reuse.adapters.sourcecode.adapter;
 
 import java.util.HashMap;
 
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTNode;
 
 public class LanguageConfigurator {
 	

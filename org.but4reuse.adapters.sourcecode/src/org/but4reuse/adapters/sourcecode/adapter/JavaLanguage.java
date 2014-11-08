@@ -6,13 +6,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.OffsetCharStream;
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.ParseException;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.PrintVisitorException;
-import org.but4reuse.adapters.sourcecode.featurehouse.tmp.generated_java15.Java15Parser;
+import printer.PrintVisitorException;
+import cide.gparser.OffsetCharStream;
+import cide.gparser.ParseException;
+import tmp.generated_java15.Java15Parser;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class JavaLanguage implements InterfaceLanguage {
 

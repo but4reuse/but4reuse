@@ -8,10 +8,11 @@ import java.util.List;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement;
 import org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.AbstractFSTPrintVisitor;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
+
+import de.ovgu.cide.fstgen.ast.AbstractFSTPrintVisitor;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class FST2SoCPVisitor extends AbstractFSTPrintVisitor  {
 	

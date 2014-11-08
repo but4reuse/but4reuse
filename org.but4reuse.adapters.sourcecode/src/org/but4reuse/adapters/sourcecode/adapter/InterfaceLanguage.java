@@ -1,13 +1,12 @@
 package org.but4reuse.adapters.sourcecode.adapter;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.ParseException;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.PrintVisitorException;
+import printer.PrintVisitorException;
+import cide.gparser.ParseException;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public interface InterfaceLanguage {
 

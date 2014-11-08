@@ -11,12 +11,13 @@ import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.but4reuse.adapters.sourcecode.adapter.LanguageConfigurator;
 import org.but4reuse.adapters.sourcecode.adapter.ReadFSTProduct;
 import org.but4reuse.adapters.sourcecode.adapter.Sop2FST;
-import org.but4reuse.adapters.sourcecode.featurehouse.builder.ArtifactBuilder;
-import org.but4reuse.adapters.sourcecode.featurehouse.builder.capprox.CApproxBuilder;
-import org.but4reuse.adapters.sourcecode.featurehouse.builder.java.JavaBuilder;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import builder.ArtifactBuilder;
+import builder.capprox.CApproxBuilder;
+import builder.java.JavaBuilder;
 
 public class SourceCodeAdapter implements IAdapter {
 

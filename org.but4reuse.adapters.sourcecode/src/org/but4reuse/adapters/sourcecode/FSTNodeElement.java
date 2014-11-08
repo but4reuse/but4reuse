@@ -7,9 +7,10 @@ import java.nio.file.Path;
 
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.sourcecode.adapter.LanguageConfigurator;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import org.but4reuse.utils.files.FileUtils;
+
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 
 public abstract class FSTNodeElement extends AbstractElement {
 
