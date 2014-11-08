@@ -1,6 +1,7 @@
 package org.but4reuse.adaptedmodel.helpers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -22,38 +23,48 @@ public class AdaptedModelHelper {
 	 * @param adapters
 	 * @param monitor
 	 * @return
+	 * @throws InterruptedException 
 	 */
 	public static AdaptedModel adapt(ArtefactModel artefactModel,
-			List<IAdapter> adapters, IProgressMonitor monitor) {
-		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
+			List<IAdapter> adapters, IProgressMonitor monitor) throws InterruptedException {
+		Date date = new Date();String datestart = date.toString();
 		
-		// TODO implement concurrency to improve performance
+		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
+		ArrayList<AdaptedModelThread> ListThread = new ArrayList<AdaptedModelThread>();
+		int i =0;
+		AdaptedArtefact[] tabAdp = new AdaptedArtefact[artefactModel.getOwnedArtefacts().size()];
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
 				AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-				adaptedArtefact.setArtefact(artefact);
+				tabAdp[i] = adaptedArtefact;
+				int index = i;
+				AdaptedModelThread th = new AdaptedModelThread(tabAdp, adaptedModel,artefact, adapters, monitor,index);
+				ListThread.add(th);
+				i++;
 				
-				String name = artefact.getName();
-				if (name == null || name.length() == 0) {
-					name = artefact.getArtefactURI();
-				}
-				monitor.subTask("Adapting: " + name);
-
-				List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-				for(IElement ele : list){
-					ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
-					ew.setElement(ele);
-					adaptedArtefact.getOwnedElementWrappers().add(ew);
-				}
-				
-				adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
-				monitor.worked(1);
-				if (monitor.isCanceled()) {
-					return adaptedModel;
-				}
 			}
 		}
+		for(AdaptedModelThread th : ListThread){
+		th.start();
+		}
+		
+		for(AdaptedModelThread th : ListThread){
+			th.join();
+		}
+		
+		for(int j=0;j<tabAdp.length;j++){
+			
+			adaptedModel.getOwnedAdaptedArtefacts().add(tabAdp[j]);
+			
+		}
+		
+		
+		//while (adaptedModel.getOwnedAdaptedArtefacts().size() != artefactModel.getOwnedArtefacts().size()){}
+		System.out.println(datestart);
+		Date dateend = new Date();
+		System.out.println(dateend.toString());
 		return adaptedModel;
+		
 	}
 	
 	public static boolean isIdentical(ElementWrapper e1, ElementWrapper e2){
