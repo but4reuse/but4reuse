@@ -16,6 +16,8 @@ import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
@@ -60,15 +62,16 @@ public class AdaptersHelper {
 	/**
 	 * 
 	 * @param variantsModel
+	 * @param monitor 
 	 * @return
 	 */
-	public static List<IAdapter> getAdapters(ArtefactModel variantsModel) {
+	public static List<IAdapter> getAdapters(ArtefactModel variantsModel, IProgressMonitor monitor) {
 		// TODO for the moment we return the super set of adapters of all
 		// artefacts but this can have problems. Now we assume that all share
 		// the same adapters.
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 		for (Artefact artefact : variantsModel.getOwnedArtefacts()) {
-			List<IAdapter> artefactAdapters = getAdapters(artefact);
+			List<IAdapter> artefactAdapters = getAdapters(artefact, monitor);
 			for (IAdapter a : artefactAdapters) {
 				if (!filteredAdapters.contains(a)) {
 					filteredAdapters.add(a);
@@ -84,7 +87,7 @@ public class AdaptersHelper {
 	 * @param artefact
 	 * @return
 	 */
-	public static List<IAdapter> getAdapters(Artefact artefact) {
+	public static List<IAdapter> getAdapters(Artefact artefact, IProgressMonitor monitor) {
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 
 		if (!(artefact instanceof ComposedArtefact)) {
@@ -107,7 +110,7 @@ public class AdaptersHelper {
 					if (artefact instanceof ComposedArtefact) {
 						ComposedArtefact ca = (ComposedArtefact) artefact;
 						for (Artefact ar : ca.getOwnedArtefacts()) {
-							List<IAdapter> lap = getAdapters(ar);
+							List<IAdapter> lap = getAdapters(ar, new NullProgressMonitor());
 							for (IAdapter adapp : lap) {
 								if (!filteredAdapters.contains(adapp)) {
 									filteredAdapters.add(adapp);
@@ -117,6 +120,11 @@ public class AdaptersHelper {
 					} else {
 						if (artefact.getArtefactURI() != null) {
 							URI uri = new URI(artefact.getArtefactURI());
+							String name = artefact.getName();
+							if(name == null){
+								name = uri.toString();
+							}
+							monitor.subTask("Checking if "+ name +" is adaptable with " + getAdapterName(adapter));
 							if (adapter.isAdaptable(uri, null)) {
 								filteredAdapters.add(adapter);
 							}

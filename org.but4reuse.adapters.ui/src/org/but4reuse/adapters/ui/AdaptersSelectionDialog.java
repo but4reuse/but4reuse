@@ -43,7 +43,7 @@ public class AdaptersSelectionDialog {
 						name = "this artefact model";
 					}
 					monitor.beginTask("Calculating the Adapters that can be used for " + name, 1);
-					correctAdapters = AdaptersHelper.getAdapters(input);
+					correctAdapters = AdaptersHelper.getAdapters(input, monitor);
 					monitor.done();
 				}
 			});
@@ -67,7 +67,7 @@ public class AdaptersSelectionDialog {
 						name = "this artefact";
 					}
 					monitor.beginTask("Calculating the Adapters that can be used for " + name, 1);
-					correctAdapters = AdaptersHelper.getAdapters(input);
+					correctAdapters = AdaptersHelper.getAdapters(input, monitor);
 					monitor.done();
 				}
 			});
