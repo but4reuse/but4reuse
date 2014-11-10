@@ -17,9 +17,6 @@
             </element>
          </elements>
       </adapter>
-   </extension>
-   <extension
-         point="org.but4reuse.adapters">
       <adapter
             class="org.but4reuse.adapters.sourcecode.CSourceCodeAdapter"
             icon="icons/c.png"

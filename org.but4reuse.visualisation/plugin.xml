@@ -6,7 +6,7 @@
          point="org.eclipse.contribution.visualiser.providers">
       <provider
             contentProviderClass="org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsContentProvider"
-            description="Block Elements on Artefacts"
+            description="Elements on Artefacts"
             emptyMessage="Empty. Run a feature identification or feature localization action"
             id="org.but4reuse.visualisation.blockelementsonartefacts.provider"
             markupProviderClass="org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider"
