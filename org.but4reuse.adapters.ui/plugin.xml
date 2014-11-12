@@ -43,6 +43,21 @@
       	   <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
+            id="org.but4reuse.adapters.ui.constructseparately"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ConstructSeparatelyViewAction"
+               icon="icons/constructSeparately.png"
+               id="org.but4reuse.adapters.ui.constructseparatelyaction"
+               label="Construct separately"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      </extension>
+      	   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
             id="org.but4reuse.adapters.ui.showblockelements"
             targetID="org.eclipse.contribution.visualiser.views.Menu">
          <action
