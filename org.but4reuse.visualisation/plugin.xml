@@ -67,5 +67,9 @@
            class="org.but4reuse.visualisation.visualiser.featurelist.BlocksOnFeaturesVisualisation"
            name="Blocks on Features">
      </visualisation>
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.featurelist.FeatureSpecificHeatMapVisualisation"
+           name="Feature-Specific heuristic HeatMap">
+     </visualisation>
   </extension>
 </plugin>
