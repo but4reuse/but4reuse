@@ -1,16 +1,22 @@
 package org.but4reuse.utils.files;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IFile;
@@ -178,6 +184,28 @@ public class FileUtils {
 	 */
 	public static boolean isExtension(File file, String extension){
 		return getExtension(file).equalsIgnoreCase(extension);
+	}
+	
+	/**
+	 * Get lines of a file
+	 * @param file
+	 * @return list of strings
+	 */
+	public static List<String> getLinesOfFile(File file) {
+		List<String> lines = new ArrayList<String>();
+		try {
+			FileInputStream fstream = new FileInputStream(file);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			while ((strLine = br.readLine()) != null) {
+				lines.add(strLine);
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lines;
 	}
 	
 }
