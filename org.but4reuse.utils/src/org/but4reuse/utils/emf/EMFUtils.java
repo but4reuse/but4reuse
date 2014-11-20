@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -12,6 +13,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -93,6 +95,21 @@ public class EMFUtils {
 			return ResourcesPlugin.getWorkspace().getRoot().findMember(platformString);
 		}
 		return null;
+	}
+	
+	/**
+	 * Save resource
+	 * @param resource
+	 */
+	public static void saveResource(Resource resource) {
+		Map<Object, Object> saveOptions = ((XMLResource) resource).getDefaultSaveOptions();
+		saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
+		saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
+		try {
+			resource.save(saveOptions);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Featureide
-Bundle-SymbolicName: org.but4reuse.importer.featureide;singleton:=true
+Bundle-SymbolicName: org.but4reuse.extension.featureide;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.but4reuse.importer.featureide.activator.Activator
+Bundle-Activator: org.but4reuse.extension.featureide.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

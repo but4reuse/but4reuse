@@ -5,12 +5,12 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
-            id="org.but4reuse.feature.localization.ui.action"
+            id="org.but4reuse.extension.featureid.import"
             objectClass="org.but4reuse.featurelist.FeatureList">
          <action
-               class="org.but4reuse.importer.featureide.ImportFeatureIDEAction"
+               class="org.but4reuse.extension.featureide.ImportFeatureIDEAction"
                icon="IMG_TOOL_UP"
-               id="org.but4reuse.feature.localization.ui.action"
+               id="org.but4reuse.extension.featureid.import.action"
                label="Import from Feature IDE"
                menubarPath="additions">
          </action>
