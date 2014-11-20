@@ -11,6 +11,9 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.featurelist,
  de.ovgu.featureide.fm.core,
  org.but4reuse.artefactmodel,
- org.eclipse.emf.ecore.xmi
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.contribution.visualiser,
+ org.but4reuse.visualisation,
+ org.but4reuse.adaptedmodel
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

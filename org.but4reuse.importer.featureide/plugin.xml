@@ -16,4 +16,32 @@
          </action>
       </objectContribution>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.viewActions">
+<viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.extension.featureide.CreateFeatureModelAction"
+               icon="icons/createFM.png"
+               id="org.but4reuse.extension.featureide.createfeatuermodel"
+               label="Create Feature Model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution2"
+            targetID="org.eclipse.contribution.visualiser.views.Visualiser">
+         <action
+               class="org.but4reuse.extension.featureide.CreateConfigurationsAction"
+               icon="icons/createConfigurations.png"
+               id="org.but4reuse.analysis.constructionprimitives.action2"
+               label="Create Configurations"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
 </plugin>
