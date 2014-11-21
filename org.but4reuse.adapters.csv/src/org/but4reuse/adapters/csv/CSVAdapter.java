@@ -14,6 +14,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.files.CSVUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.graphics.Point;
 
 /**
  * CSV Adapter
@@ -51,11 +52,16 @@ public class CSVAdapter implements IAdapter {
 				String[] cells = strLine.split(";");
 				int column = 0;
 				for (String cell : cells) {
-					CellElement lineElement = new CellElement(cell, row, column);
+					// Create cell element
+					CellElement cellElement = new CellElement(cell, row, column);
+					// Add dependency to its position
+					cellElement.addDependency(new Point(row,column));
+					// Add marker
 					// TODO now the marker is on the whole line, adjust to
 					// column also
-					lineElement.setMarkerInfo(uri, row);
-					elements.add(lineElement);
+					cellElement.setMarkerInfo(uri, row);
+					elements.add(cellElement);
+					
 					column++;
 				}
 				row++;
