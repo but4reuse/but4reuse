@@ -8,7 +8,8 @@
             icon="icons/requirements.png"
             name="Requirements">
          <elements>
-            <element></element>
+            <element
+                  element="org.but4reuse.adapters.requirements.ReqElement"></element>
          </elements>
       </adapter>
    </extension>

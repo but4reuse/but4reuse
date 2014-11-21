@@ -36,13 +36,13 @@ public class AdaptersHelper {
 	public static final String ADAPTERS_EXTENSIONPOINT = "org.but4reuse.adapters";
 
 	private static List<IAdapter> cache_adapters;
-	
+
 	/**
-	 * 
-	 * @return
+	 * Get all adapters
+	 * @return list of declared adapters
 	 */
 	public static List<IAdapter> getAllAdapters() {
-		if(cache_adapters!=null){
+		if (cache_adapters != null) {
 			return cache_adapters;
 		}
 		List<IAdapter> adapters = new ArrayList<IAdapter>();
@@ -60,21 +60,21 @@ public class AdaptersHelper {
 	}
 
 	/**
-	 * 
-	 * @param variantsModel
-	 * @param monitor 
+	 * Get adapters from artefact model
+	 * @param artefactModel
+	 * @param monitor
 	 * @return
 	 */
-	public static List<IAdapter> getAdapters(ArtefactModel variantsModel, IProgressMonitor monitor) {
+	public static List<IAdapter> getAdapters(ArtefactModel artefactModel, IProgressMonitor monitor) {
 		// TODO for the moment we return the super set of adapters of all
 		// artefacts but this can have problems. Now we assume that all share
 		// the same adapters.
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
-		for (Artefact artefact : variantsModel.getOwnedArtefacts()) {
+		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			List<IAdapter> artefactAdapters = getAdapters(artefact, monitor);
-			for (IAdapter a : artefactAdapters) {
-				if (!filteredAdapters.contains(a)) {
-					filteredAdapters.add(a);
+			for (IAdapter artefactAdapter : artefactAdapters) {
+				if (!filteredAdapters.contains(artefactAdapter)) {
+					filteredAdapters.add(artefactAdapter);
 				}
 			}
 		}
@@ -102,6 +102,7 @@ public class AdaptersHelper {
 			}
 		}
 
+
 		// TODO clean this method
 		List<IAdapter> adapters = getAllAdapters();
 		for (IAdapter adapter : adapters) {
@@ -121,10 +122,10 @@ public class AdaptersHelper {
 						if (artefact.getArtefactURI() != null) {
 							URI uri = new URI(artefact.getArtefactURI());
 							String name = artefact.getName();
-							if(name == null){
+							if (name == null) {
 								name = uri.toString();
 							}
-							monitor.subTask("Checking if "+ name +" is adaptable with " + getAdapterName(adapter));
+							monitor.subTask("Checking if " + name + " is adaptable with " + getAdapterName(adapter));
 							if (adapter.isAdaptable(uri, null)) {
 								filteredAdapters.add(adapter);
 							}
@@ -139,6 +140,11 @@ public class AdaptersHelper {
 		return filteredAdapters;
 	}
 
+	/**
+	 * Get artefacts whose active property is set to true
+	 * @param artefactModel
+	 * @return list of artefacts
+	 */
 	public static List<Artefact> getActiveArtefacts(ArtefactModel artefactModel) {
 		List<Artefact> activeArtefacts = new ArrayList<Artefact>();
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
@@ -149,6 +155,12 @@ public class AdaptersHelper {
 		return activeArtefacts;
 	}
 
+	/**
+	 * Get Elements from a given artefact with a set of adapters
+	 * @param artefact
+	 * @param adapters
+	 * @return list of Elements
+	 */
 	public static List<IElement> getElements(Artefact artefact, List<IAdapter> adapters) {
 		List<IElement> list = new ArrayList<IElement>();
 		if (artefact.isActive()) {
@@ -167,9 +179,9 @@ public class AdaptersHelper {
 	}
 
 	/**
-	 * 
+	 * Get Elements of a given artefact with a given adapter
 	 * @param artefact
-	 * @return
+	 * @return list of ielements
 	 */
 	public static List<IElement> getElements(Artefact artefact, IAdapter adapter) {
 		List<IElement> elements = null;
@@ -178,12 +190,17 @@ public class AdaptersHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(elements==null){
+		if (elements == null) {
 			elements = new ArrayList<IElement>();
 		}
 		return elements;
 	}
 
+	/**
+	 * Get adapter name
+	 * @param adapter
+	 * @return adapter name
+	 */
 	public static String getAdapterName(IAdapter adapter) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ADAPTERS_EXTENSIONPOINT);
@@ -204,6 +221,11 @@ public class AdaptersHelper {
 		return null;
 	}
 
+	/**
+	 * Get adapter icon
+	 * @param adapter
+	 * @return image descriptor
+	 */
 	public static ImageDescriptor getAdapterIcon(IAdapter adapter) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ADAPTERS_EXTENSIONPOINT);
@@ -216,8 +238,9 @@ public class AdaptersHelper {
 			}
 			if (ada.getClass().equals(adapter.getClass())) {
 				String path = adapterExtensionPoint.getAttribute("icon");
-				if(path==null){
-					return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
+				if (path == null) {
+					return PlatformUI.getWorkbench().getSharedImages()
+							.getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
 				}
 				Bundle bundle = Platform.getBundle(adapterExtensionPoint.getContributor().getName());
 				Path imageFilePath = new Path(path);
@@ -228,24 +251,34 @@ public class AdaptersHelper {
 		return null;
 	}
 
+	/**
+	 * Get associated adapter of a given element
+	 * @param element
+	 * @return adapter or null if the element was not declared in any adapter
+	 */
 	public static IAdapter getAdapter(IElement element) {
+		// loop through adapter extension points and check the declaration of elements
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			IConfigurationElement[] a = adapterExtensionPoint.getChildren("elements");
 			if (a != null && a.length > 0) {
-				// only one
-				IConfigurationElement cps = a[0];
-				IConfigurationElement[] cps2 = cps.getChildren("element");
-				if (cps2 != null && cps2.length > 0) {
-					for (IConfigurationElement cpcon : cps2) {
-						try {
-							String className = cpcon.getAttribute("element");
-							if (className.equals(element.getClass().getName())) {
-								return (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
+				for (int ai = 0; ai < a.length; ai++) {
+					IConfigurationElement cps = a[0];
+					IConfigurationElement[] cps2 = cps.getChildren("element");
+					if (cps2 != null && cps2.length > 0) {
+						for (IConfigurationElement cpcon : cps2) {
+							try {
+								String className = cpcon.getAttribute("element");
+								if (className != null) {
+									// matching of element class names so return the adapter
+									if (className.equals(element.getClass().getName())) {
+										return (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
+									}
+								}
+							} catch (CoreException e) {
+								e.printStackTrace();
 							}
-						} catch (CoreException e) {
-							e.printStackTrace();
 						}
 					}
 				}
