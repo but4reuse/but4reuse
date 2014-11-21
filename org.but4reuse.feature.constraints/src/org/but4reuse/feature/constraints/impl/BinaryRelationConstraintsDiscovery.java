@@ -114,6 +114,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 								if (toCheck.getMaxDependencies(key) <= 1) {
 									return true;
 								}
+							} else {
+								// if it is an Object we suppose max dependencies == 1
+								return true;
 							}
 						}
 					}
