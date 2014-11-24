@@ -4,14 +4,14 @@
    <extension
          point="org.but4reuse.adapters">
       <adapter
-            class="org.but4reuse.adapters.filestructure.FileStructureAdapter"
-            icon="icons/files.gif"
-            name="File structure">
+            class="org.but4reuse.adapters.eclipse.EclipseAdapter"
+            icon="icons/icon_eclipse.png"
+            name="Eclipse">
          <elements>
             <element
-                  element="org.but4reuse.adapters.filestructure.FileElement"></element>
+                  element="org.but4reuse.adapters.eclipse.FileElement"></element>
             <element
-                  element="org.but4reuse.adapters.filestructure.FolderElement">
+                  element="org.but4reuse.adapters.eclipse.FolderElement">
             </element>
          </elements>
       </adapter>
