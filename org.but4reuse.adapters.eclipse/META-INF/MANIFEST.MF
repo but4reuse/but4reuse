@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: File Structure adapter
+Bundle-SymbolicName: org.but4reuse.adapters.filestructure;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.eclipse.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.adapters,
+ org.but4reuse.utils,
+ org.eclipse.core.resources
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
