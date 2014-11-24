@@ -1,0 +1,36 @@
+package org.but4reuse.adapters.filestructure.preferences;
+
+import org.but4reuse.adapters.filestructure.activator.Activator;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
+/**
+ * Preference page for file structure adapter
+ * 
+ * @author jabier.martinez
+ */
+public class FileStructureAdapterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+
+	public static final String CONTENT_CHECK = "CONTENT_CHECK";
+
+	public FileStructureAdapterPreferencePage() {
+		super(GRID);
+		this.setPreferenceStore(Activator.getDefault().getPreferenceStore());
+	}
+
+	/**
+	 * Creates the field editors.
+	 */
+	public void createFieldEditors() {
+		BooleanFieldEditor bfe = new BooleanFieldEditor(CONTENT_CHECK, "Check file content for similarity",
+				getFieldEditorParent());
+		addField(bfe);
+	}
+
+	@Override
+	public void init(IWorkbench workbench) {
+	}
+
+}

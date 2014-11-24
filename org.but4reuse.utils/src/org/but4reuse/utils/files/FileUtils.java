@@ -208,4 +208,15 @@ public class FileUtils {
 		return lines;
 	}
 	
+	/**
+	 * Check whether two files have the same content
+	 * @param file1
+	 * @param file2
+	 * @return
+	 */
+	public static boolean isFileContentIdentical(File file1, File file2){
+		// TODO check equal binary content! this is not a real bytes comparison
+		return file1.length() == file2.length();
+	}
+	
 }
