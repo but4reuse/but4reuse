@@ -3,18 +3,20 @@ package org.but4reuse.adapters.requirements;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 
+import edu.cmu.lti.lexical_db.NictWordNet;
+import edu.cmu.lti.ws4j.impl.WuPalmer;
+
+
 public class ReqElement extends AbstractElement {
 
 	private String description;
 	
 	@Override
 	public double similarity(IElement anotherElement) {
-		// TODO integrating Natural Language Processing techniques
 		if(anotherElement instanceof ReqElement){
 			String anotherDescription = ((ReqElement)anotherElement).getDescription();
-			if(description.equals(anotherDescription)){
-				return 1;
-			}
+			// integrating Natural Language Processing techniques
+			return calculateSimilarity(this.getDescription(),anotherDescription);
 		}
 		return 0;
 	}
@@ -32,5 +34,10 @@ public class ReqElement extends AbstractElement {
 		this.description = description;
 	}
 
-
+	// Wu and Palmer algorithm
+	private double calculateSimilarity(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new WuPalmer(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
 }
