@@ -6,7 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.console.IConsoleConstants;
 
 /**
- * But4Reuse Perspective factory
+ * BUT4Reuse Perspective factory
  * 
  * @author jabier.martinez
  */
@@ -33,23 +33,26 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		// Note that each new Folder uses a percentage of the remaining
 		// EditorArea.
 
-		IFolderLayout bottom = factory.createFolder("bottomRight", // NON-NLS-1
-				IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
-		bottom.addView("org.but4reuse.input.inputdropview"); // NON-NLS-1
-		//bottom.addView("org.eclipse.contribution.visualiser.views.Menu");
-		//bottom.addView("org.eclipse.contribution.visualiser.views.Visualiser");
-		bottom.addView("org.eclipse.ui.views.PropertySheet");
-		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);
-		bottom.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
-
 		IFolderLayout topLeft = factory.createFolder("topLeft", // NON-NLS-1
 				IPageLayout.LEFT, 0.25f, factory.getEditorArea());
 		topLeft.addView(IPageLayout.ID_RES_NAV);
 
-		// factory.addFastView("org.eclipse.team.ccvs.ui.RepositoriesView",0.50f);
-		// //NON-NLS-1
-		// factory.addFastView("org.eclipse.team.sync.views.SynchronizeView",
-		// 0.50f); //NON-NLS-1
+		IFolderLayout bottomRight = factory.createFolder("bottomRight", // NON-NLS-1
+				IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
+
+		IFolderLayout bottomLeft = factory.createFolder("bottomLeft", // NON-NLS-1
+				IPageLayout.LEFT, 0.75f, "bottomRight");
+
+		bottomLeft.addView("org.but4reuse.input.inputdropview"); // NON-NLS-1
+
+		bottomLeft.addView("org.eclipse.ui.views.PropertySheet");// NON-NLS-1
+		bottomLeft.addView(IPageLayout.ID_PROBLEM_VIEW);
+
+		bottomRight.addView("org.eclipse.contribution.visualiser.views.Menu");// NON-NLS-1
+		bottomLeft.addView("org.eclipse.contribution.visualiser.views.Visualiser");// NON-NLS-1
+
+		bottomLeft.addView("org.but4reuse.feature.constraints.ui.view");// NON-NLS-1
+		bottomLeft.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
 	}
 
 	private void addActionSets() {
@@ -57,11 +60,13 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 	}
 
 	private void addPerspectiveShortcuts() {
-		// factory.addPerspectiveShortcut("org.eclipse.ui.resourcePerspective"); // NON-NLS-1
+		// factory.addPerspectiveShortcut("org.eclipse.ui.resourcePerspective");
+		// // NON-NLS-1
 	}
 
 	private void addNewWizardShortcuts() {
 		factory.addNewWizardShortcut("org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizardID");// NON-NLS-1
+		factory.addNewWizardShortcut("org.but4reuse.featurelist.presentation.FeatureListModelWizardID");// NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");// NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");// NON-NLS-1
 	}
@@ -71,8 +76,12 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		factory.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
 		factory.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		factory.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
-		// factory.addShowViewShortcut("org.but4reuse.input.drop.view");
 		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+		factory.addShowViewShortcut("org.but4reuse.input.inputdropview");// NON-NLS-1
+		factory.addShowViewShortcut("org.eclipse.ui.views.PropertySheet");// NON-NLS-1
+		factory.addShowViewShortcut("org.eclipse.contribution.visualiser.views.Menu");// NON-NLS-1
+		factory.addShowViewShortcut("org.eclipse.contribution.visualiser.views.Visualiser");// NON-NLS-1
+		factory.addShowViewShortcut("org.but4reuse.feature.constraints.ui.view");// NON-NLS-1
 	}
 
 }
