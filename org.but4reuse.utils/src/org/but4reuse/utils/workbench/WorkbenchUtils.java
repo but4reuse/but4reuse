@@ -5,6 +5,7 @@ import java.net.URI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -115,6 +116,11 @@ public class WorkbenchUtils {
 	 * @return File
 	 */
 	public static File getFileFromIResource(IResource resource) {
+		if(resource instanceof IProject){
+			// for some reason rawlocation in projects return null
+			IProject project = (IProject)resource;
+			return project.getLocation().makeAbsolute().toFile();
+		}
 		return resource.getRawLocation().makeAbsolute().toFile();
 	}
 
@@ -137,14 +143,14 @@ public class WorkbenchUtils {
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 		return win.getActivePage();
 	}
-
+	
 	/**
-	 * Convert IFile to URI
+	 * Convert IResource to URI
 	 * 
 	 * @param platform uri, for example platform:/resource/projectName/myFile
-	 * @return the ifile or null
+	 * @return the iresource or null
 	 */
-	public static IFile getIFileFromURI(URI uri) {
+	public static IResource getIResourceFromURI(URI uri) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		URI rootUri = root.getLocationURI();
 		uri = rootUri.relativize(uri);
@@ -152,7 +158,7 @@ public class WorkbenchUtils {
 		path = path.removeFirstSegments(1);
 		// if the segment count is 1 then it is an IProject
 		if(path.segmentCount()==1){
-			return null;
+			return root.getProject(path.segment(0));
 		}
 		return root.getFile(path);
 	}

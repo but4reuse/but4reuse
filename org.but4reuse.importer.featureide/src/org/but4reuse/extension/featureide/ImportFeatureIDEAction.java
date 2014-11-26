@@ -73,7 +73,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				IFile fmifile = WorkbenchUtils.getIFileFromURI(fmURI);
+				IFile fmifile = (IFile)WorkbenchUtils.getIResourceFromURI(fmURI);
 				FeatureModel featureModel = new FeatureModel();
 				FeatureModelReaderIFileWrapper modelReader = new FeatureModelReaderIFileWrapper(
 						new XmlFeatureModelReader(featureModel));

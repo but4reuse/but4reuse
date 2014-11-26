@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -74,7 +74,7 @@ public class FileUtils {
 		if (uri.getScheme().equals("file")) {
 			file = new File(uri);
 		} else if (uri.getScheme().equals("platform")) {
-			IFile ifile = WorkbenchUtils.getIFileFromURI(uri);
+			IResource ifile = WorkbenchUtils.getIResourceFromURI(uri);
 			if(ifile==null){
 				return null;
 			}

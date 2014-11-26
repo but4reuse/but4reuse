@@ -10,8 +10,8 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -76,7 +76,7 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	@Override
 	public IMarker getMarker() {
 		IMarker marker = null;
-		IFile ifile = WorkbenchUtils.getIFileFromURI(getUri());
+		IResource ifile = WorkbenchUtils.getIResourceFromURI(getUri());
 		if (ifile != null && ifile.exists()) {
 			try {
 				marker = ifile.createMarker(IMarker.TEXT);
