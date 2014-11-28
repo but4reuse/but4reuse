@@ -47,7 +47,7 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 					matrix[0][i] = adaptedModel.getOwnedBlocks().get(i - 1).getName();
 				}
 				// first column with feature names
-				for (int i = 1; i < blocksSize; i++) {
+				for (int i = 1; i < featuresSize; i++) {
 					matrix[i][0] = featureList.getOwnedFeatures().get(i - 1).getName();
 				}
 				// calculate feature-specific heuristic
