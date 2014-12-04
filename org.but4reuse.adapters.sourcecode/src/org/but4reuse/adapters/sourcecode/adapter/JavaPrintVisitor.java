@@ -6,12 +6,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.ArtifactPrintVisitor;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.PrintVisitorException;
-import org.but4reuse.adapters.sourcecode.featurehouse.tmp.generated_java15.SimplePrintVisitor;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import printer.ArtifactPrintVisitor;
+import printer.PrintVisitorException;
+import tmp.generated_java15.SimplePrintVisitor;
 
 public class JavaPrintVisitor extends ArtifactPrintVisitor {
 

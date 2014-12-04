@@ -1,19 +1,25 @@
 package org.but4reuse.utils.files;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -68,7 +74,7 @@ public class FileUtils {
 		if (uri.getScheme().equals("file")) {
 			file = new File(uri);
 		} else if (uri.getScheme().equals("platform")) {
-			IFile ifile = WorkbenchUtils.getIFileFromURI(uri);
+			IResource ifile = WorkbenchUtils.getIResourceFromURI(uri);
 			if(ifile==null){
 				return null;
 			}
@@ -167,6 +173,50 @@ public class FileUtils {
 			return file.getName().substring(i + 1);
 		}
 		return "";
+	}
+	
+	/**
+	 * Check if a file has a given extension
+	 * 
+	 * @param file
+	 * @param extension
+	 * @return
+	 */
+	public static boolean isExtension(File file, String extension){
+		return getExtension(file).equalsIgnoreCase(extension);
+	}
+	
+	/**
+	 * Get lines of a file
+	 * @param file
+	 * @return list of strings
+	 */
+	public static List<String> getLinesOfFile(File file) {
+		List<String> lines = new ArrayList<String>();
+		try {
+			FileInputStream fstream = new FileInputStream(file);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			while ((strLine = br.readLine()) != null) {
+				lines.add(strLine);
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lines;
+	}
+	
+	/**
+	 * Check whether two files have the same content
+	 * @param file1
+	 * @param file2
+	 * @return
+	 */
+	public static boolean isFileContentIdentical(File file1, File file2){
+		// TODO check equal binary content! this is not a real bytes comparison
+		return file1.length() == file2.length();
 	}
 	
 }

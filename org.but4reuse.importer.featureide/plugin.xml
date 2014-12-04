@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.extension.featureid.import"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.extension.featureide.ImportFeatureIDEAction"
+               icon="IMG_TOOL_UP"
+               id="org.but4reuse.extension.featureid.import.action"
+               label="Import from Feature IDE"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.viewActions">
+<viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.extension.featureide.CreateFeatureModelAction"
+               icon="icons/createFM.png"
+               id="org.but4reuse.extension.featureide.createfeatuermodel"
+               label="Create Feature Model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution2"
+            targetID="org.eclipse.contribution.visualiser.views.Visualiser">
+         <action
+               class="org.but4reuse.extension.featureide.CreateConfigurationsAction"
+               icon="icons/createConfigurations.png"
+               id="org.but4reuse.analysis.constructionprimitives.action2"
+               label="Create Configurations"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+</plugin>

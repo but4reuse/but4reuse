@@ -2,7 +2,8 @@ package org.but4reuse.adapters.sourcecode;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.sourcecode.adapter.LanguageConfigurator;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
+
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class FSTTerminalNodeElement extends FSTNodeElement {
 

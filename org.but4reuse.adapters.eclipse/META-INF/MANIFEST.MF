@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: File Structure adapter
-Bundle-SymbolicName: org.but4reuse.adapters.filestructure;singleton:=true
+Bundle-Name: Eclipse adapter
+Bundle-SymbolicName: org.but4reuse.adapters.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.eclipse.activator.Activator
 Require-Bundle: org.eclipse.ui,

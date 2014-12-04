@@ -6,8 +6,8 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -28,9 +28,14 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 	}
 
 	@Override
+	/**
+	 * Identical when same position and value
+	 */
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof CellElement) {
-			if (((CellElement) anotherElement).getValue().equals(value)) {
+			CellElement cellElement = (CellElement) anotherElement;
+			if (cellElement.getRow() == row && cellElement.getColumn() == column
+					&& cellElement.getValue().equals(value)) {
 				return 1;
 			}
 		}
@@ -58,7 +63,7 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 	@Override
 	public IMarker getMarker() {
 		IMarker marker = null;
-		IFile ifile = WorkbenchUtils.getIFileFromURI(uri);
+		IResource ifile = WorkbenchUtils.getIResourceFromURI(uri);
 		if (ifile != null && ifile.exists()) {
 			try {
 				marker = ifile.createMarker(IMarker.TEXT);
@@ -69,6 +74,14 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 			}
 		}
 		return marker;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getColumn() {
+		return column;
 	}
 
 }

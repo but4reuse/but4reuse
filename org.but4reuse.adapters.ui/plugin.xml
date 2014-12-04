@@ -24,6 +24,12 @@
             id="org.but4reuse.adapters.ui.preferences.SimilarityPreferencePage"
             name="Similarity">
       </page>
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.adapters.ui.preferences.AdaptersPreferencePage"
+            id="org.but4reuse.adapters.ui.preferences.AdaptersPreferencePage"
+            name="Adapters">
+      </page>
    </extension>
 	   <extension
          point="org.eclipse.ui.viewActions">
@@ -35,6 +41,21 @@
                icon="icons/construct.png"
                id="org.but4reuse.adapters.ui.constructaction"
                label="Construct"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      </extension>
+      	   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.but4reuse.adapters.ui.constructseparately"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ConstructSeparatelyViewAction"
+               icon="icons/constructSeparately.png"
+               id="org.but4reuse.adapters.ui.constructseparatelyaction"
+               label="Construct separately"
                style="push"
                toolbarPath="additions">
          </action>

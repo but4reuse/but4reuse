@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 
 public abstract class AbstractElement implements IElement {
 
-	private static final String MAIN_DEPENDENCY_ID = "depends on";
+	public static final String MAIN_DEPENDENCY_ID = "depends on";
 	/**
 	 * Abstract IElement
 	 * 
@@ -43,11 +43,17 @@ public abstract class AbstractElement implements IElement {
 
 	@Override
 	public int getMaxDependencies(String dependencyID) {
+		if(maxDependencies.get(dependencyID)==null){
+			return Integer.MAX_VALUE;
+		}
 		return maxDependencies.get(dependencyID);
 	}
 
 	@Override
 	public int getMinDependencies(String dependencyID) {
+		if(minDependencies.get(dependencyID)==null){
+			return Integer.MIN_VALUE;
+		}
 		return minDependencies.get(dependencyID);
 	}
 
@@ -93,7 +99,7 @@ public abstract class AbstractElement implements IElement {
 				return true;
 			}
 			// check if we should ask the user
-			if (!PreferencesHelper.isManualEqualActivated()) {
+			if (!PreferencesHelper.isManualEqualActivated() || PreferencesHelper.isDeactivateManualEqualOnlyForThisTime()) {
 				// no? ok, so it is not equal
 				return false;
 			}
@@ -125,7 +131,7 @@ public abstract class AbstractElement implements IElement {
 		} else if (buttonIndex ==1){
 			return false;
 		} else {
-			PreferencesHelper.setManualEqual(false);
+			PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(true);
 			return false;
 		}
 	}
@@ -147,8 +153,9 @@ public abstract class AbstractElement implements IElement {
 		@Override
 		public void run() {
 			// TODO implement "Always" and "Never" buttons
+			// Default is No
 			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal", null, elementText1 + "\n\n is equal to \n\n" + elementText2,
-					MessageDialog.QUESTION, new String[] { "Yes", "No" , "Deactivate manual equal" }, 0);
+					MessageDialog.QUESTION, new String[] { "Yes", "No" , "Deactivate manual equal" }, 1);
 			result = dialog.open();
 		}
 

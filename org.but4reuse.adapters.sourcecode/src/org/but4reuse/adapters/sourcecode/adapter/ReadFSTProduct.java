@@ -7,11 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.ParseException;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNonTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.PrintVisitorException;
+
+import printer.PrintVisitorException;
+import cide.gparser.ParseException;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class ReadFSTProduct {
 

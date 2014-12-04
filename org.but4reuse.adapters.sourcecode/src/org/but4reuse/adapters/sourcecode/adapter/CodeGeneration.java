@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.FSTNode;
+
+import de.ovgu.cide.fstgen.ast.FSTNode;
 
 public class CodeGeneration {
 

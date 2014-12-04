@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -56,8 +57,8 @@ public class EMFAdapter implements IAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	private void adapt(EObject eObject, EObject adaptedEObject, List<IElement> elements) {
-		// Current child to set the owner is the last cp
-		IElement ownerElement = elements.get(elements.size() - 1);
+		// Current child to set the owner is the last element
+		AbstractElement ownerElement = (AbstractElement)elements.get(elements.size() - 1);
 
 		// Attributes
 		List<EAttribute> attributes = eObject.eClass().getEAllAttributes();
@@ -65,12 +66,13 @@ public class EMFAdapter implements IAdapter {
 			if (!attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
 				Object o = eObject.eGet(attr);
 				if (o != null) {
-					EMFAttributeElement cp = new EMFAttributeElement();
-					cp.owner = adaptedEObject;
-					cp.eAttribute = attr;
-					cp.value = o;
-					cp.addDependency(attr.getName(), ownerElement);
-					elements.add(cp);
+					EMFAttributeElement element = new EMFAttributeElement();
+					element.owner = adaptedEObject;
+					element.eAttribute = attr;
+					element.value = o;
+					element.addDependency(attr.getName(), ownerElement);
+					ownerElement.setMaximumDependencies(attr.getName(), 1);
+					elements.add(element);
 				}
 			}
 		}
@@ -100,6 +102,7 @@ public class EMFAdapter implements IAdapter {
 					element.referenced.add(r);
 				}
 				element.addDependency(ref.getName(), ownerElement);
+				ownerElement.setMaximumDependencies(ref.getName(), 1);
 				elements.add(element);
 			}
 		}
@@ -130,6 +133,7 @@ public class EMFAdapter implements IAdapter {
 						element.owner = adaptedEObject;
 						element.reference = childReference;
 						element.addDependency(childReference.getName(), ownerElement);
+						// TODO add maximum dependencies
 						elements.add(element);
 						adapt(child, element.childEObject, elements);
 					}

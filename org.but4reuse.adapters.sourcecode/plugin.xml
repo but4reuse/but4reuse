@@ -4,9 +4,9 @@
    <extension
          point="org.but4reuse.adapters">
       <adapter
-            class="org.but4reuse.adapters.sourcecode.SourceCodeAdapter"
+            class="org.but4reuse.adapters.sourcecode.JavaSourceCodeAdapter"
             icon="icons/code.gif"
-            name="Source code">
+            name="Java source code">
          <elements>
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTNodeElement"></element>
@@ -14,6 +14,22 @@
                   element="org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement"></element>
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
+            </element>
+         </elements>
+      </adapter>
+      <adapter
+            class="org.but4reuse.adapters.sourcecode.CSourceCodeAdapter"
+            icon="icons/c.png"
+            name="C source code">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTNodeElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement">
             </element>
          </elements>
       </adapter>

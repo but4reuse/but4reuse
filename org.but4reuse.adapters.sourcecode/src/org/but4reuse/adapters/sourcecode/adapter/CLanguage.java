@@ -5,14 +5,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.OffsetCharStream;
-import org.but4reuse.adapters.sourcecode.featurehouse.cide.gparser.ParseException;
-import org.but4reuse.adapters.sourcecode.featurehouse.de.ovgu.cide.fstgen.ast.*;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.PrintVisitorException;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.capprox.CApproxHeaderPrintVisitor;
-import org.but4reuse.adapters.sourcecode.featurehouse.printer.capprox.CApproxPrintVisitor;
-import org.but4reuse.adapters.sourcecode.featurehouse.tmp.generated_capprox.CApproxParser;
-import org.but4reuse.adapters.sourcecode.featurehouse.tmp.generated_java15.Java15Parser;
+import printer.PrintVisitorException;
+import printer.capprox.CApproxHeaderPrintVisitor;
+import printer.capprox.CApproxPrintVisitor;
+import cide.gparser.OffsetCharStream;
+import cide.gparser.ParseException;
+import tmp.generated_capprox.CApproxParser;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 
 public class CLanguage implements InterfaceLanguage {
@@ -78,7 +79,7 @@ public void generateCode(FSTNode n, String dir, String featName) {
 	
 	
 	CApproxPrintVisitor  cpv = new CApproxPrintVisitor ();
-	cpv.setNameFiles( LanguageConfigurator.filesNames);
+	//cpv.setNameFiles( LanguageConfigurator.filesNames);
 	
 	try {
 		System.out.println ("C-Code Generation");
@@ -90,7 +91,7 @@ public void generateCode(FSTNode n, String dir, String featName) {
 		e.printStackTrace();
 	}
 	CApproxHeaderPrintVisitor cpvh = new CApproxHeaderPrintVisitor();
-	cpvh.setcApproxPrintVisitor(cpv);
+	//cpvh.setcApproxPrintVisitor(cpv);
 	try {
 		cpvh.processNode(n, fDir);
 	} catch (PrintVisitorException e) {

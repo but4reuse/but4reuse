@@ -119,7 +119,7 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 			for(int i=0; i<stripes.size(); i++){
 				ElementStripe stripe = (ElementStripe)stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText + ((ElementStripe)stripe).getElement().getText() + "\n";
+				sText = sText + ((ElementStripe)stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("\r", " ") + "\n";
 			}
 			
 			// Remove the last \n

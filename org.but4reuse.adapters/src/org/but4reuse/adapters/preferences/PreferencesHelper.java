@@ -12,6 +12,7 @@ public class PreferencesHelper {
 	public static final String AUTOMATIC_EQUAL_THRESHOLD = "automatic_threshold";
 	public static final String ASK_USER_THRESHOLD = "ask_user_threshold";
 	public static final String ASK_USER = "ask_user";
+	public static final String ASK_USER_DEACTIVATED_FOR_THIS_TIME = "ask_user_deactivated_for_this_time";
 	
 	public static boolean isOnlyIdenticalMode(){
 		if(getAutomaticEqualThreshold()==1){
@@ -40,5 +41,13 @@ public class PreferencesHelper {
 
 	public static IPreferenceStore getPreferenceStore() {
 		return Activator.getDefault().getPreferenceStore();
+	}
+
+	public static void setDeactivateManualEqualOnlyForThisTime(boolean b) {
+		prefs.putBoolean(ASK_USER_DEACTIVATED_FOR_THIS_TIME, b);
+	}
+	
+	public static boolean isDeactivateManualEqualOnlyForThisTime() {
+		return prefs.getBoolean(ASK_USER_DEACTIVATED_FOR_THIS_TIME, false);
 	}
 }

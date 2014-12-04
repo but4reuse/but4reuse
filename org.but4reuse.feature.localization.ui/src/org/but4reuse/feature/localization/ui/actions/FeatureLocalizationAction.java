@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
-import org.but4reuse.adaptedmodel.blockcreation.IBlockCreationAlgorithm;
-import org.but4reuse.adaptedmodel.blockcreation.IntersectionsAlgorithm;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
+import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
+import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
-import org.but4reuse.visualisation.IVisualisation;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -56,26 +56,22 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 									InterruptedException {
 
 								// Adapting each active artefact + calculating blocks + prepare visualisations
-								List<IVisualisation> visualisations = VisualisationsHelper.getAllVisualisations();
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + visualisations.size();
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
 								
 								monitor.subTask("Calculating existing blocks");
+								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 								// TODO selection of block creation algorithm
-								IBlockCreationAlgorithm a = new IntersectionsAlgorithm();
+								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								
 								monitor.worked(1);
 								monitor.subTask("Preparing visualisations");
-								
-								for(IVisualisation visualisation : visualisations){
-									visualisation.prepare(featureList, adaptedModel, null, monitor);
-									visualisation.show();
-								}
+								VisualisationsHelper.notifyVisualisations(featureList, adaptedModel, null, monitor);
 								
 								monitor.worked(1);
 								monitor.done();
