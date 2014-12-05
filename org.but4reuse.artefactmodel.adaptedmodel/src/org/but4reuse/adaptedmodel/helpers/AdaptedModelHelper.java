@@ -1,6 +1,7 @@
 package org.but4reuse.adaptedmodel.helpers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -16,70 +17,82 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AdaptedModelHelper {
-
 	/**
 	 * Adapt an artefact model to create the list of elements of each artefact
-	 * 
 	 * @param artefactModel
 	 * @param adapters
 	 * @param monitor
 	 * @return
+	 * @throws InterruptedException 
 	 */
-	public static AdaptedModel adapt(ArtefactModel artefactModel, List<IAdapter> adapters, IProgressMonitor monitor) {
+	public static AdaptedModel adapt(ArtefactModel artefactModel,
+			List<IAdapter> adapters, IProgressMonitor monitor) throws InterruptedException {
+		long startTime = System.nanoTime();
+		
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
-
-		// TODO implement concurrency to improve performance
+		ArrayList<AdaptedModelThread> ListThread = new ArrayList<AdaptedModelThread>();
+		int i =0;
+		AdaptedArtefact[] tabAdp = new AdaptedArtefact[artefactModel.getOwnedArtefacts().size()];
+		
+		
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
-				AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-				adaptedArtefact.setArtefact(artefact);
-
-				String name = artefact.getName();
-				if (name == null || name.length() == 0) {
-					name = artefact.getArtefactURI();
-				}
-				monitor.subTask("Adapting: " + name);
-
+				
 				List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-				for (IElement ele : list) {
-					ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
-					ew.setElement(ele);
-					adaptedArtefact.getOwnedElementWrappers().add(ew);
-				}
-
-				adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
-				monitor.worked(1);
-				if (monitor.isCanceled()) {
-					return adaptedModel;
-				}
+				AdaptedModelThread th = new AdaptedModelThread(list,tabAdp, adaptedModel,artefact, adapters, monitor,i);
+				ListThread.add(th);
+				th.start();
+				i++;
+				
 			}
 		}
-		return adaptedModel;
-	}
+		/*for(AdaptedModelThread th : ListThread){
+		th.start();
+		}*/
+		
+		for(AdaptedModelThread th : ListThread){
+			th.join();
+		}
+		
+		for(int j=0;j<tabAdp.length;j++){
+			
+			adaptedModel.getOwnedAdaptedArtefacts().add(tabAdp[j]);
+			
+		}
+		
+		
+		//while (adaptedModel.getOwnedAdaptedArtefacts().size() != artefactModel.getOwnedArtefacts().size()){}
+		long endTime = System.nanoTime();
 
-	public static boolean isIdentical(ElementWrapper e1, ElementWrapper e2) {
-		if (e1.getElement() != null && e2.getElement() != null) {
-			return ((IElement) e1).similarity((IElement) e2) == 1.0;
+		long duration = (endTime - startTime);
+		System.out.println(duration);
+		return adaptedModel;
+		
+	}
+	
+	public static boolean isIdentical(ElementWrapper e1, ElementWrapper e2){
+		if(e1.getElement()!=null && e2.getElement()!=null){
+			return ((IElement)e1).similarity((IElement)e2)==1.0;
 		} else {
 			return false;
 		}
 	}
-
-	public static double similarity(ElementWrapper e1, ElementWrapper e2) {
-		if (e1.getElement() != null && e2.getElement() != null) {
-			return ((IElement) e1).similarity((IElement) e2);
+	
+	public static double similarity(ElementWrapper e1, ElementWrapper e2){
+		if(e1.getElement()!=null && e2.getElement()!=null){
+			return ((IElement)e1).similarity((IElement)e2);
 		} else {
 			return 0;
 		}
 	}
 
+	
 	public static List<ElementWrapper> findElementWrappers(List<AdaptedArtefact> artefacts, IElement ie) {
-		// expensive task, it is better if you use a hashmap IElement,
-		// IElementWrappers instead
+		// expensive task, it is better if you use a hashmap IElement, IElementWrappers instead
 		List<ElementWrapper> elementWrappers = new ArrayList<ElementWrapper>();
-		for (AdaptedArtefact artefact : artefacts) {
-			for (ElementWrapper ew : artefact.getOwnedElementWrappers()) {
-				if (ew.getElement().equals(ie)) {
+		for(AdaptedArtefact artefact : artefacts){
+			for(ElementWrapper ew : artefact.getOwnedElementWrappers()){
+				if(ew.getElement().equals(ie)){
 					elementWrappers.add(ew);
 				}
 			}
@@ -89,15 +102,15 @@ public class AdaptedModelHelper {
 
 	public static List<Block> checkBlockNames(List<Block> blocks) {
 		int i = 0;
-		for (Block block : blocks) {
-			if (block.getName() == null || block.getName().isEmpty()) {
-				block.setName("Block " + getNumberWithZeros(i, blocks.size() - 1));
+		for(Block block : blocks){
+			if(block.getName()==null || block.getName().isEmpty()){
+				block.setName("Block " + getNumberWithZeros(i,blocks.size() - 1));
 				i++;
 			}
 		}
 		return blocks;
 	}
-
+	
 	public static String getNumberWithZeros(int number, int maxNumber) {
 		String _return = String.valueOf(number);
 		for (int zeros = _return.length(); zeros < String.valueOf(maxNumber).length(); zeros++) {
