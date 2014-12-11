@@ -63,7 +63,11 @@ public class WorkbenchUtils {
 	 */
 	public static IViewPart forceShowView(String viewId) {
 		try {
-			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+			IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if(ww!=null && ww.getActivePage()!=null){
+				return ww.getActivePage().showView(viewId);
+			}
+			return null;
 		} catch (PartInitException e) {
 			return null;
 		}

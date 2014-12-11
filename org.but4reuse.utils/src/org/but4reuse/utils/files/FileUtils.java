@@ -86,7 +86,7 @@ public class FileUtils {
 			}
 			file = WorkbenchUtils.getFileFromIResource(ifile);
 			// web
-		} else if (uri.getScheme().equals("http")) {
+		} else if (uri.getScheme().equals("http") || uri.getScheme().equals("https")) {
 			URL url;
 			try {
 				url = uri.toURL();
