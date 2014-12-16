@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -235,8 +236,10 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean isFileContentIdentical(File file1, File file2) {
-		// TODO check equal binary content! this is not a real bytes comparison
-		return file1.length() == file2.length();
+		// We compare the checksum of the two files
+		String checksumFile1 = getChecksumMD5(file1);
+		String checksumFile2 = getChecksumMD5(file2);
+		return checksumFile1.equals(checksumFile2);
 	}
 
 	/**
@@ -268,6 +271,38 @@ public class FileUtils {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * get checksum of a file using MD5 hashing algorithm
+	 * @param file
+	 * @return the checksum
+	 */
+	public static String getChecksumMD5(File file) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			FileInputStream fis = new FileInputStream(file);
+
+			byte[] dataBytes = new byte[1024];
+
+			int nread = 0;
+			while ((nread = fis.read(dataBytes)) != -1) {
+				md.update(dataBytes, 0, nread);
+			}
+			;
+			byte[] mdbytes = md.digest();
+
+			// Convert to hex format
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < mdbytes.length; i++) {
+				sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			fis.close();
+			return sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
