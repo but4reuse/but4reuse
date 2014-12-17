@@ -9,14 +9,16 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * Binary relations constraints discovery
- * A structural constraints discovery between pairs of blocks
+ * Binary relations constraints discovery A structural constraints discovery
+ * between pairs of blocks
+ * 
  * @author jabier.martinez
  * 
  */
@@ -26,11 +28,12 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	public String discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
 		String result = "";
-		
-		// for binary relations we explore the matrix n*n where n is the number of blocks
+
+		// for binary relations we explore the matrix n*n where n is the number
+		// of blocks
 		monitor.beginTask("Binary Relation Constraints discovery",
 				new Double(Math.pow(adaptedModel.getOwnedBlocks().size(), 2)).intValue());
-		
+
 		// Block Level
 		// TODO feature level
 		for (int y = 0; y < adaptedModel.getOwnedBlocks().size(); y++) {
@@ -51,7 +54,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						// constraint, the involved elements for example
 						result = result + b1.getName() + " requires " + b2.getName() + "\n";
 					}
-					// mutual exclusion, not(b1 and b2), as it is mutual we do not need to check the opposite
+					// mutual exclusion, not(b1 and b2), as it is mutual we do
+					// not need to check the opposite
 					if (y < x) {
 						// mutual exclusion
 						if (blockExcludesAnotherBlock(b1, b2)) {
@@ -75,7 +79,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 */
 	public boolean blockRequiresAnotherBlockB(Block b1, Block b2) {
 		for (BlockElement e : b1.getOwnedBlockElements()) {
-			List<Object> de = getAllDependencies(e);
+			List<IDependencyObject> de = getAllDependencies(e);
 			for (BlockElement b2e : b2.getOwnedBlockElements()) {
 				for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
 					if (de.contains(elementW2.getElement())) {
@@ -99,23 +103,17 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		for (BlockElement e1 : b1.getOwnedBlockElements()) {
 			for (BlockElement e2 : b2.getOwnedBlockElements()) {
 				// intersection of their dependencies
-				Map<String, List<Object>> map1 = getDepedencyTypesAndPointedObjects(e1);
-				Map<String, List<Object>> map2 = getDepedencyTypesAndPointedObjects(e2);
+				Map<String, List<IDependencyObject>> map1 = getDepedencyTypesAndPointedObjects(e1);
+				Map<String, List<IDependencyObject>> map2 = getDepedencyTypesAndPointedObjects(e2);
 				for (String key : map1.keySet()) {
-					List<Object> pointed1 = map1.get(key);
-					List<Object> pointed2 = map2.get(key);
+					List<IDependencyObject> pointed1 = map1.get(key);
+					List<IDependencyObject> pointed2 = map2.get(key);
 					if (pointed2 == null) {
 						break;
 					}
-					for (Object o : pointed1) {
+					for (IDependencyObject o : pointed1) {
 						if (pointed2.contains(o)) {
-							if (o instanceof IElement) {
-								IElement toCheck = (IElement) o;
-								if (toCheck.getMaxDependencies(key) <= 1) {
-									return true;
-								}
-							} else {
-								// if it is an Object we suppose max dependencies == 1
+							if (o.getMaxDependencies(key) <= 1) {
 								return true;
 							}
 						}
@@ -126,18 +124,18 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		return false;
 	}
 
-	private Map<String, List<Object>> getDepedencyTypesAndPointedObjects(BlockElement blockElement) {
-		Map<String, List<Object>> result = new HashMap<String, List<Object>>();
+	private Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(BlockElement blockElement) {
+		Map<String, List<IDependencyObject>> result = new HashMap<String, List<IDependencyObject>>();
 		for (ElementWrapper elementW1 : blockElement.getElementWrappers()) {
 			IElement element = (IElement) elementW1.getElement();
-			Map<String, List<Object>> map = element.getDependencies();
+			Map<String, List<IDependencyObject>> map = element.getDependencies();
 			for (String key : map.keySet()) {
-				List<Object> res = result.get(key);
+				List<IDependencyObject> res = result.get(key);
 				if (res == null) {
-					res = new ArrayList<Object>();
+					res = new ArrayList<IDependencyObject>();
 				}
-				List<Object> dependencies = map.get(key);
-				for (Object o : dependencies) {
+				List<IDependencyObject> dependencies = map.get(key);
+				for (IDependencyObject o : dependencies) {
 					if (!res.contains(o)) {
 						res.add(o);
 					}
@@ -148,14 +146,14 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		return result;
 	}
 
-	public static List<Object> getAllDependencies(BlockElement blockElement) {
-		List<Object> result = new ArrayList<Object>();
+	public static List<IDependencyObject> getAllDependencies(BlockElement blockElement) {
+		List<IDependencyObject> result = new ArrayList<IDependencyObject>();
 		for (ElementWrapper elementW1 : blockElement.getElementWrappers()) {
 			IElement element = (IElement) elementW1.getElement();
-			Map<String, List<Object>> map = element.getDependencies();
+			Map<String, List<IDependencyObject>> map = element.getDependencies();
 			for (String key : map.keySet()) {
-				List<Object> dependencies = map.get(key);
-				for (Object o : dependencies) {
+				List<IDependencyObject> dependencies = map.get(key);
+				for (IDependencyObject o : dependencies) {
 					if (!result.contains(o)) {
 						result.add(o);
 					}

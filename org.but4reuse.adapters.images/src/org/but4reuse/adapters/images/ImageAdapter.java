@@ -59,7 +59,7 @@ public class ImageAdapter implements IAdapter {
 				if(pixel.alpha!=0){
 					pixel.position = new Point(x, y);
 					// A pixel depends on its position
-					pixel.addDependency(pixel.position);
+					pixel.addDependency(new PositionDependencyObject(pixel.position));
 					elements.add(pixel);
 				}
 			}
