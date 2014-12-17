@@ -19,16 +19,10 @@ public class PixelElement extends AbstractElement {
 
 	@Override
 	public String getText() {
-		String text = position + ", ";
-		// if completely transparent, do not show the color
-		if (alpha == 0) {
-			text = text + "Alpha: 0";
-		} else {
-			text = text + color;
-			// show alpha only if it is not completely opaque
-			if (alpha != 255) {
-				text = text + ", Alpha: " + alpha;
-			}
+		String text = position + ", " + color;
+		// show alpha only if it is not completely opaque
+		if (alpha != 255) {
+			text = text + ", Alpha: " + alpha;
 		}
 		return text;
 	}
