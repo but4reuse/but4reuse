@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.images;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.images.utils.ImageUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
@@ -41,8 +42,8 @@ public class PixelElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof PixelElement) {
 			PixelElement pixel = (PixelElement) anotherElement;
-			if (position.equals(pixel.position) && color.equals(pixel.color) && alpha == pixel.alpha) {
-				return 1;
+			if (position.equals(pixel.position) && alpha == pixel.alpha) {
+				return ImageUtils.getColorSimilarity(color, pixel.color);
 			}
 		}
 		return 0;

@@ -55,10 +55,13 @@ public class ImageAdapter implements IAdapter {
 					// alphaData it returns 255
 					pixel.alpha = imageData.getAlpha(x, y);
 				}
-				pixel.position = new Point(x, y);
-				// A pixel depends on its position
-				pixel.addDependency(pixel.position);
-				elements.add(pixel);
+				// Only add if it is not completely transparent
+				if(pixel.alpha!=0){
+					pixel.position = new Point(x, y);
+					// A pixel depends on its position
+					pixel.addDependency(pixel.position);
+					elements.add(pixel);
+				}
 			}
 		}
 		return elements;
