@@ -31,18 +31,19 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		String result = "";
 
 		// for binary relations we explore the matrix n*n where n is the number
-		// of blocks
-		monitor.beginTask("Binary Relation Constraints discovery",
-				new Double(Math.pow(adaptedModel.getOwnedBlocks().size(), 2)).intValue());
+		// of blocks. We ignore the matrix diagonal so it is n*n - n for
+		// requires and (n*n-n)/2 for mutual exclusion
+		int n = adaptedModel.getOwnedBlocks().size();
+		monitor.beginTask("Binary Relation Constraints discovery", (n * n - n) + ((n * n - n) / 2));
 
 		// Block Level
 		// TODO feature level
-		for (int y = 0; y < adaptedModel.getOwnedBlocks().size(); y++) {
-			Block b1 = adaptedModel.getOwnedBlocks().get(y);
-			for (int x = 0; x < adaptedModel.getOwnedBlocks().size(); x++) {
-				Block b2 = adaptedModel.getOwnedBlocks().get(x);
+		for (int y = 0; y < n; y++) {
+			for (int x = 0; x < n; x++) {
 				if (x != y) {
-					monitor.subTask("Checking relations of " + b1.getName() + " with " + b2.getName());
+					Block b1 = adaptedModel.getOwnedBlocks().get(y);
+					Block b2 = adaptedModel.getOwnedBlocks().get(x);
+					monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
 						return result;
@@ -55,16 +56,29 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						// constraint, the involved elements for example
 						result = result + b1.getName() + " requires " + b2.getName() + "\n";
 					}
-					// mutual exclusion, not(b1 and b2), as it is mutual we do
-					// not need to check the opposite
-					if (y < x) {
-						// mutual exclusion
-						if (blockExcludesAnotherBlock(b1, b2)) {
-							result = result + b1.getName() + " mutually excludes " + b2.getName() + "\n";
-						}
-					}
+					monitor.worked(1);
 				}
-				monitor.worked(1);
+			}
+		}
+
+		for (int y = 0; y < n; y++) {
+			for (int x = 0; x < n; x++) {
+				// mutual exclusion, not(b1 and b2), as it is mutual we do
+				// not need to check the opposite
+				if (x != y && y < x) {
+					Block b1 = adaptedModel.getOwnedBlocks().get(y);
+					Block b2 = adaptedModel.getOwnedBlocks().get(x);
+					monitor.subTask("Checking Mutual Exclusion relations of " + b1.getName() + " with " + b2.getName());
+					// check monitor
+					if (monitor.isCanceled()) {
+						return result;
+					}
+					// mutual exclusion
+					if (blockExcludesAnotherBlock(b1, b2)) {
+						result = result + b1.getName() + " mutually excludes " + b2.getName() + "\n";
+					}
+					monitor.worked(1);
+				}
 			}
 		}
 		monitor.done();
