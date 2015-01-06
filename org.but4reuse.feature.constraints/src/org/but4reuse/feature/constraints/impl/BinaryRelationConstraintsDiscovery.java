@@ -1,6 +1,7 @@
 package org.but4reuse.feature.constraints.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,23 +101,26 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @return
 	 */
 	private boolean blockExcludesAnotherBlock(Block b1, Block b2) {
+		// Create the global maps of dependency ids and dependency objects
+		Map<String, List<IDependencyObject>> map1 = new HashMap<String, List<IDependencyObject>>();
+		Map<String, List<IDependencyObject>> map2 = new HashMap<String, List<IDependencyObject>>();
 		for (BlockElement e1 : b1.getOwnedBlockElements()) {
-			for (BlockElement e2 : b2.getOwnedBlockElements()) {
-				// intersection of their dependencies
-				Map<String, List<IDependencyObject>> map1 = getDepedencyTypesAndPointedObjects(e1);
-				Map<String, List<IDependencyObject>> map2 = getDepedencyTypesAndPointedObjects(e2);
-				for (String key : map1.keySet()) {
-					List<IDependencyObject> pointed1 = map1.get(key);
-					List<IDependencyObject> pointed2 = map2.get(key);
-					if (pointed2 == null) {
-						break;
-					}
-					for (IDependencyObject o : pointed1) {
-						if (pointed2.contains(o)) {
-							if (o.getMaxDependencies(key) <= 1) {
-								return true;
-							}
-						}
+			map1 = getDepedencyTypesAndPointedObjects(map1, e1);
+		}
+		for (BlockElement e2 : b2.getOwnedBlockElements()) {
+			map2 = getDepedencyTypesAndPointedObjects(map2, e2);
+		}
+		for (String key : map1.keySet()) {
+			List<IDependencyObject> pointed1 = map1.get(key);
+			List<IDependencyObject> pointed2 = map2.get(key);
+			if (pointed2 == null) {
+				break;
+			}
+			for (IDependencyObject o : pointed1) {
+				if (pointed2.contains(o)) {
+					if (o.getMaxDependencies(key) < Collections.frequency(pointed1, o)
+							+ Collections.frequency(pointed2, o)) {
+						return true;
 					}
 				}
 			}
@@ -124,8 +128,11 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		return false;
 	}
 
-	private Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(BlockElement blockElement) {
-		Map<String, List<IDependencyObject>> result = new HashMap<String, List<IDependencyObject>>();
+	private Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(
+			Map<String, List<IDependencyObject>> result, BlockElement blockElement) {
+		// we allow duplicates in result but not those that belong to the same
+		// BlockElement
+		List<IDependencyObject> visitedForThisBlockElement = new ArrayList<IDependencyObject>();
 		for (ElementWrapper elementW1 : blockElement.getElementWrappers()) {
 			IElement element = (IElement) elementW1.getElement();
 			Map<String, List<IDependencyObject>> map = element.getDependencies();
@@ -136,8 +143,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 				}
 				List<IDependencyObject> dependencies = map.get(key);
 				for (IDependencyObject o : dependencies) {
-					if (!res.contains(o)) {
+					if (!visitedForThisBlockElement.contains(o)) {
 						res.add(o);
+						visitedForThisBlockElement.add(o);
 					}
 				}
 				result.put(key, res);
