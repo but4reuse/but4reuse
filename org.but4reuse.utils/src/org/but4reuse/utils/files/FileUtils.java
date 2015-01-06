@@ -112,7 +112,7 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static void createFile(File file) throws IOException {
-		if (!file.exists()) {
+		if (file!=null && !file.exists()) {
 			if (!file.getParentFile().exists()) {
 				file.getParentFile().mkdirs();
 			}

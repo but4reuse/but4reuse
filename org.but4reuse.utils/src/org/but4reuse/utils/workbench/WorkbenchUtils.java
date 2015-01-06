@@ -125,7 +125,10 @@ public class WorkbenchUtils {
 			IProject project = (IProject)resource;
 			return project.getLocation().makeAbsolute().toFile();
 		}
-		return resource.getRawLocation().makeAbsolute().toFile();
+		if(resource.getRawLocation()!=null){
+			return resource.getRawLocation().makeAbsolute().toFile();
+		}
+		return null;
 	}
 
 	/**
