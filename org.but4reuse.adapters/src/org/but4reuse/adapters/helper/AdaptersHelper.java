@@ -77,6 +77,10 @@ public class AdaptersHelper {
 					filteredAdapters.add(artefactAdapter);
 				}
 			}
+			// monitor canceled
+			if(monitor.isCanceled()){
+				return filteredAdapters;
+			}
 		}
 		return filteredAdapters;
 	}
@@ -128,6 +132,10 @@ public class AdaptersHelper {
 							monitor.subTask("Checking if " + name + " is adaptable with " + getAdapterName(adapter));
 							if (adapter.isAdaptable(uri, null)) {
 								filteredAdapters.add(adapter);
+							}
+							// user cancel
+							if(monitor.isCanceled()){
+								return filteredAdapters;
 							}
 						}
 					}

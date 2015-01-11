@@ -5,15 +5,20 @@ import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,19 +76,33 @@ public class FileUtils {
 	 */
 	public static File getFile(URI uri) {
 		File file = null;
+		// file
 		if (uri.getScheme().equals("file")) {
 			file = new File(uri);
+			// eclipse workbench
 		} else if (uri.getScheme().equals("platform")) {
 			IResource ifile = WorkbenchUtils.getIResourceFromURI(uri);
-			if(ifile==null){
+			if (ifile == null) {
 				return null;
 			}
 			file = WorkbenchUtils.getFileFromIResource(ifile);
+			// web
+		} else if (uri.getScheme().equals("http") || uri.getScheme().equals("https")) {
+			URL url;
+			try {
+				url = uri.toURL();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return null;
+			}
+			String tDir = System.getProperty("java.io.tmpdir");
+			String fileName = url.toString().substring(url.toString().lastIndexOf('/') + 1, url.toString().length());
+			String path = tDir + "tmp_" + fileName;
+			file = new File(path);
+			file.deleteOnExit();
+			downloadFileFromURL(url, file);
 		}
-		if(file!=null){
-			return file;
-		}
-		return null;
+		return file;
 	}
 
 	/**
@@ -93,7 +112,7 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static void createFile(File file) throws IOException {
-		if (!file.exists()) {
+		if (file!=null && !file.exists()) {
 			if (!file.getParentFile().exists()) {
 				file.getParentFile().mkdirs();
 			}
@@ -174,7 +193,7 @@ public class FileUtils {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * Check if a file has a given extension
 	 * 
@@ -182,12 +201,13 @@ public class FileUtils {
 	 * @param extension
 	 * @return
 	 */
-	public static boolean isExtension(File file, String extension){
+	public static boolean isExtension(File file, String extension) {
 		return getExtension(file).equalsIgnoreCase(extension);
 	}
-	
+
 	/**
 	 * Get lines of a file
+	 * 
 	 * @param file
 	 * @return list of strings
 	 */
@@ -207,16 +227,82 @@ public class FileUtils {
 		}
 		return lines;
 	}
-	
+
 	/**
 	 * Check whether two files have the same content
+	 * 
 	 * @param file1
 	 * @param file2
 	 * @return
 	 */
-	public static boolean isFileContentIdentical(File file1, File file2){
-		// TODO check equal binary content! this is not a real bytes comparison
-		return file1.length() == file2.length();
+	public static boolean isFileContentIdentical(File file1, File file2) {
+		// We compare the checksum of the two files
+		String checksumFile1 = getChecksumMD5(file1);
+		String checksumFile2 = getChecksumMD5(file2);
+		return checksumFile1.equals(checksumFile2);
 	}
-	
+
+	/**
+	 * Download file from url
+	 * 
+	 * @param url
+	 * @param file
+	 * @return true if file was correctly updated
+	 */
+	public static boolean downloadFileFromURL(URL url, File file) {
+		URLConnection connection;
+		try {
+			connection = url.openConnection();
+			InputStream in = connection.getInputStream();
+			FileOutputStream fos = new FileOutputStream(file);
+			byte[] buf = new byte[512];
+			while (true) {
+				int len = in.read(buf);
+				if (len == -1) {
+					break;
+				}
+				fos.write(buf, 0, len);
+			}
+			in.close();
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * get checksum of a file using MD5 hashing algorithm
+	 * @param file
+	 * @return the checksum
+	 */
+	public static String getChecksumMD5(File file) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			FileInputStream fis = new FileInputStream(file);
+
+			byte[] dataBytes = new byte[1024];
+
+			int nread = 0;
+			while ((nread = fis.read(dataBytes)) != -1) {
+				md.update(dataBytes, 0, nread);
+			}
+			;
+			byte[] mdbytes = md.digest();
+
+			// Convert to hex format
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < mdbytes.length; i++) {
+				sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+			}
+			fis.close();
+			return sb.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

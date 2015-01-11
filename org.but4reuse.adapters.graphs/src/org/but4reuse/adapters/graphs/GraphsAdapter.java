@@ -21,6 +21,7 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
+import com.tinkerpop.blueprints.util.io.gml.GMLReader;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLReader;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter;
 
@@ -37,7 +38,8 @@ public class GraphsAdapter implements IAdapter {
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
-		if (file != null && file.exists() && !file.isDirectory() && FileUtils.isExtension(file, "graphml")) {
+		if (file != null && file.exists() && !file.isDirectory()
+				&& (FileUtils.isExtension(file, "graphml") || FileUtils.isExtension(file, "gml"))) {
 			return true;
 		}
 		return false;
@@ -51,16 +53,29 @@ public class GraphsAdapter implements IAdapter {
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		Graph graph = new TinkerGraph();
-		GraphMLReader reader = new GraphMLReader(graph);
-
-		InputStream is;
-		try {
-			is = new BufferedInputStream(new FileInputStream(file));
-			reader.inputGraph(is);
-		} catch (IOException e) {
-			e.printStackTrace();
+		// Read the graph
+		// TODO show error to user for malformed files
+		if (FileUtils.isExtension(file, "graphml")) {
+			GraphMLReader reader = new GraphMLReader(graph);
+			InputStream is;
+			try {
+				is = new BufferedInputStream(new FileInputStream(file));
+				reader.inputGraph(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if (FileUtils.isExtension(file, "gml")){
+			GMLReader reader = new GMLReader(graph);
+			InputStream is;
+			try {
+				is = new BufferedInputStream(new FileInputStream(file));
+				reader.inputGraph(is);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
+		// Create elements
 		HashMap<Vertex, VertexElement> map = new HashMap<Vertex, VertexElement>();
 		Iterable<Vertex> vertices = graph.getVertices();
 		for (Vertex vertex : vertices) {
@@ -97,14 +112,15 @@ public class GraphsAdapter implements IAdapter {
 				VertexElement ve = (VertexElement) element;
 				Vertex v = graph.addVertex(ve.getVertex().getId());
 				// adding all its properties
-				for(String key : ve.getVertex().getPropertyKeys()){
+				for (String key : ve.getVertex().getPropertyKeys()) {
 					v.setProperty(key, ve.getVertex().getProperty(key));
 				}
 			}
 		}
-		
+
 		// Add edges
-		// We create link vertices when they do not exist in the graph but the edge reference to it
+		// We create link vertices when they do not exist in the graph but the
+		// edge reference to it
 		int linkVertex = 0;
 		for (IElement element : elements) {
 			if (element instanceof EdgeElement) {
@@ -112,26 +128,26 @@ public class GraphsAdapter implements IAdapter {
 				Vertex v1 = ee.getEdge().getVertex(Direction.IN);
 				Vertex v2 = ee.getEdge().getVertex(Direction.OUT);
 				// If they dont exist, create fake ones
-				if(graph.getVertex(v1.getId())==null){
-					v1 = graph.addVertex("link vertex "+ linkVertex);
+				if (graph.getVertex(v1.getId()) == null) {
+					v1 = graph.addVertex("link vertex " + linkVertex);
 					v1.setProperty("label", v1.getId());
 					linkVertex++;
 				} else {
 					// get the current object in the graph
 					v1 = graph.getVertex(v1.getId());
 				}
-				if(graph.getVertex(v2.getId())==null){
-					v2 = graph.addVertex("link vertex "+ linkVertex);
+				if (graph.getVertex(v2.getId()) == null) {
+					v2 = graph.addVertex("link vertex " + linkVertex);
 					v2.setProperty("label", v2.getId());
 					linkVertex++;
 				} else {
 					// get the current object in the graph
 					v2 = graph.getVertex(v2.getId());
 				}
-				
+
 				Edge edge = graph.addEdge(ee.getEdge().getId(), v1, v2, ee.getEdge().getLabel());
 				// adding all its properties
-				for(String key : ee.getEdge().getPropertyKeys()){
+				for (String key : ee.getEdge().getPropertyKeys()) {
 					edge.setProperty(key, ee.getEdge().getProperty(key));
 				}
 			}

@@ -43,7 +43,9 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 				} else {
 					File file1 = FileUtils.getFile(this.getUri());
 					File file2 = FileUtils.getFile(anotherFileElement.getUri());
-					if ((file1.isDirectory() && file2.isDirectory()) || FileUtils.isFileContentIdentical(file1, file2)) {
+					if ((file1.isDirectory() && file2.isDirectory())
+							|| (!file1.isDirectory() && !file2.isDirectory() && FileUtils.isFileContentIdentical(file1,
+									file2))) {
 						return 1;
 					}
 				}

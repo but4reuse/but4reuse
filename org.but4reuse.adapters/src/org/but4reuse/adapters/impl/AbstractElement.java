@@ -5,12 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-public abstract class AbstractElement implements IElement {
+/**
+ * Abstract Element
+ * @author jabier.martinez
+ */
+public abstract class AbstractElement implements IElement, IDependencyObject {
 
 	public static final String MAIN_DEPENDENCY_ID = "depends on";
 	/**
@@ -18,7 +23,7 @@ public abstract class AbstractElement implements IElement {
 	 * 
 	 * @author jabier.martinez
 	 */
-	private Map<String, List<Object>> dependencies = new HashMap<String, List<Object>>();
+	private Map<String, List<IDependencyObject>> dependencies = new HashMap<String, List<IDependencyObject>>();
 	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
 	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
 
@@ -37,7 +42,7 @@ public abstract class AbstractElement implements IElement {
 	}
 
 	@Override
-	public Map<String, List<Object>> getDependencies() {
+	public Map<String, List<IDependencyObject>> getDependencies() {
 		return dependencies;
 	}
 
@@ -65,10 +70,10 @@ public abstract class AbstractElement implements IElement {
 		minDependencies.put(dependencyID, number);
 	}
 
-	public void addDependency(String dependencyID, Object dependency) {
-		List<Object> o = dependencies.get(dependencyID);
+	public void addDependency(String dependencyID, IDependencyObject dependency) {
+		List<IDependencyObject> o = dependencies.get(dependencyID);
 		if (o == null) {
-			o = new ArrayList<Object>();
+			o = new ArrayList<IDependencyObject>();
 		}
 		if (!o.contains(dependency)) {
 			o.add(dependency);
@@ -76,12 +81,12 @@ public abstract class AbstractElement implements IElement {
 		dependencies.put(dependencyID, o);
 	}
 
-	public void addDependency(Object dependency) {
+	public void addDependency(IDependencyObject dependency) {
 		addDependency(MAIN_DEPENDENCY_ID, dependency);
 	}
 
-	public void addDependencies(List<String> dependencies) {
-		for (String dependency : dependencies) {
+	public void addDependencies(List<IDependencyObject> dependencies) {
+		for (IDependencyObject dependency : dependencies) {
 			addDependency(MAIN_DEPENDENCY_ID, dependency);
 		}
 	}

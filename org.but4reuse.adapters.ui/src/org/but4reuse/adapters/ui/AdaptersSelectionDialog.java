@@ -89,7 +89,7 @@ public class AdaptersSelectionDialog {
 
 		// No adapters
 		List<IAdapter> result = new ArrayList<IAdapter>();
-		if (correctAdapters.isEmpty()) {
+		if (correctAdapters==null || correctAdapters.isEmpty()) {
 			MessageDialog
 					.openError(Display.getCurrent().getActiveShell(), "Adapters selection",
 							"Sorry, no adapter is available for your artefact types or some problems occurred. Please, check the Problems view.");

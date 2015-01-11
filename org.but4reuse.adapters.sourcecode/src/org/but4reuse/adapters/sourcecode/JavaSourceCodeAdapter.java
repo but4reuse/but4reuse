@@ -25,6 +25,9 @@ public class JavaSourceCodeAdapter implements IAdapter {
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		// check if there is at least one java class
 		File file = FileUtils.getFile(uri);
+		if (file == null || !file.exists()) {
+			return false;
+		}
 		return FileUtils.containsFileWithExtension(file, "java");
 	}
 

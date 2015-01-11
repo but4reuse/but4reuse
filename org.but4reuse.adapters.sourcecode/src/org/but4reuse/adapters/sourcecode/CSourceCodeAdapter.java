@@ -25,6 +25,9 @@ public class CSourceCodeAdapter implements IAdapter {
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		// check if there is at least one c class
 		File file = FileUtils.getFile(uri);
+		if (file == null || !file.exists()) {
+			return false;
+		}
 		return FileUtils.containsFileWithExtension(file, "c");
 	}
 

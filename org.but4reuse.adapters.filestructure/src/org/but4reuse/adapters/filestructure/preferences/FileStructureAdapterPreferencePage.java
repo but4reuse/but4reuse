@@ -24,7 +24,8 @@ public class FileStructureAdapterPreferencePage extends FieldEditorPreferencePag
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		BooleanFieldEditor bfe = new BooleanFieldEditor(CONTENT_CHECK, "Check file content for similarity",
+		BooleanFieldEditor bfe = new BooleanFieldEditor(CONTENT_CHECK,
+				"Similarity: Apart from relative paths, use also checksums with MD5",
 				getFieldEditorParent());
 		addField(bfe);
 	}

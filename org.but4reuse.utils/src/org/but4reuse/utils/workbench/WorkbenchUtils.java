@@ -63,7 +63,11 @@ public class WorkbenchUtils {
 	 */
 	public static IViewPart forceShowView(String viewId) {
 		try {
-			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(viewId);
+			IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if(ww!=null && ww.getActivePage()!=null){
+				return ww.getActivePage().showView(viewId);
+			}
+			return null;
 		} catch (PartInitException e) {
 			return null;
 		}
@@ -121,7 +125,10 @@ public class WorkbenchUtils {
 			IProject project = (IProject)resource;
 			return project.getLocation().makeAbsolute().toFile();
 		}
-		return resource.getRawLocation().makeAbsolute().toFile();
+		if(resource.getRawLocation()!=null){
+			return resource.getRawLocation().makeAbsolute().toFile();
+		}
+		return null;
 	}
 
 	/**
