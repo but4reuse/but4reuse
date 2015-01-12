@@ -123,10 +123,24 @@ public class PluginInfosExtractor {
 			int i = value.indexOf(';');
 			if (i!=-1)
 				value = value.substring(0, i);
+//			System.out.println(value);
 			plugin.setPluginSymbName(value);
 			plugin.setPluginName(jar.getManifest().getMainAttributes().getValue("Bundle-Name"));
-//			System.err.println(jar.getManifest().getMainAttributes().getValue("Require-Bundle"));
-//			System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+			value = jar.getManifest().getMainAttributes().getValue("Require-Bundle");
+			if (value != null) {
+				String[] values = value.split(",");
+				for (String val : values) {
+					if (!val.matches("[0-9]+.*")) {
+						i = val.indexOf(';');
+						if (i!=-1)
+							val = val.substring(0, i);
+						val = val.replaceAll("\\s", "");
+						plugin.addRequire_bundle(val);
+//						System.err.println(val);
+					}
+				}
+//				System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+			}
 			jar.close();
 			return plugin;
 		} catch (IOException e) {
