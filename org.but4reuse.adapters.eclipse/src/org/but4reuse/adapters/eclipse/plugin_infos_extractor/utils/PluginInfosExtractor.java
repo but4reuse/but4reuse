@@ -43,7 +43,7 @@ public class PluginInfosExtractor {
 				}
 				if (ligne.contains("Bundle-Name: ")) {
 					ligne = ligne.substring(ligne.indexOf("Bundle-Name: ") + 13);
-					//TODO Tester si le nom est présent ou s'il s'agit d'une variable
+					//Tester si le nom est présent ou s'il s'agit d'une variable
 					//faisant référence à un fichier properties
 					if (ligne.startsWith("%")) {
 						File manifest = new File(fichierManifest);
@@ -108,10 +108,27 @@ public class PluginInfosExtractor {
 		return null;
 	}
 
-	public static String getPluginInfosFromJar(String fichierJar) throws IOException{
+	/**
+	 * Extracts the plugin infos, considering that it is a jar file
+	 * @param fichierJar the absolute path to the jar file
+	 * @return the plugin element
+	 * @throws IOException
+	 */
+	public static PluginElement getPluginInfosFromJar(String fichierJar) throws IOException{
 		File f = new File(fichierJar);
+		JarFile jar = new JarFile(f);
+		PluginElement plugin = new PluginElement();
 		try {
-			return new JarFile(f).getManifest().getMainAttributes().getValue("Bundle-SymbolicName");
+			String value = jar.getManifest().getMainAttributes().getValue("Bundle-SymbolicName");
+			int i = value.indexOf(';');
+			if (i!=-1)
+				value = value.substring(0, i);
+			plugin.setPluginSymbName(value);
+			plugin.setPluginName(jar.getManifest().getMainAttributes().getValue("Bundle-Name"));
+//			System.err.println(jar.getManifest().getMainAttributes().getValue("Require-Bundle"));
+//			System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+			jar.close();
+			return plugin;
 		} catch (IOException e) {
 			throw new IOException("Read exception for file " + fichierJar + " !");
 		}

@@ -69,11 +69,11 @@ public class EclipseAdapter implements IAdapter {
 		
 		for (int i = 0; i<fichiers.length; i++) {
 			
-			System.out.println("analyse de l'élément "+fichiers[i].getName());
+//			System.out.println("analyse de l'élément "+fichiers[i].getName());
 			
 			if (fichiers[i].isDirectory()) {
 				
-				System.out.println("plugin sous forme de dossier : "+fichiers[i].getAbsolutePath());
+//				System.out.println("plugin sous forme de dossier : "+fichiers[i].getAbsolutePath());
 				
 				try {
 					elements.add(PluginInfosExtractor.getPluginInfosFromManifest(fichiers[i].getAbsolutePath()+
@@ -84,19 +84,14 @@ public class EclipseAdapter implements IAdapter {
 					e.printStackTrace();
 				}
 			}
-			
-//			if(fichiers[i].getPath().endsWith(".jar")){
-//				JarFile jar;
-//				try {
-//					IElement e = new PluginElement();
-//					jar = new JarFile(uri);
-//					((PluginElement) e).setPluginSymbName(jar.getManifest().getMainAttributes().getValue("Bundle-SymbolicName"));
-//					((PluginElement) e).setPluginName(jar.getManifest().getMainAttributes().getValue("Bundle-Name"));
-//					((PluginElement) e).addRequire_bundle(jar.getManifest().getMainAttributes().getValue("Require-Bundle"));
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
+			else
+			if(fichiers[i].getPath().endsWith(".jar")){
+				try {
+					elements.add(PluginInfosExtractor.getPluginInfosFromJar(fichiers[i].getAbsolutePath()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 
 		}
 

@@ -57,7 +57,7 @@ public class PluginElement extends AbstractElement{
 
 	@Override
 	public String getText() {
-		return pluginName;
+		return pluginSymbName;
 	}
 
 
