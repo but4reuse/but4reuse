@@ -1,11 +1,6 @@
 package org.but4reuse.adapters.eclipse;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.jar.JarFile;
+import java.util.ArrayList;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -20,8 +15,11 @@ public class PluginElement extends AbstractElement{
 
 	private String pluginSymbName;
 	private String pluginName;
-	//Changer le type de require_Bundle en ArrayList<String>
-	private String require_Bundle;
+	private ArrayList<String> require_Bundles;
+	
+	public PluginElement() {
+		require_Bundles = new ArrayList<String>();
+	}
 
 	
 	public String getPluginSymbName() {
@@ -34,13 +32,13 @@ public class PluginElement extends AbstractElement{
 	}
 
 
-	public String getRequire_bundle() {
-		return require_Bundle;
+	public ArrayList<String> getRequire_bundle() {
+		return require_Bundles;
 	}
 
 
-	public void setRequire_bundle(String require_bundle) {
-		this.require_Bundle = require_bundle;
+	public void addRequire_bundle(String require_bundle) {
+		this.require_Bundles.add(require_bundle);
 	}
 
 
@@ -59,7 +57,7 @@ public class PluginElement extends AbstractElement{
 
 	@Override
 	public String getText() {
-		return pluginSymbName;
+		return pluginName;
 	}
 
 
