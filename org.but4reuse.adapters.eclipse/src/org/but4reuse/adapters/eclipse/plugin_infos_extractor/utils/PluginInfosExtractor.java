@@ -15,6 +15,10 @@ public class PluginInfosExtractor {
 	
 	public PluginInfosExtractor(){}
 	
+	/*
+	 * FOLDERS
+	 */
+	
 	/**
 	 * Extracts the plugin infos from its MANIFEST.MF file
 	 * @param fichierManifest the absolute path to the manifest
@@ -33,67 +37,13 @@ public class PluginInfosExtractor {
 			
 			while ((ligne = br.readLine()) != null) {
 				if (ligne.contains("Bundle-SymbolicName: ")) {
-					int i = ligne.indexOf(';');
-					if (i==-1)
-						ligne = ligne.substring(ligne.indexOf("Bundle-SymbolicName: ") + 21);
-					else
-						ligne = ligne.substring(ligne.indexOf("Bundle-SymbolicName: ") + 21, i);
-					ligne.replaceAll("[\\s]", "");
-					plugin.setPluginSymbName(ligne);
+					getSymbolicName(ligne, plugin);
 				}
 				if (ligne.contains("Bundle-Name: ")) {
-					ligne = ligne.substring(ligne.indexOf("Bundle-Name: ") + 13);
-					//Tester si le nom est présent ou s'il s'agit d'une variable
-					//faisant référence à un fichier properties
-					if (ligne.startsWith("%")) {
-						File manifest = new File(fichierManifest);
-						try {
-							//Premier essai : plugin.properties, à la racine du dossier
-							String pathToProperties = manifest.getParentFile().getParentFile().getAbsolutePath()+
-									"/plugin.properties";
-							plugin.setPluginName(getNameFromPropertiesFile(pathToProperties, ligne.substring(1)));
-						} catch (Exception e) {
-							try {
-								//Deuxième essai, bundle.properties, OSGI
-								String pathToProperties = manifest.getParentFile().getParentFile().getAbsolutePath()+
-										"/OSGI-INF/l10n/bundle.properties";
-								plugin.setPluginName(getNameFromPropertiesFile(pathToProperties, ligne.substring(1)));
-							} catch (Exception e2) {
-								//Echec => On prend le symbolic name à la place.
-								plugin.setPluginName(plugin.getPluginSymbName()); //on le trouve avant le name, donc non null
-							}
-						}
-					} else {
-						plugin.setPluginName(ligne);
-					}
+					getPluginName(ligne, fichierManifest, plugin);
 				}
 				if (ligne.contains("Require-Bundle: ")) {
-					
-					String value = ligne.substring(ligne.indexOf("Require-Bundle: ") + 16);
-					//Lire toutes les lignes contenant les require-bundle
-					boolean isMarked = false;
-					while ((ligne = br.readLine()) != null && !ligne.matches("\\s*[A-Z].*")) {
-						value+=ligne;
-						br.mark(1024);
-						isMarked=true;
-					}
-					//reset du reader pour ne pas râter la prochaine ligne lors du retour 
-					//au while englobant
-					if (isMarked)
-						br.reset();
-					String[] values = value.split(",");
-//					System.out.println(plugin.getPluginSymbName());
-					for (String val : values) {
-						if (!val.matches("\\s*[0-9].*")) {
-							int i = val.indexOf(';');
-							if (i!=-1)
-								val = val.substring(0, i);
-							val = val.replaceAll("\\s", "");
-							plugin.addRequire_bundle(val);
-//							System.err.println(val);
-						}
-					}
-//					System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+					getRequireBundles(ligne, br, plugin);					
 				}
 			}
 			br.close();
@@ -105,6 +55,78 @@ public class PluginInfosExtractor {
 			e.printStackTrace();
 			throw new IOException("Error during the reading of the file !");
 		}
+	}
+	
+	/**
+	 * Gets the plugin's symbolic name from its manifest file
+	 * @param ligne the line containing the Bundle-SymbolicName field
+	 * @param plugin the PluginElement for which we are searching the symbolic name
+	 */
+	private static void getSymbolicName(String ligne, PluginElement plugin) {
+		int i = ligne.indexOf(';');
+		if (i==-1)
+			ligne = ligne.substring(ligne.indexOf("Bundle-SymbolicName: ") + 21);
+		else
+			ligne = ligne.substring(ligne.indexOf("Bundle-SymbolicName: ") + 21, i);
+		ligne.replaceAll("[\\s]", "");
+		plugin.setPluginSymbName(ligne);
+	}
+	
+	/**
+	 * Gets the plugin's name from the manifest, or searches in any properties file
+	 * if the name is not in the manifest
+	 * @param ligne the line of the manifest containing the Bundle-Name field
+	 * @param fichierManifest absolute path to the manifest file
+	 * @param plugin the PluginElement for which we are searching the name
+	 */
+	private static void getPluginName(String ligne, String fichierManifest, PluginElement plugin) {
+		ligne = ligne.substring(ligne.indexOf("Bundle-Name: ") + 13);
+		//Tester si le nom est présent ou s'il s'agit d'une variable
+		//faisant référence à un fichier properties
+		if (ligne.startsWith("%")) {
+			File manifest = new File(fichierManifest);
+			try {
+				//Premier essai : plugin.properties, à la racine du dossier
+				String pathToProperties = manifest.getParentFile().getParentFile().getAbsolutePath()+
+						"/plugin.properties";
+				plugin.setPluginName(getNameFromPropertiesFile(pathToProperties, ligne.substring(1)));
+			} catch (Exception e) {
+				try {
+					//Deuxième essai, bundle.properties, OSGI
+					String pathToProperties = manifest.getParentFile().getParentFile().getAbsolutePath()+
+							"/OSGI-INF/l10n/bundle.properties";
+					plugin.setPluginName(getNameFromPropertiesFile(pathToProperties, ligne.substring(1)));
+				} catch (Exception e2) {
+					//Echec => On prend le symbolic name à la place.
+					plugin.setPluginName(plugin.getPluginSymbName()); //on le trouve avant le name, donc non null
+				}
+			}
+		} else {
+			plugin.setPluginName(ligne);
+		}
+	}
+	
+	/**
+	 * Extracts the required plugins from the manifest
+	 * @param ligne the line containing the Require-Bundle field
+	 * @param br the manifest's BufferedReader
+	 * @param plugin the PluginElement for which we are searching the required plugins
+	 * @throws IOException
+	 */
+	private static void getRequireBundles(String ligne, BufferedReader br, PluginElement plugin) throws IOException {
+		String value = ligne.substring(ligne.indexOf("Require-Bundle: ") + 16);
+		//Lire toutes les lignes contenant les require-bundle
+		boolean isMarked = false;
+		while ((ligne = br.readLine()) != null && !ligne.matches("\\s*[A-Z].*")) {
+			value+=ligne;
+			br.mark(1024);
+			isMarked=true;
+		}
+		//reset du reader pour ne pas râter la prochaine ligne lors du retour 
+		//au while englobant
+		if (isMarked)
+			br.reset();
+		getRequireBundlesSymbNames(value, plugin);
 	}
 	
 	/**
@@ -130,6 +152,10 @@ public class PluginInfosExtractor {
 		br.close();
 		return null;
 	}
+	
+	/*
+	 * JARS
+	 */
 
 	/**
 	 * Extracts the plugin infos, considering that it is a jar file
@@ -146,28 +172,42 @@ public class PluginInfosExtractor {
 			int i = value.indexOf(';');
 			if (i!=-1)
 				value = value.substring(0, i);
-//			System.out.println(value);
 			plugin.setPluginSymbName(value);
 			plugin.setPluginName(jar.getManifest().getMainAttributes().getValue("Bundle-Name"));
 			value = jar.getManifest().getMainAttributes().getValue("Require-Bundle");
 			if (value != null) {
-				String[] values = value.split(",");
-				for (String val : values) {
-					if (!val.matches("^[0-9]")) {
-						i = val.indexOf(';');
-						if (i!=-1)
-							val = val.substring(0, i);
-						val = val.replaceAll("\\s", "");
-						plugin.addRequire_bundle(val);
-//						System.err.println(val);
-					}
-				}
-//				System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+				getRequireBundlesSymbNames(value, plugin);
 			}
 			jar.close();
 			return plugin;
 		} catch (IOException e) {
 			throw new IOException("Read exception for file " + fichierJar + " !");
 		}
+	}
+	
+	/*
+	 * BOTH
+	 */
+	
+	/**
+	 * Extracts all the required plugins' symbolic names from the
+	 * Require-Bundle field's value
+	 * @param value a String containing the whole Require-Bundle field's value
+	 * @param plugin the PluginElement for which we are searching the required plugins
+	 */
+	private static void getRequireBundlesSymbNames(String value, PluginElement plugin) {
+		String[] values = value.split(",");
+		System.out.println(plugin.getPluginSymbName());
+		for (String val : values) {
+			if (!val.matches("\\s*[0-9].*")) {
+				int i = val.indexOf(';');
+				if (i!=-1)
+					val = val.substring(0, i);
+				val = val.replaceAll("\\s", "");
+				plugin.addRequire_bundle(val);
+				System.err.println(val);
+			}
+		}
+		System.err.println("$$$$$$$$$$$$$$$$$$$$$");
 	}
 }
