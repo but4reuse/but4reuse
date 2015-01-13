@@ -68,9 +68,32 @@ public class PluginInfosExtractor {
 					}
 				}
 				if (ligne.contains("Require-Bundle: ")) {
-					//TODO à traiter. Pas de convention pour la présentation de la liste,
-					//ormi la séparation par des virgules
-//					ligne = ligne.substring(ligne.indexOf("Require-Bundle: ") + 16);
+					
+					String value = ligne.substring(ligne.indexOf("Require-Bundle: ") + 16);
+					//Lire toutes les lignes contenant les require-bundle
+					boolean isMarked = false;
+					while ((ligne = br.readLine()) != null && !ligne.matches("\\s*[A-Z].*")) {
+						value+=ligne;
+						br.mark(1024);
+						isMarked=true;
+					}
+					//reset du reader pour ne pas râter la prochaine ligne lors du retour 
+					//au while englobant
+					if (isMarked)
+						br.reset();
+					String[] values = value.split(",");
+//					System.out.println(plugin.getPluginSymbName());
+					for (String val : values) {
+						if (!val.matches("\\s*[0-9].*")) {
+							int i = val.indexOf(';');
+							if (i!=-1)
+								val = val.substring(0, i);
+							val = val.replaceAll("\\s", "");
+							plugin.addRequire_bundle(val);
+//							System.err.println(val);
+						}
+					}
+//					System.err.println("$$$$$$$$$$$$$$$$$$$$$");
 				}
 			}
 			br.close();
@@ -130,7 +153,7 @@ public class PluginInfosExtractor {
 			if (value != null) {
 				String[] values = value.split(",");
 				for (String val : values) {
-					if (!val.matches("[0-9]+.*")) {
+					if (!val.matches("^[0-9]")) {
 						i = val.indexOf(';');
 						if (i!=-1)
 							val = val.substring(0, i);
