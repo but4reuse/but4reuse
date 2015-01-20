@@ -17,6 +17,9 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class AdaptedModelHelper {
+	static boolean proceed;
+	static int[] nbready;
+	
 	/**
 	 * Adapt an artefact model to create the list of elements of each artefact
 	 * @param artefactModel
@@ -24,11 +27,21 @@ public class AdaptedModelHelper {
 	 * @param monitor
 	 * @return
 	 * @throws InterruptedException 
+	 * 
+	 * 
+	 * 
 	 */
+	
+	
+	
+	
 	public static AdaptedModel adapt(ArtefactModel artefactModel,
 			List<IAdapter> adapters, IProgressMonitor monitor) throws InterruptedException {
 		long startTime = System.nanoTime();
-		
+		proceed = false;
+		nbready = new int[1];
+		nbready[0]=0;
+			
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 		ArrayList<AdaptedModelThread> ListThread = new ArrayList<AdaptedModelThread>();
 		int i =0;
@@ -38,16 +51,22 @@ public class AdaptedModelHelper {
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
 				
-				List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-				AdaptedModelThread th = new AdaptedModelThread(list,tabAdp, adaptedModel,artefact, adapters, monitor,i);
+				
+				AdaptedModelThread th = new AdaptedModelThread(nbready,proceed,tabAdp, adaptedModel,artefact, adapters, monitor,i);
 				ListThread.add(th);
-				th.start();
+				
 				i++;
 				
 			}
 		}
-		/*for(AdaptedModelThread th : ListThread){
-		th.start();
+		for(AdaptedModelThread th : ListThread){
+			
+			th.start();
+		}
+		
+		/*while(nbready[0]!= artefactModel.getOwnedArtefacts().size()){
+			
+			System.out.println(nbready[0]);
 		}*/
 		
 		for(AdaptedModelThread th : ListThread){
