@@ -16,8 +16,8 @@
          </action>
       </objectContribution>
       <objectContribution
-            id="org.but4reuse.adapters.ui.contribution1"
-            objectClass="org.eclipse.core.resources.IFile">
+            id="org.but4reuse.adapters.ui.showElementDependencies"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
                class="org.but4reuse.adapters.ui.actions.ShowElementDependenciesAction"
                enablesFor="1"

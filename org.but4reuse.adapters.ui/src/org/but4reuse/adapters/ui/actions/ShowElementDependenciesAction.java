@@ -23,6 +23,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * ShowElementDependenciesAction
+ * @author Selma Sadouk
+ * @author Julia Wisniewski
+ */
 public class ShowElementDependenciesAction implements IObjectActionDelegate {
 
 	Artefact artefact = null;
@@ -86,7 +91,7 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 							dialog.open();
 							 */
 
-							//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tryEclipseZest.view");
+							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tryEclipseZest.view");
 
 						} catch (Exception e) {
 							e.printStackTrace();
