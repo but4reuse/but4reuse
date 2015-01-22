@@ -15,6 +15,18 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+      <objectContribution
+            id="org.but4reuse.adapters.ui.contribution1"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowElementDependenciesAction"
+               enablesFor="1"
+               icon="icons/show.png"
+               id="org.but4reuse.adapters.ui.showElementDependencies"
+               label="Show element dependencies"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
