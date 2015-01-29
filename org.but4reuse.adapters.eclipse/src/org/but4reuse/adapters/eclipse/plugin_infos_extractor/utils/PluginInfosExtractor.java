@@ -213,8 +213,8 @@ public class PluginInfosExtractor {
 				PluginElement p = new PluginElement();
 				p.setPluginSymbName(val);
 				plugin.addRequire_bundle(p);
-				//plugin.addDependency(p);
-				//System.out.println(plugin.getDependencies().size());
+				plugin.addDependency(p);
+				System.out.println(plugin.getDependencies().size());
 				System.err.println(val);
 			}
 		}

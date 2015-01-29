@@ -60,25 +60,25 @@ public class EclipseAdapter implements IAdapter {
 			elements.addAll(adaptFolder(file.getAbsolutePath()+"/plugins", monitor));
 			//TODO implémenter l'unicité des éléments de la liste!
 		}
-//		System.out.println("taille des dépendences "+elements.get(0).getDependencies().size());
-//		List<IDependencyObject> map = elements.get(0).getDependencies().get(AbstractElement.MAIN_DEPENDENCY_ID);
-//		ArrayList<PluginElement> req = ((PluginElement)elements.get(0)).getRequire_Bundles();
-//		boolean ok = true;
-//		for(IDependencyObject o : map){
-//			if(!req.contains(o)){
-//				ok=false;
-//				break;
-//			} 
-//		}
-//		if( ok ){
-//			for(PluginElement p : req){
-//				if(!map.contains(p)){
-//					ok=false;
-//					break;
-//				}
-//			}
-//		}
-//		System.out.println(ok);
+		System.out.println("taille des dépendences "+elements.get(0).getDependencies().size());
+		List<IDependencyObject> map = elements.get(0).getDependencies().get(AbstractElement.MAIN_DEPENDENCY_ID);
+		ArrayList<PluginElement> req = ((PluginElement)elements.get(0)).getRequire_Bundles();
+		boolean ok = true;
+		for(IDependencyObject o : map){
+			if(!req.contains(o)){
+				ok=false;
+				break;
+			} 
+		}
+		if( ok ){
+			for(PluginElement p : req){
+				if(!map.contains(p)){
+					ok=false;
+					break;
+				}
+			}
+		}
+		System.out.println(ok);
 		return elements;
 	}
 
