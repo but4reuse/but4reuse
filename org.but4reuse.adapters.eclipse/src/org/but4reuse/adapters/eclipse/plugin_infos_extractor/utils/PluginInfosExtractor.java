@@ -30,6 +30,10 @@ public class PluginInfosExtractor {
 			throws FileNotFoundException, IOException {
 		try {
 			PluginElement plugin = new PluginElement();
+			plugin.setJar(false);
+			File f = new File(fichierManifest);
+			f = f.getParentFile().getParentFile();
+			plugin.setAbsolutePath(f.getAbsolutePath());
 			InputStream ips = new FileInputStream(fichierManifest);
 			InputStreamReader ipsr = new InputStreamReader(ips);
 			BufferedReader br = new BufferedReader(ipsr);
@@ -167,6 +171,8 @@ public class PluginInfosExtractor {
 		File f = new File(fichierJar);
 		JarFile jar = new JarFile(f);
 		PluginElement plugin = new PluginElement();
+		plugin.setJar(true);
+		plugin.setAbsolutePath(fichierJar);
 		try {
 			String value = jar.getManifest().getMainAttributes().getValue("Bundle-SymbolicName");
 			int i = value.indexOf(';');
@@ -204,7 +210,11 @@ public class PluginInfosExtractor {
 				if (i!=-1)
 					val = val.substring(0, i);
 				val = val.replaceAll("\\s", "");
-				plugin.addRequire_bundle(val);
+				PluginElement p = new PluginElement();
+				p.setPluginSymbName(val);
+				plugin.addRequire_bundle(p);
+				//plugin.addDependency(p);
+				//System.out.println(plugin.getDependencies().size());
 				System.err.println(val);
 			}
 		}

@@ -6,12 +6,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.plugin_infos_extractor.utils.PluginInfosExtractor;
+import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 
 /**
  * Eclipse adapter
@@ -55,6 +60,25 @@ public class EclipseAdapter implements IAdapter {
 			elements.addAll(adaptFolder(file.getAbsolutePath()+"/plugins", monitor));
 			//TODO implémenter l'unicité des éléments de la liste!
 		}
+//		System.out.println("taille des dépendences "+elements.get(0).getDependencies().size());
+//		List<IDependencyObject> map = elements.get(0).getDependencies().get(AbstractElement.MAIN_DEPENDENCY_ID);
+//		ArrayList<PluginElement> req = ((PluginElement)elements.get(0)).getRequire_Bundles();
+//		boolean ok = true;
+//		for(IDependencyObject o : map){
+//			if(!req.contains(o)){
+//				ok=false;
+//				break;
+//			} 
+//		}
+//		if( ok ){
+//			for(PluginElement p : req){
+//				if(!map.contains(p)){
+//					ok=false;
+//					break;
+//				}
+//			}
+//		}
+//		System.out.println(ok);
 		return elements;
 	}
 
@@ -76,6 +100,7 @@ public class EclipseAdapter implements IAdapter {
 //				System.out.println("plugin sous forme de dossier : "+fichiers[i].getAbsolutePath());
 				
 				try {
+					
 					elements.add(PluginInfosExtractor.getPluginInfosFromManifest(fichiers[i].getAbsolutePath()+
 							"/META-INF/MANIFEST.MF"));
 				} catch (FileNotFoundException e) {
