@@ -41,7 +41,7 @@ public class AdaptedModelHelper {
 		proceed = false;
 		nbready = new int[1];
 		nbready[0]=0;
-			
+		AdaptersHelper adp = new AdaptersHelper();	
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 		ArrayList<AdaptedModelThread> ListThread = new ArrayList<AdaptedModelThread>();
 		int i =0;
@@ -52,7 +52,7 @@ public class AdaptedModelHelper {
 			if (artefact.isActive()) {
 				
 				
-				AdaptedModelThread th = new AdaptedModelThread(nbready,proceed,tabAdp, adaptedModel,artefact, adapters, monitor,i);
+				AdaptedModelThread th = new AdaptedModelThread(adp,nbready,proceed,tabAdp, adaptedModel,artefact, adapters, monitor,i);
 				ListThread.add(th);
 				
 				i++;

@@ -34,10 +34,11 @@ public class AdaptedModelThread extends Thread{
 	int[] cpt;
 	boolean proc;
 	List<IElement> list;
-	
+	AdaptersHelper adph;
 	/**
 	 * 
 	 * Constructor for the thread
+	 * @param adp 
 	 * @param proceed 
 	 * @param nbready 
 	 * @param list 
@@ -50,7 +51,7 @@ public class AdaptedModelThread extends Thread{
 	 * @param mon
 	 * @param index
 	 */
-	AdaptedModelThread(int[] nbready, boolean proceed, AdaptedArtefact[] tabAdp, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon,int index){
+	AdaptedModelThread(AdaptersHelper adp, int[] nbready, boolean proceed, AdaptedArtefact[] tabAdp, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon,int index){
 		
 		tab = tabAdp;
 		adaptedModel=adaptedMod;
@@ -59,7 +60,7 @@ public class AdaptedModelThread extends Thread{
 		monitor = mon;
 		num = index;
 		adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-		
+		adph = adp;
 		cpt = nbready;
 		proc = proceed;
 		
@@ -73,11 +74,11 @@ public class AdaptedModelThread extends Thread{
 	 */
 	public void run() {
 		
-		synchronized(cpt){
+		
 			
-			this.list = AdaptersHelper.getElements(artefact, adapters);
-			System.out.println("init de "+this.num);cpt[0]++;
-		}
+		this.list = adph.getElements(artefact, adapters);
+		System.out.println("init de "+this.num);
+		
 		
 		/*while(cpt[0] != tab.length){
 			
