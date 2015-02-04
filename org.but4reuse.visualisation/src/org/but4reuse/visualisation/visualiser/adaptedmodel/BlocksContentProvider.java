@@ -68,23 +68,23 @@ public class BlocksContentProvider extends SimpleContentProvider {
 					// the moment it can only be one
 					BlockElement blockElement = blockElements.get(0);
 					Block block = (Block) blockElement.eContainer();
-					if(!visitedBlocks.contains(block)){
+					if (!visitedBlocks.contains(block)) {
 						visitedBlocks.add(block);
 					}
 				}
 			}
-			
+
 			int i = 0;
-			for(Block block : adaptedModel.getOwnedBlocks()){
-				if(visitedBlocks.contains(block)){
+			for (Block block : adaptedModel.getOwnedBlocks()) {
+				if (visitedBlocks.contains(block)) {
 					int blockSize = block.getOwnedBlockElements().size();
 					IMarkupKind blockKind = map.get(block);
 					Stripe stripe = new Stripe(blockKind, i, blockSize);
-					i=i+blockSize;
+					i = i + blockSize;
 					markupProvider.addMarkup(member.getFullname(), stripe);
 				}
 			}
-			
+
 			group.add(member);
 		}
 	}
@@ -108,37 +108,41 @@ public class BlocksContentProvider extends SimpleContentProvider {
 			if (memberName.contains("/")) {
 				memberName = memberName.substring(memberName.lastIndexOf("/") + 1, memberName.length());
 			}
-			
+
 			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
 			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-			
+
 			// Get colors and initialize lines
 			List<Color> colors = new ArrayList<Color>();
 			List<List<Integer>> lines = new ArrayList<List<Integer>>();
-			Map<Object,Integer> kindIndexMap = new HashMap<Object,Integer>();
+			Map<Object, Integer> kindIndexMap = new HashMap<Object, Integer>();
 			Object[] markups2 = markupProvider.getAllMarkupKinds().toArray();
-			for (int i=0; i<markups2.length; i ++) {
-				IMarkupKind mk = (IMarkupKind)markups2[i];
+			for (int i = 0; i < markups2.length; i++) {
+				IMarkupKind mk = (IMarkupKind) markups2[i];
 				kindIndexMap.put(mk, i);
 				colors.add(markupProvider.getColorFor(mk));
 				lines.add(new ArrayList<Integer>());
 			}
-			
+
 			List<?> stripes = markupProvider.getMemberMarkups(member);
 			String sText = "";
-			for(int i=0; i<stripes.size(); i++){
-				ElementStripe stripe = (ElementStripe)stripes.get(i);
-				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText + ((ElementStripe)stripe).getElement().getText() + "\n";
+			int nElements = 0;
+			if (stripes != null) {
+				nElements = stripes.size();
+				for (int i = 0; i < stripes.size(); i++) {
+					ElementStripe stripe = (ElementStripe) stripes.get(i);
+					lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
+					sText = sText + ((ElementStripe) stripe).getElement().getText() + "\n";
+				}
+
+				// Remove the last \n
+				if (sText.length() > 0) {
+					sText = sText.substring(0, sText.length() - 1);
+				}
 			}
-			
-			// Remove the last \n
-			if (sText.length() > 0) {
-				sText = sText.substring(0, sText.length() - 1);
-			}
-			
+
 			ScrollableMessageLineColorsDialog dialog = new ScrollableMessageLineColorsDialog(Display.getCurrent()
-					.getActiveShell(), memberName, stripes.size() + " Elements", sText, lines, colors);
+					.getActiveShell(), memberName, nElements + " Elements", sText, lines, colors);
 			dialog.open();
 		}
 		return true;

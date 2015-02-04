@@ -34,17 +34,17 @@ public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgori
 		// A map from IElement to the IElementWrappers that contains similar
 		// IElement
 		Map<IElement, List<ElementWrapper>> eewmap = new HashMap<IElement, List<ElementWrapper>>();
-		int n =  adaptedArtefacts.size();
+		int n = adaptedArtefacts.size();
 		for (int i = 0; i < n; i++) {
-			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i+1) + "/" + n);
+			monitor.subTask("Block Creation. Intersections algorithm. Preparation step " + (i + 1) + "/" + n);
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
 			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
-				
+
 				// user cancel
-				if(monitor.isCanceled()){
+				if (monitor.isCanceled()) {
 					return blocks;
 				}
-				
+
 				IElement e = (IElement) ew.getElement();
 				List<ElementWrapper> ews = eewmap.get(e);
 				if (ews == null) {
@@ -62,10 +62,13 @@ public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgori
 			}
 		}
 
-		monitor.subTask("Block Creation. Intersections algorithm. Creating Blocks");
-		
+		int step = 1;
+		int totalSteps = R.keySet().size();
+
 		// Iterate on R to create blocks with their block elements
 		while (!R.isEmpty()) {
+			monitor.subTask("Block Creation. Intersections algorithm. Creating Blocks. Step " + step + "/" + totalSteps);
+			// TODO performance can be improved in find methods
 			IElement keyOfMostFrequentElement = findMostFrequentElement(R);
 			List<Integer> artefactIndexes = R.get(keyOfMostFrequentElement);
 			List<IElement> intersection = findElementsContainedInArtefactIndexes(artefactIndexes, R);
@@ -79,44 +82,56 @@ public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgori
 					be.getElementWrappers().add(ewliste);
 				}
 				block.getOwnedBlockElements().add(be);
-				
+
 				// Remove from R
 				R.remove(intersected);
+				step++;
 			}
 			blocks.add(block);
+
+			// user cancel
+			if (monitor.isCanceled()) {
+				return blocks;
+			}
 		}
-		
+
 		// finished
 		return blocks;
 	}
 
 	/**
-	 * Find most frequent element in the artefacts. 
-	 * @param a relation of all elements with the list of artefacts where it appears
-	 * @return the artefact indexes 
+	 * Find most frequent element in the artefacts.
+	 * 
+	 * @param a
+	 *            relation of all elements with the list of artefacts where it
+	 *            appears
+	 * @return the artefact indexes
 	 */
 	protected static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
 		IElement keyOfMostFrequent = null;
 		int sizeOfMostFrequent = -1;
-		
+
 		for (IElement key : R.keySet()) {
 			int currentSize = R.get(key).size();
-			if (sizeOfMostFrequent < currentSize){
+			if (sizeOfMostFrequent < currentSize) {
 				keyOfMostFrequent = key;
 				sizeOfMostFrequent = currentSize;
 			}
 		}
-		
+
 		return keyOfMostFrequent;
 	}
 
 	/**
 	 * Find elements that are contained in the given artefact indexes
+	 * 
 	 * @param artefactIndexes
 	 * @param R
-	 * @return the list of elements that are present exactly in the same artefact indexes
+	 * @return the list of elements that are present exactly in the same
+	 *         artefact indexes
 	 */
-	private static List<IElement> findElementsContainedInArtefactIndexes(List<Integer> artefactIndexes, Map<IElement, List<Integer>> R) {
+	private static List<IElement> findElementsContainedInArtefactIndexes(List<Integer> artefactIndexes,
+			Map<IElement, List<Integer>> R) {
 
 		List<IElement> result = new ArrayList<IElement>();
 
