@@ -26,19 +26,19 @@ import org.eclipse.swt.layout.GridData;
  */
 public class EclipseAdapter implements IAdapter {
 
-
 	/**
-	 * Cette méthode permet de définir si l'artefact est adaptable par le EclipseAdapter
+	 * Cette méthode permet de définir si l'artefact est adaptable par le
+	 * EclipseAdapter
 	 */
 
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
 		if (file.isDirectory()) {
-			File eclipse = new File(file.getAbsolutePath()+"/eclipse.exe");
-			if (eclipse.exists()){
+			File eclipse = new File(file.getAbsolutePath() + "/eclipse.exe");
+			if (eclipse.exists()) {
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		}
@@ -48,71 +48,94 @@ public class EclipseAdapter implements IAdapter {
 	/**
 	 * Provides the atoms (plugins) this distribution is made of
 	 * 
-	 * @param uri URI of the distribution
-	 * @param monitor 
+	 * @param uri
+	 *            URI of the distribution
+	 * @param monitor
 	 */
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
-		if(file != null && file.exists() && file.isDirectory() ){
-			elements.addAll(adaptFolder(file.getAbsolutePath()+"/dropins", monitor));
-			elements.addAll(adaptFolder(file.getAbsolutePath()+"/plugins", monitor));
-			//TODO implémenter l'unicité des éléments de la liste!
+		if (file != null && file.exists() && file.isDirectory()) {
+			elements.addAll(adaptFolder(file.getAbsolutePath() + "/dropins",
+					monitor));
+			elements.addAll(adaptFolder(file.getAbsolutePath() + "/plugins",
+					monitor));
+			// TODO implémenter l'unicité des éléments de la liste!
 		}
-		System.out.println("taille des dépendences "+elements.get(0).getDependencies().size());
-		List<IDependencyObject> map = elements.get(0).getDependencies().get(AbstractElement.MAIN_DEPENDENCY_ID);
-		ArrayList<PluginElement> req = ((PluginElement)elements.get(0)).getRequire_Bundles();
-		boolean ok = true;
-		for(IDependencyObject o : map){
-			if(!req.contains(o)){
-				ok=false;
-				break;
-			} 
-		}
-		if( ok ){
-			for(PluginElement p : req){
-				if(!map.contains(p)){
-					ok=false;
-					break;
+		for (IElement element : elements) {
+			PluginElement plugin = (PluginElement) element;
+			if (plugin.getDependencies().size() == 0) {
+				System.out.println("The plugin " + plugin.getPluginSymbName()
+						+ " has no dependencies");
+			} else {
+				System.out
+						.println("nombre de dépendances pour "
+								+ plugin.getPluginSymbName()
+								+ " : "
+								+ plugin.getDependencies()
+										.get(AbstractElement.MAIN_DEPENDENCY_ID)
+										.size());
+				List<IDependencyObject> dependencies = plugin.getDependencies().get(
+						AbstractElement.MAIN_DEPENDENCY_ID);
+				ArrayList<PluginElement> req = ((PluginElement) plugin)
+						.getRequire_Bundles();
+				boolean ok = true;
+				for (IDependencyObject o : dependencies) {
+					if (!req.contains(o)) {
+						ok = false;
+						break;
+					}
 				}
+				if (ok) {
+					for (PluginElement p : req) {
+						if (!dependencies.contains(p)) {
+							ok = false;
+							break;
+						}
+					}
+				}
+				System.out.println(ok);
 			}
 		}
-		System.out.println(ok);
 		return elements;
 	}
 
 	/**
 	 * Searches for plugins in the given folder
-	 * @param uri URI of an Eclipse folder
+	 * 
+	 * @param uri
+	 *            URI of an Eclipse folder
 	 */
 	private List<IElement> adaptFolder(String uri, IProgressMonitor monitor) {
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = new File(uri);
 		File[] fichiers = file.listFiles();
-		
-		for (int i = 0; i<fichiers.length; i++) {
-			
-//			System.out.println("analyse de l'élément "+fichiers[i].getName());
-			
+
+		for (int i = 0; i < fichiers.length; i++) {
+
+			// System.out.println("analyse de l'élément "+fichiers[i].getName());
+
 			if (fichiers[i].isDirectory()) {
-				
-//				System.out.println("plugin sous forme de dossier : "+fichiers[i].getAbsolutePath());
-				
+
+				// System.out.println("plugin sous forme de dossier : "+fichiers[i].getAbsolutePath());
+
 				try {
-					
-					elements.add(PluginInfosExtractor.getPluginInfosFromManifest(fichiers[i].getAbsolutePath()+
-							"/META-INF/MANIFEST.MF"));
+
+					elements.add(PluginInfosExtractor
+							.getPluginInfosFromManifest(fichiers[i]
+									.getAbsolutePath()
+									+ "/META-INF/MANIFEST.MF"));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-			else
-			if(fichiers[i].getPath().endsWith(".jar")){
+			} else if (fichiers[i].getPath().endsWith(".jar")) {
 				try {
-					elements.add(PluginInfosExtractor.getPluginInfosFromJar(fichiers[i].getAbsolutePath()));
+					elements.add(PluginInfosExtractor
+							.getPluginInfosFromJar(fichiers[i]
+									.getAbsolutePath()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -122,7 +145,6 @@ public class EclipseAdapter implements IAdapter {
 
 		return elements;
 	}
-	
 
 	@Override
 	public void construct(URI uri, List<IElement> elements,
@@ -131,39 +153,38 @@ public class EclipseAdapter implements IAdapter {
 
 	}
 
-
-
-	//TODO à faire lorsqu'on aura compris à quoi ça sert.
-	//	@Override
-	//	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-	//		for (IElement element : elements) {
-	//			// check user cancel for each element
-	//			if (!monitor.isCanceled()) {
-	//				// provide user info
-	//				monitor.subTask(element.getText());
-	//				if (element instanceof PluginElement) {
-	//					PluginElement fileElement = (PluginElement) element;
-	//					try {
-	//						// Create parent folders structure
-	//						URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
-	//						File destinationFile = FileUtils.getFile(newDirectoryURI);
-	//						if (destinationFile!=null && !destinationFile.getParentFile().exists()) {
-	//							destinationFile.getParentFile().mkdirs();
-	//						}
-	//						if (destinationFile!=null && !destinationFile.exists()) {
-	//							// Copy the content. In the case of a folder, its
-	//							// content is not copied
-	//							File file = FileUtils.getFile(fileElement.getUri());
-	//							Files.copy(file.toPath(), destinationFile.toPath(),
-	//									StandardCopyOption.REPLACE_EXISTING);
-	//						}
-	//					} catch (IOException e) {
-	//						e.printStackTrace();
-	//					}
-	//				}
-	//			}
-	//			monitor.worked(1);
-	//		}
-	//	}
+	// TODO à faire lorsqu'on aura compris à quoi ça sert.
+	// @Override
+	// public void construct(URI uri, List<IElement> elements, IProgressMonitor
+	// monitor) {
+	// for (IElement element : elements) {
+	// // check user cancel for each element
+	// if (!monitor.isCanceled()) {
+	// // provide user info
+	// monitor.subTask(element.getText());
+	// if (element instanceof PluginElement) {
+	// PluginElement fileElement = (PluginElement) element;
+	// try {
+	// // Create parent folders structure
+	// URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
+	// File destinationFile = FileUtils.getFile(newDirectoryURI);
+	// if (destinationFile!=null && !destinationFile.getParentFile().exists()) {
+	// destinationFile.getParentFile().mkdirs();
+	// }
+	// if (destinationFile!=null && !destinationFile.exists()) {
+	// // Copy the content. In the case of a folder, its
+	// // content is not copied
+	// File file = FileUtils.getFile(fileElement.getUri());
+	// Files.copy(file.toPath(), destinationFile.toPath(),
+	// StandardCopyOption.REPLACE_EXISTING);
+	// }
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// monitor.worked(1);
+	// }
+	// }
 
 }

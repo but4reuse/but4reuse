@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.jar.JarFile;
 
+import javax.swing.text.AbstractDocument.AbstractElement;
+
 import org.but4reuse.adapters.eclipse.PluginElement;
 
 public class PluginInfosExtractor {
@@ -214,10 +216,10 @@ public class PluginInfosExtractor {
 				p.setPluginSymbName(val);
 				plugin.addRequire_bundle(p);
 				plugin.addDependency(p);
-				System.out.println(plugin.getDependencies().size());
-				System.err.println(val);
+				System.out.println(plugin.getDependencies().get(org.but4reuse.adapters.impl.AbstractElement.MAIN_DEPENDENCY_ID).size());
+//				System.err.println(val);
 			}
 		}
-		System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+//		System.err.println("$$$$$$$$$$$$$$$$$$$$$");
 	}
 }
