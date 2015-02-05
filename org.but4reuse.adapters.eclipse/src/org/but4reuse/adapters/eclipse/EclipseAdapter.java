@@ -63,41 +63,43 @@ public class EclipseAdapter implements IAdapter {
 					monitor));
 			// TODO implémenter l'unicité des éléments de la liste!
 		}
-		for (IElement element : elements) {
-			PluginElement plugin = (PluginElement) element;
-			if (plugin.getDependencies().size() == 0) {
-				System.out.println("The plugin " + plugin.getPluginSymbName()
-						+ " has no dependencies");
-			} else {
-				System.out
-						.println("nombre de dépendances pour "
-								+ plugin.getPluginSymbName()
-								+ " : "
-								+ plugin.getDependencies()
-										.get(AbstractElement.MAIN_DEPENDENCY_ID)
-										.size());
-				List<IDependencyObject> dependencies = plugin.getDependencies().get(
-						AbstractElement.MAIN_DEPENDENCY_ID);
-				ArrayList<PluginElement> req = ((PluginElement) plugin)
-						.getRequire_Bundles();
-				boolean ok = true;
-				for (IDependencyObject o : dependencies) {
-					if (!req.contains(o)) {
-						ok = false;
-						break;
-					}
-				}
-				if (ok) {
-					for (PluginElement p : req) {
-						if (!dependencies.contains(p)) {
-							ok = false;
-							break;
-						}
-					}
-				}
-				System.out.println(ok);
-			}
-		}
+//		for (IElement element : elements) {
+//			PluginElement plugin = (PluginElement) element;
+//			if (plugin.getDependencies().size() == 0) {
+//				System.out.println("The plugin " + plugin.getPluginSymbName()
+//						+ " has no dependencies");
+//			} else {
+//				System.out
+//						.println("nombre de dépendances pour "
+//								+ plugin.getPluginSymbName()
+//								+ " : "
+//								+ plugin.getDependencies()
+//										.get(AbstractElement.MAIN_DEPENDENCY_ID)
+//										.size());
+//				List<IDependencyObject> dependencies = plugin.getDependencies().get(
+//						AbstractElement.MAIN_DEPENDENCY_ID);
+//				ArrayList<PluginElement> req = ((PluginElement) plugin)
+//						.getRequire_Bundles();
+//				boolean ok = true;
+//				for (IDependencyObject o : dependencies) {
+//					if (!req.contains(o)) {
+//						ok = false;
+//						break;
+//					}
+//				}
+//				if (ok) {
+//					for (PluginElement p : req) {
+//						if (!dependencies.contains(p)) {
+//							ok = false;
+//							break;
+//						}
+//					}
+//				}
+//				if (!ok) {
+//					System.err.println("PROBLEM !!!!!!!!!!!!!");
+//				}
+//			}
+//		}
 		return elements;
 	}
 

@@ -216,7 +216,7 @@ public class PluginInfosExtractor {
 				p.setPluginSymbName(val);
 				plugin.addRequire_bundle(p);
 				plugin.addDependency(p);
-				System.out.println(plugin.getDependencies().get(org.but4reuse.adapters.impl.AbstractElement.MAIN_DEPENDENCY_ID).size());
+//				System.out.println(plugin.getDependencies().get(org.but4reuse.adapters.impl.AbstractElement.MAIN_DEPENDENCY_ID).size());
 //				System.err.println(val);
 			}
 		}
