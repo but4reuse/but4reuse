@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.jar.JarFile;
 
-import javax.swing.text.AbstractDocument.AbstractElement;
-
 import org.but4reuse.adapters.eclipse.PluginElement;
 
 public class PluginInfosExtractor {
@@ -205,18 +203,14 @@ public class PluginInfosExtractor {
 	 */
 	private static void getRequireBundlesSymbNames(String value, PluginElement plugin) {
 		String[] values = value.split(",");
-		System.out.println(plugin.getPluginSymbName());
+//		System.out.println(plugin.getPluginSymbName());
 		for (String val : values) {
 			if (!val.matches("\\s*[0-9].*")) {
 				int i = val.indexOf(';');
 				if (i!=-1)
 					val = val.substring(0, i);
 				val = val.replaceAll("\\s", "");
-				PluginElement p = new PluginElement();
-				p.setPluginSymbName(val);
-				plugin.addRequire_bundle(p);
-				plugin.addDependency(p);
-//				System.out.println(plugin.getDependencies().get(org.but4reuse.adapters.impl.AbstractElement.MAIN_DEPENDENCY_ID).size());
+				plugin.addRequire_bundle(val);
 //				System.err.println(val);
 			}
 		}

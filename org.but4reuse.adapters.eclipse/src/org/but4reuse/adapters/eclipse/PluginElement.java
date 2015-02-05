@@ -18,9 +18,9 @@ public class PluginElement extends AbstractElement{
 	//chaque pluginElement de require_Bundles, sa liste require_Bundle sera vide.
 	//Car on ne connait potentiellement pas les dépendences de ces plugins
 	//De meme pour absoluthPath
-	private ArrayList<PluginElement> require_Bundles;
+	private ArrayList<String> require_Bundles;
 	
-	public ArrayList<PluginElement> getRequire_Bundles() {
+	public ArrayList<String> getRequire_Bundles() {
 		return require_Bundles;
 	}
 
@@ -29,7 +29,7 @@ public class PluginElement extends AbstractElement{
 	private boolean isJar; 
 	
 	public PluginElement() {
-		require_Bundles = new ArrayList<PluginElement>();
+		require_Bundles = new ArrayList<String>();
 	}
 
 	
@@ -44,7 +44,7 @@ public class PluginElement extends AbstractElement{
 
 
 
-	public void addRequire_bundle(PluginElement require_bundle) {
+	public void addRequire_bundle(String require_bundle) {
 		this.require_Bundles.add(require_bundle);
 	}
 

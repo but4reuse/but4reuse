@@ -11,6 +11,7 @@ import java.util.Map;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.eclipse.plugin_infos_extractor.utils.DependenciesBuilder;
 import org.but4reuse.adapters.eclipse.plugin_infos_extractor.utils.PluginInfosExtractor;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.files.FileUtils;
@@ -61,45 +62,32 @@ public class EclipseAdapter implements IAdapter {
 					monitor));
 			elements.addAll(adaptFolder(file.getAbsolutePath() + "/plugins",
 					monitor));
-			// TODO implémenter l'unicité des éléments de la liste!
-		}
-//		for (IElement element : elements) {
-//			PluginElement plugin = (PluginElement) element;
-//			if (plugin.getDependencies().size() == 0) {
-//				System.out.println("The plugin " + plugin.getPluginSymbName()
-//						+ " has no dependencies");
-//			} else {
-//				System.out
-//						.println("nombre de dépendances pour "
-//								+ plugin.getPluginSymbName()
-//								+ " : "
-//								+ plugin.getDependencies()
-//										.get(AbstractElement.MAIN_DEPENDENCY_ID)
-//										.size());
-//				List<IDependencyObject> dependencies = plugin.getDependencies().get(
-//						AbstractElement.MAIN_DEPENDENCY_ID);
-//				ArrayList<PluginElement> req = ((PluginElement) plugin)
-//						.getRequire_Bundles();
-//				boolean ok = true;
-//				for (IDependencyObject o : dependencies) {
-//					if (!req.contains(o)) {
-//						ok = false;
-//						break;
-//					}
-//				}
-//				if (ok) {
-//					for (PluginElement p : req) {
-//						if (!dependencies.contains(p)) {
-//							ok = false;
-//							break;
-//						}
-//					}
-//				}
-//				if (!ok) {
-//					System.err.println("PROBLEM !!!!!!!!!!!!!");
+			// For each element, build the dependencies map, depending
+			// on the plugins installed in the considered distribution
+			// and the values retrieved in its RequiredBundle field
+			for (IElement elem : elements) {
+				DependenciesBuilder builder = new DependenciesBuilder(
+						(PluginElement) elem, elements);
+				builder.run();
+			}
+			// Test
+//			for (IElement elem : elements) {
+//				PluginElement plugin = (PluginElement) elem;
+//				if (plugin.getDependencies().get(
+//						AbstractElement.MAIN_DEPENDENCY_ID) == null) {
+//					System.out.println("Le plugin "
+//							+ plugin.getPluginSymbName()
+//							+ " n'a aucune dépendance.");
+//				} else {
+//					System.out.println("Le plugin "
+//							+ plugin.getPluginSymbName()
+//							+ " a "
+//							+ plugin.getDependencies()
+//									.get(AbstractElement.MAIN_DEPENDENCY_ID)
+//									.size()+" dépendances.");
 //				}
 //			}
-//		}
+		}
 		return elements;
 	}
 
