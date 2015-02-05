@@ -6,18 +6,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.but4reuse.adapters.IAdapter;
-import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.plugin_infos_extractor.utils.DependenciesBuilder;
 import org.but4reuse.adapters.eclipse.plugin_infos_extractor.utils.PluginInfosExtractor;
-import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 
 /**
  * Eclipse adapter
