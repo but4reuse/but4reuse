@@ -203,21 +203,17 @@ public class PluginInfosExtractor {
 	 */
 	private static void getRequireBundlesSymbNames(String value, PluginElement plugin) {
 		String[] values = value.split(",");
-		System.out.println(plugin.getPluginSymbName());
+//		System.out.println(plugin.getPluginSymbName());
 		for (String val : values) {
 			if (!val.matches("\\s*[0-9].*")) {
 				int i = val.indexOf(';');
 				if (i!=-1)
 					val = val.substring(0, i);
 				val = val.replaceAll("\\s", "");
-				PluginElement p = new PluginElement();
-				p.setPluginSymbName(val);
-				plugin.addRequire_bundle(p);
-				//plugin.addDependency(p);
-				//System.out.println(plugin.getDependencies().size());
-				System.err.println(val);
+				plugin.addRequire_bundle(val);
+//				System.err.println(val);
 			}
 		}
-		System.err.println("$$$$$$$$$$$$$$$$$$$$$");
+//		System.err.println("$$$$$$$$$$$$$$$$$$$$$");
 	}
 }
