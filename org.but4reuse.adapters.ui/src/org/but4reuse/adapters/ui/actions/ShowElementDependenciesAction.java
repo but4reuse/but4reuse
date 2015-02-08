@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.eclipse.EclipseAdapter;
+import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
-import org.but4reuse.adapters.ui.views.PluginBouchon;
 import org.but4reuse.adapters.ui.views.PluginContentProvider;
 import org.but4reuse.adapters.ui.views.PluginLabelProvider;
 import org.but4reuse.artefactmodel.Artefact;
@@ -28,6 +30,8 @@ import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.GraphConnection;
 import org.eclipse.zest.core.widgets.GraphItem;
 import org.eclipse.zest.core.widgets.GraphNode;
+import org.eclipse.zest.layouts.LayoutStyles;
+import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
 /** 
  * ShowElementDependenciesAction
@@ -38,8 +42,9 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 
 	Artefact artefact = null;
 	List<IAdapter> adap;
-	List<String> text = new ArrayList<String>();
-
+	//List<String> text = new ArrayList<String>();
+private List<IElement> elements;
+	
 	@Override
 	public void run(IAction action) {
 		artefact = null;
@@ -67,19 +72,19 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 									int totalWork = 1;
 									monitor.beginTask("Calculating dependencies of " + artefact.getArtefactURI(), totalWork);
 
-									text.clear();
+									//text.clear();
 									for (IAdapter adapter : adap) {
-										/*
-										List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
+										if(adapter instanceof EclipseAdapter) {
+											elements = AdaptersHelper.getElements(artefact, adapter);
+
+											/*
 										for (IElement element : elements) {
 											//text.add(element.getText());
 											//element.getDependencies(); ??
 										}
-										*/
+											 */
 										
-									String[] elems = {"test1", "test2"};
-
-										
+										}
 										
 									}
 									monitor.worked(1);
@@ -104,8 +109,6 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 							dialog.open();
 							 */
 
-							//PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("tryEclipseZest.view");
-
 							
 							Display.getDefault().syncExec(
 									new Runnable(){
@@ -115,14 +118,8 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 											Shell shell = new Shell();
 											shell.setText("Visualization");
 											shell.setLayout(new FillLayout(SWT.VERTICAL));
-											shell.setSize(400,400);
-											/*
-											final Graph dependenciesGraph = new Graph(shell, SWT.NONE);
-											final GraphNode n1 = new GraphNode(dependenciesGraph,SWT.NONE);
-											final GraphNode n2 = new GraphNode(dependenciesGraph,SWT.NONE);
-											final GraphConnection c = new GraphConnection(dependenciesGraph,SWT.NONE,n1,n2);
-											dependenciesGraph.setSelection(new GraphItem[]{n1,n2,c});
-											*/
+											shell.setSize(700,700);
+										
 											GraphViewer viewer = new GraphViewer(shell,SWT.NONE);
 											
 											
@@ -132,22 +129,14 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 											viewer.setContentProvider(contentProvider);
 											viewer.setLabelProvider(labelProvider);
 											
-											List<PluginBouchon> input = new ArrayList<PluginBouchon>();
-											PluginBouchon p1 = new PluginBouchon("plugin1");
-											PluginBouchon p2 = new PluginBouchon("plugin2");
-											input.add(p1); input.add(p2);
-											viewer.setInput(input); // -> Ajouter ici dependencies but4reuse
-											// ===================================
+											 // Definition du layout 
+									        viewer.setLayoutAlgorithm(new 
+									                SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING)); 
+									        viewer.applyLayout(); 
 											
-											/*
-											viewer.setControl(dependenciesGraph);
-											n1.setData("1");
-											n2.setData("2");
-											*/
+											viewer.setInput(elements); 
+											// ===================================
 
-											//GraphNode noeud = new GraphNode(dependenciesGraph, SWT.NONE);
-											//noeud.setText("Un noeud");
-											//dependenciesGraph.update();
 											shell.open();
 											while (!shell.isDisposed()) {
 												while (!d.readAndDispatch()) {

@@ -87,5 +87,17 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.showblockdependencies"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowBlockDependenciesAction"
+               icon="icons/show.png"
+               id="org.but4reuse.adapters.ui.showblockelementsaction"
+               label="Show Block Dependencies"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
       </extension>
 </plugin>

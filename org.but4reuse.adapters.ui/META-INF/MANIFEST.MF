@@ -16,7 +16,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.contribution.visualiser,
  org.but4reuse.visualisation,
  org.but4reuse.adaptedmodel,
- org.eclipse.zest.core;bundle-version="1.5.0"
+ org.eclipse.zest.core;bundle-version="1.5.0",
+ org.but4reuse.adapters.eclipse,
+ org.eclipse.zest.layouts;bundle-version="1.1.0",
+ org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.ui

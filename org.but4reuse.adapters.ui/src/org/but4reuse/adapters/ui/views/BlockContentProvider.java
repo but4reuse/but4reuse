@@ -3,50 +3,54 @@ package org.but4reuse.adapters.ui.views;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.feature.constraints.impl.BinaryRelationConstraintsDiscovery;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 
-/** 
- * ContentProvider de notre graphe. Cette implementation prend en donnees  
- * d'entree la liste des plugins.
- * @author Selma Sadouk
- * @author Julia Wisniewski
- */ 
-public class PluginContentProvider implements IGraphEntityContentProvider {
+public class BlockContentProvider implements IGraphEntityContentProvider {
+
+	private List<Block> blockList;
+	
+	public List<Block> getBlockList() {
+		return blockList;
+	}
+
+	public void setBlockList(List<Block> blockList) {
+		this.blockList = blockList;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object[] getElements(Object inputElement) {
-		return ((List<PluginElement>)inputElement).toArray();
+		return ((List<Block>)inputElement).toArray();
 	}
 
-	/**
-	 * Pour chaque plugin, on retourne la liste des plugins dont depend le plugin courant.
-	 */
 	@Override
 	public Object[] getConnectedTo(Object entity) {
-		if(entity instanceof PluginElement) {
+		if(entity instanceof Block) {
 			
-			Map<String,List<IDependencyObject>> map =
-					((PluginElement)entity).getDependencies();
-
-			List<IDependencyObject> dependencies = map.get(AbstractElement.MAIN_DEPENDENCY_ID);
+			/*
+			List<Block> dependencies =
+			BinaryRelationConstraintsDiscovery.getAllDependencies(((Block)entity), blockList);
 			if(dependencies == null) 
 				return null;
-				
+			
 			return dependencies.toArray();
+		    */
+		
 		}
-		else
-			return null;
+		return null;
 	}
-	
+
 	@Override
 	public void dispose() { }
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) { }
-
+	
 }
