@@ -4,8 +4,8 @@ import org.but4reuse.adapters.eclipse.PluginElement;
 import org.eclipse.jface.viewers.LabelProvider;
 
 /** 
- * LabelProvider du graphe. Determine le texte a afficher selon le type  
- * d'element.
+ * LabelProvider of the graph. Choose the text to display depending on
+ * the type of element.
  * @author Selma Sadouk
  * @author Julia Wisniewski
  */

@@ -10,8 +10,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 
 /** 
- * ContentProvider de notre graphe. Cette implementation prend en donnees  
- * d'entree la liste des plugins.
+ * ContentProvider of our graph. Input : the list of plugins.
  * @author Selma Sadouk
  * @author Julia Wisniewski
  */ 
@@ -24,7 +23,7 @@ public class PluginContentProvider implements IGraphEntityContentProvider {
 	}
 
 	/**
-	 * Pour chaque plugin, on retourne la liste des plugins dont depend le plugin courant.
+	 * For each plugin, the list of plugins from which depend the current plugin is returned.
 	 */
 	@Override
 	public Object[] getConnectedTo(Object entity) {

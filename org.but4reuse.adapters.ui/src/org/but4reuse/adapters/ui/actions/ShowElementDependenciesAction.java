@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
@@ -24,12 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.zest.core.viewers.GraphViewer;
-import org.eclipse.zest.core.widgets.Graph;
-import org.eclipse.zest.core.widgets.GraphConnection;
-import org.eclipse.zest.core.widgets.GraphItem;
-import org.eclipse.zest.core.widgets.GraphNode;
 import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 
@@ -42,8 +36,7 @@ public class ShowElementDependenciesAction implements IObjectActionDelegate {
 
 	Artefact artefact = null;
 	List<IAdapter> adap;
-	//List<String> text = new ArrayList<String>();
-private List<IElement> elements;
+    List<IElement> elements;
 	
 	@Override
 	public void run(IAction action) {
@@ -72,44 +65,21 @@ private List<IElement> elements;
 									int totalWork = 1;
 									monitor.beginTask("Calculating dependencies of " + artefact.getArtefactURI(), totalWork);
 
-									//text.clear();
 									for (IAdapter adapter : adap) {
 										if(adapter instanceof EclipseAdapter) {
 											elements = AdaptersHelper.getElements(artefact, adapter);
-
-											/*
-										for (IElement element : elements) {
-											//text.add(element.getText());
-											//element.getDependencies(); ??
 										}
-											 */
-										
-										}
-										
 									}
 									monitor.worked(1);
 									monitor.done();
 								}
 							});
-/*
-							String sText = "";
-							for (String t : text) {
-								t = t.replaceAll("\n", " ").replaceAll("\r", "");
-								sText = sText + t + "\n";
-							}
-*/
+
 							String name = artefact.getName();
 							if (name == null || name.length() == 0) {
 								name = artefact.getArtefactURI();
 							}
 
-							/*
-							ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent()
-									.getActiveShell(), name, text.size() + " Elements", sText);
-							dialog.open();
-							 */
-
-							
 							Display.getDefault().syncExec(
 									new Runnable(){
 										public void run(){
@@ -122,20 +92,18 @@ private List<IElement> elements;
 										
 											GraphViewer viewer = new GraphViewer(shell,SWT.NONE);
 											
-											
-											// ===================================
 											PluginContentProvider contentProvider = new PluginContentProvider();
 											PluginLabelProvider labelProvider = new PluginLabelProvider();
 											viewer.setContentProvider(contentProvider);
 											viewer.setLabelProvider(labelProvider);
 											
-											 // Definition du layout 
+											 // Definition of the layout 
 									        viewer.setLayoutAlgorithm(new 
 									                SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING)); 
 									        viewer.applyLayout(); 
 											
 											viewer.setInput(elements); 
-											// ===================================
+											
 
 											shell.open();
 											while (!shell.isDisposed()) {
