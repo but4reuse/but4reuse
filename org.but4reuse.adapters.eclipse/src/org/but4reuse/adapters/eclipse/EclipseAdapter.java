@@ -1,9 +1,16 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
+import java.net.URL;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,45 +138,75 @@ public class EclipseAdapter implements IAdapter {
 		return elements;
 	}
 
+	//TODO à faire lorsqu'on aura compris à quoi ça sert.
 	@Override
-	public void construct(URI uri, List<IElement> elements,
-			IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
+		 System.out.println("Enter construct");
+		   
+		    Path dir = FileSystems.getDefault().getPath("/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/");
+		    Path abs=dir.toAbsolutePath();
+		    System.out.println(dir.toString());
+		    File dest = new File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/");
+		    
+			for (IElement element : elements) {
+			    System.out.println("************* ENTRE element");
 
+				if (!monitor.isCanceled()) {
+					
+					monitor.subTask(element.getText());
+					if (element instanceof PluginElement) {
+						System.out.println("*********PluginELEMENT     **********");
+
+						PluginElement fileElement = (PluginElement) element;
+						
+					try {
+							 // if (dir.getParent() != null) {
+									
+								//	File file = FileUtils.getFile(fileElement.getAbsolutePath());
+					
+									String pluginAddr = fileElement.getAbsolutePath();
+									System.out.println("plugin : " +  pluginAddr);
+								//File f = new File("/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/" +fileElement.getPluginSymbName());
+									//File source = FileUtils.getFile(URI.create("C:/UPMC/M2/GPSTL/Eclipse versions/eclipse_juno/plugins/org.eclipse.e4.ui.workbench.renderers.swt_0.10.3.v20130124-170312.jar"));
+									//copyFile(source, f);
+									
+									FileUtils.downloadFileFromURL(new URL(pluginAddr), dest);
+								
+									
+							//	Files.copy(file.toPath(), dir,StandardCopyOption.REPLACE_EXISTING);
+								//  System.out.println("Copy  *************"+file.toString()+"----->"+dir);
+
+							//	}
+								//else{
+								//new File("C:\\UPMC\\M2\\GPSTL\\runtime-EclipseApplication\\test3\\plugins").mkdirs();
+								//System.out.println("*********DIRECTORY CREATED**********");
+								//}
+
+						
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				monitor.worked(1);
+			}
 	}
-
-	// TODO à faire lorsqu'on aura compris à quoi ça sert.
-	// @Override
-	// public void construct(URI uri, List<IElement> elements, IProgressMonitor
-	// monitor) {
-	// for (IElement element : elements) {
-	// // check user cancel for each element
-	// if (!monitor.isCanceled()) {
-	// // provide user info
-	// monitor.subTask(element.getText());
-	// if (element instanceof PluginElement) {
-	// PluginElement fileElement = (PluginElement) element;
-	// try {
-	// // Create parent folders structure
-	// URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
-	// File destinationFile = FileUtils.getFile(newDirectoryURI);
-	// if (destinationFile!=null && !destinationFile.getParentFile().exists()) {
-	// destinationFile.getParentFile().mkdirs();
-	// }
-	// if (destinationFile!=null && !destinationFile.exists()) {
-	// // Copy the content. In the case of a folder, its
-	// // content is not copied
-	// File file = FileUtils.getFile(fileElement.getUri());
-	// Files.copy(file.toPath(), destinationFile.toPath(),
-	// StandardCopyOption.REPLACE_EXISTING);
-	// }
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// monitor.worked(1);
-	// }
-	// }
-
+	
+	private static void copyFile(File source, File dest)throws IOException{
+		InputStream input = null;
+		OutputStream output = null;
+		try{
+			input = new FileInputStream(source);
+			output = new FileOutputStream(dest);
+			byte[] buf = new byte[1024];
+			int bytesRead; 
+			while((bytesRead = input.read(buf)) > 0){
+				output.write(buf,0,bytesRead);
+				
+			}
+		}finally{
+				input.close();
+				output.close();
+		}
+	}
 }
