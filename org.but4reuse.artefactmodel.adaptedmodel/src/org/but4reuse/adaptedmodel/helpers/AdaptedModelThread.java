@@ -31,11 +31,17 @@ public class AdaptedModelThread extends Thread{
 	IProgressMonitor monitor;
 	AdaptedArtefact[] tab;
 	int num;
-	
-	
+	int[] cpt;
+	boolean proc;
+	List<IElement> list;
+	AdaptersHelper adph;
 	/**
 	 * 
 	 * Constructor for the thread
+	 * @param adp 
+	 * @param proceed 
+	 * @param nbready 
+	 * @param list 
 	 * 
 	 * 
 	 * @param tabAdp
@@ -45,14 +51,20 @@ public class AdaptedModelThread extends Thread{
 	 * @param mon
 	 * @param index
 	 */
-	AdaptedModelThread(AdaptedArtefact[] tabAdp, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon,int index){
-		adaptedArtefact = tabAdp[index];
+	AdaptedModelThread(AdaptersHelper adp, int[] nbready, boolean proceed, AdaptedArtefact[] tabAdp, AdaptedModel adaptedMod, Artefact art,List<IAdapter> adapts, IProgressMonitor mon,int index){
+		
 		tab = tabAdp;
 		adaptedModel=adaptedMod;
 		artefact = art;
 		adapters = adapts;
 		monitor = mon;
 		num = index;
+		adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
+		adph = adp;
+		cpt = nbready;
+		proc = proceed;
+		
+		
 	}
 	/**
 	 * 
@@ -61,7 +73,19 @@ public class AdaptedModelThread extends Thread{
 	 * 
 	 */
 	public void run() {
-	    
+		
+		
+			
+		this.list = adph.getElements(artefact, adapters);
+		System.out.println("init de "+this.num);
+		
+		
+		/*while(cpt[0] != tab.length){
+			
+			System.out.println(this.num + " - "+ cpt[0]);
+			
+		}*/
+		System.out.println("Process de "+this.num);
 		adaptedArtefact.setArtefact(artefact);
 		
 		
@@ -69,21 +93,34 @@ public class AdaptedModelThread extends Thread{
 		if (name == null || name.length() == 0) {
 			name = artefact.getArtefactURI();
 		}
+		
+		
 		monitor.subTask("Adapting: " + name);
-
-		List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
+		
+		
+		
+		
 		for(IElement ele : list){
 			ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
 			ew.setElement(ele);
 			adaptedArtefact.getOwnedElementWrappers().add(ew);
+			
 		}
-		tab[num]=adaptedArtefact;
+		
+		
+		
+			tab[num]=adaptedArtefact;
+		
+		System.out.println(num + " terminé");
+		
 		
 		monitor.worked(1);
 		if (monitor.isCanceled()) {
 			this.stop();
 		}
 		
+		
 	  }
+	
 	
 }
