@@ -1,18 +1,13 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URL;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
@@ -23,9 +18,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Eclipse adapter
- * 
- * @author Jason CHUMMUN
+ * @author Fjorilda Gjermizi
+ * @author Krista Drushku
  * @author Diana MALABARD
+ * @author Jason CHUMMUN
+ *
  */
 public class EclipseAdapter implements IAdapter {
 
@@ -74,22 +71,22 @@ public class EclipseAdapter implements IAdapter {
 				builder.run();
 			}
 			// Test
-//			for (IElement elem : elements) {
-//				PluginElement plugin = (PluginElement) elem;
-//				if (plugin.getDependencies().get(
-//						AbstractElement.MAIN_DEPENDENCY_ID) == null) {
-//					System.out.println("Le plugin "
-//							+ plugin.getPluginSymbName()
-//							+ " n'a aucune dépendance.");
-//				} else {
-//					System.out.println("Le plugin "
-//							+ plugin.getPluginSymbName()
-//							+ " a "
-//							+ plugin.getDependencies()
-//									.get(AbstractElement.MAIN_DEPENDENCY_ID)
-//									.size()+" dépendances.");
-//				}
-//			}
+			//			for (IElement elem : elements) {
+			//				PluginElement plugin = (PluginElement) elem;
+			//				if (plugin.getDependencies().get(
+			//						AbstractElement.MAIN_DEPENDENCY_ID) == null) {
+			//					System.out.println("Le plugin "
+			//							+ plugin.getPluginSymbName()
+			//							+ " n'a aucune dépendance.");
+			//				} else {
+			//					System.out.println("Le plugin "
+			//							+ plugin.getPluginSymbName()
+			//							+ " a "
+			//							+ plugin.getDependencies()
+			//									.get(AbstractElement.MAIN_DEPENDENCY_ID)
+			//									.size()+" dépendances.");
+			//				}
+			//			}
 		}
 		return elements;
 	}
@@ -139,75 +136,66 @@ public class EclipseAdapter implements IAdapter {
 		return elements;
 	}
 
-	//TODO à faire lorsqu'on aura compris à quoi ça sert.
-	@Override
-	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		 System.out.println("Enter construct");
-		   
-		    Path dir = FileSystems.getDefault().getPath("/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/");
-		    Path abs=dir.toAbsolutePath();
-		    System.out.println(dir.toString());
-		    File dest = new File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/");
-		    
-			for (IElement element : elements) {
-			    System.out.println("************* ENTRE element");
+	@Override public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) { 
+		System.out.println("Enter construct");
 
-				if (!monitor.isCanceled()) {
-					
-					monitor.subTask(element.getText());
-					if (element instanceof PluginElement) {
-						System.out.println("*********PluginELEMENT     **********");
+		File dest= new File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test1/plugins/"); 
+		deleteFolder(dest); 
+		// File dest = new File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/"); 
+		// System.out.println(dest.mkdirs()); 
+		for (IElement element : elements) { 
+			System.out.println("************* ENTRE element"); 
+			URI uri2 = uri.resolve(uri); 
+			System.out.println(uri2);
 
-						PluginElement fileElement = (PluginElement) element;
-						
-					try {
-							 // if (dir.getParent() != null) {
-									
-								//	File file = FileUtils.getFile(fileElement.getAbsolutePath());
-					
-									String pluginAddr = fileElement.getAbsolutePath();
-									System.out.println("plugin : " +  pluginAddr);
-								//File f = new File("/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/" +fileElement.getPluginSymbName());
-									//File source = FileUtils.getFile(URI.create("C:/UPMC/M2/GPSTL/Eclipse versions/eclipse_juno/plugins/org.eclipse.e4.ui.workbench.renderers.swt_0.10.3.v20130124-170312.jar"));
-									//copyFile(source, f);
-									
-									FileUtils.downloadFileFromURL(new URL(pluginAddr), dest);
-								
-									
-							//	Files.copy(file.toPath(), dir,StandardCopyOption.REPLACE_EXISTING);
-								//  System.out.println("Copy  *************"+file.toString()+"----->"+dir);
 
-							//	}
-								//else{
-								//new File("C:\\UPMC\\M2\\GPSTL\\runtime-EclipseApplication\\test3\\plugins").mkdirs();
-								//System.out.println("*********DIRECTORY CREATED**********");
-								//}
+			if (!monitor.isCanceled()) { 
+				monitor.subTask(element.getText()); 
+				if (element instanceof PluginElement) { 
+					System.out.println("*********PluginELEMENT **********");
+					PluginElement fileElement = (PluginElement) element; 
 
-						
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				monitor.worked(1);
-			}
-	}
-	
-	private static void copyFile(File source, File dest)throws IOException{
-		InputStream input = null;
-		OutputStream output = null;
-		try{
-			input = new FileInputStream(source);
-			output = new FileOutputStream(dest);
-			byte[] buf = new byte[1024];
-			int bytesRead; 
-			while((bytesRead = input.read(buf)) > 0){
-				output.write(buf,0,bytesRead);
-				
-			}
-		}finally{
-				input.close();
-				output.close();
+					try { 
+						String pluginAddr = fileElement.getAbsolutePath(); 
+						System.out.println("plugin : " + pluginAddr); 
+						String pluginName = tokenize(pluginAddr); 
+						// URI newDirectoryURI = uri.resolve(pluginAddr); 
+						// System.out.println("uri ==========="+ newDirectoryURI.toString()); 
+						//System.out.println("Eclipse i ri ------------------------"+newDirectoryURI+"plugins/"+pluginName); 
+						FileUtils.downloadFileFromURL(new URL("file:///"+pluginAddr), new File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test1/plugins/"+pluginName)); 
+						System.out.println("pass");
+
+					} catch (IOException e) { 
+						e.printStackTrace(); 
+					} 
+				} 
+			} monitor.worked(1); 
 		}
 	}
+
+
+
+	private String tokenize (String addresse){ 
+		System.out.println("TOKEN --------------------"); 
+		String resultat =null ; 
+		StringTokenizer st = new StringTokenizer(addresse, "\\"); 
+		while (st.hasMoreTokens()){ 
+			resultat = st.nextToken().toString(); 
+		} 
+		return resultat; 
+	} 
+	private void deleteFolder(File folder) { 
+		File[] files = folder.listFiles(); if(files!=null) { 
+			//some JVMs return null for empty dirs 
+			for(File f: files) { 
+				if(f.isDirectory()) { 
+					deleteFolder(f); 
+				} else { 
+					f.delete(); 
+				} 
+			} 
+		} 
+	}
 }
+
+
