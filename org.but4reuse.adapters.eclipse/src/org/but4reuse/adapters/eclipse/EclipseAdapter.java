@@ -39,7 +39,8 @@ public class EclipseAdapter implements IAdapter {
 		File file = FileUtils.getFile(uri);
 		if (file.isDirectory()) {
 			File eclipse = new File(file.getAbsolutePath() + "/eclipse.exe");
-			if (eclipse.exists()) {
+			File eclipsemac = new File(file.getAbsolutePath() + "/eclipse.app");
+			if (eclipse.exists() || eclipsemac.exists()) {
 				return true;
 			} else {
 				return false;
