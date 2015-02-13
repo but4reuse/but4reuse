@@ -9,7 +9,7 @@
             name="Eclipse">
          <elements>
             <element
-                  element="org.but4reuse.adapters.eclipse.FileElement"></element>
+                  element="org.but4reuse.adapters.eclipse.PluginElement"></element>
             <element
                   element="org.but4reuse.adapters.eclipse.FolderElement">
             </element>

@@ -66,7 +66,7 @@ public class TextLinesAdapter implements IAdapter {
 		}
 		return elements;
 	}
-
+	
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		try {
