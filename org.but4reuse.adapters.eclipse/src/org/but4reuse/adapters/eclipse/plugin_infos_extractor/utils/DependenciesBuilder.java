@@ -27,19 +27,19 @@ public class DependenciesBuilder {
 		this.pluginsSet = pluginsSet;
 	}
 
-
 	public void run() {
 		for (String dependency_symbName : plugin.getRequire_Bundles()) {
 			PluginElement dependency = null;
 			for (IElement elem : pluginsSet) {
-				if (((PluginElement) elem).getPluginSymbName()
-						.compareToIgnoreCase(dependency_symbName) == 0) {
-					dependency = (PluginElement) elem;
-					break;
+				if (elem instanceof PluginElement) {
+					if (((PluginElement) elem).getPluginSymbName().compareToIgnoreCase(dependency_symbName) == 0) {
+						dependency = (PluginElement) elem;
+						break;
+					}
 				}
 			}
 			if (dependency != null) {
-				plugin.addDependency(dependency);
+				plugin.addDependency("requiredBundle", dependency);
 			}
 		}
 	}

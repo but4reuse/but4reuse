@@ -1,9 +1,10 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  */
 public class EclipseAdapter implements IAdapter {
+
+	private URI rootURI;
 
 	/**
 	 * This method check if the artefact is adaptable with the EclipseAdapter
@@ -54,122 +57,110 @@ public class EclipseAdapter implements IAdapter {
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
-		if (file != null && file.exists() && file.isDirectory()) {
-			elements.addAll(adaptFolder(file.getAbsolutePath() + "/dropins", monitor));
-			elements.addAll(adaptFolder(file.getAbsolutePath() + "/plugins", monitor));
-			// For each element, build the dependencies map, depending
-			// on the plugins installed in the considered distribution
-			// and the values retrieved in its RequiredBundle field
-			for (IElement elem : elements) {
+		rootURI = file.toURI();
+		// start the containment tree traversal, with null as initial container
+		adapt(file, elements, null);
+
+		// plugin dependencies
+		for (IElement elem : elements) {
+			if (elem instanceof PluginElement) {
 				DependenciesBuilder builder = new DependenciesBuilder((PluginElement) elem, elements);
 				builder.run();
 			}
 		}
+
+		// in elements we have the result
 		return elements;
 	}
 
 	/**
-	 * Searches for plugins in the given folder
+	 * adapt recursively
 	 * 
-	 * @param uri
-	 *            URI of an Eclipse folder
+	 * @param file
+	 * @param elements
+	 * @param container
 	 */
-	private List<IElement> adaptFolder(String uri, IProgressMonitor monitor) {
-		List<IElement> elements = new ArrayList<IElement>();
-		File file = new File(uri);
-		File[] fichiers = file.listFiles();
-
-		for (int i = 0; i < fichiers.length; i++) {
-			// Plugin as a folder
-			if (fichiers[i].isDirectory()) {
-				try {
-					elements.add(PluginInfosExtractor.getPluginInfosFromManifest(fichiers[i].getAbsolutePath()
-							+ "/META-INF/MANIFEST.MF"));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
+	private void adapt(File file, List<IElement> elements, IElement container) {
+		FileElement newElement = null;
+		if (isAPlugin(file)) {
+			try {
+				if (file.isDirectory()) {
+					newElement = PluginInfosExtractor.getPluginInfosFromManifest(file.getAbsolutePath()
+							+ "/META-INF/MANIFEST.MF");
+				} else {
+					newElement = PluginInfosExtractor.getPluginInfosFromJar(file.getAbsolutePath());
 				}
-				// Plugin as a jar
-			} else if (fichiers[i].getPath().endsWith(".jar")) {
-				try {
-					elements.add(PluginInfosExtractor.getPluginInfosFromJar(fichiers[i].getAbsolutePath()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
+		} else {
+			newElement = new FileElement();
 		}
 
-		return elements;
+		// Set the relevant information
+		newElement.setUri(file.toURI());
+		newElement.setRelativeURI(rootURI.relativize(file.toURI()));
+
+		// Add dependency to the parent folder
+		if (container != null) {
+			newElement.addDependency("container", container);
+		}
+
+		// Add to the list
+		elements.add(newElement);
+
+		// Go for the files in case of folder
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File subFile : files) {
+				adapt(subFile, elements, newElement);
+			}
+		}
+	}
+
+	private boolean isAPlugin(File file) {
+		if (file.getParentFile().getName().equals("plugins") || file.getParentFile().getName().equals("dropins")) {
+			if (file.isDirectory()) {
+				File manif = new File(file.getAbsolutePath() + "/META-INF/MANIFEST.MF");
+				if (manif.exists()) {
+					return true;
+				}
+			} else if (FileUtils.getExtension(file).equalsIgnoreCase("jar")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		// System.out.println("Enter construct");
-		//
-		// File dest = new
-		// File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test1/plugins/");
-		// deleteFolder(dest);
-		// // File dest = new
-		// //
-		// File("C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test/plugins/");
-		// // System.out.println(dest.mkdirs());
-		// for (IElement element : elements) {
-		// System.out.println("************* ENTRE element");
-		// URI uri2 = uri.resolve(uri);
-		// System.out.println(uri2);
-		//
-		// if (!monitor.isCanceled()) {
-		// monitor.subTask(element.getText());
-		// if (element instanceof PluginElement) {
-		// System.out.println("*********PluginELEMENT **********");
-		// PluginElement fileElement = (PluginElement) element;
-		//
-		// try {
-		// String pluginAddr = fileElement.getAbsolutePath();
-		// System.out.println("plugin : " + pluginAddr);
-		// String pluginName = tokenize(pluginAddr);
-		// // URI newDirectoryURI = uri.resolve(pluginAddr);
-		// // System.out.println("uri ==========="+
-		// // newDirectoryURI.toString());
-		// //
-		// System.out.println("Eclipse i ri ------------------------"+newDirectoryURI+"plugins/"+pluginName);
-		// FileUtils.downloadFileFromURL(new URL("file:///" + pluginAddr), new
-		// File(
-		// "C:/UPMC/M2/GPSTL/fevrier/runtime-EclipseApplication/test1/plugins/"
-		// + pluginName));
-		// System.out.println("pass");
-		//
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// }
-		// }
-		// monitor.worked(1);
-		// }
+		for (IElement element : elements) {
+			// check user cancel for each element
+			if (!monitor.isCanceled()) {
+				// provide user info
+				monitor.subTask(element.getText());
+				if (element instanceof FileElement) {
+					FileElement fileElement = (FileElement) element;
+					try {
+						// Create parent folders structure
+						URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
+						File destinationFile = FileUtils.getFile(newDirectoryURI);
+						if (destinationFile != null && !destinationFile.getParentFile().exists()) {
+							destinationFile.getParentFile().mkdirs();
+						}
+						if (destinationFile != null && !destinationFile.exists()) {
+							// Copy the content. In the case of a folder, its
+							// content is not copied
+							File file = FileUtils.getFile(fileElement.getUri());
+							Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			monitor.worked(1);
+		}
 	}
 
-	// private String tokenize(String addresse) {
-	// String resultat = null;
-	// StringTokenizer st = new StringTokenizer(addresse, "\\");
-	// while (st.hasMoreTokens()) {
-	// resultat = st.nextToken().toString();
-	// }
-	// return resultat;
-	// }
-	//
-	// private void deleteFolder(File folder) {
-	// File[] files = folder.listFiles();
-	// if (files != null) {
-	// // some JVMs return null for empty dirs
-	// for (File f : files) {
-	// if (f.isDirectory()) {
-	// deleteFolder(f);
-	// } else {
-	// f.delete();
-	// }
-	// }
-	// }
-	// }
 }
