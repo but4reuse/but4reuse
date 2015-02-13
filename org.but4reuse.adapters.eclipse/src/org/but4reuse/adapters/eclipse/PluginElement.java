@@ -15,9 +15,9 @@ public class PluginElement extends AbstractElement{
 
 	private String pluginSymbName;
 	private String pluginName;
-	//chaque pluginElement de require_Bundles, sa liste require_Bundle sera vide.
-	//Car on ne connait potentiellement pas les dépendences de ces plugins
-	//De meme pour absoluthPath
+	//each pluginElement in require_Bundles, the list of require_Bundle will be empty.
+	//because we do not know the dependencies
+	//The same thing for absoluthPath
 	private ArrayList<String> require_Bundles;
 	
 	public ArrayList<String> getRequire_Bundles() {
@@ -51,8 +51,7 @@ public class PluginElement extends AbstractElement{
 
 	@Override
 	public double similarity(IElement anotherElement) {
-		// When they have the same relative URI
-		// TODO add a preference option to check file content
+		// When they have the same symbolic name
 		if (anotherElement instanceof PluginElement) {
 			if (((PluginElement) anotherElement).getPluginSymbName().equals(getPluginSymbName())) {
 				return 1;

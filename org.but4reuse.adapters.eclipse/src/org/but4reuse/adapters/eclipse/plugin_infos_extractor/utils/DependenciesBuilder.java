@@ -12,7 +12,7 @@ import org.but4reuse.adapters.eclipse.PluginElement;
  * @author Diana Malabard
  * 
  */
-public class DependenciesBuilder implements Runnable {
+public class DependenciesBuilder {
 
 	private PluginElement plugin;
 	private List<IElement> pluginsSet;
@@ -27,12 +27,7 @@ public class DependenciesBuilder implements Runnable {
 		this.pluginsSet = pluginsSet;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
+
 	public void run() {
 		for (String dependency_symbName : plugin.getRequire_Bundles()) {
 			PluginElement dependency = null;

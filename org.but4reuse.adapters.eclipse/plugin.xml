@@ -10,9 +10,6 @@
          <elements>
             <element
                   element="org.but4reuse.adapters.eclipse.PluginElement"></element>
-            <element
-                  element="org.but4reuse.adapters.eclipse.FolderElement">
-            </element>
          </elements>
       </adapter>
    </extension>
