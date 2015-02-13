@@ -8,7 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.but4reuse.utils,
- org.eclipse.contribution.visualiser;bundle-version="2.2.0",
+ org.eclipse.contribution.visualiser,
  org.but4reuse.adapters,
  org.but4reuse.featurelist,
  org.eclipse.gmf.runtime.common.core
