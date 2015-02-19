@@ -27,11 +27,11 @@ public class EMFReferenceElement extends AbstractElement {
 			referenceText = "Empty";
 		} else {
 			for (EObject eObject : referenced) {
-				referenceText = referenceText + EMFUtils.getName(eObject) + ", ";
+				referenceText = referenceText + EMFUtils.getText(eObject) + ", ";
 			}
 			referenceText = referenceText.substring(0, referenceText.length() - ", ".length());
 		}
-		return "Reference: [Owner->" + EMFUtils.getName(owner) + "] [Ref->" + this.eReference.getName()
+		return "Reference: [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + this.eReference.getName()
 				+ "] [Value->" + referenceText + "]";
 	}
 

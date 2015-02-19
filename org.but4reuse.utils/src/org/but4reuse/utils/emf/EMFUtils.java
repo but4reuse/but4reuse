@@ -10,13 +10,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.swt.graphics.Image;
 
 /**
  * EMF Utils
@@ -56,32 +58,29 @@ public class EMFUtils {
 	}
 
 	/**
-	 * Try to find a human redable name for an EObject
+	 * Get a human readable name for an EObject
 	 * 
 	 * @param eObject
 	 * @return a name
 	 */
-	public static String getName(EObject eObject) {
-		// TODO get item provider and then getText
-		String name = eObject.eClass().getName();
-		for (EAttribute attr : eObject.eClass().getEAllAttributes()) {
-			if (attr.getName().equalsIgnoreCase("name")) {
-				Object o = eObject.eGet(attr);
-				if (o != null) {
-					name = name + "_" + eObject.eGet(attr);
-					break;
-				}
-			}
-			if (attr.getName().equalsIgnoreCase("title")) {
-				Object o = eObject.eGet(attr);
-				if (o != null) {
-					name = name + "_" + eObject.eGet(attr);
-					break;
-				}
-			}
-		}
-		return name;
+	public static String getText(EObject eObject) {
+		EcoreItemProviderAdapterFactory factory = new EcoreItemProviderAdapterFactory();
+		AdapterFactoryLabelProvider aflp = new AdapterFactoryLabelProvider(factory);
+		return aflp.getText(eObject);
 	}
+	
+	/**
+	 * Get the icon of an EObject
+	 * 
+	 * @param eObject
+	 * @return an image
+	 */
+	public static Image getImage(EObject eObject) {
+		EcoreItemProviderAdapterFactory factory = new EcoreItemProviderAdapterFactory();
+		AdapterFactoryLabelProvider aflp = new AdapterFactoryLabelProvider(factory);
+		return aflp.getImage(eObject);
+	}
+
 
 	/**
 	 * Get an IResource from an EMF resource

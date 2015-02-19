@@ -30,7 +30,7 @@ public class EMFClassElement extends AbstractElement {
 	
 	@Override
 	public String getText() {
-		return ("Class: " + childEObject.eClass().getName() + " [Owner->" + EMFUtils.getName(owner) + "] [Ref->" + reference.getName() + "]");
+		return ("Class: " + childEObject.eClass().getName() + " [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
 	}
 	
 	public boolean construct(URI uri) {
