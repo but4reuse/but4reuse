@@ -33,4 +33,9 @@ public class PositionDependencyObject implements IDependencyObject {
 		return super.equals(obj);
 	}
 
+	@Override
+	public String getDependencyObjectText() {
+		return position.toString();
+	}
+
 }

@@ -29,6 +29,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	public String discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
 		String result = "";
+		String resultWithExplanations = "";
 
 		// for binary relations we explore the matrix n*n where n is the number
 		// of blocks. We ignore the matrix diagonal so it is n*n - n for
@@ -46,7 +47,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
-						return result;
+						return resultWithExplanations;
 					}
 					// here we have all binary combinations A and B, B and A
 					// etc.
@@ -55,7 +56,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					if (messages.size() > 0) {
 						// TODO provide more info about the origin of the
 						// constraint, the involved elements for example
-						result = result + b1.getName() + " requires " + b2.getName() + " :(" + messages.size()
+						result = result + b1.getName() + " requires " + b2.getName() + "\n";
+						resultWithExplanations = resultWithExplanations + b1.getName() + " requires " + b2.getName() + " :(" + messages.size()
 								+ " reasons): " + messages + "\n\n";
 					}
 					monitor.worked(1);
@@ -73,18 +75,25 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					monitor.subTask("Checking Mutual Exclusion relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
-						return result;
+						return resultWithExplanations;
 					}
 					// mutual exclusion
-					if (blockExcludesAnotherBlock(b1, b2)) {
+					List<String> messages = blockExcludesAnotherBlock(b1, b2);
+					if(messages.size()>0){
 						result = result + b1.getName() + " mutually excludes " + b2.getName() + "\n";
+						resultWithExplanations = resultWithExplanations + b1.getName() + " mutually excludes " + b2.getName() + " :(" + messages.size()
+								+ " reasons): " + messages + "\n\n";
 					}
 					monitor.worked(1);
 				}
 			}
 		}
 		monitor.done();
-		return result;
+		if(result.length()>0){
+			return result + "\n\nExplanations\n" + resultWithExplanations;
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -95,7 +104,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @return
 	 */
 	public List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
-		List<String> requi = new ArrayList<String>();
+		List<String> messages = new ArrayList<String>();
 		for (BlockElement e : b1.getOwnedBlockElements()) {
 			List<IDependencyObject> de = getAllDependencies(e);
 
@@ -114,7 +123,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					if (de.contains(elementW2.getElement())) {
 						String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText() + "->"
 								+ ((IElement) elementW2.getElement()).getText();
-						requi.add(message);
+						messages.add(message);
 						// it is enough for all the element wrappers of b2e
 						// TODO continue with all the element wrappers but keep
 						// track of already added dependencies
@@ -123,7 +132,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 				}
 			}
 		}
-		return requi;
+		return messages;
 	}
 
 	/**
@@ -134,7 +143,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public boolean blockExcludesAnotherBlock(Block b1, Block b2) {
+	public List<String> blockExcludesAnotherBlock(Block b1, Block b2) {
+		List<String> messages = new ArrayList<String>();
 		// Create the global maps of dependency ids and dependency objects
 		Map<String, List<IDependencyObject>> map1 = new HashMap<String, List<IDependencyObject>>();
 		Map<String, List<IDependencyObject>> map2 = new HashMap<String, List<IDependencyObject>>();
@@ -154,12 +164,12 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 				if (pointed2.contains(o)) {
 					if (o.getMaxDependencies(key) < Collections.frequency(pointed1, o)
 							+ Collections.frequency(pointed2, o)) {
-						return true;
+						messages.add(o.getDependencyObjectText());
 					}
 				}
 			}
 		}
-		return false;
+		return messages;
 	}
 
 	private Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(

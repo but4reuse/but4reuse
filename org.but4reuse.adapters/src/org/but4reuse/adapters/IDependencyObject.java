@@ -21,4 +21,10 @@ public interface IDependencyObject {
 	 */
 	public int getMaxDependencies(String dependencyID);
 	
+	/**
+	 * Get dependency object text
+	 * @return
+	 */
+	public String getDependencyObjectText();
+	
 }

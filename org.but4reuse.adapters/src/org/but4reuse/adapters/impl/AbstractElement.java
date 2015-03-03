@@ -170,5 +170,10 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		}
 
 	}
+	
+	@Override
+	public String getDependencyObjectText() {
+		return getText();
+	}
 
 }
