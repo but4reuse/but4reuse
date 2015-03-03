@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class ScrollableMessageDialog extends TitleAreaDialog {
-    private String title;
-    private String text;
-    private String scrollableText;
+    public String title;
+    public String text;
+    public String scrollableText;
 
     public ScrollableMessageDialog(Shell parentShell, String title, String text, String scrollableText) {
         super(parentShell);

@@ -1,15 +1,17 @@
 package org.but4reuse.adapters.ui.actions;
 
+import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockMarkupKind;
 import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.contribution.visualiser.views.Menu;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
@@ -48,9 +50,15 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 					
 					// Show
 					// TODO Show also the artefacts where the block is present
-					ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(),
+					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(Display.getCurrent().getActiveShell(),
 							markupKind.getName(), block.getOwnedBlockElements().size() + " Elements", sText);
 					dialog.open();
+					if(dialog.name!=null && !dialog.name.equals(block.getName())){
+						block.setName(dialog.name);
+						AdaptedModel adaptedModel = (AdaptedModel)block.eContainer();
+						// TODO feature model!
+						VisualisationsHelper.notifyVisualisations(null, adaptedModel, null, new NullProgressMonitor());
+					}
 				}
 			}
 		}
