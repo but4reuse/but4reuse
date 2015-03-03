@@ -27,19 +27,16 @@ public class DependenciesBuilder {
 		this.pluginsSet = pluginsSet;
 	}
 
-	public void run() {
+	public void build() {
 		for (String dependency_symbName : plugin.getRequire_Bundles()) {
-			PluginElement dependency = null;
 			for (IElement elem : pluginsSet) {
 				if (elem instanceof PluginElement) {
 					if (((PluginElement) elem).getPluginSymbName().compareToIgnoreCase(dependency_symbName) == 0) {
-						dependency = (PluginElement) elem;
+						// TODO check versions
+						plugin.addDependency("requiredBundle", (PluginElement) elem);
 						break;
 					}
 				}
-			}
-			if (dependency != null) {
-				plugin.addDependency("requiredBundle", dependency);
 			}
 		}
 	}

@@ -2,6 +2,8 @@ package org.but4reuse.adapters.eclipse;
 
 import java.util.ArrayList;
 
+import org.but4reuse.adapters.IElement;
+
 /**
  * Plugin Element
  * 
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public class PluginElement extends FileElement {
 
 	private String pluginSymbName;
-	private String pluginName;
+	private String pluginVersion;
 	// each pluginElement in require_Bundles, the list of require_Bundle will be
 	// empty.
 	// because we do not know the dependencies
@@ -41,17 +43,13 @@ public class PluginElement extends FileElement {
 		this.require_Bundles.add(require_bundle);
 	}
 
+	public void removeRequire_bundle(String require_bundle) {
+		this.require_Bundles.remove(require_bundle);
+	}
+
 	@Override
 	public String getText() {
-		return " Plugin :" + pluginSymbName + " -> " + super.getText();
-	}
-
-	public String getPluginName() {
-		return pluginName;
-	}
-
-	public void setPluginName(String pluginName) {
-		this.pluginName = pluginName;
+		return pluginSymbName + " " + pluginVersion;
 	}
 
 	public boolean isJar() {
@@ -68,6 +66,31 @@ public class PluginElement extends FileElement {
 
 	public void setAbsolutePath(String absolutePath) {
 		this.absolutePath = absolutePath;
+	}
+
+	@Override
+	public double similarity(IElement anotherElement) {
+		// When they have the same relative URI
+		// TODO URIs can reference to the same file... check this
+		if (anotherElement instanceof PluginElement) {
+			PluginElement anotherPluginElement = ((PluginElement) anotherElement);
+
+			// Same symbolic name
+			if (this.getPluginSymbName().equals(anotherPluginElement.getPluginSymbName())) {
+				if (this.getPluginVersion().equals(anotherPluginElement.getPluginVersion())) {
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
+	public String getPluginVersion() {
+		return pluginVersion;
+	}
+
+	public void setPluginVersion(String pluginVersion) {
+		this.pluginVersion = pluginVersion;
 	}
 
 }

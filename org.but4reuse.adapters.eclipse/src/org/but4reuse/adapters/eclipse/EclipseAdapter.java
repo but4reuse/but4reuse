@@ -65,7 +65,7 @@ public class EclipseAdapter implements IAdapter {
 		for (IElement elem : elements) {
 			if (elem instanceof PluginElement) {
 				DependenciesBuilder builder = new DependenciesBuilder((PluginElement) elem, elements);
-				builder.run();
+				builder.build();
 			}
 		}
 
