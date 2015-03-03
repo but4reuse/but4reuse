@@ -51,10 +51,12 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					// here we have all binary combinations A and B, B and A
 					// etc.
 					// requires b1 -> b2
-					if (blockRequiresAnotherBlockB(b1, b2)) {
+					List<String> messages = blockRequiresAnotherBlockB(b1, b2);
+					if (messages.size() > 0) {
 						// TODO provide more info about the origin of the
 						// constraint, the involved elements for example
-						result = result + b1.getName() + " requires " + b2.getName() + "\n";
+						result = result + b1.getName() + " requires " + b2.getName() + " :(" + messages.size()
+								+ " reasons): " + messages + "\n\n";
 					}
 					monitor.worked(1);
 				}
@@ -92,18 +94,36 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public boolean blockRequiresAnotherBlockB(Block b1, Block b2) {
+	public List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
+		List<String> requi = new ArrayList<String>();
 		for (BlockElement e : b1.getOwnedBlockElements()) {
 			List<IDependencyObject> de = getAllDependencies(e);
+
+			// Remove dependencies that are already inside the block
+			for (BlockElement be1 : b1.getOwnedBlockElements()) {
+				for (ElementWrapper elementW2 : be1.getElementWrappers()) {
+					Object elem = elementW2.getElement();
+					// remove if found
+					de.remove(elem);
+				}
+			}
+
+			// Actually check
 			for (BlockElement b2e : b2.getOwnedBlockElements()) {
 				for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
 					if (de.contains(elementW2.getElement())) {
-						return true;
+						String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText() + "->"
+								+ ((IElement) elementW2.getElement()).getText();
+						requi.add(message);
+						// it is enough for all the element wrappers of b2e
+						// TODO continue with all the element wrappers but keep
+						// track of already added dependencies
+						break;
 					}
 				}
 			}
 		}
-		return false;
+		return requi;
 	}
 
 	/**
@@ -114,7 +134,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	private boolean blockExcludesAnotherBlock(Block b1, Block b2) {
+	public boolean blockExcludesAnotherBlock(Block b1, Block b2) {
 		// Create the global maps of dependency ids and dependency objects
 		Map<String, List<IDependencyObject>> map1 = new HashMap<String, List<IDependencyObject>>();
 		Map<String, List<IDependencyObject>> map2 = new HashMap<String, List<IDependencyObject>>();
