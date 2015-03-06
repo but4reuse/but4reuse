@@ -83,6 +83,18 @@ public class WorkbenchUtils {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Refresh resource
+	 */
+	public static void refreshIResource(IResource resource) {
+		try {
+			resource.refreshLocal(IResource.DEPTH_INFINITE, new NullProgressMonitor());
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * Open a file in its default editor
