@@ -7,6 +7,7 @@ import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
@@ -96,6 +97,17 @@ public class AdaptedModelHelper {
 			}
 		}
 		return blocks;
+	}
+	
+	public static List<Artefact> getArtefactsContainingBlockElement(BlockElement blockElement) {
+		List<Artefact> artefacts = new ArrayList<Artefact>();
+		for (ElementWrapper ew : blockElement.getElementWrappers()) {
+			AdaptedArtefact aa = (AdaptedArtefact) ew.eContainer();
+			if (!artefacts.contains(aa.getArtefact())) {
+				artefacts.add(aa.getArtefact());
+			}
+		}
+		return artefacts;
 	}
 
 	public static String getNumberWithZeros(int number, int maxNumber) {

@@ -103,7 +103,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
+	public static List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
 		List<String> messages = new ArrayList<String>();
 		for (BlockElement e : b1.getOwnedBlockElements()) {
 			List<IDependencyObject> de = getAllDependencies(e);
@@ -143,7 +143,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public List<String> blockExcludesAnotherBlock(Block b1, Block b2) {
+	public static List<String> blockExcludesAnotherBlock(Block b1, Block b2) {
 		List<String> messages = new ArrayList<String>();
 		// Create the global maps of dependency ids and dependency objects
 		Map<String, List<IDependencyObject>> map1 = new HashMap<String, List<IDependencyObject>>();
@@ -172,7 +172,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		return messages;
 	}
 
-	private Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(
+	public static Map<String, List<IDependencyObject>> getDepedencyTypesAndPointedObjects(
 			Map<String, List<IDependencyObject>> result, BlockElement blockElement) {
 		// we allow duplicates in result but not those that belong to the same
 		// BlockElement

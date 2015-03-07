@@ -12,9 +12,11 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.feature.constraints.impl.BinaryRelationConstraintsDiscovery;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
@@ -28,18 +30,67 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter;
 
+/**
+ * Graph visualisation
+ * 
+ * @author jabier.martinez
+ */
 public class GraphVisualisation implements IVisualisation {
-
-	private AdaptedModel adaptedModel;
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
-		this.adaptedModel = adaptedModel;
+		// Create the graphs
+		Graph graph = createElementsGraph(adaptedModel, monitor);
+		Graph graphBlocks = createBlocksGraph(adaptedModel, monitor);
+
+		// Save it
+		monitor.subTask("Saving the graph visualisations");
+
+		// TODO improve checks!
+		// Here we try to find the folder to save it
+		URI uri = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
+		java.net.URI uri2 = null;
+		try {
+			uri2 = new java.net.URI(uri.toString());
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		}
+		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
+		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
+		
+		// Save 1
+		File file = new File(artefactModelFile.getAbsolutePath() + "_visualisation.graphml");
+		try {
+			GraphMLWriter writer = new GraphMLWriter(graph);
+			writer.setNormalize(true);
+			writer.outputGraph(file.getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Save 2
+		File file2 = new File(artefactModelFile.getAbsolutePath() + "_blocks_visualisation.graphml");
+		try {
+			GraphMLWriter writer = new GraphMLWriter(graphBlocks);
+			writer.setNormalize(true);
+			writer.outputGraph(file2.getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		// Refresh
+		WorkbenchUtils.refreshIResource(res.getParent());
 	}
 
-	@Override
-	public void show() {
-
+	/**
+	 * Create Elements Graph
+	 * 
+	 * @param adaptedModel
+	 * @param monitor 
+	 * @return the graph
+	 */
+	public Graph createElementsGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
+		monitor.subTask("Creating the Elements graph visualisation");
 		// Create graph
 		Map<BlockElement, Integer> idMap = new HashMap<BlockElement, Integer>();
 		Map<IElement, List<ElementWrapper>> ieews = new HashMap<IElement, List<ElementWrapper>>();
@@ -51,7 +102,7 @@ public class GraphVisualisation implements IVisualisation {
 			for (BlockElement blockElement : block.getOwnedBlockElements()) {
 				Vertex v = graph.addVertex(id);
 				v.setProperty("block", block.getName());
-				List<Artefact> artefacts = getArtefactList(blockElement);
+				List<Artefact> artefacts = AdaptedModelHelper.getArtefactsContainingBlockElement(blockElement);
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					if (artefacts.contains(aa.getArtefact())) {
 						v.setProperty(aa.getArtefact().getName(), "yes");
@@ -136,39 +187,50 @@ public class GraphVisualisation implements IVisualisation {
 				}
 			}
 		}
-
-		// Save
-		GraphMLWriter writer = new GraphMLWriter(graph);
-		writer.setNormalize(true);
-		// TODO improve checks!
-		URI uri = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
-		java.net.URI uri2 = null;
-		try {
-			uri2 = new java.net.URI(uri.toString());
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
-		}
-		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
-		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
-		File file = new File(artefactModelFile.getAbsolutePath() + "_visualisation.graphml");
-		try {
-			writer.outputGraph(file.getAbsolutePath());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		WorkbenchUtils.refreshIResource(res.getParent());
+		return graph;
 	}
 
-	// TODO move to adaptedmodelhelper or similar
-	public List<Artefact> getArtefactList(BlockElement blockElement) {
-		List<Artefact> artefacts = new ArrayList<Artefact>();
-		for (ElementWrapper ew : blockElement.getElementWrappers()) {
-			AdaptedArtefact aa = (AdaptedArtefact) ew.eContainer();
-			if (!artefacts.contains(aa.getArtefact())) {
-				artefacts.add(aa.getArtefact());
+	/**
+	 * Create Elements Graph
+	 * 
+	 * @param adaptedModel
+	 * @param monitor 
+	 * @return the graph
+	 */
+	public Graph createBlocksGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
+		monitor.subTask("Creating the Blocks graph visualisation");
+		Graph graph = new TinkerGraph();
+		// Create vertices for each block in the list with the id of its
+		// position
+		List<Block> blocks = adaptedModel.getOwnedBlocks();
+		for (int id = 0; id < blocks.size(); id++) {
+			Vertex v = graph.addVertex(id);
+			v.setProperty("Label", blocks.get(id).getName());
+			v.setProperty("NumberOfBlockElements", blocks.get(id).getOwnedBlockElements().size());
+		}
+		for(Block block1 : blocks){
+			for(Block block2 : blocks){
+				if(block1!=block2){
+					monitor.subTask("Creating the Blocks graph visualisation. Computing relation " + block1.getName() +" -> "+ block2.getName());
+					List<String> messages = BinaryRelationConstraintsDiscovery.blockRequiresAnotherBlockB(block1, block2);
+					if(!messages.isEmpty()){
+						int id1 = blocks.indexOf(block1);
+						int id2 = blocks.indexOf(block2);
+						Vertex one = graph.getVertex(id1);
+						Vertex two = graph.getVertex(id2);
+						Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+						edge.setProperty("Label", messages.toString());
+						edge.setProperty("Weight", messages.size());
+					}
+				}
 			}
 		}
-		return artefacts;
+		return graph;
+	}
+
+	@Override
+	public void show() {
+		// Do nothing. Everything is done in the prepare method
 	}
 
 }

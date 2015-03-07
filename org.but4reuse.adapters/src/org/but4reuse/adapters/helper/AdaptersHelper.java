@@ -95,6 +95,10 @@ public class AdaptersHelper {
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 
 		if (!(artefact instanceof ComposedArtefact)) {
+			if(artefact.getArtefactURI()==null || artefact.getArtefactURI().length()==0){
+				WorkbenchUtils.reportError(EMFUtils.getIResource(artefact.eResource()), 0, "URI is not defined");
+				return filteredAdapters;
+			}
 			// Check if URI exists, we use emf utils
 			org.eclipse.emf.common.util.URI emfuri = org.eclipse.emf.common.util.URI.createURI(artefact
 					.getArtefactURI());
