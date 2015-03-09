@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.contribution.visualiser,
  org.but4reuse.visualisation,
- org.but4reuse.adaptedmodel
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

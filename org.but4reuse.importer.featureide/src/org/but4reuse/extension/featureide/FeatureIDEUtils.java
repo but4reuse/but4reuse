@@ -6,54 +6,48 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IFile;
+import org.prop4j.Node;
+import org.prop4j.NodeReader;
+
+import de.ovgu.featureide.fm.core.Constraint;
+import de.ovgu.featureide.fm.core.Feature;
+import de.ovgu.featureide.fm.core.FeatureModel;
+import de.ovgu.featureide.fm.core.io.FeatureModelWriterIFileWrapper;
+import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelWriter;
 
 /**
- * 
+ * Feature IDE Utils
  * @author jabier.martinez
  */
 public class FeatureIDEUtils {
 
-	/**
-	 * 
-	 * @param featureModelURI
-	 * @param features
-	 * @throws IOException
-	 */
-	public static void createFeatureModel(URI featureModelURI, List<String> features) throws IOException {
-		// TODO Use FeatureIDE API
+	public static void exportFeatureModel(URI featureModelURI, AdaptedModel adaptedModel) {
 		File fmFile = FileUtils.getFile(featureModelURI);
-		FileUtils.createFile(fmFile);
-		BufferedWriter output = new BufferedWriter(new FileWriter(fmFile));
-		output.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-		output.newLine();
-		output.append("<featureModel chosenLayoutAlgorithm=\"1\">");
-		output.newLine();
-		output.append("<struct>");
-		output.newLine();
-		output.append("<and abstract=\"true\" mandatory=\"true\" name=\"SPL\">");
-		output.newLine();
-		for (String feature : features) {
-			output.append("<feature name=\"" + feature.replaceAll(" ", "") + "\"/>");
-			output.newLine();
+		try {
+			FileUtils.createFile(fmFile);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		output.append("</and>");
-		output.newLine();
-		output.append("</struct>");
-		output.newLine();
-		output.append("<constraints/>");
-		output.newLine();
-		output.append("<calculations Auto=\"true\" Constraints=\"true\" Features=\"true\" Redundant=\"true\"/>");
-		output.newLine();
-		output.append("<comments/>");
-		output.newLine();
-		output.append("<featureOrder userDefined=\"false\"/>");
-		output.newLine();
-		output.append("</featureModel>");
-		output.close();
+		FeatureModel fm = createFlatFeatureModel(adaptedModel);
+		save(fm, fmFile);
+		// Refresh in case of workspace
+		IFile file = WorkbenchUtils.getIFileFromFile(fmFile);
+		if (file != null) {
+			WorkbenchUtils.refreshIResource(file);
+		}
 	}
 
 	/**
@@ -61,7 +55,7 @@ public class FeatureIDEUtils {
 	 * @param configsFolderURI
 	 * @param configurations
 	 * @throws URISyntaxException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void createConfigurations(URI configsFolderURI, Map<String, List<String>> configurations)
 			throws URISyntaxException, IOException {
@@ -76,17 +70,112 @@ public class FeatureIDEUtils {
 	 * 
 	 * @param configURI
 	 * @param feature
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void createConfiguration(URI configURI, List<String> features) throws IOException {
 		File configFile = FileUtils.getFile(configURI);
 		FileUtils.createFile(configFile);
 		BufferedWriter output = new BufferedWriter(new FileWriter(configFile));
-		for (String feature : features){
-			output.append(feature.replaceAll(" ", ""));
+		for (String feature : features) {
+			output.append(validFeatureName(feature));
 			output.newLine();
 		}
 		output.close();
+	}
+
+	/**
+	 * Create a flat feature model with cross tree constraints
+	 * 
+	 * @param adaptedModel
+	 * @return
+	 */
+	public static FeatureModel createFlatFeatureModel(AdaptedModel adaptedModel) {
+		FeatureModel fm = new FeatureModel();
+		Feature root = new Feature(fm);
+		String rootName = AdaptedModelHelper.getName(adaptedModel);
+		if(rootName == null){
+			rootName = "FeatureModel";
+		} else {
+			rootName = validFeatureName(rootName);
+		}
+		root.setName(rootName);
+		root.setAND(true);
+		
+		fm.setRoot(root);
+		fm.addFeature(root);
+		
+		LinkedList<Feature> children = new LinkedList<Feature>();
+		// Add blocks as features
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			Feature f = new Feature(fm, block.getName().replaceAll(" ", ""));
+			f.setAbstract(false);
+			f.setMandatory(false);
+			f.setParent(root);
+			children.add(f);
+			fm.addFeature(f);
+		}
+		root.setChildren(children);
+		
+		// Add constraints
+		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
+			addConstraint(fm, getConstraintString(constraint));
+		}
+		return fm;
+	}
+
+	/**
+	 * Get string representation of the constraint
+	 * @param constraint
+	 * @return
+	 */
+	public static String getConstraintString(IConstraint constraint) {
+		String type = constraint.getType();
+		// only this two supported for the moment
+		if (type.equals(IConstraint.REQUIRES) || type.equals(IConstraint.EXCLUDES)) {
+			String text = validFeatureName(constraint.getBlock1().getName()) + " implies ";
+			if (type.equals(IConstraint.EXCLUDES)) {
+				text += "not ";
+			}
+			text += validFeatureName(constraint.getBlock2().getName());
+			return text;
+		}
+		return null;
+	}
+
+	/**
+	 * Save
+	 * @param featureModel
+	 * @param file
+	 */
+	public static void save(FeatureModel featureModel, File file) {
+		new FeatureModelWriterIFileWrapper(new XmlFeatureModelWriter(featureModel)).writeToFile(file);
+	}
+
+	/**
+	 * Add constraint
+	 * @param featureModel
+	 * @param constraint
+	 */
+	public static void addConstraint(FeatureModel featureModel, String constraint) {
+		NodeReader nodeReader = new NodeReader();
+		List<String> featureList = new ArrayList<String>(featureModel.getFeatureNames());
+		Node node = nodeReader.stringToNode(constraint, featureList);
+		// TODO report error if node is null
+		if(node!=null){
+			Constraint c = new Constraint(featureModel, node);
+			featureModel.addConstraint(c);
+		}
+	}
+	
+	/**
+	 * Feature IDE has some restrictions like no whitespaces etc.
+	 * They say that the feature name must be a valid Java identifier.
+	 * @param name
+	 * @return
+	 */
+	public static String validFeatureName(String name){
+		// TODO improve checks
+		return name.replaceAll(" ", "");
 	}
 
 }

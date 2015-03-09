@@ -118,4 +118,19 @@ public class AdaptedModelHelper {
 		return _return;
 	}
 
+	/**
+	 * Get the name of the artefact model
+	 * @param adaptedModel
+	 * @return the name or null
+	 */
+	public static String getName(AdaptedModel adaptedModel) {
+		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
+			ArtefactModel a = (ArtefactModel)aa.getArtefact().eContainer();
+			if(a.getName()!=null){
+				return a.getName();
+			}
+		}
+		return null;
+	}
+
 }

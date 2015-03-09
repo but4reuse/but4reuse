@@ -49,7 +49,7 @@ public class CreateConfigurationsAction implements IViewActionDelegate {
 			BlockElementsContentProvider contentProvider = (BlockElementsContentProvider) definition
 					.getContentProvider();
 
-			List membersList = contentProvider.getAllMembers();
+			List<?> membersList = contentProvider.getAllMembers();
 			for (Object memberO : membersList) {
 
 				IMember member = (IMember) memberO;
@@ -61,7 +61,7 @@ public class CreateConfigurationsAction implements IViewActionDelegate {
 				}
 				configsMap.put(memberName, currentConfigFeatures);
 
-				List markups = markupProvider.getMemberMarkups(member);
+				List<?> markups = markupProvider.getMemberMarkups(member);
 				for (Object o : markups) {
 					Stripe stripe = (Stripe) o;
 					List<IMarkupKind> kinds = stripe.getKinds();

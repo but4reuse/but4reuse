@@ -2,13 +2,11 @@ package org.but4reuse.extension.featureide;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
-import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockMarkupKind;
@@ -35,8 +33,8 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		try {
 			// Get construction uri from user
-			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(), "Construction URI",
-					"Insert feature model URI", "platform:/resource/projectName/model.xml");
+			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
+					"Construction URI", "Insert feature model URI", "platform:/resource/projectName/model.xml");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}
@@ -44,26 +42,27 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 			URI fmURI = null;
 			fmURI = new URI(constructionURI);
 
-			List<String> features = new ArrayList<String>();
 			File fmFile = FileUtils.getFile(fmURI);
 			FileUtils.createFile(fmFile);
 
 			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
 			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
 
+			AdaptedModel adaptedModel = null;
 			for (Object o : markupProvider.getAllMarkupKinds()) {
 				IMarkupKind kind = (IMarkupKind) o;
-				if (menu.getActive(kind)) {
-					Object active = kind;
-					if (active instanceof BlockMarkupKind) {
-						Block block = ((BlockMarkupKind) active).getBlock();
-						features.add(block.getName());
-					}
+				// We don't care about the selection now
+				// if (menu.getActive(kind)) {
+				Object active = kind;
+				if (active instanceof BlockMarkupKind) {
+					Block block = ((BlockMarkupKind) active).getBlock();
+					adaptedModel = (AdaptedModel) block.eContainer();
+					break;
 				}
+				// }
 			}
 
-			FeatureIDEUtils.createFeatureModel(fmURI, features);
-			WorkbenchUtils.refreshAllWorkspace();
+			FeatureIDEUtils.exportFeatureModel(fmURI, adaptedModel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
