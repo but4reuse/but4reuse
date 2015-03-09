@@ -126,7 +126,7 @@ public class AdaptedModelHelper {
 	public static String getName(AdaptedModel adaptedModel) {
 		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
 			ArtefactModel a = (ArtefactModel)aa.getArtefact().eContainer();
-			if(a.getName()!=null){
+			if(a.getName()!=null && a.getName().length()>0){
 				return a.getName();
 			}
 		}

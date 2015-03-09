@@ -8,7 +8,7 @@
             id="org.but4reuse.extension.featureid.import"
             objectClass="org.but4reuse.featurelist.FeatureList">
          <action
-               class="org.but4reuse.extension.featureide.ImportFeatureIDEAction"
+               class="org.but4reuse.extension.featureide.ui.ImportFeatureIDEAction"
                icon="IMG_TOOL_UP"
                id="org.but4reuse.extension.featureid.import.action"
                label="Import from Feature IDE"
@@ -23,7 +23,7 @@
             id="org.but4reuse.exportation.featureide.viewContribution"
             targetID="org.eclipse.contribution.visualiser.views.Menu">
          <action
-               class="org.but4reuse.extension.featureide.CreateFeatureModelAction"
+               class="org.but4reuse.extension.featureide.ui.CreateFeatureModelAction"
                icon="icons/createFM.png"
                id="org.but4reuse.extension.featureide.createfeatuermodel"
                label="Create Feature Model"
@@ -35,7 +35,7 @@
             id="org.but4reuse.exportation.featureide.viewContribution2"
             targetID="org.eclipse.contribution.visualiser.views.Visualiser">
          <action
-               class="org.but4reuse.extension.featureide.CreateConfigurationsAction"
+               class="org.but4reuse.extension.featureide.ui.CreateConfigurationsAction"
                icon="icons/createConfigurations.png"
                id="org.but4reuse.analysis.constructionprimitives.action2"
                label="Create Configurations"
