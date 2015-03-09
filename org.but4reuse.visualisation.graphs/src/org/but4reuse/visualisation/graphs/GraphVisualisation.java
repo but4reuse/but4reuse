@@ -16,7 +16,8 @@ import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.artefactmodel.Artefact;
-import org.but4reuse.feature.constraints.impl.BinaryRelationConstraintsDiscovery;
+import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
@@ -113,7 +114,7 @@ public class GraphVisualisation implements IVisualisation {
 				// Assumption, all block elements are of the same type
 				ElementWrapper ew = blockElement.getElementWrappers().get(0);
 				IElement element = (IElement) ew.getElement();
-				v.setProperty("elementType", element.getClass().getName());
+				v.setProperty("elementType", element.getClass().getSimpleName());
 				List<ElementWrapper> list = ieews.get(element);
 				if (list == null) {
 					list = new ArrayList<ElementWrapper>();
@@ -208,21 +209,23 @@ public class GraphVisualisation implements IVisualisation {
 			v.setProperty("Label", blocks.get(id).getName());
 			v.setProperty("NumberOfBlockElements", blocks.get(id).getOwnedBlockElements().size());
 		}
-		for(Block block1 : blocks){
-			for(Block block2 : blocks){
-				if(block1!=block2){
-					monitor.subTask("Creating the Blocks graph visualisation. Computing relation " + block1.getName() +" -> "+ block2.getName());
-					List<String> messages = BinaryRelationConstraintsDiscovery.blockRequiresAnotherBlockB(block1, block2);
-					if(!messages.isEmpty()){
-						int id1 = blocks.indexOf(block1);
-						int id2 = blocks.indexOf(block2);
-						Vertex one = graph.getVertex(id1);
-						Vertex two = graph.getVertex(id2);
-						Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
-						edge.setProperty("Label", messages.toString());
-						edge.setProperty("Weight", messages.size());
-					}
-				}
+		
+		
+		Object o = adaptedModel.getConstraints();
+		List<IConstraint> constraints = new ArrayList<IConstraint>();
+		if(o!=null && o instanceof List<?>){
+			constraints = (List<IConstraint>) o;
+		}
+		
+		for(IConstraint constraint: constraints){
+			if(constraint.getType().equals(IConstraint.REQUIRES)){
+				int id1 = blocks.indexOf(constraint.getBlock1());
+				int id2 = blocks.indexOf(constraint.getBlock2());
+				Vertex one = graph.getVertex(id1);
+				Vertex two = graph.getVertex(id2);
+				Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+				edge.setProperty("Label", ConstraintsHelper.getTextWithExplanations(constraint));
+				edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
 			}
 		}
 		return graph;

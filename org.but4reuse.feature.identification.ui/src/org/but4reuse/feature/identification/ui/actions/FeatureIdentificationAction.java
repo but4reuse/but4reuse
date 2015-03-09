@@ -13,6 +13,9 @@ import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
 import org.but4reuse.blockcreation.helper.BlockCreationHelper;
+import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.IConstraintsDiscovery;
+import org.but4reuse.feature.constraints.impl.BinaryRelationConstraintsDiscovery;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -50,8 +53,8 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 								
-								// Adapting each active artefact + calculating blocks + prepare visualisation
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 +  VisualisationsHelper.getAllVisualisations().size();
+								// Adapting each active artefact + calculating blocks + constraints discovery + prepare visualisation
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 +  VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
@@ -64,6 +67,13 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								
 								adaptedModel.getOwnedBlocks().addAll(blocks);
+								monitor.worked(1);
+								
+								monitor.subTask("Structural constraints discovery");
+								IConstraintsDiscovery constraintsDiscoveryAlgorithm = new BinaryRelationConstraintsDiscovery();
+								List<IConstraint> constraints = constraintsDiscoveryAlgorithm.discover(null, adaptedModel,
+										null, monitor);
+								adaptedModel.setConstraints(constraints);
 								monitor.worked(1);
 								
 								monitor.subTask("Preparing visualisations");

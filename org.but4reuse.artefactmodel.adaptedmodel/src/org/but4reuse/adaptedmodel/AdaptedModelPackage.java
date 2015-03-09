@@ -85,13 +85,22 @@ public interface AdaptedModelPackage extends EPackage {
 	int ADAPTED_MODEL__OWNED_ADAPTED_ARTEFACTS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Constraints</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTED_MODEL__CONSTRAINTS = 2;
+
+	/**
 	 * The number of structural features of the '<em>Adapted Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTED_MODEL_FEATURE_COUNT = 2;
+	int ADAPTED_MODEL_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Adapted Model</em>' class.
@@ -320,6 +329,17 @@ public interface AdaptedModelPackage extends EPackage {
 	EReference getAdaptedModel_OwnedAdaptedArtefacts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.but4reuse.adaptedmodel.AdaptedModel#getConstraints <em>Constraints</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constraints</em>'.
+	 * @see org.but4reuse.adaptedmodel.AdaptedModel#getConstraints()
+	 * @see #getAdaptedModel()
+	 * @generated
+	 */
+	EAttribute getAdaptedModel_Constraints();
+
+	/**
 	 * Returns the meta object for class '{@link org.but4reuse.adaptedmodel.AdaptedArtefact <em>Adapted Artefact</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -495,6 +515,14 @@ public interface AdaptedModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADAPTED_MODEL__OWNED_ADAPTED_ARTEFACTS = eINSTANCE.getAdaptedModel_OwnedAdaptedArtefacts();
+
+		/**
+		 * The meta object literal for the '<em><b>Constraints</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ADAPTED_MODEL__CONSTRAINTS = eINSTANCE.getAdaptedModel_Constraints();
 
 		/**
 		 * The meta object literal for the '{@link org.but4reuse.adaptedmodel.impl.AdaptedArtefactImpl <em>Adapted Artefact</em>}' class.

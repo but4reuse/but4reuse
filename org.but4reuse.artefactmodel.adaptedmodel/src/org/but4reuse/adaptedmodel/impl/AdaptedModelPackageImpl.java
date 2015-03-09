@@ -155,6 +155,15 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAdaptedModel_Constraints() {
+		return (EAttribute)adaptedModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAdaptedArtefact() {
 		return adaptedArtefactEClass;
 	}
@@ -289,6 +298,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 		adaptedModelEClass = createEClass(ADAPTED_MODEL);
 		createEReference(adaptedModelEClass, ADAPTED_MODEL__OWNED_BLOCKS);
 		createEReference(adaptedModelEClass, ADAPTED_MODEL__OWNED_ADAPTED_ARTEFACTS);
+		createEAttribute(adaptedModelEClass, ADAPTED_MODEL__CONSTRAINTS);
 
 		adaptedArtefactEClass = createEClass(ADAPTED_ARTEFACT);
 		createEReference(adaptedArtefactEClass, ADAPTED_ARTEFACT__ARTEFACT);
@@ -344,6 +354,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 		initEClass(adaptedModelEClass, AdaptedModel.class, "AdaptedModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdaptedModel_OwnedBlocks(), this.getBlock(), null, "ownedBlocks", null, 0, -1, AdaptedModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAdaptedModel_OwnedAdaptedArtefacts(), this.getAdaptedArtefact(), null, "ownedAdaptedArtefacts", null, 0, -1, AdaptedModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAdaptedModel_Constraints(), ecorePackage.getEJavaObject(), "constraints", null, 0, 1, AdaptedModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(adaptedArtefactEClass, AdaptedArtefact.class, "AdaptedArtefact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdaptedArtefact_Artefact(), theArtefactModelPackage.getArtefact(), null, "artefact", null, 0, 1, AdaptedArtefact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

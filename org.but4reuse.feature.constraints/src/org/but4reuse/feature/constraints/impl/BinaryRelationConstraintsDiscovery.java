@@ -12,6 +12,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,16 +27,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery {
 
 	@Override
-	public String discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
+	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
-		String result = "";
-		String resultWithExplanations = "";
+		List<IConstraint> constraintList = new ArrayList<IConstraint>();
 
 		// for binary relations we explore the matrix n*n where n is the number
 		// of blocks. We ignore the matrix diagonal so it is n*n - n for
 		// requires and (n*n-n)/2 for mutual exclusion
 		int n = adaptedModel.getOwnedBlocks().size();
-		monitor.beginTask("Binary Relation Constraints discovery", (n * n - n) + ((n * n - n) / 2));
+		// TODO monitor is not used, only for reporting messages
+		// monitor.beginTask("Binary Relation Constraints discovery", (n * n - n) + ((n * n - n) / 2));
 
 		// Block Level
 		// TODO feature level
@@ -47,20 +48,22 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
-						return resultWithExplanations;
+						return constraintList;
 					}
 					// here we have all binary combinations A and B, B and A
 					// etc.
 					// requires b1 -> b2
 					List<String> messages = blockRequiresAnotherBlockB(b1, b2);
 					if (messages.size() > 0) {
-						// TODO provide more info about the origin of the
-						// constraint, the involved elements for example
-						result = result + b1.getName() + " requires " + b2.getName() + "\n";
-						resultWithExplanations = resultWithExplanations + b1.getName() + " requires " + b2.getName() + " :(" + messages.size()
-								+ " reasons): " + messages + "\n\n";
+						IConstraint constraint = new ConstraintImpl();
+						constraint.setType(IConstraint.REQUIRES);
+						constraint.setBlock1(b1);
+						constraint.setBlock2(b2);
+						constraint.setExplanations(messages);
+						constraint.setNumberOfReasons(messages.size());
+						constraintList.add(constraint);
 					}
-					monitor.worked(1);
+					//monitor.worked(1);
 				}
 			}
 		}
@@ -75,25 +78,25 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					monitor.subTask("Checking Mutual Exclusion relations of " + b1.getName() + " with " + b2.getName());
 					// check monitor
 					if (monitor.isCanceled()) {
-						return resultWithExplanations;
+						return constraintList;
 					}
 					// mutual exclusion
 					List<String> messages = blockExcludesAnotherBlock(b1, b2);
 					if(messages.size()>0){
-						result = result + b1.getName() + " mutually excludes " + b2.getName() + "\n";
-						resultWithExplanations = resultWithExplanations + b1.getName() + " mutually excludes " + b2.getName() + " :(" + messages.size()
-								+ " reasons): " + messages + "\n\n";
+						IConstraint constraint = new ConstraintImpl();
+						constraint.setType(IConstraint.EXCLUDES);
+						constraint.setBlock1(b1);
+						constraint.setBlock2(b2);
+						constraint.setExplanations(messages);
+						constraint.setNumberOfReasons(messages.size());
+						constraintList.add(constraint);
 					}
-					monitor.worked(1);
+					//monitor.worked(1);
 				}
 			}
 		}
-		monitor.done();
-		if(result.length()>0){
-			return result + "\n\nExplanations\n" + resultWithExplanations;
-		} else {
-			return "";
-		}
+		// monitor.done();
+		return constraintList;
 	}
 
 	/**

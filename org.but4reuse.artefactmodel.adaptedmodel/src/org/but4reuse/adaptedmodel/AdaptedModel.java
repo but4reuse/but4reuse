@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.but4reuse.adaptedmodel.AdaptedModel#getOwnedBlocks <em>Owned Blocks</em>}</li>
  *   <li>{@link org.but4reuse.adaptedmodel.AdaptedModel#getOwnedAdaptedArtefacts <em>Owned Adapted Artefacts</em>}</li>
+ *   <li>{@link org.but4reuse.adaptedmodel.AdaptedModel#getConstraints <em>Constraints</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,5 +56,31 @@ public interface AdaptedModel extends EObject {
 	 * @generated
 	 */
 	EList<AdaptedArtefact> getOwnedAdaptedArtefacts();
+
+	/**
+	 * Returns the value of the '<em><b>Constraints</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Constraints</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Constraints</em>' attribute.
+	 * @see #setConstraints(Object)
+	 * @see org.but4reuse.adaptedmodel.AdaptedModelPackage#getAdaptedModel_Constraints()
+	 * @model
+	 * @generated
+	 */
+	Object getConstraints();
+
+	/**
+	 * Sets the value of the '{@link org.but4reuse.adaptedmodel.AdaptedModel#getConstraints <em>Constraints</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Constraints</em>' attribute.
+	 * @see #getConstraints()
+	 * @generated
+	 */
+	void setConstraints(Object value);
 
 } // AdaptedModel

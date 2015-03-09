@@ -57,7 +57,7 @@ public class WorkbenchUtils {
 
 	/**
 	 * Try to force to show a view
-	 * 
+	 * If not UI-thread, use Display.getDefault().asyncExec(new Runnable() {
 	 * @param viewId
 	 * @return
 	 */
