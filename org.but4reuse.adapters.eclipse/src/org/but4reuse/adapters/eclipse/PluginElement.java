@@ -77,9 +77,8 @@ public class PluginElement extends FileElement {
 
 			// Same symbolic name
 			if (this.getPluginSymbName().equals(anotherPluginElement.getPluginSymbName())) {
-				//if (this.getPluginVersion().equals(anotherPluginElement.getPluginVersion())) {
-					return 1;
-				//}
+				// TODO no versioning supported
+				return 1;
 			}
 		}
 		return 0;
@@ -91,6 +90,14 @@ public class PluginElement extends FileElement {
 
 	public void setPluginVersion(String pluginVersion) {
 		this.pluginVersion = pluginVersion;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((getPluginSymbName() == null) ? 0 : getPluginSymbName().hashCode());
+		return result;
 	}
 
 }
