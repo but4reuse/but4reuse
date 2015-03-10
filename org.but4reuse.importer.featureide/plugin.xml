@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.but4reuse.extensions.featureide.fmcreators" name="Feature Model Creators" schema="schema/org.but4reuse.extensions.featureide.fmcreators.exsd"/>
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -43,5 +44,18 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
+   </extension>
+   <extension
+         point="org.but4reuse.extensions.featureide.fmcreators">
+      <fmcreator
+            class="org.but4reuse.extension.featureide.fmcreators.impl.FlatFeatureModelCreator"
+            description="A flat list of features and a set of cross tree constraints"
+            name="Flat Feature Model">
+      </fmcreator>
+      <fmcreator
+            class="org.but4reuse.extension.featureide.fmcreators.impl.AlternativesBeforeHierarchyFMCreator"
+            description="Create alternative groups with the excludes constraints and then the hierarchy with the requires constraints"
+            name="Alternatives Before Hierarchy">
+      </fmcreator>
    </extension>
 </plugin>

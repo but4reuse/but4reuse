@@ -77,9 +77,9 @@ public class PluginElement extends FileElement {
 
 			// Same symbolic name
 			if (this.getPluginSymbName().equals(anotherPluginElement.getPluginSymbName())) {
-				if (this.getPluginVersion().equals(anotherPluginElement.getPluginVersion())) {
+				//if (this.getPluginVersion().equals(anotherPluginElement.getPluginVersion())) {
 					return 1;
-				}
+				//}
 			}
 		}
 		return 0;

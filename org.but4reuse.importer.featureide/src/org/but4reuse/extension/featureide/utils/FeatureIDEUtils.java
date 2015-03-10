@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
-import org.but4reuse.extension.featureide.IFeatureModelCreator;
+import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;

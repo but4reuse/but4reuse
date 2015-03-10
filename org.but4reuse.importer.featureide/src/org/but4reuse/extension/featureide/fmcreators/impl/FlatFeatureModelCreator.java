@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
-import org.but4reuse.extension.featureide.IFeatureModelCreator;
+import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
 import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;

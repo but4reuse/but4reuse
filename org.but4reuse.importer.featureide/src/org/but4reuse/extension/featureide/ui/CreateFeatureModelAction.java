@@ -2,10 +2,12 @@ package org.but4reuse.extension.featureide.ui;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
-import org.but4reuse.extension.featureide.fmcreators.impl.FlatFeatureModelCreator;
+import org.but4reuse.extension.featureide.fmcreators.FeatureModelCreatorsHelper;
+import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
 import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
@@ -36,17 +38,15 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 		try {
 			// Get construction uri from user
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Construction URI", "Insert feature model URI", "platform:/resource/projectName/model.xml");
+					"Feature Models container URI", "Insert container URI for feature models",
+					"platform:/resource/projectName/featureModels/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}
 			String constructionURI = inputDialog.getValue();
-			URI fmURI = null;
-			fmURI = new URI(constructionURI);
 
-			File fmFile = FileUtils.getFile(fmURI);
-			FileUtils.createFile(fmFile);
-
+			// TODO break the dependency with this visualisation
+			// Get the adaptedModel
 			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
 			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
 
@@ -64,8 +64,17 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 				// }
 			}
 
-			// TODO ask the user to select the feature model creator
-			FeatureIDEUtils.exportFeatureModel(fmURI, adaptedModel, new FlatFeatureModelCreator());
+			// Get the registered fm creators
+			List<IFeatureModelCreator> featureModelCreators = FeatureModelCreatorsHelper.getAllFeatureModelCreators();
+
+			// Create fm with each of them
+			for (IFeatureModelCreator fmc : featureModelCreators) {
+				URI fmURI = new URI(constructionURI + fmc.getClass().getSimpleName() + ".xml");
+				File fmFile = FileUtils.getFile(fmURI);
+				FileUtils.createFile(fmFile);
+				FeatureIDEUtils.exportFeatureModel(fmURI, adaptedModel, fmc);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
