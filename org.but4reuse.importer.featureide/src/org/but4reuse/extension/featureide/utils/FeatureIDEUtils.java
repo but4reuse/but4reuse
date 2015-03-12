@@ -20,6 +20,7 @@ import org.prop4j.Node;
 import org.prop4j.NodeReader;
 
 import de.ovgu.featureide.fm.core.Constraint;
+import de.ovgu.featureide.fm.core.Feature;
 import de.ovgu.featureide.fm.core.FeatureModel;
 import de.ovgu.featureide.fm.core.io.FeatureModelWriterIFileWrapper;
 import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelWriter;
@@ -131,7 +132,74 @@ public class FeatureIDEUtils {
 	 */
 	public static String validFeatureName(String name){
 		// TODO improve checks
-		return name.replaceAll(" ", "");
+		return name.replaceAll(" ", "_");
+	}
+	
+
+	// For example 3 requires 2 (3 is child of 2). Then 2 requires 1. isAncestor 1 of 3 is true.
+	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, List<IConstraint> constraints, Feature f1, Feature f2) {
+		List<Feature> directRequired = getFeatureRequiredFeatures(fm, constraints, f2);
+		if (directRequired.contains(f1)) {
+			return true;
+		}
+		for (Feature direct : directRequired) {
+			if (isAncestorFeature1ofFeature2(fm, constraints, f1, direct)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean existsExcludeConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
+		for (IConstraint constraint : constraints) {
+			if (constraint.getType().equals(IConstraint.EXCLUDES)) {
+				// check f1 excludes f2 and viceversa
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+					return true;
+				} else if (f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
+						&& f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean existsRequiresConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
+		for (IConstraint constraint : constraints) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static List<Feature> getFeatureRequiredFeatures(FeatureModel fm, List<IConstraint> constraints, Feature f1) {
+		List<Feature> required = new ArrayList<Feature>();
+		for (IConstraint constraint : constraints) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))) {
+					required.add(fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName())));
+				}
+			}
+		}
+		return required;
+	}
+	
+	public static int getNumberOfReasonsOfRequiresConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
+		for (IConstraint constraint : constraints) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+					return constraint.getNumberOfReasons();
+				}
+			}
+		}
+		return -1;
 	}
 
 }

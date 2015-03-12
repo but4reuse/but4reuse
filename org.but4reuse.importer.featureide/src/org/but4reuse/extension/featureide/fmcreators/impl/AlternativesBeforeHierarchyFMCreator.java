@@ -16,7 +16,15 @@ import de.ovgu.featureide.fm.core.Feature;
 import de.ovgu.featureide.fm.core.FeatureModel;
 
 /**
- * TODO not finished, for the moment only alternative groups
+ * Feature Model synthesis: First we identify alternative groups, then we create
+ * the hierarchy. From the possible parent candidates, we discard those that are
+ * already containing other parent candidates. The parent candidates of an
+ * alternative group are the intersection of the parent candidates of the
+ * features integrating the group. In case of several parent candidates, we
+ * select parent candidates belonging to alternative groups and in the case of
+ * any, we select the parent candidate with the higher number of reasons in the
+ * requires constraint description. Finally, the features without parent are
+ * added to the root.
  * 
  * @author jabier.martinez
  */
@@ -24,7 +32,15 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 
 	@Override
 	public FeatureModel createFeatureModel(AdaptedModel adaptedModel) {
+		// TODO Check for loops in the Requires graph.
+		// Assumption is that there is no loops in the Requires constraints
+		// between blocks as it happens with the default block identification
+		// algorithm.
 		FeatureModel fm = new FeatureModel();
+		// fm.getFeatures returns a collection with random ordering...
+		// let's keep our own list of features
+		List<Feature> fmFeatures = new ArrayList<Feature>();
+
 		Feature root = new Feature(fm);
 		String rootName = AdaptedModelHelper.getName(adaptedModel);
 		if (rootName == null) {
@@ -35,8 +51,11 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		root.setName(rootName);
 		root.setAND(true);
 
+		List<Feature> parentAssigned = new ArrayList<Feature>();
+
 		fm.setRoot(root);
 		fm.addFeature(root);
+		fmFeatures.add(root);
 
 		// Add blocks as features
 		for (Block block : adaptedModel.getOwnedBlocks()) {
@@ -44,6 +63,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 			f.setAbstract(false);
 			f.setMandatory(false);
 			fm.addFeature(f);
+			fmFeatures.add(f);
 		}
 
 		// Add constraints, maybe redundant after hierarchical fm creation but
@@ -72,7 +92,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 					boolean allFound = true;
 					for (Feature f : altF2.features) {
 						if (!f.equals(feature2)) {
-							if (!existsExcludeConstraint(constraints, f, feature1)) {
+							if (!FeatureIDEUtils.existsExcludeConstraint(constraints, f, feature1)) {
 								allFound = false;
 								break;
 							}
@@ -87,7 +107,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 					boolean allFound = true;
 					for (Feature f : altF1.features) {
 						if (!f.equals(feature1)) {
-							if (!existsExcludeConstraint(constraints, f, feature2)) {
+							if (!FeatureIDEUtils.existsExcludeConstraint(constraints, f, feature2)) {
 								allFound = false;
 								break;
 							}
@@ -104,22 +124,110 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		for (AltGroup altGroup : altGroupList.altGroups) {
 			Feature fakeAltFeature = new Feature(fm);
 			fakeAltFeature.setName("Alternative_" + altGroup.id);
+			altGroup.altRoot = fakeAltFeature;
 			fakeAltFeature.setAlternative();
 			fakeAltFeature.setAbstract(true);
 			fakeAltFeature.setMandatory(false);
 			fakeAltFeature.setChildren(altGroup.features);
 			fm.addFeature(fakeAltFeature);
-			fakeAltFeature.setParent(root);
+			fmFeatures.add(fakeAltFeature);
 		}
 
-		// TODO Improve with Requires hierarchy. Feature not belonging to an
-		// alternative group we just put them in the root
+		// Create hierarchy with the Requires
+		for (Feature f : fmFeatures) {
+
+			// check if the feature belongs to an alternative group
+			AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
+
+			List<Feature> parentCandidates;
+			if (altGroup == null) {
+				// normal feature
+				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
+			} else {
+				// feature inside an alt group
+				// the parent candidates will be those that are shared parent
+				// candidates for all the alt group
+				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
+				for (Feature altf : altGroup.features) {
+					parentCandidates.retainAll(FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, altf));
+				}
+			}
+			List<Feature> definitiveList = new ArrayList<Feature>();
+			for (Feature pc : parentCandidates) {
+				definitiveList.add(pc);
+			}
+
+			// Reduce the parent candidates, remove ancestors
+			for (Feature pc1 : parentCandidates) {
+				for (Feature pc2 : parentCandidates) {
+					if (pc1 != pc2) {
+						if (FeatureIDEUtils.isAncestorFeature1ofFeature2(fm, constraints, pc1, pc2)) {
+							definitiveList.remove(pc1);
+						} else if (FeatureIDEUtils.isAncestorFeature1ofFeature2(fm, constraints, pc2, pc1)) {
+							definitiveList.remove(pc2);
+						}
+					}
+				}
+			}
+
+			// Select one
+			if (!definitiveList.isEmpty()) {
+				Feature parent = null;
+
+				// Preference to parents in alternative groups
+				// TODO for the moment get the first alternative group
+				for (Feature dp : definitiveList) {
+					if (altGroupList.getAltGroupOfFeature(dp) != null) {
+						parent = dp;
+						break;
+					}
+				}
+
+				// If no parent in alternative group
+				// Get the one with higher number of reasons in the requires
+				// constraint
+				if (parent == null) {
+					int maximumReasons = Integer.MIN_VALUE;
+					for (Feature dp : definitiveList) {
+						int reasons = FeatureIDEUtils.getNumberOfReasonsOfRequiresConstraint(constraints, f, dp);
+						if (reasons > maximumReasons) {
+							parent = dp;
+						}
+					}
+				}
+
+				// And add it
+				parent.setAND(true);
+				LinkedList<Feature> childs = parent.getChildren();
+				if (altGroup == null) {
+					childs.add(f);
+					parentAssigned.add(f);
+					parent.setChildren(childs);
+					f.setParent(parent);
+				} else {
+					// Only once for the whole alt group
+					if (!parentAssigned.contains(altGroup.altRoot)) {
+						childs.add(altGroup.altRoot);
+						parentAssigned.add(altGroup.altRoot);
+						parent.setChildren(childs);
+						altGroup.altRoot.setParent(parent);
+					}
+				}
+			}
+		}
+
+		// Features without parent are added to the root
 		LinkedList<Feature> toTheRoot = new LinkedList<Feature>();
-		for (Feature f : fm.getFeatures()) {
+		for (Feature f : fmFeatures) {
 			if (!f.equals(root)) {
-				if (altGroupList.getAltGroupOfFeature(f) == null) {
-					toTheRoot.addFirst(f);
+				AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
+				if (altGroup != null) {
+					f = altGroup.altRoot;
+				}
+				if (!parentAssigned.contains(f)) {
+					toTheRoot.add(f);
 					f.setParent(root);
+					parentAssigned.add(f);
 				}
 			}
 		}
@@ -128,25 +236,13 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		return fm;
 	}
 
-	public static boolean existsExcludeConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
-		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.EXCLUDES)) {
-				// check f1 excludes f2 and viceversa
-				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
-					return true;
-				} else if (f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
+	/**
+	 * Auxiliary classes
+	 */
 	public class AltGroup {
 		LinkedList<Feature> features = new LinkedList<Feature>();
 		int id;
+		Feature altRoot;
 	}
 
 	public class AltGroupList {
