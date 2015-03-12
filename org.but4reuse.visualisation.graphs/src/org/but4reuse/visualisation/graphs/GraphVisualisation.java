@@ -58,7 +58,7 @@ public class GraphVisualisation implements IVisualisation {
 		}
 		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
 		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
-		
+
 		// Save 1
 		File file = new File(artefactModelFile.getAbsolutePath() + "_visualisation.graphml");
 		try {
@@ -68,7 +68,7 @@ public class GraphVisualisation implements IVisualisation {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// Save 2
 		File file2 = new File(artefactModelFile.getAbsolutePath() + "_blocks_visualisation.graphml");
 		try {
@@ -78,7 +78,7 @@ public class GraphVisualisation implements IVisualisation {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// Refresh
 		WorkbenchUtils.refreshIResource(res.getParent());
 	}
@@ -87,7 +87,7 @@ public class GraphVisualisation implements IVisualisation {
 	 * Create Elements Graph
 	 * 
 	 * @param adaptedModel
-	 * @param monitor 
+	 * @param monitor
 	 * @return the graph
 	 */
 	public Graph createElementsGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
@@ -195,7 +195,7 @@ public class GraphVisualisation implements IVisualisation {
 	 * Create Elements Graph
 	 * 
 	 * @param adaptedModel
-	 * @param monitor 
+	 * @param monitor
 	 * @return the graph
 	 */
 	public Graph createBlocksGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
@@ -209,23 +209,25 @@ public class GraphVisualisation implements IVisualisation {
 			v.setProperty("Label", blocks.get(id).getName());
 			v.setProperty("NumberOfBlockElements", blocks.get(id).getOwnedBlockElements().size());
 		}
-		
-		
-		Object o = adaptedModel.getConstraints();
-		List<IConstraint> constraints = new ArrayList<IConstraint>();
-		if(o!=null && o instanceof List<?>){
-			constraints = (List<IConstraint>) o;
-		}
-		
-		for(IConstraint constraint: constraints){
-			if(constraint.getType().equals(IConstraint.REQUIRES)){
-				int id1 = blocks.indexOf(constraint.getBlock1());
-				int id2 = blocks.indexOf(constraint.getBlock2());
-				Vertex one = graph.getVertex(id1);
-				Vertex two = graph.getVertex(id2);
-				Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
-				edge.setProperty("Label", ConstraintsHelper.getTextWithExplanations(constraint));
-				edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
+
+		// Create the edges with the constraints. For the mutually excludes add
+		// edges in both directions
+		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
+		for (IConstraint constraint : constraints) {
+			int id1 = blocks.indexOf(constraint.getBlock1());
+			int id2 = blocks.indexOf(constraint.getBlock2());
+			Vertex one = graph.getVertex(id1);
+			Vertex two = graph.getVertex(id2);
+			Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+			edge.setProperty("Label", constraint.getType());
+			edge.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
+			edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
+			if (constraint.getType().equals(IConstraint.EXCLUDES)) {
+				// Add also the opposite in the case of mutually excludes
+				Edge edge2 = graph.addEdge(id2 + "-" + id1, two, one, id2 + "-" + id1);
+				edge2.setProperty("Label", constraint.getType());
+				edge2.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
+				edge2.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
 			}
 		}
 		return graph;
