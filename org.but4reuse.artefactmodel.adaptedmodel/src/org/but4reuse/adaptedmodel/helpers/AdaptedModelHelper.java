@@ -32,22 +32,7 @@ public class AdaptedModelHelper {
 		// TODO implement concurrency to improve performance
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
-				AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-				adaptedArtefact.setArtefact(artefact);
-
-				String name = artefact.getName();
-				if (name == null || name.length() == 0) {
-					name = artefact.getArtefactURI();
-				}
-				monitor.subTask("Adapting: " + name);
-
-				List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-				for (IElement ele : list) {
-					ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
-					ew.setElement(ele);
-					adaptedArtefact.getOwnedElementWrappers().add(ew);
-				}
-
+				AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);
 				adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
 				monitor.worked(1);
 				if (monitor.isCanceled()) {
@@ -56,6 +41,33 @@ public class AdaptedModelHelper {
 			}
 		}
 		return adaptedModel;
+	}
+
+	/**
+	 * Adapt artefact
+	 * 
+	 * @param artefact
+	 * @param adapters
+	 * @param monitor
+	 * @return
+	 */
+	public static AdaptedArtefact adapt(Artefact artefact, List<IAdapter> adapters, IProgressMonitor monitor) {
+		AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
+		adaptedArtefact.setArtefact(artefact);
+
+		String name = artefact.getName();
+		if (name == null || name.length() == 0) {
+			name = artefact.getArtefactURI();
+		}
+		monitor.subTask("Adapting: " + name);
+
+		List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
+		for (IElement ele : list) {
+			ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
+			ew.setElement(ele);
+			adaptedArtefact.getOwnedElementWrappers().add(ew);
+		}
+		return adaptedArtefact;
 	}
 
 	public static boolean isIdentical(ElementWrapper e1, ElementWrapper e2) {
@@ -98,7 +110,7 @@ public class AdaptedModelHelper {
 		}
 		return blocks;
 	}
-	
+
 	public static List<Artefact> getArtefactsContainingBlockElement(BlockElement blockElement) {
 		List<Artefact> artefacts = new ArrayList<Artefact>();
 		for (ElementWrapper ew : blockElement.getElementWrappers()) {
@@ -120,13 +132,14 @@ public class AdaptedModelHelper {
 
 	/**
 	 * Get the name of the artefact model
+	 * 
 	 * @param adaptedModel
 	 * @return the name or null
 	 */
 	public static String getName(AdaptedModel adaptedModel) {
-		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
-			ArtefactModel a = (ArtefactModel)aa.getArtefact().eContainer();
-			if(a.getName()!=null && a.getName().length()>0){
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+			ArtefactModel a = (ArtefactModel) aa.getArtefact().eContainer();
+			if (a.getName() != null && a.getName().length() > 0) {
 				return a.getName();
 			}
 		}

@@ -94,7 +94,7 @@ public class GraphVisualisation implements IVisualisation {
 	 * @param monitor
 	 * @return the graph
 	 */
-	public Graph createElementsGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
+	public static Graph createElementsGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
 		monitor.subTask("Creating the Elements graph visualisation");
 		// Create graph
 		Map<BlockElement, Integer> idMap = new HashMap<BlockElement, Integer>();
@@ -202,7 +202,7 @@ public class GraphVisualisation implements IVisualisation {
 	 * @param monitor
 	 * @return the graph
 	 */
-	public Graph createBlocksGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
+	public static Graph createBlocksGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
 		monitor.subTask("Creating the Blocks graph visualisation");
 		Graph graph = new TinkerGraph();
 		// Create vertices for each block in the list with the id of its

@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
@@ -39,6 +40,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get all adapters
+	 * 
 	 * @return list of declared adapters
 	 */
 	public static List<IAdapter> getAllAdapters() {
@@ -61,6 +63,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get adapters from artefact model
+	 * 
 	 * @param artefactModel
 	 * @param monitor
 	 * @return
@@ -78,7 +81,7 @@ public class AdaptersHelper {
 				}
 			}
 			// monitor canceled
-			if(monitor.isCanceled()){
+			if (monitor.isCanceled()) {
 				return filteredAdapters;
 			}
 		}
@@ -95,7 +98,7 @@ public class AdaptersHelper {
 		List<IAdapter> filteredAdapters = new ArrayList<IAdapter>();
 
 		if (!(artefact instanceof ComposedArtefact)) {
-			if(artefact.getArtefactURI()==null || artefact.getArtefactURI().length()==0){
+			if (artefact.getArtefactURI() == null || artefact.getArtefactURI().length() == 0) {
 				WorkbenchUtils.reportError(EMFUtils.getIResource(artefact.eResource()), 0, "URI is not defined");
 				return filteredAdapters;
 			}
@@ -109,7 +112,6 @@ public class AdaptersHelper {
 				return filteredAdapters;
 			}
 		}
-
 
 		// TODO clean this method
 		List<IAdapter> adapters = getAllAdapters();
@@ -138,7 +140,7 @@ public class AdaptersHelper {
 								filteredAdapters.add(adapter);
 							}
 							// user cancel
-							if(monitor.isCanceled()){
+							if (monitor.isCanceled()) {
 								return filteredAdapters;
 							}
 						}
@@ -154,6 +156,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get artefacts whose active property is set to true
+	 * 
 	 * @param artefactModel
 	 * @return list of artefacts
 	 */
@@ -168,7 +171,25 @@ public class AdaptersHelper {
 	}
 
 	/**
+	 * Get artefact model
+	 * 
+	 * @param artefact
+	 * @return artefactModel
+	 */
+	public static ArtefactModel getArtefactModel(Artefact artefact) {
+		EObject container = artefact.eContainer();
+		while (container != null) {
+			if (container instanceof ArtefactModel) {
+				return (ArtefactModel) container;
+			}
+			container = container.eContainer();
+		}
+		return null;
+	}
+
+	/**
 	 * Get Elements from a given artefact with a set of adapters
+	 * 
 	 * @param artefact
 	 * @param adapters
 	 * @return list of Elements
@@ -192,6 +213,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get Elements of a given artefact with a given adapter
+	 * 
 	 * @param artefact
 	 * @return list of ielements
 	 */
@@ -210,6 +232,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get adapter name
+	 * 
 	 * @param adapter
 	 * @return adapter name
 	 */
@@ -235,6 +258,7 @@ public class AdaptersHelper {
 
 	/**
 	 * Get adapter icon
+	 * 
 	 * @param adapter
 	 * @return image descriptor
 	 */
@@ -265,11 +289,13 @@ public class AdaptersHelper {
 
 	/**
 	 * Get associated adapter of a given element
+	 * 
 	 * @param element
 	 * @return adapter or null if the element was not declared in any adapter
 	 */
 	public static IAdapter getAdapter(IElement element) {
-		// loop through adapter extension points and check the declaration of elements
+		// loop through adapter extension points and check the declaration of
+		// elements
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
@@ -283,7 +309,8 @@ public class AdaptersHelper {
 							try {
 								String className = cpcon.getAttribute("element");
 								if (className != null) {
-									// matching of element class names so return the adapter
+									// matching of element class names so return
+									// the adapter
 									if (className.equals(element.getClass().getName())) {
 										return (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
 									}

@@ -8,5 +8,19 @@
             name="Graph">
       </visualisation>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.visualisations.graphs.createGraph"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.visualisation.graphs.actions.CreateArtefactGraphAction"
+               icon="IMG_OBJ_ELEMENTS"
+               id="org.but4reuse.visualisations.graphs.actions.createGraph"
+               label="Create Graph Visualisation"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
 </plugin>
