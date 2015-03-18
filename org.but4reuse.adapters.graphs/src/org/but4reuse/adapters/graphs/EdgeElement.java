@@ -43,7 +43,7 @@ public class EdgeElement extends AbstractElement {
 		for(String key : keys){
 			properties = properties + ", " + key + "=" + edge.getProperty(key);
 		}
-		return "E: id=" + edge.getId() + " fromTo=" + edge.getVertex(Direction.IN).getId() + "->" + edge.getVertex(Direction.OUT).getId() + properties;
+		return "E: id=" + edge.getId() + " fromTo=" + edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId() + properties;
 	}
 
 	public Edge getEdge() {
