@@ -44,7 +44,7 @@ public class GraphVisualisation implements IVisualisation {
 		Graph graph = createElementsGraph(adaptedModel, monitor);
 		Graph graphBlocks = createBlocksGraph(adaptedModel, monitor);
 
-		// Save it
+		// Save them
 		monitor.subTask("Saving the graph visualisations");
 
 		// TODO improve checks!
@@ -59,8 +59,12 @@ public class GraphVisualisation implements IVisualisation {
 		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
 		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
 
+		// create folder
+		File graphsFolder = new File(artefactModelFile.getParentFile(), "graphVisualisations");
+		graphsFolder.mkdir();
+
 		// Save 1
-		File file = new File(artefactModelFile.getAbsolutePath() + "_visualisation.graphml");
+		File file = new File(graphsFolder, artefactModelFile.getName() + "_elements.graphml");
 		try {
 			GraphMLWriter writer = new GraphMLWriter(graph);
 			writer.setNormalize(true);
@@ -70,7 +74,7 @@ public class GraphVisualisation implements IVisualisation {
 		}
 
 		// Save 2
-		File file2 = new File(artefactModelFile.getAbsolutePath() + "_blocks_visualisation.graphml");
+		File file2 = new File(graphsFolder, artefactModelFile.getName() + "_blocks.graphml");
 		try {
 			GraphMLWriter writer = new GraphMLWriter(graphBlocks);
 			writer.setNormalize(true);
