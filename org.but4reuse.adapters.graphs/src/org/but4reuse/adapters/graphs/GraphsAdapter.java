@@ -121,31 +121,33 @@ public class GraphsAdapter implements IAdapter {
 		// Add edges
 		// We create link vertices when they do not exist in the graph but the
 		// edge reference to it
+		int idEdge = 1;
 		int linkVertex = 0;
 		for (IElement element : elements) {
 			if (element instanceof EdgeElement) {
 				EdgeElement ee = (EdgeElement) element;
-				Vertex v1 = ee.getEdge().getVertex(Direction.IN);
-				Vertex v2 = ee.getEdge().getVertex(Direction.OUT);
+				Vertex targetVertex = ee.getEdge().getVertex(Direction.IN);
+				Vertex sourceVertex = ee.getEdge().getVertex(Direction.OUT);
 				// If they dont exist, create fake ones
-				if (graph.getVertex(v1.getId()) == null) {
-					v1 = graph.addVertex("link vertex " + linkVertex);
-					v1.setProperty("label", v1.getId());
+				if (graph.getVertex(targetVertex.getId()) == null) {
+					targetVertex = graph.addVertex("link vertex " + linkVertex);
+					targetVertex.setProperty("label", targetVertex.getId());
 					linkVertex++;
 				} else {
 					// get the current object in the graph
-					v1 = graph.getVertex(v1.getId());
+					targetVertex = graph.getVertex(targetVertex.getId());
 				}
-				if (graph.getVertex(v2.getId()) == null) {
-					v2 = graph.addVertex("link vertex " + linkVertex);
-					v2.setProperty("label", v2.getId());
+				if (graph.getVertex(sourceVertex.getId()) == null) {
+					sourceVertex = graph.addVertex("link vertex " + linkVertex);
+					sourceVertex.setProperty("label", sourceVertex.getId());
 					linkVertex++;
 				} else {
 					// get the current object in the graph
-					v2 = graph.getVertex(v2.getId());
+					sourceVertex = graph.getVertex(sourceVertex.getId());
 				}
 
-				Edge edge = graph.addEdge(ee.getEdge().getId(), v1, v2, ee.getEdge().getLabel());
+				Edge edge = graph.addEdge(idEdge, sourceVertex, targetVertex, ee.getEdge().getLabel());
+				idEdge++;
 				// adding all its properties
 				for (String key : ee.getEdge().getPropertyKeys()) {
 					edge.setProperty(key, ee.getEdge().getProperty(key));

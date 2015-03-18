@@ -3,8 +3,11 @@ package org.but4reuse.adapters.graphs;
 import java.util.Set;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.graphs.activator.Activator;
+import org.but4reuse.adapters.graphs.preferences.GraphsAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 
 /**
@@ -19,8 +22,15 @@ public class EdgeElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if(anotherElement instanceof EdgeElement){
 			EdgeElement edgeElement = (EdgeElement) anotherElement;
-			if(edgeElement.getEdge().getId().equals(edge.getId())){
-				return 1;
+			String id = Activator.getDefault().getPreferenceStore().getString(GraphsAdapterPreferencePage.EDGE_ID);
+			if(id==null || id.isEmpty()){
+				if(edgeElement.getEdge().getId().equals(edge.getId())){
+					return 1;
+				}
+			}else{
+				if(edgeElement.getEdge().getProperty(id).equals(edge.getProperty(id))){
+					return 1;
+				}
 			}
 		}
 		return 0;
@@ -33,7 +43,7 @@ public class EdgeElement extends AbstractElement {
 		for(String key : keys){
 			properties = properties + ", " + key + "=" + edge.getProperty(key);
 		}
-		return "E: id=" + edge.getId() + properties;
+		return "E: id=" + edge.getId() + " fromTo=" + edge.getVertex(Direction.IN).getId() + "->" + edge.getVertex(Direction.OUT).getId() + properties;
 	}
 
 	public Edge getEdge() {
