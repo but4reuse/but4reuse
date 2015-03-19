@@ -20,4 +20,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/blueprints-core-2.6.0.jar,
  .
-Import-Package: graphs
