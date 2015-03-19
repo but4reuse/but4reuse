@@ -73,18 +73,19 @@ public class ConstructSeparatelyViewAction implements IViewActionDelegate {
 				Object active = kind;
 				if (active instanceof BlockMarkupKind) {
 					Block block = ((BlockMarkupKind) active).getBlock();
-					
+
 					// Separate by adapter
 					elementsMapByAdapter = new HashMap<String, List<IElement>>();
 					adaptersMap = new HashMap<String, IAdapter>();
 					numberOfElements = 0;
-					
+
 					try {
-						blockConstructionURI = new URI(constructionURI.toString()+block.getName().replaceAll(" ", "_")+"/");
+						blockConstructionURI = new URI(constructionURI.toString()
+								+ block.getName().replaceAll(" ", "_") + "/");
 					} catch (URISyntaxException e1) {
 						e1.printStackTrace();
 					}
-					
+
 					for (BlockElement blockElement : block.getOwnedBlockElements()) {
 						// TODO construct, for the moment we get the first
 						// element of a blockelement
@@ -106,7 +107,7 @@ public class ConstructSeparatelyViewAction implements IViewActionDelegate {
 						numberOfElements++;
 						elementsMapByAdapter.put(key, list);
 					}
-					
+
 					// Launch Progress dialog
 					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
 							.getActiveShell());
@@ -120,7 +121,7 @@ public class ConstructSeparatelyViewAction implements IViewActionDelegate {
 								// Number of adapters + total numbers of
 								// elements
 								int totalWork = adaptersMap.keySet().size() + numberOfElements;
-								monitor.beginTask("Construction", totalWork);
+								monitor.beginTask("Construction " + blockConstructionURI, totalWork);
 
 								// Construct through adapter
 								for (String key : adaptersMap.keySet()) {
