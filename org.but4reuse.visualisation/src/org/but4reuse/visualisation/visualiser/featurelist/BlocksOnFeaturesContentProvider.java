@@ -55,7 +55,8 @@ public class BlocksOnFeaturesContentProvider extends SimpleContentProvider {
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			IMember member = new SimpleMember(block.getName());
 			member.setSize(block.getOwnedBlockElements().size());
-			member.setTooltip(member.getFullname() + "\nElements: " + block.getOwnedBlockElements().size());
+			// TODO Do not touch tooltip, unfortunately it is used by Visualiser for the action when we right click an artefact
+			// member.setTooltip(member.getFullname() + "\nElements: " + block.getOwnedBlockElements().size());
 			
 			// Add stripes
 			for(Feature feature : featureList.getOwnedFeatures()){

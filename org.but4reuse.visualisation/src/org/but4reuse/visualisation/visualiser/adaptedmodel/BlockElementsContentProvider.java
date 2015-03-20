@@ -58,8 +58,8 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
 			IMember member = new SimpleMember(adaptedArtefact.getArtefact().getName());
 			member.setSize(adaptedArtefact.getOwnedElementWrappers().size());
-			member.setTooltip(member.getFullname() + "\nElements: " + adaptedArtefact.getOwnedElementWrappers().size());
-
+			// TODO Do not touch tooltip, unfortunately it is used by Visualiser for the action when we right click an artefact
+			// member.setTooltip(member.getFullname() + "\nElements: " + adaptedArtefact.getOwnedElementWrappers().size());
 			int i = 0;
 			for (ElementWrapper elementWrapper : adaptedArtefact.getOwnedElementWrappers()) {
 				List<BlockElement> blockElements = elementWrapper.getBlockElements();
