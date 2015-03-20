@@ -2,6 +2,8 @@ package org.but4reuse.adapters.ui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
@@ -107,6 +109,14 @@ public class AdaptersSelectionDialog {
 				}
 			}
 		}
+		
+		// Sort
+		Collections.sort(allAdapters, new Comparator<IAdapter>(){
+			@Override
+			public int compare(IAdapter o1, IAdapter o2) {
+				return AdaptersHelper.getAdapterName(o1).compareTo(AdaptersHelper.getAdapterName(o2));
+			}
+		});
 
 		// Dialog
 		ListSelectionDialog lsd = new ListSelectionDialog(Display.getDefault().getActiveShell(), allAdapters,
@@ -125,6 +135,7 @@ public class AdaptersSelectionDialog {
 				}, "Select the Adapter");
 		lsd.setInitialSelections(correctAdapters2.toArray());
 		lsd.setTitle(title);
+		lsd.setHelpAvailable(false);
 
 		// Open and process
 		if (lsd.open() == Window.OK && lsd.getResult() != null && lsd.getResult().length > 0) {
