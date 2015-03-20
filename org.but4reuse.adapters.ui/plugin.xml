@@ -75,5 +75,17 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.reconstructall"
+            targetID="org.eclipse.contribution.visualiser.views.Visualiser">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ReConstructAllAction"
+               icon="icons/reconstructAll.png"
+               id="org.but4reuse.adapters.ui.reconstructall.action"
+               label="Re-Construct All Artefacts"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
       </extension>
 </plugin>

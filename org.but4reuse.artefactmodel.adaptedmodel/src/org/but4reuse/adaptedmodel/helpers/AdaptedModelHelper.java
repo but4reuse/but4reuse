@@ -146,4 +146,22 @@ public class AdaptedModelHelper {
 		return null;
 	}
 
+	/**
+	 * Get artefact name
+	 * @param artefact
+	 * @return
+	 */
+	public static String getArtefactName(Artefact artefact) {
+		// Try with the name
+		String name = artefact.getName();
+		if(name==null || name.length()==0){
+			// Get last fragment of uri otherwise
+			name = artefact.getArtefactURI();
+			if (name.contains("/")) {
+				name = name.substring(name.lastIndexOf("/") + 1, name.length());
+			}
+		}
+		return name;
+	}
+
 }
