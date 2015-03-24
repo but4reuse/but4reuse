@@ -305,4 +305,14 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * Replace one file with another
+	 * @param oldFile
+	 * @param newFile
+	 */
+	public static void replace(File oldFile, File newFile) {
+		oldFile.delete();
+		newFile.renameTo(oldFile);
+	}
+
 }

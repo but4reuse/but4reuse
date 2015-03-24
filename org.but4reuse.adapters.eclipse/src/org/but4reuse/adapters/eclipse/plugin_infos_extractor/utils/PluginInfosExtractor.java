@@ -5,13 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.but4reuse.adapters.eclipse.PluginElement;
+import org.but4reuse.utils.files.FileUtils;
 
 public class PluginInfosExtractor {
+	public static final String BUNDLESINFO_RELATIVEPATH = "configuration/org.eclipse.equinox.simpleconfigurator/bundles.info";
 	private static final String BUNDLE_VERSION = "Bundle-Version";
 	private static final String REQUIRE_BUNDLE = "Require-Bundle";
 	private static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
@@ -117,5 +123,40 @@ public class PluginInfosExtractor {
 				plugin.removeRequire_bundle(previous);
 			}
 		}
+	}
+	
+	public static Map<String, String> createBundlesInfoMap(URI uri) {
+		Map<String, String> map = new HashMap<String, String>();
+		File file = FileUtils.getFile(uri);
+		File bundlesInfo = new File(file.getAbsolutePath() + "/" + BUNDLESINFO_RELATIVEPATH);
+		if (bundlesInfo.exists()) {
+			List<String> bundles = FileUtils.getLinesOfFile(bundlesInfo);
+			for(String info : bundles){
+				int comma = info.indexOf(",");
+				if(comma!=-1){
+					map.put(info.substring(0,comma), info);
+				}
+			}
+		}
+		return map;
+	}
+	
+	/**
+	 * Check if a file is a plugin
+	 * @param file
+	 * @return true if it is a plugin
+	 */
+	public static boolean isAPlugin(File file) {
+		if (file.getParentFile().getName().equals("plugins") || file.getParentFile().getName().equals("dropins")) {
+			if (file.isDirectory()) {
+				File manif = new File(file.getAbsolutePath() + "/META-INF/MANIFEST.MF");
+				if (manif.exists()) {
+					return true;
+				}
+			} else if (FileUtils.getExtension(file).equalsIgnoreCase("jar")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

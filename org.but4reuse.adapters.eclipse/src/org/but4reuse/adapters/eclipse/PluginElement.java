@@ -14,6 +14,7 @@ public class PluginElement extends FileElement {
 
 	private String pluginSymbName;
 	private String pluginVersion;
+	private String bundleInfoLine;
 	// each pluginElement in require_Bundles, the list of require_Bundle will be
 	// empty.
 	// because we do not know the dependencies
@@ -90,6 +91,14 @@ public class PluginElement extends FileElement {
 
 	public void setPluginVersion(String pluginVersion) {
 		this.pluginVersion = pluginVersion;
+	}
+	
+	public String getBundleInfoLine() {
+		return bundleInfoLine;
+	}
+
+	public void setBundleInfoLine(String bundleInfoLine) {
+		this.bundleInfoLine = bundleInfoLine;
 	}
 	
 	@Override

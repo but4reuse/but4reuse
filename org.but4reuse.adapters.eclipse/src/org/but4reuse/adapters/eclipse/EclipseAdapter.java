@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
@@ -46,6 +47,8 @@ public class EclipseAdapter implements IAdapter {
 		return false;
 	}
 
+	Map<String, String> bundlesInfoLines;
+
 	/**
 	 * Provides the atomic elements (plugins) this distribution is made of
 	 * 
@@ -55,9 +58,15 @@ public class EclipseAdapter implements IAdapter {
 	 */
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
+
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
+
+		// A hashmap of bundle symbolic names and the complete line in the
+		// bundles.info file
+		bundlesInfoLines = PluginInfosExtractor.createBundlesInfoMap(uri);
+
 		// start the containment tree traversal, with null as initial container
 		adapt(file, elements, null);
 
@@ -82,7 +91,7 @@ public class EclipseAdapter implements IAdapter {
 	 */
 	private void adapt(File file, List<IElement> elements, IElement container) {
 		FileElement newElement = null;
-		if (isAPlugin(file)) {
+		if (PluginInfosExtractor.isAPlugin(file)) {
 			try {
 				if (file.isDirectory()) {
 					newElement = PluginInfosExtractor.getPluginInfosFromManifest(file.getAbsolutePath()
@@ -106,6 +115,14 @@ public class EclipseAdapter implements IAdapter {
 			newElement.addDependency("container", container);
 		}
 
+		// Add the bundles info
+		if (newElement instanceof PluginElement) {
+			String line = bundlesInfoLines.get(((PluginElement) newElement).getPluginSymbName());
+			// in the case of source code plugins, line will be null but no
+			// problem
+			((PluginElement) newElement).setBundleInfoLine(line);
+		}
+
 		// Add to the list
 		elements.add(newElement);
 
@@ -118,22 +135,10 @@ public class EclipseAdapter implements IAdapter {
 		}
 	}
 
-	private boolean isAPlugin(File file) {
-		if (file.getParentFile().getName().equals("plugins") || file.getParentFile().getName().equals("dropins")) {
-			if (file.isDirectory()) {
-				File manif = new File(file.getAbsolutePath() + "/META-INF/MANIFEST.MF");
-				if (manif.exists()) {
-					return true;
-				}
-			} else if (FileUtils.getExtension(file).equalsIgnoreCase("jar")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
+		boolean constructBundlesInfo = false;
+		String bundlesInfoContent = "#version=1\n";
 		for (IElement element : elements) {
 			// check user cancel for each element
 			if (!monitor.isCanceled()) {
@@ -141,6 +146,9 @@ public class EclipseAdapter implements IAdapter {
 				monitor.subTask(element.getText());
 				if (element instanceof FileElement) {
 					FileElement fileElement = (FileElement) element;
+					if (fileElement.getRelativeURI().toString().equals(PluginInfosExtractor.BUNDLESINFO_RELATIVEPATH)) {
+						constructBundlesInfo = true;
+					}
 					try {
 						// Create parent folders structure
 						URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
@@ -158,8 +166,36 @@ public class EclipseAdapter implements IAdapter {
 						e.printStackTrace();
 					}
 				}
+				// prepare the bundles.info configuration file
+				// just in case we need to construct it
+				if (element instanceof PluginElement) {
+					PluginElement pluginElement = (PluginElement) element;
+					String line = pluginElement.getBundleInfoLine();
+					if (line != null) {
+						String[] lineFields = line.split(",");
+						bundlesInfoContent += pluginElement.getPluginSymbName() + ",";
+						bundlesInfoContent += pluginElement.getPluginVersion() + ",";
+						bundlesInfoContent += pluginElement.getRelativeURI() + ",";
+						bundlesInfoContent += lineFields[3] + ",";
+						bundlesInfoContent += lineFields[4] + "\n";
+					}
+				}
 			}
 			monitor.worked(1);
+		}
+		// Replace bundles.info content
+		if (constructBundlesInfo) {
+			try {
+				File tmpFile = File.createTempFile("tempBundles", "info");
+				FileUtils.appendToFile(tmpFile, bundlesInfoContent);
+				File file = FileUtils.getFile(uri);
+				File bundlesInfo = new File(file.getAbsolutePath() + "/"
+						+ PluginInfosExtractor.BUNDLESINFO_RELATIVEPATH);
+				FileUtils.replace(bundlesInfo, tmpFile);
+				tmpFile.deleteOnExit();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
