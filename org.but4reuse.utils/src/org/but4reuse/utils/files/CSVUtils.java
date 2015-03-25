@@ -44,4 +44,35 @@ public class CSVUtils {
 		}
 	}
 	
+	/**
+	 * export a matrix to a comma separated value (csv) file
+	 * @param uri
+	 * @param a matrix (line, columns) of objects
+	 */
+	public static void exportCSV(URI uri, Object[][] texts){
+		// Create csv file
+		String csvText = "";
+		for (Object[] list : texts) {
+			for(Object text : list){
+				String a = "";
+				if(text !=null){
+					a = text.toString();
+				}
+				csvText = csvText + a + ";";
+			}
+			csvText = csvText.substring(0, csvText.length()-1);
+			csvText = csvText + "\n";
+		}
+		// Save file
+		File f = FileUtils.getFile(uri);
+		try {
+			FileUtils.createFile(f);
+			BufferedWriter output = new BufferedWriter(new FileWriter(f));
+			output.append(csvText);
+			output.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

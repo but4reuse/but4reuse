@@ -1,5 +1,7 @@
 package org.but4reuse.visualisation.visualiser.featurelist;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,12 @@ import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.utils.files.CSVUtils;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
@@ -29,9 +35,13 @@ import org.eclipse.swt.widgets.TableItem;
  */
 public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 	String[][] matrix;
-
+	URI adaptedModelURI;
+	
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
+		// TODO improve how to get this uri
+		adaptedModelURI = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
+		
 		matrix = null;
 		if (featureList != null) {
 			int featuresSize = featureList.getOwnedFeatures().size() + 1;
@@ -119,6 +129,27 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 					shell.open();
 				}
 			});
+			// Text version
+			// TODO improve checks!
+			// Here we try to find the folder to save it
+			java.net.URI uri2 = null;
+			try {
+				uri2 = new java.net.URI(adaptedModelURI.toString());
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
+			IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
+			File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
+
+			// create folder
+			File graphsFolder = new File(artefactModelFile.getParentFile(), "featureLocation");
+			graphsFolder.mkdir();
+			
+			File file = new File(graphsFolder, artefactModelFile.getName() + "_featuresAndBlocks.csv");
+			CSVUtils.exportCSV(file.toURI(), matrix);
+			
+			// TODO improve this
+			WorkbenchUtils.refreshAllWorkspace();
 		}
 	}
 

@@ -72,7 +72,7 @@ public class FileUtils {
 	 * Try to return a file related to a uri
 	 * 
 	 * @param uri
-	 * @return
+	 * @return the file or null if not found
 	 */
 	public static File getFile(URI uri) {
 		File file = null;

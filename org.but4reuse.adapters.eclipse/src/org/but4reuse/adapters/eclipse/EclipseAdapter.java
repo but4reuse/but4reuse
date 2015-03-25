@@ -134,8 +134,6 @@ public class EclipseAdapter implements IAdapter {
 				for (File subFile : files) {
 					adapt(subFile, elements, newElement);
 				}
-			} else {
-				System.out.println();
 			}
 		}
 	}

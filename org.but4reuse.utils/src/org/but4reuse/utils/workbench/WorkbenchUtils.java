@@ -135,6 +135,9 @@ public class WorkbenchUtils {
 		if(resource instanceof IProject){
 			// for some reason rawlocation in projects return null
 			IProject project = (IProject)resource;
+			if(!project.exists()){
+				return null;
+			}
 			return project.getLocation().makeAbsolute().toFile();
 		}
 		if(resource.getRawLocation()!=null){
