@@ -128,9 +128,14 @@ public class EclipseAdapter implements IAdapter {
 
 		// Go for the files in case of folder
 		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			for (File subFile : files) {
-				adapt(subFile, elements, newElement);
+			// Exclude the features folder
+			if (!newElement.getRelativeURI().toString().equals("features/")) {
+				File[] files = file.listFiles();
+				for (File subFile : files) {
+					adapt(subFile, elements, newElement);
+				}
+			} else {
+				System.out.println();
 			}
 		}
 	}
