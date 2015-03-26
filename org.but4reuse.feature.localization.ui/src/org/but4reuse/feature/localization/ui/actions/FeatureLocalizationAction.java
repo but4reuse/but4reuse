@@ -1,6 +1,7 @@
 package org.but4reuse.feature.localization.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -13,6 +14,9 @@ import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
 import org.but4reuse.blockcreation.helper.BlockCreationHelper;
+import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.IConstraintsDiscovery;
+import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -55,8 +59,8 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 
-								// Adapting each active artefact + calculating blocks + prepare visualisations
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + VisualisationsHelper.getAllVisualisations().size();
+								// Adapting each active artefact + calculating blocks + constraints discovery + prepare visualisations
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
@@ -68,8 +72,19 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);
-								
 								monitor.worked(1);
+								
+								monitor.subTask("Structural constraints discovery");
+								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper.getSelectedConstraintsDiscoveryAlgorithms();
+								List<IConstraint> constraints = new ArrayList<IConstraint>();
+								for(IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms){
+									List<IConstraint> discovered = constraintsDiscovery.discover(featureList, adaptedModel,
+											null, monitor);
+									constraints.addAll(discovered);
+								}
+								adaptedModel.setConstraints(constraints);
+								monitor.worked(1);
+								
 								monitor.subTask("Preparing visualisations");
 								VisualisationsHelper.notifyVisualisations(featureList, adaptedModel, null, monitor);
 								

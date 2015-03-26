@@ -1,6 +1,7 @@
 package org.but4reuse.feature.identification.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -15,7 +16,7 @@ import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
 import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
-import org.but4reuse.feature.constraints.impl.BinaryRelationConstraintsDiscovery;
+import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -70,9 +71,13 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								monitor.worked(1);
 								
 								monitor.subTask("Structural constraints discovery");
-								IConstraintsDiscovery constraintsDiscoveryAlgorithm = new BinaryRelationConstraintsDiscovery();
-								List<IConstraint> constraints = constraintsDiscoveryAlgorithm.discover(null, adaptedModel,
-										null, monitor);
+								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper.getSelectedConstraintsDiscoveryAlgorithms();
+								List<IConstraint> constraints = new ArrayList<IConstraint>();
+								for(IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms){
+									List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel,
+											null, monitor);
+									constraints.addAll(discovered);
+								}
 								adaptedModel.setConstraints(constraints);
 								monitor.worked(1);
 								

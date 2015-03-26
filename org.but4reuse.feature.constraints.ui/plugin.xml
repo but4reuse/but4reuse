@@ -19,5 +19,13 @@
             restorable="true">
       </view>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.feature.constraints.ui.preferences.ConstraintsDiscoveryPreferencePage"
+            id="org.but4reuse.constraints.discovery.ui.page"
+            name="Constraints discovery">
+      </page>
+   </extension>
 </plugin>
