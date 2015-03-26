@@ -11,9 +11,12 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.files.CSVUtils;
+import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
 import org.eclipse.core.resources.IResource;
@@ -36,9 +39,14 @@ import org.eclipse.swt.widgets.TableItem;
 public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 	String[][] matrix;
 	URI adaptedModelURI;
+	FeatureList featureList;
+	AdaptedModel adaptedModel;
 	
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
+		this.featureList = featureList;
+		this.adaptedModel = adaptedModel;
+		
 		// TODO improve how to get this uri
 		adaptedModelURI = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
 		
@@ -127,9 +135,53 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 					shell.pack();
 					shell.setText("Feature-Specific heuristic heatmap");
 					shell.open();
+					
+					
+					
+					// Heuristic
+					String text = "";
+					List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
+					for (int r = 1; r < matrix.length; r++) {
+						String[] cells = matrix[r];
+						Feature feature = featureList.getOwnedFeatures().get(r-1);
+						List<Block> blocks = new ArrayList<Block>();
+						for (int ce = cells.length -1; ce > 0; ce--) {
+							if(Double.parseDouble(matrix[r][ce])==1){
+								Block block = adaptedModel.getOwnedBlocks().get(ce-1);
+								blocks.add(block);
+							}
+						}
+						// Calculate reduced list
+						List<Block> toBeRemoved = new ArrayList<Block>();
+						for(Block block : blocks){
+							for(IConstraint c : constraints){
+								if(c.getType().equals(IConstraint.REQUIRES)){
+									if(c.getBlock2().equals(block) && blocks.contains(c.getBlock1())){
+										toBeRemoved.add(block);
+										break;
+									}
+								}
+							}
+						}
+						blocks.removeAll(toBeRemoved);
+						text += feature.getName() + " = ";
+						for(Block b : blocks){
+							text += b.getName() + ", ";
+						}
+						// remove last comma
+						if(!blocks.isEmpty()){
+							text = text.substring(0, text.length()-2);
+						}
+						text += "\n";
+					}
+					
+					Shell shell2 = new Shell(display);
+					ScrollableMessageDialog m = new ScrollableMessageDialog(shell2, "Feature-Specific Heuristic result", "The Blocks that ALWAYS appear in a feature, removing the Blocks that are required from other Blocks of this list", text);
+					m.open();
 				}
 			});
-			// Text version
+			
+			// CSV version of the matrix
 			// TODO improve checks!
 			// Here we try to find the folder to save it
 			java.net.URI uri2 = null;
