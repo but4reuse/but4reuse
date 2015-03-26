@@ -148,13 +148,14 @@ public class AdaptedModelHelper {
 
 	/**
 	 * Get artefact name
+	 * 
 	 * @param artefact
 	 * @return
 	 */
 	public static String getArtefactName(Artefact artefact) {
 		// Try with the name
 		String name = artefact.getName();
-		if(name==null || name.length()==0){
+		if (name == null || name.length() == 0) {
 			// Get last fragment of uri otherwise
 			name = artefact.getArtefactURI();
 			if (name.contains("/")) {
@@ -162,6 +163,25 @@ public class AdaptedModelHelper {
 			}
 		}
 		return name;
+	}
+
+	/**
+	 * Return the list of blocks that are present in an Adapted artefact
+	 * 
+	 * @param adaptedArtefact
+	 * @return the list of blocks
+	 */
+	public static List<Block> getBlocksOfAdaptedArtefact(AdaptedArtefact adaptedArtefact) {
+		List<Block> blocks = new ArrayList<Block>();
+		for (ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()) {
+			for (BlockElement be : ew.getBlockElements()) {
+				Block block = (Block) be.eContainer();
+				if (!blocks.contains(block)) {
+					blocks.add(block);
+				}
+			}
+		}
+		return blocks;
 	}
 
 }

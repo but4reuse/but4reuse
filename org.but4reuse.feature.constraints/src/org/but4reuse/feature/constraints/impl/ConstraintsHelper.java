@@ -16,7 +16,7 @@ public class ConstraintsHelper {
 	public static String getText(List<IConstraint> constraints) {
 		String text = "";
 		for (IConstraint constraint : constraints) {
-			text += getText(constraint) + "\n";
+			text += constraint.getText() + "\n";
 		}
 		if (text.length() != 0) {
 			// remove last end of line
@@ -37,12 +37,8 @@ public class ConstraintsHelper {
 		return text;
 	}
 
-	public static String getText(IConstraint constraint) {
-		return constraint.getBlock1().getName() + " " + constraint.getType() + " " + constraint.getBlock2().getName();
-	}
-
 	public static String getTextWithExplanations(IConstraint constraint) {
-		return getText(constraint) + " (" + constraint.getNumberOfReasons() + " reasons) "
+		return constraint.getText() + " (" + constraint.getNumberOfReasons() + " reasons) "
 				+ constraint.getExplanations();
 	}
 

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Weka
+Bundle-SymbolicName: org.but4reuse.constraints.discovery.weka;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.constraints.discovery.weka.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.feature.constraints,
+ org.but4reuse.featurelist,
+ org.but4reuse.adaptedmodel
+Bundle-ActivationPolicy: lazy
+Export-Package: org.but4reuse.constraints.discovery.weka
+Bundle-ClassPath: libs/weka.jar,
+ .

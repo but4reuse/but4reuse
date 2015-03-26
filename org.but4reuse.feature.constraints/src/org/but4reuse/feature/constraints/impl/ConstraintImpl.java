@@ -14,6 +14,7 @@ public class ConstraintImpl implements IConstraint {
 	Block block1;
 	Block block2;
 	String type;
+	String text;
 	List<String> explanations;
 	int numberOfReasons;
 	
@@ -67,6 +68,18 @@ public class ConstraintImpl implements IConstraint {
 		this.numberOfReasons = numberOfReasons;
 	}
 
+	@Override
+	public String getText() {
+		if(getType().equals(IConstraint.FREETEXT)){
+			return text;
+		}
+		return getBlock1().getName() + " " + getType() + " " + getBlock2().getName();
+	}
+
+	@Override
+	public void setText(String text) {
+		this.text = text;
+	}
 
 
 }

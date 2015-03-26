@@ -11,6 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 public interface IConstraint {
 	String REQUIRES = "requires";
 	String EXCLUDES = "mutually excludes";
+	String FREETEXT = "constraint";
 	
 	public Block getBlock1();
 	public Block getBlock2();
@@ -22,4 +23,6 @@ public interface IConstraint {
 	public void setExplanations(List<String> explanations);
 	public int getNumberOfReasons();
 	public void setNumberOfReasons(int numberOfReasons);
+	public String getText();
+	public void setText(String text);
 }

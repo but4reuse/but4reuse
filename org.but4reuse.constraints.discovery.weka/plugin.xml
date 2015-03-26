@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.constraints.discovery">
+      <constraintsDiscovery
+            class="org.but4reuse.constraints.discovery.weka.APrioriConstraintsDiscovery"
+            name="Apriori association rules">
+      </constraintsDiscovery>
+   </extension>
+
+</plugin>
