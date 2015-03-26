@@ -8,5 +8,19 @@
             name="Apriori association rules">
       </constraintsDiscovery>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.but4reuse.constraints.discovery.exportWekaFile"
+            targetID="org.eclipse.contribution.visualiser.views.Visualiser">
+         <action
+               class="org.but4reuse.constraints.discovery.weka.actions.ExportWekaFileAction"
+               icon="icons/createArff.png"
+               id="org.but4reuse.constraints.discovery.exportWekaFile.action"
+               label="Export Arff file for Weka"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
 </plugin>

@@ -8,8 +8,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.feature.constraints,
  org.but4reuse.featurelist,
- org.but4reuse.adaptedmodel
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.utils,
+ org.eclipse.contribution.visualiser,
+ org.but4reuse.visualisation,
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.constraints.discovery.weka
+Export-Package: org.but4reuse.constraints.discovery.weka,
+ org.but4reuse.constraints.discovery.weka.actions
 Bundle-ClassPath: libs/weka.jar,
  .

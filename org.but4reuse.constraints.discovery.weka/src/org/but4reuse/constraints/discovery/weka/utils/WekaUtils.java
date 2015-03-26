@@ -1,5 +1,7 @@
 package org.but4reuse.constraints.discovery.weka.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +15,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
 
 /**
  * Weka utils
@@ -62,6 +65,19 @@ public class WekaUtils {
 			instances.add(instance);
 		}
 		return instances;
+	}
+
+	/**
+	 * Save arff file
+	 * @param file
+	 * @param instances
+	 * @throws IOException
+	 */
+	public static void save(File file, Instances instances) throws IOException {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(instances);
+		saver.setFile(file);
+		saver.writeBatch();
 	}
 
 }
