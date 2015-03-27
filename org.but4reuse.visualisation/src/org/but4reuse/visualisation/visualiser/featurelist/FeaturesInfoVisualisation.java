@@ -1,10 +1,10 @@
 package org.but4reuse.visualisation.visualiser.featurelist;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
@@ -34,35 +34,24 @@ public class FeaturesInfoVisualisation implements IVisualisation {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				String text = "";
+				StringBuilder text = new StringBuilder();
 				for (Feature feature : featureList.getOwnedFeatures()) {
-					text += feature.getName() + " = ";
-					List<Block> blocks = getCorrespondingBlocks(feature);
+					text.append(feature.getName() + " = ");
+					List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
 					for(Block b : blocks){
-						text += b.getName() + ", ";
+						text.append(b.getName() + ", ");
 					}
 					// remove last comma
 					if(!blocks.isEmpty()){
-						text = text.substring(0, text.length()-2);
+						text.setLength(text.length()-2);
 					}
-					text += "\n";
+					text.append("\n");
 				}
 
 				Display display = Display.getDefault();
 				Shell shell = new Shell(display);
-				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Features info", "", text);
+				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Features info", "", text.toString());
 				m.open();
-			}
-			
-			public List<Block> getCorrespondingBlocks(Feature feature) {
-				List<Block> correspondingBlocks = new ArrayList<Block>();
-				for (Block block : adaptedModel.getOwnedBlocks()) {
-					List<Feature> features = block.getCorrespondingFeatures();
-					if (features != null && features.contains(feature) && !correspondingBlocks.contains(block)) {
-						correspondingBlocks.add(block);
-					}
-				}
-				return correspondingBlocks;
 			}
 		});
 	}

@@ -67,17 +67,18 @@ public class ShowElementsAction implements IObjectActionDelegate {
 								}
 							});
 
-							String sText = "";
+							// Create the text to be shown
+							StringBuilder sText = new StringBuilder();
 							for (String t : text) {
 								t = t.replaceAll("\n", " ").replaceAll("\r", "");
-								sText = sText + t + "\n";
+								sText.append(t + "\n");
 							}
 							String name = artefact.getName();
 							if (name == null || name.length() == 0) {
 								name = artefact.getArtefactURI();
 							}
 							ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent()
-									.getActiveShell(), name, text.size() + " Elements", sText);
+									.getActiveShell(), name, text.size() + " Elements", sText.toString());
 							dialog.open();
 						} catch (Exception e) {
 							e.printStackTrace();

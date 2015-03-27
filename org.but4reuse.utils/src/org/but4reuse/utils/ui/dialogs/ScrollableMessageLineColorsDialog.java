@@ -29,6 +29,7 @@ public class ScrollableMessageLineColorsDialog extends TitleAreaDialog {
         this.scrollableText = scrollableText;
         this.lines = lines;
         this.colors = colors;
+        setHelpAvailable(false);
     }
 
     @Override

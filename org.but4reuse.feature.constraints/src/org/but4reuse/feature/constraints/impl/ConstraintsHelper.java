@@ -1,6 +1,7 @@
 package org.but4reuse.feature.constraints.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -21,27 +22,26 @@ import org.but4reuse.featurelist.FeatureList;
 public class ConstraintsHelper {
 
 	public static String getText(List<IConstraint> constraints) {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		for (IConstraint constraint : constraints) {
-			text += constraint.getText() + "\n";
+			text.append(constraint.getText() + "\n");
 		}
-		if (text.length() != 0) {
-			// remove last end of line
-			text = text.substring(0, text.length() - 1);
+		if (text.length() > 0) {
+			text.setLength(text.length() - 1);
 		}
-		return text;
+		return text.toString();
 	}
 
 	public static String getTextWithExplanations(List<IConstraint> constraints) {
-		String text = "";
+		StringBuilder text = new StringBuilder();
 		for (IConstraint constraint : constraints) {
-			text += getTextWithExplanations(constraint) + "\n\n";
+			text.append(getTextWithExplanations(constraint) + "\n\n");
 		}
-		if (text.length() != 0) {
+		if (text.length() > 0) {
 			// remove last end of line
-			text = text.substring(0, text.length() - 1);
+			text.setLength(text.length() - 1);
 		}
-		return text;
+		return text.toString();
 	}
 
 	public static String getTextWithExplanations(IConstraint constraint) {
@@ -69,9 +69,9 @@ public class ConstraintsHelper {
 		return constraints;
 	}
 
-
 	/**
 	 * Create matrix
+	 * 
 	 * @param featureList
 	 * @param adaptedModel
 	 * @return
@@ -106,9 +106,10 @@ public class ConstraintsHelper {
 		}
 		return matrix;
 	}
-	
+
 	/**
 	 * Percentage of one block appearing in a given feature
+	 * 
 	 * @param block
 	 * @param feature
 	 * @return
@@ -130,5 +131,78 @@ public class ConstraintsHelper {
 			}
 		}
 		return new Double(foundArtefacts.size()) / new Double(artefacts.size());
+	}
+
+	/**
+	 * Calculate feature constraints based on block constraints
+	 * @param featureList
+	 * @param adaptedModel
+	 * @return a non null list of constraints
+	 */
+	public static List<IConstraint> getFeatureConstraints(FeatureList featureList, AdaptedModel adaptedModel) {
+		List<IConstraint> featureConstraints = new ArrayList<IConstraint>();
+		List<IConstraint> blockConstraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
+		// loop all the constraints
+		HashSet<String> alreadyAdded = new HashSet<String>();
+		for (IConstraint constraint : blockConstraints) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				Block block1 = constraint.getBlock1();
+				Block block2 = constraint.getBlock2();
+				List<Feature> block1Features = block1.getCorrespondingFeatures();
+				List<Feature> block2Features = block2.getCorrespondingFeatures();
+				// check if they share the same feature
+				boolean sameFeatureFound = false;
+				for (Feature f1 : block1Features) {
+					for (Feature f2 : block2Features) {
+						if (f1 == f2) {
+							sameFeatureFound = true;
+							break;
+						}
+					}
+					if (sameFeatureFound) {
+						break;
+					}
+				}
+				// wow, the blocks were in different features... constraint!
+				if (!sameFeatureFound) {
+					for (Feature f1 : block1Features) {
+						for (Feature f2 : block2Features) {
+							String text = f1.getName() + " requires " + f2.getName();
+							if (!alreadyAdded.contains(text)) {
+								alreadyAdded.add(text);
+								// constraint
+								IConstraint cons = new ConstraintImpl();
+								cons.setType(IConstraint.FREETEXT);
+								cons.setText(text);
+								List<String> explanations = new ArrayList<String>();
+								explanations.add("Maybe more, but at least:" + constraint.getText());
+								cons.setExplanations(explanations);
+								cons.setNumberOfReasons(1);
+								featureConstraints.add(cons);
+							}
+						}
+					}
+				}
+			}
+		}
+		return featureConstraints;
+	}
+
+	/**
+	 * TODO Move this to an appropriate helper. Here now to avoid dependency
+	 * cycles
+	 * 
+	 * @param feature
+	 * @return
+	 */
+	public static List<Block> getCorrespondingBlocks(AdaptedModel adaptedModel, Feature feature) {
+		List<Block> correspondingBlocks = new ArrayList<Block>();
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			List<Feature> features = block.getCorrespondingFeatures();
+			if (features != null && features.contains(feature) && !correspondingBlocks.contains(block)) {
+				correspondingBlocks.add(block);
+			}
+		}
+		return correspondingBlocks;
 	}
 }

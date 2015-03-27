@@ -22,6 +22,7 @@ public class ScrollableMessageDialog extends TitleAreaDialog {
         this.title = title;
         this.text = text;
         this.scrollableText = scrollableText;
+        setHelpAvailable(false);
     }
 
     @Override
@@ -50,7 +51,6 @@ public class ScrollableMessageDialog extends TitleAreaDialog {
         //getShell ().setSize (300, 300);
         setTitle(title);
         setMessage(text, IMessageProvider.INFORMATION);
-
     }
 
     @Override

@@ -20,24 +20,24 @@ public class CSVUtils {
 	 */
 	public static void exportCSV(URI uri, List<List<Object>> texts){
 		// Create csv file
-		String csvText = "";
+		StringBuilder csvText = new StringBuilder();
 		for (List<?> list : texts) {
 			for(Object text : list){
 				String a = "";
 				if(text !=null){
 					a = text.toString();
 				}
-				csvText = csvText + a + ";";
+				csvText.append(a + ";");
 			}
-			csvText = csvText.substring(0, csvText.length()-1);
-			csvText = csvText + "\n";
+			csvText.setLength(csvText.length()-1);
+			csvText.append("\n");
 		}
 		// Save file
 		File f = FileUtils.getFile(uri);
 		try {
 			FileUtils.createFile(f);
 			BufferedWriter output = new BufferedWriter(new FileWriter(f));
-			output.append(csvText);
+			output.append(csvText.toString());
 			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -51,24 +51,24 @@ public class CSVUtils {
 	 */
 	public static void exportCSV(URI uri, Object[][] texts){
 		// Create csv file
-		String csvText = "";
+		StringBuilder csvText = new StringBuilder();
 		for (Object[] list : texts) {
 			for(Object text : list){
 				String a = "";
 				if(text !=null){
 					a = text.toString();
 				}
-				csvText = csvText + a + ";";
+				csvText.append(a + ";");
 			}
-			csvText = csvText.substring(0, csvText.length()-1);
-			csvText = csvText + "\n";
+			csvText.setLength(csvText.length()-1);
+			csvText.append("\n");
 		}
 		// Save file
 		File f = FileUtils.getFile(uri);
 		try {
 			FileUtils.createFile(f);
 			BufferedWriter output = new BufferedWriter(new FileWriter(f));
-			output.append(csvText);
+			output.append(csvText.toString());
 			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();

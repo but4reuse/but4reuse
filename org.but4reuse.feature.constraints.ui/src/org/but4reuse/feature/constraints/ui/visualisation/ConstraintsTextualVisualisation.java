@@ -1,6 +1,5 @@
 package org.but4reuse.feature.constraints.ui.visualisation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -20,21 +19,15 @@ import org.eclipse.swt.widgets.Display;
  */
 public class ConstraintsTextualVisualisation implements IVisualisation {
 
-	String message;
+	StringBuilder message;
+	AdaptedModel adaptedModel;
+	FeatureList featureList;
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
-		Object o = adaptedModel.getConstraints();
-		List<IConstraint> constraints = new ArrayList<IConstraint>();
-		if (o != null && (o instanceof List<?>)) {
-			constraints = (List<IConstraint>) o;
-		}
-		message = ConstraintsHelper.getText(constraints);
-		if (message.isEmpty()) {
-			message = "No structural constraints were identified";
-		} else {
-			message += "\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(constraints);
-		}
+		message = new StringBuilder();
+		this.adaptedModel = adaptedModel;
+		this.featureList = featureList;
 	}
 
 	@Override
@@ -43,10 +36,31 @@ public class ConstraintsTextualVisualisation implements IVisualisation {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
+				List<IConstraint> blockConstraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
+				// Feature constraints if there is a feature list
+				if(featureList!=null){
+					message.append("Discovered Feature Constraints\n");
+					List<IConstraint> featureConstraints = ConstraintsHelper.getFeatureConstraints(featureList, adaptedModel);
+					if(featureConstraints.isEmpty()){
+						message.append("No structural feature constraints were identified\n");
+					} else {
+						message.append(ConstraintsHelper.getText(featureConstraints));
+						message.append("\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(featureConstraints) + "\n");
+					}
+				}
+				// Block constraints
+				message.append("Discovered Block Constraints\n");
+				message.append(ConstraintsHelper.getText(blockConstraints));
+				if (message.length()==0) {
+					message.append("No structural block constraints were identified\n");
+				} else {
+					message.append("\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(blockConstraints));
+				}
+				
 				ConstraintsTextualView view = (ConstraintsTextualView) WorkbenchUtils
 						.forceShowView(ConstraintsTextualView.ID);
 				
-				view.scrollable.setText(message);
+				view.scrollable.setText(message.toString());
 			}
 		});
 	}

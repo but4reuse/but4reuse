@@ -26,7 +26,7 @@ public class ConstraintsTextualView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		scrollable = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
+		scrollable = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY);
 		scrollable.setText("Results available after feature identification or localization");
 	}
 
