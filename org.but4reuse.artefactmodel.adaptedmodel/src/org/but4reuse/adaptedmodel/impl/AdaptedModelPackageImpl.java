@@ -236,7 +236,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBlock_CorrespondingFeature() {
+	public EReference getBlock_CorrespondingFeatures() {
 		return (EReference)blockEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -310,7 +310,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 
 		blockEClass = createEClass(BLOCK);
 		createEReference(blockEClass, BLOCK__OWNED_BLOCK_ELEMENTS);
-		createEReference(blockEClass, BLOCK__CORRESPONDING_FEATURE);
+		createEReference(blockEClass, BLOCK__CORRESPONDING_FEATURES);
 		createEAttribute(blockEClass, BLOCK__NAME);
 
 		blockElementEClass = createEClass(BLOCK_ELEMENT);
@@ -366,7 +366,7 @@ public class AdaptedModelPackageImpl extends EPackageImpl implements AdaptedMode
 
 		initEClass(blockEClass, Block.class, "Block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBlock_OwnedBlockElements(), this.getBlockElement(), null, "ownedBlockElements", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getBlock_CorrespondingFeature(), theFeatureListPackage.getFeature(), null, "correspondingFeature", null, 0, 1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBlock_CorrespondingFeatures(), theFeatureListPackage.getFeature(), null, "correspondingFeatures", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBlock_Name(), ecorePackage.getEString(), "name", null, 0, 1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(blockElementEClass, BlockElement.class, "BlockElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

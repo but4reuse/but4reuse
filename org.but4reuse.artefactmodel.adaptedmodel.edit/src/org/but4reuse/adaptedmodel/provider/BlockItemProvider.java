@@ -59,26 +59,26 @@ public class BlockItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCorrespondingFeaturePropertyDescriptor(object);
+			addCorrespondingFeaturesPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Corresponding Feature feature.
+	 * This adds a property descriptor for the Corresponding Features feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCorrespondingFeaturePropertyDescriptor(Object object) {
+	protected void addCorrespondingFeaturesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Block_correspondingFeature_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Block_correspondingFeature_feature", "_UI_Block_type"),
-				 AdaptedModelPackage.Literals.BLOCK__CORRESPONDING_FEATURE,
+				 getString("_UI_Block_correspondingFeatures_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Block_correspondingFeatures_feature", "_UI_Block_type"),
+				 AdaptedModelPackage.Literals.BLOCK__CORRESPONDING_FEATURES,
 				 true,
 				 false,
 				 true,

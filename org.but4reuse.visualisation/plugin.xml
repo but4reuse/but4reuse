@@ -71,5 +71,9 @@
            class="org.but4reuse.visualisation.visualiser.featurelist.FeatureSpecificHeatMapVisualisation"
            name="Feature-Specific heuristic HeatMap">
      </visualisation>
+     <visualisation
+           class="org.but4reuse.visualisation.visualiser.featurelist.FeaturesInfoVisualisation"
+           name="Features Info">
+     </visualisation>
   </extension>
 </plugin>

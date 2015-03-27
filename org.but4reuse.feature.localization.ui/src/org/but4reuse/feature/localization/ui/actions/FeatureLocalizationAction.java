@@ -17,6 +17,8 @@ import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
+import org.but4reuse.feature.localization.IFeatureLocation;
+import org.but4reuse.feature.localization.impl.FeatureSpecificHeuristicFeatureLocation;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -59,15 +61,14 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 
-								// Adapting each active artefact + calculating blocks + constraints discovery + prepare visualisations
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + VisualisationsHelper.getAllVisualisations().size();
+								// Adapting each active artefact + calculating blocks + constraints discovery + feature location + prepare visualisations
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1 + VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
 								
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
-								// TODO selection of block creation algorithm
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
@@ -83,6 +84,11 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 									constraints.addAll(discovered);
 								}
 								adaptedModel.setConstraints(constraints);
+								monitor.worked(1);
+								
+								monitor.subTask("Feature location");
+								IFeatureLocation featureLocationAlgorithm = new FeatureSpecificHeuristicFeatureLocation();
+								featureLocationAlgorithm.locateFeatures(featureList, adaptedModel, monitor);
 								monitor.worked(1);
 								
 								monitor.subTask("Preparing visualisations");

@@ -223,13 +223,13 @@ public interface AdaptedModelPackage extends EPackage {
 	int BLOCK__OWNED_BLOCK_ELEMENTS = 0;
 
 	/**
-	 * The feature id for the '<em><b>Corresponding Feature</b></em>' reference.
+	 * The feature id for the '<em><b>Corresponding Features</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__CORRESPONDING_FEATURE = 1;
+	int BLOCK__CORRESPONDING_FEATURES = 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -425,15 +425,15 @@ public interface AdaptedModelPackage extends EPackage {
 	EReference getBlock_OwnedBlockElements();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.but4reuse.adaptedmodel.Block#getCorrespondingFeature <em>Corresponding Feature</em>}'.
+	 * Returns the meta object for the reference list '{@link org.but4reuse.adaptedmodel.Block#getCorrespondingFeatures <em>Corresponding Features</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Corresponding Feature</em>'.
-	 * @see org.but4reuse.adaptedmodel.Block#getCorrespondingFeature()
+	 * @return the meta object for the reference list '<em>Corresponding Features</em>'.
+	 * @see org.but4reuse.adaptedmodel.Block#getCorrespondingFeatures()
 	 * @see #getBlock()
 	 * @generated
 	 */
-	EReference getBlock_CorrespondingFeature();
+	EReference getBlock_CorrespondingFeatures();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.but4reuse.adaptedmodel.Block#getName <em>Name</em>}'.
@@ -595,12 +595,12 @@ public interface AdaptedModelPackage extends EPackage {
 		EReference BLOCK__OWNED_BLOCK_ELEMENTS = eINSTANCE.getBlock_OwnedBlockElements();
 
 		/**
-		 * The meta object literal for the '<em><b>Corresponding Feature</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Corresponding Features</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BLOCK__CORRESPONDING_FEATURE = eINSTANCE.getBlock_CorrespondingFeature();
+		EReference BLOCK__CORRESPONDING_FEATURES = eINSTANCE.getBlock_CorrespondingFeatures();
 
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
