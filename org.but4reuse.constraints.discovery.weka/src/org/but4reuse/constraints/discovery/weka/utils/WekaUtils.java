@@ -36,8 +36,9 @@ public class WekaUtils {
 		FastVector attributes = new FastVector(adaptedModel.getOwnedBlocks().size());
 		Map<Block, Attribute> map = new HashMap<Block, Attribute>();
 		FastVector values = new FastVector(2);
-        values.addElement("1");
+		// this order is important for the results in fast vectors
         values.addElement("0");
+        values.addElement("1");
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Attribute a = new Attribute(block.getName(), values);
 			attributes.addElement(a);

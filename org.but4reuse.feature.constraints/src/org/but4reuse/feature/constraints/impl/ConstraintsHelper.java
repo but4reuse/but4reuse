@@ -135,6 +135,7 @@ public class ConstraintsHelper {
 
 	/**
 	 * Calculate feature constraints based on block constraints
+	 * 
 	 * @param featureList
 	 * @param adaptedModel
 	 * @return a non null list of constraints
@@ -204,5 +205,36 @@ public class ConstraintsHelper {
 			}
 		}
 		return correspondingBlocks;
+	}
+
+	/**
+	 * TODO another way for this
+	 * 
+	 * @param c1
+	 * @param c2
+	 * @return whether a constraint is equal to another
+	 */
+	public static boolean equalsConstraint(IConstraint c1, IConstraint c2) {
+		// same type
+		String type = c1.getType();
+		if (type.equals(c2.getType())) {
+			if (type.equals(IConstraint.FREETEXT)) {
+				if (c1.getText().equals(c2.getText())) {
+					return true;
+				}
+				// directional
+			} else if (type.equals(IConstraint.REQUIRES)) {
+				if (c1.getBlock1().equals(c2.getBlock1()) && c1.getBlock2().equals(c2.getBlock2())) {
+					return true;
+				}
+				// non directional
+			} else if (type.equals(IConstraint.EXCLUDES)) {
+				if (c1.getBlock1().equals(c2.getBlock1()) && c1.getBlock2().equals(c2.getBlock2())
+						|| c1.getBlock1().equals(c2.getBlock2()) && c1.getBlock2().equals(c2.getBlock1())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

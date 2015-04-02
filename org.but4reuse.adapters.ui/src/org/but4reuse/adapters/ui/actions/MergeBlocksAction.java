@@ -7,8 +7,11 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.IConstraintsDiscovery;
+import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
-import org.but4reuse.featurelist.Feature;
+import org.but4reuse.feature.localization.IFeatureLocation;
+import org.but4reuse.feature.localization.impl.FeatureSpecificHeuristicFeatureLocation;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
@@ -54,42 +57,75 @@ public class MergeBlocksAction implements IViewActionDelegate {
 					if (blockToKeep == null) {
 						blockToKeep = block;
 					} else {
-						List<BlockElement> toBeAdded = new ArrayList<BlockElement>();
+						List<BlockElement> toBeAddedElements = new ArrayList<BlockElement>();
 						// get its elements and then remove it
 						for (BlockElement be : block.getOwnedBlockElements()) {
 							if (!blockToKeep.getOwnedBlockElements().contains(be)) {
-								toBeAdded .add(be);
+								toBeAddedElements.add(be);
 							}
 						}
-						blockToKeep.getOwnedBlockElements().addAll(toBeAdded);
-						
-						// TODO redirect block assigned to feature. Maybe the thing to do is to recalculate!
-						List<Feature> toBeAddedFeatures = new ArrayList<Feature>();
-						List<Feature> features = block.getCorrespondingFeatures();
-						for(Feature f : features){
-							if(!blockToKeep.getCorrespondingFeatures().contains(f)){
-								toBeAddedFeatures.add(f);
-							}
-						}
-						blockToKeep.getCorrespondingFeatures().addAll(toBeAddedFeatures);
-						
-						// TODO redirect constraints. Maybe the thing to do is to recalculate!
-						List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
-						for(IConstraint c : constraints){
-							if(c.getBlock1().equals(block)){
-								c.setBlock1(blockToKeep);
-							}
-							if(c.getBlock2().equals(block)){
-								c.setBlock2(blockToKeep);
-							}
-						}
-						
-						// Remove the block
+						blockToKeep.getOwnedBlockElements().addAll(toBeAddedElements);
+
 						adaptedModel.getOwnedBlocks().remove(block);
+
+						// Redirect block assigned to feature. Clear and
+						// recalculate
+						// TODO refactoring code, this is from feature
+						// identification and location
+						for (Block blockToClear : adaptedModel.getOwnedBlocks()) {
+							if (!blockToClear.getCorrespondingFeatures().isEmpty()) {
+								// TODO find a better way to get feature model
+								if (featureModel == null) {
+									featureModel = (FeatureList) blockToClear.getCorrespondingFeatures().get(0)
+											.eContainer();
+								}
+								blockToClear.getCorrespondingFeatures().clear();
+							}
+
+						}
+						if (featureModel != null) {
+							IFeatureLocation featureLocationAlgorithm = new FeatureSpecificHeuristicFeatureLocation();
+							featureLocationAlgorithm.locateFeatures(featureModel, adaptedModel,
+									new NullProgressMonitor());
+						}
+
+						// Constraints! Clear and recalculate
+						// TODO refactoring code, this is from feature
+						// identification and location
+						adaptedModel.setConstraints(null);
+						List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
+								.getSelectedConstraintsDiscoveryAlgorithms();
+						List<IConstraint> constraints = new ArrayList<IConstraint>();
+						for (IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms) {
+							List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel, null,
+									new NullProgressMonitor());
+							if (constraints.isEmpty()) {
+								constraints.addAll(discovered);
+							} else {
+								// Only add the ones that are not
+								// already there
+								List<IConstraint> toBeAdded = new ArrayList<IConstraint>();
+								for (IConstraint d : discovered) {
+									boolean found = false;
+									for (IConstraint c : constraints) {
+										if (ConstraintsHelper.equalsConstraint(d, c)) {
+											found = true;
+											break;
+										}
+									}
+									if (!found) {
+										toBeAdded.add(d);
+									}
+								}
+								constraints.addAll(toBeAdded);
+							}
+						}
+						adaptedModel.setConstraints(constraints);
 					}
 				}
 			}
 		}
+		// Changes were made, notify
 		if (blockToKeep != null) {
 			VisualisationsHelper.notifyVisualisations(featureModel, adaptedModel, null, new NullProgressMonitor());
 		}

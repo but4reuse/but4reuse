@@ -11,7 +11,7 @@
                class="org.but4reuse.feature.localization.ui.actions.FeatureLocalizationAction"
                icon="icons/FeatureList.gif"
                id="org.but4reuse.feature.localization.ui.action"
-               label="Feature Localization"
+               label="Feature Location"
                menubarPath="additions">
          </action>
       </objectContribution>

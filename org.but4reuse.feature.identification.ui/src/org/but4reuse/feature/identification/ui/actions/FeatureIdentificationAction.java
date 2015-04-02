@@ -17,6 +17,7 @@ import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -28,18 +29,23 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * Feature identification action
+ * 
+ * @author jabier.martinez
+ */
 public class FeatureIdentificationAction implements IObjectActionDelegate {
 
 	ArtefactModel artefactModel;
 	List<IAdapter> adapters;
-	
+
 	@Override
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
 			Object art = ((IStructuredSelection) selection).getFirstElement();
 			if (art instanceof ArtefactModel) {
 				artefactModel = ((ArtefactModel) art);
-				
+
 				// Adapter selection by user
 				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel);
 
@@ -47,43 +53,66 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 					// Launch Progress dialog
 					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
 							.getActiveShell());
-					
+
 					try {
 						progressDialog.run(true, true, new IRunnableWithProgress() {
 							@Override
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
-								
-								// Adapting each active artefact + calculating blocks + constraints discovery + prepare visualisation
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 +  VisualisationsHelper.getAllVisualisations().size();
+
+								// Adapting each active artefact + calculating
+								// blocks + constraints discovery + prepare
+								// visualisation
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1
+										+ VisualisationsHelper.getAllVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
-								
+
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
-								
+
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
-								
+
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
-								
+
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
-								
-								monitor.subTask("Structural constraints discovery");
-								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper.getSelectedConstraintsDiscoveryAlgorithms();
+
+								monitor.subTask("Constraints discovery");
+								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
+										.getSelectedConstraintsDiscoveryAlgorithms();
 								List<IConstraint> constraints = new ArrayList<IConstraint>();
-								for(IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms){
+								for (IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms) {
 									List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel,
 											null, monitor);
-									constraints.addAll(discovered);
+									if (constraints.isEmpty()){
+										constraints.addAll(discovered);
+									} else {
+										// Only add the ones that are not
+										// already there
+										List<IConstraint> toBeAdded = new ArrayList<IConstraint>();
+										for (IConstraint d : discovered) {
+											boolean found = false;
+											for (IConstraint c : constraints) {
+												if (ConstraintsHelper.equalsConstraint(d, c)) {
+													found = true;
+													break;
+												}
+											}
+											if(!found){
+												toBeAdded.add(d);
+											}
+										}
+										constraints.addAll(toBeAdded);
+									}
 								}
 								adaptedModel.setConstraints(constraints);
 								monitor.worked(1);
-								
+
 								monitor.subTask("Preparing visualisations");
 								VisualisationsHelper.notifyVisualisations(null, adaptedModel, null, monitor);
-								
+
 								monitor.worked(1);
 								monitor.done();
 							}
@@ -92,7 +121,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 						e.printStackTrace();
 					}
 				}
-				
+
 			}
 		}
 	}

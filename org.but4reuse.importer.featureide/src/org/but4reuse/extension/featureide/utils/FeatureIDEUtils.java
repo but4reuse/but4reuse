@@ -96,7 +96,7 @@ public class FeatureIDEUtils {
 			text += validFeatureName(constraint.getBlock2().getName());
 			return text;
 		}
-		return null;
+		return constraint.getText();
 	}
 
 	/**
@@ -116,7 +116,12 @@ public class FeatureIDEUtils {
 	public static void addConstraint(FeatureModel featureModel, String constraint) {
 		NodeReader nodeReader = new NodeReader();
 		List<String> featureList = new ArrayList<String>(featureModel.getFeatureNames());
-		Node node = nodeReader.stringToNode(constraint, featureList);
+		Node node = null;
+		try{
+			node = nodeReader.stringToNode(constraint, featureList);
+		} catch(Exception e){
+			System.out.println("Not valid constraint definition: " + constraint);
+		}
 		// TODO report error if node is null
 		if(node!=null){
 			Constraint c = new Constraint(featureModel, node);

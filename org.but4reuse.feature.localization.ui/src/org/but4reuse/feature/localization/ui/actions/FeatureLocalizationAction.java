@@ -17,6 +17,7 @@ import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
+import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.feature.localization.IFeatureLocation;
 import org.but4reuse.feature.localization.impl.FeatureSpecificHeuristicFeatureLocation;
 import org.but4reuse.featurelist.FeatureList;
@@ -75,13 +76,33 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
 								
-								monitor.subTask("Structural constraints discovery");
-								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper.getSelectedConstraintsDiscoveryAlgorithms();
+								monitor.subTask("Constraints discovery");
+								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
+										.getSelectedConstraintsDiscoveryAlgorithms();
 								List<IConstraint> constraints = new ArrayList<IConstraint>();
-								for(IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms){
-									List<IConstraint> discovered = constraintsDiscovery.discover(featureList, adaptedModel,
+								for (IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms) {
+									List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel,
 											null, monitor);
-									constraints.addAll(discovered);
+									if (constraints.isEmpty()){
+										constraints.addAll(discovered);
+									} else {
+										// Only add the ones that are not
+										// already there
+										List<IConstraint> toBeAdded = new ArrayList<IConstraint>();
+										for (IConstraint d : discovered) {
+											boolean found = false;
+											for (IConstraint c : constraints) {
+												if (ConstraintsHelper.equalsConstraint(d, c)) {
+													found = true;
+													break;
+												}
+											}
+											if(!found){
+												toBeAdded.add(d);
+											}
+										}
+										constraints.addAll(toBeAdded);
+									}
 								}
 								adaptedModel.setConstraints(constraints);
 								monitor.worked(1);

@@ -37,7 +37,7 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 	public void show() {
 		// TODO modify visualisation extension to allow adapter specific
 		// visualisation.
-		if (featureList != null && featureList.getName().contains("Eclipse")) {
+		if (featureList != null && featureList.getName()!=null && featureList.getName().contains("Eclipse")) {
 			// TODO improve checks!
 			// Here we try to find the folder to save it
 			URI uri = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
