@@ -37,21 +37,21 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 				if (kind instanceof BlockMarkupKind) {
 					BlockMarkupKind markupKind = (BlockMarkupKind) kind;
 					Block block = markupKind.getBlock();
-					String sText = "";
+					StringBuilder sText = new StringBuilder();
 					for (BlockElement blockElement : block.getOwnedBlockElements()){
 						IElement element = (IElement)blockElement.getElementWrappers().get(0).getElement();
-						sText = sText + element.getText() + "\n";
+						sText.append(element.getText() + "\n");
 					}
 					
 					// Remove the last \n
 					if (sText.length() > 0) {
-						sText = sText.substring(0, sText.length() - 1);
+						sText.setLength(sText.length() - 1);
 					}
 					
 					// Show
 					// TODO Show also the artefacts where the block is present
 					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(Display.getCurrent().getActiveShell(),
-							markupKind.getName(), block.getOwnedBlockElements().size() + " Elements", sText);
+							markupKind.getName(), block.getOwnedBlockElements().size() + " Elements", sText.toString());
 					dialog.open();
 					if(dialog.name!=null && !dialog.name.equals(block.getName())){
 						block.setName(dialog.name);

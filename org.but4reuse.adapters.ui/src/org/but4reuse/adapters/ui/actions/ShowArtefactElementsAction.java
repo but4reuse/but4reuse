@@ -24,7 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * Show Elements Action
  * @author jabier.martinez
  */
-public class ShowElementsAction implements IObjectActionDelegate {
+public class ShowArtefactElementsAction implements IObjectActionDelegate {
 
 	Artefact artefact = null;
 	List<IAdapter> adap;

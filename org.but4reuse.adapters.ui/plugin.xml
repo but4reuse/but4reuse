@@ -8,7 +8,7 @@
             id="org.but4reuse.adapters.ui.showElements"
             objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
-               class="org.but4reuse.adapters.ui.actions.ShowElementsAction"
+               class="org.but4reuse.adapters.ui.actions.ShowArtefactElementsAction"
                icon="icons/show.png"
                id="org.but4reuse.adapters.ui.action.showElements"
                label="Show elements"
@@ -83,6 +83,18 @@
                icon="icons/reconstructAll.png"
                id="org.but4reuse.adapters.ui.reconstructall.action"
                label="Re-Construct All Artefacts"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.mergeblocks"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.MergeBlocksAction"
+               icon="icons/merge.png"
+               id="org.but4reuse.adapters.ui.mergeblocksaction"
+               label="Merge Selected Blocks"
                style="push"
                toolbarPath="additions">
          </action>
