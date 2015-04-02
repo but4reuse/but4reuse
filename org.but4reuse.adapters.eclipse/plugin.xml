@@ -16,5 +16,12 @@
          </elements>
       </adapter>
    </extension>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.adapters.eclipse.visualisations.EclipseFeatureLocationPluginsVisualisation"
+            name="org.but4reuse.adapters.eclipse.visualisation">
+      </visualisation>
+   </extension>
 
 </plugin>

@@ -7,7 +7,12 @@ Bundle-Activator: org.but4reuse.adapters.eclipse.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.adapters,
- org.but4reuse.utils
+ org.but4reuse.utils,
+ org.but4reuse.visualisation,
+ org.but4reuse.featurelist,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.feature.constraints,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.eclipse

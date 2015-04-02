@@ -30,30 +30,32 @@ public class FeaturesInfoVisualisation implements IVisualisation {
 
 	@Override
 	public void show() {
-		// asyncExec to avoid SWT invalid thread access
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				StringBuilder text = new StringBuilder();
-				for (Feature feature : featureList.getOwnedFeatures()) {
-					text.append(feature.getName() + " = ");
-					List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
-					for(Block b : blocks){
-						text.append(b.getName() + ", ");
+		if (featureList != null) {
+			// asyncExec to avoid SWT invalid thread access
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					StringBuilder text = new StringBuilder();
+					for (Feature feature : featureList.getOwnedFeatures()) {
+						text.append(feature.getName() + " = ");
+						List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
+						for (Block b : blocks) {
+							text.append(b.getName() + ", ");
+						}
+						// remove last comma
+						if (!blocks.isEmpty()) {
+							text.setLength(text.length() - 2);
+						}
+						text.append("\n");
 					}
-					// remove last comma
-					if(!blocks.isEmpty()){
-						text.setLength(text.length()-2);
-					}
-					text.append("\n");
-				}
 
-				Display display = Display.getDefault();
-				Shell shell = new Shell(display);
-				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Features info", "", text.toString());
-				m.open();
-			}
-		});
+					Display display = Display.getDefault();
+					Shell shell = new Shell(display);
+					ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Features info", "", text.toString());
+					m.open();
+				}
+			});
+		}
 	}
 
 }

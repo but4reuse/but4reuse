@@ -134,6 +134,20 @@ public class FileUtils {
 		output.newLine();
 		output.close();
 	}
+	
+	/**
+	 * No append, just overwrite with new text
+	 * 
+	 * @param file
+	 * @param text
+	 * @throws Exception
+	 */
+	public static void writeFile(File file, String text) throws Exception {
+		BufferedWriter output;
+		output = new BufferedWriter(new FileWriter(file, false));
+		output.append(text);
+		output.close();
+	}
 
 	/**
 	 * Creation date of a file
