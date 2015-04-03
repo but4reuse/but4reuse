@@ -126,6 +126,8 @@ public class FeatureIDEUtils {
 		if(node!=null){
 			Constraint c = new Constraint(featureModel, node);
 			featureModel.addConstraint(c);
+		} else {
+			System.out.println("Maybe problems with names: " + constraint);
 		}
 	}
 	

@@ -54,20 +54,21 @@ public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 			List<Integer> negativeLeft = getNegatives(left);
 			List<Integer> positiveRight = getPositives(right);
 			List<Integer> negativeRight = getNegatives(right);
-			
-			// TODO For the moment binary requires relations are added otherwise
-			// freetext constraints
-			if (positiveLeft.size() == 1 && negativeLeft.isEmpty() && positiveRight.size() == 1 && negativeRight.isEmpty()) {
-					constraint.setType(IConstraint.REQUIRES);
-					constraint.setBlock1(adaptedModel.getOwnedBlocks().get(positiveLeft.get(0)));
-					constraint.setBlock2(adaptedModel.getOwnedBlocks().get(positiveRight.get(0)));
-					constraint
-							.setText(constraint.getBlock1().getName() + "requires" + constraint.getBlock2().getName());
+
+			// For the moment binary requires relations are added otherwise
+			// freetext constraints in featureide tool syntax
+			if (positiveLeft.size() == 1 && negativeLeft.isEmpty() && positiveRight.size() == 1
+					&& negativeRight.isEmpty()) {
+				constraint.setType(IConstraint.REQUIRES);
+				constraint.setBlock1(adaptedModel.getOwnedBlocks().get(positiveLeft.get(0)));
+				constraint.setBlock2(adaptedModel.getOwnedBlocks().get(positiveRight.get(0)));
+				constraint.setText(constraint.getBlock1().getName() + "requires" + constraint.getBlock2().getName());
 			}
 			// Just add it as free text
 			if (constraint.getType() == null) {
 				constraint.setType(IConstraint.FREETEXT);
-				constraint.setText(left.toString(m_instances) + " requires " + right.toString(m_instances));
+				constraint.setText(getFeatureIDELikeText(adaptedModel, positiveLeft, negativeLeft, positiveRight,
+						negativeRight));
 			}
 			List<String> explanations = new ArrayList<String>();
 			explanations.add(new String("APriori association rule"));
@@ -75,6 +76,27 @@ public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 			constraints.add(constraint);
 		}
 		return constraints;
+	}
+
+	private String getFeatureIDELikeText(AdaptedModel adaptedModel, List<Integer> positiveLeft,
+			List<Integer> negativeLeft, List<Integer> positiveRight, List<Integer> negativeRight) {
+		StringBuilder text = new StringBuilder();
+		for (Integer integer : positiveLeft) {
+			text.append(adaptedModel.getOwnedBlocks().get(integer).getName().replaceAll(" ", "_") + " and ");
+		}
+		for (Integer integer : negativeLeft) {
+			text.append("not " + adaptedModel.getOwnedBlocks().get(integer).getName().replaceAll(" ", "_") + " and ");
+		}
+		text.setLength(text.length() - " and ".length());
+		text.append(" implies ");
+		for (Integer integer : positiveRight) {
+			text.append(adaptedModel.getOwnedBlocks().get(integer).getName().replaceAll(" ", "_") + " and ");
+		}
+		for (Integer integer : negativeRight) {
+			text.append("not " + adaptedModel.getOwnedBlocks().get(integer).getName().replaceAll(" ", "_") + " and ");
+		}
+		text.setLength(text.length() - " and ".length());
+		return text.toString();
 	}
 
 	private List<Integer> getPositives(AprioriItemSet itemSet) {
@@ -86,7 +108,7 @@ public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 		}
 		return ints;
 	}
-	
+
 	private List<Integer> getNegatives(AprioriItemSet itemSet) {
 		List<Integer> ints = new ArrayList<Integer>();
 		for (int i = 0; i < itemSet.items().length; i++) {
@@ -96,6 +118,5 @@ public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 		}
 		return ints;
 	}
-
 
 }
