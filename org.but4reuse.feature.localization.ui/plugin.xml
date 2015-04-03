@@ -8,13 +8,22 @@
             id="org.but4reuse.feature.localization.ui.action"
             objectClass="org.but4reuse.featurelist.FeatureList">
          <action
-               class="org.but4reuse.feature.localization.ui.actions.FeatureLocalizationAction"
+               class="org.but4reuse.feature.location.ui.actions.FeatureLocationAction"
                icon="icons/FeatureList.gif"
                id="org.but4reuse.feature.localization.ui.action"
                label="Feature Location"
                menubarPath="additions">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.feature.location.ui.preferences.FeatureLocationPreferencePage"
+            id="org.but4reuse.feature.location.ui.page"
+            name="Feature Location">
+      </page>
    </extension>
 
 </plugin>

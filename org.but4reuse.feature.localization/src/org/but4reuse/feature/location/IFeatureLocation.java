@@ -1,4 +1,4 @@
-package org.but4reuse.feature.localization;
+package org.but4reuse.feature.location;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.featurelist.FeatureList;

@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.eclipse.core.resources,
  org.but4reuse.feature.constraints,
- org.but4reuse.feature.localization
+ org.but4reuse.feature.location
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.ui

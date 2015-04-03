@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.but4reuse.feature.location" name="Feature Location" schema="schema/org.but4reuse.feature.location.exsd"/>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.feature.location.impl.FeatureSpecificHeuristicFeatureLocation"
+            name="Feature-Specific Heuristic">
+      </feature.location>
+      <feature.location
+            class="org.but4reuse.feature.location.impl.NCFeatureSpecificHeuristicFeatureLocation"
+            name="Non Conservative Feature-Specific Heuristic">
+      </feature.location>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.feature.location.helper.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

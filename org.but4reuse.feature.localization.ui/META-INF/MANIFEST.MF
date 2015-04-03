@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
-Bundle-SymbolicName: org.but4reuse.feature.localization.ui;singleton:=true
+Bundle-SymbolicName: org.but4reuse.feature.location.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.but4reuse.feature.localization.ui.activator.Activator
+Bundle-Activator: org.but4reuse.feature.location.ui.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.featurelist,
@@ -11,8 +11,8 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters.ui,
  org.but4reuse.visualisation,
- org.but4reuse.blockcreation,
  org.but4reuse.feature.constraints,
- org.but4reuse.feature.localization
+ org.but4reuse.feature.location,
+ org.but4reuse.blockcreation
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

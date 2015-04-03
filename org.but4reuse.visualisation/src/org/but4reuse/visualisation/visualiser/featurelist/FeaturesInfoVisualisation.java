@@ -26,6 +26,7 @@ public class FeaturesInfoVisualisation implements IVisualisation {
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 		this.featureList = featureList;
 		this.adaptedModel = adaptedModel;
+		monitor.subTask("Features Info Visualisation");
 	}
 
 	@Override

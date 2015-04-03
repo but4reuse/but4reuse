@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Localization
-Bundle-SymbolicName: org.but4reuse.feature.localization
+Bundle-SymbolicName: org.but4reuse.feature.location;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.but4reuse.feature.localization.activator.Activator
+Bundle-Activator: org.but4reuse.feature.location.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.featurelist,
@@ -11,5 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.feature.localization,
- org.but4reuse.feature.localization.impl
+Export-Package: org.but4reuse.feature.location,
+ org.but4reuse.feature.location.helper,
+ org.but4reuse.feature.location.impl

@@ -1,4 +1,4 @@
-package org.but4reuse.feature.localization.ui.actions;
+package org.but4reuse.feature.location.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
-import org.but4reuse.feature.localization.IFeatureLocation;
-import org.but4reuse.feature.localization.impl.FeatureSpecificHeuristicFeatureLocation;
+import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class FeatureLocalizationAction implements IObjectActionDelegate {
+public class FeatureLocationAction implements IObjectActionDelegate {
 
 	FeatureList featureList;
 	List<IAdapter> adapters;
@@ -108,7 +108,7 @@ public class FeatureLocalizationAction implements IObjectActionDelegate {
 								monitor.worked(1);
 								
 								monitor.subTask("Feature location");
-								IFeatureLocation featureLocationAlgorithm = new FeatureSpecificHeuristicFeatureLocation();
+								IFeatureLocation featureLocationAlgorithm = FeatureLocationHelper.getSelectedFeatureLocation();
 								featureLocationAlgorithm.locateFeatures(featureList, adaptedModel, monitor);
 								monitor.worked(1);
 								
