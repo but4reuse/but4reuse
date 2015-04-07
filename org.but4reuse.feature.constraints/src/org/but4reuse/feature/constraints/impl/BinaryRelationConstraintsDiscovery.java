@@ -161,7 +161,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 			List<IDependencyObject> pointed1 = map1.get(key);
 			List<IDependencyObject> pointed2 = map2.get(key);
 			if (pointed2 == null) {
-				break;
+				continue;
 			}
 			for (IDependencyObject o : pointed1) {
 				if (pointed2.contains(o)) {
@@ -201,6 +201,11 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		return result;
 	}
 
+	/**
+	 * Get all dependency objects independently of the dependency id
+	 * @param blockElement
+	 * @return non empty list of dependency objects
+	 */
 	public static List<IDependencyObject> getAllDependencies(BlockElement blockElement) {
 		List<IDependencyObject> result = new ArrayList<IDependencyObject>();
 		for (ElementWrapper elementW1 : blockElement.getElementWrappers()) {
