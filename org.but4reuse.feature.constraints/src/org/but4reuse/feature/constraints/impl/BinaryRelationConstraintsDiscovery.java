@@ -84,7 +84,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					List<String> messages = blockExcludesAnotherBlock(b1, b2);
 					if(messages.size()>0){
 						IConstraint constraint = new ConstraintImpl();
-						constraint.setType(IConstraint.EXCLUDES);
+						constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
 						constraint.setBlock1(b1);
 						constraint.setBlock2(b2);
 						constraint.setExplanations(messages);

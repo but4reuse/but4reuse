@@ -146,7 +146,7 @@ public class ConstraintsHelper {
 		// loop all the constraints
 		HashSet<String> alreadyAdded = new HashSet<String>();
 		for (IConstraint constraint : blockConstraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+			if (constraint.getType().equals(IConstraint.REQUIRES) || constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				Block block1 = constraint.getBlock1();
 				Block block2 = constraint.getBlock2();
 				List<Feature> block1Features = block1.getCorrespondingFeatures();
@@ -168,7 +168,7 @@ public class ConstraintsHelper {
 				if (!sameFeatureFound) {
 					for (Feature f1 : block1Features) {
 						for (Feature f2 : block2Features) {
-							String text = f1.getName() + " requires " + f2.getName();
+							String text = f1.getName() + " " + constraint.getType() + " " + f2.getName();
 							if (!alreadyAdded.contains(text)) {
 								alreadyAdded.add(text);
 								// constraint
@@ -185,6 +185,7 @@ public class ConstraintsHelper {
 					}
 				}
 			}
+			
 		}
 		return featureConstraints;
 	}
@@ -228,7 +229,7 @@ public class ConstraintsHelper {
 					return true;
 				}
 				// non directional
-			} else if (type.equals(IConstraint.EXCLUDES)) {
+			} else if (type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				if (c1.getBlock1().equals(c2.getBlock1()) && c1.getBlock2().equals(c2.getBlock2())
 						|| c1.getBlock1().equals(c2.getBlock2()) && c1.getBlock2().equals(c2.getBlock1())) {
 					return true;

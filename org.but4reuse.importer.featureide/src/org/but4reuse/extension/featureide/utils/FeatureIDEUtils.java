@@ -88,9 +88,9 @@ public class FeatureIDEUtils {
 	public static String getConstraintString(IConstraint constraint) {
 		String type = constraint.getType();
 		// only this two supported for the moment
-		if (type.equals(IConstraint.REQUIRES) || type.equals(IConstraint.EXCLUDES)) {
+		if (type.equals(IConstraint.REQUIRES) || type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
 			String text = validFeatureName(constraint.getBlock1().getName()) + " implies ";
-			if (type.equals(IConstraint.EXCLUDES)) {
+			if (type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				text += "not ";
 			}
 			text += validFeatureName(constraint.getBlock2().getName());
@@ -159,7 +159,7 @@ public class FeatureIDEUtils {
 
 	public static boolean existsExcludeConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.EXCLUDES)) {
+			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				// check f1 excludes f2 and viceversa
 				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
 						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {

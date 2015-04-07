@@ -42,7 +42,7 @@ public class ConstraintsTextualVisualisation implements IVisualisation {
 					message.append("Discovered Feature Constraints\n");
 					List<IConstraint> featureConstraints = ConstraintsHelper.getFeatureConstraints(featureList, adaptedModel);
 					if(featureConstraints.isEmpty()){
-						message.append("No structural feature constraints were identified\n");
+						message.append("No structural feature constraints were identified\n\n");
 					} else {
 						message.append(ConstraintsHelper.getText(featureConstraints));
 						message.append("\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(featureConstraints) + "\n");

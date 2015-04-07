@@ -76,7 +76,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		AltGroupList altGroupList = new AltGroupList();
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.EXCLUDES)) {
+			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				Feature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()));
 				Feature feature2 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()));
 				// any of them exists in previous?

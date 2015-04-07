@@ -10,7 +10,7 @@ import org.but4reuse.adaptedmodel.Block;
  */
 public interface IConstraint {
 	String REQUIRES = "requires";
-	String EXCLUDES = "mutually excludes";
+	String MUTUALLY_EXCLUDES = "mutually excludes";
 	String FREETEXT = "constraint";
 	
 	public Block getBlock1();
