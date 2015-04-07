@@ -18,26 +18,26 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
 /**
- * EMF Child CP
+ * EMF Class Element
  * @author jabier.martinez
  */
 public class EMFClassElement extends AbstractElement {
 
 	public EObject owner;
 	public EReference reference;
-	public EObject childEObject;
+	public EObject eObject;
 
 	
 	@Override
 	public String getText() {
-		return ("Class: " + childEObject.eClass().getName() + " [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
+		return ("Class: " + eObject.eClass().getName() +  " [Text->" + EMFUtils.getText(eObject) + "] [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
 	}
 	
 	public boolean construct(URI uri) {
 		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(
 				EMFAdapter.ADAPTER_FACTORY, new BasicCommandStack());
-		EFactory eFactory = childEObject.eClass().getEPackage().getEFactoryInstance();
-		EObject newChildEObject = eFactory.create(childEObject.eClass());
+		EFactory eFactory = eObject.eClass().getEPackage().getEFactoryInstance();
+		EObject newChildEObject = eFactory.create(eObject.eClass());
 		Command command = null;
 		// TODO check cardinalities
 		if (reference.isMany()) {
@@ -62,8 +62,8 @@ public class EMFClassElement extends AbstractElement {
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFClassElement){
-			EMFClassElement targetCP = (EMFClassElement)anotherElement;
-			if(DiffMergeUtils.isEqualEObject(childEObject, targetCP.childEObject)){
+			EMFClassElement targetClassElement = (EMFClassElement)anotherElement;
+			if(DiffMergeUtils.isEqualEObject(eObject, targetClassElement.eObject)){
 				return 1;
 			}
 		}

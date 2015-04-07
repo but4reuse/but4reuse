@@ -26,9 +26,10 @@ import org.eclipse.emf.ecore.EReference;
  * @author jabier.martinez
  */
 public class DiffMergeUtils {
-	
+
 	/**
 	 * Get the most appropriate comparison method
+	 * 
 	 * @param leftEObject
 	 * @param rightEObject
 	 * @return
@@ -36,11 +37,12 @@ public class DiffMergeUtils {
 	public static IComparisonMethod getComparisonMethod(EObject leftEObject, EObject rightEObject) {
 		EObjectScopeDefinition left = new EObjectScopeDefinition(leftEObject, "left", true);
 		EObjectScopeDefinition right = new EObjectScopeDefinition(rightEObject, "right", true);
-		List<IComparisonMethodFactory> listcmf = EMFDiffMergeUIPlugin.getDefault().getSetupManager().getApplicableComparisonMethodFactories(left, right, null);
-		if (listcmf.isEmpty()){
+		List<IComparisonMethodFactory> listcmf = EMFDiffMergeUIPlugin.getDefault().getSetupManager()
+				.getApplicableComparisonMethodFactories(left, right, null);
+		if (listcmf.isEmpty()) {
 			return new DefaultComparisonMethod(left, right, null);
 		}
-		IComparisonMethod icm = listcmf.get(0).createComparisonMethod(left,right,null);
+		IComparisonMethod icm = listcmf.get(0).createComparisonMethod(left, right, null);
 		return icm;
 	}
 
@@ -52,6 +54,7 @@ public class DiffMergeUtils {
 	 * @return
 	 */
 	public static boolean isEqualEObject(EObject referenceEObject, EObject targetEObject) {
+
 		List<EObject> referenceElements = new ArrayList<EObject>();
 		referenceElements.add(referenceEObject);
 		IEditableModelScope referenceScope = new FilteredModelScope(referenceElements);
@@ -65,7 +68,7 @@ public class DiffMergeUtils {
 		IMatchPolicy matchPolicy = icm.getMatchPolicy();
 		// Merge policy not needed, but we get it
 		IMergePolicy mergePolicy = icm.getMergePolicy();
-		
+
 		// Compare ignoring all structural policies in the diff
 		IDiffPolicy diffPolicy = new IgnoreAllStructuralFeaturesDiffPolicy();
 		IComparison comparison = new EComparisonImpl(targetScope, referenceScope);
@@ -73,7 +76,7 @@ public class DiffMergeUtils {
 
 		// Collection<IDifference> differences =
 		// comparison.getRemainingDifferences();
-		// for (IDifference difference: differences){
+		// for (IDifference difference : differences) {
 		// System.out.println(difference);
 		// }
 
@@ -95,19 +98,19 @@ public class DiffMergeUtils {
 	 */
 	public static boolean isEqualEObjectAttribute(EObject referenceEObject, EAttribute referenceEAttribute,
 			Object referenceValue, EObject targetEObject, EAttribute targetEAttribute, Object targetValue) {
-		
+
 		IComparisonMethod icm = getComparisonMethod(referenceEObject, targetEObject);
 		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 		// Same attribute
-		if (!referenceEAttribute.equals(targetEAttribute)){
+		if (!referenceEAttribute.equals(targetEAttribute)) {
 			return false;
 		}
 		// Same attribute owner
-		if (!isEqualEObject(referenceEObject, targetEObject)){
+		if (!isEqualEObject(referenceEObject, targetEObject)) {
 			return false;
 		}
 		// Consider equal if attribute not covered
-		if (!diffPolicy.coverFeature(referenceEAttribute)){
+		if (!diffPolicy.coverFeature(referenceEAttribute)) {
 			return true;
 		}
 		// Check equal value
@@ -128,17 +131,17 @@ public class DiffMergeUtils {
 	public static boolean isEqualEObjectReference(EObject referenceEObject, EReference referenceEReference,
 			List<EObject> referenceReferenced, EObject targetEObject, EReference targetEReference,
 			List<EObject> targetReferenced) {
-		
+
 		IComparisonMethod icm = getComparisonMethod(referenceEObject, targetEObject);
 		IDiffPolicy diffPolicy = icm.getDiffPolicy();
-		
+
 		// Not the same reference
 		if (!referenceEReference.equals(targetEReference)) {
 			return false;
 		}
-		
+
 		// Consider equal if reference not covered
-		if (!diffPolicy.coverFeature(referenceEReference)){
+		if (!diffPolicy.coverFeature(referenceEReference)) {
 			return true;
 		}
 

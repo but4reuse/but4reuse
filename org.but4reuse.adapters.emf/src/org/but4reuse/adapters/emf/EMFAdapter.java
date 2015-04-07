@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,6 +27,9 @@ public class EMFAdapter implements IAdapter {
 
 	public static AdapterFactory ADAPTER_FACTORY = EMFUtils.getAllRegisteredAdapterFactories();
 
+	/**
+	 * Adaptable if we can load an EObject from the URI
+	 */
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		EObject eObject = EMFUtils.getEObject(uri);
@@ -34,6 +39,9 @@ public class EMFAdapter implements IAdapter {
 		return true;
 	}
 
+	/**
+	 * Recursively adapt the model
+	 */
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		// First construction primitive is the Resource creation
@@ -42,10 +50,12 @@ public class EMFAdapter implements IAdapter {
 		EMFResourceElement element = new EMFResourceElement();
 		element.owner = null;
 		element.reference = null;
-		element.childEObject = eObject;
+		element.eObject = eObject;
 		elements.add(element);
 		// Then we loop the model to add the rest of the construction primitives
-		adapt(eObject, element.childEObject, elements);
+		adapt(eObject, element.eObject, elements);
+		// After that we add the EReferences dependencies
+		addReferencesDependencies(elements);
 		return elements;
 	}
 
@@ -57,22 +67,26 @@ public class EMFAdapter implements IAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	private void adapt(EObject eObject, EObject adaptedEObject, List<IElement> elements) {
+		// If it is not covered by the diff policy we are not going to consider it
+		IComparisonMethod comparisonMethod = DiffMergeUtils.getComparisonMethod(adaptedEObject, adaptedEObject);
 		// Current child to set the owner is the last element
-		AbstractElement ownerElement = (AbstractElement)elements.get(elements.size() - 1);
+		AbstractElement ownerElement = (AbstractElement) elements.get(elements.size() - 1);
 
 		// Attributes
 		List<EAttribute> attributes = eObject.eClass().getEAllAttributes();
 		for (EAttribute attr : attributes) {
-			if (!attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
-				Object o = eObject.eGet(attr);
-				if (o != null) {
-					EMFAttributeElement element = new EMFAttributeElement();
-					element.owner = adaptedEObject;
-					element.eAttribute = attr;
-					element.value = o;
-					element.addDependency(attr.getName(), ownerElement);
-					ownerElement.setMaximumDependencies(attr.getName(), 1);
-					elements.add(element);
+			if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
+				if (!attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
+					Object o = eObject.eGet(attr);
+					if (o != null) {
+						EMFAttributeElement element = new EMFAttributeElement();
+						element.owner = adaptedEObject;
+						element.eAttribute = attr;
+						element.value = o;
+						element.addDependency(attr.getName(), ownerElement);
+						ownerElement.setMaximumDependencies(attr.getName(), 1);
+						elements.add(element);
+					}
 				}
 			}
 		}
@@ -80,30 +94,35 @@ public class EMFAdapter implements IAdapter {
 		// References
 		List<EReference> references = eObject.eClass().getEAllReferences();
 		for (EReference ref : references) {
-			if (!ref.isContainment() && !ref.isDerived() && !ref.isVolatile() && !ref.isTransient()) {
-				List<EObject> refList = new ArrayList<EObject>();
-				if (ref.isMany()) {
-					refList = (List<EObject>) eObject.eGet(ref);
-				} else {
-					EObject o = (EObject) eObject.eGet(ref);
-					if (o != null) {
-						refList.add(o);
+			if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
+				if (!ref.isContainment() && !ref.isDerived() && !ref.isVolatile() && !ref.isTransient()) {
+					List<EObject> refList = new ArrayList<EObject>();
+					if (ref.isMany()) {
+						refList = (List<EObject>) eObject.eGet(ref);
+					} else {
+						EObject o = (EObject) eObject.eGet(ref);
+						if (o != null) {
+							refList.add(o);
+						}
 					}
+					// Add it even if empty. Problem of empty and null.
+					if (refList == null) {
+						refList = new ArrayList<EObject>();
+					}
+					EMFReferenceElement element = new EMFReferenceElement();
+					element.owner = adaptedEObject;
+					element.eReference = ref;
+					// if (refList != null) {
+					element.referenced = new ArrayList<EObject>();
+					for (EObject r : refList) {
+						element.referenced.add(r);
+					}
+					// }
+					element.addDependency(ref.getName(), ownerElement);
+
+					ownerElement.setMaximumDependencies(ref.getName(), 1);
+					elements.add(element);
 				}
-				// Add it even if empty. Problem of empty and null.
-				if (refList == null) {
-					refList = new ArrayList<EObject>();
-				}
-				EMFReferenceElement element = new EMFReferenceElement();
-				element.owner = adaptedEObject;
-				element.eReference = ref;
-				element.referenced = new ArrayList<EObject>();
-				for (EObject r : refList) {
-					element.referenced.add(r);
-				}
-				element.addDependency(ref.getName(), ownerElement);
-				ownerElement.setMaximumDependencies(ref.getName(), 1);
-				elements.add(element);
 			}
 		}
 
@@ -129,17 +148,64 @@ public class EMFAdapter implements IAdapter {
 				if (childEObjectList != null && !childEObjectList.isEmpty()) {
 					for (EObject child : childEObjectList) {
 						EMFClassElement element = new EMFClassElement();
-						element.childEObject = child;
+						element.eObject = child;
 						element.owner = adaptedEObject;
 						element.reference = childReference;
 						element.addDependency(childReference.getName(), ownerElement);
 						// TODO add maximum dependencies
 						elements.add(element);
-						adapt(child, element.childEObject, elements);
+						adapt(child, element.eObject, elements);
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Once we have all the Elements, we prepare the dependencies
+	 * @param elements
+	 */
+	private void addReferencesDependencies(List<IElement> elements) {
+		for (IElement element : elements) {
+			if (element instanceof EMFReferenceElement) {
+				EMFReferenceElement referenceElement = (EMFReferenceElement) element;
+				// set max and min number of dependencies
+				// if -1 or -2 keep max integer
+				if (referenceElement.eReference.getUpperBound() > 0) {
+					referenceElement.setMaximumDependencies(referenceElement.eReference.getName(),
+							referenceElement.eReference.getUpperBound());
+				}
+				referenceElement.setMinimumDependencies(referenceElement.eReference.getName(),
+						referenceElement.eReference.getLowerBound());
+				// Now add the dependencies
+				for (EObject referenced : referenceElement.referenced) {
+					EMFClassElement classElement = findClassElement(elements, referenced);
+					if (classElement == null) {
+						// this must not happen
+						System.out.println("EMFAdapter.addReferencesDependencies() not found!");
+					}
+					referenceElement.addDependency(referenceElement.eReference.getName(), classElement);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Find the Class Element that contains this eObject
+	 * @param elements
+	 * @param eObject
+	 * @return an EMFClassElement or null
+	 */
+	private EMFClassElement findClassElement(List<IElement> elements, EObject eObject) {
+		for (IElement element : elements) {
+			if (element instanceof EMFClassElement) {
+				EMFClassElement classElement = (EMFClassElement) element;
+				if (eObject.equals(classElement.eObject)) {
+					return classElement;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override

@@ -19,15 +19,15 @@ public class EMFResourceElement extends EMFClassElement {
 	
 	@Override
 	public String getText() {
-		return "Class: " + childEObject.eClass().getName();
+		return "Class: " + eObject.eClass().getName();
 	}
 	
 	@Override
 	public boolean construct(URI uri) {
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource resource = resSet.createResource(org.eclipse.emf.common.util.URI.createURI(uri.toString()));
-		EFactory eFactory = childEObject.eClass().getEPackage().getEFactoryInstance();
-		EObject newChildEObject = eFactory.create(childEObject.eClass());
+		EFactory eFactory = eObject.eClass().getEPackage().getEFactoryInstance();
+		EObject newChildEObject = eFactory.create(eObject.eClass());
 		resource.getContents().add(newChildEObject);
 		try {
 			resource.save(Collections.EMPTY_MAP);
