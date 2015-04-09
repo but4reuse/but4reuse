@@ -241,6 +241,20 @@ public class FileUtils {
 		}
 		return lines;
 	}
+	
+	/**
+	 * Get string
+	 * @param file
+	 * @return
+	 */
+	public static String getStringOfFile(File file) {
+		StringBuilder string = new StringBuilder();
+		for(String line : getLinesOfFile(file)){
+			string.append(line + "\n");
+		}
+		string.setLength(string.length()-1);
+		return string.toString();
+	}
 
 	/**
 	 * Check whether two files have the same content
@@ -327,6 +341,20 @@ public class FileUtils {
 	public static void replace(File oldFile, File newFile) {
 		oldFile.delete();
 		newFile.renameTo(oldFile);
+	}
+
+	/**
+	 * Copy file
+	 * @param sourceFile
+	 * @param destinationFile
+	 */
+	public static void copyFile(File sourceFile, File destinationFile) {
+		// TODO Improve this! copy it correctly
+		try {
+			writeFile(destinationFile, FileUtils.getStringOfFile(sourceFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

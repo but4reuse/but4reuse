@@ -16,6 +16,11 @@ import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+/**
+ * Adapted Model Helper
+ * @author jabier.martinez
+ *
+ */
 public class AdaptedModelHelper {
 
 	/**
@@ -167,7 +172,7 @@ public class AdaptedModelHelper {
 
 	/**
 	 * Return the list of blocks that are present in an Adapted artefact
-	 * 
+	 * TODO improve
 	 * @param adaptedArtefact
 	 * @return the list of blocks
 	 */
@@ -181,7 +186,17 @@ public class AdaptedModelHelper {
 				}
 			}
 		}
-		return blocks;
+		
+		// Sort them
+		List<Block> orderedBlocks = new ArrayList<Block>();
+		AdaptedModel am = (AdaptedModel)adaptedArtefact.eContainer();
+		for(Block block : am.getOwnedBlocks()){
+			if(blocks.contains(block)){
+				orderedBlocks.add(block);
+			}
+		}
+		
+		return orderedBlocks;
 	}
 
 }

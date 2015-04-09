@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.emf;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +10,15 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -67,7 +71,8 @@ public class EMFAdapter implements IAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	private void adapt(EObject eObject, EObject adaptedEObject, List<IElement> elements) {
-		// If it is not covered by the diff policy we are not going to consider it
+		// If it is not covered by the diff policy we are not going to consider
+		// it
 		IComparisonMethod comparisonMethod = DiffMergeUtils.getComparisonMethod(adaptedEObject, adaptedEObject);
 		// Current child to set the owner is the last element
 		AbstractElement ownerElement = (AbstractElement) elements.get(elements.size() - 1);
@@ -163,6 +168,7 @@ public class EMFAdapter implements IAdapter {
 
 	/**
 	 * Once we have all the Elements, we prepare the dependencies
+	 * 
 	 * @param elements
 	 */
 	private void addReferencesDependencies(List<IElement> elements) {
@@ -192,6 +198,7 @@ public class EMFAdapter implements IAdapter {
 
 	/**
 	 * Find the Class Element that contains this eObject
+	 * 
 	 * @param elements
 	 * @param eObject
 	 * @return an EMFClassElement or null
@@ -210,14 +217,67 @@ public class EMFAdapter implements IAdapter {
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		// TODO construct EMF
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
-						"For the moment, construction is not available for the EMF adapter");
+		try {
+			URI original = null;
+			// Check if there is a resource element
+			EMFResourceElement res = null;
+			for (IElement element : elements) {
+				if (element instanceof EMFResourceElement) {
+					res = (EMFResourceElement) element;
+					original = new URI(res.eObject.eResource().getURI().toString());
+					File sourceFile = FileUtils.getFile(original);
+					File destinationFile = FileUtils.getFile(uri);
+					FileUtils.copyFile(sourceFile, destinationFile);
+					break;
+				}
 			}
-		});
+			// in uri we have the copy of the model
+			// We remove all the Elements from the copy that are not in the list
+			// of elements
+			if (res != null) {
+				EObject sourceModel = res.eObject;
+				EObject destinationModel = EMFUtils.getEObject(uri);
+				// the iterators will have the same order
+				TreeIterator<EObject> sourceIterator = sourceModel.eAllContents();
+				TreeIterator<EObject> destinationIterator = destinationModel.eAllContents();
+				List<EObject> toBeRemoved = new ArrayList<EObject>();
+				while (sourceIterator.hasNext()) {
+					EObject se = sourceIterator.next();
+					EObject de = destinationIterator.next();
+					if (!containedInTheElements(se, elements)) {
+						toBeRemoved.add(de);
+					}
+				}
+				// remove them
+				for(EObject e : toBeRemoved){
+					EcoreUtil.delete(e, true);
+				}
+				EMFUtils.saveResource(destinationModel.eResource());
+			} else {
+				// TODO construct EMF
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
+								"For the moment, construction is not available for the EMF adapter");
+					}
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private boolean containedInTheElements(EObject se, List<IElement> elements) {
+		for (IElement element : elements) {
+			if (element instanceof EMFClassElement) {
+				EObject e = ((EMFClassElement) element).eObject;
+				if (e.equals(se)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

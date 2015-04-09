@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 
+import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -25,8 +26,8 @@ public class EMFResourceElement extends EMFClassElement {
 	@Override
 	public boolean construct(URI uri) {
 		ResourceSet resSet = new ResourceSetImpl();
-		Resource resource = resSet.createResource(org.eclipse.emf.common.util.URI.createURI(uri.toString()));
-		EFactory eFactory = eObject.eClass().getEPackage().getEFactoryInstance();
+		Resource resource = resSet.createResource(EMFUtils.uriToEMFURI(uri));
+		EFactory eFactory = EMFUtils.getEFactory(eObject);
 		EObject newChildEObject = eFactory.create(eObject.eClass());
 		resource.getContents().add(newChildEObject);
 		try {

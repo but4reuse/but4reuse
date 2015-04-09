@@ -3,6 +3,7 @@ package org.but4reuse.utils.emf;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
@@ -109,6 +115,29 @@ public class EMFUtils {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static void saveEObject(URI uri, EObject eObject) throws IOException {  
+		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		  Map<String, Object> m = reg.getExtensionToFactoryMap();
+		  m.put("daform", new XMIResourceFactoryImpl());
+
+		  ResourceSet resSet = new ResourceSetImpl();
+		  Resource resource = resSet.createResource(uriToEMFURI(uri));
+		  resource.getContents().add(eObject);
+		  resource.save(Collections.EMPTY_MAP);
+		}
+
+	public static org.eclipse.emf.common.util.URI uriToEMFURI(URI uri) {
+		return org.eclipse.emf.common.util.URI.createURI(uri.toString());
+	}
+
+	public static EFactory getEFactory(EObject eObject) {
+		return getEPackage(eObject).getEFactoryInstance();
+	}
+	
+	public static EPackage getEPackage(EObject eObject) {
+		return eObject.eClass().getEPackage();
 	}
 
 }

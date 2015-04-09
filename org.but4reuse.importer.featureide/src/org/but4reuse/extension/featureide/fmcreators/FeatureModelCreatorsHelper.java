@@ -18,6 +18,7 @@ public class FeatureModelCreatorsHelper {
 
 	/**
 	 * Get all feature model creators
+	 * 
 	 * @return get the list
 	 */
 	public static List<IFeatureModelCreator> getAllFeatureModelCreators() {
@@ -32,6 +33,27 @@ public class FeatureModelCreatorsHelper {
 			}
 		}
 		return fmCreators;
+	}
+
+	/**
+	 * Get feature model creator by name
+	 * 
+	 * @param name
+	 * @return null or the feature model creator
+	 */
+	public static IFeatureModelCreator getFeatureModelCreatorByName(String name) {
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				FEATUREMODELCREATORS_EXTENSIONPOINT);
+		for (IConfigurationElement fmCreatorExtensionPoint : adapterExtensionPoints) {
+			if (fmCreatorExtensionPoint.getAttribute("name").equals(name)) {
+				try {
+					return (IFeatureModelCreator) fmCreatorExtensionPoint.createExecutableExtension("class");
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 
 }
