@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.featurelist;
+package org.but4reuse.visualisation.impl.visualiser.featurelist;
 
 import java.util.ArrayList;
 import java.util.List;

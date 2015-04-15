@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.adaptedmodel;
+package org.but4reuse.visualisation.impl.visualiser.adaptedmodel;
 
 import org.but4reuse.adapters.IElement;
 import org.eclipse.contribution.visualiser.core.Stripe;

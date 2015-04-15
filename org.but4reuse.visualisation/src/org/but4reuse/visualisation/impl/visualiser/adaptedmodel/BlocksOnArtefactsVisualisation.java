@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.adaptedmodel;
+package org.but4reuse.visualisation.impl.visualiser.adaptedmodel;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.featurelist.FeatureList;
@@ -10,7 +10,7 @@ import org.eclipse.contribution.visualiser.core.ProviderManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
-public class BlockElementsOnArtefactsVisualisation implements IVisualisation {
+public class BlocksOnArtefactsVisualisation implements IVisualisation {
 
 	ProviderDefinition definition;
 	BlockElementsMarkupProvider markupProvider;
@@ -18,8 +18,8 @@ public class BlockElementsOnArtefactsVisualisation implements IVisualisation {
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
-		definition = getBlockElementsOnVariantsProvider();
-		BlockElementsContentProvider contentProvider = (BlockElementsContentProvider) definition.getContentProvider();
+		definition = getBlocksOnArtefactsProvider();
+		BlocksContentProvider contentProvider = (BlocksContentProvider) definition.getContentProvider();
 		markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
 		// reset
 		contentProvider.reset();
@@ -36,9 +36,9 @@ public class BlockElementsOnArtefactsVisualisation implements IVisualisation {
 	 * 
 	 * @return this visualisation provider
 	 */
-	public static ProviderDefinition getBlockElementsOnVariantsProvider() {
+	public static ProviderDefinition getBlocksOnArtefactsProvider() {
 		for (ProviderDefinition definition : ProviderManager.getAllProviderDefinitions()) {
-			if (definition.getID().equals("org.but4reuse.visualisation.blockelementsonartefacts.provider")) {
+			if (definition.getID().equals("org.but4reuse.visualisation.blocksonartefacts.provider")) {
 				return definition;
 			}
 		}

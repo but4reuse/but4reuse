@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.adaptedmodel;
+package org.but4reuse.visualisation.impl.visualiser.adaptedmodel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

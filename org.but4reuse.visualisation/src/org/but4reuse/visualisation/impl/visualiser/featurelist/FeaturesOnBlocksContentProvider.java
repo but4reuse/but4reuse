@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.featurelist;
+package org.but4reuse.visualisation.impl.visualiser.featurelist;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.files.FileUtils;
-import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
+import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IGroup;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;

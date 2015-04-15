@@ -63,7 +63,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 									InterruptedException {
 
 								// Adapting each active artefact + calculating blocks + constraints discovery + feature location + prepare visualisations
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1 + VisualisationsHelper.getAllVisualisations().size();
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1 + VisualisationsHelper.getSelectedVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 								
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);

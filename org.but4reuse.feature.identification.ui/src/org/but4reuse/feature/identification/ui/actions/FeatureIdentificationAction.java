@@ -64,7 +64,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								// blocks + constraints discovery + prepare
 								// visualisation
 								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1
-										+ VisualisationsHelper.getAllVisualisations().size();
+										+ VisualisationsHelper.getSelectedVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);

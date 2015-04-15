@@ -1,10 +1,10 @@
-package org.but4reuse.visualisation.visualiser.featurelist;
+package org.but4reuse.visualisation.impl.visualiser.featurelist;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
-import org.but4reuse.visualisation.visualiser.adaptedmodel.BlockElementsMarkupProvider;
+import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.eclipse.contribution.visualiser.VisualiserPlugin;
 import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.core.ProviderManager;

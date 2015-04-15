@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.featurelist;
+package org.but4reuse.visualisation.impl.visualiser.featurelist;
 
 import org.but4reuse.featurelist.Feature;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleMarkupKind;

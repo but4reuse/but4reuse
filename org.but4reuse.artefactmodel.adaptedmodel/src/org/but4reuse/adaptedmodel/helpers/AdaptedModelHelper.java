@@ -198,5 +198,45 @@ public class AdaptedModelHelper {
 		
 		return orderedBlocks;
 	}
+	
+	/**
+	 * Get the list of elements of one block
+	 * @param block
+	 * @return
+	 */
+	public static List<IElement> getElementsOfBlock(Block block){
+		List<IElement> elements = new ArrayList<IElement>();
+		for(BlockElement be : block.getOwnedBlockElements()){
+			// TODO we just get the first one
+			elements.add((IElement)be.getElementWrappers().get(0).getElement());
+		}
+		return elements;
+	}
+
+	/**
+	 * Get the blocks that are on the adapted artefacts
+	 * @param adaptedModel
+	 * @return a non-empty list
+	 */
+	public static List<Block> getCommonBlocks(AdaptedModel adaptedModel) {
+		// do not modify the adaptedModel
+		List<Block> blocks = adaptedModel.getOwnedBlocks();
+		List<Block> toBeRemoved = new ArrayList<Block>();
+		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
+			List<Block> aaBlocks = getBlocksOfAdaptedArtefact(aa);
+			for(Block b : blocks){
+				if(!toBeRemoved.contains(b) && !aaBlocks.contains(b)){
+					toBeRemoved.add(b);
+				}
+			}
+		}
+		List<Block> common = new ArrayList<Block>();
+		for(Block b : blocks){
+			if(!toBeRemoved.contains(b)){
+				common.add(b);
+			}
+		}
+		return common;
+	}
 
 }

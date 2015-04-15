@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * Intialize Constraints discovery preferences by selecting only the default algorithm
+ * Initialize Constraints discovery preferences by selecting only the default algorithm
  * 
  * @author jabier.martinez
  * 
@@ -21,7 +21,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		for (IConstraintsDiscovery algo : algos) {
 			String algoName = ConstraintsDiscoveryHelper.getAlgorithmName(algo);
 			boolean isTheDefault = algoName.equals("Structural binary relations constraints");
-			store.setDefault(ConstraintsDiscoveryHelper.getAlgorithmName(algo), isTheDefault);
+			store.setDefault(algoName, isTheDefault);
 		}
 	}
 

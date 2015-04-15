@@ -5,7 +5,7 @@
          point="org.but4reuse.visualisation">
       <visualisation
             class="org.but4reuse.visualisation.graphs.GraphVisualisation"
-            name="Graph">
+            name="Graph visualisations of Blocks and Elements">
       </visualisation>
    </extension>
    <extension

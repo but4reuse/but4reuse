@@ -1,4 +1,4 @@
-package org.but4reuse.visualisation.visualiser.adaptedmodel;
+package org.but4reuse.visualisation.impl.visualiser.featurelist;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.featurelist.FeatureList;
@@ -10,24 +10,30 @@ import org.eclipse.contribution.visualiser.core.ProviderManager;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 
-public class BlocksOnArtefactsVisualisation implements IVisualisation {
+public class FeaturesOnBlocksVisualisation implements IVisualisation {
 
 	ProviderDefinition definition;
-	BlockElementsMarkupProvider markupProvider;
+	FeaturesMarkupProvider markupProvider;
+	boolean show;
 	
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
-
-		definition = getBlocksOnArtefactsProvider();
-		BlocksContentProvider contentProvider = (BlocksContentProvider) definition.getContentProvider();
-		markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
+		// Nothing if feature list is null
+		if (featureList == null) {
+			show=false;
+			return;
+		}
+		show=true;
+		definition = getFeaturesOnBlocksProvider();
+		BlocksOnFeaturesContentProvider contentProvider = (BlocksOnFeaturesContentProvider) definition.getContentProvider();
+		markupProvider = (FeaturesMarkupProvider) definition.getMarkupInstance();
 		// reset
 		contentProvider.reset();
 		markupProvider.reset();
 		// creates the blocks on the menu
-		markupProvider.update(adaptedModel);
-		// fill the variants and add the stripes
-		contentProvider.update(adaptedModel);
+		markupProvider.update(featureList);
+		// fill the blocks and add the stripes
+		contentProvider.update(featureList, adaptedModel);
 
 	}
 
@@ -36,9 +42,9 @@ public class BlocksOnArtefactsVisualisation implements IVisualisation {
 	 * 
 	 * @return this visualisation provider
 	 */
-	public static ProviderDefinition getBlocksOnArtefactsProvider() {
+	public static ProviderDefinition getFeaturesOnBlocksProvider() {
 		for (ProviderDefinition definition : ProviderManager.getAllProviderDefinitions()) {
-			if (definition.getID().equals("org.but4reuse.visualisation.blocksonartefacts.provider")) {
+			if (definition.getID().equals("org.but4reuse.visualisation.featuresonblocks.provider")) {
 				return definition;
 			}
 		}
@@ -47,6 +53,9 @@ public class BlocksOnArtefactsVisualisation implements IVisualisation {
 
 	@Override
 	public void show() {
+		if(!show){
+			return;
+		}
 		// asyncExec to avoid SWT invalid thread access
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override

@@ -17,6 +17,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.visualisation,
  org.but4reuse.visualisation.helpers,
- org.but4reuse.visualisation.visualiser.adaptedmodel,
- org.but4reuse.visualisation.visualiser.featurelist
-Import-Package: org.eclipse.core.resources
+ org.but4reuse.visualisation.impl.visualiser.adaptedmodel,
+ org.but4reuse.visualisation.impl.visualiser.featurelist
