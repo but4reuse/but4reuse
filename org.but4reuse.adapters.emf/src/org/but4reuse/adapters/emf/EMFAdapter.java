@@ -259,7 +259,7 @@ public class EMFAdapter implements IAdapter {
 					@Override
 					public void run() {
 						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
-								"For the moment, construction is not available for the EMF adapter");
+								"For the moment, construction is only available when a Resource element is part of the construction");
 					}
 				});
 			}
