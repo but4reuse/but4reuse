@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
@@ -39,7 +40,15 @@ public class MetricsVisualisation implements IVisualisation {
 			public void run() {
 				StringBuilder text = new StringBuilder();
 				// General metrics of the Adapted model
-				text.append("Blocks= " + adaptedModel.getOwnedBlocks().size());
+				text.append("Artefacts= " + adaptedModel.getOwnedAdaptedArtefacts().size());
+				List<Double> nElementsPerArtefact = new ArrayList<Double>();
+				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+					double nElements = aa.getOwnedElementWrappers().size();
+					nElementsPerArtefact.add(nElements);
+				}
+				addMetrics(text, "Number of Elements per Artefact", nElementsPerArtefact);
+				
+				text.append("\n\nBlocks= " + adaptedModel.getOwnedBlocks().size());
 				List<Double> nElementsPerBlock = new ArrayList<Double>();
 				for (Block block : adaptedModel.getOwnedBlocks()) {
 					double nElements = block.getOwnedBlockElements().size();
@@ -47,6 +56,8 @@ public class MetricsVisualisation implements IVisualisation {
 				}
 				addMetrics(text, "Number of Elements per Block", nElementsPerBlock);
 
+				text.append("\n\nBlock Constraints= " + ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
+				
 				if (featureList != null) {
 					// Feature Related Metrics
 					List<Double> nBlocksInFeatures = new ArrayList<Double>();
