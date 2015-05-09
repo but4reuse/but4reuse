@@ -5,11 +5,14 @@ import java.net.URI;
 import java.util.Collections;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.emf.activator.Activator;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
+import org.but4reuse.adapters.emf.preferences.EMFAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -19,6 +22,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
 /**
  * EMF Class Element
+ * 
  * @author jabier.martinez
  */
 public class EMFClassElement extends AbstractElement {
@@ -26,16 +30,20 @@ public class EMFClassElement extends AbstractElement {
 	public EObject owner;
 	public EReference reference;
 	public EObject eObject;
+	boolean isResource = false;
 
-	
 	@Override
 	public String getText() {
-		return ("Class: " + eObject.eClass().getName() +  " [Text->" + EMFUtils.getText(eObject) + "] [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
+		if (isResource) {
+			return "Class: " + eObject.eClass().getName();
+		}
+		return ("Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "] [Owner->"
+				+ EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
 	}
-	
+
 	public boolean construct(URI uri) {
-		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(
-				EMFAdapter.ADAPTER_FACTORY, new BasicCommandStack());
+		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(EMFAdapter.ADAPTER_FACTORY,
+				new BasicCommandStack());
 		EFactory eFactory = eObject.eClass().getEPackage().getEFactoryInstance();
 		EObject newChildEObject = eFactory.create(eObject.eClass());
 		Command command = null;
@@ -45,7 +53,7 @@ public class EMFClassElement extends AbstractElement {
 		} else {
 			command = SetCommand.create(domain, owner, reference, newChildEObject);
 		}
-		if (command!=null && command.canExecute()){
+		if (command != null && command.canExecute()) {
 			domain.getCommandStack().execute(command);
 		} else {
 			return false;
@@ -61,13 +69,26 @@ public class EMFClassElement extends AbstractElement {
 
 	@Override
 	public double similarity(IElement anotherElement) {
-		if (anotherElement instanceof EMFClassElement){
-			EMFClassElement targetClassElement = (EMFClassElement)anotherElement;
-			if(DiffMergeUtils.isEqualEObject(eObject, targetClassElement.eObject)){
+		if (anotherElement instanceof EMFClassElement) {
+			EMFClassElement targetClassElement = (EMFClassElement) anotherElement;
+			if (DiffMergeUtils.isEqualEObject(eObject, targetClassElement.eObject)) {
 				return 1;
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public int hashCode() {
+		if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.XML_ID_HASHING)) {
+			String id = ModelImplUtil.getXMLID(eObject);
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			return result;
+		} else {
+			return super.hashCode();
+		}
 	}
 
 }

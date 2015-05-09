@@ -51,7 +51,8 @@ public class EMFAdapter implements IAdapter {
 		// First construction primitive is the Resource creation
 		List<IElement> elements = new ArrayList<IElement>();
 		EObject eObject = EMFUtils.getEObject(uri);
-		EMFResourceElement element = new EMFResourceElement();
+		EMFClassElement element = new EMFClassElement();
+		element.isResource = true;
 		element.owner = null;
 		element.reference = null;
 		element.eObject = eObject;
@@ -220,15 +221,17 @@ public class EMFAdapter implements IAdapter {
 		try {
 			URI original = null;
 			// Check if there is a resource element
-			EMFResourceElement res = null;
+			EMFClassElement res = null;
 			for (IElement element : elements) {
-				if (element instanceof EMFResourceElement) {
-					res = (EMFResourceElement) element;
+				if (element instanceof EMFClassElement) {
+					res = (EMFClassElement) element;
+					if(res.isResource){
 					original = new URI(res.eObject.eResource().getURI().toString());
 					File sourceFile = FileUtils.getFile(original);
 					File destinationFile = FileUtils.getFile(uri);
 					FileUtils.copyFile(sourceFile, destinationFile);
 					break;
+					}
 				}
 			}
 			// in uri we have the copy of the model
