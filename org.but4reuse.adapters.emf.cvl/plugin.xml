@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.viewActions">
+<viewContribution
+            id="org.but4reuse.adapters.emf.cvl.actions.createcvl"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.emf.cvl.actions.CreateCVLAction"
+               icon="icons/cvl.png"
+               id="org.but4reuse.adapters.emf.cvl.actions.CreateCVLAction"
+               label="Create CVL model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+</plugin>
