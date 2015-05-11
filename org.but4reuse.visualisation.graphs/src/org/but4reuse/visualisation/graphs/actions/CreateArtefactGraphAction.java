@@ -9,16 +9,17 @@ import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
-import org.but4reuse.blockcreation.helper.BlockCreationHelper;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.graphs.GraphVisualisation;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -86,11 +87,14 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 									adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
 									
-									// Create a fake block
-									IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
-									List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
-									blocks = AdaptedModelHelper.checkBlockNames(blocks);
-									adaptedModel.getOwnedBlocks().addAll(blocks);
+									Block fakeBlock = AdaptedModelFactory.eINSTANCE.createBlock();
+									fakeBlock.setName("GraphBlock");
+									for(ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()){
+										BlockElement blockElement = AdaptedModelFactory.eINSTANCE.createBlockElement();
+										blockElement.getElementWrappers().add(ew);
+										fakeBlock.getOwnedBlockElements().add(blockElement);
+									}
+									adaptedModel.getOwnedBlocks().add(fakeBlock);
 									
 									// Create the graph
 									Graph graph = GraphVisualisation.createElementsGraph(adaptedModel, monitor);
@@ -107,8 +111,10 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									}
 									
 									// Refresh
-									// TODO more specific refresh
-									WorkbenchUtils.refreshAllWorkspace();
+									IResource iResource = WorkbenchUtils.getIResourceFromURI(graphURI);
+									if(iResource!=null){
+										WorkbenchUtils.refreshIResource(iResource);
+									}
 									
 									monitor.worked(1);
 									monitor.done();

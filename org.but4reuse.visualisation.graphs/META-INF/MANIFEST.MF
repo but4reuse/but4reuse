@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.visualisation.graphs.activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.visualisation,
- org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
  org.but4reuse.utils,
@@ -14,8 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.feature.constraints,
  org.but4reuse.adapters.ui,
  org.eclipse.jface,
- org.eclipse.ui.workbench,
- org.but4reuse.blockcreation
+ org.eclipse.ui.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/blueprints-core-2.6.0.jar,
