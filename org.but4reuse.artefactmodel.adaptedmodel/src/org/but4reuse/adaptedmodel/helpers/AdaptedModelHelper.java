@@ -1,6 +1,7 @@
 package org.but4reuse.adaptedmodel.helpers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -10,6 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.artefactmodel.Artefact;
@@ -18,8 +20,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Adapted Model Helper
+ * 
  * @author jabier.martinez
- *
+ * 
  */
 public class AdaptedModelHelper {
 
@@ -171,8 +174,9 @@ public class AdaptedModelHelper {
 	}
 
 	/**
-	 * Return the list of blocks that are present in an Adapted artefact
-	 * TODO improve
+	 * Return the list of blocks that are present in an Adapted artefact TODO
+	 * improve
+	 * 
 	 * @param adaptedArtefact
 	 * @return the list of blocks
 	 */
@@ -186,35 +190,37 @@ public class AdaptedModelHelper {
 				}
 			}
 		}
-		
+
 		// Sort them
 		List<Block> orderedBlocks = new ArrayList<Block>();
-		AdaptedModel am = (AdaptedModel)adaptedArtefact.eContainer();
-		for(Block block : am.getOwnedBlocks()){
-			if(blocks.contains(block)){
+		AdaptedModel am = (AdaptedModel) adaptedArtefact.eContainer();
+		for (Block block : am.getOwnedBlocks()) {
+			if (blocks.contains(block)) {
 				orderedBlocks.add(block);
 			}
 		}
-		
+
 		return orderedBlocks;
 	}
-	
+
 	/**
 	 * Get the list of elements of one block
+	 * 
 	 * @param block
 	 * @return
 	 */
-	public static List<IElement> getElementsOfBlock(Block block){
+	public static List<IElement> getElementsOfBlock(Block block) {
 		List<IElement> elements = new ArrayList<IElement>();
-		for(BlockElement be : block.getOwnedBlockElements()){
+		for (BlockElement be : block.getOwnedBlockElements()) {
 			// TODO we just get the first one
-			elements.add((IElement)be.getElementWrappers().get(0).getElement());
+			elements.add((IElement) be.getElementWrappers().get(0).getElement());
 		}
 		return elements;
 	}
 
 	/**
 	 * Get the blocks that are on the adapted artefacts
+	 * 
 	 * @param adaptedModel
 	 * @return a non-empty list
 	 */
@@ -222,21 +228,43 @@ public class AdaptedModelHelper {
 		// do not modify the adaptedModel
 		List<Block> blocks = adaptedModel.getOwnedBlocks();
 		List<Block> toBeRemoved = new ArrayList<Block>();
-		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 			List<Block> aaBlocks = getBlocksOfAdaptedArtefact(aa);
-			for(Block b : blocks){
-				if(!toBeRemoved.contains(b) && !aaBlocks.contains(b)){
+			for (Block b : blocks) {
+				if (!toBeRemoved.contains(b) && !aaBlocks.contains(b)) {
 					toBeRemoved.add(b);
 				}
 			}
 		}
 		List<Block> common = new ArrayList<Block>();
-		for(Block b : blocks){
-			if(!toBeRemoved.contains(b)){
+		for (Block b : blocks) {
+			if (!toBeRemoved.contains(b)) {
 				common.add(b);
 			}
 		}
 		return common;
+	}
+
+	/**
+	 * Get all the dependency objects that points to a given element
+	 * @param adaptedModel
+	 * @param element
+	 * @return
+	 */
+	public static List<IDependencyObject> getDependingOnIElement(AdaptedModel adaptedModel, IElement element) {
+		List<IDependencyObject> depObjects = new ArrayList<IDependencyObject>();
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			for (IElement e : getElementsOfBlock(block)) {
+				for (Collection<IDependencyObject> c : e.getDependencies().values()) {
+					for (IDependencyObject ado : c) {
+						if (ado.equals(element)) {
+							depObjects.add(e);
+						}
+					}
+				}
+			}
+		}
+		return depObjects;
 	}
 
 }

@@ -1,24 +1,24 @@
 package org.but4reuse.adapters.emf;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.emf.activator.Activator;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
+import org.but4reuse.adapters.emf.preferences.EMFAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
-import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -81,9 +81,18 @@ public class EMFAdapter implements IAdapter {
 		// Attributes
 		List<EAttribute> attributes = eObject.eClass().getEAllAttributes();
 		for (EAttribute attr : attributes) {
+			// should it be covered by the diff policy
 			if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
+				// is a real attribute
 				if (!attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
 					Object o = eObject.eGet(attr);
+					if (o instanceof Enumerator) {
+						// because eGet will return a value even if it was
+						// undefined
+						if (!eObject.eIsSet(attr)) {
+							o = null;
+						}
+					}
 					if (o != null) {
 						EMFAttributeElement element = new EMFAttributeElement();
 						element.owner = adaptedEObject;
@@ -117,9 +126,11 @@ public class EMFAdapter implements IAdapter {
 					}
 					EMFReferenceElement element = new EMFReferenceElement();
 					element.owner = adaptedEObject;
+					element.ownerElement = ownerElement;
 					element.eReference = ref;
 					// if (refList != null) {
 					element.referenced = new ArrayList<EObject>();
+					element.referencedElements = new ArrayList<EMFClassElement>();
 					for (EObject r : refList) {
 						element.referenced.add(r);
 					}
@@ -191,6 +202,7 @@ public class EMFAdapter implements IAdapter {
 						// this must not happen
 						System.out.println("EMFAdapter.addReferencesDependencies() not found!");
 					}
+					referenceElement.referencedElements.add(classElement);
 					referenceElement.addDependency(referenceElement.eReference.getName(), classElement);
 				}
 			}
@@ -218,69 +230,36 @@ public class EMFAdapter implements IAdapter {
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		try {
-			URI original = null;
-			// Check if there is a resource element
-			EMFClassElement res = null;
-			for (IElement element : elements) {
-				if (element instanceof EMFClassElement) {
-					res = (EMFClassElement) element;
-					if(res.isResource){
-					original = new URI(res.eObject.eResource().getURI().toString());
-					File sourceFile = FileUtils.getFile(original);
-					File destinationFile = FileUtils.getFile(uri);
-					FileUtils.copyFile(sourceFile, destinationFile);
-					break;
-					}
-				}
+		// TODO construct fragments. Using CVL extraction for the moment
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
+						"For the moment, construction is not available. Use CVL extraction action instead.");
 			}
-			// in uri we have the copy of the model
-			// We remove all the Elements from the copy that are not in the list
-			// of elements
-			if (res != null) {
-				EObject sourceModel = res.eObject;
-				EObject destinationModel = EMFUtils.getEObject(uri);
-				// the iterators will have the same order
-				TreeIterator<EObject> sourceIterator = sourceModel.eAllContents();
-				TreeIterator<EObject> destinationIterator = destinationModel.eAllContents();
-				List<EObject> toBeRemoved = new ArrayList<EObject>();
-				while (sourceIterator.hasNext()) {
-					EObject se = sourceIterator.next();
-					EObject de = destinationIterator.next();
-					if (!containedInTheElements(se, elements)) {
-						toBeRemoved.add(de);
-					}
-				}
-				// remove them
-				for(EObject e : toBeRemoved){
-					EcoreUtil.delete(e, true);
-				}
-				EMFUtils.saveResource(destinationModel.eResource());
-			} else {
-				// TODO construct EMF
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
-								"For the moment, construction is only available when a Resource element is part of the construction");
-					}
-				});
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
 
-	private boolean containedInTheElements(EObject se, List<IElement> elements) {
-		for (IElement element : elements) {
-			if (element instanceof EMFClassElement) {
-				EObject e = ((EMFClassElement) element).eObject;
-				if (e.equals(se)) {
-					return true;
-				}
-			}
+	/**
+	 * Get the hash code of an eObject based on the extrensic id (e.g. xmi id).
+	 * To be activated or deactivated in the preferences page of the adapter.
+	 * Use it (it will boost the speed) if we can assume that two eObjects with
+	 * the same extrensic id must be the same and that it cannot happen that two
+	 * eObjects are different with the same extrensic id.
+	 * 
+	 * @param eObject
+	 * @return
+	 */
+	public static int getHashCode(EObject eObject) {
+		if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.XML_ID_HASHING)) {
+			String id = ModelImplUtil.getXMLID(eObject);
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			return result;
+		} else {
+			return 1;
 		}
-		return false;
 	}
 
 }

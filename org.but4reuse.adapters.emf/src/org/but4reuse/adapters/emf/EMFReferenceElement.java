@@ -3,12 +3,9 @@ package org.but4reuse.adapters.emf;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.emf.activator.Activator;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
-import org.but4reuse.adapters.emf.preferences.EMFAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
@@ -22,6 +19,8 @@ public class EMFReferenceElement extends AbstractElement {
 	public EObject owner;
 	public EReference eReference;
 	public List<EObject> referenced;
+	public IElement ownerElement;
+	public List<EMFClassElement> referencedElements;
 
 	@Override
 	public String getText() {
@@ -52,15 +51,7 @@ public class EMFReferenceElement extends AbstractElement {
 	
 	@Override
 	public int hashCode() {
-		if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.XML_ID_HASHING)) {
-			String id = ModelImplUtil.getXMLID(owner);
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			return result;
-		} else {
-			return super.hashCode();
-		}
+		return EMFAdapter.getHashCode(owner);
 	}
 
 }

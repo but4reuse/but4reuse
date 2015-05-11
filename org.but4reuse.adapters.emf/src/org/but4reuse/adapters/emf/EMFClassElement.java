@@ -1,24 +1,11 @@
 package org.but4reuse.adapters.emf;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Collections;
-
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.emf.activator.Activator;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
-import org.but4reuse.adapters.emf.preferences.EMFAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
-import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 
 /**
  * EMF Class Element
@@ -30,7 +17,7 @@ public class EMFClassElement extends AbstractElement {
 	public EObject owner;
 	public EReference reference;
 	public EObject eObject;
-	boolean isResource = false;
+	public boolean isResource = false;
 
 	@Override
 	public String getText() {
@@ -39,32 +26,6 @@ public class EMFClassElement extends AbstractElement {
 		}
 		return ("Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "] [Owner->"
 				+ EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
-	}
-
-	public boolean construct(URI uri) {
-		AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(EMFAdapter.ADAPTER_FACTORY,
-				new BasicCommandStack());
-		EFactory eFactory = eObject.eClass().getEPackage().getEFactoryInstance();
-		EObject newChildEObject = eFactory.create(eObject.eClass());
-		Command command = null;
-		// TODO check cardinalities
-		if (reference.isMany()) {
-			command = AddCommand.create(domain, owner, reference, newChildEObject);
-		} else {
-			command = SetCommand.create(domain, owner, reference, newChildEObject);
-		}
-		if (command != null && command.canExecute()) {
-			domain.getCommandStack().execute(command);
-		} else {
-			return false;
-		}
-		try {
-			owner.eResource().save(Collections.EMPTY_MAP);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -80,15 +41,7 @@ public class EMFClassElement extends AbstractElement {
 
 	@Override
 	public int hashCode() {
-		if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.XML_ID_HASHING)) {
-			String id = ModelImplUtil.getXMLID(eObject);
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((id == null) ? 0 : id.hashCode());
-			return result;
-		} else {
-			return super.hashCode();
-		}
+		return EMFAdapter.getHashCode(eObject);
 	}
 
 }
