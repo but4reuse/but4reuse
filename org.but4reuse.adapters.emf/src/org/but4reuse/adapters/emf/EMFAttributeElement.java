@@ -27,9 +27,9 @@ public class EMFAttributeElement extends AbstractElement {
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFAttributeElement) {
-			EMFAttributeElement targetCP = (EMFAttributeElement) anotherElement;
-			if (DiffMergeUtils.isEqualEObjectAttribute(owner, eAttribute, value, targetCP.owner, targetCP.eAttribute,
-					targetCP.value)) {
+			EMFAttributeElement targetElement = (EMFAttributeElement) anotherElement;
+			if (DiffMergeUtils.isEqualEObjectAttribute(EMFAdapter.getComparisonMethod(), owner, eAttribute, value, targetElement.owner, targetElement.eAttribute,
+					targetElement.value)) {
 				return 1;
 			}
 		}

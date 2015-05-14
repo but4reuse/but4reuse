@@ -14,6 +14,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.provider.EcoreItemProviderAdapterFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -74,7 +75,7 @@ public class EMFUtils {
 		AdapterFactoryLabelProvider aflp = new AdapterFactoryLabelProvider(factory);
 		return aflp.getText(eObject);
 	}
-	
+
 	/**
 	 * Get the icon of an EObject
 	 * 
@@ -87,9 +88,9 @@ public class EMFUtils {
 		return aflp.getImage(eObject);
 	}
 
-
 	/**
 	 * Get an IResource from an EMF resource
+	 * 
 	 * @param eResource
 	 * @return the iResource
 	 */
@@ -101,32 +102,34 @@ public class EMFUtils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Save resource
+	 * 
 	 * @param resource
 	 */
 	public static void saveResource(Resource resource) {
-		Map<Object, Object> saveOptions = ((XMLResource) resource).getDefaultSaveOptions();
-		saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
-		saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
+		Map<Object, Object> options = ((XMLResource) resource).getDefaultSaveOptions();
+		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
+		options.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
+		options.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
 		try {
-			resource.save(saveOptions);
+			resource.save(options);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static void saveEObject(URI uri, EObject eObject) throws IOException {  
-		  Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-		  Map<String, Object> m = reg.getExtensionToFactoryMap();
-		  m.put("daform", new XMIResourceFactoryImpl());
 
-		  ResourceSet resSet = new ResourceSetImpl();
-		  Resource resource = resSet.createResource(uriToEMFURI(uri));
-		  resource.getContents().add(eObject);
-		  resource.save(Collections.EMPTY_MAP);
-		}
+	public static void saveEObject(URI uri, EObject eObject) throws IOException {
+		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		Map<String, Object> m = reg.getExtensionToFactoryMap();
+		m.put("daform", new XMIResourceFactoryImpl());
+
+		ResourceSet resSet = new ResourceSetImpl();
+		Resource resource = resSet.createResource(uriToEMFURI(uri));
+		resource.getContents().add(eObject);
+		resource.save(Collections.EMPTY_MAP);
+	}
 
 	public static org.eclipse.emf.common.util.URI uriToEMFURI(URI uri) {
 		return org.eclipse.emf.common.util.URI.createURI(uri.toString());
@@ -135,9 +138,33 @@ public class EMFUtils {
 	public static EFactory getEFactory(EObject eObject) {
 		return getEPackage(eObject).getEFactoryInstance();
 	}
-	
+
 	public static EPackage getEPackage(EObject eObject) {
 		return eObject.eClass().getEPackage();
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * Get the referenced EObjects. The precondition is that the reference belongs to this meta-class
+	 * @param eObject
+	 * @param reference
+	 * @return A non null List
+	 */
+	public static List<EObject> getReferencedEObjects(EObject eObject, EReference reference) {
+		List<EObject> refList = new ArrayList<EObject>();
+		if (reference.isMany()) {
+			Object o = eObject.eGet(reference);
+			if (o != null && o instanceof List<?>) {
+				refList = (List<EObject>) o;
+			}
+		} else {
+			Object ob = eObject.eGet(reference);
+			if (ob != null && ob instanceof EObject) {
+				EObject o = (EObject) ob;
+				refList.add(o);
+			}
+		}
+		return refList;
 	}
 
 }

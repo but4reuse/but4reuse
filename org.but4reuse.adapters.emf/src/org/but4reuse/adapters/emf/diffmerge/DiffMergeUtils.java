@@ -53,7 +53,7 @@ public class DiffMergeUtils {
 	 * @param targetEObject
 	 * @return
 	 */
-	public static boolean isEqualEObject(EObject referenceEObject, EObject targetEObject) {
+	public static boolean isEqualEObject(IComparisonMethod icm, EObject referenceEObject, EObject targetEObject) {
 
 		List<EObject> referenceElements = new ArrayList<EObject>();
 		referenceElements.add(referenceEObject);
@@ -64,7 +64,6 @@ public class DiffMergeUtils {
 		IEditableModelScope targetScope = new FilteredModelScope(targetElements);
 
 		// Get the more appropriate comparison method
-		IComparisonMethod icm = getComparisonMethod(referenceEObject, targetEObject);
 		IMatchPolicy matchPolicy = icm.getMatchPolicy();
 		// Merge policy not needed, but we get it
 		IMergePolicy mergePolicy = icm.getMergePolicy();
@@ -96,19 +95,19 @@ public class DiffMergeUtils {
 	 * @param targetValue
 	 * @return
 	 */
-	public static boolean isEqualEObjectAttribute(EObject referenceEObject, EAttribute referenceEAttribute,
+	public static boolean isEqualEObjectAttribute(IComparisonMethod icm, EObject referenceEObject, EAttribute referenceEAttribute,
 			Object referenceValue, EObject targetEObject, EAttribute targetEAttribute, Object targetValue) {
 
-		IComparisonMethod icm = getComparisonMethod(referenceEObject, targetEObject);
-		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 		// Same attribute
 		if (!referenceEAttribute.equals(targetEAttribute)) {
 			return false;
 		}
 		// Same attribute owner
-		if (!isEqualEObject(referenceEObject, targetEObject)) {
+		if (!isEqualEObject(icm, referenceEObject, targetEObject)) {
 			return false;
 		}
+		
+		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 		// Consider equal if attribute not covered
 		if (!diffPolicy.coverFeature(referenceEAttribute)) {
 			return true;
@@ -128,18 +127,16 @@ public class DiffMergeUtils {
 	 * @param targetReferenced
 	 * @return
 	 */
-	public static boolean isEqualEObjectReference(EObject referenceEObject, EReference referenceEReference,
+	public static boolean isEqualEObjectReference(IComparisonMethod icm, EObject referenceEObject, EReference referenceEReference,
 			List<EObject> referenceReferenced, EObject targetEObject, EReference targetEReference,
 			List<EObject> targetReferenced) {
-
-		IComparisonMethod icm = getComparisonMethod(referenceEObject, targetEObject);
-		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 
 		// Not the same reference
 		if (!referenceEReference.equals(targetEReference)) {
 			return false;
 		}
 
+		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 		// Consider equal if reference not covered
 		if (!diffPolicy.coverFeature(referenceEReference)) {
 			return true;
@@ -151,7 +148,7 @@ public class DiffMergeUtils {
 		}
 
 		// Not the same owner
-		if (!isEqualEObject(referenceEObject, targetEObject)) {
+		if (!isEqualEObject(icm, referenceEObject, targetEObject)) {
 			return false;
 		}
 
@@ -161,7 +158,7 @@ public class DiffMergeUtils {
 			for (int i = 0; i < referenceReferenced.size(); i++) {
 				EObject ref = referenceReferenced.get(i);
 				EObject tar = targetReferenced.get(i);
-				if (!isEqualEObject(ref, tar)) {
+				if (!isEqualEObject(icm, ref, tar)) {
 					return false;
 				}
 			}
@@ -176,7 +173,7 @@ public class DiffMergeUtils {
 				EObject ref = referenceReferenced.get(i);
 				for (int x = 0; x < targetReferenced.size(); x++) {
 					EObject tar = targetReferenced.get(x);
-					if (isEqualEObject(ref, tar)) {
+					if (isEqualEObject(icm, ref, tar)) {
 						found = true;
 						break;
 					}

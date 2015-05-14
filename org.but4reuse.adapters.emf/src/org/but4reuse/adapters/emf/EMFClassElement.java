@@ -32,7 +32,7 @@ public class EMFClassElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFClassElement) {
 			EMFClassElement targetClassElement = (EMFClassElement) anotherElement;
-			if (DiffMergeUtils.isEqualEObject(eObject, targetClassElement.eObject)) {
+			if (DiffMergeUtils.isEqualEObject(EMFAdapter.getComparisonMethod(), eObject, targetClassElement.eObject)) {
 				return 1;
 			}
 		}

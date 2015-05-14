@@ -31,6 +31,10 @@ public class EMFAdapter implements IAdapter {
 
 	public static AdapterFactory ADAPTER_FACTORY = EMFUtils.getAllRegisteredAdapterFactories();
 
+	// This will store the comparison method used during the analysis
+	// TODO support different comparison methods for the same analysis
+	static IComparisonMethod comparisonMethod = null;
+
 	/**
 	 * Adaptable if we can load an EObject from the URI
 	 */
@@ -74,7 +78,10 @@ public class EMFAdapter implements IAdapter {
 	private void adapt(EObject eObject, EObject adaptedEObject, List<IElement> elements) {
 		// If it is not covered by the diff policy we are not going to consider
 		// it
-		IComparisonMethod comparisonMethod = DiffMergeUtils.getComparisonMethod(adaptedEObject, adaptedEObject);
+		// TODO we assume that we always use the same comparison method
+		if (comparisonMethod == null) {
+			comparisonMethod = DiffMergeUtils.getComparisonMethod(adaptedEObject, adaptedEObject);
+		}
 		// Current child to set the owner is the last element
 		AbstractElement ownerElement = (AbstractElement) elements.get(elements.size() - 1);
 
@@ -84,7 +91,7 @@ public class EMFAdapter implements IAdapter {
 			// should it be covered by the diff policy
 			if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
 				// is a real attribute
-				if (!attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
+				if (eObject.eIsSet(attr) && !attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
 					Object o = eObject.eGet(attr);
 					if (o instanceof Enumerator) {
 						// because eGet will return a value even if it was
@@ -110,20 +117,9 @@ public class EMFAdapter implements IAdapter {
 		List<EReference> references = eObject.eClass().getEAllReferences();
 		for (EReference ref : references) {
 			if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
-				if (!ref.isContainment() && !ref.isDerived() && !ref.isVolatile() && !ref.isTransient()) {
-					List<EObject> refList = new ArrayList<EObject>();
-					if (ref.isMany()) {
-						refList = (List<EObject>) eObject.eGet(ref);
-					} else {
-						EObject o = (EObject) eObject.eGet(ref);
-						if (o != null) {
-							refList.add(o);
-						}
-					}
-					// Add it even if empty. Problem of empty and null.
-					if (refList == null) {
-						refList = new ArrayList<EObject>();
-					}
+				if (eObject.eIsSet(ref) && !ref.isContainment() && !ref.isContainer() && !ref.isDerived()
+						&& !ref.isVolatile() && !ref.isTransient()) {
+					List<EObject> refList = EMFUtils.getReferencedEObjects(eObject, ref);
 					EMFReferenceElement element = new EMFReferenceElement();
 					element.owner = adaptedEObject;
 					element.ownerElement = ownerElement;
@@ -199,11 +195,16 @@ public class EMFAdapter implements IAdapter {
 				for (EObject referenced : referenceElement.referenced) {
 					EMFClassElement classElement = findClassElement(elements, referenced);
 					if (classElement == null) {
-						// this must not happen
-						System.out.println("EMFAdapter.addReferencesDependencies() not found!");
+						// this must not happen...
+						// Probably the EObject is outside this resource! It
+						// references another model. Not supported.
+						// TODO provide feedback to user
+						// System.out.println("EMFAdapter.addReferencesDependencies() Warning: Referenced element not found "
+						// + referenced);
+					} else {
+						referenceElement.referencedElements.add(classElement);
+						referenceElement.addDependency(referenceElement.eReference.getName(), classElement);
 					}
-					referenceElement.referencedElements.add(classElement);
-					referenceElement.addDependency(referenceElement.eReference.getName(), classElement);
 				}
 			}
 		}
@@ -260,6 +261,10 @@ public class EMFAdapter implements IAdapter {
 		} else {
 			return 1;
 		}
+	}
+
+	public static IComparisonMethod getComparisonMethod() {
+		return comparisonMethod;
 	}
 
 }

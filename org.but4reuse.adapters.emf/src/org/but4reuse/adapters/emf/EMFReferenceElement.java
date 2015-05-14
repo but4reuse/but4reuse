@@ -41,7 +41,7 @@ public class EMFReferenceElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFReferenceElement) {
 			EMFReferenceElement targetCP = (EMFReferenceElement) anotherElement;
-			if (DiffMergeUtils.isEqualEObjectReference(owner, eReference, referenced, targetCP.owner,
+			if (DiffMergeUtils.isEqualEObjectReference(EMFAdapter.getComparisonMethod(), owner, eReference, referenced, targetCP.owner,
 					targetCP.eReference, targetCP.referenced)) {
 				return 1;
 			}
