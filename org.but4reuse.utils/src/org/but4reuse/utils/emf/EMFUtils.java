@@ -113,6 +113,8 @@ public class EMFUtils {
 		options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 		options.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
 		options.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
+		// Do not throw anything if dangling references
+		// options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);		
 		try {
 			resource.save(options);
 		} catch (IOException e) {
@@ -123,7 +125,7 @@ public class EMFUtils {
 	public static void saveEObject(URI uri, EObject eObject) throws IOException {
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
-		m.put("daform", new XMIResourceFactoryImpl());
+		m.put("uml", new XMIResourceFactoryImpl());
 
 		ResourceSet resSet = new ResourceSetImpl();
 		Resource resource = resSet.createResource(uriToEMFURI(uri));

@@ -29,6 +29,8 @@ public class CVLUtils {
 		ExecutablePrimitiveTerm rightTerm = CvlFactory.eINSTANCE.createExecutablePrimitiveTerm();
 		leftTerm.setPrimitive(left);
 		rightTerm.setPrimitive(right);
+		leftTerm.setName(left.getName());
+		rightTerm.setName(right.getName());
 		implies.setLeft(leftTerm);
 		implies.setRight(rightTerm);
 		root.getVariabilitySpecification().add(implies);

@@ -44,6 +44,6 @@ public interface IElement extends IDependencyObject {
 	 *         objects for the element.
 	 */
 	public Map<String, List<IDependencyObject>> getDependencies();
-
+	public Map<String, List<IDependencyObject>> getDependants();
 
 }

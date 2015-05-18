@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * Abstract Element
+ * 
  * @author jabier.martinez
  */
 public abstract class AbstractElement implements IElement, IDependencyObject {
@@ -24,6 +25,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 * @author jabier.martinez
 	 */
 	private Map<String, List<IDependencyObject>> dependencies = new HashMap<String, List<IDependencyObject>>();
+	private Map<String, List<IDependencyObject>> dependants = new HashMap<String, List<IDependencyObject>>();
 	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
 	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
 
@@ -47,8 +49,13 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	}
 
 	@Override
+	public Map<String, List<IDependencyObject>> getDependants() {
+		return dependants;
+	}
+
+	@Override
 	public int getMaxDependencies(String dependencyID) {
-		if(maxDependencies.get(dependencyID)==null){
+		if (maxDependencies.get(dependencyID) == null) {
 			return Integer.MAX_VALUE;
 		}
 		return maxDependencies.get(dependencyID);
@@ -56,7 +63,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 
 	@Override
 	public int getMinDependencies(String dependencyID) {
-		if(minDependencies.get(dependencyID)==null){
+		if (minDependencies.get(dependencyID) == null) {
 			return Integer.MIN_VALUE;
 		}
 		return minDependencies.get(dependencyID);
@@ -70,15 +77,31 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		minDependencies.put(dependencyID, number);
 	}
 
+	/**
+	 * Add a dependency. We do not check if it was already added because it is
+	 * expensive, try to avoid duplicates while adding dependencies
+	 * 
+	 * @param dependencyID
+	 * @param dependency
+	 */
 	public void addDependency(String dependencyID, IDependencyObject dependency) {
+		// Add dependencies
 		List<IDependencyObject> o = dependencies.get(dependencyID);
 		if (o == null) {
 			o = new ArrayList<IDependencyObject>();
 		}
-		if (!o.contains(dependency)) {
-			o.add(dependency);
-		}
+		o.add(dependency);
 		dependencies.put(dependencyID, o);
+		// Add also dependants
+		if (dependency instanceof AbstractElement) {
+			AbstractElement ae = (AbstractElement) dependency;
+			List<IDependencyObject> oo = ae.getDependants().get(dependencyID);
+			if (oo == null) {
+				oo = new ArrayList<IDependencyObject>();
+			}
+			oo.add(this);
+			ae.getDependants().put(dependencyID, oo);
+		}
 	}
 
 	public void addDependency(IDependencyObject dependency) {
@@ -91,8 +114,6 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		}
 	}
 
-	
-
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IElement) {
@@ -104,7 +125,8 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 				return true;
 			}
 			// check if we should ask the user
-			if (!PreferencesHelper.isManualEqualActivated() || PreferencesHelper.isDeactivateManualEqualOnlyForThisTime()) {
+			if (!PreferencesHelper.isManualEqualActivated()
+					|| PreferencesHelper.isDeactivateManualEqualOnlyForThisTime()) {
 				// no? ok, so it is not equal
 				return false;
 			}
@@ -123,17 +145,19 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	}
 
 	/**
-	 * Manual equal. Override to provide tailored comparison user interfaces for your elements
+	 * Manual equal. Override to provide tailored comparison user interfaces for
+	 * your elements
 	 * 
 	 * @return whether the element is equal to another
 	 */
 	public boolean manualEqual(Object obj) {
-		ElementTextManualComparison manualComparison = new ElementTextManualComparison(this.getText(),((IElement)obj).getText());
+		ElementTextManualComparison manualComparison = new ElementTextManualComparison(this.getText(),
+				((IElement) obj).getText());
 		Display.getDefault().syncExec(manualComparison);
 		int buttonIndex = manualComparison.getResult();
 		if (buttonIndex == 0) {
 			return true;
-		} else if (buttonIndex ==1){
+		} else if (buttonIndex == 1) {
 			return false;
 		} else {
 			PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(true);
@@ -159,8 +183,9 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		public void run() {
 			// TODO implement "Always" and "Never" buttons
 			// Default is No
-			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal", null, elementText1 + "\n\n is equal to \n\n" + elementText2,
-					MessageDialog.QUESTION, new String[] { "Yes", "No" , "Deactivate manual equal" }, 1);
+			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal", null, elementText1
+					+ "\n\n is equal to \n\n" + elementText2, MessageDialog.QUESTION, new String[] { "Yes", "No",
+					"Deactivate manual equal" }, 1);
 			result = dialog.open();
 		}
 
@@ -170,7 +195,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		}
 
 	}
-	
+
 	@Override
 	public String getDependencyObjectText() {
 		return getText();

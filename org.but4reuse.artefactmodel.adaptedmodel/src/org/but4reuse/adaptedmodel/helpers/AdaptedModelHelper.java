@@ -1,8 +1,11 @@
 package org.but4reuse.adaptedmodel.helpers;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -108,6 +111,43 @@ public class AdaptedModelHelper {
 		return elementWrappers;
 	}
 
+	// TODO to be removed
+	public static ElementWrapper findOneElementWrapper(List<AdaptedArtefact> artefacts, IElement ie) {
+		// expensive task, it is better if you use a hashmap IElement,
+		// IElementWrappers instead
+		List<ElementWrapper> elementWrappers = new ArrayList<ElementWrapper>();
+		for (AdaptedArtefact artefact : artefacts) {
+			for (ElementWrapper ew : artefact.getOwnedElementWrappers()) {
+				if (ew.getElement().equals(ie)) {
+					return ew;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Map<IElement, ElementWrapper> createMapIEEW(AdaptedModel adaptedModel) {
+		Map<IElement, ElementWrapper> result = new HashMap<IElement, ElementWrapper>();
+		for (AdaptedArtefact artefact : adaptedModel.getOwnedAdaptedArtefacts()) {
+			for (ElementWrapper ew : artefact.getOwnedElementWrappers()) {
+				result.put((IElement) ew.getElement(), ew);
+			}
+		}
+		return result;
+	}
+
+	public static Map<IElement, BlockElement> createMapIEBE(AdaptedModel adaptedModel) {
+		Map<IElement, BlockElement> result = new HashMap<IElement, BlockElement>();
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			for (BlockElement be : block.getOwnedBlockElements()) {
+				for (ElementWrapper ew : be.getElementWrappers()) {
+					result.put((IElement) ew.getElement(), be);
+				}
+			}
+		}
+		return result;
+	}
+
 	public static List<Block> checkBlockNames(List<Block> blocks) {
 		int i = 0;
 		for (Block block : blocks) {
@@ -130,6 +170,13 @@ public class AdaptedModelHelper {
 		return artefacts;
 	}
 
+	/**
+	 * TODO move this somewhere else
+	 * 
+	 * @param number
+	 * @param maxNumber
+	 * @return
+	 */
 	public static String getNumberWithZeros(int number, int maxNumber) {
 		String _return = String.valueOf(number);
 		for (int zeros = _return.length(); zeros < String.valueOf(maxNumber).length(); zeros++) {
@@ -218,6 +265,14 @@ public class AdaptedModelHelper {
 		return elements;
 	}
 
+	public static List<IElement> getElementsOfAdaptedArtefact(AdaptedArtefact adaptedArtefact) {
+		List<IElement> elements = new ArrayList<IElement>();
+		for (ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()) {
+			elements.add((IElement) ew.getElement());
+		}
+		return elements;
+	}
+
 	/**
 	 * Get the blocks that are on the adapted artefacts
 	 * 
@@ -247,24 +302,111 @@ public class AdaptedModelHelper {
 
 	/**
 	 * Get all the dependency objects that points to a given element
+	 * 
 	 * @param adaptedModel
 	 * @param element
 	 * @return
 	 */
-	public static List<IDependencyObject> getDependingOnIElement(AdaptedModel adaptedModel, IElement element) {
-		List<IDependencyObject> depObjects = new ArrayList<IDependencyObject>();
-		for (Block block : adaptedModel.getOwnedBlocks()) {
-			for (IElement e : getElementsOfBlock(block)) {
-				for (Collection<IDependencyObject> c : e.getDependencies().values()) {
-					for (IDependencyObject ado : c) {
-						if (ado.equals(element)) {
-							depObjects.add(e);
-						}
+	public static List<IDependencyObject> getDependingOnIElement(AdaptedModel adaptedModel, IElement element,
+			Map<IElement, ElementWrapper> ieewMap) {
+		List<IDependencyObject> result = new ArrayList<IDependencyObject>();
+		BlockElement blockElement = ieewMap.get(element).getBlockElements().get(0);
+		for (ElementWrapper ew : blockElement.getElementWrappers()) {
+			IElement e = (IElement) ew.getElement();
+			Map<String, List<IDependencyObject>> dependants = e.getDependants();
+			for (String dk : dependants.keySet()) {
+				List<IDependencyObject> ide = dependants.get(dk);
+				for (IDependencyObject iDependencyObject : ide) {
+					if (!result.contains(iDependencyObject)) {
+						result.add(iDependencyObject);
 					}
 				}
 			}
 		}
-		return depObjects;
+		return result;
+	}
+
+	public static Set<IDependencyObject> getDependingOnIElementBE(AdaptedModel adaptedModel, IElement element,
+			Map<IElement, BlockElement> iebeMap) {
+		Set<IDependencyObject> result = new HashSet<IDependencyObject>();
+		BlockElement blockElement = iebeMap.get(element);
+		// Maybe only first...
+		for (ElementWrapper ew : blockElement.getElementWrappers()) {
+			IElement e = (IElement) ew.getElement();
+			Map<String, List<IDependencyObject>> dependants = e.getDependants();
+			// No ordering
+			for (List<IDependencyObject> iDependencyObjects : dependants.values()) {
+				for (IDependencyObject ido : iDependencyObjects) {
+					if (!result.contains(ido)) {
+						result.add(ido);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	// public static List<IDependencyObject> getDependingOnIElement(AdaptedModel
+	// adaptedModel, IElement element) {
+	// List<IDependencyObject> result = new ArrayList<IDependencyObject>();
+	// BlockElement blockElement =
+	// AdaptedModelHelper.findOneElementWrapper(adaptedModel.getOwnedAdaptedArtefacts(),
+	// element).getBlockElements().get(0);
+	// for(ElementWrapper ew : blockElement.getElementWrappers()){
+	// IElement e = (IElement)ew.getElement();
+	// Map<String, List<IDependencyObject>> dependants = e.getDependants();
+	// for (String dk : dependants.keySet()) {
+	// List<IDependencyObject> ide = dependants.get(dk);
+	// for (IDependencyObject iDependencyObject : ide) {
+	// if(!result.contains(iDependencyObject)){
+	// result.add(iDependencyObject);
+	// }
+	// }
+	// }
+	// }
+	// return result;
+	// }
+
+	public static int getNumberOfElementsOfType(AdaptedModel adaptedModel, Object class1) {
+		int i = 0;
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
+				if (e.getClass().equals(class1)) {
+					i++;
+				}
+			}
+		}
+		return i;
+	}
+
+	public static int getNumberOfElementsOfType(Block block, Object class1) {
+		int i = 0;
+		for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
+			if (e.getClass().equals(class1)) {
+				i++;
+			}
+		}
+		return i;
+	}
+
+	public static int getNumberOfElementsOfType(AdaptedArtefact adaptedArtefact, Object class1) {
+		int i = 0;
+		for (IElement e : AdaptedModelHelper.getElementsOfAdaptedArtefact(adaptedArtefact)) {
+			if (e.getClass().equals(class1)) {
+				i++;
+			}
+		}
+		return i;
+	}
+
+	public static Set<IElement> getAllElementsFromAllBlocks(AdaptedModel adaptedModel) {
+		Set<IElement> all = new HashSet<IElement>();
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
+				all.add(e);
+			}
+		}
+		return all;
 	}
 
 }

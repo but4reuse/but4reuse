@@ -7,6 +7,7 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
@@ -40,7 +41,7 @@ public class MetricsVisualisation implements IVisualisation {
 			public void run() {
 				StringBuilder text = new StringBuilder();
 				// General metrics of the Adapted model
-				text.append("Artefacts= " + adaptedModel.getOwnedAdaptedArtefacts().size());
+				text.append("Artefacts= " + adaptedModel.getOwnedAdaptedArtefacts().size() + "\n");
 				List<Double> nElementsPerArtefact = new ArrayList<Double>();
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					double nElements = aa.getOwnedElementWrappers().size();
@@ -48,7 +49,7 @@ public class MetricsVisualisation implements IVisualisation {
 				}
 				addMetrics(text, "Number of Elements per Artefact", nElementsPerArtefact);
 				
-				text.append("\n\nBlocks= " + adaptedModel.getOwnedBlocks().size());
+				text.append("\n\nBlocks= " + adaptedModel.getOwnedBlocks().size() + "\n");
 				List<Double> nElementsPerBlock = new ArrayList<Double>();
 				for (Block block : adaptedModel.getOwnedBlocks()) {
 					double nElements = block.getOwnedBlockElements().size();
@@ -57,6 +58,9 @@ public class MetricsVisualisation implements IVisualisation {
 				addMetrics(text, "Number of Elements per Block", nElementsPerBlock);
 
 				text.append("\n\nBlock Constraints= " + ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
+				
+				appendBlocksOnArtefacts(text);
+				
 				
 				if (featureList != null) {
 					// Feature Related Metrics
@@ -75,12 +79,36 @@ public class MetricsVisualisation implements IVisualisation {
 					addMetrics(text, "Number of Blocks assigned to a Feature", nBlocksInFeatures);
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
 				}
+				
+				
 
+				
+				// Open window
 				Display display = Display.getDefault();
 				Shell shell = new Shell(display);
 				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Metrics", "", text.toString());
 				m.open();
 
+			}
+
+			private void appendBlocksOnArtefacts(StringBuilder text) {
+				text.append("\n\nBlocks on Artefacts\n;");
+				for(Block b : adaptedModel.getOwnedBlocks()){
+					text.append(b.getName() + ";");
+				}
+				text.append("\n");
+				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+					text.append(aa.getArtefact().getName()+";");
+					List<Block> blocksOfAA = AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa);
+					for(Block b : adaptedModel.getOwnedBlocks()){
+						if(blocksOfAA.contains(b)){
+							text.append("1;");
+						} else {
+							text.append("0;");
+						}
+					}
+					text.append("\n");
+				}
 			}
 		});
 	}

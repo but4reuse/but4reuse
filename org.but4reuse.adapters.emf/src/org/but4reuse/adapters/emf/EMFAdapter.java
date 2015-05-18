@@ -2,7 +2,9 @@ package org.but4reuse.adapters.emf;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
@@ -34,7 +36,7 @@ public class EMFAdapter implements IAdapter {
 	// This will store the comparison method used during the analysis
 	// TODO support different comparison methods for the same analysis
 	static IComparisonMethod comparisonMethod = null;
-
+	
 	/**
 	 * Adaptable if we can load an EObject from the URI
 	 */
@@ -62,11 +64,19 @@ public class EMFAdapter implements IAdapter {
 		element.eObject = eObject;
 		elements.add(element);
 		// Then we loop the model to add the rest of the construction primitives
+		refElements = new ArrayList<EMFReferenceElement>();
+		eobjectEMFClassElementMap = new HashMap<EObject, EMFClassElement>();
+		eobjectEMFClassElementMap.put(element.eObject, element);
 		adapt(eObject, element.eObject, elements);
 		// After that we add the EReferences dependencies
-		addReferencesDependencies(elements);
+		addReferenceDependencies();
 		return elements;
 	}
+
+	List<EMFReferenceElement> refElements = new ArrayList<EMFReferenceElement>();
+	// TODO list or map? it seems that list is also ok
+	// List<EMFClassElement> classElements = new ArrayList<EMFClassElement>();
+	Map<EObject, EMFClassElement> eobjectEMFClassElementMap = new HashMap<EObject, EMFClassElement>();
 
 	/**
 	 * 
@@ -88,10 +98,10 @@ public class EMFAdapter implements IAdapter {
 		// Attributes
 		List<EAttribute> attributes = eObject.eClass().getEAllAttributes();
 		for (EAttribute attr : attributes) {
-			// should it be covered by the diff policy
-			if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
-				// is a real attribute
-				if (eObject.eIsSet(attr) && !attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
+			// is a real attribute
+			if (eObject.eIsSet(attr) && !attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
+				// should it be covered by the diff policy
+				if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
 					Object o = eObject.eGet(attr);
 					if (o instanceof Enumerator) {
 						// because eGet will return a value even if it was
@@ -116,24 +126,22 @@ public class EMFAdapter implements IAdapter {
 		// References
 		List<EReference> references = eObject.eClass().getEAllReferences();
 		for (EReference ref : references) {
-			if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
-				if (eObject.eIsSet(ref) && !ref.isContainment() && !ref.isContainer() && !ref.isDerived()
-						&& !ref.isVolatile() && !ref.isTransient()) {
+			if (eObject.eIsSet(ref) && !ref.isContainment() && !ref.isContainer() && !ref.isDerived()
+					&& !ref.isVolatile() && !ref.isTransient()) {
+				if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
 					List<EObject> refList = EMFUtils.getReferencedEObjects(eObject, ref);
 					EMFReferenceElement element = new EMFReferenceElement();
 					element.owner = adaptedEObject;
 					element.ownerElement = ownerElement;
 					element.eReference = ref;
-					// if (refList != null) {
 					element.referenced = new ArrayList<EObject>();
 					element.referencedElements = new ArrayList<EMFClassElement>();
 					for (EObject r : refList) {
 						element.referenced.add(r);
 					}
-					// }
 					element.addDependency(ref.getName(), ownerElement);
-
 					ownerElement.setMaximumDependencies(ref.getName(), 1);
+					refElements.add(element);
 					elements.add(element);
 				}
 			}
@@ -165,7 +173,8 @@ public class EMFAdapter implements IAdapter {
 						element.owner = adaptedEObject;
 						element.reference = childReference;
 						element.addDependency(childReference.getName(), ownerElement);
-						// TODO add maximum dependencies
+						// add maximum dependencies
+						eobjectEMFClassElementMap.put(element.eObject, element);
 						elements.add(element);
 						adapt(child, element.eObject, elements);
 					}
@@ -177,34 +186,35 @@ public class EMFAdapter implements IAdapter {
 	/**
 	 * Once we have all the Elements, we prepare the dependencies
 	 * 
-	 * @param elements
+	 * @param refElements2
 	 */
-	private void addReferencesDependencies(List<IElement> elements) {
-		for (IElement element : elements) {
-			if (element instanceof EMFReferenceElement) {
-				EMFReferenceElement referenceElement = (EMFReferenceElement) element;
-				// set max and min number of dependencies
-				// if -1 or -2 keep max integer
-				if (referenceElement.eReference.getUpperBound() > 0) {
-					referenceElement.setMaximumDependencies(referenceElement.eReference.getName(),
-							referenceElement.eReference.getUpperBound());
-				}
-				referenceElement.setMinimumDependencies(referenceElement.eReference.getName(),
-						referenceElement.eReference.getLowerBound());
-				// Now add the dependencies
-				for (EObject referenced : referenceElement.referenced) {
-					EMFClassElement classElement = findClassElement(elements, referenced);
-					if (classElement == null) {
-						// this must not happen...
-						// Probably the EObject is outside this resource! It
-						// references another model. Not supported.
-						// TODO provide feedback to user
-						// System.out.println("EMFAdapter.addReferencesDependencies() Warning: Referenced element not found "
-						// + referenced);
-					} else {
-						referenceElement.referencedElements.add(classElement);
-						referenceElement.addDependency(referenceElement.eReference.getName(), classElement);
-					}
+	private void addReferenceDependencies() {
+		for (EMFReferenceElement referenceElement : refElements) {
+			// set max and min number of dependencies
+			// if -1 or -2 keep max integer
+			if (referenceElement.eReference.getUpperBound() > 0) {
+				referenceElement.setMaximumDependencies(referenceElement.eReference.getName(),
+						referenceElement.eReference.getUpperBound());
+			}
+			referenceElement.setMinimumDependencies(referenceElement.eReference.getName(),
+					referenceElement.eReference.getLowerBound());
+
+			// Now add the dependencies
+			for (EObject referenced : referenceElement.referenced) {
+				EMFClassElement classElement = findClassElement(referenced);
+				if (classElement == null) {
+					// this must not happen...
+					// Probably the EObject is outside this resource! It
+					// references another model. Not supported.
+					// TODO provide feedback to user
+					// System.out.println("EMFAdapter.addReferencesDependencies() Warning: Referenced element not found "
+					// + referenced);
+				} else {
+					referenceElement.referencedElements.add(classElement);
+					// referenceElement.addDependency(referenceElement.eReference.getName(),
+					// classElement);
+					// hard-coded reference id
+					referenceElement.addDependency("referenced", classElement);
 				}
 			}
 		}
@@ -213,20 +223,12 @@ public class EMFAdapter implements IAdapter {
 	/**
 	 * Find the Class Element that contains this eObject
 	 * 
-	 * @param elements
+	 * @param classElements2
 	 * @param eObject
 	 * @return an EMFClassElement or null
 	 */
-	private EMFClassElement findClassElement(List<IElement> elements, EObject eObject) {
-		for (IElement element : elements) {
-			if (element instanceof EMFClassElement) {
-				EMFClassElement classElement = (EMFClassElement) element;
-				if (eObject.equals(classElement.eObject)) {
-					return classElement;
-				}
-			}
-		}
-		return null;
+	private EMFClassElement findClassElement(EObject eObject) {
+		return eobjectEMFClassElementMap.get(eObject);
 	}
 
 	@Override

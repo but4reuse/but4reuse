@@ -95,8 +95,9 @@ public class DiffMergeUtils {
 	 * @param targetValue
 	 * @return
 	 */
-	public static boolean isEqualEObjectAttribute(IComparisonMethod icm, EObject referenceEObject, EAttribute referenceEAttribute,
-			Object referenceValue, EObject targetEObject, EAttribute targetEAttribute, Object targetValue) {
+	public static boolean isEqualEObjectAttribute(IComparisonMethod icm, EObject referenceEObject,
+			EAttribute referenceEAttribute, Object referenceValue, EObject targetEObject, EAttribute targetEAttribute,
+			Object targetValue) {
 
 		// Same attribute
 		if (!referenceEAttribute.equals(targetEAttribute)) {
@@ -106,7 +107,7 @@ public class DiffMergeUtils {
 		if (!isEqualEObject(icm, referenceEObject, targetEObject)) {
 			return false;
 		}
-		
+
 		IDiffPolicy diffPolicy = icm.getDiffPolicy();
 		// Consider equal if attribute not covered
 		if (!diffPolicy.coverFeature(referenceEAttribute)) {
@@ -127,9 +128,9 @@ public class DiffMergeUtils {
 	 * @param targetReferenced
 	 * @return
 	 */
-	public static boolean isEqualEObjectReference(IComparisonMethod icm, EObject referenceEObject, EReference referenceEReference,
-			List<EObject> referenceReferenced, EObject targetEObject, EReference targetEReference,
-			List<EObject> targetReferenced) {
+	public static boolean isEqualEObjectReference(IComparisonMethod icm, EObject referenceEObject,
+			EReference referenceEReference, List<EObject> referenceReferenced, EObject targetEObject,
+			EReference targetEReference, List<EObject> targetReferenced) {
 
 		// Not the same reference
 		if (!referenceEReference.equals(targetEReference)) {

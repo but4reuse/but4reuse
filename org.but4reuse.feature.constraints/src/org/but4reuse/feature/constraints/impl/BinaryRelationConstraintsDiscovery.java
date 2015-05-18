@@ -27,7 +27,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery {
 
 	@Override
-	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
+	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
+			IProgressMonitor monitor) {
 
 		List<IConstraint> constraintList = new ArrayList<IConstraint>();
 
@@ -36,7 +37,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		// requires and (n*n-n)/2 for mutual exclusion
 		int n = adaptedModel.getOwnedBlocks().size();
 		// TODO monitor is not used, only for reporting messages
-		// monitor.beginTask("Binary Relation Constraints discovery", (n * n - n) + ((n * n - n) / 2));
+		// monitor.beginTask("Binary Relation Constraints discovery", (n * n -
+		// n) + ((n * n - n) / 2));
 
 		// Block Level
 		// TODO feature level
@@ -63,7 +65,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						constraint.setNumberOfReasons(messages.size());
 						constraintList.add(constraint);
 					}
-					//monitor.worked(1);
+					// monitor.worked(1);
 				}
 			}
 		}
@@ -81,8 +83,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						return constraintList;
 					}
 					// mutual exclusion
-					List<String> messages = blockExcludesAnotherBlock(b1, b2);
-					if(messages.size()>0){
+					 List<String> messages = blockExcludesAnotherBlock(b1, b2);
+					if (messages.size() > 0) {
 						IConstraint constraint = new ConstraintImpl();
 						constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
 						constraint.setBlock1(b1);
@@ -91,7 +93,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						constraint.setNumberOfReasons(messages.size());
 						constraintList.add(constraint);
 					}
-					//monitor.worked(1);
+					
+					// monitor.worked(1);
 				}
 			}
 		}
@@ -109,28 +112,37 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	public static List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
 		List<String> messages = new ArrayList<String>();
 		for (BlockElement e : b1.getOwnedBlockElements()) {
+			// System.out.println(i++ + "/" + b1.getOwnedBlockElements().size());
 			List<IDependencyObject> de = getAllDependencies(e);
+			List<IDependencyObject> deSameBlock = new ArrayList<IDependencyObject>();
 
 			// Remove dependencies that are already inside the block
-			for (BlockElement be1 : b1.getOwnedBlockElements()) {
-				for (ElementWrapper elementW2 : be1.getElementWrappers()) {
-					Object elem = elementW2.getElement();
-					// remove if found
-					de.remove(elem);
+			for (IDependencyObject deo : de) {
+				for (BlockElement be1 : b1.getOwnedBlockElements()) {
+					for (ElementWrapper elementW2 : be1.getElementWrappers()) {
+						Object elem = elementW2.getElement();
+						if (elem.equals(de)) {
+							deSameBlock.add(deo);
+						}
+					}
 				}
 			}
+			de.removeAll(deSameBlock);
 
 			// Actually check
-			for (BlockElement b2e : b2.getOwnedBlockElements()) {
-				for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
-					if (de.contains(elementW2.getElement())) {
-						String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText() + "->"
-								+ ((IElement) elementW2.getElement()).getText();
-						messages.add(message);
-						// it is enough for all the element wrappers of b2e
-						// TODO continue with all the element wrappers but keep
-						// track of already added dependencies
-						break;
+			for (IDependencyObject deo : de) {
+				for (BlockElement b2e : b2.getOwnedBlockElements()) {
+					for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
+						if (deo.equals(elementW2.getElement())) {
+							String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText() + "->"
+									+ ((IElement) elementW2.getElement()).getText();
+							messages.add(message);
+							// it is enough for all the element wrappers of b2e
+							// TODO continue with all the element wrappers but
+							// keep
+							// track of already added dependencies
+							break;
+						}
 					}
 				}
 			}
@@ -203,6 +215,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 
 	/**
 	 * Get all dependency objects independently of the dependency id
+	 * 
 	 * @param blockElement
 	 * @return non empty list of dependency objects
 	 */
@@ -211,8 +224,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		for (ElementWrapper elementW1 : blockElement.getElementWrappers()) {
 			IElement element = (IElement) elementW1.getElement();
 			Map<String, List<IDependencyObject>> map = element.getDependencies();
-			for (String key : map.keySet()) {
-				List<IDependencyObject> dependencies = map.get(key);
+			for (List<IDependencyObject> dependencies : map.values()) {
 				for (IDependencyObject o : dependencies) {
 					if (!result.contains(o)) {
 						result.add(o);

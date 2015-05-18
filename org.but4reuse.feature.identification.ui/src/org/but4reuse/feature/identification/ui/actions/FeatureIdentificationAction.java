@@ -67,13 +67,22 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 										+ VisualisationsHelper.getSelectedVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
 
+								long startTime = System.currentTimeMillis();
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
+								long stopTime = System.currentTimeMillis();
+								long elapsedTime = stopTime - startTime;
+								// System.out.println(elapsedTime / 1000.0);
 
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
+								startTime = System.currentTimeMillis();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
+								stopTime = System.currentTimeMillis();
+								elapsedTime = stopTime - startTime;
+								// System.out.println(elapsedTime / 1000.0);
+
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 
 								adaptedModel.getOwnedBlocks().addAll(blocks);
@@ -84,9 +93,13 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 										.getSelectedConstraintsDiscoveryAlgorithms();
 								List<IConstraint> constraints = new ArrayList<IConstraint>();
 								for (IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms) {
+									startTime = System.currentTimeMillis();
 									List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel,
 											null, monitor);
-									if (constraints.isEmpty()){
+									stopTime = System.currentTimeMillis();
+									elapsedTime = stopTime - startTime;
+									// System.out.println(elapsedTime / 1000.0);
+									if (constraints.isEmpty()) {
 										constraints.addAll(discovered);
 									} else {
 										// Only add the ones that are not
@@ -100,7 +113,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 													break;
 												}
 											}
-											if(!found){
+											if (!found) {
 												toBeAdded.add(d);
 											}
 										}

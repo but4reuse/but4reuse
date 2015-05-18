@@ -2,15 +2,16 @@ package org.but4reuse.adapters.emf.cvl;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
@@ -57,28 +58,31 @@ import cvl.ValueSubstitution;
  * @author jabier.martinez
  */
 public class CVLModelsExtractor {
-	
+
 	public static void createCVLModels(String constructionURI, AdaptedModel adaptedModel) {
 		try {
+			
+			// System.out.println("Start construct Base Model");
+			double startTime = System.currentTimeMillis();
 			/**
 			 * Construct the Base Model
 			 */
 			// Get emf adapter
 			// retrieve the common block
 			Block baseBlock = AdaptedModelHelper.getCommonBlocks(adaptedModel).get(0);
-
 			List<IElement> elements = AdaptedModelHelper.getElementsOfBlock(baseBlock);
-			
 			String extension = getFileExtension(elements);
 			URI baseModelURI = new URI(constructionURI + "BaseModel." + extension);
 
 			// Get the initial class
 			EMFClassElement resource = getResourceClassElement(elements);
+			elements = new ArrayList<IElement>();
 
 			// A stack that is initialized with the resource EMF Class Element
 			Stack<EMFClassElement> stack = new Stack<EMFClassElement>();
 			stack.add(resource);
 			ResourceSet resSet = new ResourceSetImpl();
+
 			Resource emfResource = resSet.createResource(EMFUtils.uriToEMFURI(baseModelURI));
 			EObject resourceEObject = EcoreUtil.create(resource.eObject.eClass());
 			emfResource.getContents().add(resourceEObject);
@@ -87,7 +91,7 @@ public class CVLModelsExtractor {
 			HashMap<EMFClassElement, EObject> mapAMEEobject = new HashMap<EMFClassElement, EObject>();
 			// Map for attribute AME to the BaseModel EObject that host it
 			HashMap<EMFAttributeElement, EObject> mapAttributeAMEEobject = new HashMap<EMFAttributeElement, EObject>();
-						
+
 			mapAMEEobject.put(resource, resourceEObject);
 
 			AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(EMFAdapter.ADAPTER_FACTORY,
@@ -96,15 +100,24 @@ public class CVLModelsExtractor {
 			HashMap<EObject, String> mapNewEObjectsOldIds = new HashMap<EObject, String>();
 			mapNewEObjectsOldIds.put(resourceEObject, ModelImplUtil.getXMLID(resource.eObject));
 
+
+			// Map<IElement,ElementWrapper> ieewMap = AdaptedModelHelper.createMapIEEW(adaptedModel);
+			Map<IElement,BlockElement> iebeMap = AdaptedModelHelper.createMapIEBE(adaptedModel);
+
 			// First stack to create the model tree structure and setting the
 			// attributes
 			// Second stack will be for references
+			//int it = 0;
 			while (!stack.isEmpty()) {
+				//it++;
+
 				EMFClassElement peek = stack.pop();
 				EObject peekClass = mapAMEEobject.get(peek);
 
 				// Get the EMF Model Elements that depends on it
-				List<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElement(adaptedModel, peek);
+				//System.out.println(it);
+				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek, iebeMap);
+				//System.out.println("next " + it);
 				for (IDependencyObject ame : dependingOnMe) {
 					if (ame instanceof EMFClassElement) {
 						EMFClassElement emfclass = (EMFClassElement) ame;
@@ -135,12 +148,12 @@ public class CVLModelsExtractor {
 					}
 				}
 			}
-
+			
 			// References
 			stack.push(resource);
 			while (!stack.isEmpty()) {
 				EMFClassElement peek = stack.pop();
-				List<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElement(adaptedModel, peek);
+				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek, iebeMap);
 				for (IDependencyObject ame : dependingOnMe) {
 					if (ame instanceof EMFClassElement) {
 						EMFClassElement emfclass = (EMFClassElement) ame;
@@ -167,9 +180,10 @@ public class CVLModelsExtractor {
 			}
 
 			// Save BaseModel
-			emfResource.save(Collections.EMPTY_MAP);
+			EMFUtils.saveResource(emfResource);
 
 			// Now that it is saved we can try to keep old ids
+
 			TreeIterator<EObject> i = emfResource.getAllContents();
 			while (i.hasNext()) {
 				EObject o = i.next();
@@ -178,8 +192,13 @@ public class CVLModelsExtractor {
 			}
 
 			// Save again BaseModel to try to maintain old ids
-			emfResource.save(Collections.EMPTY_MAP);
+			EMFUtils.saveResource(emfResource);
 
+			double stopTime = System.currentTimeMillis();
+		    double elapsedTime = stopTime - startTime;
+		    // System.out.println("BaseModel " + elapsedTime / 1000.0);
+		    
+		    startTime = System.currentTimeMillis();
 			/**
 			 * Create the CVL model
 			 */
@@ -228,6 +247,7 @@ public class CVLModelsExtractor {
 				}
 			}
 
+			// System.out.println("Resolution layer");
 			/**
 			 * Resolution layer
 			 */
@@ -244,7 +264,12 @@ public class CVLModelsExtractor {
 					for (IElement ele : blockElements) {
 						if (ele instanceof EMFClassElement) {
 							EObject e = mapAMEEobject.get((EMFClassElement) ele);
-							blockEObjects.add(e);
+							if (e == null) {
+								System.out.println("CVLModelsExtractor.createCVLModels()");
+								System.out.println("EMFClassElement without EObject! " + ele.getText());
+							} else {
+								blockEObjects.add(e);
+							}
 						}
 					}
 
@@ -266,20 +291,21 @@ public class CVLModelsExtractor {
 							if (ele instanceof EMFClassElement) {
 								EMFClassElement emfclass = ((EMFClassElement) ele);
 								EObject eObject = mapAMEEobject.get(emfclass);
-
-								// Add it only if parent is not part of this
-								// block
-								EObject parent = eObject.eContainer();
-								if (!blockEObjects.contains(parent)) {
-									if (!eObjectsForFromPlacement.contains(parent)) {
-										eObjectsForFromPlacement.add(parent);
+								if (eObject != null) {
+									// Add it only if parent is not part of this
+									// block
+									EObject parent = eObject.eContainer();
+									if (!blockEObjects.contains(parent)) {
+										if (!eObjectsForFromPlacement.contains(parent)) {
+											eObjectsForFromPlacement.add(parent);
+										}
+										ToPlacement toPlacement = CvlFactory.eINSTANCE.createToPlacement();
+										toPlacement.getInsideBoundaryElement().add(eObject);
+										toPlacement.setOutsideBoundaryElement(eObject.eContainer());
+										toPlacement.setName(EMFUtils.getText(emfclass.eObject));
+										toPlacement.setPropertyName(emfclass.reference.getName());
+										pf.getBoundaryElement().add(toPlacement);
 									}
-									ToPlacement toPlacement = CvlFactory.eINSTANCE.createToPlacement();
-									toPlacement.getInsideBoundaryElement().add(eObject);
-									toPlacement.setOutsideBoundaryElement(eObject.eContainer());
-									toPlacement.setName(EMFUtils.getText(emfclass.eObject));
-									toPlacement.setPropertyName(emfclass.reference.getName());
-									pf.getBoundaryElement().add(toPlacement);
 								}
 							}
 						}
@@ -295,7 +321,7 @@ public class CVLModelsExtractor {
 										for (Object eo : refList) {
 											if (eo != null && !blockEObjects.contains(eo)) {
 												if (!eObjectsForFromPlacement.contains(eo)) {
-													eObjectsForFromPlacement.add((EObject)eo);
+													eObjectsForFromPlacement.add((EObject) eo);
 												}
 											}
 										}
@@ -419,6 +445,10 @@ public class CVLModelsExtractor {
 
 			// Save it and it is ready
 			EMFUtils.saveEObject(modelURI, cvlModel);
+			
+			stopTime = System.currentTimeMillis();
+		    elapsedTime = stopTime - startTime;
+		    // System.out.println("CVLModel " + elapsedTime / 1000.0);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -427,6 +457,7 @@ public class CVLModelsExtractor {
 
 	/**
 	 * Get the resource emf class element
+	 * 
 	 * @param elements
 	 * @return
 	 */
@@ -444,6 +475,7 @@ public class CVLModelsExtractor {
 
 	/**
 	 * Get the extension of the model (uml or whatever we are dealing with)
+	 * 
 	 * @param block
 	 * @return
 	 */
@@ -461,4 +493,5 @@ public class CVLModelsExtractor {
 		}
 		return extension;
 	}
+
 }

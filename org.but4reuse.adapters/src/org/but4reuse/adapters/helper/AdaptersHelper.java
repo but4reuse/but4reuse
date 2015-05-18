@@ -325,4 +325,41 @@ public class AdaptersHelper {
 		}
 		return null;
 	}
+
+	/**
+	 * Get the IElements of a given adapter
+	 * 
+	 * @param adapter
+	 * @return list non-null
+	 */
+	public static List<IElement> getAdapterIElements(IAdapter adapter) {
+		List<IElement> elements = new ArrayList<IElement>();
+		try {
+			IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+					.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
+			for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+				IAdapter ada = null;
+				ada = (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
+				if (ada.getClass().equals(adapter.getClass())) {
+					// I found the adapter, now get the elements
+					IConfigurationElement[] a = adapterExtensionPoint.getChildren("elements");
+					if (a != null && a.length > 0) {
+						for (int ai = 0; ai < a.length; ai++) {
+							IConfigurationElement cps = a[0];
+							IConfigurationElement[] cps2 = cps.getChildren("element");
+							if (cps2 != null && cps2.length > 0) {
+								for (IConfigurationElement cpcon : cps2) {
+									IElement ele = (IElement) cpcon.createExecutableExtension("element");
+									elements.add(ele);
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return elements;
+	}
 }
