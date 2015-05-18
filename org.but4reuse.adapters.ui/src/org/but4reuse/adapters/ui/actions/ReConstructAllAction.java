@@ -8,19 +8,14 @@ import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
-import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockMarkupKind;
-import org.eclipse.contribution.visualiser.core.ProviderDefinition;
-import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -49,21 +44,7 @@ public class ReConstructAllAction implements IViewActionDelegate {
 			}
 
 			String constructionURI = inputDialog.getValue();
-
-			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
-			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-
-			// get the adaptedModel
-			AdaptedModel adaptedModel = null;
-			for (Object o : markupProvider.getAllMarkupKinds()) {
-				IMarkupKind kind = (IMarkupKind) o;
-				Object active = kind;
-				if (active instanceof BlockMarkupKind) {
-					Block block = ((BlockMarkupKind) active).getBlock();
-					adaptedModel = (AdaptedModel) block.eContainer();
-					break;
-				}
-			}
+			AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 
 			// construct each adapted artefact
 			for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {

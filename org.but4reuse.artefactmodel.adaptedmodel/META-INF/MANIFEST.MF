@@ -10,6 +10,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.but4reuse.adaptedmodel,
  org.but4reuse.adaptedmodel.helpers,
  org.but4reuse.adaptedmodel.impl,
+ org.but4reuse.adaptedmodel.manager,
  org.but4reuse.adaptedmodel.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore,

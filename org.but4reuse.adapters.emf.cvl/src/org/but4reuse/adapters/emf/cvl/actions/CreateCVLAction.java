@@ -1,14 +1,9 @@
 package org.but4reuse.adapters.emf.cvl.actions;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
-import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.emf.cvl.CVLModelsExtractor;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
-import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockMarkupKind;
-import org.eclipse.contribution.visualiser.core.ProviderDefinition;
-import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.contribution.visualiser.views.Menu;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -34,22 +29,8 @@ public class CreateCVLAction implements IViewActionDelegate {
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}
-			String constructionURI = inputDialog.getValue();
-
-			// TODO break the dependency with this visualisation
-			// Get the adaptedModel
-			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
-			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-
-			AdaptedModel adaptedModel = null;
-			for (Object o : markupProvider.getAllMarkupKinds()) {
-				IMarkupKind kind = (IMarkupKind) o;
-				if (kind instanceof BlockMarkupKind) {
-					Block block = ((BlockMarkupKind) kind).getBlock();
-					adaptedModel = (AdaptedModel) block.eContainer();
-					break;
-				}
-			}
+			String constructionURI = inputDialog.getValue();			
+			AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 
 			// Call the extractor
 			CVLModelsExtractor.createCVLModels(constructionURI, adaptedModel);

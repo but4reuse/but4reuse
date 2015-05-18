@@ -13,6 +13,7 @@ import org.but4reuse.adaptedmodel.AdaptedModelFactory;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
@@ -51,6 +52,8 @@ public class AdaptedModelHelper {
 				}
 			}
 		}
+		// Add it to the manager
+		AdaptedModelManager.setAdaptedModel(adaptedModel);
 		return adaptedModel;
 	}
 
