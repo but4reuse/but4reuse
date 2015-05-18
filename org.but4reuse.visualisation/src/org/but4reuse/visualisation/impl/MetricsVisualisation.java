@@ -3,6 +3,7 @@ package org.but4reuse.visualisation.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -103,7 +104,7 @@ public class MetricsVisualisation implements IVisualisation {
 
 				text.append("--------------------------------------------\n");
 				text.append("Number of Block Constraints= "
-						+ ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
+						+ ConstraintsHelper.getCalculatedConstraints(adaptedModel).size() + "\n");
 
 				if (featureList != null) {
 					// Feature Related Metrics
@@ -122,6 +123,12 @@ public class MetricsVisualisation implements IVisualisation {
 					}
 					addMetrics(text, "Number of Blocks assigned to a Feature", nBlocksInFeatures);
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
+				}
+
+				text.append("--------------------------------------------\n");
+				text.append("Times in milliseconds\n");
+				for (Entry<String, Long> entry : AdaptedModelManager.getElapsedTimeRegistry().entrySet()) {
+					text.append(entry.getKey() + "= " + entry.getValue() + "\n");
 				}
 
 				String name = AdaptedModelHelper.getName(adaptedModel);

@@ -39,20 +39,28 @@ public class AdaptedModelHelper {
 	 * @return
 	 */
 	public static AdaptedModel adapt(ArtefactModel artefactModel, List<IAdapter> adapters, IProgressMonitor monitor) {
+		// When we adapt we consider that we are starting a new analysis
+		AdaptedModelManager.getElapsedTimeRegistry().clear();
+		long startTime = System.currentTimeMillis();
+
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 
 		// TODO implement concurrency to improve performance
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
+				long startTimeArtefact = System.currentTimeMillis();
 				AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);
 				adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
 				monitor.worked(1);
 				if (monitor.isCanceled()) {
 					return adaptedModel;
 				}
+				AdaptedModelManager.registerTime("Adapt " + artefact.getName(), System.currentTimeMillis()
+						- startTimeArtefact);
 			}
 		}
 		// Add info to the manager
+		AdaptedModelManager.registerTime("Adapt all artefacts", System.currentTimeMillis() - startTime);
 		AdaptedModelManager.setAdaptedModel(adaptedModel);
 		AdaptedModelManager.setAdapters(adapters);
 		return adaptedModel;

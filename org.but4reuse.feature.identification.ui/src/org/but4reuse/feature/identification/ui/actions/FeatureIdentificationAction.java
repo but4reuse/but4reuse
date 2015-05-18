@@ -7,6 +7,7 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
@@ -66,22 +67,18 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1
 										+ VisualisationsHelper.getSelectedVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
-
-								long startTime = System.currentTimeMillis();
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
-								long stopTime = System.currentTimeMillis();
-								long elapsedTime = stopTime - startTime;
-								// System.out.println(elapsedTime / 1000.0);
 
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
-								startTime = System.currentTimeMillis();
+								long startTime = System.currentTimeMillis();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
-								stopTime = System.currentTimeMillis();
-								elapsedTime = stopTime - startTime;
-								// System.out.println(elapsedTime / 1000.0);
+								long stopTime = System.currentTimeMillis();
+								long elapsedTime = stopTime - startTime;
+								AdaptedModelManager.registerTime(
+										"Block identification " + a.getClass().getSimpleName(), elapsedTime);
 
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 
@@ -98,6 +95,8 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 											null, monitor);
 									stopTime = System.currentTimeMillis();
 									elapsedTime = stopTime - startTime;
+									AdaptedModelManager.registerTime("Constraints discovery "
+											+ constraintsDiscovery.getClass().getSimpleName(), elapsedTime);
 									// System.out.println(elapsedTime / 1000.0);
 									if (constraints.isEmpty()) {
 										constraints.addAll(discovered);
