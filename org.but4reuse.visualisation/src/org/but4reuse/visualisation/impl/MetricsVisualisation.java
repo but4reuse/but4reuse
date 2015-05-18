@@ -8,6 +8,9 @@ import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
+import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
@@ -42,13 +45,19 @@ public class MetricsVisualisation implements IVisualisation {
 				StringBuilder text = new StringBuilder();
 				// General metrics of the Adapted model
 				text.append("Artefacts= " + adaptedModel.getOwnedAdaptedArtefacts().size() + "\n");
+				text.append("Adapter= ");
+				for (IAdapter adapter : AdaptedModelManager.getAdapters()) {
+					text.append(AdaptersHelper.getAdapterName(adapter) + ",");
+				}
+				text.setLength(text.length() - 1);
+				text.append("\n");
 				List<Double> nElementsPerArtefact = new ArrayList<Double>();
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					double nElements = aa.getOwnedElementWrappers().size();
 					nElementsPerArtefact.add(nElements);
 				}
 				addMetrics(text, "Number of Elements per Artefact", nElementsPerArtefact);
-				
+
 				text.append("\n\nBlocks= " + adaptedModel.getOwnedBlocks().size() + "\n");
 				List<Double> nElementsPerBlock = new ArrayList<Double>();
 				for (Block block : adaptedModel.getOwnedBlocks()) {
@@ -58,10 +67,9 @@ public class MetricsVisualisation implements IVisualisation {
 				addMetrics(text, "Number of Elements per Block", nElementsPerBlock);
 
 				text.append("\n\nBlock Constraints= " + ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
-				
+
 				appendBlocksOnArtefacts(text);
-				
-				
+
 				if (featureList != null) {
 					// Feature Related Metrics
 					List<Double> nBlocksInFeatures = new ArrayList<Double>();
@@ -79,10 +87,7 @@ public class MetricsVisualisation implements IVisualisation {
 					addMetrics(text, "Number of Blocks assigned to a Feature", nBlocksInFeatures);
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
 				}
-				
-				
 
-				
 				// Open window
 				Display display = Display.getDefault();
 				Shell shell = new Shell(display);
@@ -92,16 +97,16 @@ public class MetricsVisualisation implements IVisualisation {
 			}
 
 			private void appendBlocksOnArtefacts(StringBuilder text) {
-				text.append("\n\nBlocks on Artefacts\n;");
-				for(Block b : adaptedModel.getOwnedBlocks()){
+				text.append("\n\nBlocks on Artefacts (CSV)\n;");
+				for (Block b : adaptedModel.getOwnedBlocks()) {
 					text.append(b.getName() + ";");
 				}
 				text.append("\n");
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
-					text.append(aa.getArtefact().getName()+";");
+					text.append(aa.getArtefact().getName() + ";");
 					List<Block> blocksOfAA = AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa);
-					for(Block b : adaptedModel.getOwnedBlocks()){
-						if(blocksOfAA.contains(b)){
+					for (Block b : adaptedModel.getOwnedBlocks()) {
+						if (blocksOfAA.contains(b)) {
 							text.append("1;");
 						} else {
 							text.append("0;");
@@ -142,7 +147,7 @@ public class MetricsVisualisation implements IVisualisation {
 
 	public static void addMetrics(StringBuilder stringBuilder, String title, List<Double> data) {
 		Collections.sort(data);
-		stringBuilder.append("\n\n" + title);
+		stringBuilder.append("\n" + title);
 		stringBuilder.append("\nMin= " + data.get(0));
 		stringBuilder.append("\nMax= " + data.get(data.size() - 1));
 		Double mean = mean(data);

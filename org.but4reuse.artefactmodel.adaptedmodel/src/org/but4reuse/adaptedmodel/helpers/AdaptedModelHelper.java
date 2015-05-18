@@ -52,8 +52,9 @@ public class AdaptedModelHelper {
 				}
 			}
 		}
-		// Add it to the manager
+		// Add info to the manager
 		AdaptedModelManager.setAdaptedModel(adaptedModel);
+		AdaptedModelManager.setAdapters(adapters);
 		return adaptedModel;
 	}
 
