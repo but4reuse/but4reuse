@@ -43,14 +43,18 @@ public class MetricsVisualisation implements IVisualisation {
 			@Override
 			public void run() {
 				StringBuilder text = new StringBuilder();
+
 				// General metrics of the Adapted model
+				appendUsedAdapters(text);
+				text.append("--------------------------------------------\n");
 				text.append("Artefacts= " + adaptedModel.getOwnedAdaptedArtefacts().size() + "\n");
-				text.append("Adapter= ");
+
+				// Get IElement types
+				List<String> iElementTypes = new ArrayList<String>();
 				for (IAdapter adapter : AdaptedModelManager.getAdapters()) {
-					text.append(AdaptersHelper.getAdapterName(adapter) + ",");
+					iElementTypes.addAll(AdaptersHelper.getAdapterIElements(adapter));
 				}
-				text.setLength(text.length() - 1);
-				text.append("\n");
+
 				List<Double> nElementsPerArtefact = new ArrayList<Double>();
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					double nElements = aa.getOwnedElementWrappers().size();
@@ -58,7 +62,22 @@ public class MetricsVisualisation implements IVisualisation {
 				}
 				addMetrics(text, "Number of Elements per Artefact", nElementsPerArtefact);
 
-				text.append("\n\nBlocks= " + adaptedModel.getOwnedBlocks().size() + "\n");
+				text.append("\n\nElement types per Artefact\n");
+				text.append(";");
+				for (String elementType : iElementTypes) {
+					text.append(elementType.substring(elementType.lastIndexOf(".") + 1, elementType.length()) + ";");
+				}
+				text.append("\n");
+				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+					text.append(aa.getArtefact().getName() + ";");
+					for (String elementType : iElementTypes) {
+						text.append(AdaptedModelHelper.getNumberOfElementsOfType(aa, elementType) + ";");
+					}
+					text.append("\n");
+				}
+
+				text.append("--------------------------------------------\n");
+				text.append("Blocks= " + adaptedModel.getOwnedBlocks().size() + "\n");
 				List<Double> nElementsPerBlock = new ArrayList<Double>();
 				for (Block block : adaptedModel.getOwnedBlocks()) {
 					double nElements = block.getOwnedBlockElements().size();
@@ -66,12 +85,29 @@ public class MetricsVisualisation implements IVisualisation {
 				}
 				addMetrics(text, "Number of Elements per Block", nElementsPerBlock);
 
-				text.append("\n\nBlock Constraints= " + ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
+				text.append("\n\nElement types per Block\n");
+				text.append(";");
+				for (String elementType : iElementTypes) {
+					text.append(elementType.substring(elementType.lastIndexOf(".") + 1, elementType.length()) + ";");
+				}
+				text.append("\n");
+				for (Block block : adaptedModel.getOwnedBlocks()) {
+					text.append(block.getName() + ";");
+					for (String elementType : iElementTypes) {
+						text.append(AdaptedModelHelper.getNumberOfElementsOfType(block, elementType) + ";");
+					}
+					text.append("\n");
+				}
 
 				appendBlocksOnArtefacts(text);
 
+				text.append("--------------------------------------------\n");
+				text.append("Number of Block Constraints= "
+						+ ConstraintsHelper.getCalculatedConstraints(adaptedModel).size());
+
 				if (featureList != null) {
 					// Feature Related Metrics
+					text.append("--------------------------------------------\n");
 					List<Double> nBlocksInFeatures = new ArrayList<Double>();
 					List<Double> nElementsInFeatures = new ArrayList<Double>();
 					for (Feature feature : featureList.getOwnedFeatures()) {
@@ -88,16 +124,30 @@ public class MetricsVisualisation implements IVisualisation {
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
 				}
 
+				String name = AdaptedModelHelper.getName(adaptedModel);
+				if (name == null) {
+					name = "";
+				}
+
 				// Open window
 				Display display = Display.getDefault();
 				Shell shell = new Shell(display);
-				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Metrics", "", text.toString());
+				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Metrics", name, text.toString());
 				m.open();
 
 			}
 
+			private void appendUsedAdapters(StringBuilder text) {
+				text.append("Adapter= ");
+				for (IAdapter adapter : AdaptedModelManager.getAdapters()) {
+					text.append(AdaptersHelper.getAdapterName(adapter) + ",");
+				}
+				text.setLength(text.length() - 1);
+				text.append("\n");
+			}
+
 			private void appendBlocksOnArtefacts(StringBuilder text) {
-				text.append("\n\nBlocks on Artefacts (CSV)\n;");
+				text.append("\nBlocks on Artefacts\n;");
 				for (Block b : adaptedModel.getOwnedBlocks()) {
 					text.append(b.getName() + ";");
 				}

@@ -332,8 +332,8 @@ public class AdaptersHelper {
 	 * @param adapter
 	 * @return list non-null
 	 */
-	public static List<IElement> getAdapterIElements(IAdapter adapter) {
-		List<IElement> elements = new ArrayList<IElement>();
+	public static List<String> getAdapterIElements(IAdapter adapter) {
+		List<String> elements = new ArrayList<String>();
 		try {
 			IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
 					.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
@@ -349,15 +349,14 @@ public class AdaptersHelper {
 							IConfigurationElement[] cps2 = cps.getChildren("element");
 							if (cps2 != null && cps2.length > 0) {
 								for (IConfigurationElement cpcon : cps2) {
-									IElement ele = (IElement) cpcon.createExecutableExtension("element");
-									elements.add(ele);
+									elements.add(cpcon.getAttribute("element"));
 								}
 							}
 						}
 					}
 				}
 			}
-		} catch (CoreException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return elements;

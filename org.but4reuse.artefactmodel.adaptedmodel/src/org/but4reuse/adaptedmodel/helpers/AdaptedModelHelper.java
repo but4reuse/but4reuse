@@ -119,7 +119,8 @@ public class AdaptedModelHelper {
 	public static ElementWrapper findOneElementWrapper(List<AdaptedArtefact> artefacts, IElement ie) {
 		// expensive task, it is better if you use a hashmap IElement,
 		// IElementWrappers instead
-		List<ElementWrapper> elementWrappers = new ArrayList<ElementWrapper>();
+		// List<ElementWrapper> elementWrappers = new
+		// ArrayList<ElementWrapper>();
 		for (AdaptedArtefact artefact : artefacts) {
 			for (ElementWrapper ew : artefact.getOwnedElementWrappers()) {
 				if (ew.getElement().equals(ie)) {
@@ -350,32 +351,19 @@ public class AdaptedModelHelper {
 		return result;
 	}
 
-	// public static List<IDependencyObject> getDependingOnIElement(AdaptedModel
-	// adaptedModel, IElement element) {
-	// List<IDependencyObject> result = new ArrayList<IDependencyObject>();
-	// BlockElement blockElement =
-	// AdaptedModelHelper.findOneElementWrapper(adaptedModel.getOwnedAdaptedArtefacts(),
-	// element).getBlockElements().get(0);
-	// for(ElementWrapper ew : blockElement.getElementWrappers()){
-	// IElement e = (IElement)ew.getElement();
-	// Map<String, List<IDependencyObject>> dependants = e.getDependants();
-	// for (String dk : dependants.keySet()) {
-	// List<IDependencyObject> ide = dependants.get(dk);
-	// for (IDependencyObject iDependencyObject : ide) {
-	// if(!result.contains(iDependencyObject)){
-	// result.add(iDependencyObject);
-	// }
-	// }
-	// }
-	// }
-	// return result;
-	// }
-
-	public static int getNumberOfElementsOfType(AdaptedModel adaptedModel, Object class1) {
+	/**
+	 * Get the number of ielements of a given type
+	 * 
+	 * @param adaptedModel
+	 * @param class1
+	 *            is the full qualified name with packages etc.
+	 * @return
+	 */
+	public static int getNumberOfElementsOfType(AdaptedModel adaptedModel, String class1) {
 		int i = 0;
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
-				if (e.getClass().equals(class1)) {
+				if (e.getClass().getName().equals(class1)) {
 					i++;
 				}
 			}
@@ -383,20 +371,20 @@ public class AdaptedModelHelper {
 		return i;
 	}
 
-	public static int getNumberOfElementsOfType(Block block, Object class1) {
+	public static int getNumberOfElementsOfType(Block block, String class1) {
 		int i = 0;
 		for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
-			if (e.getClass().equals(class1)) {
+			if (e.getClass().getName().equals(class1)) {
 				i++;
 			}
 		}
 		return i;
 	}
 
-	public static int getNumberOfElementsOfType(AdaptedArtefact adaptedArtefact, Object class1) {
+	public static int getNumberOfElementsOfType(AdaptedArtefact adaptedArtefact, String class1) {
 		int i = 0;
 		for (IElement e : AdaptedModelHelper.getElementsOfAdaptedArtefact(adaptedArtefact)) {
-			if (e.getClass().equals(class1)) {
+			if (e.getClass().getName().equals(class1)) {
 				i++;
 			}
 		}
