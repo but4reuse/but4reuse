@@ -99,4 +99,15 @@
             class="org.but4reuse.visualisation.ui.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+      <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.but4reuse.views.category"
+            class="org.but4reuse.visualisation.impl.MetricsVisualisationView"
+            icon="IMG_OBJS_INFO_TSK"
+            id="org.but4reuse.visualisation.metrics"
+            name="Metrics"
+            restorable="true">
+      </view>
+   </extension>
 </plugin>

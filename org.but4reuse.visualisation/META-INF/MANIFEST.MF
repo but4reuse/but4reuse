@@ -5,12 +5,10 @@ Bundle-SymbolicName: org.but4reuse.visualisation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.visualisation.activator.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.but4reuse.utils,
  org.eclipse.contribution.visualiser,
  org.but4reuse.adapters,
- org.but4reuse.featurelist,
  org.eclipse.gmf.runtime.common.core,
  org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

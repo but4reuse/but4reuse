@@ -84,7 +84,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					}
 				}
 			}
-			AdaptedModelManager.registerTime("Constraints discover [Requires]", System.currentTimeMillis() - start);
+			AdaptedModelManager.registerTime("Constraints discovery [Requires]", System.currentTimeMillis() - start);
 		}
 		// EXCLUDES
 		boolean excludes = Activator.getDefault().getPreferenceStore()
@@ -120,7 +120,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					}
 				}
 			}
-			AdaptedModelManager.registerTime("Constraints discover [Mutual exclusion]", System.currentTimeMillis()
+			AdaptedModelManager.registerTime("Constraints discovery [Mutual exclusion]", System.currentTimeMillis()
 					- start);
 		}
 		// monitor.done();

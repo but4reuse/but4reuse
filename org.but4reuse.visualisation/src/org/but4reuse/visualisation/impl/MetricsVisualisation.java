@@ -15,11 +15,10 @@ import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
-import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 /**
  * Metrics visualisation
@@ -136,12 +135,10 @@ public class MetricsVisualisation implements IVisualisation {
 					name = "";
 				}
 
-				// Open window
-				Display display = Display.getDefault();
-				Shell shell = new Shell(display);
-				ScrollableMessageDialog m = new ScrollableMessageDialog(shell, "Metrics", name, text.toString());
-				m.open();
+				MetricsVisualisationView view = (MetricsVisualisationView) WorkbenchUtils
+						.forceShowView(MetricsVisualisationView.ID);
 
+				view.scrollable.setText(text.toString());
 			}
 
 			private void appendUsedAdapters(StringBuilder text) {
