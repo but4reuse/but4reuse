@@ -278,6 +278,22 @@ public class AdaptedModelHelper {
 		return elements;
 	}
 
+	/**
+	 * Get the list of elements of one block. To be used when the order is not
+	 * important. For example when using the contains method of the set
+	 * 
+	 * @param block
+	 * @return
+	 */
+	public static HashSet<IElement> getElementsOfBlockHashSet(Block block) {
+		HashSet<IElement> elements = new HashSet<IElement>();
+		for (BlockElement be : block.getOwnedBlockElements()) {
+			// TODO we just get the first one
+			elements.add((IElement) be.getElementWrappers().get(0).getElement());
+		}
+		return elements;
+	}
+
 	public static List<IElement> getElementsOfAdaptedArtefact(AdaptedArtefact adaptedArtefact) {
 		List<IElement> elements = new ArrayList<IElement>();
 		for (ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()) {

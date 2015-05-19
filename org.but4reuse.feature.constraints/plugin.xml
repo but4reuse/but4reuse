@@ -15,4 +15,19 @@
             class="org.but4reuse.feature.constraints.helper.PreferenceInitializer">
       </initializer>
    </extension>
+      <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.constraints.discovery.ui.page"
+            class="org.but4reuse.feature.constraints.preferences.BinaryRelationPreferencePage"
+            id="org.but4reuse.constraints.discovery.binaryrelation.page"
+            name="Binary relations">
+      </page>
+   </extension>
+      <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.feature.constraints.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

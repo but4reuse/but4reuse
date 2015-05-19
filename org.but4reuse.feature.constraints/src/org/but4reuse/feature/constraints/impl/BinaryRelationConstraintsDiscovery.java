@@ -3,6 +3,7 @@ package org.but4reuse.feature.constraints.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,14 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
+import org.but4reuse.feature.constraints.activator.Activator;
+import org.but4reuse.feature.constraints.preferences.BinaryRelationPreferencePage;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -25,6 +30,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  */
 public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery {
+
+	public static boolean onlyOneReason = false;
 
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
@@ -40,63 +47,81 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		// monitor.beginTask("Binary Relation Constraints discovery", (n * n -
 		// n) + ((n * n - n) / 2));
 
+		onlyOneReason = Activator.getDefault().getPreferenceStore()
+				.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
+
+		// REQUIRES
 		// Block Level
 		// TODO feature level
-		for (int y = 0; y < n; y++) {
-			for (int x = 0; x < n; x++) {
-				if (x != y) {
-					Block b1 = adaptedModel.getOwnedBlocks().get(y);
-					Block b2 = adaptedModel.getOwnedBlocks().get(x);
-					monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
-					// check monitor
-					if (monitor.isCanceled()) {
-						return constraintList;
+		boolean requires = Activator.getDefault().getPreferenceStore()
+				.getBoolean(BinaryRelationPreferencePage.REQUIRES);
+		if (requires) {
+			long start = System.currentTimeMillis();
+			for (int y = 0; y < n; y++) {
+				for (int x = 0; x < n; x++) {
+					if (x != y) {
+						Block b1 = adaptedModel.getOwnedBlocks().get(y);
+						Block b2 = adaptedModel.getOwnedBlocks().get(x);
+						monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
+						// check monitor
+						if (monitor.isCanceled()) {
+							return constraintList;
+						}
+						// here we have all binary combinations A and B, B and A
+						// etc.
+						// requires b1 -> b2
+						List<String> messages = blockRequiresAnotherBlockB(b1, b2);
+						if (messages.size() > 0) {
+							IConstraint constraint = new ConstraintImpl();
+							constraint.setType(IConstraint.REQUIRES);
+							constraint.setBlock1(b1);
+							constraint.setBlock2(b2);
+							constraint.setExplanations(messages);
+							constraint.setNumberOfReasons(messages.size());
+							constraintList.add(constraint);
+						}
+						// monitor.worked(1);
 					}
-					// here we have all binary combinations A and B, B and A
-					// etc.
-					// requires b1 -> b2
-					List<String> messages = blockRequiresAnotherBlockB(b1, b2);
-					if (messages.size() > 0) {
-						IConstraint constraint = new ConstraintImpl();
-						constraint.setType(IConstraint.REQUIRES);
-						constraint.setBlock1(b1);
-						constraint.setBlock2(b2);
-						constraint.setExplanations(messages);
-						constraint.setNumberOfReasons(messages.size());
-						constraintList.add(constraint);
-					}
-					// monitor.worked(1);
 				}
 			}
+			AdaptedModelManager.registerTime("Constraints discover [Requires]", System.currentTimeMillis() - start);
 		}
+		// EXCLUDES
+		boolean excludes = Activator.getDefault().getPreferenceStore()
+				.getBoolean(BinaryRelationPreferencePage.EXCLUDES);
+		if (excludes) {
+			long start = System.currentTimeMillis();
+			for (int y = 0; y < n; y++) {
+				for (int x = 0; x < n; x++) {
+					// mutual exclusion, not(b1 and b2), as it is mutual we do
+					// not need to check the opposite
+					if (x != y && y < x) {
+						Block b1 = adaptedModel.getOwnedBlocks().get(y);
+						Block b2 = adaptedModel.getOwnedBlocks().get(x);
+						monitor.subTask("Checking Mutual Exclusion relations of " + b1.getName() + " with "
+								+ b2.getName());
+						// check monitor
+						if (monitor.isCanceled()) {
+							return constraintList;
+						}
+						// mutual exclusion
+						List<String> messages = blockExcludesAnotherBlock(b1, b2);
+						if (messages.size() > 0) {
+							IConstraint constraint = new ConstraintImpl();
+							constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
+							constraint.setBlock1(b1);
+							constraint.setBlock2(b2);
+							constraint.setExplanations(messages);
+							constraint.setNumberOfReasons(messages.size());
+							constraintList.add(constraint);
+						}
 
-		for (int y = 0; y < n; y++) {
-			for (int x = 0; x < n; x++) {
-				// mutual exclusion, not(b1 and b2), as it is mutual we do
-				// not need to check the opposite
-				if (x != y && y < x) {
-					Block b1 = adaptedModel.getOwnedBlocks().get(y);
-					Block b2 = adaptedModel.getOwnedBlocks().get(x);
-					monitor.subTask("Checking Mutual Exclusion relations of " + b1.getName() + " with " + b2.getName());
-					// check monitor
-					if (monitor.isCanceled()) {
-						return constraintList;
+						// monitor.worked(1);
 					}
-					// mutual exclusion
-					 List<String> messages = blockExcludesAnotherBlock(b1, b2);
-					if (messages.size() > 0) {
-						IConstraint constraint = new ConstraintImpl();
-						constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
-						constraint.setBlock1(b1);
-						constraint.setBlock2(b2);
-						constraint.setExplanations(messages);
-						constraint.setNumberOfReasons(messages.size());
-						constraintList.add(constraint);
-					}
-					
-					// monitor.worked(1);
 				}
 			}
+			AdaptedModelManager.registerTime("Constraints discover [Mutual exclusion]", System.currentTimeMillis()
+					- start);
 		}
 		// monitor.done();
 		return constraintList;
@@ -111,37 +136,31 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 */
 	public static List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
 		List<String> messages = new ArrayList<String>();
+		// Get the elements of B1
+		HashSet<IElement> elementsOfB1 = AdaptedModelHelper.getElementsOfBlockHashSet(b1);
 		for (BlockElement e : b1.getOwnedBlockElements()) {
-			// System.out.println(i++ + "/" + b1.getOwnedBlockElements().size());
+			// TODO getAllDependencies is the bottleneck here
 			List<IDependencyObject> de = getAllDependencies(e);
-			List<IDependencyObject> deSameBlock = new ArrayList<IDependencyObject>();
-
-			// Remove dependencies that are already inside the block
-			for (IDependencyObject deo : de) {
-				for (BlockElement be1 : b1.getOwnedBlockElements()) {
-					for (ElementWrapper elementW2 : be1.getElementWrappers()) {
-						Object elem = elementW2.getElement();
-						if (elem.equals(de)) {
-							deSameBlock.add(deo);
-						}
-					}
-				}
-			}
-			de.removeAll(deSameBlock);
-
 			// Actually check
 			for (IDependencyObject deo : de) {
-				for (BlockElement b2e : b2.getOwnedBlockElements()) {
-					for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
-						if (deo.equals(elementW2.getElement())) {
-							String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText() + "->"
-									+ ((IElement) elementW2.getElement()).getText();
-							messages.add(message);
-							// it is enough for all the element wrappers of b2e
-							// TODO continue with all the element wrappers but
-							// keep
-							// track of already added dependencies
-							break;
+				// Check if the dependency object is already in b1
+				boolean deoAlreadyInB1 = elementsOfB1.contains(deo);
+				if (!deoAlreadyInB1) {
+					for (BlockElement b2e : b2.getOwnedBlockElements()) {
+						for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
+							if (deo.equals(elementW2.getElement())) {
+								String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText()
+										+ "->" + ((IElement) elementW2.getElement()).getText();
+								messages.add(message);
+								if (onlyOneReason) {
+									return messages;
+								}
+								// it is enough for all the element wrappers of
+								// b2e
+								// TODO continue with all the element wrappers
+								// but keep track of already added dependencies
+								break;
+							}
 						}
 					}
 				}
@@ -180,6 +199,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					if (o.getMaxDependencies(key) < Collections.frequency(pointed1, o)
 							+ Collections.frequency(pointed2, o)) {
 						messages.add(o.getDependencyObjectText());
+						if (onlyOneReason) {
+							return messages;
+						}
 					}
 				}
 			}
