@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.featurelist.FeatureList;
 
 /**
  * Adapted Model Manager
@@ -16,6 +17,7 @@ import org.but4reuse.adapters.IAdapter;
 public class AdaptedModelManager {
 
 	private static AdaptedModel adaptedModel = null;
+	private static FeatureList featureList = null;
 	private static List<IAdapter> adapters = null;
 	private static Map<String, Long> elapsedTimeRegistry = new LinkedHashMap<String, Long>();
 
@@ -25,6 +27,8 @@ public class AdaptedModelManager {
 
 	public static void setAdaptedModel(AdaptedModel adaptedModel) {
 		AdaptedModelManager.adaptedModel = adaptedModel;
+		// Restart feature list as null
+		featureList = null;
 	}
 
 	public static List<IAdapter> getAdapters() {
@@ -47,6 +51,14 @@ public class AdaptedModelManager {
 
 	public static Map<String, Long> getElapsedTimeRegistry() {
 		return elapsedTimeRegistry;
+	}
+
+	public static FeatureList getFeatureList() {
+		return featureList;
+	}
+
+	public static void setFeatureList(FeatureList featureList) {
+		AdaptedModelManager.featureList = featureList;
 	}
 
 }

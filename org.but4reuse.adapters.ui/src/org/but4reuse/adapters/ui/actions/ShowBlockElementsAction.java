@@ -3,6 +3,7 @@ package org.but4reuse.adapters.ui.actions;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
@@ -57,7 +58,7 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 						block.setName(dialog.name);
 						AdaptedModel adaptedModel = (AdaptedModel)block.eContainer();
 						// TODO feature model!
-						VisualisationsHelper.notifyVisualisations(null, adaptedModel, null, new NullProgressMonitor());
+						VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(), adaptedModel, null, new NullProgressMonitor());
 					}
 				}
 			}

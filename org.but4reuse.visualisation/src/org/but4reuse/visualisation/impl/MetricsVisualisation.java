@@ -108,6 +108,7 @@ public class MetricsVisualisation implements IVisualisation {
 				if (featureList != null) {
 					// Feature Related Metrics
 					text.append("--------------------------------------------\n");
+					text.append("Features= " + featureList.getOwnedFeatures().size() + "\n");
 					List<Double> nBlocksInFeatures = new ArrayList<Double>();
 					List<Double> nElementsInFeatures = new ArrayList<Double>();
 					for (Feature feature : featureList.getOwnedFeatures()) {
@@ -121,7 +122,42 @@ public class MetricsVisualisation implements IVisualisation {
 						nElementsInFeatures.add(nElements);
 					}
 					addMetrics(text, "Number of Blocks assigned to a Feature", nBlocksInFeatures);
+					
+					text.append("\n\nBlocks on Features\n");
+					for (Feature feature : featureList.getOwnedFeatures()) {
+						text.append(feature.getName() + " = ");
+						List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
+						for (Block b : blocks) {
+							text.append(b.getName() + ", ");
+						}
+						// remove last comma
+						if (!blocks.isEmpty()) {
+							text.setLength(text.length() - 2);
+						}
+						text.append("\n");
+					}
+					
+					text.append("\nBlocks on Features\n");
+					text.append(";");
+					for (Block b : adaptedModel.getOwnedBlocks()){
+						text.append(b.getName()+";");
+					}
+					text.append("\n");
+					for (Feature feature : featureList.getOwnedFeatures()) {
+						text.append(feature.getName() + ";");
+						List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
+						for (Block b : adaptedModel.getOwnedBlocks()) {
+							if(blocks.contains(b)){
+								text.append("1;");
+							} else {
+								text.append("0;");
+							}
+						}
+						text.append("\n");
+					}
+					
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
+					text.append("\n");
 				}
 
 				text.append("--------------------------------------------\n");

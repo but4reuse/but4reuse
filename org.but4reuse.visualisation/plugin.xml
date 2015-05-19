@@ -76,10 +76,6 @@
            name="Feature-Specific heuristic HeatMap">
      </visualisation>
      <visualisation
-           class="org.but4reuse.visualisation.impl.FeaturesInfoVisualisation"
-           name="Features Location info">
-     </visualisation>
-     <visualisation
            class="org.but4reuse.visualisation.impl.MetricsVisualisation"
            name="Metrics">
      </visualisation>
