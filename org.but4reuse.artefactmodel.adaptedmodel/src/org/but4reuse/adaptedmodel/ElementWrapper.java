@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.but4reuse.adaptedmodel.ElementWrapper#getElement <em>Element</em>}</li>
  *   <li>{@link org.but4reuse.adaptedmodel.ElementWrapper#getBlockElements <em>Block Elements</em>}</li>
+ *   <li>{@link org.but4reuse.adaptedmodel.ElementWrapper#getText <em>Text</em>}</li>
  * </ul>
  * </p>
  *
@@ -35,7 +36,7 @@ public interface ElementWrapper extends EObject {
 	 * @return the value of the '<em>Element</em>' attribute.
 	 * @see #setElement(Object)
 	 * @see org.but4reuse.adaptedmodel.AdaptedModelPackage#getElementWrapper_Element()
-	 * @model
+	 * @model transient="true"
 	 * @generated
 	 */
 	Object getElement();
@@ -67,5 +68,31 @@ public interface ElementWrapper extends EObject {
 	 * @generated
 	 */
 	EList<BlockElement> getBlockElements();
+
+	/**
+	 * Returns the value of the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Text</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Text</em>' attribute.
+	 * @see #setText(String)
+	 * @see org.but4reuse.adaptedmodel.AdaptedModelPackage#getElementWrapper_Text()
+	 * @model
+	 * @generated
+	 */
+	String getText();
+
+	/**
+	 * Sets the value of the '{@link org.but4reuse.adaptedmodel.ElementWrapper#getText <em>Text</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Text</em>' attribute.
+	 * @see #getText()
+	 * @generated
+	 */
+	void setText(String value);
 
 } // ElementWrapper

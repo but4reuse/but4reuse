@@ -15,18 +15,21 @@
     <genClasses ecoreClass="adaptedmodel.ecore#//AdaptedModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedModel/ownedBlocks"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedModel/ownedAdaptedArtefacts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adaptedmodel.ecore#//AdaptedModel/constraints"/>
     </genClasses>
     <genClasses ecoreClass="adaptedmodel.ecore#//AdaptedArtefact">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedArtefact/artefact"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedArtefact/ownedElementWrappers"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//AdaptedArtefact/ownedElementWrappers"/>
     </genClasses>
-    <genClasses ecoreClass="adaptedmodel.ecore#//ElementWrapper">
+    <genClasses ecoreClass="adaptedmodel.ecore#//ElementWrapper" labelFeature="#//adaptedmodel/ElementWrapper/text">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adaptedmodel.ecore#//ElementWrapper/element"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//ElementWrapper/blockElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adaptedmodel.ecore#//ElementWrapper/text"/>
     </genClasses>
     <genClasses ecoreClass="adaptedmodel.ecore#//Block">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//Block/ownedBlockElements"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//Block/correspondingFeature"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//Block/correspondingFeatures"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute adaptedmodel.ecore#//Block/name"/>
     </genClasses>
     <genClasses ecoreClass="adaptedmodel.ecore#//BlockElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference adaptedmodel.ecore#//BlockElement/elementWrappers"/>

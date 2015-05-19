@@ -99,5 +99,17 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.showblockelements"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.SerializeAction"
+               icon="icons/serialize.gif"
+               id="org.but4reuse.adapters.ui.serializeaction"
+               label="Serialize analysis model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
       </extension>
 </plugin>

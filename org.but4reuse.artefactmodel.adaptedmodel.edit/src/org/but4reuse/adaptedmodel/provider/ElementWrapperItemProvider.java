@@ -59,6 +59,7 @@ public class ElementWrapperItemProvider
 
 			addElementPropertyDescriptor(object);
 			addBlockElementsPropertyDescriptor(object);
+			addTextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -108,6 +109,28 @@ public class ElementWrapperItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Text feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ElementWrapper_text_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ElementWrapper_text_feature", "_UI_ElementWrapper_type"),
+				 AdaptedModelPackage.Literals.ELEMENT_WRAPPER__TEXT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ElementWrapper.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -122,15 +145,14 @@ public class ElementWrapperItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		Object labelValue = ((ElementWrapper)object).getElement();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((ElementWrapper)object).getText();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ElementWrapper_type") :
-			getString("_UI_ElementWrapper_type") + " " + label;
+			label;
 	}
 
 	/**
@@ -146,6 +168,7 @@ public class ElementWrapperItemProvider
 
 		switch (notification.getFeatureID(ElementWrapper.class)) {
 			case AdaptedModelPackage.ELEMENT_WRAPPER__ELEMENT:
+			case AdaptedModelPackage.ELEMENT_WRAPPER__TEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModelPackage;
+import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -96,10 +98,14 @@ public class BlockElementItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
+		List<ElementWrapper> ews = ((BlockElement)object).getElementWrappers();
+		if(ews!=null && !ews.isEmpty()){
+			return ews.get(0).getText();
+		}
 		return getString("_UI_BlockElement_type");
 	}
 

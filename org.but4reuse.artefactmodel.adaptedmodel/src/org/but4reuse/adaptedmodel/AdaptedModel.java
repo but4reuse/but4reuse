@@ -68,7 +68,7 @@ public interface AdaptedModel extends EObject {
 	 * @return the value of the '<em>Constraints</em>' attribute.
 	 * @see #setConstraints(Object)
 	 * @see org.but4reuse.adaptedmodel.AdaptedModelPackage#getAdaptedModel_Constraints()
-	 * @model
+	 * @model transient="true"
 	 * @generated
 	 */
 	Object getConstraints();

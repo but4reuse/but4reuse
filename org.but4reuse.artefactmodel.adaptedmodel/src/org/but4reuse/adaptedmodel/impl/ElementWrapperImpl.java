@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link org.but4reuse.adaptedmodel.impl.ElementWrapperImpl#getElement <em>Element</em>}</li>
  *   <li>{@link org.but4reuse.adaptedmodel.impl.ElementWrapperImpl#getBlockElements <em>Block Elements</em>}</li>
+ *   <li>{@link org.but4reuse.adaptedmodel.impl.ElementWrapperImpl#getText <em>Text</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +62,26 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 	 * @ordered
 	 */
 	protected EList<BlockElement> blockElements;
+
+	/**
+	 * The default value of the '{@link #getText() <em>Text</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getText()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TEXT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getText() <em>Text</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getText()
+	 * @generated
+	 * @ordered
+	 */
+	protected String text = TEXT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -119,6 +140,27 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setText(String newText) {
+		String oldText = text;
+		text = newText;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AdaptedModelPackage.ELEMENT_WRAPPER__TEXT, oldText, text));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -155,6 +197,8 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 				return getElement();
 			case AdaptedModelPackage.ELEMENT_WRAPPER__BLOCK_ELEMENTS:
 				return getBlockElements();
+			case AdaptedModelPackage.ELEMENT_WRAPPER__TEXT:
+				return getText();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -175,6 +219,9 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 				getBlockElements().clear();
 				getBlockElements().addAll((Collection<? extends BlockElement>)newValue);
 				return;
+			case AdaptedModelPackage.ELEMENT_WRAPPER__TEXT:
+				setText((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -193,6 +240,9 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 			case AdaptedModelPackage.ELEMENT_WRAPPER__BLOCK_ELEMENTS:
 				getBlockElements().clear();
 				return;
+			case AdaptedModelPackage.ELEMENT_WRAPPER__TEXT:
+				setText(TEXT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -209,6 +259,8 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 				return ELEMENT_EDEFAULT == null ? element != null : !ELEMENT_EDEFAULT.equals(element);
 			case AdaptedModelPackage.ELEMENT_WRAPPER__BLOCK_ELEMENTS:
 				return blockElements != null && !blockElements.isEmpty();
+			case AdaptedModelPackage.ELEMENT_WRAPPER__TEXT:
+				return TEXT_EDEFAULT == null ? text != null : !TEXT_EDEFAULT.equals(text);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -225,6 +277,8 @@ public class ElementWrapperImpl extends MinimalEObjectImpl.Container implements 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (element: ");
 		result.append(element);
+		result.append(", text: ");
+		result.append(text);
 		result.append(')');
 		return result.toString();
 	}

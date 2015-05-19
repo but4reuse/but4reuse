@@ -186,13 +186,22 @@ public interface AdaptedModelPackage extends EPackage {
 	int ELEMENT_WRAPPER__BLOCK_ELEMENTS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT_WRAPPER__TEXT = 2;
+
+	/**
 	 * The number of structural features of the '<em>Element Wrapper</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_WRAPPER_FEATURE_COUNT = 2;
+	int ELEMENT_WRAPPER_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Element Wrapper</em>' class.
@@ -404,6 +413,17 @@ public interface AdaptedModelPackage extends EPackage {
 	EReference getElementWrapper_BlockElements();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.but4reuse.adaptedmodel.ElementWrapper#getText <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Text</em>'.
+	 * @see org.but4reuse.adaptedmodel.ElementWrapper#getText()
+	 * @see #getElementWrapper()
+	 * @generated
+	 */
+	EAttribute getElementWrapper_Text();
+
+	/**
 	 * Returns the meta object for class '{@link org.but4reuse.adaptedmodel.Block <em>Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -575,6 +595,14 @@ public interface AdaptedModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ELEMENT_WRAPPER__BLOCK_ELEMENTS = eINSTANCE.getElementWrapper_BlockElements();
+
+		/**
+		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ELEMENT_WRAPPER__TEXT = eINSTANCE.getElementWrapper_Text();
 
 		/**
 		 * The meta object literal for the '{@link org.but4reuse.adaptedmodel.impl.BlockImpl <em>Block</em>}' class.
