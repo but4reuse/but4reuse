@@ -3,8 +3,10 @@ package org.but4reuse.adaptedmodel.helpers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
@@ -357,15 +359,15 @@ public class AdaptedModelHelper {
 
 	public static Set<IDependencyObject> getDependingOnIElementBE(AdaptedModel adaptedModel, IElement element,
 			Map<IElement, BlockElement> iebeMap) {
-		Set<IDependencyObject> result = new HashSet<IDependencyObject>();
+		Set<IDependencyObject> result = new LinkedHashSet<IDependencyObject>();
 		BlockElement blockElement = iebeMap.get(element);
 		// Maybe only first...
 		for (ElementWrapper ew : blockElement.getElementWrappers()) {
 			IElement e = (IElement) ew.getElement();
 			Map<String, List<IDependencyObject>> dependants = e.getDependants();
-			// No ordering
-			for (List<IDependencyObject> iDependencyObjects : dependants.values()) {
-				for (IDependencyObject ido : iDependencyObjects) {
+			// keep ordering
+			for (Entry<String, List<IDependencyObject>> entry : dependants.entrySet()) {
+				for (IDependencyObject ido : entry.getValue()) {
 					if (!result.contains(ido)) {
 						result.add(ido);
 					}

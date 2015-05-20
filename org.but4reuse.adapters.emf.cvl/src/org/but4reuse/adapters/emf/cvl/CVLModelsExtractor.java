@@ -61,7 +61,7 @@ public class CVLModelsExtractor {
 
 	public static void createCVLModels(String constructionURI, AdaptedModel adaptedModel) {
 		try {
-			
+
 			// System.out.println("Start construct Base Model");
 			double startTime = System.currentTimeMillis();
 			/**
@@ -100,24 +100,25 @@ public class CVLModelsExtractor {
 			HashMap<EObject, String> mapNewEObjectsOldIds = new HashMap<EObject, String>();
 			mapNewEObjectsOldIds.put(resourceEObject, ModelImplUtil.getXMLID(resource.eObject));
 
-
-			// Map<IElement,ElementWrapper> ieewMap = AdaptedModelHelper.createMapIEEW(adaptedModel);
-			Map<IElement,BlockElement> iebeMap = AdaptedModelHelper.createMapIEBE(adaptedModel);
+			// Map<IElement,ElementWrapper> ieewMap =
+			// AdaptedModelHelper.createMapIEEW(adaptedModel);
+			Map<IElement, BlockElement> iebeMap = AdaptedModelHelper.createMapIEBE(adaptedModel);
 
 			// First stack to create the model tree structure and setting the
 			// attributes
 			// Second stack will be for references
-			//int it = 0;
+			// int it = 0;
 			while (!stack.isEmpty()) {
-				//it++;
+				// it++;
 
 				EMFClassElement peek = stack.pop();
 				EObject peekClass = mapAMEEobject.get(peek);
 
 				// Get the EMF Model Elements that depends on it
-				//System.out.println(it);
-				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek, iebeMap);
-				//System.out.println("next " + it);
+				// System.out.println(it);
+				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek,
+						iebeMap);
+				// System.out.println("next " + it);
 				for (IDependencyObject ame : dependingOnMe) {
 					if (ame instanceof EMFClassElement) {
 						EMFClassElement emfclass = (EMFClassElement) ame;
@@ -142,27 +143,33 @@ public class CVLModelsExtractor {
 							domain.getCommandStack().execute(command);
 						}
 					} else if (ame instanceof EMFAttributeElement) {
+						// Set the attribute value
 						EMFAttributeElement attribute = (EMFAttributeElement) ame;
 						peekClass.eSet(attribute.eAttribute, attribute.value);
 						mapAttributeAMEEobject.put(attribute, peekClass);
 					}
 				}
 			}
-			
+
 			// References
 			stack.push(resource);
 			while (!stack.isEmpty()) {
 				EMFClassElement peek = stack.pop();
-				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek, iebeMap);
+				Set<IDependencyObject> dependingOnMe = AdaptedModelHelper.getDependingOnIElementBE(adaptedModel, peek,
+						iebeMap);
 				for (IDependencyObject ame : dependingOnMe) {
 					if (ame instanceof EMFClassElement) {
 						EMFClassElement emfclass = (EMFClassElement) ame;
 						stack.add(emfclass);
 					} else if (ame instanceof EMFReferenceElement) {
 						EMFReferenceElement referenceAme = (EMFReferenceElement) ame;
-						EObject ownerEObject = mapAMEEobject.get(referenceAme.ownerElement);
-						if (!referenceAme.ownerElement.equals(peek)) {
+						// It is the class that owned the reference
+						if (referenceAme.ownerElement.equals(peek)) {
+							EObject ownerEObject = mapAMEEobject.get(referenceAme.ownerElement);
+							// Add referencedElements
+							List<EObject> added = new ArrayList<EObject>();
 							for (EMFClassElement referencedAme : referenceAme.referencedElements) {
+								added.add(referencedAme.eObject);
 								EObject ref = mapAMEEobject.get(referencedAme);
 								Command command = null;
 								if (referenceAme.eReference.isMany()) {
@@ -174,13 +181,37 @@ public class CVLModelsExtractor {
 									domain.getCommandStack().execute(command);
 								}
 							}
+							// This means that the referenced were in another
+							// resource
+							if (added.size() != referenceAme.referenced.size()) {
+								for (EObject ref : referenceAme.referenced) {
+									if (!added.contains(ref)) {
+										Command command = null;
+										if (referenceAme.eReference.isMany()) {
+											command = AddCommand.create(domain, ownerEObject, referenceAme.eReference,
+													ref);
+										} else {
+											command = SetCommand.create(domain, ownerEObject, referenceAme.eReference,
+													ref);
+										}
+										if (command != null && command.canExecute()) {
+											domain.getCommandStack().execute(command);
+										}
+									}
+								}
+							}
+
+							// Check if
+						} else {
+							System.out.println();
 						}
 					}
 				}
 			}
 
 			// Save BaseModel
-			EMFUtils.saveResource(emfResource);
+			// Deactivate ignore dangling to see possible errors
+			EMFUtils.saveResourceIgnoringDangling(emfResource);
 
 			// Now that it is saved we can try to keep old ids
 
@@ -192,13 +223,13 @@ public class CVLModelsExtractor {
 			}
 
 			// Save again BaseModel to try to maintain old ids
-			EMFUtils.saveResource(emfResource);
+			EMFUtils.saveResourceIgnoringDangling(emfResource);
 
 			double stopTime = System.currentTimeMillis();
-		    double elapsedTime = stopTime - startTime;
-		    // System.out.println("BaseModel " + elapsedTime / 1000.0);
-		    
-		    startTime = System.currentTimeMillis();
+			double elapsedTime = stopTime - startTime;
+			// System.out.println("BaseModel " + elapsedTime / 1000.0);
+
+			startTime = System.currentTimeMillis();
 			/**
 			 * Create the CVL model
 			 */
@@ -445,10 +476,10 @@ public class CVLModelsExtractor {
 
 			// Save it and it is ready
 			EMFUtils.saveEObject(modelURI, cvlModel);
-			
+
 			stopTime = System.currentTimeMillis();
-		    elapsedTime = stopTime - startTime;
-		    // System.out.println("CVLModel " + elapsedTime / 1000.0);
+			elapsedTime = stopTime - startTime;
+			// System.out.println("CVLModel " + elapsedTime / 1000.0);
 
 		} catch (Exception e) {
 			e.printStackTrace();

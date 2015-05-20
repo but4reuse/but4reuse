@@ -2,6 +2,7 @@ package org.but4reuse.adapters.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 * 
 	 * @author jabier.martinez
 	 */
-	private Map<String, List<IDependencyObject>> dependencies = new HashMap<String, List<IDependencyObject>>();
-	private Map<String, List<IDependencyObject>> dependants = new HashMap<String, List<IDependencyObject>>();
+	private Map<String, List<IDependencyObject>> dependencies = new LinkedHashMap<String, List<IDependencyObject>>();
+	private Map<String, List<IDependencyObject>> dependants = new LinkedHashMap<String, List<IDependencyObject>>();
 	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
 	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
 
