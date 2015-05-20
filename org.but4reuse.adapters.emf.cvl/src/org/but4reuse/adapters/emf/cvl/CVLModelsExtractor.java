@@ -62,7 +62,7 @@ public class CVLModelsExtractor {
 	public static void createCVLModels(String constructionURI, AdaptedModel adaptedModel) {
 		try {
 
-			// System.out.println("Start construct Base Model");
+			System.out.println("Start construct Base Model");
 			double startTime = System.currentTimeMillis();
 			/**
 			 * Construct the Base Model
@@ -103,7 +103,8 @@ public class CVLModelsExtractor {
 			// Map<IElement,ElementWrapper> ieewMap =
 			// AdaptedModelHelper.createMapIEEW(adaptedModel);
 			Map<IElement, BlockElement> iebeMap = AdaptedModelHelper.createMapIEBE(adaptedModel);
-
+			System.out.println("Preparation " + ((System.currentTimeMillis() - startTime) / 1000.0));
+			startTime = System.currentTimeMillis();
 			// First stack to create the model tree structure and setting the
 			// attributes
 			// Second stack will be for references
@@ -150,6 +151,9 @@ public class CVLModelsExtractor {
 					}
 				}
 			}
+
+			System.out.println("BaseModel Tree " + ((System.currentTimeMillis() - startTime) / 1000.0));
+			startTime = System.currentTimeMillis();
 
 			// References
 			stack.push(resource);
@@ -200,14 +204,13 @@ public class CVLModelsExtractor {
 									}
 								}
 							}
-
-							// Check if
-						} else {
-							System.out.println();
 						}
 					}
 				}
 			}
+
+			System.out.println("BaseModel References " + ((System.currentTimeMillis() - startTime) / 1000.0));
+			startTime = System.currentTimeMillis();
 
 			// Save BaseModel
 			// Deactivate ignore dangling to see possible errors
@@ -225,11 +228,10 @@ public class CVLModelsExtractor {
 			// Save again BaseModel to try to maintain old ids
 			EMFUtils.saveResourceIgnoringDangling(emfResource);
 
-			double stopTime = System.currentTimeMillis();
-			double elapsedTime = stopTime - startTime;
-			// System.out.println("BaseModel " + elapsedTime / 1000.0);
-
+			System.out.println("BaseModel Saving " + ((System.currentTimeMillis() - startTime) / 1000.0));
 			startTime = System.currentTimeMillis();
+
+			System.out.println("Start construct CVL Model");
 			/**
 			 * Create the CVL model
 			 */
@@ -476,10 +478,7 @@ public class CVLModelsExtractor {
 
 			// Save it and it is ready
 			EMFUtils.saveEObject(modelURI, cvlModel);
-
-			stopTime = System.currentTimeMillis();
-			elapsedTime = stopTime - startTime;
-			// System.out.println("CVLModel " + elapsedTime / 1000.0);
+			System.out.println("CVL Model finished " + ((System.currentTimeMillis() - startTime) / 1000.0));
 
 		} catch (Exception e) {
 			e.printStackTrace();
