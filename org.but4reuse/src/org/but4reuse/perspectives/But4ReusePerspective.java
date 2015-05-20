@@ -52,6 +52,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		bottomLeft.addView("org.eclipse.contribution.visualiser.views.Visualiser");// NON-NLS-1
 
 		bottomLeft.addView("org.but4reuse.feature.constraints.ui.view");// NON-NLS-1
+		bottomLeft.addView("org.but4reuse.visualisation.metrics");
 		bottomLeft.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
 	}
 
@@ -82,6 +83,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		factory.addShowViewShortcut("org.eclipse.contribution.visualiser.views.Menu");// NON-NLS-1
 		factory.addShowViewShortcut("org.eclipse.contribution.visualiser.views.Visualiser");// NON-NLS-1
 		factory.addShowViewShortcut("org.but4reuse.feature.constraints.ui.view");// NON-NLS-1
+		factory.addShowViewShortcut("org.but4reuse.visualisation.metrics");// NON-NLS-1
 	}
 
 }
