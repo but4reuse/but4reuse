@@ -15,7 +15,6 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleMarkupProvider;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -72,16 +71,6 @@ public class BlockElementsMarkupProvider extends SimpleMarkupProvider {
 		}
 		// return false for not to recompute
 		return false;
-	}
-
-	@Override
-	public void resetColours() {
-		super.resetColours();
-		if (this.getAllMarkupKinds() != null && !this.getAllMarkupKinds().isEmpty()) {
-			// Block 0 is usually the common, force it to be white
-			IMarkupKind firstKind = (IMarkupKind) this.getAllMarkupKinds().first();
-			setColorFor(firstKind, new Color(Display.getCurrent(), 255, 255, 255));
-		}
 	}
 
 }

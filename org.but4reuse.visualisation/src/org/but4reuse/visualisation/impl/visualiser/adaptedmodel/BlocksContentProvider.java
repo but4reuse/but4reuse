@@ -126,24 +126,24 @@ public class BlocksContentProvider extends SimpleContentProvider {
 			}
 
 			List<?> stripes = markupProvider.getMemberMarkups(member);
-			String sText = "";
+			StringBuffer sText = new StringBuffer("");
 			int nElements = 0;
 			if (stripes != null) {
 				nElements = stripes.size();
 				for (int i = 0; i < stripes.size(); i++) {
 					ElementStripe stripe = (ElementStripe) stripes.get(i);
 					lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-					sText = sText + ((ElementStripe) stripe).getElement().getText() + "\n";
+					sText.append(((ElementStripe) stripe).getElement().getText() + "\n");
 				}
 
 				// Remove the last \n
 				if (sText.length() > 0) {
-					sText = sText.substring(0, sText.length() - 1);
+					sText.setLength(sText.length() - 1);
 				}
 			}
 
 			ScrollableMessageLineColorsDialog dialog = new ScrollableMessageLineColorsDialog(Display.getCurrent()
-					.getActiveShell(), memberName, nElements + " Elements", sText, lines, colors);
+					.getActiveShell(), memberName, nElements + " Elements", sText.toString(), lines, colors);
 			dialog.open();
 		}
 		return true;
