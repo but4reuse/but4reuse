@@ -24,8 +24,6 @@ import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -97,8 +95,10 @@ public class CVLModelsExtractor {
 			AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(EMFAdapter.ADAPTER_FACTORY,
 					new BasicCommandStack());
 
-			HashMap<EObject, String> mapNewEObjectsOldIds = new HashMap<EObject, String>();
-			mapNewEObjectsOldIds.put(resourceEObject, ModelImplUtil.getXMLID(resource.eObject));
+			// HashMap<EObject, String> mapNewEObjectsOldIds = new
+			// HashMap<EObject, String>();
+			// mapNewEObjectsOldIds.put(resourceEObject,
+			// ModelImplUtil.getXMLID(resource.eObject));
 
 			// Map<IElement,ElementWrapper> ieewMap =
 			// AdaptedModelHelper.createMapIEEW(adaptedModel);
@@ -129,8 +129,9 @@ public class CVLModelsExtractor {
 						EObject child = EcoreUtil.create(emfclass.eObject.eClass());
 
 						// Try to keep extrinsic id
-						String oldId = ModelImplUtil.getXMLID(emfclass.eObject);
-						mapNewEObjectsOldIds.put(child, oldId);
+						// String oldId =
+						// ModelImplUtil.getXMLID(emfclass.eObject);
+						// mapNewEObjectsOldIds.put(child, oldId);
 
 						mapAMEEobject.put(emfclass, child);
 
@@ -216,17 +217,17 @@ public class CVLModelsExtractor {
 			// Deactivate ignore dangling to see possible errors
 			EMFUtils.saveResourceIgnoringDangling(emfResource);
 
-			// Now that it is saved we can try to keep old ids
-
-			TreeIterator<EObject> i = emfResource.getAllContents();
-			while (i.hasNext()) {
-				EObject o = i.next();
-				String oldId = mapNewEObjectsOldIds.get(o);
-				ModelImplUtil.setXMLID(o, oldId);
-			}
-
-			// Save again BaseModel to try to maintain old ids
-			EMFUtils.saveResourceIgnoringDangling(emfResource);
+			// // Now that it is saved we can try to keep old ids
+			//
+			// TreeIterator<EObject> i = emfResource.getAllContents();
+			// while (i.hasNext()) {
+			// EObject o = i.next();
+			// String oldId = mapNewEObjectsOldIds.get(o);
+			// ModelImplUtil.setXMLID(o, oldId);
+			// }
+			//
+			// // Save again BaseModel to try to maintain old ids
+			// EMFUtils.saveResourceIgnoringDangling(emfResource);
 
 			System.out.println("BaseModel Saving " + ((System.currentTimeMillis() - startTime) / 1000.0));
 			startTime = System.currentTimeMillis();
