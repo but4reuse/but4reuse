@@ -21,7 +21,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		List<IBlockCreationAlgorithm> algos = BlockCreationHelper.getAllBlockCreationAlgorithms();
 		for (IBlockCreationAlgorithm algo : algos) {
 			String algoName = BlockCreationHelper.getAlgorithmName(algo);
-			boolean isTheDefault = algoName.equals("Intersections among artefacts");
+			boolean isTheDefault = algoName.startsWith("Interdependent elements");
 			store.setDefault(BlockCreationHelper.getAlgorithmName(algo), isTheDefault);
 		}
 	}

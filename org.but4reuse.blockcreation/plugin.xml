@@ -6,7 +6,7 @@
          point="org.but4reuse.blockcreation">
       <blockcreation
             class="org.but4reuse.blockcreation.impl.IntersectionsBlockCreationAlgorithm"
-            name="Intersections among artefacts">
+            name="Interdependent elements (Intersections among artefacts)">
       </blockcreation>
       <blockcreation
             class="org.but4reuse.blockcreation.impl.SimilarElementsBlocksCreationAlgorithm"
