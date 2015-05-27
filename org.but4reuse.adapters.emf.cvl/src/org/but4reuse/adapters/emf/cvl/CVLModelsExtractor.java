@@ -24,6 +24,8 @@ import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -56,6 +58,10 @@ import cvl.ValueSubstitution;
  * @author jabier.martinez
  */
 public class CVLModelsExtractor {
+
+	// TODO add these options to a preferences page
+	static boolean KEEP_INTRINSIC_IDS = true;
+	static boolean KEEP_EXTRENSIC_IDS = true;
 
 	public static void createCVLModels(String constructionURI, AdaptedModel adaptedModel) {
 		try {
@@ -95,10 +101,14 @@ public class CVLModelsExtractor {
 			AdapterFactoryEditingDomain domain = new AdapterFactoryEditingDomain(EMFAdapter.ADAPTER_FACTORY,
 					new BasicCommandStack());
 
-			// HashMap<EObject, String> mapNewEObjectsOldIds = new
-			// HashMap<EObject, String>();
-			// mapNewEObjectsOldIds.put(resourceEObject,
-			// ModelImplUtil.getXMLID(resource.eObject));
+			HashMap<EObject, String> mapNewEObjectsOldIds = new HashMap<EObject, String>();
+			HashMap<EObject, String> mapNewEObjectsOldIntrinsicIds = new HashMap<EObject, String>();
+			if (KEEP_EXTRENSIC_IDS) {
+				mapNewEObjectsOldIds.put(resourceEObject, ModelImplUtil.getXMLID(resource.eObject));
+			}
+			if (KEEP_INTRINSIC_IDS) {
+				mapNewEObjectsOldIntrinsicIds.put(resourceEObject, ModelImplUtil.getIntrinsicID(resource.eObject));
+			}
 
 			// Map<IElement,ElementWrapper> ieewMap =
 			// AdaptedModelHelper.createMapIEEW(adaptedModel);
@@ -128,10 +138,15 @@ public class CVLModelsExtractor {
 						EReference reference = emfclass.reference;
 						EObject child = EcoreUtil.create(emfclass.eObject.eClass());
 
-						// Try to keep extrinsic id
-						// String oldId =
-						// ModelImplUtil.getXMLID(emfclass.eObject);
-						// mapNewEObjectsOldIds.put(child, oldId);
+						// Try to keep extrinsic and intrinsic ids
+						String oldId = ModelImplUtil.getXMLID(emfclass.eObject);
+						String oldIntrinsicId = ModelImplUtil.getIntrinsicID(emfclass.eObject);
+						if (KEEP_EXTRENSIC_IDS) {
+							mapNewEObjectsOldIds.put(child, oldId);
+						}
+						if (KEEP_INTRINSIC_IDS && oldIntrinsicId != null) {
+							mapNewEObjectsOldIntrinsicIds.put(child, oldIntrinsicId);
+						}
 
 						mapAMEEobject.put(emfclass, child);
 
@@ -217,17 +232,24 @@ public class CVLModelsExtractor {
 			// Deactivate ignore dangling to see possible errors
 			EMFUtils.saveResourceIgnoringDangling(emfResource);
 
-			// // Now that it is saved we can try to keep old ids
-			//
-			// TreeIterator<EObject> i = emfResource.getAllContents();
-			// while (i.hasNext()) {
-			// EObject o = i.next();
-			// String oldId = mapNewEObjectsOldIds.get(o);
-			// ModelImplUtil.setXMLID(o, oldId);
-			// }
-			//
-			// // Save again BaseModel to try to maintain old ids
-			// EMFUtils.saveResourceIgnoringDangling(emfResource);
+			// Now that it is saved we can try to keep old ids
+			if (KEEP_EXTRENSIC_IDS || KEEP_INTRINSIC_IDS) {
+				TreeIterator<EObject> i = emfResource.getAllContents();
+				while (i.hasNext()) {
+					EObject o = i.next();
+					if (KEEP_INTRINSIC_IDS) {
+						String oldIntrinsicId = mapNewEObjectsOldIntrinsicIds.get(o);
+						ModelImplUtil.setIntrinsicID(o, oldIntrinsicId);
+					}
+					if (KEEP_EXTRENSIC_IDS) {
+						String oldId = mapNewEObjectsOldIds.get(o);
+						ModelImplUtil.setXMLID(o, oldId);
+					}
+				}
+
+				// Save again BaseModel to try to maintain old ids
+				EMFUtils.saveResourceIgnoringDangling(emfResource);
+			}
 
 			System.out.println("BaseModel Saving " + ((System.currentTimeMillis() - startTime) / 1000.0));
 			startTime = System.currentTimeMillis();
