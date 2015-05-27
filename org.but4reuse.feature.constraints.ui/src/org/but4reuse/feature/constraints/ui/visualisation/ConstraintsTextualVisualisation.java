@@ -38,28 +38,30 @@ public class ConstraintsTextualVisualisation implements IVisualisation {
 			public void run() {
 				List<IConstraint> blockConstraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 				// Feature constraints if there is a feature list
-				if(featureList!=null){
+				if (featureList != null) {
 					message.append("Discovered Feature Constraints\n");
-					List<IConstraint> featureConstraints = ConstraintsHelper.getFeatureConstraints(featureList, adaptedModel);
-					if(featureConstraints.isEmpty()){
+					List<IConstraint> featureConstraints = ConstraintsHelper.getFeatureConstraints(featureList,
+							adaptedModel);
+					if (featureConstraints.isEmpty()) {
 						message.append("No structural feature constraints were identified\n\n");
 					} else {
 						message.append(ConstraintsHelper.getText(featureConstraints));
-						message.append("\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(featureConstraints) + "\n");
+						message.append("\n\nExplanations\n"
+								+ ConstraintsHelper.getTextWithExplanations(featureConstraints) + "\n");
 					}
 				}
 				// Block constraints
 				message.append("Discovered Block Constraints\n");
-				message.append(ConstraintsHelper.getText(blockConstraints));
-				if (message.length()==0) {
+				if (blockConstraints.isEmpty()) {
 					message.append("No structural block constraints were identified\n");
 				} else {
+					message.append(ConstraintsHelper.getText(blockConstraints));
 					message.append("\n\nExplanations\n" + ConstraintsHelper.getTextWithExplanations(blockConstraints));
 				}
-				
+
 				ConstraintsTextualView view = (ConstraintsTextualView) WorkbenchUtils
 						.forceShowView(ConstraintsTextualView.ID);
-				
+
 				view.scrollable.setText(message.toString());
 			}
 		});
