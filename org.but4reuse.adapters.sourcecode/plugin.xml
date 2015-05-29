@@ -15,6 +15,9 @@
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
             </element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.BodyElement">
+            </element>
          </elements>
       </adapter>
       <adapter
@@ -30,6 +33,9 @@
             </element>
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.sourcecode.BodyElement">
             </element>
          </elements>
       </adapter>

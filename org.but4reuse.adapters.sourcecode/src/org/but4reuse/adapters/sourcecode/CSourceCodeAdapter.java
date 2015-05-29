@@ -7,9 +7,9 @@ import java.util.List;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.sourcecode.adapter.CLanguage;
-import org.but4reuse.adapters.sourcecode.adapter.LanguageConfigurator;
+import org.but4reuse.adapters.sourcecode.adapter.LanguageManager;
 import org.but4reuse.adapters.sourcecode.adapter.ReadFSTProduct;
-import org.but4reuse.adapters.sourcecode.adapter.Sop2FST;
+import org.but4reuse.adapters.sourcecode.adapter.Elements2FST;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -34,7 +34,7 @@ public class CSourceCodeAdapter implements IAdapter {
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		builder = new CApproxBuilder();
-		LanguageConfigurator.LANGUAGE = new CLanguage();
+		LanguageManager.setLanguage(new CLanguage());
 		File file = FileUtils.getFile(uri);
 		String dirVariant = file.getAbsolutePath();
 
@@ -60,7 +60,7 @@ public class CSourceCodeAdapter implements IAdapter {
 
 	@Override
 	public void construct(URI uri, List<IElement> cps, IProgressMonitor monitor) {
-		Sop2FST ss = new Sop2FST();
+		Elements2FST ss = new Elements2FST();
 		List<FSTNode> nodesS = ss.toFST(cps);
 
 		String absPath = FileUtils.getFile(uri).getAbsolutePath();
@@ -69,7 +69,7 @@ public class CSourceCodeAdapter implements IAdapter {
 		for (FSTNode n : nodesS) {
 
 			// if (n instanceof FSTNonTerminal){//String featName=f.getId();
-			LanguageConfigurator.getLanguage().generateCode(n, absPath, null);
+			LanguageManager.getLanguage().generateCode(n, absPath);
 			// }
 
 		}

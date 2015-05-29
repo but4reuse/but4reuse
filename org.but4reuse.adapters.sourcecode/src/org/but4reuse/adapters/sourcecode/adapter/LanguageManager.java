@@ -4,18 +4,22 @@ import java.util.HashMap;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
-public class LanguageConfigurator {
+/**
+ * The current language
+ */
+public class LanguageManager {
 	
-	public static InterfaceLanguage LANGUAGE;
+	private static ILanguage LANGUAGE;
 	
 	public static HashMap<FSTNode, String> filesNames=
 				new HashMap<FSTNode, String>();
 
-	public static InterfaceLanguage getLanguage() {
+	public static ILanguage getLanguage() {
 		return LANGUAGE;
 	}
-
 	
-	
+	public static void setLanguage(ILanguage iLanguage) {
+		LANGUAGE = iLanguage;
+	}
 	
 }

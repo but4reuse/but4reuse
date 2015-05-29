@@ -1,7 +1,5 @@
 package org.but4reuse.adapters.sourcecode.adapter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
@@ -12,7 +10,7 @@ public class CodeGeneration {
 
 	public static void generate(String featName, String pathImpl, List<IElement> feature) {
 
-		Sop2FST s = new Sop2FST();
+		Elements2FST s = new Elements2FST();
 
 		List<FSTNode> nodes = s.toFST(feature);
 
@@ -23,7 +21,7 @@ public class CodeGeneration {
 
 		for (FSTNode n : nodes) {
 
-			LanguageConfigurator.getLanguage().generateCode(n, pathImpl, featName);
+			LanguageManager.getLanguage().generateCode(n, pathImpl);
 
 		}
 
