@@ -48,7 +48,7 @@ public class CSourceCodeAdapter implements IAdapter {
 		ReadFSTProduct rp1 = new ReadFSTProduct();
 		try {
 			rp1.readProduct(dirVariant);
-			artefact = rp1.getArtefact();
+			artefact = rp1.getArtefactElements();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,22 +58,16 @@ public class CSourceCodeAdapter implements IAdapter {
 		return artefact;
 	}
 
+	
 	@Override
-	public void construct(URI uri, List<IElement> cps, IProgressMonitor monitor) {
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		Elements2FST ss = new Elements2FST();
-		List<FSTNode> nodesS = ss.toFST(cps);
-
+		List<FSTNode> nodesS = ss.elementsToFST(elements);
 		String absPath = FileUtils.getFile(uri).getAbsolutePath();
-		System.out.println("         @Code Generation for Feature :" + absPath);
-		System.out.println("		                          @-------------------");
 		for (FSTNode n : nodesS) {
-
-			// if (n instanceof FSTNonTerminal){//String featName=f.getId();
 			LanguageManager.getLanguage().generateCode(n, absPath);
-			// }
-
 		}
-
 	}
+	
 
 }

@@ -33,36 +33,28 @@ public class JavaSourceCodeAdapter implements IAdapter {
 
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
-
 		LanguageManager.setLanguage(new JavaLanguage());
 		builder = new JavaBuilder();
-
 		File file = FileUtils.getFile(uri);
 		String dirVariant = file.getAbsolutePath();
 
 		// Step1: Read the input product variant.
-		List<IElement> artefact = null;
-		ReadFSTProduct rp1 = new ReadFSTProduct();
-		rp1.readProduct(dirVariant);
-		artefact = rp1.getArtefact();
+		ReadFSTProduct reader = new ReadFSTProduct();
+		reader.readProduct(dirVariant);
+		List<IElement> elements = reader.getArtefactElements();
 
-		// handleBodies(rp1.getBody(), j);
-
-		return artefact;
+		// TODO handleBodies
+		return elements;
 	}
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		Elements2FST ss = new Elements2FST();
-		List<FSTNode> nodesS = ss.toFST(elements);
+		List<FSTNode> nodesS = ss.elementsToFST(elements);
 		String absPath = FileUtils.getFile(uri).getAbsolutePath();
 		for (FSTNode n : nodesS) {
-			// if (n instanceof FSTNonTerminal){//String featName=f.getId();
 			LanguageManager.getLanguage().generateCode(n, absPath);
-			// }
-
 		}
-
 	}
 
 }
