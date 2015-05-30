@@ -22,7 +22,7 @@ public class ReadFSTProduct {
 
 	private List<IElement> artefact = null;
 
-	public List<IElement> getArtefact() {
+	public List<IElement> getArtefactElements() {
 		return artefact;
 	}
 

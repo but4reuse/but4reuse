@@ -41,28 +41,23 @@ public class JavaSourceCodeAdapter implements IAdapter {
 		String dirVariant = file.getAbsolutePath();
 
 		// Step1: Read the input product variant.
-		List<IElement> artefact = null;
 		ReadFSTProduct rp1 = new ReadFSTProduct();
 		rp1.readProduct(dirVariant);
-		artefact = rp1.getArtefact();
+		List<IElement> elements = rp1.getArtefactElements();
 
 		// handleBodies(rp1.getBody(), j);
 
-		return artefact;
+		return elements;
 	}
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		Elements2FST ss = new Elements2FST();
-		List<FSTNode> nodesS = ss.toFST(elements);
+		Elements2FST elements2FST = new Elements2FST();
+		List<FSTNode> nodesS = elements2FST.elementsToFST(elements);
 		String absPath = FileUtils.getFile(uri).getAbsolutePath();
 		for (FSTNode n : nodesS) {
-			// if (n instanceof FSTNonTerminal){//String featName=f.getId();
 			LanguageManager.getLanguage().generateCode(n, absPath);
-			// }
-
 		}
-
 	}
 
 }
