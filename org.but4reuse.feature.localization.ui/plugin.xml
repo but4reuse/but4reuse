@@ -15,6 +15,18 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+            <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.preprocessing.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.FeatureListPreprocessingAction"
+               icon="icons/FeatureList.gif"
+               id="org.but4reuse.feature.localization.ui.featurelist.preprocessing.action"
+               label="FeatureList Preprocessing"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">

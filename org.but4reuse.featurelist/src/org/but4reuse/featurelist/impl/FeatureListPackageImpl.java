@@ -196,6 +196,24 @@ public class FeatureListPackageImpl extends EPackageImpl implements FeatureListP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getFeature_NegationFeatureOf() {
+		return (EReference)featureEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFeature_InteractionFeatureOf() {
+		return (EReference)featureEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FeatureListFactory getFeatureListFactory() {
 		return (FeatureListFactory)getEFactoryInstance();
 	}
@@ -230,6 +248,8 @@ public class FeatureListPackageImpl extends EPackageImpl implements FeatureListP
 		createEAttribute(featureEClass, FEATURE__NAME);
 		createEReference(featureEClass, FEATURE__IMPLEMENTED_IN_ARTEFACTS);
 		createEAttribute(featureEClass, FEATURE__DESCRIPTION);
+		createEReference(featureEClass, FEATURE__NEGATION_FEATURE_OF);
+		createEReference(featureEClass, FEATURE__INTERACTION_FEATURE_OF);
 	}
 
 	/**
@@ -276,6 +296,8 @@ public class FeatureListPackageImpl extends EPackageImpl implements FeatureListP
 		initEAttribute(getFeature_Name(), ecorePackage.getEString(), "name", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFeature_ImplementedInArtefacts(), theArtefactModelPackage.getArtefact(), null, "implementedInArtefacts", null, 0, -1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFeature_Description(), ecorePackage.getEString(), "description", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFeature_NegationFeatureOf(), this.getFeature(), null, "negationFeatureOf", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFeature_InteractionFeatureOf(), this.getFeature(), null, "interactionFeatureOf", null, 0, -1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -9,6 +9,7 @@ import org.but4reuse.featurelist.FeatureListPackage;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -24,6 +25,8 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link org.but4reuse.featurelist.impl.FeatureImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.but4reuse.featurelist.impl.FeatureImpl#getImplementedInArtefacts <em>Implemented In Artefacts</em>}</li>
  *   <li>{@link org.but4reuse.featurelist.impl.FeatureImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.but4reuse.featurelist.impl.FeatureImpl#getNegationFeatureOf <em>Negation Feature Of</em>}</li>
+ *   <li>{@link org.but4reuse.featurelist.impl.FeatureImpl#getInteractionFeatureOf <em>Interaction Feature Of</em>}</li>
  * </ul>
  * </p>
  *
@@ -99,6 +102,26 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getNegationFeatureOf() <em>Negation Feature Of</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNegationFeatureOf()
+	 * @generated
+	 * @ordered
+	 */
+	protected Feature negationFeatureOf;
+
+	/**
+	 * The cached value of the '{@link #getInteractionFeatureOf() <em>Interaction Feature Of</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInteractionFeatureOf()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Feature> interactionFeatureOf;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -199,6 +222,56 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Feature getNegationFeatureOf() {
+		if (negationFeatureOf != null && negationFeatureOf.eIsProxy()) {
+			InternalEObject oldNegationFeatureOf = (InternalEObject)negationFeatureOf;
+			negationFeatureOf = (Feature)eResolveProxy(oldNegationFeatureOf);
+			if (negationFeatureOf != oldNegationFeatureOf) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, FeatureListPackage.FEATURE__NEGATION_FEATURE_OF, oldNegationFeatureOf, negationFeatureOf));
+			}
+		}
+		return negationFeatureOf;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Feature basicGetNegationFeatureOf() {
+		return negationFeatureOf;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNegationFeatureOf(Feature newNegationFeatureOf) {
+		Feature oldNegationFeatureOf = negationFeatureOf;
+		negationFeatureOf = newNegationFeatureOf;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FeatureListPackage.FEATURE__NEGATION_FEATURE_OF, oldNegationFeatureOf, negationFeatureOf));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Feature> getInteractionFeatureOf() {
+		if (interactionFeatureOf == null) {
+			interactionFeatureOf = new EObjectResolvingEList<Feature>(Feature.class, this, FeatureListPackage.FEATURE__INTERACTION_FEATURE_OF);
+		}
+		return interactionFeatureOf;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -210,6 +283,11 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 				return getImplementedInArtefacts();
 			case FeatureListPackage.FEATURE__DESCRIPTION:
 				return getDescription();
+			case FeatureListPackage.FEATURE__NEGATION_FEATURE_OF:
+				if (resolve) return getNegationFeatureOf();
+				return basicGetNegationFeatureOf();
+			case FeatureListPackage.FEATURE__INTERACTION_FEATURE_OF:
+				return getInteractionFeatureOf();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -236,6 +314,13 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 			case FeatureListPackage.FEATURE__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
+			case FeatureListPackage.FEATURE__NEGATION_FEATURE_OF:
+				setNegationFeatureOf((Feature)newValue);
+				return;
+			case FeatureListPackage.FEATURE__INTERACTION_FEATURE_OF:
+				getInteractionFeatureOf().clear();
+				getInteractionFeatureOf().addAll((Collection<? extends Feature>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -260,6 +345,12 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 			case FeatureListPackage.FEATURE__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case FeatureListPackage.FEATURE__NEGATION_FEATURE_OF:
+				setNegationFeatureOf((Feature)null);
+				return;
+			case FeatureListPackage.FEATURE__INTERACTION_FEATURE_OF:
+				getInteractionFeatureOf().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -280,6 +371,10 @@ public class FeatureImpl extends MinimalEObjectImpl.Container implements Feature
 				return implementedInArtefacts != null && !implementedInArtefacts.isEmpty();
 			case FeatureListPackage.FEATURE__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case FeatureListPackage.FEATURE__NEGATION_FEATURE_OF:
+				return negationFeatureOf != null;
+			case FeatureListPackage.FEATURE__INTERACTION_FEATURE_OF:
+				return interactionFeatureOf != null && !interactionFeatureOf.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

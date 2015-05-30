@@ -167,13 +167,31 @@ public interface FeatureListPackage extends EPackage {
 	int FEATURE__DESCRIPTION = 3;
 
 	/**
+	 * The feature id for the '<em><b>Negation Feature Of</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FEATURE__NEGATION_FEATURE_OF = 4;
+
+	/**
+	 * The feature id for the '<em><b>Interaction Feature Of</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FEATURE__INTERACTION_FEATURE_OF = 5;
+
+	/**
 	 * The number of structural features of the '<em>Feature</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FEATURE_FEATURE_COUNT = 4;
+	int FEATURE_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Feature</em>' class.
@@ -294,6 +312,28 @@ public interface FeatureListPackage extends EPackage {
 	EAttribute getFeature_Description();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.but4reuse.featurelist.Feature#getNegationFeatureOf <em>Negation Feature Of</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Negation Feature Of</em>'.
+	 * @see org.but4reuse.featurelist.Feature#getNegationFeatureOf()
+	 * @see #getFeature()
+	 * @generated
+	 */
+	EReference getFeature_NegationFeatureOf();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.but4reuse.featurelist.Feature#getInteractionFeatureOf <em>Interaction Feature Of</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Interaction Feature Of</em>'.
+	 * @see org.but4reuse.featurelist.Feature#getInteractionFeatureOf()
+	 * @see #getFeature()
+	 * @generated
+	 */
+	EReference getFeature_InteractionFeatureOf();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -399,6 +439,22 @@ public interface FeatureListPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FEATURE__DESCRIPTION = eINSTANCE.getFeature_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Negation Feature Of</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FEATURE__NEGATION_FEATURE_OF = eINSTANCE.getFeature_NegationFeatureOf();
+
+		/**
+		 * The meta object literal for the '<em><b>Interaction Feature Of</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FEATURE__INTERACTION_FEATURE_OF = eINSTANCE.getFeature_InteractionFeatureOf();
 
 	}
 

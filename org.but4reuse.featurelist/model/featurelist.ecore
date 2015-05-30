@@ -16,5 +16,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="implementedInArtefacts"
         upperBound="-1" eType="ecore:EClass ../../org.but4reuse.artefactmodel/model/artefactmodel.ecore#//Artefact"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="negationFeatureOf" eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactionFeatureOf" upperBound="-1"
+        eType="#//Feature"/>
   </eClassifiers>
 </ecore:EPackage>

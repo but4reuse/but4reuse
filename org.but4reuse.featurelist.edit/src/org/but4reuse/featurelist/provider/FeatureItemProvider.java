@@ -64,6 +64,8 @@ public class FeatureItemProvider
 			addNamePropertyDescriptor(object);
 			addImplementedInArtefactsPropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
+			addNegationFeatureOfPropertyDescriptor(object);
+			addInteractionFeatureOfPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -152,6 +154,50 @@ public class FeatureItemProvider
 				 true,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Negation Feature Of feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNegationFeatureOfPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Feature_negationFeatureOf_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Feature_negationFeatureOf_feature", "_UI_Feature_type"),
+				 FeatureListPackage.Literals.FEATURE__NEGATION_FEATURE_OF,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Interaction Feature Of feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addInteractionFeatureOfPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Feature_interactionFeatureOf_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Feature_interactionFeatureOf_feature", "_UI_Feature_type"),
+				 FeatureListPackage.Literals.FEATURE__INTERACTION_FEATURE_OF,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

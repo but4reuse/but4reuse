@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.but4reuse.featurelist.Feature#getName <em>Name</em>}</li>
  *   <li>{@link org.but4reuse.featurelist.Feature#getImplementedInArtefacts <em>Implemented In Artefacts</em>}</li>
  *   <li>{@link org.but4reuse.featurelist.Feature#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.but4reuse.featurelist.Feature#getNegationFeatureOf <em>Negation Feature Of</em>}</li>
+ *   <li>{@link org.but4reuse.featurelist.Feature#getInteractionFeatureOf <em>Interaction Feature Of</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,5 +123,47 @@ public interface Feature extends EObject {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Negation Feature Of</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Negation Feature Of</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Negation Feature Of</em>' reference.
+	 * @see #setNegationFeatureOf(Feature)
+	 * @see org.but4reuse.featurelist.FeatureListPackage#getFeature_NegationFeatureOf()
+	 * @model
+	 * @generated
+	 */
+	Feature getNegationFeatureOf();
+
+	/**
+	 * Sets the value of the '{@link org.but4reuse.featurelist.Feature#getNegationFeatureOf <em>Negation Feature Of</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Negation Feature Of</em>' reference.
+	 * @see #getNegationFeatureOf()
+	 * @generated
+	 */
+	void setNegationFeatureOf(Feature value);
+
+	/**
+	 * Returns the value of the '<em><b>Interaction Feature Of</b></em>' reference list.
+	 * The list contents are of type {@link org.but4reuse.featurelist.Feature}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Interaction Feature Of</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Interaction Feature Of</em>' reference list.
+	 * @see org.but4reuse.featurelist.FeatureListPackage#getFeature_InteractionFeatureOf()
+	 * @model
+	 * @generated
+	 */
+	EList<Feature> getInteractionFeatureOf();
 
 } // Feature
