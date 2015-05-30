@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.sourcecode.BodyElement;
 import org.but4reuse.adapters.sourcecode.FSTNodeElement;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -17,28 +16,30 @@ public class Elements2FST {
 
 	List<FSTNode> rootOfFeatures = new ArrayList<FSTNode>();
 
-	public List<FSTNode> elementsToFST(List<IElement> elements) {
+	public List<FSTNode> toFST(List<IElement> elements) {
+
 		ArrayList<FSTNode> retained = new ArrayList<FSTNode>();
-		for (IElement element : elements) {
-			// if it is a BodyElement create the parent
-			if(element instanceof BodyElement){
-				BodyElement be = (BodyElement)element;
-				element = be.getParent();
-			}
-			// calculate elements to keep
-			if (element instanceof FSTNodeElement) {
-				FSTNodeElement nodeElement = (FSTNodeElement) element;
-				FSTNode node = nodeElement.getNode();
+
+		for (IElement t : elements) {
+			// TODO Body elements
+			if (t instanceof FSTNodeElement) {
+
+				FSTNodeElement cfst = (FSTNodeElement) t;
+				FSTNode node = cfst.getNode();
 				List<FSTNode> np = this.getElementsToKeep(node);
 				FSTNode rootOfNode = this.getRoot(np);
+
 				if (rootOfFeatures.contains(rootOfNode)) {
 					List<FSTNode> clones = clone(np);
+
 					for (FSTNode d : clones) {
-						if (!checkNode(retained, d)){
+						if (!checkNode(retained, d))
 							retained.add(d);
-						}
 					}
-				} else {
+				}
+
+				else {
+
 					for (FSTNode n : this.getElementsToKeep(node)) {
 						if (!retained.contains(n)) {
 							retained.add(n);
@@ -47,15 +48,20 @@ public class Elements2FST {
 				}
 			}
 		}
+
 		List<FSTNode> roots = getRoots(retained);
+
 		List<FSTNode> newRoots = new ArrayList<FSTNode>();
 		for (FSTNode root : roots) {
+
 			if (!rootOfFeatures.contains(root))
 				rootOfFeatures.add(root);
 			root = cleanChildren(root, retained);
 			newRoots.add(root);
 		}
+
 		return newRoots;
+
 	}
 
 	private boolean checkNode(List<FSTNode> conserver, FSTNode d) {
@@ -88,15 +94,18 @@ public class Elements2FST {
 		return result;
 	}
 
-	private List<FSTNode> getRoots(List<FSTNode> conserver) {
+	private List<FSTNode> getRoots(ArrayList<FSTNode> conserver) {
 		List<FSTNode> res = new ArrayList<FSTNode>();
 		for (FSTNode n : conserver) {
+			// System.out.println(" Get Root "+n.getName()+" "+n.getType());
 			if (n.getParent() == null) {
 				if (!res.contains(n)) {
 					res.add(n);
+					// System.out.println(" Get Root Added "+n.getName()+" "+n.getType());
 				}
 			}
 		}
+
 		return res;
 	}
 
@@ -116,14 +125,37 @@ public class Elements2FST {
 						|| (child.getName().equals("#include")) || (child.getType().equals("ImportDeclaration"))) {
 
 					newNode.addChild(cleanChildren(child, conserver));
+
 				}
+
 			}
 			LanguageManager.filesNames.put(newNode, LanguageManager.filesNames.get(node));
 			return newNode;
 		}
+
 	}
 
 	ArrayList<FSTNode> parents = new ArrayList<FSTNode>();
+
+	/*
+	 * public void printFeature(Feature f){
+	 * 
+	 * System.out.println(" ==============================");
+	 * System.out.println("Feature : "+f.getId() + " "+ f.size()+ " node");
+	 * System.out.println("------------DEBUT --------");
+	 * 
+	 * for(Trigger t:f){
+	 * 
+	 * StatementPrimitive st = (StatementPrimitive)t; ConstructionPrimitive
+	 * consPrimitive = st.getPrimitive(); CreateFSTNode cfst =
+	 * (CreateFSTNode)consPrimitive; FSTNode node = cfst.getNode();
+	 * System.out.println(cfst.getNode().getName());
+	 * 
+	 * } System.out.println("------------FIN --------");
+	 * System.out.println(" ==============================");
+	 * 
+	 * }
+	 */
 
 	private FSTNode getRoot(List<FSTNode> parent) {
 		for (FSTNode n : parents) {
@@ -137,14 +169,22 @@ public class Elements2FST {
 		List<FSTNode> pr = new ArrayList<FSTNode>();
 		pr.add(0, node);
 		FSTNode parent = node.getParent();
+
 		int i = 1;
 		while (parent != null) {
+
 			if (!checkNode(pr, parent)) {
 				pr.add(i, parent);
+				// System.out.println(node.getName()+"  : PARENT ADDED :"+parent.getName()+
+				// "  "+parent.getType());
 			}
 			parent = parent.getParent();
 			i++;
+
 		}
+
+		// System.out.println("The parents of :"+node.getName());
+		// System.out.println("      "+pr.size());
 		return pr;
 	}
 

@@ -41,22 +41,31 @@ public class JavaLanguage implements ILanguage {
 	}
 
 	@Override
-	public void generateCode(FSTNode n, String path) {
-		;
+	public void generateCode(FSTNode n, String dir) {
+
+		// String rep = dir + "features";
+		// File repit = new File(rep);
+		// repit.mkdirs();
+		File fDir;
 		String packageName = this.getPackageName((FSTNonTerminal) n);
 		String[] pack = packageName.split("\\.");
+
+		String path = dir; // rep+"/"+featName;
+
 		for (int x = 0; x < pack.length; x++) {
+
 			path = path + "/" + (pack[x]);
 		}
-		File fDir = new File(path);
-		// fDir.mkdirs();
-		if (!fDir.exists()){
+		fDir = new File(path);
+		fDir.mkdirs();
+		if (!fDir.exists())
 			fDir.mkdirs();
-		}
+
 		JavaPrintVisitor jpv = new JavaPrintVisitor();
 		try {
 			jpv.processNode(n, fDir);
 		} catch (PrintVisitorException e) {
+
 			e.printStackTrace();
 		}
 	}

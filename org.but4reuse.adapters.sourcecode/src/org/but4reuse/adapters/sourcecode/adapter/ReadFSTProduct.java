@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
 
@@ -15,16 +14,16 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 public class ReadFSTProduct {
 
 	private HashMap<String, ArrayList<HashMap<String, FSTTerminal>>> bodies_nodes = new HashMap<String, ArrayList<HashMap<String, FSTTerminal>>>();
-	Map<String, String> methodsOfProduct = null;
+	HashMap<String, String> methodsOfProduct = null;
 
-	public Map<String, String> getBody() {
+	public HashMap<String, String> getBody() {
 		return methodsOfProduct;
 	}
 
-	private List<IElement> artefactElements = null;
+	private List<IElement> artefact = null;
 
-	public List<IElement> getArtefactElements() {
-		return artefactElements;
+	public List<IElement> getArtefact() {
+		return artefact;
 	}
 
 	public void readProduct(String pathToExplore) {
@@ -44,7 +43,7 @@ public class ReadFSTProduct {
 		fst2elements.adapt(theNodes);
 
 		bodies_nodes = fst2elements.getBodies_nodes();
-		artefactElements = fst2elements.getProduct();
+		artefact = fst2elements.getProduct();
 		// artefact.setId(idProduct);
 		this.methodsOfProduct = fst2elements.getBody();
 	}
@@ -53,7 +52,7 @@ public class ReadFSTProduct {
 		return bodies_nodes;
 	}
 
-	public Map<String, String> getMethodsOfProduct() {
+	public HashMap<String, String> getMethodsOfProduct() {
 		return methodsOfProduct;
 	}
 
