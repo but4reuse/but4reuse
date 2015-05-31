@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.impl;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -139,7 +140,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 			}
 
 			// ok, let's ask the user
-			boolean userDecision = manualEqual(obj);
+			boolean userDecision = manualEqual(similarity, obj);
 			return userDecision;
 		}
 		return super.equals(obj);
@@ -151,9 +152,9 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 * 
 	 * @return whether the element is equal to another
 	 */
-	public boolean manualEqual(Object obj) {
-		ElementTextManualComparison manualComparison = new ElementTextManualComparison(this.getText(),
-				((IElement) obj).getText());
+	public boolean manualEqual(double calculatedSimilarity, Object obj) {
+		ElementTextManualComparison manualComparison = new ElementTextManualComparison(calculatedSimilarity,
+				this.getText(), ((IElement) obj).getText());
 		Display.getDefault().syncExec(manualComparison);
 		int buttonIndex = manualComparison.getResult();
 		if (buttonIndex == 0) {
@@ -173,18 +174,21 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	public class ElementTextManualComparison implements IManualComparison {
 		String elementText1;
 		String elementText2;
+		double calculatedSimilarity;
 		int result;
 
-		public ElementTextManualComparison(String elementText1, String elementText2) {
+		public ElementTextManualComparison(double calculatedSimilarity, String elementText1, String elementText2) {
 			this.elementText1 = elementText1;
 			this.elementText2 = elementText2;
+			this.calculatedSimilarity = calculatedSimilarity;
 		}
 
 		@Override
 		public void run() {
 			// TODO implement "Always" and "Never" buttons
 			// Default is No
-			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal", null, elementText1
+			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal. Automatic said "
+					+ new DecimalFormat("#").format(calculatedSimilarity * 100) + "%", null, elementText1
 					+ "\n\n is equal to \n\n" + elementText2, MessageDialog.QUESTION, new String[] { "Yes", "No",
 					"Deactivate manual equal" }, 1);
 			result = dialog.open();

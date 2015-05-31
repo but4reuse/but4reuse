@@ -28,7 +28,7 @@ public class PreferencesHelper {
 	}
 	
 	public static double getManualEqualThreshold() {
-		return (new Double(prefs.getInt(ASK_USER_THRESHOLD, 100))).doubleValue() / 100;
+		return (new Double(prefs.getInt(ASK_USER_THRESHOLD, 90))).doubleValue() / 100;
 	}
 	
 	public static boolean isManualEqualActivated(){

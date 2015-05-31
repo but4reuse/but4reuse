@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nltext
+Bundle-SymbolicName: org.but4reuse.adapters.nltext;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.nltext.activator.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.but4reuse.adapters,
+ org.but4reuse.utils,
+ org.but4reuse.utils.nlp
+Bundle-ActivationPolicy: lazy

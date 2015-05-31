@@ -1,9 +1,19 @@
-package org.but4reuse.adapters.requirements;
+package org.but4reuse.utils.nlp.similarity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edu.cmu.lti.lexical_db.NictWordNet;
 import edu.cmu.lti.ws4j.RelatednessCalculator;
+import edu.cmu.lti.ws4j.impl.HirstStOnge;
+import edu.cmu.lti.ws4j.impl.JiangConrath;
+import edu.cmu.lti.ws4j.impl.LeacockChodorow;
+import edu.cmu.lti.ws4j.impl.Lesk;
+import edu.cmu.lti.ws4j.impl.Path;
+import edu.cmu.lti.ws4j.impl.Resnik;
+import edu.cmu.lti.ws4j.impl.Vector;
+import edu.cmu.lti.ws4j.impl.VectorPairs;
+import edu.cmu.lti.ws4j.impl.WuPalmer;
 import edu.cmu.lti.ws4j.util.WS4JConfiguration;
 
 /**
@@ -16,6 +26,64 @@ public class WS4JComparer {
 
 	WS4JComparer(RelatednessCalculator Calc) {
 		SimCalc = Calc;
+	}
+	
+	
+
+
+	public static double getSimilarityHSO(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new HirstStOnge(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityJC(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new JiangConrath(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityLC(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new LeacockChodorow(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityL(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new Lesk(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityP(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new Path(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityR(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new Resnik(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityV(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new Vector(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	public static double getSimilarityVP(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new VectorPairs(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
+	}
+	
+	// Wu and Palmer algorithm
+	public static double getSimilarityWUP(String text1, String text2) {
+		WS4JComparer ws4jcomparer = new WS4JComparer(new WuPalmer(new NictWordNet()));
+		float similarity = ws4jcomparer.CompareText(text1, text2);
+		return similarity;
 	}
 	
 	public final String[] ParseString(String RawString) {
