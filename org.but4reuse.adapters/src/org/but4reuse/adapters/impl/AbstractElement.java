@@ -140,7 +140,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 			}
 
 			// ok, let's ask the user
-			boolean userDecision = manualEqual(similarity, obj);
+			boolean userDecision = manualEqual(similarity, (IElement)obj);
 			return userDecision;
 		}
 		return super.equals(obj);
@@ -152,14 +152,20 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 * 
 	 * @return whether the element is equal to another
 	 */
-	public boolean manualEqual(double calculatedSimilarity, Object obj) {
+	public boolean manualEqual(double calculatedSimilarity, IElement element) {
+		Boolean cache = ManualEqualCache.check(this, element);
+		if (cache != null) {
+			return cache;
+		}
 		ElementTextManualComparison manualComparison = new ElementTextManualComparison(calculatedSimilarity,
-				this.getText(), ((IElement) obj).getText());
+				this.getText(), element.getText());
 		Display.getDefault().syncExec(manualComparison);
 		int buttonIndex = manualComparison.getResult();
 		if (buttonIndex == 0) {
+			ManualEqualCache.add(this, element, true);
 			return true;
 		} else if (buttonIndex == 1) {
+			ManualEqualCache.add(this, element, false);
 			return false;
 		} else {
 			PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(true);
