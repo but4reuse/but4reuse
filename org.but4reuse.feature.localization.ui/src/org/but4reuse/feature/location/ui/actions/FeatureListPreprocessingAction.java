@@ -6,6 +6,7 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.featurelist.FeatureListFactory;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -43,6 +44,31 @@ public class FeatureListPreprocessingAction implements IObjectActionDelegate {
 				Shell shell = new Shell(display);
 				shell.setLayout(new GridLayout(1, true));
 				shell.setText("Feature List Preprocessing");
+				
+				final Button button0 = new Button(shell, SWT.PUSH);
+				button0.setText("Add Core Feature if it does not exist");
+				button0.addSelectionListener(new SelectionListener() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						for(Feature f : featureList.getOwnedFeatures()){
+							if(FeatureListHelper.isCoreFeature(artefactModel, f)){
+								button0.setEnabled(false);
+								return;
+							}
+						}
+						Feature core = FeatureListFactory.eINSTANCE.createFeature();
+						core.getImplementedInArtefacts().addAll(artefactModel.getOwnedArtefacts());
+						core.setName("Core");
+						core.setId("Core");
+						// add it at the beginning
+						featureList.getOwnedFeatures().add(0, core);
+						button0.setEnabled(false);
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+				});
 
 				final Button button1 = new Button(shell, SWT.PUSH);
 				button1.setText("Add Feature Negations excluding Features present in all artefacts");
@@ -93,6 +119,33 @@ public class FeatureListPreprocessingAction implements IObjectActionDelegate {
 						featureList.getOwnedFeatures().addAll(threeWise);
 						button2.setEnabled(false);
 						button_2.setEnabled(false);
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+				});
+				
+				final Button button_w = new Button(shell, SWT.PUSH);
+				button_w.setText("Add 2-wise, 3-wise and 4-wise Feature Interactions existing in the artefacts");
+				button_w.addSelectionListener(new SelectionListener() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						// Add 2-wise feature interactions
+						List<Feature> twoWise = FeatureListHelper.get2WiseFeatureInteractions(
+								featureList.getOwnedFeatures(), artefactModel);
+						// Add 3-wise feature interactions
+						List<Feature> threeWise = FeatureListHelper.get3WiseFeatureInteractions(
+								featureList.getOwnedFeatures(), artefactModel);
+						// Add 3-wise feature interactions
+						List<Feature> fourWise = FeatureListHelper.get4WiseFeatureInteractions(
+								featureList.getOwnedFeatures(), artefactModel);
+						featureList.getOwnedFeatures().addAll(twoWise);
+						featureList.getOwnedFeatures().addAll(threeWise);
+						featureList.getOwnedFeatures().addAll(fourWise);
+						button2.setEnabled(false);
+						button_2.setEnabled(false);
+						button_w.setEnabled(false);
 					}
 
 					@Override

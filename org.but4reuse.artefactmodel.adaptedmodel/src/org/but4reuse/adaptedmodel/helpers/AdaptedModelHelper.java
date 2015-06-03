@@ -427,4 +427,13 @@ public class AdaptedModelHelper {
 		return all;
 	}
 
+	public static AdaptedArtefact getAdaptedArtefact(AdaptedModel adaptedModel, Artefact a) {
+		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
+			if(aa.getArtefact().equals(a)){
+				return aa;
+			}
+		}
+		return null;
+	}
+
 }

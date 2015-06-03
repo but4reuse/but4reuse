@@ -72,7 +72,7 @@
     <extension
         point="org.but4reuse.visualisation">
      <visualisation
-           class="org.but4reuse.visualisation.impl.FeatureSpecificHeatMapVisualisation"
+           class="org.but4reuse.visualisation.impl.BlocksOnFeaturesHeatMapVisualisation"
            name="Feature-Specific heuristic HeatMap">
      </visualisation>
      <visualisation

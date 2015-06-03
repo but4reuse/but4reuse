@@ -168,6 +168,52 @@ public class FeatureListHelper {
 		return threeWise;
 	}
 
+	/**
+	 * TODO implement it with N as parameter
+	 * 
+	 * @param features
+	 * @param artefactModel
+	 * @return
+	 */
+	public static List<Feature> get4WiseFeatureInteractions(EList<Feature> features, ArtefactModel artefactModel) {
+		List<Feature> fourWise = new ArrayList<Feature>();
+		for (Feature f1 : features) {
+			for (Feature f2 : features) {
+				if (f1 != f2 && features.indexOf(f1) < features.indexOf(f2)) {
+					for (Feature f3 : features) {
+						if (f2 != f3 && features.indexOf(f2) < features.indexOf(f3)) {
+							for (Feature f4 : features) {
+								if (f3 != f4 && features.indexOf(f3) < features.indexOf(f4)) {
+									Feature newF = FeatureListFactory.eINSTANCE.createFeature();
+									newF.setName("I4_" + f1.getName() + "_" + f2.getName() + "_" + f3.getName() + "_"
+											+ f4.getName());
+									newF.setId("I4_" + f1.getName() + "_" + f2.getName() + "_" + f3.getName() + "_"
+											+ f4.getName());
+									newF.getInteractionFeatureOf().add(f1);
+									newF.getInteractionFeatureOf().add(f2);
+									newF.getInteractionFeatureOf().add(f3);
+									newF.getInteractionFeatureOf().add(f4);
+									for (Artefact a : artefactModel.getOwnedArtefacts()) {
+										if (f1.getImplementedInArtefacts().contains(a)
+												&& f2.getImplementedInArtefacts().contains(a)
+												&& f3.getImplementedInArtefacts().contains(a)
+												&& f4.getImplementedInArtefacts().contains(a)) {
+											newF.getImplementedInArtefacts().add(a);
+										}
+									}
+									if (!newF.getImplementedInArtefacts().isEmpty()) {
+										fourWise.add(newF);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return fourWise;
+	}
+
 	public static void mergeFeaturesImplementedInTheSameArtefacts(FeatureList featureList, ArtefactModel artefactModel) {
 		List<Feature> toBeRemoved = new ArrayList<Feature>();
 		for (Feature f1 : featureList.getOwnedFeatures()) {
@@ -188,5 +234,12 @@ public class FeatureListHelper {
 		for (Feature re : toBeRemoved) {
 			featureList.getOwnedFeatures().remove(re);
 		}
+	}
+
+	public static boolean isCoreFeature(ArtefactModel artefactModel, Feature f) {
+		if (f.getImplementedInArtefacts().containsAll(artefactModel.getOwnedArtefacts())) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
+import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.files.CSVUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
@@ -12,8 +14,10 @@ import org.but4reuse.visualisation.IVisualisation;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -26,22 +30,43 @@ import org.eclipse.swt.widgets.TableItem;
  * 
  * @author jabier.martinez
  */
-public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
+public class BlocksOnFeaturesHeatMapVisualisation implements IVisualisation {
 	String[][] matrix;
+	Boolean[][] locatedMatrix;
 	URI adaptedModelURI;
 	FeatureList featureList;
 	AdaptedModel adaptedModel;
-	
+	Image location;
+
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 		this.featureList = featureList;
 		this.adaptedModel = adaptedModel;
-		
+
 		// TODO improve how to get this uri
 		adaptedModelURI = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
-		
+
 		// calculate the matrix
 		matrix = ConstraintsHelper.createMatrixOfPresenceOfBlocksInFeatures(featureList, adaptedModel);
+
+		locatedMatrix = createLocatedMatrix();
+		if (location == null) {
+			location = ImageDescriptor
+					.createFromFile(BlocksOnFeaturesHeatMapVisualisation.class, "/icons/location.png").createImage();
+		}
+	}
+
+	private Boolean[][] createLocatedMatrix() {
+		// +1 because of the headers
+		Boolean[][] m = new Boolean[featureList.getOwnedFeatures().size() + 1][adaptedModel.getOwnedBlocks().size() + 1];
+		for (int i = 0; i < adaptedModel.getOwnedBlocks().size(); i++) {
+			Block b = adaptedModel.getOwnedBlocks().get(i);
+			for (Feature f : b.getCorrespondingFeatures()) {
+				int fi = featureList.getOwnedFeatures().indexOf(f);
+				m[fi + 1][i + 1] = true;
+			}
+		}
+		return m;
 	}
 
 	@Override
@@ -79,13 +104,16 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 
 						// set the text of each row
 						item.setText(cells2);
-						
+
 						// calculating gradient color
 						if (r != 0) {
 							for (int ce = 1; ce < cells.length; ce++) {
 								if (cells[ce] != null) {
 									double value = Double.parseDouble(cells[ce]);
 									item.setBackground(ce, getGradientColor(value));
+									if (locatedMatrix[r][ce] != null) {
+										item.setImage(ce, location);
+									}
 								}
 							}
 						}
@@ -97,11 +125,11 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 					}
 
 					shell.pack();
-					shell.setText("Feature-Specific heatmap. CSV file at featureLocation folder");
+					shell.setText("Blocks on Features heatmap. CSV file at featureLocation folder");
 					shell.open();
 				}
 			});
-			
+
 			// CSV version of the matrix
 			// TODO improve checks!
 			// Here we try to find the folder to save it
@@ -117,12 +145,11 @@ public class FeatureSpecificHeatMapVisualisation implements IVisualisation {
 			// create folder
 			File graphsFolder = new File(artefactModelFile.getParentFile(), "featureLocation");
 			graphsFolder.mkdir();
-			
+
 			File file = new File(graphsFolder, artefactModelFile.getName() + "_featuresAndBlocks.csv");
 			CSVUtils.exportCSV(file.toURI(), matrix);
-			
-			// TODO improve this
-			WorkbenchUtils.refreshAllWorkspace();
+
+			WorkbenchUtils.refreshIResource(res.getParent());
 		}
 	}
 

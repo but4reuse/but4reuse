@@ -5,6 +5,10 @@
    <extension
          point="org.but4reuse.feature.location">
       <feature.location
+            class="org.but4reuse.feature.location.impl.FeatureSpecificFeatureLocation"
+            name="Strict Feature-Specific Location">
+      </feature.location>
+      <feature.location
             class="org.but4reuse.feature.location.impl.FeatureSpecificHeuristicFeatureLocation"
             name="Feature-Specific Heuristic">
       </feature.location>
