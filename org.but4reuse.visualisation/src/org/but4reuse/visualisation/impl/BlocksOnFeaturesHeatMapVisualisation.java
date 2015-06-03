@@ -43,16 +43,18 @@ public class BlocksOnFeaturesHeatMapVisualisation implements IVisualisation {
 		this.featureList = featureList;
 		this.adaptedModel = adaptedModel;
 
-		// TODO improve how to get this uri
-		adaptedModelURI = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
+		if (this.featureList != null) {
+			// TODO improve how to get this uri
+			adaptedModelURI = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
 
-		// calculate the matrix
-		matrix = ConstraintsHelper.createMatrixOfPresenceOfBlocksInFeatures(featureList, adaptedModel);
+			// calculate the matrix
+			matrix = ConstraintsHelper.createMatrixOfPresenceOfBlocksInFeatures(featureList, adaptedModel);
 
-		locatedMatrix = createLocatedMatrix();
-		if (location == null) {
-			location = ImageDescriptor
-					.createFromFile(BlocksOnFeaturesHeatMapVisualisation.class, "/icons/location.png").createImage();
+			locatedMatrix = createLocatedMatrix();
+			if (location == null) {
+				location = ImageDescriptor.createFromFile(BlocksOnFeaturesHeatMapVisualisation.class,
+						"/icons/location.png").createImage();
+			}
 		}
 	}
 
@@ -107,7 +109,7 @@ public class BlocksOnFeaturesHeatMapVisualisation implements IVisualisation {
 
 						// calculating gradient color
 						if (r != 0) {
-							for (int ce = 0; ce < cells.length; ce++) {
+							for (int ce = 1; ce < cells.length; ce++) {
 								if (cells[ce] != null) {
 									double value = Double.parseDouble(cells[ce]);
 									item.setBackground(ce, getGradientColor(value));

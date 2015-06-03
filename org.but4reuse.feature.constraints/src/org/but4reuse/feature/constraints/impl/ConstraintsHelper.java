@@ -78,29 +78,27 @@ public class ConstraintsHelper {
 	 */
 	public static String[][] createMatrixOfPresenceOfBlocksInFeatures(FeatureList featureList, AdaptedModel adaptedModel) {
 		String[][] matrix = null;
-		if (featureList != null) {
-			int featuresSize = featureList.getOwnedFeatures().size() + 1;
-			int blocksSize = adaptedModel.getOwnedBlocks().size() + 1;
-			if (featuresSize > 1 && blocksSize > 1) {
-				// initialize matrix sizes
-				matrix = new String[featuresSize][];
-				for (int i = 0; i < featuresSize; i++) {
-					matrix[i] = new String[blocksSize];
-				}
-				// first row with block names
-				for (int i = 1; i < blocksSize; i++) {
-					matrix[0][i] = adaptedModel.getOwnedBlocks().get(i - 1).getName();
-				}
-				// first column with feature names
-				for (int i = 1; i < featuresSize; i++) {
-					matrix[i][0] = featureList.getOwnedFeatures().get(i - 1).getName();
-				}
-				// calculate feature-specific heuristic
-				for (int r = 1; r < featuresSize; r++) {
-					for (int c = 1; c < blocksSize; c++) {
-						matrix[r][c] = new Double(percentageOfBlockInFeature(adaptedModel.getOwnedBlocks().get(c - 1),
-								featureList.getOwnedFeatures().get(r - 1))).toString();
-					}
+		int featuresSize = featureList.getOwnedFeatures().size() + 1;
+		int blocksSize = adaptedModel.getOwnedBlocks().size() + 1;
+		if (featuresSize > 1 && blocksSize > 1) {
+			// initialize matrix sizes
+			matrix = new String[featuresSize][];
+			for (int i = 0; i < featuresSize; i++) {
+				matrix[i] = new String[blocksSize];
+			}
+			// first row with block names
+			for (int i = 1; i < blocksSize; i++) {
+				matrix[0][i] = adaptedModel.getOwnedBlocks().get(i - 1).getName();
+			}
+			// first column with feature names
+			for (int i = 1; i < featuresSize; i++) {
+				matrix[i][0] = featureList.getOwnedFeatures().get(i - 1).getName();
+			}
+			// calculate feature-specific heuristic
+			for (int r = 1; r < featuresSize; r++) {
+				for (int c = 1; c < blocksSize; c++) {
+					matrix[r][c] = new Double(percentageOfBlockInFeature(adaptedModel.getOwnedBlocks().get(c - 1),
+							featureList.getOwnedFeatures().get(r - 1))).toString();
 				}
 			}
 		}
@@ -146,7 +144,8 @@ public class ConstraintsHelper {
 		// loop all the constraints
 		HashSet<String> alreadyAdded = new HashSet<String>();
 		for (IConstraint constraint : blockConstraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES) || constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)
+					|| constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				Block block1 = constraint.getBlock1();
 				Block block2 = constraint.getBlock2();
 				List<Feature> block1Features = block1.getCorrespondingFeatures();
@@ -185,7 +184,7 @@ public class ConstraintsHelper {
 					}
 				}
 			}
-			
+
 		}
 		return featureConstraints;
 	}
