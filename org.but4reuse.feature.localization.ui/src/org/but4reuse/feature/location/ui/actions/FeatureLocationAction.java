@@ -49,8 +49,10 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 				
 				artefactModel = FeatureListHelper.getArtefactModel(featureList);
 				
+				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
+				
 				// Adapter selection by user
-				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel);
+				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters );
 
 				if (!adapters.isEmpty()) {
 					// Launch Progress dialog

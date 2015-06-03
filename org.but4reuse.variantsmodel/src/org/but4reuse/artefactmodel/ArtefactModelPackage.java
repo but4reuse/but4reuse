@@ -85,13 +85,22 @@ public interface ArtefactModelPackage extends EPackage {
 	int ARTEFACT_MODEL__DESCRIPTION = 1;
 
 	/**
+	 * The feature id for the '<em><b>Adapters</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTEFACT_MODEL__ADAPTERS = 2;
+
+	/**
 	 * The feature id for the '<em><b>Owned Artefacts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTEFACT_MODEL__OWNED_ARTEFACTS = 2;
+	int ARTEFACT_MODEL__OWNED_ARTEFACTS = 3;
 
 	/**
 	 * The number of structural features of the '<em>Artefact Model</em>' class.
@@ -100,7 +109,7 @@ public interface ArtefactModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTEFACT_MODEL_FEATURE_COUNT = 3;
+	int ARTEFACT_MODEL_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Artefact Model</em>' class.
@@ -300,6 +309,17 @@ public interface ArtefactModelPackage extends EPackage {
 	EAttribute getArtefactModel_Description();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.but4reuse.artefactmodel.ArtefactModel#getAdapters <em>Adapters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Adapters</em>'.
+	 * @see org.but4reuse.artefactmodel.ArtefactModel#getAdapters()
+	 * @see #getArtefactModel()
+	 * @generated
+	 */
+	EAttribute getArtefactModel_Adapters();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link org.but4reuse.artefactmodel.ArtefactModel#getOwnedArtefacts <em>Owned Artefacts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -444,6 +464,14 @@ public interface ArtefactModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ARTEFACT_MODEL__DESCRIPTION = eINSTANCE.getArtefactModel_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTEFACT_MODEL__ADAPTERS = eINSTANCE.getArtefactModel_Adapters();
 
 		/**
 		 * The meta object literal for the '<em><b>Owned Artefacts</b></em>' containment reference list feature.

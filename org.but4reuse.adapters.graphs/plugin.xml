@@ -5,6 +5,7 @@
          point="org.but4reuse.adapters">
       <adapter
             class="org.but4reuse.adapters.graphs.GraphsAdapter"
+            id="graphs"
             name="Graphs">
          <elements>
             <element

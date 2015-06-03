@@ -6,6 +6,7 @@
       <adapter
             class="org.but4reuse.adapters.requirements.ReqAdapter"
             icon="icons/requirements.png"
+            id="requirements"
             name="Requirements">
          <elements>
             <element

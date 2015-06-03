@@ -231,6 +231,32 @@ public class AdaptersHelper {
 	}
 
 	/**
+	 * Get adapter id
+	 * 
+	 * @param adapter
+	 * @return adapter id
+	 */
+	public static String getAdapterId(IAdapter adapter) {
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				ADAPTERS_EXTENSIONPOINT);
+		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+			IAdapter ada = null;
+			try {
+				ada = (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			if (ada.getClass().equals(adapter.getClass())) {
+				String id = adapterExtensionPoint.getAttribute("id");
+				if (id == null || id.length() > 0) {
+					return id;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Get adapter name
 	 * 
 	 * @param adapter
@@ -360,5 +386,38 @@ public class AdaptersHelper {
 			e.printStackTrace();
 		}
 		return elements;
+	}
+
+	/**
+	 * Get adapter by ids
+	 * @param adapter ids as a comma separated list
+	 * @return a non null list
+	 */
+	public static List<IAdapter> getAdaptersByIds(String adapters) {
+		List<IAdapter> ada = new ArrayList<IAdapter>();
+		if (adapters != null) {
+			String[] ada_s = adapters.split(",");
+			for (String s : ada_s) {
+				IAdapter a = getAdapterById(s);
+				if (a != null) {
+					ada.add(a);
+				}
+			}
+		}
+		return ada;
+	}
+
+	/**
+	 * Get adapter by Id
+	 * @param id
+	 * @return the adapter or null
+	 */
+	public static IAdapter getAdapterById(String id) {
+		for(IAdapter a : getAllAdapters()){
+			if(id.equals(getAdapterId(a))){
+				return a;
+			}
+		}
+		return null;
 	}
 }

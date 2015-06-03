@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.requirements;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -20,6 +22,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * Requirements Adapter
+ * 
  * @author jabier.martinez
  */
 public class ReqAdapter implements IAdapter {
@@ -29,6 +32,10 @@ public class ReqAdapter implements IAdapter {
 	 * is the object a reqIF resource?
 	 */
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
+		File file = FileUtils.getFile(uri);
+		if (!FileUtils.getExtension(file).equalsIgnoreCase("reqif")) {
+			return false;
+		}
 		EObject eObject = EMFUtils.getEObject(uri);
 		if (eObject == null || !(eObject instanceof ReqIF)) {
 			return false;
@@ -44,17 +51,17 @@ public class ReqAdapter implements IAdapter {
 		List<IElement> result = new ArrayList<IElement>();
 		EObject eObject = EMFUtils.getEObject(uri);
 		if (eObject != null && (eObject instanceof ReqIF)) {
-			ReqIF reqif = (ReqIF)eObject;
+			ReqIF reqif = (ReqIF) eObject;
 			List<Specification> specs = reqif.getCoreContent().getSpecifications();
-			for(Specification spec : specs){
+			for (Specification spec : specs) {
 				List<SpecHierarchy> elems = spec.getChildren();
-				for(SpecHierarchy elem : elems){
+				for (SpecHierarchy elem : elems) {
 					SpecObject specObject = elem.getObject();
 					List<AttributeValue> attributeValues = specObject.getValues();
-					for(AttributeValue av : attributeValues){
-						if(av instanceof AttributeValueString){
+					for (AttributeValue av : attributeValues) {
+						if (av instanceof AttributeValueString) {
 							ReqElement reqElement = new ReqElement();
-							reqElement.setDescription(((AttributeValueString)av).getTheValue());
+							reqElement.setDescription(((AttributeValueString) av).getTheValue());
 							result.add(reqElement);
 						}
 					}

@@ -47,8 +47,10 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 			if (art instanceof ArtefactModel) {
 				artefactModel = ((ArtefactModel) art);
 
+				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
+				
 				// Adapter selection by user
-				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel);
+				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters);
 
 				if (!adapters.isEmpty()) {
 					// Launch Progress dialog

@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getAdapters <em>Adapters</em>}</li>
  *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactModelImpl#getOwnedArtefacts <em>Owned Artefacts</em>}</li>
  * </ul>
  * </p>
@@ -77,6 +78,26 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 	 * @ordered
 	 */
 	protected String description = DESCRIPTION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getAdapters() <em>Adapters</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdapters()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ADAPTERS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getAdapters() <em>Adapters</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdapters()
+	 * @generated
+	 * @ordered
+	 */
+	protected String adapters = ADAPTERS_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getOwnedArtefacts() <em>Owned Artefacts</em>}' containment reference list.
@@ -154,6 +175,27 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getAdapters() {
+		return adapters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setAdapters(String newAdapters) {
+		String oldAdapters = adapters;
+		adapters = newAdapters;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS, oldAdapters, adapters));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<Artefact> getOwnedArtefacts() {
 		if (ownedArtefacts == null) {
 			ownedArtefacts = new EObjectContainmentEList<Artefact>(Artefact.class, this, ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS);
@@ -187,6 +229,8 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				return getName();
 			case ArtefactModelPackage.ARTEFACT_MODEL__DESCRIPTION:
 				return getDescription();
+			case ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS:
+				return getAdapters();
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				return getOwnedArtefacts();
 		}
@@ -207,6 +251,9 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				return;
 			case ArtefactModelPackage.ARTEFACT_MODEL__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS:
+				setAdapters((String)newValue);
 				return;
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				getOwnedArtefacts().clear();
@@ -230,6 +277,9 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 			case ArtefactModelPackage.ARTEFACT_MODEL__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS:
+				setAdapters(ADAPTERS_EDEFAULT);
+				return;
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				getOwnedArtefacts().clear();
 				return;
@@ -249,6 +299,8 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ArtefactModelPackage.ARTEFACT_MODEL__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			case ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS:
+				return ADAPTERS_EDEFAULT == null ? adapters != null : !ADAPTERS_EDEFAULT.equals(adapters);
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:
 				return ownedArtefacts != null && !ownedArtefacts.isEmpty();
 		}
@@ -269,6 +321,8 @@ public class ArtefactModelImpl extends MinimalEObjectImpl.Container implements A
 		result.append(name);
 		result.append(", description: ");
 		result.append(description);
+		result.append(", adapters: ");
+		result.append(adapters);
 		result.append(')');
 		return result.toString();
 	}

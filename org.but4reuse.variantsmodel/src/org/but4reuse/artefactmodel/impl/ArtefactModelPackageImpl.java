@@ -134,8 +134,17 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getArtefactModel_Adapters() {
+		return (EAttribute)artefactModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getArtefactModel_OwnedArtefacts() {
-		return (EReference)artefactModelEClass.getEStructuralFeatures().get(2);
+		return (EReference)artefactModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -241,6 +250,7 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 		artefactModelEClass = createEClass(ARTEFACT_MODEL);
 		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__NAME);
 		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__DESCRIPTION);
+		createEAttribute(artefactModelEClass, ARTEFACT_MODEL__ADAPTERS);
 		createEReference(artefactModelEClass, ARTEFACT_MODEL__OWNED_ARTEFACTS);
 
 		artefactEClass = createEClass(ARTEFACT);
@@ -288,6 +298,7 @@ public class ArtefactModelPackageImpl extends EPackageImpl implements ArtefactMo
 		initEClass(artefactModelEClass, ArtefactModel.class, "ArtefactModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArtefactModel_Name(), ecorePackage.getEString(), "name", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtefactModel_Description(), ecorePackage.getEString(), "description", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getArtefactModel_Adapters(), ecorePackage.getEString(), "adapters", null, 0, 1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getArtefactModel_OwnedArtefacts(), this.getArtefact(), null, "ownedArtefacts", null, 0, -1, ArtefactModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(artefactEClass, Artefact.class, "Artefact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

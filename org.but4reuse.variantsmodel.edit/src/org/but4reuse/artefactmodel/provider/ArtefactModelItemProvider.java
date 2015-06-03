@@ -65,6 +65,7 @@ public class ArtefactModelItemProvider
 
 			addNamePropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
+			addAdaptersPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -105,6 +106,28 @@ public class ArtefactModelItemProvider
 				 getString("_UI_ArtefactModel_description_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_ArtefactModel_description_feature", "_UI_ArtefactModel_type"),
 				 ArtefactModelPackage.Literals.ARTEFACT_MODEL__DESCRIPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Adapters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAdaptersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ArtefactModel_adapters_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ArtefactModel_adapters_feature", "_UI_ArtefactModel_type"),
+				 ArtefactModelPackage.Literals.ARTEFACT_MODEL__ADAPTERS,
 				 true,
 				 false,
 				 false,
@@ -182,6 +205,7 @@ public class ArtefactModelItemProvider
 		switch (notification.getFeatureID(ArtefactModel.class)) {
 			case ArtefactModelPackage.ARTEFACT_MODEL__NAME:
 			case ArtefactModelPackage.ARTEFACT_MODEL__DESCRIPTION:
+			case ArtefactModelPackage.ARTEFACT_MODEL__ADAPTERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ArtefactModelPackage.ARTEFACT_MODEL__OWNED_ARTEFACTS:

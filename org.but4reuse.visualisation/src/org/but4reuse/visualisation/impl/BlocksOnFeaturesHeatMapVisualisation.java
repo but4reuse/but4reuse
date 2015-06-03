@@ -102,12 +102,12 @@ public class BlocksOnFeaturesHeatMapVisualisation implements IVisualisation {
 							cells2[ce] = to;
 						}
 
-						// set the text of each row
+						// set the text of first row
 						item.setText(cells2);
 
 						// calculating gradient color
 						if (r != 0) {
-							for (int ce = 1; ce < cells.length; ce++) {
+							for (int ce = 0; ce < cells.length; ce++) {
 								if (cells[ce] != null) {
 									double value = Double.parseDouble(cells[ce]);
 									item.setBackground(ce, getGradientColor(value));
