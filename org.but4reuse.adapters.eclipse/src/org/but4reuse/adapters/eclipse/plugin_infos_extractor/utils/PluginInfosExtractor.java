@@ -9,9 +9,11 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.utils.files.FileUtils;
@@ -19,8 +21,50 @@ import org.but4reuse.utils.files.FileUtils;
 public class PluginInfosExtractor {
 	public static final String BUNDLESINFO_RELATIVEPATH = "configuration/org.eclipse.equinox.simpleconfigurator/bundles.info";
 	private static final String BUNDLE_VERSION = "Bundle-Version";
+	private static final String BUNDLE_NAME = "Bundle-Name";
 	private static final String REQUIRE_BUNDLE = "Require-Bundle";
 	private static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
+	private static final String BUNDLE_LOCALIZATION = "Bundle-Localization";
+
+	// as used in org.google.guava for example
+	private static final String DEFAULT_LOCALIZATION = "OSGI-INF/l10n/bundle";
+
+	private static final String FRAGMENT_HOST = "Fragment-Host";
+
+	private static String currentLocalization = null;
+
+	private static void fillPluginElementInfo(PluginElement plugin, Manifest manifest) {
+		Attributes attributes = manifest.getMainAttributes();
+		String value = attributes.getValue(BUNDLE_SYMBOLIC_NAME);
+		int i = value.indexOf(';');
+		if (i != -1)
+			value = value.substring(0, i);
+		plugin.setSymbName(value);
+
+		// Fragment info
+		String fragmentHost = attributes.getValue(FRAGMENT_HOST);
+		if (fragmentHost != null) {
+			i = fragmentHost.indexOf(';');
+			if (i != -1)
+				fragmentHost = fragmentHost.substring(0, i);
+			plugin.setFragmentHost(fragmentHost);
+		}
+
+		String version = attributes.getValue(BUNDLE_VERSION);
+		plugin.setVersion(version);
+		value = attributes.getValue(REQUIRE_BUNDLE);
+		if (value != null) {
+			getRequireBundlesSymbNames(value, plugin);
+		}
+
+		// Name
+		currentLocalization = attributes.getValue(BUNDLE_LOCALIZATION);
+		if (currentLocalization == null) {
+			currentLocalization = DEFAULT_LOCALIZATION;
+		}
+		String name = attributes.getValue(BUNDLE_NAME);
+		plugin.setName(name);
+	}
 
 	/*
 	 * FOLDERS
@@ -32,39 +76,35 @@ public class PluginInfosExtractor {
 	 *            the absolute path to the manifest
 	 * @return a PluginElement containing all the required informations
 	 * @throws FileNotFoundException
-	 * @throws IOException
 	 */
-	public static PluginElement getPluginInfosFromManifest(String manifestFile) throws Exception {
+	public static PluginElement getPluginInfosFromManifest(String manifestFile) {
+		PluginElement plugin = new PluginElement();
+		plugin.setJar(false);
+		File f = new File(manifestFile);
+		f = f.getParentFile().getParentFile();
+		plugin.setAbsolutePath(f.getAbsolutePath());
 		try {
-			PluginElement plugin = new PluginElement();
-			plugin.setJar(false);
-			File f = new File(manifestFile);
-			f = f.getParentFile().getParentFile();
-			plugin.setAbsolutePath(f.getAbsolutePath());
 			InputStream ips = new FileInputStream(manifestFile);
 			Manifest manifest = new Manifest(ips);
 			fillPluginElementInfo(plugin, manifest);
 			ips.close();
-			return plugin;
+			if (plugin.getName().contains("%")) {
+				File localizationFile = new File(f, currentLocalization + ".properties");
+				if (localizationFile.exists()) {
+					Properties prop = new Properties();
+					InputStream input = new FileInputStream(localizationFile);
+					prop.load(input);
+					// remove also whitespaces, as the problem with
+					// org.eclipse.cdt.dsf.gdb.ui
+					String name = prop.getProperty(plugin.getName().substring(1).replaceAll("\\s", ""));
+					plugin.setName(name);
+					input.close();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e;
 		}
-	}
-
-	private static void fillPluginElementInfo(PluginElement plugin, Manifest manifest) {
-		Attributes attributes = manifest.getMainAttributes();
-		String value = attributes.getValue(BUNDLE_SYMBOLIC_NAME);
-		int i = value.indexOf(';');
-		if (i != -1)
-			value = value.substring(0, i);
-		plugin.setPluginSymbName(value);
-		String version = attributes.getValue(BUNDLE_VERSION);
-		plugin.setPluginVersion(version);
-		value = attributes.getValue(REQUIRE_BUNDLE);
-		if (value != null) {
-			getRequireBundlesSymbNames(value, plugin);
-		}
+		return plugin;
 	}
 
 	/*
@@ -77,21 +117,29 @@ public class PluginInfosExtractor {
 	 * @param jarFile
 	 *            the absolute path to the jar file
 	 * @return the plugin element
-	 * @throws IOException
 	 */
-	public static PluginElement getPluginInfosFromJar(String jarFile) throws IOException {
-		File f = new File(jarFile);
-		JarFile jar = new JarFile(f);
+	public static PluginElement getPluginInfosFromJar(String jarFile) {
 		PluginElement plugin = new PluginElement();
 		plugin.setJar(true);
 		plugin.setAbsolutePath(jarFile);
 		try {
-			fillPluginElementInfo(plugin,jar.getManifest());
+			File f = new File(jarFile);
+			JarFile jar = new JarFile(f);
+			fillPluginElementInfo(plugin, jar.getManifest());
+			if (plugin.getName().contains("%")) {
+				ZipEntry zipEntry = jar.getEntry(currentLocalization + ".properties");
+				if (zipEntry != null) {
+					Properties prop = new Properties();
+					prop.load(jar.getInputStream(zipEntry));
+					String name = prop.getProperty(plugin.getName().substring(1).replaceAll("\\s", ""));
+					plugin.setName(name);
+				}
+			}
 			jar.close();
-			return plugin;
 		} catch (IOException e) {
-			throw new IOException("Read exception for file " + jarFile + " !");
+			e.printStackTrace();
 		}
+		return plugin;
 	}
 
 	/*
@@ -124,25 +172,26 @@ public class PluginInfosExtractor {
 			}
 		}
 	}
-	
+
 	public static Map<String, String> createBundlesInfoMap(URI uri) {
 		Map<String, String> map = new HashMap<String, String>();
 		File file = FileUtils.getFile(uri);
 		File bundlesInfo = new File(file.getAbsolutePath() + "/" + BUNDLESINFO_RELATIVEPATH);
 		if (bundlesInfo.exists()) {
 			List<String> bundles = FileUtils.getLinesOfFile(bundlesInfo);
-			for(String info : bundles){
+			for (String info : bundles) {
 				int comma = info.indexOf(",");
-				if(comma!=-1){
-					map.put(info.substring(0,comma), info);
+				if (comma != -1) {
+					map.put(info.substring(0, comma), info);
 				}
 			}
 		}
 		return map;
 	}
-	
+
 	/**
 	 * Check if a file is a plugin
+	 * 
 	 * @param file
 	 * @return true if it is a plugin
 	 */

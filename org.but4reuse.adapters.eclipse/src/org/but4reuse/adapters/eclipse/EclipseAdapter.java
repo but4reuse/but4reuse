@@ -73,8 +73,8 @@ public class EclipseAdapter implements IAdapter {
 		// plugin dependencies
 		for (IElement elem : elements) {
 			if (elem instanceof PluginElement) {
-				DependenciesBuilder builder = new DependenciesBuilder((PluginElement) elem, elements);
-				builder.build();
+				PluginElement pe = (PluginElement) elem;
+				DependenciesBuilder.build(pe, elements);
 			}
 		}
 
@@ -93,10 +93,12 @@ public class EclipseAdapter implements IAdapter {
 		FileElement newElement = null;
 		if (PluginInfosExtractor.isAPlugin(file)) {
 			try {
+				// Unzipped plugin
 				if (file.isDirectory()) {
 					newElement = PluginInfosExtractor.getPluginInfosFromManifest(file.getAbsolutePath()
 							+ "/META-INF/MANIFEST.MF");
 				} else {
+					// Jar plugin
 					newElement = PluginInfosExtractor.getPluginInfosFromJar(file.getAbsolutePath());
 				}
 			} catch (Exception e) {
@@ -117,10 +119,15 @@ public class EclipseAdapter implements IAdapter {
 
 		// Add the bundles info
 		if (newElement instanceof PluginElement) {
-			String line = bundlesInfoLines.get(((PluginElement) newElement).getPluginSymbName());
+			PluginElement plugin = (PluginElement) newElement;
+			String line = bundlesInfoLines.get(plugin.getSymbName());
 			// in the case of source code plugins, line will be null but no
 			// problem
-			((PluginElement) newElement).setBundleInfoLine(line);
+			plugin.setBundleInfoLine(line);
+			
+			if(plugin.getName()==null || plugin.getName().contains("%")){
+				System.out.println("EclipseAdapter.adapt() No name found for: " + plugin.isFragment() +  "  " + plugin.getSymbName());
+			}
 		}
 
 		// Add to the list
@@ -176,8 +183,8 @@ public class EclipseAdapter implements IAdapter {
 					String line = pluginElement.getBundleInfoLine();
 					if (line != null) {
 						String[] lineFields = line.split(",");
-						bundlesInfoContent += pluginElement.getPluginSymbName() + ",";
-						bundlesInfoContent += pluginElement.getPluginVersion() + ",";
+						bundlesInfoContent += pluginElement.getSymbName() + ",";
+						bundlesInfoContent += pluginElement.getVersion() + ",";
 						bundlesInfoContent += pluginElement.getRelativeURI() + ",";
 						bundlesInfoContent += lineFields[3] + ",";
 						bundlesInfoContent += lineFields[4] + "\n";

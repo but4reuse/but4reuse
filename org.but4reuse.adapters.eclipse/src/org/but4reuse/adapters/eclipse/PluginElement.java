@@ -15,12 +15,31 @@ public class PluginElement extends FileElement {
 	private String pluginSymbName;
 	private String pluginVersion;
 	private String bundleInfoLine;
+	private String fragmentHost;
+	private String name;
 	// each pluginElement in require_Bundles, the list of require_Bundle will be
 	// empty.
 	// because we do not know the dependencies
 	// The same thing for absoluthPath
 	private ArrayList<String> require_Bundles;
 
+	
+	@Override
+	public double similarity(IElement anotherElement) {
+		// When they have the same relative URI
+		// TODO URIs can reference to the same file... check this
+		if (anotherElement instanceof PluginElement) {
+			PluginElement anotherPluginElement = ((PluginElement) anotherElement);
+
+			// Same symbolic name
+			if (this.getSymbName().equals(anotherPluginElement.getSymbName())) {
+				// TODO no versioning supported
+				return 1;
+			}
+		}
+		return 0;
+	}
+	
 	public ArrayList<String> getRequire_Bundles() {
 		return require_Bundles;
 	}
@@ -32,11 +51,11 @@ public class PluginElement extends FileElement {
 		require_Bundles = new ArrayList<String>();
 	}
 
-	public String getPluginSymbName() {
+	public String getSymbName() {
 		return pluginSymbName;
 	}
 
-	public void setPluginSymbName(String pluginSymbName) {
+	public void setSymbName(String pluginSymbName) {
 		this.pluginSymbName = pluginSymbName;
 	}
 
@@ -50,7 +69,7 @@ public class PluginElement extends FileElement {
 
 	@Override
 	public String getText() {
-		return pluginSymbName + " " + pluginVersion;
+		return name + "  " + pluginSymbName + " " + pluginVersion;
 	}
 
 	public boolean isJar() {
@@ -69,27 +88,11 @@ public class PluginElement extends FileElement {
 		this.absolutePath = absolutePath;
 	}
 
-	@Override
-	public double similarity(IElement anotherElement) {
-		// When they have the same relative URI
-		// TODO URIs can reference to the same file... check this
-		if (anotherElement instanceof PluginElement) {
-			PluginElement anotherPluginElement = ((PluginElement) anotherElement);
-
-			// Same symbolic name
-			if (this.getPluginSymbName().equals(anotherPluginElement.getPluginSymbName())) {
-				// TODO no versioning supported
-				return 1;
-			}
-		}
-		return 0;
-	}
-
-	public String getPluginVersion() {
+	public String getVersion() {
 		return pluginVersion;
 	}
 
-	public void setPluginVersion(String pluginVersion) {
+	public void setVersion(String pluginVersion) {
 		this.pluginVersion = pluginVersion;
 	}
 	
@@ -100,13 +103,33 @@ public class PluginElement extends FileElement {
 	public void setBundleInfoLine(String bundleInfoLine) {
 		this.bundleInfoLine = bundleInfoLine;
 	}
+
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getFragmentHost() {
+		return fragmentHost;
+	}
+
+	public void setFragmentHost(String fragmentHost) {
+		this.fragmentHost = fragmentHost;
+	}
 	
+	public boolean isFragment(){
+		return fragmentHost!=null;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getPluginSymbName() == null) ? 0 : getPluginSymbName().hashCode());
+		result = prime * result + ((getSymbName() == null) ? 0 : getSymbName().hashCode());
 		return result;
 	}
-
 }

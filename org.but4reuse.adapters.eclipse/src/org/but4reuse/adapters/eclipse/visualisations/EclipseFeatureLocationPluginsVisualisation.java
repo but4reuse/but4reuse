@@ -62,7 +62,7 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 					for(BlockElement be : b.getOwnedBlockElements()){
 						Object o = be.getElementWrappers().get(0).getElement();
 						if(o instanceof PluginElement){
-							text.append(((PluginElement)o).getPluginSymbName() + "\n");
+							text.append(((PluginElement)o).getSymbName() + "\n");
 						}
 					}
 				}
