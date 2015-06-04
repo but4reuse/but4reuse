@@ -20,9 +20,23 @@
    <extension
          point="org.but4reuse.visualisation">
       <visualisation
-            class="org.but4reuse.adapters.eclipse.visualisations.EclipseFeatureLocationPluginsVisualisation"
-            name="org.but4reuse.adapters.eclipse.visualisation">
+            class="org.but4reuse.adapters.eclipse.benchmark.visualisations.EclipseFeatureLocationPluginsVisualisation"
+            name="org.but4reuse.adapters.eclipse.benchmark.visualisation">
       </visualisation>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+         <action
+               class="org.but4reuse.adapters.eclipse.benchmark.actions.ActualFeaturesAction"
+               id="org.but4reuse.adapters.eclipse.benchmark.action"
+               label="Eclipse benchmark"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
 
 </plugin>
