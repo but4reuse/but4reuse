@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -43,29 +46,43 @@ public class AdaptedModelHelper {
 	public static AdaptedModel adapt(ArtefactModel artefactModel, List<IAdapter> adapters, IProgressMonitor monitor) {
 		// When we adapt we consider that we are starting a new analysis
 		AdaptedModelManager.getElapsedTimeRegistry().clear();
+		ExecutorService exec = Executors.newCachedThreadPool();
+
 		long startTime = System.currentTimeMillis();
 
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
-
-		// TODO implement concurrency to improve performance
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
-			if (artefact.isActive()) {
-				long startTimeArtefact = System.currentTimeMillis();
-				AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);
-				adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
-				monitor.worked(1);
-				if (monitor.isCanceled()) {
-					return adaptedModel;
-				}
-				AdaptedModelManager.registerTime("Adapt " + artefact.getName(), System.currentTimeMillis()
-						- startTimeArtefact);
+			exec.execute( task(adaptedModel, artefact, adapters, monitor) );
+		}
+		exec.shutdown();
+		try {
+			if(!exec.awaitTermination(30000l, TimeUnit.MILLISECONDS)){
+				System.err.println("Pool did not terminate gracefuly");
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		// Add info to the manager
 		AdaptedModelManager.registerTime("Adapt all artefacts", System.currentTimeMillis() - startTime);
 		AdaptedModelManager.setAdaptedModel(adaptedModel);
 		AdaptedModelManager.setAdapters(adapters);
 		return adaptedModel;
+	}
+
+	public static Runnable task(final AdaptedModel adaptedModel, final Artefact artefact, final List<IAdapter> adapters, final IProgressMonitor monitor ){
+		return new Runnable() {
+			@Override
+			public void run() {					
+				if (artefact.isActive()) {
+					long startTimeArtefact = System.currentTimeMillis();
+					AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);
+					adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
+					monitor.worked(1);
+					//if (monitor.isCanceled()) { return adaptedModel; }
+					AdaptedModelManager.registerTime("Adapt " + artefact.getName(), System.currentTimeMillis() - startTimeArtefact);
+				}
+			}
+		};
 	}
 
 	/**
