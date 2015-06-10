@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Future;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -47,21 +50,30 @@ public class AdaptedModelHelper {
 		// When we adapt we consider that we are starting a new analysis
 		AdaptedModelManager.getElapsedTimeRegistry().clear();
 		ExecutorService exec = Executors.newCachedThreadPool();
-
+		List<Future<AdaptedArtefact>> listAdaptedArtefact = new LinkedList<>();
+		
 		long startTime = System.currentTimeMillis();
 
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
+		
+		/* This will respect a FIFA (First In First Add) to the EList*/
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
-			exec.execute( task(adaptedModel, artefact, adapters, monitor) );
+			listAdaptedArtefact.add( exec.submit(task(artefact, adapters, monitor)) );
+		}
+		for(Future<AdaptedArtefact> futureArtefact : listAdaptedArtefact){
+			AdaptedArtefact aa=null;
+			try {				
+				aa = futureArtefact.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+			if( aa !=null ){
+				adaptedModel.getOwnedAdaptedArtefacts().add( aa );
+			}			
 		}
 		exec.shutdown();
-		try {
-			if(!exec.awaitTermination(30000l, TimeUnit.MILLISECONDS)){
-				System.err.println("Pool did not terminate gracefuly");
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		// Add info to the manager
 		AdaptedModelManager.registerTime("Adapt all artefacts", System.currentTimeMillis() - startTime);
 		AdaptedModelManager.setAdaptedModel(adaptedModel);
@@ -69,18 +81,19 @@ public class AdaptedModelHelper {
 		return adaptedModel;
 	}
 
-	public static Runnable task(final AdaptedModel adaptedModel, final Artefact artefact, final List<IAdapter> adapters, final IProgressMonitor monitor ){
-		return new Runnable() {
+	public static Callable<AdaptedArtefact> task(final Artefact artefact, final List<IAdapter> adapters, final IProgressMonitor monitor ){
+		return new Callable<AdaptedArtefact>() {
 			@Override
-			public void run() {					
+			public AdaptedArtefact call() throws Exception {
 				if (artefact.isActive()) {
 					long startTimeArtefact = System.currentTimeMillis();
-					AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);
-					adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
+					AdaptedArtefact adaptedArtefact = adapt(artefact, adapters, monitor);					
 					monitor.worked(1);
 					//if (monitor.isCanceled()) { return adaptedModel; }
 					AdaptedModelManager.registerTime("Adapt " + artefact.getName(), System.currentTimeMillis() - startTimeArtefact);
+					return adaptedArtefact;
 				}
+				return null;
 			}
 		};
 	}
