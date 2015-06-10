@@ -109,7 +109,7 @@ public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgori
 	 *            appears
 	 * @return the artefact indexes
 	 */
-	protected static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
+	public static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
 		IElement keyOfMostFrequent = null;
 		int sizeOfMostFrequent = -1;
 
