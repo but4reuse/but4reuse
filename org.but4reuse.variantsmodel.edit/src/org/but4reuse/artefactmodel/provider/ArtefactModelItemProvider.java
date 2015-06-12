@@ -107,7 +107,7 @@ public class ArtefactModelItemProvider
 				 getString("_UI_PropertyDescriptor_description", "_UI_ArtefactModel_description_feature", "_UI_ArtefactModel_type"),
 				 ArtefactModelPackage.Literals.ARTEFACT_MODEL__DESCRIPTION,
 				 true,
-				 false,
+				 true,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
