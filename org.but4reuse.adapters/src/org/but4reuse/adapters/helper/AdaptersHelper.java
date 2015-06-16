@@ -218,14 +218,18 @@ public class AdaptersHelper {
 	 * @return list of ielements
 	 */
 	public static List<IElement> getElements(Artefact artefact, IAdapter adapter) {
-		List<IElement> elements = null;
-		try {
-			elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (elements == null) {
-			elements = new ArrayList<IElement>();
+		List<IElement> elements = new ArrayList<IElement>();
+		if (artefact instanceof ComposedArtefact) {
+			ComposedArtefact cArtefact = (ComposedArtefact) artefact;
+			for (Artefact a : cArtefact.getOwnedArtefacts()) {
+				elements.addAll(getElements(a, adapter));
+			}
+		} else {
+			try {
+				elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return elements;
 	}
@@ -390,7 +394,9 @@ public class AdaptersHelper {
 
 	/**
 	 * Get adapter by ids
-	 * @param adapter ids as a comma separated list
+	 * 
+	 * @param adapter
+	 *            ids as a comma separated list
 	 * @return a non null list
 	 */
 	public static List<IAdapter> getAdaptersByIds(String adapters) {
@@ -409,12 +415,13 @@ public class AdaptersHelper {
 
 	/**
 	 * Get adapter by Id
+	 * 
 	 * @param id
 	 * @return the adapter or null
 	 */
 	public static IAdapter getAdapterById(String id) {
-		for(IAdapter a : getAllAdapters()){
-			if(id.equals(getAdapterId(a))){
+		for (IAdapter a : getAllAdapters()) {
+			if (id.equals(getAdapterId(a))) {
 				return a;
 			}
 		}
