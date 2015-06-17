@@ -21,6 +21,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferencesHelper.ASK_USER, false);
 		store.setDefault(PreferencesHelper.ASK_USER_THRESHOLD, 90);
 		store.setDefault(PreferencesHelper.ASK_USER_DEACTIVATED_FOR_THIS_TIME, false);
+		store.setDefault(PreferencesHelper.ADAPT_CONCURRENTLY, false);
 	}
 
 }
