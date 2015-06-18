@@ -141,16 +141,23 @@ public class Note {
 	public void setGrace(boolean grace) {
 		this.grace = grace;
 	}
-	
+
 	@Override
 	public String toString() {
 		String info = " Silence";
-		if(!isRest()){
+		if (!isRest()) {
 			info = " Pitch: " + getPitch() + getAccidental() + " Octave: " + getOctave();
 		}
-		return "Part: " + getPart() + " Measure: " + getMeasure() + " StartStamp: " + getStartTime() + info  + " Type: " + getType() + " isDot:"
-				+ isDot() + " isGrace:" + isGrace() + " Duration: " + getDuration() + " Voice: " + getVoice()
-				+ " StartRelativeToMeasure: " + getStartRelativeToMeasure() + " DurationRelativeToMeasure: "
-				+ getDurationRelativeToMeasure();
+		String grace = "";
+		if (isGrace()) {
+			grace = " Grace";
+		}
+		String dot = "";
+		if (isDot()) {
+			dot = " Dot";
+		}
+		return "Part: " + getPart() + " Measure: " + getMeasure() + info + " Type: " + getType() + dot + grace
+				+ " Duration: " + getDuration() + " Voice: " + getVoice() + " StartRelativeToMeasure: "
+				+ getStartRelativeToMeasure() + " DurationRelativeToMeasure: " + getDurationRelativeToMeasure();
 	}
 }

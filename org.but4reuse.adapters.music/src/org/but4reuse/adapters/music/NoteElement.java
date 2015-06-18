@@ -32,7 +32,8 @@ public class NoteElement extends AbstractElement {
 			if (another.note.getPart().equals(note.getPart()) && another.note.getMeasure().equals(note.getMeasure())) {
 				if (another.note.getStartRelativeToMeasure() == note.getStartRelativeToMeasure()
 						&& another.note.getDurationRelativeToMeasure() == note.getDurationRelativeToMeasure()
-						&& another.note.getPitch().equals(note.getPitch())) {
+						&& another.note.getPitch().equals(note.getPitch())
+						&& another.note.getAccidental().equals(note.getAccidental())) {
 					if (another.note.isRest()) {
 						// This is enough for two silences
 						return 1;
@@ -41,6 +42,9 @@ public class NoteElement extends AbstractElement {
 						if (another.note.getOctave().equals(note.getOctave())
 								&& another.note.getType().equals(note.getType())) {
 							return 1;
+						} else if (another.note.getType().equals(note.getType())) {
+							// just different octave. Octave similarity
+							return 0.9;
 						}
 					}
 				}
