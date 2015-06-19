@@ -9,8 +9,11 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -37,9 +40,16 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
 				if (art instanceof Artefact) {
 					artefact = ((Artefact) art);
-
+					
+					// check predefined
+					List<IAdapter> defaultAdapters = null;
+					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
+					if(artefactModel instanceof ArtefactModel){
+						defaultAdapters = AdaptersHelper.getAdaptersByIds(((ArtefactModel)artefactModel).getAdapters());
+					}
+					 
 					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Show elements", artefact);
+					adap = AdaptersSelectionDialog.show("Show elements", artefact, defaultAdapters);
 
 					if (!adap.isEmpty()) {
 						// Launch Progress dialog

@@ -58,26 +58,29 @@ public class AdaptersSelectionDialog {
 		return show(title, correctAdapters);
 	}
 
-	public static List<IAdapter> show(String title, final Artefact input) {
+	public static List<IAdapter> show(String title, final Artefact input, List<IAdapter> defaultAdapters) {
 		// Calculate adapters selected by default
-
-		// Launch Progress dialog
-		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-		try {
-			progressDialog.run(true, true, new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					String name = input.getName();
-					if (name == null) {
-						name = "this artefact";
+		if (defaultAdapters == null || defaultAdapters.isEmpty()) {
+			// Launch Progress dialog
+			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+			try {
+				progressDialog.run(true, true, new IRunnableWithProgress() {
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						String name = input.getName();
+						if (name == null) {
+							name = "this artefact";
+						}
+						monitor.beginTask("Calculating the Adapters that can be used for " + name, 1);
+						correctAdapters = AdaptersHelper.getAdapters(input, monitor);
+						monitor.done();
 					}
-					monitor.beginTask("Calculating the Adapters that can be used for " + name, 1);
-					correctAdapters = AdaptersHelper.getAdapters(input, monitor);
-					monitor.done();
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			correctAdapters = defaultAdapters;
 		}
 		return show(title, correctAdapters);
 	}
