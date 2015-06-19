@@ -11,7 +11,7 @@ import org.but4reuse.adapters.music.utils.Note;
  */
 public class NoteElement extends AbstractElement {
 
-	Note note;
+	public Note note;
 
 	public NoteElement(Note note) {
 		super();
@@ -33,7 +33,8 @@ public class NoteElement extends AbstractElement {
 				if (another.note.getStartRelativeToMeasure() == note.getStartRelativeToMeasure()
 						&& another.note.getDurationRelativeToMeasure() == note.getDurationRelativeToMeasure()
 						&& another.note.getPitch().equals(note.getPitch())
-						&& another.note.getAccidental().equals(note.getAccidental())) {
+						&& another.note.getAccidental().equals(note.getAccidental())
+						&& another.note.isGrace()==note.isGrace()) {
 					if (another.note.isRest()) {
 						// This is enough for two silences
 						return 1;
