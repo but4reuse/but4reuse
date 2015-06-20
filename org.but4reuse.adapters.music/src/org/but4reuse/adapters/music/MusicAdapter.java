@@ -44,8 +44,11 @@ public class MusicAdapter implements IAdapter {
 			parser.parseMusicXML();
 			List<Note> songSequenceOfNoteObjects = parser.getNotesOfSong();
 			for (Note note : songSequenceOfNoteObjects) {
-				NoteElement noteElement = new NoteElement(note);
-				elements.add(noteElement);
+				// ignore silence
+				if(!note.getPitch().equals("Z")){
+					NoteElement noteElement = new NoteElement(note);
+					elements.add(noteElement);
+				}
 			}
 			NoteUtils.fillExtraInfo(songSequenceOfNoteObjects);
 		} catch (Exception e) {
