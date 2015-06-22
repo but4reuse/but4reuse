@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.sourcecode.adapter;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 import printer.PrintVisitorException;
@@ -19,7 +20,7 @@ public interface ILanguage {
 	 * @throws ParseException
 	 * @throws PrintVisitorException
 	 */
-	public FSTNonTerminal parseFile(String path) throws FileNotFoundException, ParseException, PrintVisitorException;
+	public FSTNonTerminal parseFile(File file);
 
 	/**
 	 * Check if it corresponds to a method

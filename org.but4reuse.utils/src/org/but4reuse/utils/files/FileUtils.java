@@ -112,7 +112,7 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static void createFile(File file) throws IOException {
-		if (file!=null && !file.exists()) {
+		if (file != null && !file.exists()) {
 			if (!file.getParentFile().exists()) {
 				file.getParentFile().mkdirs();
 			}
@@ -134,7 +134,7 @@ public class FileUtils {
 		output.newLine();
 		output.close();
 	}
-	
+
 	/**
 	 * No append, just overwrite with new text
 	 * 
@@ -241,18 +241,19 @@ public class FileUtils {
 		}
 		return lines;
 	}
-	
+
 	/**
 	 * Get string
+	 * 
 	 * @param file
 	 * @return
 	 */
 	public static String getStringOfFile(File file) {
 		StringBuilder string = new StringBuilder();
-		for(String line : getLinesOfFile(file)){
+		for (String line : getLinesOfFile(file)) {
 			string.append(line + "\n");
 		}
-		string.setLength(string.length()-1);
+		string.setLength(string.length() - 1);
 		return string.toString();
 	}
 
@@ -303,6 +304,7 @@ public class FileUtils {
 
 	/**
 	 * get checksum of a file using MD5 hashing algorithm
+	 * 
 	 * @param file
 	 * @return the checksum
 	 */
@@ -335,6 +337,7 @@ public class FileUtils {
 
 	/**
 	 * Replace one file with another
+	 * 
 	 * @param oldFile
 	 * @param newFile
 	 */
@@ -345,6 +348,7 @@ public class FileUtils {
 
 	/**
 	 * Copy file
+	 * 
 	 * @param sourceFile
 	 * @param destinationFile
 	 */
@@ -355,6 +359,33 @@ public class FileUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Get all files (not folders) inside one folder. Or the file itself if the
+	 * input is a file
+	 * 
+	 * @param dir
+	 * @return list of files
+	 */
+	public static List<File> getAllFiles(File dir) {
+		return getAllFiles(null, dir);
+	}
+
+	private static List<File> getAllFiles(List<File> files, File dir) {
+		if (files == null) {
+			files = new ArrayList<File>();
+		}
+
+		if (!dir.isDirectory()) {
+			files.add(dir);
+			return files;
+		}
+
+		for (File file : dir.listFiles()) {
+			getAllFiles(files, file);
+		}
+		return files;
 	}
 
 }

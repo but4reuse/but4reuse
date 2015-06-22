@@ -35,19 +35,28 @@ public class CLanguage implements ILanguage {
 
 	}
 
-	public FSTNonTerminal parseFile(String path) throws FileNotFoundException, ParseException, PrintVisitorException {
+	public FSTNonTerminal parseFile(File path) {
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(path);
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
 
-		File file = new File(path);
+		CApproxParser parser = new CApproxParser(new OffsetCharStream(fis));
 
-		CApproxParser parser = new CApproxParser(new OffsetCharStream(new FileInputStream(path)));
+		try {
+			parser.TranslationUnit(false);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		parser.TranslationUnit(false);
-
-		FSTNonTerminal racine = (FSTNonTerminal) parser.getRoot();
+		FSTNonTerminal root = (FSTNonTerminal) parser.getRoot();
 
 		// System.out.println(racine.toString());
-		LanguageManager.filesNames.put(racine, file.getName());
-		return racine;
+		LanguageManager.filesNames.put(root, path.getName());
+		return root;
 	}
 
 	@Override
