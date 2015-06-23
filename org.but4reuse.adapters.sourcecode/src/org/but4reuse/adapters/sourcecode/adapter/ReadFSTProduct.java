@@ -1,11 +1,13 @@
 package org.but4reuse.adapters.sourcecode.adapter;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.utils.files.FileUtils;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -26,17 +28,20 @@ public class ReadFSTProduct {
 		return artefact;
 	}
 
-	public void readProduct(String pathToExplore) {
-		List<String> allFiles = listFiles(null, new File(pathToExplore));
+	public void readProduct(URI uriToExplore) {
+		File file = FileUtils.getFile(uriToExplore);
+		List<File> allFiles = FileUtils.getAllFiles(file);
 		FST2ElementsAdapter fst2elements = new FST2ElementsAdapter();
 		List<FSTNode> theNodes = new ArrayList<FSTNode>();
-		for (String fileName : allFiles) {
+		for (File f : allFiles) {
+			String fileName = f.toString();
 			if (LanguageManager.getLanguage().isALanguageProgram(fileName)) {
-				try {
-					FSTNonTerminal node = LanguageManager.getLanguage().parseFile(fileName);
+				FSTNonTerminal node = LanguageManager.getLanguage().parseFile(f);
+				// node is null when there was an exception or error in the
+				// parsing
+				if (node != null) {
+					// TODO report parsing errors to the user, not only console!
 					theNodes.add(node);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		}
@@ -54,21 +59,5 @@ public class ReadFSTProduct {
 
 	public HashMap<String, String> getMethodsOfProduct() {
 		return methodsOfProduct;
-	}
-
-	public static List<String> listFiles(List<String> files, File dir) {
-		if (files == null) {
-			files = new ArrayList<String>();
-		}
-
-		if (!dir.isDirectory()) {
-			files.add(dir.toString());
-			return files;
-		}
-
-		for (File file : dir.listFiles()) {
-			listFiles(files, file);
-		}
-		return files;
 	}
 }

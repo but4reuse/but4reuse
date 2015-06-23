@@ -28,28 +28,41 @@ public class JavaLanguage implements ILanguage {
 		if (node instanceof FSTTerminal) {
 			FSTTerminal nt = (FSTTerminal) node;
 			return (nt.getType().equals("ConstructorDecl"));
-
 		}
 		return false;
 	}
 
-	public FSTNonTerminal parseFile(String path) throws FileNotFoundException, ParseException, PrintVisitorException {
-		Java15Parser p = new Java15Parser(new OffsetCharStream(new FileInputStream(path)));
-		p.CompilationUnit(false);
+	public FSTNonTerminal parseFile(File path) {
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(path);
+		} catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
+		Java15Parser p = new Java15Parser(new OffsetCharStream(fis));
+		try {
+			p.CompilationUnit(false);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		} catch (Error error) {
+			// like cide.gparser.TokenMgrError
+			error.printStackTrace();
+			return null;
+		}
 		FSTNonTerminal root = (FSTNonTerminal) p.getRoot();
 		return root;
 	}
 
 	@Override
 	public void generateCode(FSTNode n, String path) {
-		;
 		String packageName = this.getPackageName((FSTNonTerminal) n);
 		String[] pack = packageName.split("\\.");
 		for (int x = 0; x < pack.length; x++) {
 			path = path + "/" + (pack[x]);
 		}
 		File fDir = new File(path);
-		if (!fDir.exists()){
+		if (!fDir.exists()) {
 			fDir.mkdirs();
 		}
 		JavaPrintVisitor jpv = new JavaPrintVisitor();
@@ -88,5 +101,5 @@ public class JavaLanguage implements ILanguage {
 	public boolean isImportDec(FSTTerminal terminal) {
 		return (terminal.getType().equals("ImportDeclaration"));
 	}
-	
+
 }
