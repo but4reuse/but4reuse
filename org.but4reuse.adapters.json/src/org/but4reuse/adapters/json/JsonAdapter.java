@@ -66,7 +66,7 @@ public class JsonAdapter implements IAdapter
 		return elements;
 	}
 	
-	public void adapt(List<IElement> elements, JsonValue jsonVal, IJsonObject parent)
+	public void adapt(List<IElement> elements, JsonValue jsonVal, AbstractJsonObject parent)
 	{
 		if(jsonVal instanceof JsonObject)
 		{
@@ -75,10 +75,14 @@ public class JsonAdapter implements IAdapter
 			ObjectElement objElt = new ObjectElement(parent);
 			elements.add(objElt);
 			
+			objElt.addDependency(parent);
+			
 			for(String key : jsonObj.names())
 			{
 				KeyElement keyElt = new KeyElement(key, objElt);
 				elements.add(keyElt);
+				
+				keyElt.addDependency(objElt);
 				
 				adapt(elements, jsonObj.get(key), keyElt);
 			}
@@ -90,10 +94,14 @@ public class JsonAdapter implements IAdapter
 			ArrayElement arrElt = new ArrayElement(parent);
 			elements.add(arrElt);
 			
+			arrElt.addDependency(parent);
+			
 			for(int index=0 ; index<jsonArr.size() ; index++)
 			{
 				IndexArrayElement indArrElt = new IndexArrayElement(index, arrElt);
 				elements.add(indArrElt);
+				
+				indArrElt.addDependency(arrElt);
 				
 				adapt(elements, jsonArr.get(index), indArrElt);
 			}
@@ -102,6 +110,8 @@ public class JsonAdapter implements IAdapter
 		{
 			ValueElement valElt = new ValueElement(jsonVal, parent);
 			elements.add(valElt);
+			
+			valElt.addDependency(parent);
 		}
 	}
 

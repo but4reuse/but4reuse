@@ -2,11 +2,11 @@ package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
 
-public class ObjectElement extends AbstractJsonObject
+public class ArrayElement extends AbstractJsonObject
 {
 	public AbstractJsonObject parent;
 	
-	public ObjectElement(AbstractJsonObject parent)
+	public ArrayElement(AbstractJsonObject parent)
 	{
 		this.parent = parent;
 	}
@@ -14,9 +14,9 @@ public class ObjectElement extends AbstractJsonObject
 	@Override
 	public double similarity(IElement anotherElement)
 	{
-		if (anotherElement instanceof ObjectElement)
+		if (anotherElement instanceof ArrayElement)
 		{
-			ObjectElement obj = (ObjectElement) anotherElement;
+			ArrayElement obj = (ArrayElement) anotherElement;
 			
 			if( this.parent.similarity(obj.parent) == 1 )
 				return 1;
@@ -27,7 +27,7 @@ public class ObjectElement extends AbstractJsonObject
 	@Override
 	public String getText()
 	{
-		return (this.parent.getText() + " -> {}");
+		return (this.parent.getText() + " -> []");
 	}
 	
 	@Override
