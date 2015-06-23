@@ -9,3 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.adapters
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.but4reuse.utils.files
+Bundle-ClassPath: lib/minimal-json-0.9.3.jar,
+ .

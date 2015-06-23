@@ -9,7 +9,10 @@
             name="json">
          <elements>
             <element
-                  element="org.but4reuse.adapters.json.ObjectElement"></element>
+                  element="org.but4reuse.adapters.json.KeyElement"></element>
+            <element
+                  element="org.but4reuse.adapters.json.ValueElement">
+            </element>
          </elements>
       </adapter>
    </extension>
