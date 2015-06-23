@@ -20,6 +20,7 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
+import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -41,13 +42,19 @@ public class AdaptedModelHelper {
 	 * @return
 	 */
 	public static AdaptedModel adapt(ArtefactModel artefactModel, List<IAdapter> adapters, IProgressMonitor monitor) {
+
+		// Check if concurrence is activated in preferences
+		boolean adaptConcurrently = PreferencesHelper.isAdaptConcurrently();
+		if (adaptConcurrently) {
+			return AdaptConcurrently.adaptConcurrently(artefactModel, adapters, monitor);
+		}
+
 		// When we adapt we consider that we are starting a new analysis
 		AdaptedModelManager.getElapsedTimeRegistry().clear();
 		long startTime = System.currentTimeMillis();
 
 		AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 
-		// TODO implement concurrency to improve performance
 		for (Artefact artefact : artefactModel.getOwnedArtefacts()) {
 			if (artefact.isActive()) {
 				long startTimeArtefact = System.currentTimeMillis();
@@ -428,8 +435,8 @@ public class AdaptedModelHelper {
 	}
 
 	public static AdaptedArtefact getAdaptedArtefact(AdaptedModel adaptedModel, Artefact a) {
-		for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
-			if(aa.getArtefact().equals(a)){
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+			if (aa.getArtefact().equals(a)) {
 				return aa;
 			}
 		}

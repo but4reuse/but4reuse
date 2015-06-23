@@ -10,6 +10,7 @@ public class Note {
 	private String pitch; // Z is for rest
 	private Integer octave;
 	private Integer voice;
+	private String alter;
 	private String accidental;
 	private Integer counter;
 	private String type;
@@ -19,6 +20,7 @@ public class Note {
 	private double durationRelativeToMeasure;
 	private boolean dot;
 	private boolean grace;
+	private boolean staccato;
 
 	public void setCounter(Integer counter) {
 		this.counter = counter;
@@ -142,15 +144,39 @@ public class Note {
 		this.grace = grace;
 	}
 	
+	public String getAlter() {
+		return alter;
+	}
+
+	public void setAlter(String alter) {
+		this.alter = alter;
+	}
+	
+	public boolean isStaccato() {
+		return staccato;
+	}
+
+	public void setStaccato(boolean staccato) {
+		this.staccato = staccato;
+	}
+
 	@Override
 	public String toString() {
 		String info = " Silence";
-		if(!isRest()){
+		if (!isRest()) {
 			info = " Pitch: " + getPitch() + getAccidental() + " Octave: " + getOctave();
 		}
-		return "Part: " + getPart() + " Measure: " + getMeasure() + " StartStamp: " + getStartTime() + info  + " Type: " + getType() + " isDot:"
-				+ isDot() + " isGrace:" + isGrace() + " Duration: " + getDuration() + " Voice: " + getVoice()
-				+ " StartRelativeToMeasure: " + getStartRelativeToMeasure() + " DurationRelativeToMeasure: "
-				+ getDurationRelativeToMeasure();
+		String grace = "";
+		if (isGrace()) {
+			grace = " Grace";
+		}
+		String dot = "";
+		if (isDot()) {
+			dot = " Dot";
+		}
+		return "Part: " + getPart() + " Measure: " + getMeasure() + info + " Type: " + getType() + dot + grace
+				+ " Duration: " + getDuration() + " Voice: " + getVoice() + " StartRelativeToMeasure: "
+				+ getStartRelativeToMeasure() + " DurationRelativeToMeasure: " + getDurationRelativeToMeasure();
 	}
+
 }

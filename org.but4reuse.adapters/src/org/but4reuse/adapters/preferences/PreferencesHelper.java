@@ -5,37 +5,44 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 
+/**
+ * 
+ * @author jabier.martinez
+ * 
+ */
 public class PreferencesHelper {
-	
-	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle().getSymbolicName());
-	
+
+	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
+			.getSymbolicName());
+
 	public static final String AUTOMATIC_EQUAL_THRESHOLD = "automatic_threshold";
 	public static final String ASK_USER_THRESHOLD = "ask_user_threshold";
 	public static final String ASK_USER = "ask_user";
 	public static final String ASK_USER_DEACTIVATED_FOR_THIS_TIME = "ask_user_deactivated_for_this_time";
-	
-	public static boolean isOnlyIdenticalMode(){
-		if(getAutomaticEqualThreshold()==1){
-			if (!isManualEqualActivated() || getManualEqualThreshold()==1){
+	public static final String ADAPT_CONCURRENTLY = "adapt_concurrently";
+
+	public static boolean isOnlyIdenticalMode() {
+		if (getAutomaticEqualThreshold() == 1) {
+			if (!isManualEqualActivated() || getManualEqualThreshold() == 1) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public static double getAutomaticEqualThreshold(){
+	public static double getAutomaticEqualThreshold() {
 		return (new Double(prefs.getInt(AUTOMATIC_EQUAL_THRESHOLD, 100))).doubleValue() / 100;
 	}
-	
+
 	public static double getManualEqualThreshold() {
 		return (new Double(prefs.getInt(ASK_USER_THRESHOLD, 90))).doubleValue() / 100;
 	}
-	
-	public static boolean isManualEqualActivated(){
+
+	public static boolean isManualEqualActivated() {
 		return prefs.getBoolean(ASK_USER, false);
 	}
-	
-	public static void setManualEqual(boolean value){
+
+	public static void setManualEqual(boolean value) {
 		prefs.putBoolean(ASK_USER, value);
 	}
 
@@ -46,8 +53,12 @@ public class PreferencesHelper {
 	public static void setDeactivateManualEqualOnlyForThisTime(boolean b) {
 		prefs.putBoolean(ASK_USER_DEACTIVATED_FOR_THIS_TIME, b);
 	}
-	
+
 	public static boolean isDeactivateManualEqualOnlyForThisTime() {
 		return prefs.getBoolean(ASK_USER_DEACTIVATED_FOR_THIS_TIME, false);
+	}
+
+	public static boolean isAdaptConcurrently() {
+		return prefs.getBoolean(ADAPT_CONCURRENTLY, false);
 	}
 }

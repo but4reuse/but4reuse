@@ -13,14 +13,18 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.graphs.GraphVisualisation;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -68,8 +72,15 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 				if (art instanceof Artefact) {
 					artefact = ((Artefact) art);
 
+					// check predefined
+					List<IAdapter> defaultAdapters = null;
+					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
+					if(artefactModel instanceof ArtefactModel){
+						defaultAdapters = AdaptersHelper.getAdaptersByIds(((ArtefactModel)artefactModel).getAdapters());
+					}
+					
 					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Create Graph Visualisation", artefact);
+					adap = AdaptersSelectionDialog.show("Create Graph Visualisation", artefact, defaultAdapters);
 
 					if (!adap.isEmpty()) {
 						// Launch Progress dialog

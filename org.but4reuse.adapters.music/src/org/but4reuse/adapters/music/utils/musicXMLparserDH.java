@@ -260,6 +260,7 @@ public class musicXMLparserDH {
 								// thispitch.getElementsByTag("alter").text());
 								String alter = String.valueOf(thispitch.getElementsByTag("alter").text());
 								if (!thispitch.getElementsByTag("alter").isEmpty()) {
+									note.setAlter(alter);
 									if (alter.equals("1")) {
 										note.setAccidental("#");
 									} else if (alter.equals("-1")) {
@@ -307,6 +308,10 @@ public class musicXMLparserDH {
 
 						if (!thisnote.getElementsByTag("grace").isEmpty()) {
 							note.setGrace(true);
+						}
+						
+						if (!thisnote.getElementsByTag("staccato").isEmpty()) {
+							note.setStaccato(true);
 						}
 
 						// System.out.print(" dur: " + duration);
