@@ -27,7 +27,7 @@ public class ArrayElement extends AbstractJsonObject
 	@Override
 	public String getText()
 	{
-		return (this.parent.getText() + " -> []");
+		return (this.parent.getText() + "_[]");
 	}
 	
 	@Override

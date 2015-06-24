@@ -29,7 +29,7 @@ public class KeyElement extends AbstractJsonObject
 			
 			if( this.parent == null )
 			{
-				if( this.key.compareTo(keyElt.key) == 0 )
+				if( this.key.compareTo(keyElt.key) == 0 && keyElt.parent == null)
 					return 1;
 			}
 			else
@@ -46,7 +46,7 @@ public class KeyElement extends AbstractJsonObject
 	{
 		if(this.parent != null)
 		{
-			return (this.parent.getText() + " -> (key : " + this.key + ")");
+			return (this.parent.getText() + "_(key : " + this.key + ")");
 		}
 		else
 		{

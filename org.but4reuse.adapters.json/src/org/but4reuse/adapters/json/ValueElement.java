@@ -31,7 +31,7 @@ public class ValueElement extends AbstractJsonObject
 	@Override
 	public String getText()
 	{
-		return (this.parent.getText() + " -> (value : " + this.value + ")");
+		return (this.parent.getText() + "_(value : " + this.value + ")");
 	}
 	/*
 	@Override

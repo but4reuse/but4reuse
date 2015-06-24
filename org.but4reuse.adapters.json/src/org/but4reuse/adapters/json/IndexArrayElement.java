@@ -29,7 +29,7 @@ public class IndexArrayElement extends AbstractJsonObject
 	@Override
 	public String getText()
 	{
-		return (this.parent.getText() + " -> [" + this.index + "]");
+		return (this.parent.getText() + "_[" + this.index + "]");
 	}
 	
 	@Override
