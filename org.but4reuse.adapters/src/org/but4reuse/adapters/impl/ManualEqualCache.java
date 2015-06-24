@@ -5,6 +5,11 @@ import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
 
+/**
+ * TODO based on the getText of the elements!!! find a better way
+ * 
+ * @author jabier.martinez
+ */
 public class ManualEqualCache {
 
 	public static Map<CacheEntry, Boolean> cacheEntries = new HashMap<CacheEntry, Boolean>();
@@ -41,13 +46,19 @@ public class ManualEqualCache {
 				if (ce.element1 == element1 && ce.element2 == element2) {
 					return true;
 				}
+				// TODO find a better way, it cannot depend on the text
+				if (ce.element1.getText().equals(element1.getText())
+						&& ce.element2.getText().equals(element2.getText())) {
+					return true;
+				}
 			}
 			return super.equals(o);
 		}
 
 		@Override
 		public int hashCode() {
-			return element1.hashCode() + element2.hashCode();
+			// TODO find a better way, it cannot depend on the text
+			return element1.getText().hashCode() + element2.getText().hashCode();
 		}
 	}
 

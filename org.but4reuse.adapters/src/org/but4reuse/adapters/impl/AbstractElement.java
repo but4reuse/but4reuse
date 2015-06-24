@@ -1,6 +1,5 @@
 package org.but4reuse.adapters.impl;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,7 +9,6 @@ import java.util.Map;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -139,33 +137,36 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 				return false;
 			}
 
+			// check if it is on the cache
+			Boolean cache = ManualEqualCache.check(this, (IElement) obj);
+			if (cache != null) {
+				return cache;
+			}
+
 			// ok, let's ask the user
-			boolean userDecision = manualEqual(similarity, (IElement)obj);
+			boolean userDecision = manualEqual(similarity, (IElement) obj);
+			if (userDecision) {
+				ManualEqualCache.add(this, (IElement) obj, true);
+			} else {
+				ManualEqualCache.add(this, (IElement) obj, false);
+			}
 			return userDecision;
 		}
 		return super.equals(obj);
 	}
 
 	/**
-	 * Manual equal. Override to provide tailored comparison user interfaces for
-	 * your elements
+	 * Manual equal.
 	 * 
 	 * @return whether the element is equal to another
 	 */
 	public boolean manualEqual(double calculatedSimilarity, IElement element) {
-		Boolean cache = ManualEqualCache.check(this, element);
-		if (cache != null) {
-			return cache;
-		}
-		ElementTextManualComparison manualComparison = new ElementTextManualComparison(calculatedSimilarity,
-				this.getText(), element.getText());
+		IManualComparison manualComparison = getManualComparison(calculatedSimilarity, element);
 		Display.getDefault().syncExec(manualComparison);
 		int buttonIndex = manualComparison.getResult();
 		if (buttonIndex == 0) {
-			ManualEqualCache.add(this, element, true);
 			return true;
 		} else if (buttonIndex == 1) {
-			ManualEqualCache.add(this, element, false);
 			return false;
 		} else {
 			PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(true);
@@ -173,38 +174,16 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		}
 	}
 
-	public interface IManualComparison extends Runnable {
-		public int getResult();
-	};
-
-	public class ElementTextManualComparison implements IManualComparison {
-		String elementText1;
-		String elementText2;
-		double calculatedSimilarity;
-		int result;
-
-		public ElementTextManualComparison(double calculatedSimilarity, String elementText1, String elementText2) {
-			this.elementText1 = elementText1;
-			this.elementText2 = elementText2;
-			this.calculatedSimilarity = calculatedSimilarity;
-		}
-
-		@Override
-		public void run() {
-			// TODO implement "Always" and "Never" buttons
-			// Default is No
-			MessageDialog dialog = new MessageDialog(null, "Manual decision for equal. Automatic said "
-					+ new DecimalFormat("#").format(calculatedSimilarity * 100) + "%", null, elementText1
-					+ "\n\n is equal to \n\n" + elementText2, MessageDialog.QUESTION, new String[] { "Yes", "No",
-					"Deactivate manual equal" }, 1);
-			result = dialog.open();
-		}
-
-		@Override
-		public int getResult() {
-			return result;
-		}
-
+	/**
+	 * Get manual comparison. Override to provide tailored comparison user
+	 * interfaces for your elements
+	 * 
+	 * @param calculatedSimilarity
+	 * @param anotherElement
+	 * @return
+	 */
+	public IManualComparison getManualComparison(double calculatedSimilarity, IElement anotherElement) {
+		return new ElementTextManualComparison(calculatedSimilarity, this.getText(), anotherElement.getText());
 	}
 
 	@Override

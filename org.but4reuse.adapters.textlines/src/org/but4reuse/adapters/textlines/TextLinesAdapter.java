@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Text Lines adapter
+ * 
  * @author jabier.martinez
  */
 public class TextLinesAdapter implements IAdapter {
@@ -26,7 +27,7 @@ public class TextLinesAdapter implements IAdapter {
 	 */
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
-		if (file != null && file.exists() && !file.isDirectory()) {
+		if (file != null && file.exists() && !file.isDirectory() && FileUtils.isExtension(file, "txt")) {
 			return true;
 		}
 		return false;
@@ -50,12 +51,12 @@ public class TextLinesAdapter implements IAdapter {
 					String[] pieces = strLine.split("\t");
 					for (String piece : pieces) {
 						LineElement lineElement = new LineElement(piece);
-						lineElement.setMarkerInfo(uri,lineNumber);
+						lineElement.setMarkerInfo(uri, lineNumber);
 						elements.add(lineElement);
 					}
 				} else {
 					LineElement lineElement = new LineElement(strLine);
-					lineElement.setMarkerInfo(uri,lineNumber);
+					lineElement.setMarkerInfo(uri, lineNumber);
 					elements.add(lineElement);
 				}
 				lineNumber++;

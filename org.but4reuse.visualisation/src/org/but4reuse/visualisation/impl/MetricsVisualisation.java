@@ -122,7 +122,7 @@ public class MetricsVisualisation implements IVisualisation {
 						nElementsInFeatures.add(nElements);
 					}
 					addMetrics(text, "Number of Blocks assigned to a Feature", nBlocksInFeatures);
-					
+
 					text.append("\n\nBlocks on Features\n");
 					for (Feature feature : featureList.getOwnedFeatures()) {
 						text.append(feature.getName() + " = ");
@@ -136,18 +136,18 @@ public class MetricsVisualisation implements IVisualisation {
 						}
 						text.append("\n");
 					}
-					
+
 					text.append("\nBlocks on Features\n");
 					text.append(";");
-					for (Block b : adaptedModel.getOwnedBlocks()){
-						text.append(b.getName()+";");
+					for (Block b : adaptedModel.getOwnedBlocks()) {
+						text.append(b.getName() + ";");
 					}
 					text.append("\n");
 					for (Feature feature : featureList.getOwnedFeatures()) {
 						text.append(feature.getName() + ";");
 						List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
 						for (Block b : adaptedModel.getOwnedBlocks()) {
-							if(blocks.contains(b)){
+							if (blocks.contains(b)) {
 								text.append("1;");
 							} else {
 								text.append("0;");
@@ -155,7 +155,7 @@ public class MetricsVisualisation implements IVisualisation {
 						}
 						text.append("\n");
 					}
-					
+
 					addMetrics(text, "Number of Elements assigned to a Feature", nElementsInFeatures);
 					text.append("\n");
 				}
@@ -236,14 +236,16 @@ public class MetricsVisualisation implements IVisualisation {
 	}
 
 	public static void addMetrics(StringBuilder stringBuilder, String title, List<Double> data) {
-		Collections.sort(data);
-		stringBuilder.append("\n" + title);
-		stringBuilder.append("\nMin= " + data.get(0));
-		stringBuilder.append("\nMax= " + data.get(data.size() - 1));
-		Double mean = mean(data);
-		stringBuilder.append("\nMean= " + mean);
-		stringBuilder.append("\nMedian= " + median(data));
-		stringBuilder.append("\nStdDev= " + standardDeviation(data, mean));
+		if (!data.isEmpty()) {
+			Collections.sort(data);
+			stringBuilder.append("\n" + title);
+			stringBuilder.append("\nMin= " + data.get(0));
+			stringBuilder.append("\nMax= " + data.get(data.size() - 1));
+			Double mean = mean(data);
+			stringBuilder.append("\nMean= " + mean);
+			stringBuilder.append("\nMedian= " + median(data));
+			stringBuilder.append("\nStdDev= " + standardDeviation(data, mean));
+		}
 	}
 
 }

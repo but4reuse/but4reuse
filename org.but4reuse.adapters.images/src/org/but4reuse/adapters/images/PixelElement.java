@@ -2,7 +2,9 @@ package org.but4reuse.adapters.images;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.images.utils.ImageUtils;
+import org.but4reuse.adapters.images.utils.PixelManualComparison;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.impl.IManualComparison;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 
@@ -42,4 +44,14 @@ public class PixelElement extends AbstractElement {
 		}
 		return 0;
 	}
+
+	@Override
+	public IManualComparison getManualComparison(double calculatedSimilarity, IElement anotherElement) {
+		if (anotherElement instanceof PixelElement) {
+			return new PixelManualComparison(calculatedSimilarity, this, (PixelElement) anotherElement);
+		} else {
+			return super.getManualComparison(calculatedSimilarity, anotherElement);
+		}
+	}
+
 }

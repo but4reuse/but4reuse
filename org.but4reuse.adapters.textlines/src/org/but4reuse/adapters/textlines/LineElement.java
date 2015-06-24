@@ -6,7 +6,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
-import org.but4reuse.adapters.textlines.utils.LevenshteinDistanceStrategy;
+import org.but4reuse.utils.nlp.similarity.LevenshteinDistance;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -30,7 +30,7 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof LineElement) {
 			// similarity metric for two strings
-			return LevenshteinDistanceStrategy.score(line, ((LineElement) anotherElement).line);
+			return LevenshteinDistance.score(line, ((LineElement) anotherElement).line);
 		}
 		return 0;
 	}
