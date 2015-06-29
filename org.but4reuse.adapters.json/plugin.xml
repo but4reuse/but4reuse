@@ -13,6 +13,15 @@
             <element
                   element="org.but4reuse.adapters.json.ValueElement">
             </element>
+            <element
+                  element="org.but4reuse.adapters.json.ObjectElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.json.ArrayElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.json.IndexArrayElement">
+            </element>
          </elements>
       </adapter>
    </extension>

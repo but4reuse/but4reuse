@@ -1,12 +1,17 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
-public class ObjectElement extends AbstractJsonObject
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+
+
+public class ObjectElement extends AbstractElement implements IJsonElement
 {
-	public AbstractJsonObject parent;
+	public IJsonValuedElement parent;
 	
-	public ObjectElement(AbstractJsonObject parent)
+	public ObjectElement(IJsonValuedElement parent)
 	{
 		this.parent = parent;
 	}
@@ -38,5 +43,11 @@ public class ObjectElement extends AbstractJsonObject
 	@Override
 	public int getMinDependencies(String dependencyID) {
 		return Integer.MIN_VALUE;
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root)
+	{
+		return this.parent.construct(root, new JsonObject());
 	}
 }

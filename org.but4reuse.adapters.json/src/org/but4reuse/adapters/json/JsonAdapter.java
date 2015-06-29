@@ -66,13 +66,13 @@ public class JsonAdapter implements IAdapter
 		return elements;
 	}
 	
-	public void adapt(List<IElement> elements, JsonValue jsonVal, AbstractJsonObject parent)
+	public void adapt(List<IElement> elements, JsonValue jsonVal, IJsonElement parent)
 	{
 		if(jsonVal instanceof JsonObject)
 		{
-			JsonObject jsonObj = (JsonObject) jsonVal;
+			JsonObject jsonObj = jsonVal.asObject();
 			
-			ObjectElement objElt = new ObjectElement(parent);
+			ObjectElement objElt = new ObjectElement((IJsonValuedElement) parent);
 			elements.add(objElt);
 			
 			objElt.addDependency(parent);
@@ -89,9 +89,9 @@ public class JsonAdapter implements IAdapter
 		}
 		else if(jsonVal instanceof JsonArray)
 		{
-			JsonArray jsonArr = (JsonArray) jsonVal;
+			JsonArray jsonArr = jsonVal.asArray();
 			
-			ArrayElement arrElt = new ArrayElement(parent);
+			ArrayElement arrElt = new ArrayElement((IJsonValuedElement) parent);
 			elements.add(arrElt);
 			
 			arrElt.addDependency(parent);
@@ -108,7 +108,7 @@ public class JsonAdapter implements IAdapter
 		}
 		else
 		{
-			ValueElement valElt = new ValueElement(jsonVal, parent);
+			ValueElement valElt = new ValueElement(jsonVal, (IJsonValuedElement) parent);
 			elements.add(valElt);
 			
 			valElt.addDependency(parent);
@@ -117,20 +117,7 @@ public class JsonAdapter implements IAdapter
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor)
-	{
-/*		JsonObject jsonObj = new JsonObject();
-		
-		for(IElement elt : elements)
-		{
-			if(elt instanceof KeyElement)
-			{
-				
-			}
-			else if(elt instanceof ValueElement)
-			{
-			}
-		}
-/*		
+	{		
 		try
 		{
 			if (uri.toString().endsWith("/")) {
@@ -140,22 +127,19 @@ public class JsonAdapter implements IAdapter
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
 			
-			FileUtils.appendToFile(file, "{");
+			JsonObject root = new JsonObject();
 			
 			for (IElement element : elements) {
-				FileUtils.appendToFile(file, element.getText());
+				IJsonElement jsonElt = (IJsonElement) element;
+				jsonElt.construct(root);
 			}
 			
-			FileUtils.appendToFile(file, "}");
+			FileUtils.appendToFile(file, root.toString());
+
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
-		}
-*/	
-		for(IElement elt : elements)
-		{
-			System.out.println(elt.toString());
 		}
 	}
 

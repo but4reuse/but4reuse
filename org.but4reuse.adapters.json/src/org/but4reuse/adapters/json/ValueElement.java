@@ -1,15 +1,17 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
+import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-public class ValueElement extends AbstractJsonObject
+public class ValueElement extends AbstractElement implements IJsonElement
 {
 	public JsonValue value;
-	public AbstractJsonObject parent;
+	public IJsonValuedElement parent;
 	
-	public ValueElement(JsonValue value, AbstractJsonObject parent)
+	public ValueElement(JsonValue value, IJsonValuedElement parent)
 	{
 		this.value = value;
 		this.parent = parent;
@@ -33,35 +35,20 @@ public class ValueElement extends AbstractJsonObject
 	{
 		return (this.parent.getText() + "_(value : " + this.value + ")");
 	}
-	/*
+	
 	@Override
-	public JsonValue construct(JsonValue json)
+	public int getMaxDependencies(String dependencyID) {
+		return 0;
+	}
+
+	@Override
+	public int getMinDependencies(String dependencyID) {
+		return 0;
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root)
 	{
-		json = parent.construct(json);
-		
-		JsonObject jsonObj = (JsonObject) json;
-		
-		jsonObj.
-	}
-	*/
-/*	
-	@Override
-	public int getMaxDependencies(String dependencyID) {
-		return 1;
-	}
-
-	@Override
-	public int getMinDependencies(String dependencyID) {
-		return 1;
-	}
-*/
-	@Override
-	public int getMaxDependencies(String dependencyID) {
-		return 0;
-	}
-
-	@Override
-	public int getMinDependencies(String dependencyID) {
-		return 0;
+		return this.parent.construct(root, this.value);
 	}
 }

@@ -1,13 +1,18 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
-public class IndexArrayElement extends AbstractJsonObject
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+
+public class IndexArrayElement extends AbstractElement implements IJsonValuedElement
 {
 	public int index;
-	public AbstractJsonObject parent;
+	public ArrayElement parent;
 	
-	public IndexArrayElement(int index, AbstractJsonObject parent)
+	public IndexArrayElement(int index, ArrayElement parent)
 	{
 		this.index = index;
 		this.parent = parent;
@@ -40,5 +45,27 @@ public class IndexArrayElement extends AbstractJsonObject
 	@Override
 	public int getMinDependencies(String dependencyID) {
 		return 1;
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root)
+	{
+		return this.construct(root, JsonValue.NULL);
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root, JsonValue value)
+	{
+		JsonArray arr = this.parent.construct(root).asArray();
+		
+		if(this.index >= arr.size())
+			for( int i=arr.size() ; i<=this.index ; i++ )
+				arr.add(JsonValue.NULL);
+		
+		JsonValue mergeValue = JsonTools.merge(value, arr.get(this.index));
+		
+		arr.set(this.index, mergeValue);
+		
+		return mergeValue;
 	}
 }

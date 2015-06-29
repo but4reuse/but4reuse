@@ -1,14 +1,17 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 
-public class KeyElement extends AbstractJsonObject
+public class KeyElement extends AbstractElement implements IJsonValuedElement
 {
 	public String key;
-	public AbstractJsonObject parent;
+	public ObjectElement parent;
 	
-	public KeyElement(String key, AbstractJsonObject parent)
+	public KeyElement(String key, ObjectElement parent)
 	{
 		this.key = key;
 		this.parent = parent;
@@ -53,30 +56,6 @@ public class KeyElement extends AbstractJsonObject
 			return "(key : " + this.key + ")";
 		}
 	}
-	/*
-	@Override
-	public JsonValue construct(JsonValue json)
-	{
-		if(this.parent != null)
-		{
-			json = this.parent.construct(json);
-		}
-		
-		if(json.isObject())
-		{
-			JsonObject jsonObj = (JsonObject) json;
-			
-			if(jsonObj.get(this.key) == null)
-				jsonObj.add(this.key, JsonValue.NULL);
-			
-			return jsonObj.get(this.key);
-		}
-		else
-		{
-			return null;
-		}
-	}
-	*/
 	
 	@Override
 	public int getMaxDependencies(String dependencyID) {
@@ -86,5 +65,28 @@ public class KeyElement extends AbstractJsonObject
 	@Override
 	public int getMinDependencies(String dependencyID) {
 		return 1;
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root)
+	{
+		return this.construct(root, JsonValue.NULL);
+	}
+	
+	@Override
+	public JsonValue construct(JsonObject root, JsonValue value)
+	{
+		JsonObject jsonObj = null;
+		
+		if( this.parent == null )
+			jsonObj = root;
+		else
+			jsonObj = this.parent.construct(root).asObject();
+		
+		JsonValue mergeValue = JsonTools.merge( value, jsonObj.get(this.key) );
+		
+		jsonObj.set(this.key, mergeValue);
+
+		return mergeValue;
 	}
 }
