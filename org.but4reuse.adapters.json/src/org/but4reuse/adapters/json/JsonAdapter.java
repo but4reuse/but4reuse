@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import com.eclipsesource.json.WriterConfig;
 
 public class JsonAdapter implements IAdapter {
 	@Override
@@ -118,11 +119,10 @@ public class JsonAdapter implements IAdapter {
 
 			for (IElement element : elements) {
 				IJsonElement jsonElt = (IJsonElement) element;
-				System.out.println(jsonElt.toString());
 				jsonElt.construct(root);
 			}
 
-			FileUtils.appendToFile(file, root.toString());
+			FileUtils.appendToFile(file, root.toString(WriterConfig.PRETTY_PRINT));
 
 		} catch (Exception e) {
 			e.printStackTrace();

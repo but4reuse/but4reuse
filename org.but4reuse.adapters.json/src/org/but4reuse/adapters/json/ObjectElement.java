@@ -26,7 +26,6 @@ public class ObjectElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		// return (this.parent.getText() + "_{}");
 		return this.parent.getText("{}");
 	}
 

@@ -43,10 +43,6 @@ public class KeyElement extends AbstractElement implements IJsonValuedElement {
 
 	@Override
 	public String getText() {
-		/*
-		 * if(this.parent != null) { return (this.parent.getText() + "_(key : "
-		 * + this.key + ")"); } else { return "(key : " + this.key + ")"; }
-		 */
 		return this.getText("");
 	}
 

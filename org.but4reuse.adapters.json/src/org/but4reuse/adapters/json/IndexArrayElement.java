@@ -29,7 +29,6 @@ public class IndexArrayElement extends AbstractElement implements IJsonValuedEle
 
 	@Override
 	public String getText() {
-		// return (this.parent.getText() + "_[" + this.index + "]");
 		return this.parent.getText();
 	}
 
