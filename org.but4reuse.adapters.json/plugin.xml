@@ -5,6 +5,7 @@
          point="org.but4reuse.adapters">
       <adapter
             class="org.but4reuse.adapters.json.JsonAdapter"
+            icon="icons/json_icon.png"
             id="json"
             name="json">
          <elements>

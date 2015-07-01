@@ -9,7 +9,6 @@ import com.eclipsesource.json.JsonValue;
  * to be merged with the past JsonValue constructed
  */
 
-public interface IJsonValuedElement extends IJsonElement
-{
+public interface IJsonValuedElement extends IJsonElement {
 	public JsonValue construct(JsonObject root, JsonValue value);
 }

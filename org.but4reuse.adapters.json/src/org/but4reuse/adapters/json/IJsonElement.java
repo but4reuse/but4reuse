@@ -12,7 +12,8 @@ import com.eclipsesource.json.JsonValue;
  * and returns a JsonValue (conversion from tree representation to JsonValue)
  */
 
-public interface IJsonElement extends IElement
-{
+public interface IJsonElement extends IElement {
 	public JsonValue construct(JsonObject root);
+
+	public String getText(String childrenText);
 }
