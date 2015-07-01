@@ -111,15 +111,16 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 		// Generate concept lattice
 		ConceptLatticeGenerator clg = new ConceptLatticeGenerator(fc);
 		clg.generateConceptLattice();
-
 		ConceptLattice cl = clg.getConceptLattice();
-		RemoveParentsIntentConceptFilter.filter(cl);
 
 		// Add a block for each non empty concept
 		for (Concept c : cl.getConcepts()) {
-			if (!c.getIntent().isEmpty()) {
+			// getIntent returns also the intent of the parents, we are only
+			// interested in the getSimplifiedIntent which is the one that only
+			// belongs to this concept
+			if (!c.getSimplifiedIntent().isEmpty()) {
 				Block block = AdaptedModelFactory.eINSTANCE.createBlock();
-				List<Attribute> attrs = c.getIntent();
+				List<Attribute> attrs = c.getSimplifiedIntent();
 				for (Attribute attr : attrs) {
 					IElement e = attrIElementMap.get(attr);
 					BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
