@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Artefacts Similarity
+Bundle-SymbolicName: org.but4reuse.artefacts.similarity;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.artefacts.similarity.activator.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.but4reuse.utils,
+ org.but4reuse.visualisation,
+ org.but4reuse.featurelist,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.adapters,
+ graphs,
+ org.but4reuse.visualisation.graphs,
+ org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .

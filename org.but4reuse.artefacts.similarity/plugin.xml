@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.artefacts.similarity.ArtefactsSimilarityGraphVisualisation"
+            name="Artefacts Similarity Graph">
+      </visualisation>
+   </extension>
+
+</plugin>
