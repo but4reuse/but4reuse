@@ -8,6 +8,13 @@ import com.eclipsesource.json.JsonValue;
 
 public class KeyElement extends AbstractElement implements IJsonValuedElement
 {
+	/*
+	 * A keyElement can only have as parent an Object Element
+	 * {
+	 *     "key" : "value"
+	 * }
+	 */
+	
 	public String key;
 	public ObjectElement parent;
 	
@@ -82,6 +89,11 @@ public class KeyElement extends AbstractElement implements IJsonValuedElement
 			jsonObj = root;
 		else
 			jsonObj = this.parent.construct(root).asObject();
+		
+		/*
+		 * here, we merge the value passed with a possible value already containing in 'key'
+		 * for example, if 'key' contains an array or an object
+		 */
 		
 		JsonValue mergeValue = JsonTools.merge( value, jsonObj.get(this.key) );
 		

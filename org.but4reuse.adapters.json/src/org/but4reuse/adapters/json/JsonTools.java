@@ -45,6 +45,14 @@ public class JsonTools
 	
 	public static JsonValue merge(JsonValue v1, JsonValue v2)
 	{
+		/*
+		 * Merge function,
+		 * - if a null value is passed, the method returns the other,
+		 * - if the 2 parameters don't represent the same type (value, array, object)
+		 * it can not merge, so it returns the first one,
+		 * - otherwise, it calls the associative merge function (for arrays or objects)
+		 * and the 2 values are merged recursivily level by level from roots to leaves
+		 */
 		if(v1 == null && v2 == null)
 			return JsonValue.NULL;
 		

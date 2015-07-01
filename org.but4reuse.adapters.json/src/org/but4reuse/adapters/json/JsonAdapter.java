@@ -66,6 +66,11 @@ public class JsonAdapter implements IAdapter
 		return elements;
 	}
 	
+	/*
+	 * recursive adapt function,
+	 * tests if the jsonVal is a value, array or object and construct the appropriate IJsonElement
+	 */
+	
 	public void adapt(List<IElement> elements, JsonValue jsonVal, IJsonElement parent)
 	{
 		if(jsonVal instanceof JsonObject)
