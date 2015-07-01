@@ -74,7 +74,7 @@ public class BlocksOnFeaturesHeatMapVisualisation implements IVisualisation {
 	@Override
 	public void show() {
 		// no featurelist then no visualisation
-		if (matrix != null) {
+		if (featureList != null) {
 			// asyncExec to avoid SWT invalid thread access
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
