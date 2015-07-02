@@ -13,6 +13,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
+import org.but4reuse.visualisation.graphs.utils.GraphUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -35,15 +36,18 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
-
+		monitor.subTask("Artefacts similarity graph visualisation");
 	}
 
 	@Override
 	public void show() {
 		Graph graph = new TinkerGraph();
+		Graph graph2 = new TinkerGraph();
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		try {
 			List<AdaptedArtefact> adaptedArtefacts = adaptedModel.getOwnedAdaptedArtefacts();
+			List<IElement> globalEquals = null;
+
 			for (AdaptedArtefact aa1 : adaptedArtefacts) {
 				for (AdaptedArtefact aa2 : adaptedArtefacts) {
 					// Plus 1 just to start the graph ids with 1 and not with 0
@@ -85,6 +89,20 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 							}
 						}
 
+						// Calculate globalEquals
+						if (globalEquals == null) {
+							globalEquals = new ArrayList<IElement>();
+							globalEquals.addAll(equals);
+						} else {
+							List<IElement> toBeDeleted = new ArrayList<IElement>();
+							for (IElement e : globalEquals) {
+								if (!equals.contains(e)) {
+									toBeDeleted.add(e);
+								}
+							}
+							globalEquals.removeAll(toBeDeleted);
+						}
+
 						// Similarity in this case is the cardinality of the
 						// Union of the two artefacts minus the intersection,
 						// divided by the number of elements of both artefacts
@@ -100,6 +118,35 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 					}
 				}
 			}
+
+			// Add the similarity ignoring the global common elements
+			// TODO implement it in a better way
+			// Clone the graph
+			graph2 = GraphUtils.cloneGraph(graph);
+			List<Edge> toBeDeleted = new ArrayList<Edge>();
+			for (AdaptedArtefact aa1 : adaptedArtefacts) {
+				for (AdaptedArtefact aa2 : adaptedArtefacts) {
+					int id1 = adaptedArtefacts.indexOf(aa1) + 1;
+					int id2 = adaptedArtefacts.indexOf(aa2) + 1;
+					if (id2 > id1) {
+						Edge edge = graph2.getEdge(id1 + "-" + id2);
+						int maxLength = (Integer) graph2.getVertex(id1).getProperty("Elements")
+								+ (Integer) graph2.getVertex(id2).getProperty("Elements") - (2 * globalEquals.size());
+						double similarity = 1 - (((Integer) edge.getProperty("ElementsSpecificSource") + (Integer) edge
+								.getProperty("ElementsSpecificTarget")) / (double) maxLength);
+						if (similarity > 0) {
+							edge.setProperty("Weight", similarity);
+						} else {
+							toBeDeleted.add(edge);
+						}
+					}
+				}
+			}
+			// remove similarity 0 edges
+			for (Edge edge : toBeDeleted) {
+				graph2.removeEdge(edge);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -119,11 +166,20 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 		File graphsFolder = new File(artefactModelFile.getParentFile(), "graphVisualisations");
 		graphsFolder.mkdir();
 
-		File file = new File(graphsFolder, artefactModelFile.getName() + "_artefact.graphml");
+		File file = new File(graphsFolder, artefactModelFile.getName() + "_artefacts.graphml");
 		try {
 			GraphMLWriter writer = new GraphMLWriter(graph);
 			writer.setNormalize(true);
 			writer.outputGraph(file.getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		File file2 = new File(graphsFolder, artefactModelFile.getName() + "_artefactsSimilarityIgnoringCommon.graphml");
+		try {
+			GraphMLWriter writer = new GraphMLWriter(graph2);
+			writer.setNormalize(true);
+			writer.outputGraph(file2.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
