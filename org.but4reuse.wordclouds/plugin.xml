@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds"
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.WordCloudAction"
+               icon="icons/FeatureList.gif"
+               id="org.but4reuse.wordclouds.ui.actions"
+               label="Find Name"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
+            id="org.but4reuse.wordclouds.view"
+            name="WorldClouds"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
