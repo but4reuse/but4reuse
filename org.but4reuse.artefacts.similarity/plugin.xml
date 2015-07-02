@@ -5,7 +5,7 @@
          point="org.but4reuse.visualisation">
       <visualisation
             class="org.but4reuse.artefacts.similarity.ArtefactsSimilarityGraphVisualisation"
-            name="Artefacts Similarity Graph">
+            name="Graph visualisation of Artefacts similarity">
       </visualisation>
    </extension>
 

@@ -46,17 +46,20 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 			List<AdaptedArtefact> adaptedArtefacts = adaptedModel.getOwnedAdaptedArtefacts();
 			for (AdaptedArtefact aa1 : adaptedArtefacts) {
 				for (AdaptedArtefact aa2 : adaptedArtefacts) {
-					int id1 = adaptedArtefacts.indexOf(aa1);
-					int id2 = adaptedArtefacts.indexOf(aa2);
+					// Plus 1 just to start the graph ids with 1 and not with 0
+					int id1 = adaptedArtefacts.indexOf(aa1) + 1;
+					int id2 = adaptedArtefacts.indexOf(aa2) + 1;
 					Vertex v1 = graph.getVertex(id1);
 					if (v1 == null) {
 						v1 = graph.addVertex(id1);
 						v1.setProperty("Label", aa1.getArtefact().getName());
+						v1.setProperty("Elements", aa1.getOwnedElementWrappers().size());
 					}
 					Vertex v2 = graph.getVertex(id2);
 					if (v2 == null) {
 						v2 = graph.addVertex(id2);
 						v2.setProperty("Label", aa2.getArtefact().getName());
+						v2.setProperty("Elements", aa2.getOwnedElementWrappers().size());
 					}
 					// No repetition
 					if (id2 > id1) {
@@ -84,12 +87,15 @@ public class ArtefactsSimilarityGraphVisualisation implements IVisualisation {
 
 						// Similarity in this case is the cardinality of the
 						// Union of the two artefacts minus the intersection,
-						// divided by the cardinality of the union
+						// divided by the number of elements of both artefacts
 						int maxLength = a1.size() + a2.size();
 						double similarity = 1 - ((deletions.size() + additions.size()) / (double) maxLength);
 						if (similarity > 0) {
 							Edge edge = graph.addEdge(id1 + "-" + id2, v1, v2, id1 + "-" + id2);
 							edge.setProperty("Weight", similarity);
+							edge.setProperty("ElementsSpecificSource", deletions.size());
+							edge.setProperty("ElementsSpecificTarget", additions.size());
+							edge.setProperty("ElementsEqual", equals.size());
 						}
 					}
 				}
