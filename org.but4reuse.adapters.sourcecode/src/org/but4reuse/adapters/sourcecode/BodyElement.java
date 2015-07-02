@@ -1,5 +1,7 @@
 package org.but4reuse.adapters.sourcecode;
 
+import java.util.ArrayList;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 
@@ -52,4 +54,9 @@ public class BodyElement extends AbstractElement {
 		this.parent = parent;
 	}
 
+	@Override
+	public ArrayList<String> getWords()
+	{
+		return new ArrayList<String>();
+	}
 }

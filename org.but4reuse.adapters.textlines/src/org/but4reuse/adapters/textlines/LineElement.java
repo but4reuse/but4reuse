@@ -1,6 +1,8 @@
 package org.but4reuse.adapters.textlines;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -77,4 +79,15 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 		this.lineNumber = lineNumber;
 	}
 
+	@Override
+	public ArrayList<String> getWords()
+	{
+		StringTokenizer tk = new StringTokenizer(line," ²&~\"#'{}()[]-|`_\\^°,.;/§");
+		ArrayList<String> words = new ArrayList<String>();
+		
+		while(tk.hasMoreTokens())
+			words.add(tk.nextToken());
+		
+		return words;
+	}
 }

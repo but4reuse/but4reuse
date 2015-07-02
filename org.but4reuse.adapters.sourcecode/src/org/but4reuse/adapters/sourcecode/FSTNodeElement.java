@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -131,4 +132,29 @@ public abstract class FSTNodeElement extends AbstractElement {
 		return 1;
 	}
 
+	@Override
+	public ArrayList<String> getWords()
+	{
+		ArrayList<String> words = new ArrayList<String>();
+		System.out.println("Type : "+type);
+		System.out.println("Name : "+name+"\n");
+		
+		if( type.equalsIgnoreCase("MethodDecl")
+				|| type.equalsIgnoreCase("FieldDecl")
+					|| type.equalsIgnoreCase("ClassDeclaration"))
+		{
+			
+			String sub = name;
+			
+			if(sub.contains("("))
+			{
+				sub = sub.substring(0,sub.indexOf("("));
+				System.out.println("Sub -- "+sub);
+			}
+			
+			for (String w : sub.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+				words.add(w);
+		}
+		return words;
+	}
 }
