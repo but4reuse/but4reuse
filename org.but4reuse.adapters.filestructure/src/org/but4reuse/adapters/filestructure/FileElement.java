@@ -2,6 +2,7 @@ package org.but4reuse.adapters.filestructure;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.filestructure.activator.Activator;
@@ -99,4 +100,11 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 		this.uri = uri;
 	}
 
+	@Override
+	public ArrayList <String> getWords()
+	{
+		ArrayList<String> words = new ArrayList<String>();
+		words.add(uri.getPath());
+		return words;
+	}
 }
