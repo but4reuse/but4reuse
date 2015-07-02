@@ -191,4 +191,5 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		return getText();
 	}
 
+	abstract public ArrayList<String> getWords();
 }
