@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.graphs;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.but4reuse.adapters.IElement;
@@ -52,6 +53,14 @@ public class VertexElement extends AbstractElement {
 
 	public void setVertex(Vertex vertex) {
 		this.vertex = vertex;
+	}
+	
+	@Override
+	public ArrayList <String> getWords()
+	{
+		ArrayList<String> words = new ArrayList<String>();
+		words.add(vertex.getId().toString());
+		return words;
 	}
 
 }

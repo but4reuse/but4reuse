@@ -1,5 +1,7 @@
 package org.but4reuse.adapters.music;
 
+import java.util.ArrayList;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.music.utils.Note;
@@ -57,6 +59,12 @@ public class NoteElement extends AbstractElement {
 	@Override
 	public String getText() {
 		return note.toString();
+	}
+	
+	@Override
+	public ArrayList<String> getWords()
+	{
+		return new ArrayList<String>();
 	}
 
 }

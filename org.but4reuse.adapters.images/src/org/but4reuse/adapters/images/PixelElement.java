@@ -1,6 +1,9 @@
 package org.but4reuse.adapters.images;
 
+import java.util.ArrayList;
+
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.images.utils.ColorUtils;
 import org.but4reuse.adapters.images.utils.ImageUtils;
 import org.but4reuse.adapters.images.utils.PixelManualComparison;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -54,4 +57,18 @@ public class PixelElement extends AbstractElement {
 		}
 	}
 
+	
+	@Override
+	public ArrayList <String> getWords()
+	{
+		ArrayList<String> words = new ArrayList<String>();
+		if(!ColorUtils.isInit())
+			ColorUtils.init();
+		
+		String name = ColorUtils.getColorName(color);
+		if(!name.equals("Erreur"))
+			words.add(name);
+		return words;
+	}
+	
 }

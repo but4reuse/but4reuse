@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.graphs;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.but4reuse.adapters.IElement;
@@ -54,4 +55,11 @@ public class EdgeElement extends AbstractElement {
 		this.edge = edge;
 	}
 
+	@Override
+	public ArrayList <String> getWords()
+	{
+		ArrayList<String> words = new ArrayList<String>();
+		words.add(edge.getId().toString());
+		return words;
+	}
 }
