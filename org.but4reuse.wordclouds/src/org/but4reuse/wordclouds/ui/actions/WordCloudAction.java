@@ -3,6 +3,7 @@ package org.but4reuse.wordclouds.ui.actions;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -82,7 +83,7 @@ public class WordCloudAction implements IObjectActionDelegate {
 		System.out.println("View Update ... OK");
 	}
 	
-	private static void addWords(Cloud cloud, ArrayList<String> words)
+	private static void addWords(Cloud cloud, List<String> words)
 	{
 		for(String word : words)
 			cloud.addTag(new Tag(word));
