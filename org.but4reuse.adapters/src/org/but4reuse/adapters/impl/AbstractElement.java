@@ -191,5 +191,13 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		return getText();
 	}
 
-	abstract public ArrayList<String> getWords();
+	 public List<String> getWords()
+	 {
+		 List<String> l = new ArrayList<String>();
+		 for (String w : getText().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+				l.add(w);
+		 
+		 return l;
+	 }
+	 
 }

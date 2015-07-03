@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.graphs;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.but4reuse.adapters.IElement;

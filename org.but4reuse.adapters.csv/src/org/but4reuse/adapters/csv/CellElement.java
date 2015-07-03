@@ -2,6 +2,7 @@ package org.but4reuse.adapters.csv;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
