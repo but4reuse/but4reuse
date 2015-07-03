@@ -1,25 +1,15 @@
 package org.but4reuse.worldcouds.visualisation;
 
-
-
-
-
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
-import org.but4reuse.visualisation.IVisualisation;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.wordclouds.ui.actions.WordCloudAction;
-import org.eclipse.contribution.visualiser.VisualiserPlugin;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.TouchEvent;
-import org.eclipse.swt.events.TouchListener;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,11 +18,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
@@ -149,7 +137,9 @@ public class WordCloudVis extends ViewPart {
 			gc.drawString(t.getName(), x, y);
 			x+=width;
 		}
-	
+	 
+		VisualisationsHelper.notifyVisualisations
+		(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 		
 	
 	}
@@ -196,13 +186,13 @@ public class WordCloudVis extends ViewPart {
 	   data.heightHint = 25;
 	   data.widthHint = 150;
 	   renameOne.setLayoutData(data);
-	   renameOne.setText("Renommer Auto");
+	   renameOne.setText("Rename Current Block Auto");
 		   
 	   data = new GridData();
 	   data.heightHint = 25;
 	   data.widthHint = 150;
 	   renameAll.setLayoutData(data);
-	   renameAll.setText("Renommer Auto Tous");
+	   renameAll.setText("Rename All Auto");
 	   
 	   data = new GridData();
 	   data.heightHint = 25;
@@ -213,7 +203,7 @@ public class WordCloudVis extends ViewPart {
 	   data.heightHint = 25;
 	   data.widthHint = 150;
 	   accept.setLayoutData(data);
-	   accept.setText("Renommer");
+	   accept.setText("Rename Block");
 	   
 	   
 	   renameAll.addListener(SWT.Selection, new Listener() {
@@ -287,6 +277,9 @@ public class WordCloudVis extends ViewPart {
 				switch(event.type)
 				{
 				 case SWT.Selection:
+					
+					if(text.getText().equals(""))
+						return;
 					
 					int ind = combo.getSelectionIndex();
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
