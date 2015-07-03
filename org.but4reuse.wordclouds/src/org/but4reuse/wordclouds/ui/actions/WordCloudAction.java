@@ -22,19 +22,27 @@ import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.worldcouds.visualisation.WordCloudVis;
 
+/**
+ * @author Arthur
+ * 
+ *  A Pop-Up Menu. It will create a new view for renaming blocks.
+ *  
+ */
 public class WordCloudAction implements IObjectActionDelegate {
 	
 	
 	private static ArrayList<Cloud> clouds =  null;
 	
+	
 	public static ArrayList<Cloud> getClouds()
 	{
 		return clouds;
 	}
+	
 	@Override
 	public void run(IAction action) {
 		// TODO Auto-generated method stub
-		System.out.println("Action OK");
+		
 		
 		if(AdaptedModelManager.getAdaptedModel() == null)
 		{
@@ -48,20 +56,28 @@ public class WordCloudAction implements IObjectActionDelegate {
 		
 		for(Block b : adaptedModel.getOwnedBlocks())
 		{
+			
 			Cloud cloud = null;
 		    cloud  = new Cloud(Case.CAPITALIZATION);
-				
 			cloud.setMaxWeight(50);
 			cloud.setMinWeight(5);
-			cloud.setMaxTagsToDisplay(50);
-			cloud.setTagCase(Case.CAPITALIZATION);
+		
 			
+			/*
+			 * For each block we get all elements owned
+			 * We use the method getWords for having 
+			 * several strings which could be used as
+			 * block name.
+			 */
 			for(BlockElement e : b.getOwnedBlockElements())
 			{
 				for(ElementWrapper wr : e.getElementWrappers())
 				{
 					AbstractElement element = (AbstractElement)(wr.getElement());
-				//	System.out.println("\nClasse : "+element.getClass());
+					
+					/*
+					 * We put each String in the cloud.
+					 */
 					addWords(cloud,element.getWords());
 				}
 				
@@ -70,8 +86,11 @@ public class WordCloudAction implements IObjectActionDelegate {
 		}
 	
 		
-		System.out.println("WordCloud Creation ... done");
 		try {
+			
+			/*
+			 * We get the Workbench for showing the view.
+			 */
 			
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.but4reuse.wordclouds.view");
 		
@@ -79,8 +98,8 @@ public class WordCloudAction implements IObjectActionDelegate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		WordCloudVis.update(0,false);
-		System.out.println("View Update ... OK");
 	}
 	
 	private static void addWords(Cloud cloud, List<String> words)

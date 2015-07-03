@@ -9,10 +9,19 @@
             objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
                class="org.but4reuse.wordclouds.ui.actions.WordCloudAction"
-               icon="icons/FeatureList.gif"
                id="org.but4reuse.wordclouds.ui.actions"
                label="Find Name"
                menubarPath="additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactWordCloud"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloud"
+               id="org.but4reuse.wordclouds.action1"
+               label="Show Word CLoud">
          </action>
       </objectContribution>
    </extension>

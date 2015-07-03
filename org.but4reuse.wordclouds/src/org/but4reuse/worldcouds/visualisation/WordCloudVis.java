@@ -4,6 +4,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.wordclouds.ui.actions.WordCloudAction;
+import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -24,6 +25,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
+
+/**
+ * @author Arthur
+ *  This class is an eclipse view.
+ */
 
 public class WordCloudVis extends ViewPart {
 
@@ -85,63 +91,18 @@ public class WordCloudVis extends ViewPart {
 			singleton.getCombo().add(b.getName());
 		singleton.getCombo().select(index);
 		
+		
 		GC gc = new GC(singleton.getCanvas());
-		singleton.getCanvas().update();
-	
-			singleton.getCanvas().redraw();
-			singleton.getCanvas().print(gc);
 		
-		int x = 10,y=10;
-		int maxH = 0;
-		
-		for(Tag t : WordCloudAction.getClouds().get(index).tags())
-		{
-			System.out.println("Draw");
+		Cloud c = WordCloudAction.getClouds().get(index);
+		for(Tag t : c.tags())
 			singleton.getList().add(t.getName());
-			
-			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC );
-			gc.setFont(f);
-			
-			
-			
-			int width = (int)(t.getName().length()*t.getWeightInt()*0.80);
-			width += (int)(20 *1.0 /t.getName().length());
-			
-			for(int i = 1;i<t.getName().length();i++)
-				if(t.getName().charAt(i) == 'w' || t.getName().charAt(i) == 'm')
-					width+=t.getWeightInt()*0.5;
-			
-			if(t.getName().charAt(0) == 'W' || t.getName().charAt(0) == 'M')
-				width+=t.getWeightInt()*0.6;
-			
-			if(x+width > singleton.getCanvas().getSize().x)
-			{
-				x = 10;
-				y+=maxH;
-				maxH =0;
-			}
-			
-			int height = (int)(1.25* t.getWeightInt());
-			height += (int)(t.getWeightInt()/5);
-			if(t.getName().contains("p") 
-					|| t.getName().contains("q") 
-						|| t.getName().contains("g") 
-							|| t.getName().contains("j"))
-			{
-				height+=(int)(0.3*t.getWeightInt());
-			}
-			
-			if(maxH <height)
-				maxH = height;
-			
-			gc.drawString(t.getName(), x, y);
-			x+=width;
-		}
-	 
-		VisualisationsHelper.notifyVisualisations
+		
+	    WordCloudUtil.drawWordCloud(singleton.getCanvas(), c);
+		/*VisualisationsHelper.notifyVisualisations
 		(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 		
-	
+	*/
 	}
 	
 	@Override
@@ -186,7 +147,7 @@ public class WordCloudVis extends ViewPart {
 	   data.heightHint = 25;
 	   data.widthHint = 150;
 	   renameOne.setLayoutData(data);
-	   renameOne.setText("Rename Current Block Auto");
+	   renameOne.setText("Rename Current Auto");
 		   
 	   data = new GridData();
 	   data.heightHint = 25;
