@@ -31,9 +31,15 @@ import org.but4reuse.worldcouds.visualisation.WordCloudVis;
 public class WordCloudAction implements IObjectActionDelegate {
 	
 	
+	/**
+	 * A list which contains a word cloud for each identified features.
+	 */
 	private static ArrayList<Cloud> clouds =  null;
 	
-	
+	/**
+	 *  This method returns the word cloud list.
+	 * @return the value of the attribute clouds.
+	 */
 	public static ArrayList<Cloud> getClouds()
 	{
 		return clouds;
@@ -102,6 +108,11 @@ public class WordCloudAction implements IObjectActionDelegate {
 		WordCloudVis.update(0,false);
 	}
 	
+	/**
+	 * Add strings in a cloud
+	 * @param cloud This is the cloud where strings will be added.
+	 * @param words The list which contains all strings to add in the cloud. 
+	 */
 	private static void addWords(Cloud cloud, List<String> words)
 	{
 		for(String word : words)

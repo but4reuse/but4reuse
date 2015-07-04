@@ -15,7 +15,7 @@ import org.mcavallo.opencloud.Tag;
 public class WordCloudUtil {
 
 	/**
-	 * 
+	 * Draw the word cloud cloud in the canvas can. 
 	 * @param can The canvas where the string will be drawn.
 	 * @param cloud This cloud contain the string that you want to draw in your canvas.
 	 */
@@ -43,6 +43,12 @@ public class WordCloudUtil {
 			int width = (int)(t.getName().length()*t.getWeightInt()*0.80);
 			width += (int)(20 *1.0 /t.getName().length());
 			
+			/*
+			 * M,m,W,w are larger than other letters  when we find 
+			 * one of them in the string we add some pixel in the
+			 *  string length in pixel 
+			 */
+			
 			for(int i = 1;i<t.getName().length();i++)
 				if(t.getName().charAt(i) == 'w' || t.getName().charAt(i) == 'm')
 					width+=t.getWeightInt()*0.5;
@@ -50,13 +56,21 @@ public class WordCloudUtil {
 			if(t.getName().charAt(0) == 'W' || t.getName().charAt(0) == 'M')
 				width+=t.getWeightInt()*0.6;
 			
+			/*
+			 * if a part of the string will be out of the canvas
+			 * we draw the string below others strings
+			 */
+			
 			if(x+width > can.getSize().x - 25 )
 			{
 				x = 10;
 				y+=maxH;
 				maxH =0;
 			}
-			
+			/*
+			 * p,q,g,j are bigger than other letters so when we find
+			 * one of them we add pixel in the string height in pixel 
+			 */
 			int height = (int)(1.25* t.getWeightInt());
 			height += (int)(t.getWeightInt()/5);
 			if(t.getName().contains("p") 

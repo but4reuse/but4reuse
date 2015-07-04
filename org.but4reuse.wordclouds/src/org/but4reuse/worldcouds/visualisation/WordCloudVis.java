@@ -34,54 +34,119 @@ import org.mcavallo.opencloud.Tag;
 public class WordCloudVis extends ViewPart {
 
 	
-
+	/**
+	 * The current WorldCloudVis.
+	 */
 	static private WordCloudVis singleton = null;
 	
+	/**
+	 *  The combo control in the view. 
+	 */
 	private Combo combo;
+	
+	/**
+	 * The list control in the view.
+	 */
 	private List list;
+	
+	/**
+	 * The canvas control where word clouds are drawn.
+	 */
 	private Canvas canvas;
+	
+	/**
+	 *  The text control in the view
+	 */
 	private Text text;
+	
+	/**
+	 *  The button named "rename" in the view
+	 */
 	private Button accept;
+	
+	/**
+	 * The button named "Rename All Auto"
+	 */
 	private Button renameAll;
+	
+	/**
+	 * The button named "Rename Current Auto"
+	 */
 	private Button renameOne;
 	
+	/**
+	 *  Default constructor.
+	 */
 	public WordCloudVis() {
 		// TODO Auto-generated constructor stub
 		super();
 		this.singleton = this;
 	}
 
+	/**
+	 *  This method returns the value of singleton attribute. 
+	 * @return The singleton
+	 */
 	public static WordCloudVis getSingleton()
 	{
 		return singleton;
 	}
 	
+	/**
+	 * This method returns the combo control from the view. 
+	 * @return The combo control
+	 */
 	public Combo getCombo()
 	{
 		return combo;
 	}
 	
+	/**
+	 * This method returns the list control from the view.
+	 * @return The list control
+	 */
 	public List getList()
 	{
 		return list;
 	}
 	
+	/**
+	 * This method returns the canvas control from the view.
+	 * @return the canvas control
+	 */
 	public Canvas getCanvas()
 	{
 		return canvas;
 	}
 	
+	/**
+	 * The method returns the text control from the view
+	 * @return the text control
+	 */
 	public Text getText()
 	{
 		return text;
 	}
 	
+	/**
+	 * This method will update the singleton.
+	 * It will set the selected item at index.\n
+	 * The method will call WordCloudAction.getClouds() to get
+	 * cloud at the index "index" and  fill the list control with
+	 * strings contained in the cloud. 
+	 * @param index Index must be the index of an item from combo control.
+	 * @param redraw To indicate if you want clear the canvas content.
+	 */
 	public static void update(int index,boolean redraw)
 	{
+		
+		// If features aren't identified, it isn't necessary to update the view
 		if(singleton == null ||
 				AdaptedModelManager.getAdaptedModel() == null)
 			return;
-		
+		/*
+		 * We clear the content for every control in the view.
+		 */
 		singleton.getCombo().clearSelection();
 		singleton.getCombo().removeAll();
 		singleton.getList().removeAll();
@@ -99,10 +164,7 @@ public class WordCloudVis extends ViewPart {
 			singleton.getList().add(t.getName());
 		
 	    WordCloudUtil.drawWordCloud(singleton.getCanvas(), c);
-		/*VisualisationsHelper.notifyVisualisations
-		(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 		
-	*/
 	}
 	
 	@Override
@@ -166,7 +228,11 @@ public class WordCloudVis extends ViewPart {
 	   accept.setLayoutData(data);
 	   accept.setText("Rename Block");
 	   
-	   
+	   /*
+	    * When you will click on this button you will rename each block
+	    * with the most often string saw in the block's word cloud. 
+	    *  
+	    */
 	   renameAll.addListener(SWT.Selection, new Listener() {
 		      
 			@Override
@@ -201,6 +267,10 @@ public class WordCloudVis extends ViewPart {
 			}
 		      });
 	   
+	   /*
+	    * Here, we will just rename the selected block with the string
+	    *  which is the most often saw in the block' word cloud.
+	    */
 	   renameOne.addListener(SWT.Selection, new Listener() {
 		      
 			@Override
@@ -230,6 +300,9 @@ public class WordCloudVis extends ViewPart {
 			}
 		      });
 	   
+	   /*
+	    * this one will rename the selected block with the text in the text control.
+	    */
 	   accept.addListener(SWT.Selection, new Listener() {
 		      
 			@Override
@@ -252,6 +325,10 @@ public class WordCloudVis extends ViewPart {
 			}
 		      });
 	  
+	   /*
+	    * When you choose a an item from the combo control it must update the view.
+	    * it updates the list control and canvas control. 
+	    */
 	   combo.addSelectionListener(new SelectionListener() {
 				
 				@Override
@@ -270,6 +347,10 @@ public class WordCloudVis extends ViewPart {
 				}
 			});
 	   
+	   /*
+	    * When you click on an item from the list it will rename the selected
+	    * block with the value of the selected item.
+	    */
 	   list.addSelectionListener(new SelectionListener() {
 			
 			@Override
