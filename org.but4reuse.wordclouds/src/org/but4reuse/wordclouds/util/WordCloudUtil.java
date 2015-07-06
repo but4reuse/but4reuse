@@ -17,7 +17,7 @@ public class WordCloudUtil {
 	/**
 	 * Draw the word cloud cloud in the canvas can. 
 	 * @param can The canvas where the string will be drawn.
-	 * @param cloud This cloud contain the string that you want to draw in your canvas.
+	 * @param cloud This cloud contains strings that you want to draw in your canvas.
 	 */
 	
 	public static void drawWordCloud(Canvas can, Cloud cloud)

@@ -82,7 +82,7 @@ public class WordCloudAction implements IObjectActionDelegate {
 					AbstractElement element = (AbstractElement)(wr.getElement());
 					
 					/*
-					 * We put each String in the cloud.
+					 * We put each string in the cloud.
 					 */
 					addWords(cloud,element.getWords());
 				}

@@ -326,7 +326,7 @@ public class WordCloudVis extends ViewPart {
 		      });
 	  
 	   /*
-	    * When you choose a an item from the combo control it must update the view.
+	    * When you choose an item from the combo control it must update the view.
 	    * it updates the list control and canvas control. 
 	    */
 	   combo.addSelectionListener(new SelectionListener() {
