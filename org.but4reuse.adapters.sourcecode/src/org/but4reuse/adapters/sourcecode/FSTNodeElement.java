@@ -153,6 +153,10 @@ public abstract class FSTNodeElement extends AbstractElement {
 				System.out.println("Sub -- "+sub);
 			}
 			
+			/*
+			 * We split names using word case.
+			 * For instance MyFunction will become My Function in two words.  
+			 */
 			for (String w : sub.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
 				words.add(w);
 		}
