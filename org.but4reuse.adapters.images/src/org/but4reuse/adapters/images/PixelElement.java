@@ -61,10 +61,14 @@ public class PixelElement extends AbstractElement {
 	@Override
 	public ArrayList <String> getWords()
 	{
+		/*
+		 * We initiate the ColorUtil if if we need to do it.
+		 */
 		ArrayList<String> words = new ArrayList<String>();
 		if(!ColorUtils.isInit())
 			ColorUtils.init();
 		
+	
 		String name = ColorUtils.getColorName(color);
 		if(!name.equals("Erreur"))
 			words.add(name);

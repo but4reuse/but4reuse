@@ -3,11 +3,27 @@ package org.but4reuse.adapters.images.utils;
 import java.util.ArrayList;
 import org.eclipse.swt.graphics.RGB;
 
+/**
+ * @author Arthur
+ *
+ * This is a toolbox to find colors names when you have
+ *  red, green and blue quantities of the color.
+ */
 public class ColorUtils {
 	
+	/**
+	 * The current ColorUtils.
+	 */
 	private static ColorUtils singleton = null;
+	
+	/**
+	 *  A ColorName list. 
+	 */
 	private ArrayList<ColorName> colorList;
 	
+	/**
+	 * This method creates the current ColorUtils(It creates the singleton).
+	 */
 	public static void init()
 	{
 		if(singleton == null)
@@ -17,11 +33,19 @@ public class ColorUtils {
 		}
 	}
 	
+	/**
+	 * Check if the singleton have been created.
+	 * @return True is singleton is not null false otherwise.
+	 */
 	public static boolean isInit()
 	{
 		return singleton != null;
 	}
 	
+	/**
+	 * Create a new color list.
+	 * @return The color list.
+	 */
 	private ArrayList<ColorName> initColorList() 
 	{
         colorList = new ArrayList<ColorName>();
@@ -98,6 +122,15 @@ public class ColorUtils {
         return colorList;
     }
 
+	/**
+	 * It takes the different amounts of red,green and blue and returns
+	 * the color names associates with these values.
+	 * 
+	 * @param r The red quantity in the color.
+	 * @param g The green quantity in the color.
+	 * @param b The blue quantity in the color.
+	 * @return The color name associates with quantities you gave as parameter .
+	 */
     private String getColorNameFromRgb(int r, int g, int b) 
     {
     	ColorName color = null;
@@ -122,6 +155,12 @@ public class ColorUtils {
        
     }
 
+    /**
+	 * It takes an RGB object and returns
+	 * the color names associates with the RGB object.
+	 * 
+	 * @param color The color whose you want the name.
+	 */
     public static String getColorName(RGB color)
     {
     	return singleton.getColorNameFromRgb(color.red, color.green, color.blue);
