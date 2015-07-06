@@ -106,7 +106,14 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	public ArrayList <String> getWords()
 	{
 		ArrayList<String> words = new ArrayList<String>();
+		
 		//words.add(uri.getPath());
+		/*
+		 * We split path with chars '/' and '\' in order to have the name of each folder.
+		 * We split folder name using word case.
+		 * For instance EmptyFolder will become Empty Folder.  
+		 */
+		
 		StringTokenizer tk = new StringTokenizer(uri.getPath(),"/\\");
 		
 		while(tk.hasMoreTokens())
