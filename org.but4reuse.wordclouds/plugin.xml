@@ -5,17 +5,6 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
-            id="org.but4reuse.wordclouds"
-            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
-         <action
-               class="org.but4reuse.wordclouds.ui.actions.WordCloudAction"
-               id="org.but4reuse.wordclouds.ui.actions"
-               label="Find Name"
-               menubarPath="additions">
-         </action>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
             id="org.but4reuse.wordclouds.ShowArtefactWordCloud"
             objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
@@ -28,11 +17,19 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+            category="org.but4reuse.views.category"
             class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
             id="org.but4reuse.wordclouds.view"
             name="WorldClouds"
             restorable="true">
       </view>
+   </extension>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.worldcouds.visualisation.WordCloudVisualisation"
+            name="Word Cloud">
+      </visualisation>
    </extension>
 
 </plugin>
