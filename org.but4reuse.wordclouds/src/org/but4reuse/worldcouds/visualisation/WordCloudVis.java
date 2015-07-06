@@ -261,6 +261,9 @@ public class WordCloudVis extends ViewPart {
 						 ind++;
 					 }
 					WordCloudVis.update(combo.getSelectionIndex(),true);
+					
+					VisualisationsHelper.notifyVisualisations
+					(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 					break;
 					 
 				}
@@ -294,6 +297,8 @@ public class WordCloudVis extends ViewPart {
 					 }
 					 b.setName(last.getName());
 					 WordCloudVis.update(combo.getSelectionIndex(),true);
+					 VisualisationsHelper.notifyVisualisations
+						(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 					 break;
 					 
 				}
@@ -319,6 +324,8 @@ public class WordCloudVis extends ViewPart {
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
 					b.setName(text.getText());
 					WordCloudVis.update(combo.getSelectionIndex(),true);
+					VisualisationsHelper.notifyVisualisations
+					(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 					break;
 					 
 				}
@@ -361,6 +368,8 @@ public class WordCloudVis extends ViewPart {
 				Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(combo.getSelectionIndex());
 				b.setName(l.getItem(l.getSelectionIndex()));
 				WordCloudVis.update(combo.getSelectionIndex(),true);
+				VisualisationsHelper.notifyVisualisations
+				(AdaptedModelManager.getFeatureList(), AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 								
 			}
 			
