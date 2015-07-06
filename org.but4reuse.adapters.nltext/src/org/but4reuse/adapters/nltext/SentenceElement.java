@@ -41,6 +41,9 @@ public class SentenceElement extends AbstractElement {
 	@Override
 	public ArrayList<String> getWords()
 	{
+		/*
+		 * We split the sentence with special char like : ' '  ',' '|'  ...  
+		 */
 		StringTokenizer tk = new StringTokenizer(sentence," ²&~\"#'{}()[]-|`_\\^°,.;/§");
 		ArrayList<String> words = new ArrayList<String>();
 		
