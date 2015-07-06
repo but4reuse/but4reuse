@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.filestructure.activator.Activator;
@@ -105,7 +106,18 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	public ArrayList <String> getWords()
 	{
 		ArrayList<String> words = new ArrayList<String>();
-		words.add(uri.getPath());
+		//words.add(uri.getPath());
+		StringTokenizer tk = new StringTokenizer(uri.getPath(),"/\\");
+		
+		while(tk.hasMoreTokens())
+		{
+			
+			for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+			{
+				System.out.println(w);
+				words.add(w);
+			}
+		}
 		return words;
 	}
 }
