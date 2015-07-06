@@ -141,7 +141,8 @@ public abstract class FSTNodeElement extends AbstractElement {
 		
 		if( type.equalsIgnoreCase("MethodDecl")
 				|| type.equalsIgnoreCase("FieldDecl")
-					|| type.equalsIgnoreCase("ClassDeclaration"))
+					|| type.equalsIgnoreCase("ClassDeclaration")
+						|| type.equalsIgnoreCase("Func") )
 		{
 			
 			String sub = name;
