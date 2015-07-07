@@ -196,14 +196,35 @@ public class WordCloudVis extends ViewPart {
 
 		parent.setLayout(grid);
        
-		list = new List(parent, SWT.BORDER | SWT.READ_ONLY); 
+		Composite c1 = new Composite(parent, SWT.NORMAL);
+		list = new List(c1, SWT.BORDER | SWT.READ_ONLY);
+		combo = new Combo(c1, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
+	
+		grid = new GridLayout();
+		grid.numColumns = 1;
+		grid.marginHeight = 3;
+		grid.marginTop = 45;
+		
+	    c1.setLayout(grid);
+		data = new GridData();
+		data.heightHint = 500;
+		data.widthHint = 200;
+		c1.setLayoutData(data);
+		
+		data = new GridData();
+		data.heightHint = 25;
+		data.widthHint = 132;
+		combo.setLayoutData(data);
+
+		data = new GridData();
+		data.heightHint = 400;
+		data.widthHint = 150;
+		list.setLayoutData(data);
+		
+		
 		ScrolledComposite Scmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL |SWT.H_SCROLL);
 		ScrolledComposite ScmpIDF = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		combo = new Combo(parent, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
-		text = new Text(parent, SWT.BORDER);
-		renameOne = new Button(parent, SWT.NORMAL);
-		accept = new Button(parent, SWT.NORMAL);
-		renameAll = new Button(parent, SWT.NORMAL);
+		
 
 		cmp = new Composite(Scmp,SWT.NORMAL);
 		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);
@@ -223,16 +244,22 @@ public class WordCloudVis extends ViewPart {
 		ScmpIDF.setToolTipText("Word Cloud with Inverse Document Frequency"); 
 		ScmpIDF.setContent(cmpIDF);
 		
-		data = new GridData();
-		data.heightHint = 25;
-		data.widthHint = 132;
-		combo.setLayoutData(data);
+		
+		Composite c2 = new Composite(parent, SWT.NORMAL);
+		renameOne = new Button(c2, SWT.NORMAL);
+		renameAll = new Button(c2, SWT.NORMAL);
+		
 
+		grid = new GridLayout();
+		grid.numColumns = 1;
+		grid.marginHeight = 3;
+		
+	    c2.setLayout(grid);
 		data = new GridData();
-		data.heightHint = 400;
-		data.widthHint = 150;
-		list.setLayoutData(data);
-
+		data.heightHint = 75;
+		data.widthHint = 200;
+		c2.setLayoutData(data);
+		
 		data = new GridData();
 		data.heightHint = 25;
 		data.widthHint = 150;
@@ -244,9 +271,27 @@ public class WordCloudVis extends ViewPart {
 		data.widthHint = 150;
 		renameAll.setLayoutData(data);
 		renameAll.setText("Rename All Auto");
+		
+		
+		Composite c3 = new Composite(parent, SWT.NORMAL);
+		text = new Text(c3, SWT.BORDER);
+		accept = new Button(c3, SWT.NORMAL);
+	
+
+		grid = new GridLayout();
+		grid.numColumns = 1;
+		grid.marginHeight = 3;
+		
+	    c3.setLayout(grid);
+		data = new GridData();
+		data.heightHint = 75;
+		data.widthHint = 200;
+		c3.setLayoutData(data);
+
+		
 
 		data = new GridData();
-		data.heightHint = 25;
+		data.heightHint = 20;
 		data.widthHint = 150;
 		text.setLayoutData(data);
 
