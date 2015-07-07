@@ -72,8 +72,9 @@ public class ActualFeaturesAction implements IObjectActionDelegate {
 
 				for (ActualFeature af : features) {
 					Feature f = FeatureListFactory.eINSTANCE.createFeature();
-					f.setName(af.getId());
 					f.setId(af.getId());
+					f.setName(af.getName());
+					f.setDescription(af.getDescription());
 					f.getImplementedInArtefacts().addAll(af.getArtefacts());
 					fl.getOwnedFeatures().add(f);
 				}

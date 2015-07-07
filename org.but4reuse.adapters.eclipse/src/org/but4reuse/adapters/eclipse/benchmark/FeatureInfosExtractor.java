@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.but4reuse.utils.files.PropertiesFileUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,7 +22,7 @@ import org.w3c.dom.NodeList;
 public class FeatureInfosExtractor {
 
 	public static ActualFeature getFeatureInfos(String absolutePath) {
-		ActualFeature featureElement = new ActualFeature();
+		ActualFeature actualFeature = new ActualFeature();
 		try {
 			File xmlFile = new File(absolutePath + "/feature.xml");
 			// Use DOM xml parser
@@ -30,9 +31,32 @@ public class FeatureInfosExtractor {
 			Document doc = dBuilder.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 
-			// Get the id of the feature
+			// Get the id
 			String id = doc.getDocumentElement().getAttribute("id");
-			featureElement.setId(id);
+			actualFeature.setId(id);
+			
+			// Get the name
+			String name = doc.getDocumentElement().getAttribute("label");
+			if(name.contains("%")){
+				String key = PropertiesFileUtils.getKey(name);
+				name = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),  key);
+			}
+			actualFeature.setName(name);
+			
+			// Get the description
+			String description = doc.getDocumentElement().getElementsByTagName("description").item(0).getTextContent();
+			if(description.startsWith("\n")){
+				description = description.replaceFirst("\n", "");
+			}
+			if(description.contains("%")){
+				description = description.replaceAll("\\s+","");
+				String key = PropertiesFileUtils.getKey(description);
+				description = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),  key);
+			}
+			actualFeature.setDescription(description);
+			if(description.contains("%")){
+				
+			}
 
 			// Get the list of plugins of the feature
 			List<String> plugins = new ArrayList<String>();
@@ -56,7 +80,7 @@ public class FeatureInfosExtractor {
 					}
 				}
 			}
-			featureElement.setPlugins(plugins);
+			actualFeature.setPlugins(plugins);
 
 			// Get the included/nested features
 			List<String> included = new ArrayList<String>();
@@ -72,7 +96,7 @@ public class FeatureInfosExtractor {
 					}
 				}
 			}
-			featureElement.setIncludedFeatures(included);
+			actualFeature.setIncludedFeatures(included);
 
 			// Get the required plugins and features
 			List<String> requiredPlugins = new ArrayList<String>();
@@ -92,12 +116,12 @@ public class FeatureInfosExtractor {
 					}
 				}
 			}
-			featureElement.setRequiredPlugins(requiredPlugins);
-			featureElement.setRequiredFeatures(requiredFeatures);
+			actualFeature.setRequiredPlugins(requiredPlugins);
+			actualFeature.setRequiredFeatures(requiredFeatures);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return featureElement;
+		return actualFeature;
 	}
 
 }

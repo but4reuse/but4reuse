@@ -12,6 +12,8 @@ import org.but4reuse.artefactmodel.Artefact;
  */
 public class ActualFeature implements Comparable<ActualFeature>{
 	private String id;
+	private String name;
+	private String description;
 	private List<String> includedFeatures;
 	private List<String> requiredFeatures;
 	private List<String> requiredPlugins;
@@ -86,6 +88,22 @@ public class ActualFeature implements Comparable<ActualFeature>{
 
 	public void setArtefacts(List<Artefact> artefacts) {
 		this.artefacts = artefacts;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }
