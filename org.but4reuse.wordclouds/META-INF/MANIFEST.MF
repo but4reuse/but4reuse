@@ -14,10 +14,8 @@ Import-Package: org.but4reuse.adaptedmodel,
  org.but4reuse.adapters.ui,
  org.but4reuse.artefactmodel,
  org.but4reuse.featurelist,
- org.but4reuse.utils.ui.dialogs,
  org.but4reuse.visualisation,
  org.but4reuse.visualisation.helpers,
- org.eclipse.contribution.visualiser.simpleImpl,
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.util,
@@ -28,5 +26,5 @@ Import-Package: org.but4reuse.adaptedmodel,
  org.eclipse.swt.widgets
 Bundle-ClassPath: .,
  Jars/
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.9.100",
- org.eclipse.ui;bundle-version="3.105.0"
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui

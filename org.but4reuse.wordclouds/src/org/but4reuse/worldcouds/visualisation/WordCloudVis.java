@@ -1,6 +1,5 @@
 package org.but4reuse.worldcouds.visualisation;
 
-import javax.activation.DataHandler;
 
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
@@ -13,14 +12,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -97,9 +92,9 @@ public class WordCloudVis extends ViewPart {
 	 * Default constructor.
 	 */
 	public WordCloudVis() {
-		// TODO Auto-generated constructor stub
+		
 		super();
-		this.singleton = this;
+		singleton = this;
 	}
 
 	/**
@@ -212,7 +207,6 @@ public class WordCloudVis extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		// TODO Auto-generated method stub
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginTop = 5;
@@ -265,7 +259,7 @@ public class WordCloudVis extends ViewPart {
 		tbtmNewItem.setControl(sCmp);
 
 		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_1.setText("Word Cloud IDF");
+		tbtmNewItem_1.setText("Word Cloud TD-IDF");
 
 		ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem_1.setControl(sCmpIDF);
@@ -291,7 +285,7 @@ public class WordCloudVis extends ViewPart {
 		text.setLayoutData(gd_text);
 		text.setBounds(0, 0, 76, 21);
 
-		Button accept = new Button(c2, SWT.NONE);
+		accept = new Button(c2, SWT.NONE);
 		GridData gd_accept = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_accept.heightHint = 25;
 		gd_accept.widthHint = 157;
@@ -311,7 +305,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
 				Cloud c = null;
 				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
@@ -340,7 +333,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -353,7 +345,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void handleEvent(Event event) {
-				// TODO Auto-generated method stub
 				switch (event.type) {
 				case SWT.Selection:
 
@@ -390,7 +381,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void handleEvent(Event event) {
-				// TODO Auto-generated method stub
 				switch (event.type) {
 				case SWT.Selection:
 
@@ -423,7 +413,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void handleEvent(Event event) {
-				// TODO Auto-generated method stub
 				switch (event.type) {
 				case SWT.Selection:
 
@@ -450,7 +439,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 				Combo c = (Combo) e.getSource();
 				WordCloudVis.update(c.getSelectionIndex(), true);
@@ -459,7 +447,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -472,7 +459,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				List l = (List) e.getSource();
 
 				Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(combo.getSelectionIndex());
@@ -488,7 +474,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -497,7 +482,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				int ind = ((TabFolder) (e.getSource())).getSelectionIndex();
 				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
 				WordCloudVis.getSingleton().getList().removeAll();
@@ -510,7 +494,6 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -527,7 +510,6 @@ public class WordCloudVis extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 

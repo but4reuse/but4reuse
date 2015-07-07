@@ -3,8 +3,6 @@ package org.but4reuse.worldcouds.visualisation;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.SpringLayout.Constraints;
-
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
@@ -17,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
 import org.mcavallo.opencloud.Cloud.Case;
-import org.but4reuse.utils.workbench.*;
+
 
 public class WordCloudVisualisation implements IVisualisation {
 
@@ -27,7 +25,6 @@ public class WordCloudVisualisation implements IVisualisation {
 	private static ArrayList<Cloud> clouds;
 
 	public WordCloudVisualisation() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -70,13 +67,11 @@ public class WordCloudVisualisation implements IVisualisation {
 			}
 			clouds.add(cloud);
 		}
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

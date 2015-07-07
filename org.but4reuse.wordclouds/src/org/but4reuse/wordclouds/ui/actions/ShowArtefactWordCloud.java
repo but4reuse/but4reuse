@@ -17,8 +17,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -41,7 +39,6 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
 		artefact = null;
@@ -95,13 +92,11 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
 		this.selection = selection;
 	}
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
 
 	}
 
