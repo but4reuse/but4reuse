@@ -11,8 +11,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -228,6 +230,7 @@ public class WordCloudVis extends ViewPart {
 		c1.setBounds(0, 0, 101, 135);
 
 		Label lblWordList = new Label(c1, SWT.BORDER | SWT.SHADOW_IN | SWT.CENTER);
+		lblWordList.setBackground(new Color(Display.getCurrent(), new RGB(245, 245, 245)));
 		lblWordList.setBounds(41, 4, 89, 24);
 		lblWordList.setFont(new Font(Display.getCurrent(), "Sylfaen", 12, SWT.BOLD));
 		lblWordList.setText(" Word List ");
