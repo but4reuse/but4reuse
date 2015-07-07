@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.json.JsonAdapter"
+            icon="icons/json_icon.png"
+            id="json"
+            name="json">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.json.KeyElement"></element>
+            <element
+                  element="org.but4reuse.adapters.json.ValueElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.json.ObjectElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.json.ArrayElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.json.IndexArrayElement">
+            </element>
+         </elements>
+      </adapter>
+   </extension>
+
+</plugin>
