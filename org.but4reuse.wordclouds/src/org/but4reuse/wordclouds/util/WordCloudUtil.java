@@ -62,11 +62,18 @@ public class WordCloudUtil {
 		
 	}
 
+	/**
+	 * The same method than drawWordCloud but here we use inverse documents frequency
+	 * to define the size for strings.
+	 * @param cmp The composite where the word cloud will be drawn.
+	 * @param clouds The clouds list.
+	 * @param ind_cloud The index for the cloud that we want to draw.
+	 */
 	public static void drawWordCloudIDF(Composite cmp, List<Cloud> clouds, int ind_cloud) {
 		
 		int nbBlock_isPresent = 0;
 		int nbBlock = clouds.size();
-
+	
 		Cloud cloud = clouds.get(ind_cloud);
 		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
 
@@ -74,16 +81,25 @@ public class WordCloudUtil {
         cloud_IDF.setMinWeight(50);
 		for (Tag tag : cloud.tags()) {
 			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
-			double idf = (1.0 * nbBlock) / nbBlock_isPresent;
-			Tag t = new Tag(tag.getName(),idf);
+			double idf = Math.log((1.0 * nbBlock) / nbBlock_isPresent);
+			double score = tag.getScore()*idf;
+			
+			Tag t = new Tag(tag.getName(),score);
 			cloud_IDF.addTag(t);
 			
 		}
-
+		
+		
 		drawWordCloud(cmp, cloud_IDF);
 
 	}
 
+	/**
+	 * Count how many cloud contain the Tag tag
+	 * @param clouds Cloud list where we search.
+	 * @param tag The tag that we want to find.
+	 * @return How many time we find the tag.
+	 */
 	private static int nbCloudsContainTag(List<Cloud> clouds, Tag tag) {
 		int cpt = 0;
 		for (Cloud c : clouds) {

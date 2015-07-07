@@ -208,7 +208,7 @@ public class WordCloudVis extends ViewPart {
 	    c1.setLayout(grid);
 		data = new GridData();
 		data.heightHint = 500;
-		data.widthHint = 200;
+		data.widthHint = 170;
 		c1.setLayoutData(data);
 		
 		data = new GridData();
@@ -227,10 +227,13 @@ public class WordCloudVis extends ViewPart {
 		
 
 		cmp = new Composite(Scmp,SWT.NORMAL);
-		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);
+		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);		
 		cmp.setBounds(0, 0, 800, 1000);
 		cmpIDF.setBounds(0, 0, 800, 1000);
-		
+		Scmp.getVerticalBar().setIncrement(50);
+		Scmp.getHorizontalBar().setIncrement(25);
+		ScmpIDF.getVerticalBar().setIncrement(100);
+		ScmpIDF.getHorizontalBar().setIncrement(25);
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
@@ -287,8 +290,6 @@ public class WordCloudVis extends ViewPart {
 		data.heightHint = 75;
 		data.widthHint = 200;
 		c3.setLayoutData(data);
-
-		
 
 		data = new GridData();
 		data.heightHint = 20;
