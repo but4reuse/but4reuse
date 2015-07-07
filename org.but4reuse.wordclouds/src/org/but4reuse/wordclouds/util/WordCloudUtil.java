@@ -115,7 +115,7 @@ public class WordCloudUtil {
 		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
 		cloud_IDF.setMaxTagsToDisplay(50);
 		cloud_IDF.setMinWeight(5);
-		cloud_IDF.setMinWeight(50);
+		cloud_IDF.setMaxWeight(50);
 		for (Tag tag : c.tags()) {
 			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
 			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);

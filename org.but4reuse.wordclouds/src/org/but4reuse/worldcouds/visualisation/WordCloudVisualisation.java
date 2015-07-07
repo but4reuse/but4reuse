@@ -16,7 +16,6 @@ import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
 import org.mcavallo.opencloud.Cloud.Case;
 
-
 public class WordCloudVisualisation implements IVisualisation {
 
 	/**

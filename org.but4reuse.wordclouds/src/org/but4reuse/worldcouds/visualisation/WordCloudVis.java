@@ -1,6 +1,5 @@
 package org.but4reuse.worldcouds.visualisation;
 
-
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -92,7 +91,7 @@ public class WordCloudVis extends ViewPart {
 	 * Default constructor.
 	 */
 	public WordCloudVis() {
-		
+
 		super();
 		singleton = this;
 	}
@@ -321,9 +320,10 @@ public class WordCloudVis extends ViewPart {
 				}
 
 				ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-				cmp.setBounds(5, 5, win.getSize().x - 15, win.getSize().y - 40);
+				cmp.setBounds(5, 5, win.getSize().x - 10, win.getSize().y - 10);
 				Composite comp = new Composite(cmp, SWT.NORMAL);
-				comp.setBounds(0, 0, cmp.getBounds().width * 2, cmp.getBounds().height * 2);
+				comp.setBounds(0, 0, cmp.getBounds().width, cmp.getBounds().height);
+
 				win.setText(name);
 				win.open();
 				win.update();
@@ -352,6 +352,8 @@ public class WordCloudVis extends ViewPart {
 					for (Block b : AdaptedModelManager.getAdaptedModel().getOwnedBlocks()) {
 
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
+						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 						if (c.tags().size() == 0)
 							return;
 
@@ -387,6 +389,8 @@ public class WordCloudVis extends ViewPart {
 					int ind = combo.getSelectionIndex();
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
+					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+						c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 					if (c.tags().size() == 0)
 						return;
 
