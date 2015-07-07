@@ -9,8 +9,9 @@
             objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
                class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloud"
+               icon="icons/cloud.png"
                id="org.but4reuse.wordclouds.action1"
-               label="Show Word CLoud">
+               label="Show Word Cloud">
          </action>
       </objectContribution>
    </extension>
@@ -19,6 +20,7 @@
       <view
             category="org.but4reuse.views.category"
             class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
+            icon="icons/cloud.png"
             id="org.but4reuse.wordclouds.view"
             name="WorldClouds"
             restorable="true">

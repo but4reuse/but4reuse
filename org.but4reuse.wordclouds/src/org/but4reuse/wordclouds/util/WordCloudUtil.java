@@ -73,23 +73,10 @@ public class WordCloudUtil {
 	 */
 	public static void drawWordCloudIDF(Composite cmp, List<Cloud> clouds, int ind_cloud) {
 
-		int nbBlock_isPresent = 0;
-		int nbBlock = clouds.size();
+		
 
 		Cloud cloud = clouds.get(ind_cloud);
-		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
-		cloud_IDF.setMaxTagsToDisplay(50);
-		cloud_IDF.setMinWeight(5);
-		cloud_IDF.setMinWeight(50);
-		for (Tag tag : cloud.tags()) {
-			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
-			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);
-			double score = tag.getScore() * idf;
-
-			Tag t = new Tag(tag.getName(), score);
-			cloud_IDF.addTag(t);
-
-		}
+		Cloud cloud_IDF = WordCloudUtil.getCloudIDF(clouds, cloud);
 
 		drawWordCloud(cmp, cloud_IDF);
 
@@ -115,5 +102,32 @@ public class WordCloudUtil {
 			}
 		}
 		return cpt;
+	}
+	
+	/**
+	 * This method will create a new word cloud using inverse document frequency
+	 * @param clouds The word cloud list.
+	 * @param c The starting cloud.
+	 * @return A new word cloud.
+	 */
+	public static Cloud getCloudIDF(List<Cloud> clouds,Cloud c)
+	{
+		int nbBlock_isPresent = 0;
+		int nbBlock = clouds.size();
+		
+		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
+		cloud_IDF.setMaxTagsToDisplay(50);
+		cloud_IDF.setMinWeight(5);
+		cloud_IDF.setMinWeight(50);
+		for (Tag tag : c.tags()) {
+			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
+			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);
+			double score = tag.getScore() * idf;
+
+			Tag t = new Tag(tag.getName(), score);
+			cloud_IDF.addTag(t);
+
+		}
+		return cloud_IDF;
 	}
 }

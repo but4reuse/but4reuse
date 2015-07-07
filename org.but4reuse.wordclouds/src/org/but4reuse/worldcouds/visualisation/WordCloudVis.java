@@ -26,6 +26,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 import org.mcavallo.opencloud.Cloud;
@@ -83,6 +86,10 @@ public class WordCloudVis extends ViewPart {
 	 */
 	private Button renameOne;
 
+	/**
+	 * TabFolder from the view.
+	 */
+	private TabFolder tabFolder;
 	/**
 	 * Default constructor.
 	 */
@@ -149,6 +156,14 @@ public class WordCloudVis extends ViewPart {
 	}
 
 	/**
+	 * It will return the tabFolder which is in the view.
+	 * @return the tabFolder
+	 */
+	public TabFolder getTabFolder()
+	{
+		return tabFolder;
+	}
+	/**
 	 * This method will update the singleton. It will set the selected item at
 	 * index.\n The method will call WordCloudAction.getClouds() to get cloud at
 	 * the index "index" and fill the list control with strings contained in the
@@ -177,8 +192,16 @@ public class WordCloudVis extends ViewPart {
 		singleton.getCombo().select(index);
 
 		Cloud c = WordCloudVisualisation.getClouds().get(index);
-		for (Tag t : c.tags())
-			singleton.getList().add(t.getName() + " - " + t.getScoreInt());
+		if(WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+		{
+			Cloud c2 = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+			for (Tag t : c2.tags())
+				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
+
+		}
+		else	
+			for (Tag t : c.tags())
+				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
@@ -189,120 +212,144 @@ public class WordCloudVis extends ViewPart {
 	public void createPartControl(Composite parent) {
 		// TODO Auto-generated method stub
 
-		GridLayout grid = new GridLayout();
-		grid.numColumns = 3;
-		grid.marginHeight = 3;
-		GridData data;
-
-		parent.setLayout(grid);
-
-		Label lab1= new Label(parent, SWT.NORMAL);
-		Label lab2= new Label(parent, SWT.NORMAL);
-		Label lab3= new Label(parent, SWT.NORMAL);
 		
-		lab1.setText("Name List");
-		lab2.setText("Word Cloud");
-		lab2.setText("Word Cloud IDF");
 		
-		Composite c1 = new Composite(parent, SWT.NORMAL);
-		list = new List(c1, SWT.BORDER | SWT.READ_ONLY);
-		combo = new Combo(c1, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginTop = 5;
+		gridLayout.marginRight = 5;
+		gridLayout.marginLeft = 5;
+		gridLayout.horizontalSpacing = 10;
+		parent.setLayout(gridLayout);
 		
-		grid = new GridLayout();
-		grid.numColumns = 1;
-		grid.marginHeight = 3;
-		grid.marginTop = 45;
-
-		c1.setLayout(grid);
-		data = new GridData();
-		data.heightHint = 500;
-		data.widthHint = 170;
-		c1.setLayoutData(data);
-
-		data = new GridData();
-		data.heightHint = 25;
-		data.widthHint = 132;
-		combo.setLayoutData(data);
-
-		data = new GridData();
-		data.heightHint = 400;
-		data.widthHint = 150;
-		list.setLayoutData(data);
-
-		ScrolledComposite Scmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		ScrolledComposite ScmpIDF = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-
-		cmp = new Composite(Scmp, SWT.NORMAL);
-		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);
+		Composite c1 = new Composite(parent, SWT.NONE);
+		c1.setLayout(null);
+		GridData gd_c1 = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_c1.widthHint = 170;
+		gd_c1.heightHint = 431;
+		c1.setLayoutData(gd_c1);
+		c1.setBounds(0, 0, 101, 135);
+		
+		Label lblWordList = new Label(c1, SWT.BORDER | SWT.SHADOW_IN | SWT.CENTER);
+		lblWordList.setBounds(41, 4, 89, 24);
+		lblWordList.setFont(new Font(Display.getCurrent(),"Sylfaen", 12, SWT.BOLD));
+		lblWordList.setText(" Word List ");
+		
+		list = new List(c1, SWT.BORDER);
+		list.setBounds(5, 34, 157, 304);
+		
+		combo = new Combo(c1, SWT.NONE | SWT.READ_ONLY);
+		combo.setBounds(5, 343, 157, 23);
+		
+		renameAll = new Button(c1, SWT.NONE);
+		renameAll.setLocation(5, 372);
+		renameAll.setSize(157, 25);
+		renameAll.setText("Rename All Auto");
+		
+		renameOne = new Button(c1, SWT.NONE);
+		renameOne.setLocation(5, 403);
+		renameOne.setSize(157, 25);
+		renameOne.setText("Rename Current Auto");
+		
+		tabFolder = new TabFolder(parent, SWT.NONE);
+		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_tabFolder.heightHint = 410;
+		gd_tabFolder.widthHint = 500;
+		tabFolder.setLayoutData(gd_tabFolder);
+		tabFolder.setBounds(0, 0, 122, 43);
+		
+		TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
+		tbtmNewItem.setText("Word Cloud");
+		
+		ScrolledComposite sCmp = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmNewItem.setControl(sCmp);
+		
+		
+		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_1.setText("Word Cloud IDF");
+		
+		ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmNewItem_1.setControl(sCmpIDF);
+		
+		
+		cmp = new Composite(sCmp, SWT.NORMAL);
+		cmpIDF = new Composite(sCmpIDF, SWT.NORMAL);
 		cmp.setBounds(0, 0, 1000, 2000);
 		cmpIDF.setBounds(0, 0, 1000, 4000);
-		Scmp.getVerticalBar().setIncrement(200);
-		Scmp.getHorizontalBar().setIncrement(25);
-		ScmpIDF.getVerticalBar().setIncrement(200);
-		ScmpIDF.getHorizontalBar().setIncrement(200);
-		data = new GridData();
-		data.heightHint = 400;
-		data.widthHint = 500;
-		Scmp.setLayoutData(data);
-		Scmp.setContent(cmp);
+		sCmp.getVerticalBar().setIncrement(200);
+		sCmp.getHorizontalBar().setIncrement(25);
+		sCmpIDF.getVerticalBar().setIncrement(200);
+		sCmpIDF.getHorizontalBar().setIncrement(200);
+		sCmp.setContent(cmp);
+		sCmpIDF.setContent(cmpIDF);
+		Composite c2 = new Composite(parent, SWT.NONE);
+		c2.setBounds(0, 0, 64, 64);
+		c2.setLayout(new GridLayout(1, false));
+		
+		text = new Text(c2, SWT.BORDER);
+		GridData gd_text = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_text.heightHint = 16;
+		gd_text.widthHint = 145;
+		text.setLayoutData(gd_text);
+		text.setBounds(0, 0, 76, 21);
+		
+		Button accept = new Button(c2, SWT.NONE);
+		GridData gd_accept = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_accept.heightHint = 25;
+		gd_accept.widthHint = 157;
+		accept.setLayoutData(gd_accept);
+		accept.setBounds(0, 0, 75, 25);
+		accept.setText("Rename");
+		
+		Composite c3 = new Composite(parent, SWT.NONE);
+		GridData gd_c3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_c3.widthHint = 509;
+		c3.setLayoutData(gd_c3);
+		
+		Button newWin = new Button(c3, SWT.NONE);
+		newWin.setBounds(171, 0, 150, 25);
+		newWin.setText("Show In New Window");
+		newWin.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
+		 		Cloud c = null;
+				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
+				String name = "Word Cloud "+AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(i).getName();
+		 		if(WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 0)
+				{
+					win.setSize(1000, 2000);
+					c = WordCloudVisualisation.getClouds().get(i);
+					
+				}
+				else
+				{
+					win.setSize(1000, 4000);
+					c = WordCloudVisualisation.getClouds().get(i);
+					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+					name+=" IDF";
+				}
 
-		data = new GridData();
-		data.heightHint = 400;
-		data.widthHint = 500;
-		ScmpIDF.setLayoutData(data);
-		ScmpIDF.setToolTipText("Word Cloud with Inverse Document Frequency");
-		ScmpIDF.setContent(cmpIDF);
+				ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+				cmp.setBounds(5, 5, win.getSize().x - 15, win.getSize().y - 40);
+				Composite comp = new Composite(cmp, SWT.NORMAL);
+				comp.setBounds(0, 0, cmp.getBounds().width * 2, cmp.getBounds().height * 2);
+				win.setText(name);
+				win.open();
+				win.update();
 
-		Composite c2 = new Composite(parent, SWT.NORMAL);
-		renameOne = new Button(c2, SWT.NORMAL);
-		renameAll = new Button(c2, SWT.NORMAL);
-
-		grid = new GridLayout();
-		grid.numColumns = 1;
-		grid.marginHeight = 3;
-
-		c2.setLayout(grid);
-		data = new GridData();
-		data.heightHint = 75;
-		data.widthHint = 200;
-		c2.setLayoutData(data);
-
-		data = new GridData();
-		data.heightHint = 25;
-		data.widthHint = 150;
-		renameOne.setLayoutData(data);
-		renameOne.setText("Rename Current Auto");
-
-		data = new GridData();
-		data.heightHint = 25;
-		data.widthHint = 150;
-		renameAll.setLayoutData(data);
-		renameAll.setText("Rename All Auto");
-
-		Composite c3 = new Composite(parent, SWT.NORMAL);
-		text = new Text(c3, SWT.BORDER);
-		accept = new Button(c3, SWT.NORMAL);
-
-		grid = new GridLayout();
-		grid.numColumns = 1;
-		grid.marginHeight = 3;
-
-		c3.setLayout(grid);
-		data = new GridData();
-		data.heightHint = 75;
-		data.widthHint = 200;
-		c3.setLayoutData(data);
-
-		data = new GridData();
-		data.heightHint = 20;
-		data.widthHint = 150;
-		text.setLayoutData(data);
-
-		data = new GridData();
-		data.heightHint = 25;
-		data.widthHint = 150;
-		accept.setLayoutData(data);
-		accept.setText("Rename Block");
+				WordCloudUtil.drawWordCloud(comp, c);
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		 
+		
 
 		/*
 		 * When you will click on this button you will rename each block with
@@ -452,9 +499,32 @@ public class WordCloudVis extends ViewPart {
 			}
 		});
 
+		tabFolder.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				int ind = ((TabFolder)(e.getSource())).getSelectionIndex();
+				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
+				WordCloudVis.getSingleton().getList().removeAll();
+				Cloud c = WordCloudVisualisation.getClouds().get(i);
+				if(ind == 1)
+					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+				for(Tag t : c.tags())
+					WordCloudVis.getSingleton().getList().add(t.getName()+" - "+t.getScore());
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		if (AdaptedModelManager.getAdaptedModel() == null)
 			return;
 
+		
 		for (Block b : AdaptedModelManager.getAdaptedModel().getOwnedBlocks())
 			combo.add(b.getName());
 
