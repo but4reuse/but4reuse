@@ -1,11 +1,14 @@
 package org.but4reuse.wordclouds.util;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.mcavallo.opencloud.Cloud;
+import org.mcavallo.opencloud.Cloud.Case;
 import org.mcavallo.opencloud.Tag;
 
 /**
@@ -33,14 +36,13 @@ public class WordCloudUtil {
 		for (Tag t : cloud.tags()) {
 			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC);
 			gc.setFont(f);
-
 			/*
 			 * In the following lines we try to find the size in pixel of each
 			 * string in order to not draw several strings in the same place. We
 			 * use the length of the string and chars to define the height and
 			 * width of the string.
 			 */
-             
+
 			int width = (int) (t.getName().length() * t.getWeightInt() * 0.80);
 			width += (int) (20 * 1.0 / t.getName().length());
 
@@ -83,5 +85,40 @@ public class WordCloudUtil {
 			gc.drawString(t.getName(), x, y);
 			x += width;
 		}
+	}
+
+	public static void drawWordCloudIDF(Canvas can, List<Cloud> clouds, int ind_cloud) {
+		
+		int nbBlock_isPresent = 0;
+		int nbBlock = clouds.size();
+
+		Cloud cloud = clouds.get(ind_cloud);
+		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
+
+		cloud_IDF.setMinWeight(5);
+        cloud_IDF.setMinWeight(50);
+		for (Tag tag : cloud.tags()) {
+			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
+			double idf = (1.0 * nbBlock) / nbBlock_isPresent;
+			Tag t = new Tag(tag.getName(),idf);
+			cloud_IDF.addTag(t);
+			
+		}
+
+		drawWordCloud(can, cloud_IDF);
+
+	}
+
+	private static int nbCloudsContainTag(List<Cloud> clouds, Tag tag) {
+		int cpt = 0;
+		for (Cloud c : clouds) {
+			for (Tag t : c.tags()) {
+				if (t.getName().equalsIgnoreCase(tag.getName())) {
+					cpt++;
+					break;
+				}
+			}
+		}
+		return cpt;
 	}
 }

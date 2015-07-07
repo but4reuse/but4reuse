@@ -1,5 +1,7 @@
 package org.but4reuse.worldcouds.visualisation;
 
+import javax.activation.DataHandler;
+
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -7,10 +9,12 @@ import org.but4reuse.wordclouds.ui.actions.WordCloudAction;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -51,6 +55,12 @@ public class WordCloudVis extends ViewPart {
 	 * The canvas control where word clouds are drawn.
 	 */
 	private Canvas canvas;
+
+	/**
+	 * The canvas control where word clouds are draw using inverse document
+	 * frequency
+	 */
+	private Canvas canvasIDF;
 
 	/**
 	 * The text control in the view
@@ -118,6 +128,16 @@ public class WordCloudVis extends ViewPart {
 	}
 
 	/**
+	 * This method returns the canvas control from the view. It's the canvas
+	 * where the IDF is used.
+	 * 
+	 * @return the canvas control
+	 */
+	public Canvas getCanvasIDF() {
+		return canvasIDF;
+	}
+
+	/**
 	 * The method returns the text control from the view
 	 * 
 	 * @return the text control
@@ -158,9 +178,10 @@ public class WordCloudVis extends ViewPart {
 
 		Cloud c = WordCloudVisualisation.getClouds().get(index);
 		for (Tag t : c.tags())
-			singleton.getList().add(t.getName());
+			singleton.getList().add(t.getName()+" - "+t.getScoreInt());
 
 		WordCloudUtil.drawWordCloud(singleton.getCanvas(), c);
+		WordCloudUtil.drawWordCloudIDF(singleton.getCanvasIDF(), WordCloudVisualisation.getClouds(), index);
 
 	}
 
@@ -169,33 +190,58 @@ public class WordCloudVis extends ViewPart {
 		// TODO Auto-generated method stub
 
 		GridLayout grid = new GridLayout();
-		grid.numColumns = 2;
+		grid.numColumns = 3;
 		grid.marginHeight = 3;
 		GridData data;
 
 		parent.setLayout(grid);
-
-		list = new List(parent, SWT.BORDER | SWT.READ_ONLY);
-		canvas = new Canvas(parent, SWT.BORDER);
+       
+		list = new List(parent, SWT.BORDER | SWT.READ_ONLY); 
+		ScrolledComposite cmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL);
+		canvas = new Canvas(cmp, SWT.BORDER|SWT.V_SCROLL);
+		canvasIDF = new Canvas(parent, SWT.BORDER);
 		combo = new Combo(parent, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		text = new Text(parent, SWT.BORDER);
 		renameOne = new Button(parent, SWT.NORMAL);
 		accept = new Button(parent, SWT.NORMAL);
 		renameAll = new Button(parent, SWT.NORMAL);
 
+		
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
+		cmp.setLayoutData(data);
+		cmp.setContent(canvas);
+		cmp.setExpandHorizontal(true);
+		cmp.setExpandVertical(true);
+		cmp.getVerticalBar().addSelectionListener(new VScrollListener(cmp, new Rectangle(0, 0, 400, 500)));
+		/*cmp.getVerticalBar().addSelectionListener
+		(new VScrollListener(cmp,new Rectangle(0, 0,data.widthHint , data.heightHint)));*/
+		
+		data = new GridData();
+		data.heightHint = 1000;
+		data.widthHint = 500;
 		canvas.setLayoutData(data);
+		canvas.getVerticalBar().setMinimum(5);
+		canvas.getVerticalBar().setMaximum(20);;
+		
+		
+		
+		
+		data = new GridData();
+		data.heightHint = 400;
+		data.widthHint = 500;
+		canvasIDF.setLayoutData(data);
+		canvasIDF.setToolTipText("Word Cloud with Inverse Document Frequency");
 
 		data = new GridData();
 		data.heightHint = 25;
-		data.widthHint = 380;
+		data.widthHint = 132;
 		combo.setLayoutData(data);
 
 		data = new GridData();
 		data.heightHint = 400;
-		data.widthHint = 400;
+		data.widthHint = 150;
 		list.setLayoutData(data);
 
 		data = new GridData();
@@ -352,8 +398,11 @@ public class WordCloudVis extends ViewPart {
 				List l = (List) e.getSource();
 
 				Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(combo.getSelectionIndex());
-				b.setName(l.getItem(l.getSelectionIndex()));
+				String newName =l.getItem(l.getSelectionIndex());
+				int ind = newName.indexOf(" - ");
+				b.setName(newName.substring(0, ind));
 				WordCloudVis.update(combo.getSelectionIndex(), true);
+				
 				VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 						AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 
