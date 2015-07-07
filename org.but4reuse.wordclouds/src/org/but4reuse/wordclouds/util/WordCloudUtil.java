@@ -83,7 +83,7 @@ public class WordCloudUtil {
 		cloud_IDF.setMinWeight(50);
 		for (Tag tag : cloud.tags()) {
 			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
-			double idf = Math.log((1.0 * nbBlock) / nbBlock_isPresent);
+			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);
 			double score = tag.getScore() * idf;
 
 			Tag t = new Tag(tag.getName(), score);

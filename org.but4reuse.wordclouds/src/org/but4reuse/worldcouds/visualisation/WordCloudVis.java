@@ -5,7 +5,6 @@ import javax.activation.DataHandler;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
-import org.but4reuse.wordclouds.ui.actions.WordCloudAction;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -24,6 +23,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -196,10 +196,18 @@ public class WordCloudVis extends ViewPart {
 
 		parent.setLayout(grid);
 
+		Label lab1= new Label(parent, SWT.NORMAL);
+		Label lab2= new Label(parent, SWT.NORMAL);
+		Label lab3= new Label(parent, SWT.NORMAL);
+		
+		lab1.setText("Name List");
+		lab2.setText("Word Cloud");
+		lab2.setText("Word Cloud IDF");
+		
 		Composite c1 = new Composite(parent, SWT.NORMAL);
 		list = new List(c1, SWT.BORDER | SWT.READ_ONLY);
 		combo = new Combo(c1, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
-
+		
 		grid = new GridLayout();
 		grid.numColumns = 1;
 		grid.marginHeight = 3;
