@@ -78,10 +78,10 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 
-						ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER| SWT.V_SCROLL | SWT.H_SCROLL);
+						ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 						cmp.setBounds(5, 5, widthWin - 15, heightWin - 40);
-                        Composite comp = new Composite(cmp, SWT.NORMAL);
-                        comp.setBounds(0, 0, cmp.getBounds().width*2, cmp.getBounds().height*2);
+						Composite comp = new Composite(cmp, SWT.NORMAL);
+						comp.setBounds(0, 0, cmp.getBounds().width * 2, cmp.getBounds().height * 2);
 						win.open();
 						win.update();
 

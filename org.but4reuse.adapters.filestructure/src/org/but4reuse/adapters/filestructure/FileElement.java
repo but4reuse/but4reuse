@@ -118,11 +118,13 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 		
 		while(tk.hasMoreTokens())
 		{
-			
-			for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+			String s = tk.nextToken();
+			System.out.println(s);
+			for (String w : s.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
 			{
-				System.out.println(w);
-				words.add(w);
+				StringTokenizer tk2 = new StringTokenizer(w,"-. ");
+				while(tk2.hasMoreTokens())
+					words.add(tk2.nextToken());
 			}
 		}
 		return words;

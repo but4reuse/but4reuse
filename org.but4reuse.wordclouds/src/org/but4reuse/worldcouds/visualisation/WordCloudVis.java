@@ -132,7 +132,8 @@ public class WordCloudVis extends ViewPart {
 	 * This method returns the canvas control from the view. It's the canvas
 	 * where the IDF is used.
 	 * 
-	 * @return the {@link Composite} control where is drawn the word cloud using the IDF
+	 * @return the {@link Composite} control where is drawn the word cloud using
+	 *         the IDF
 	 */
 	public Composite getSCompositeIDF() {
 		return cmpIDF;
@@ -175,10 +176,9 @@ public class WordCloudVis extends ViewPart {
 			singleton.getCombo().add(b.getName());
 		singleton.getCombo().select(index);
 
-
 		Cloud c = WordCloudVisualisation.getClouds().get(index);
 		for (Tag t : c.tags())
-			singleton.getList().add(t.getName()+" - "+t.getScoreInt());
+			singleton.getList().add(t.getName() + " - " + t.getScoreInt());
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
@@ -195,22 +195,22 @@ public class WordCloudVis extends ViewPart {
 		GridData data;
 
 		parent.setLayout(grid);
-       
+
 		Composite c1 = new Composite(parent, SWT.NORMAL);
 		list = new List(c1, SWT.BORDER | SWT.READ_ONLY);
 		combo = new Combo(c1, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
-	
+
 		grid = new GridLayout();
 		grid.numColumns = 1;
 		grid.marginHeight = 3;
 		grid.marginTop = 45;
-		
-	    c1.setLayout(grid);
+
+		c1.setLayout(grid);
 		data = new GridData();
 		data.heightHint = 500;
 		data.widthHint = 170;
 		c1.setLayoutData(data);
-		
+
 		data = new GridData();
 		data.heightHint = 25;
 		data.widthHint = 132;
@@ -220,49 +220,45 @@ public class WordCloudVis extends ViewPart {
 		data.heightHint = 400;
 		data.widthHint = 150;
 		list.setLayoutData(data);
-		
-		
-		ScrolledComposite Scmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL |SWT.H_SCROLL);
-		ScrolledComposite ScmpIDF = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		
 
-		cmp = new Composite(Scmp,SWT.NORMAL);
-		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);		
-		cmp.setBounds(0, 0, 800, 1000);
-		cmpIDF.setBounds(0, 0, 800, 1000);
-		Scmp.getVerticalBar().setIncrement(50);
+		ScrolledComposite Scmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		ScrolledComposite ScmpIDF = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+
+		cmp = new Composite(Scmp, SWT.NORMAL);
+		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);
+		cmp.setBounds(0, 0, 1000, 2000);
+		cmpIDF.setBounds(0, 0, 1000, 4000);
+		Scmp.getVerticalBar().setIncrement(200);
 		Scmp.getHorizontalBar().setIncrement(25);
-		ScmpIDF.getVerticalBar().setIncrement(100);
-		ScmpIDF.getHorizontalBar().setIncrement(25);
+		ScmpIDF.getVerticalBar().setIncrement(200);
+		ScmpIDF.getHorizontalBar().setIncrement(200);
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
 		Scmp.setLayoutData(data);
 		Scmp.setContent(cmp);
-		
+
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
 		ScmpIDF.setLayoutData(data);
-		ScmpIDF.setToolTipText("Word Cloud with Inverse Document Frequency"); 
+		ScmpIDF.setToolTipText("Word Cloud with Inverse Document Frequency");
 		ScmpIDF.setContent(cmpIDF);
-		
-		
+
 		Composite c2 = new Composite(parent, SWT.NORMAL);
 		renameOne = new Button(c2, SWT.NORMAL);
 		renameAll = new Button(c2, SWT.NORMAL);
-		
 
 		grid = new GridLayout();
 		grid.numColumns = 1;
 		grid.marginHeight = 3;
-		
-	    c2.setLayout(grid);
+
+		c2.setLayout(grid);
 		data = new GridData();
 		data.heightHint = 75;
 		data.widthHint = 200;
 		c2.setLayoutData(data);
-		
+
 		data = new GridData();
 		data.heightHint = 25;
 		data.widthHint = 150;
@@ -274,18 +270,16 @@ public class WordCloudVis extends ViewPart {
 		data.widthHint = 150;
 		renameAll.setLayoutData(data);
 		renameAll.setText("Rename All Auto");
-		
-		
+
 		Composite c3 = new Composite(parent, SWT.NORMAL);
 		text = new Text(c3, SWT.BORDER);
 		accept = new Button(c3, SWT.NORMAL);
-	
 
 		grid = new GridLayout();
 		grid.numColumns = 1;
 		grid.marginHeight = 3;
-		
-	    c3.setLayout(grid);
+
+		c3.setLayout(grid);
 		data = new GridData();
 		data.heightHint = 75;
 		data.widthHint = 200;
@@ -408,7 +402,7 @@ public class WordCloudVis extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 				Combo c = (Combo) e.getSource();
 				WordCloudVis.update(c.getSelectionIndex(), true);
 
@@ -433,11 +427,11 @@ public class WordCloudVis extends ViewPart {
 				List l = (List) e.getSource();
 
 				Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(combo.getSelectionIndex());
-				String newName =l.getItem(l.getSelectionIndex());
+				String newName = l.getItem(l.getSelectionIndex());
 				int ind = newName.indexOf(" - ");
 				b.setName(newName.substring(0, ind));
 				WordCloudVis.update(combo.getSelectionIndex(), true);
-				
+
 				VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 						AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 

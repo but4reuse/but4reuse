@@ -50,6 +50,7 @@ public class WordCloudVisualisation implements IVisualisation {
 			cloud = new Cloud(Case.CAPITALIZATION);
 			cloud.setMaxWeight(50);
 			cloud.setMinWeight(5);
+			cloud.setMaxTagsToDisplay(50);
 
 			/*
 			 * For each block we get all elements owned We use the method
