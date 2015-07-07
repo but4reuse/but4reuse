@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -52,15 +53,15 @@ public class WordCloudVis extends ViewPart {
 	private List list;
 
 	/**
-	 * The canvas control where word clouds are drawn.
+	 * The Composite control where word clouds are drawn.
 	 */
-	private Canvas canvas;
+	private Composite cmp;
 
 	/**
-	 * The canvas control where word clouds are draw using inverse document
+	 * The composite control where word clouds are draw using inverse document
 	 * frequency
 	 */
-	private Canvas canvasIDF;
+	private Composite cmpIDF;
 
 	/**
 	 * The text control in the view
@@ -119,22 +120,22 @@ public class WordCloudVis extends ViewPart {
 	}
 
 	/**
-	 * This method returns the canvas control from the view.
+	 * This method returns the {@link Composite} control from the view.
 	 * 
 	 * @return the canvas control
 	 */
-	public Canvas getCanvas() {
-		return canvas;
+	public Composite getSComposite() {
+		return cmp;
 	}
 
 	/**
 	 * This method returns the canvas control from the view. It's the canvas
 	 * where the IDF is used.
 	 * 
-	 * @return the canvas control
+	 * @return the {@link Composite} control where is drawn the word cloud using the IDF
 	 */
-	public Canvas getCanvasIDF() {
-		return canvasIDF;
+	public Composite getSCompositeIDF() {
+		return cmpIDF;
 	}
 
 	/**
@@ -174,14 +175,13 @@ public class WordCloudVis extends ViewPart {
 			singleton.getCombo().add(b.getName());
 		singleton.getCombo().select(index);
 
-		GC gc = new GC(singleton.getCanvas());
 
 		Cloud c = WordCloudVisualisation.getClouds().get(index);
 		for (Tag t : c.tags())
 			singleton.getList().add(t.getName()+" - "+t.getScoreInt());
 
-		WordCloudUtil.drawWordCloud(singleton.getCanvas(), c);
-		WordCloudUtil.drawWordCloudIDF(singleton.getCanvasIDF(), WordCloudVisualisation.getClouds(), index);
+		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
+		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
 
 	}
 
@@ -197,43 +197,32 @@ public class WordCloudVis extends ViewPart {
 		parent.setLayout(grid);
        
 		list = new List(parent, SWT.BORDER | SWT.READ_ONLY); 
-		ScrolledComposite cmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL);
-		canvas = new Canvas(cmp, SWT.BORDER|SWT.V_SCROLL);
-		canvasIDF = new Canvas(parent, SWT.BORDER);
+		ScrolledComposite Scmp = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL |SWT.H_SCROLL);
+		ScrolledComposite ScmpIDF = new ScrolledComposite(parent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		combo = new Combo(parent, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		text = new Text(parent, SWT.BORDER);
 		renameOne = new Button(parent, SWT.NORMAL);
 		accept = new Button(parent, SWT.NORMAL);
 		renameAll = new Button(parent, SWT.NORMAL);
 
+		cmp = new Composite(Scmp,SWT.NORMAL);
+		cmpIDF = new Composite(ScmpIDF, SWT.NORMAL);
+		cmp.setBounds(0, 0, 800, 1000);
+		cmpIDF.setBounds(0, 0, 800, 1000);
 		
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
-		cmp.setLayoutData(data);
-		cmp.setContent(canvas);
-		cmp.setExpandHorizontal(true);
-		cmp.setExpandVertical(true);
-		cmp.getVerticalBar().addSelectionListener(new VScrollListener(cmp, new Rectangle(0, 0, 400, 500)));
-		/*cmp.getVerticalBar().addSelectionListener
-		(new VScrollListener(cmp,new Rectangle(0, 0,data.widthHint , data.heightHint)));*/
-		
-		data = new GridData();
-		data.heightHint = 1000;
-		data.widthHint = 500;
-		canvas.setLayoutData(data);
-		canvas.getVerticalBar().setMinimum(5);
-		canvas.getVerticalBar().setMaximum(20);;
-		
-		
-		
+		Scmp.setLayoutData(data);
+		Scmp.setContent(cmp);
 		
 		data = new GridData();
 		data.heightHint = 400;
 		data.widthHint = 500;
-		canvasIDF.setLayoutData(data);
-		canvasIDF.setToolTipText("Word Cloud with Inverse Document Frequency");
-
+		ScmpIDF.setLayoutData(data);
+		ScmpIDF.setToolTipText("Word Cloud with Inverse Document Frequency"); 
+		ScmpIDF.setContent(cmpIDF);
+		
 		data = new GridData();
 		data.heightHint = 25;
 		data.widthHint = 132;
@@ -373,7 +362,7 @@ public class WordCloudVis extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("Hello selected");
+				
 				Combo c = (Combo) e.getSource();
 				WordCloudVis.update(c.getSelectionIndex(), true);
 
