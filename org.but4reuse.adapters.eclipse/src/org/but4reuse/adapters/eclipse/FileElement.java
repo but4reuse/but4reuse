@@ -57,10 +57,10 @@ public class FileElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList <String> getWords()
+	public List <String> getWords()
 	{
-		ArrayList<String> words = new ArrayList<String>();
-		words.add(uri.getPath());
+		List<String> words = new ArrayList<String>();
+		
 		return words;
 	}
 }

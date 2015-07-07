@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 
@@ -131,5 +132,17 @@ public class PluginElement extends FileElement {
 		int result = 1;
 		result = prime * result + ((getSymbName() == null) ? 0 : getSymbName().hashCode());
 		return result;
+	}
+	
+	@Override
+	public List<String> getWords()
+	{
+		List<String> words = new ArrayList<String>();
+		if(name != null)
+			for (String w : name.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
+			{
+			words.add(w);
+			}
+		return words;
 	}
 }
