@@ -6,8 +6,9 @@ public interface IMarkerElement {
 
 	/**
 	 * Get the marker
+	 * 
 	 * @return the marker
 	 */
 	public IMarker getMarker();
-	
+
 }

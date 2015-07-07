@@ -25,12 +25,10 @@ public class GraphsAdapterPreferencePage extends FieldEditorPreferencePage imple
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		StringFieldEditor sfe = new StringFieldEditor(NODE_ID,
-				"Node id (keep it empty to use default id):",
+		StringFieldEditor sfe = new StringFieldEditor(NODE_ID, "Node id (keep it empty to use default id):",
 				getFieldEditorParent());
 		addField(sfe);
-		StringFieldEditor sfe2 = new StringFieldEditor(EDGE_ID,
-				"Edge id (keep it empty to use default id):",
+		StringFieldEditor sfe2 = new StringFieldEditor(EDGE_ID, "Edge id (keep it empty to use default id):",
 				getFieldEditorParent());
 		addField(sfe2);
 	}

@@ -22,10 +22,10 @@ import org.eclipse.contribution.visualiser.VisualiserPlugin;
  * 
  */
 public interface IVisualiserHelpContextIds {
-	
-	public static final String PREFIX= VisualiserPlugin.PLUGIN_ID + '.';
-	
-	public static final String VISUALISER_VIEW= PREFIX + "visualiser_view_context"; //$NON-NLS-1$
-	public static final String VISUALISER_MENU_VIEW= PREFIX + "visualiser_menu_view_context"; //$NON-NLS-1$
-	
+
+	public static final String PREFIX = VisualiserPlugin.PLUGIN_ID + '.';
+
+	public static final String VISUALISER_VIEW = PREFIX + "visualiser_view_context"; //$NON-NLS-1$
+	public static final String VISUALISER_MENU_VIEW = PREFIX + "visualiser_menu_view_context"; //$NON-NLS-1$
+
 }

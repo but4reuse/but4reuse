@@ -13,6 +13,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 
 /**
  * To be used in the EMF editor
+ * 
  * @author jabier.martinez
  */
 // TODO to drop elements from the file system (desktop) directly in the editor

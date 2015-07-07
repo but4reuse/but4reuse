@@ -31,7 +31,6 @@ public class SerializeAction implements IViewActionDelegate {
 
 	URI constructionURI;
 
-
 	@Override
 	public void run(IAction action) {
 
@@ -56,14 +55,14 @@ public class SerializeAction implements IViewActionDelegate {
 			progressDialog.run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					
+
 					// put texts and save
 					int totalWork = 2;
 					monitor.beginTask("Serialize Adapted Model", totalWork);
 					AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
-					for(AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()){
-						for(ElementWrapper ew : aa.getOwnedElementWrappers()){
-							ew.setText(((IElement)ew.getElement()).getText());
+					for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+						for (ElementWrapper ew : aa.getOwnedElementWrappers()) {
+							ew.setText(((IElement) ew.getElement()).getText());
 						}
 					}
 					monitor.worked(1);

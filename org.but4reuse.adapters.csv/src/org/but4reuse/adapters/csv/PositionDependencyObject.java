@@ -5,6 +5,7 @@ import org.eclipse.swt.graphics.Point;
 
 /**
  * Position dependency object
+ * 
  * @author jabier.martinez
  */
 public class PositionDependencyObject implements IDependencyObject {
@@ -32,7 +33,7 @@ public class PositionDependencyObject implements IDependencyObject {
 		}
 		return super.equals(obj);
 	}
-	
+
 	@Override
 	public String getDependencyObjectText() {
 		return position.toString();

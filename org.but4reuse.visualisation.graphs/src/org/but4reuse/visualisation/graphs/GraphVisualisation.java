@@ -218,7 +218,8 @@ public class GraphVisualisation implements IVisualisation {
 		// edges in both directions
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES) || constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
+			if (constraint.getType().equals(IConstraint.REQUIRES)
+					|| constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				int id1 = blocks.indexOf(constraint.getBlock1());
 				int id2 = blocks.indexOf(constraint.getBlock2());
 				Vertex one = graph.getVertex(id1);

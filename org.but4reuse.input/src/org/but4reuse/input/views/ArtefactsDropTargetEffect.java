@@ -26,14 +26,15 @@ import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Artefacts Drop Target Effect
+ * 
  * @author jabier.martinez
  */
 public class ArtefactsDropTargetEffect extends DropTargetEffect {
-	
+
 	public static final String EDITOR_ID = "org.but4reuse.artefactmodel.presentation.ArtefactModelEditorID";
-	
+
 	private boolean dragOver = false;
-	
+
 	public ArtefactsDropTargetEffect(Control control) {
 		super(control);
 	}
@@ -62,9 +63,8 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		if (event.data instanceof IResource[]) {
 			IResource[] res = (IResource[]) event.data;
 			for (int i = 0; i < res.length; i++) {
-				String uriString = "platform:/resource/"
-						+ URI.encodeSegment(res[i].getProject().getName(), false) + "/"
-						+ res[i].getProjectRelativePath().toOSString().replace("\\", "/");
+				String uriString = "platform:/resource/" + URI.encodeSegment(res[i].getProject().getName(), false)
+						+ "/" + res[i].getProjectRelativePath().toOSString().replace("\\", "/");
 				Date creationDate = FileUtils.getCreationDate(WorkbenchUtils.getFileFromIResource(res[i]));
 				Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
 				if (command != null) {
@@ -89,12 +89,12 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		}
 		if (compoundCommand.canExecute()) {
 			editor.getEditingDomain().getCommandStack().execute(compoundCommand);
-//			if (editor instanceof IWorkbenchPart){
-//				((IWorkbenchPart)editor).setFocus();
-//			}
+			// if (editor instanceof IWorkbenchPart){
+			// ((IWorkbenchPart)editor).setFocus();
+			// }
 		}
-		if (editor instanceof IWorkbenchPart){
-			((IWorkbenchPart)editor).setFocus();
+		if (editor instanceof IWorkbenchPart) {
+			((IWorkbenchPart) editor).setFocus();
 		}
 	}
 
@@ -110,16 +110,16 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		setDragOver(false);
 		getControl().redraw();
 	}
-	
+
 	private Command addArtefact(EditingDomain editingDomain, String uriString, Date date) {
 		Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
 		a.setArtefactURI(uriString);
 		a.setDate(date);
 		String name = uriString;
-		if(name.endsWith("/")){
-			name = name.substring(0,name.length()-1);
+		if (name.endsWith("/")) {
+			name = name.substring(0, name.length() - 1);
 		}
-		name = name.substring(name.lastIndexOf("/")+1, name.length());
+		name = name.substring(name.lastIndexOf("/") + 1, name.length());
 		a.setName(name);
 		XMIResource amr = (XMIResource) editingDomain.getResourceSet().getResources().get(0);
 		ArtefactModel am = (ArtefactModel) amr.getContents().get(0);

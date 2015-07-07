@@ -18,12 +18,12 @@ import org.eclipse.osgi.util.NLS;
  */
 public class VisualiserMessages extends NLS {
 
-	private static final String BUNDLE_NAME= VisualiserMessages.class.getName();
-	
+	private static final String BUNDLE_NAME = VisualiserMessages.class.getName();
+
 	private VisualiserMessages() {
 		// Do not instantiate
 	}
-	
+
 	public static String VisualiserPreferencePage_providersLabel;
 	public static String VisualiserPreferencePage_description;
 	public static String VisualiserPreferencePage_noDescription;
@@ -79,12 +79,12 @@ public class VisualiserMessages extends NLS {
 	public static String Jobs_GettingData;
 	public static String Jobs_UpdatingMenu;
 	public static String Jobs_Drawing;
-	
+
 	public static String Change_color_for;
 
 	public static String Visualiser_testString;
 	public static String Pattern_for;
-	
+
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, VisualiserMessages.class);
 	}

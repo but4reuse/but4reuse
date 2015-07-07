@@ -90,6 +90,7 @@ public class WordCloudVis extends ViewPart {
 	 * TabFolder from the view.
 	 */
 	private TabFolder tabFolder;
+
 	/**
 	 * Default constructor.
 	 */
@@ -157,12 +158,13 @@ public class WordCloudVis extends ViewPart {
 
 	/**
 	 * It will return the tabFolder which is in the view.
+	 * 
 	 * @return the tabFolder
 	 */
-	public TabFolder getTabFolder()
-	{
+	public TabFolder getTabFolder() {
 		return tabFolder;
 	}
+
 	/**
 	 * This method will update the singleton. It will set the selected item at
 	 * index.\n The method will call WordCloudAction.getClouds() to get cloud at
@@ -192,14 +194,12 @@ public class WordCloudVis extends ViewPart {
 		singleton.getCombo().select(index);
 
 		Cloud c = WordCloudVisualisation.getClouds().get(index);
-		if(WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
-		{
+		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1) {
 			Cloud c2 = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 			for (Tag t : c2.tags())
 				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
 
-		}
-		else	
+		} else
 			for (Tag t : c.tags())
 				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
 
@@ -212,15 +212,13 @@ public class WordCloudVis extends ViewPart {
 	public void createPartControl(Composite parent) {
 		// TODO Auto-generated method stub
 
-		
-		
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginTop = 5;
 		gridLayout.marginRight = 5;
 		gridLayout.marginLeft = 5;
 		gridLayout.horizontalSpacing = 10;
 		parent.setLayout(gridLayout);
-		
+
 		Composite c1 = new Composite(parent, SWT.NONE);
 		c1.setLayout(null);
 		GridData gd_c1 = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
@@ -228,49 +226,47 @@ public class WordCloudVis extends ViewPart {
 		gd_c1.heightHint = 431;
 		c1.setLayoutData(gd_c1);
 		c1.setBounds(0, 0, 101, 135);
-		
+
 		Label lblWordList = new Label(c1, SWT.BORDER | SWT.SHADOW_IN | SWT.CENTER);
 		lblWordList.setBounds(41, 4, 89, 24);
-		lblWordList.setFont(new Font(Display.getCurrent(),"Sylfaen", 12, SWT.BOLD));
+		lblWordList.setFont(new Font(Display.getCurrent(), "Sylfaen", 12, SWT.BOLD));
 		lblWordList.setText(" Word List ");
-		
+
 		list = new List(c1, SWT.BORDER);
 		list.setBounds(5, 34, 157, 304);
-		
+
 		combo = new Combo(c1, SWT.NONE | SWT.READ_ONLY);
 		combo.setBounds(5, 343, 157, 23);
-		
+
 		renameAll = new Button(c1, SWT.NONE);
 		renameAll.setLocation(5, 372);
 		renameAll.setSize(157, 25);
 		renameAll.setText("Rename All Auto");
-		
+
 		renameOne = new Button(c1, SWT.NONE);
 		renameOne.setLocation(5, 403);
 		renameOne.setSize(157, 25);
 		renameOne.setText("Rename Current Auto");
-		
+
 		tabFolder = new TabFolder(parent, SWT.NONE);
 		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_tabFolder.heightHint = 410;
 		gd_tabFolder.widthHint = 500;
 		tabFolder.setLayoutData(gd_tabFolder);
 		tabFolder.setBounds(0, 0, 122, 43);
-		
+
 		TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
 		tbtmNewItem.setText("Word Cloud");
-		
+
 		ScrolledComposite sCmp = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem.setControl(sCmp);
-		
-		
+
 		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
 		tbtmNewItem_1.setText("Word Cloud IDF");
-		
+
 		ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem_1.setControl(sCmpIDF);
-		
-		
+
 		cmp = new Composite(sCmp, SWT.NORMAL);
 		cmpIDF = new Composite(sCmpIDF, SWT.NORMAL);
 		cmp.setBounds(0, 0, 1000, 2000);
@@ -284,14 +280,14 @@ public class WordCloudVis extends ViewPart {
 		Composite c2 = new Composite(parent, SWT.NONE);
 		c2.setBounds(0, 0, 64, 64);
 		c2.setLayout(new GridLayout(1, false));
-		
+
 		text = new Text(c2, SWT.BORDER);
 		GridData gd_text = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		gd_text.heightHint = 16;
 		gd_text.widthHint = 145;
 		text.setLayoutData(gd_text);
 		text.setBounds(0, 0, 76, 21);
-		
+
 		Button accept = new Button(c2, SWT.NONE);
 		GridData gd_accept = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_accept.heightHint = 25;
@@ -299,36 +295,33 @@ public class WordCloudVis extends ViewPart {
 		accept.setLayoutData(gd_accept);
 		accept.setBounds(0, 0, 75, 25);
 		accept.setText("Rename");
-		
+
 		Composite c3 = new Composite(parent, SWT.NONE);
 		GridData gd_c3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_c3.widthHint = 509;
 		c3.setLayoutData(gd_c3);
-		
+
 		Button newWin = new Button(c3, SWT.NONE);
 		newWin.setBounds(171, 0, 150, 25);
 		newWin.setText("Show In New Window");
 		newWin.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
-		 		Cloud c = null;
+				Cloud c = null;
 				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
-				String name = "Word Cloud "+AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(i).getName();
-		 		if(WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 0)
-				{
+				String name = "Word Cloud " + AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(i).getName();
+				if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 0) {
 					win.setSize(1000, 2000);
 					c = WordCloudVisualisation.getClouds().get(i);
-					
-				}
-				else
-				{
+
+				} else {
 					win.setSize(1000, 4000);
 					c = WordCloudVisualisation.getClouds().get(i);
 					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-					name+=" IDF";
+					name += " IDF";
 				}
 
 				ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -341,15 +334,13 @@ public class WordCloudVis extends ViewPart {
 
 				WordCloudUtil.drawWordCloud(comp, c);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		 
-		
 
 		/*
 		 * When you will click on this button you will rename each block with
@@ -500,31 +491,30 @@ public class WordCloudVis extends ViewPart {
 		});
 
 		tabFolder.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				int ind = ((TabFolder)(e.getSource())).getSelectionIndex();
+				int ind = ((TabFolder) (e.getSource())).getSelectionIndex();
 				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
 				WordCloudVis.getSingleton().getList().removeAll();
 				Cloud c = WordCloudVisualisation.getClouds().get(i);
-				if(ind == 1)
+				if (ind == 1)
 					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-				for(Tag t : c.tags())
-					WordCloudVis.getSingleton().getList().add(t.getName()+" - "+t.getScore());
+				for (Tag t : c.tags())
+					WordCloudVis.getSingleton().getList().add(t.getName() + " - " + t.getScore());
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		if (AdaptedModelManager.getAdaptedModel() == null)
 			return;
 
-		
 		for (Block b : AdaptedModelManager.getAdaptedModel().getOwnedBlocks())
 			combo.add(b.getName());
 

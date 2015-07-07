@@ -18,24 +18,26 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Adapted Artefact</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Adapted Artefact</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.but4reuse.adaptedmodel.impl.AdaptedArtefactImpl#getArtefact <em>Artefact</em>}</li>
- *   <li>{@link org.but4reuse.adaptedmodel.impl.AdaptedArtefactImpl#getOwnedElementWrappers <em>Owned Element Wrappers</em>}</li>
+ * <li>{@link org.but4reuse.adaptedmodel.impl.AdaptedArtefactImpl#getArtefact
+ * <em>Artefact</em>}</li>
+ * <li>
+ * {@link org.but4reuse.adaptedmodel.impl.AdaptedArtefactImpl#getOwnedElementWrappers
+ * <em>Owned Element Wrappers</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements AdaptedArtefact {
 	/**
-	 * The cached value of the '{@link #getArtefact() <em>Artefact</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getArtefact() <em>Artefact</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getArtefact()
 	 * @generated
 	 * @ordered
@@ -43,9 +45,10 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	protected Artefact artefact;
 
 	/**
-	 * The cached value of the '{@link #getOwnedElementWrappers() <em>Owned Element Wrappers</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getOwnedElementWrappers()
+	 * <em>Owned Element Wrappers</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getOwnedElementWrappers()
 	 * @generated
 	 * @ordered
@@ -53,8 +56,8 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	protected EList<ElementWrapper> ownedElementWrappers;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected AdaptedArtefactImpl() {
@@ -62,8 +65,8 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -72,25 +75,26 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Artefact getArtefact() {
 		if (artefact != null && artefact.eIsProxy()) {
-			InternalEObject oldArtefact = (InternalEObject)artefact;
-			artefact = (Artefact)eResolveProxy(oldArtefact);
+			InternalEObject oldArtefact = (InternalEObject) artefact;
+			artefact = (Artefact) eResolveProxy(oldArtefact);
 			if (artefact != oldArtefact) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT, oldArtefact, artefact));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT, oldArtefact, artefact));
 			}
 		}
 		return artefact;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Artefact basicGetArtefact() {
@@ -98,112 +102,115 @@ public class AdaptedArtefactImpl extends MinimalEObjectImpl.Container implements
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setArtefact(Artefact newArtefact) {
 		Artefact oldArtefact = artefact;
 		artefact = newArtefact;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT, oldArtefact, artefact));
+			eNotify(new ENotificationImpl(this, Notification.SET, AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT,
+					oldArtefact, artefact));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<ElementWrapper> getOwnedElementWrappers() {
 		if (ownedElementWrappers == null) {
-			ownedElementWrappers = new EObjectContainmentEList<ElementWrapper>(ElementWrapper.class, this, AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS);
+			ownedElementWrappers = new EObjectContainmentEList<ElementWrapper>(ElementWrapper.class, this,
+					AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS);
 		}
 		return ownedElementWrappers;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				return ((InternalEList<?>)getOwnedElementWrappers()).basicRemove(otherEnd, msgs);
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			return ((InternalEList<?>) getOwnedElementWrappers()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
-				if (resolve) return getArtefact();
-				return basicGetArtefact();
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				return getOwnedElementWrappers();
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
+			if (resolve)
+				return getArtefact();
+			return basicGetArtefact();
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			return getOwnedElementWrappers();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
-				setArtefact((Artefact)newValue);
-				return;
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				getOwnedElementWrappers().clear();
-				getOwnedElementWrappers().addAll((Collection<? extends ElementWrapper>)newValue);
-				return;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
+			setArtefact((Artefact) newValue);
+			return;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			getOwnedElementWrappers().clear();
+			getOwnedElementWrappers().addAll((Collection<? extends ElementWrapper>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
-				setArtefact((Artefact)null);
-				return;
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				getOwnedElementWrappers().clear();
-				return;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
+			setArtefact((Artefact) null);
+			return;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			getOwnedElementWrappers().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
-				return artefact != null;
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				return ownedElementWrappers != null && !ownedElementWrappers.isEmpty();
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__ARTEFACT:
+			return artefact != null;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			return ownedElementWrappers != null && !ownedElementWrappers.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //AdaptedArtefactImpl
+} // AdaptedArtefactImpl

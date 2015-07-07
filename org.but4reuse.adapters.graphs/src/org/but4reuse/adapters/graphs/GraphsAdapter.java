@@ -64,7 +64,7 @@ public class GraphsAdapter implements IAdapter {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (FileUtils.isExtension(file, "gml")){
+		} else if (FileUtils.isExtension(file, "gml")) {
 			GMLReader reader = new GMLReader(graph);
 			InputStream is;
 			try {

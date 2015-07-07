@@ -14,6 +14,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * Block creation helper
+ * 
  * @author jabier.martinez
  */
 public class BlockCreationHelper {
@@ -21,13 +22,14 @@ public class BlockCreationHelper {
 	public static final String BLOCKCREATION_EXTENSIONPOINT = "org.but4reuse.blockcreation";
 
 	private static List<IBlockCreationAlgorithm> cache_blockcreationalgorithms;
-	
+
 	/**
 	 * Get all the registered block creation algorithms
+	 * 
 	 * @return
 	 */
 	public static List<IBlockCreationAlgorithm> getAllBlockCreationAlgorithms() {
-		if(cache_blockcreationalgorithms!=null){
+		if (cache_blockcreationalgorithms != null) {
 			return cache_blockcreationalgorithms;
 		}
 		List<IBlockCreationAlgorithm> blockCreationAlgorithms = new ArrayList<IBlockCreationAlgorithm>();
@@ -35,7 +37,8 @@ public class BlockCreationHelper {
 				BLOCKCREATION_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				blockCreationAlgorithms.add((IBlockCreationAlgorithm) adapterExtensionPoint.createExecutableExtension("class"));
+				blockCreationAlgorithms.add((IBlockCreationAlgorithm) adapterExtensionPoint
+						.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -44,8 +47,9 @@ public class BlockCreationHelper {
 		return blockCreationAlgorithms;
 	}
 
-	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle().getSymbolicName());
-	
+	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
+			.getSymbolicName());
+
 	public static IPreferenceStore getPreferenceStore() {
 		return Activator.getDefault().getPreferenceStore();
 	}
@@ -55,8 +59,9 @@ public class BlockCreationHelper {
 				BLOCKCREATION_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				IBlockCreationAlgorithm oneAlgo = (IBlockCreationAlgorithm) adapterExtensionPoint.createExecutableExtension("class");
-				if(oneAlgo.getClass().equals(algo.getClass())){
+				IBlockCreationAlgorithm oneAlgo = (IBlockCreationAlgorithm) adapterExtensionPoint
+						.createExecutableExtension("class");
+				if (oneAlgo.getClass().equals(algo.getClass())) {
 					String name = adapterExtensionPoint.getAttribute("name");
 					return name;
 				}
@@ -69,8 +74,8 @@ public class BlockCreationHelper {
 	}
 
 	public static IBlockCreationAlgorithm getSelectedBlockCreation() {
-		for(IBlockCreationAlgorithm algo : getAllBlockCreationAlgorithms()){
-			if(isAlgorithmSelected(algo)){
+		for (IBlockCreationAlgorithm algo : getAllBlockCreationAlgorithms()) {
+			if (isAlgorithmSelected(algo)) {
 				return algo;
 			}
 		}
@@ -82,5 +87,5 @@ public class BlockCreationHelper {
 		IPreferenceStore prefs = getPreferenceStore();
 		return prefs.getBoolean(algoName);
 	}
-	
+
 }

@@ -80,14 +80,13 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords()
-	{
-		StringTokenizer tk = new StringTokenizer(line," ²&~\"#'{}()[]-|`_\\^°,.;/§");
+	public ArrayList<String> getWords() {
+		StringTokenizer tk = new StringTokenizer(line, " ²&~\"#'{}()[]-|`_\\^°,.;/§");
 		ArrayList<String> words = new ArrayList<String>();
-		
-		while(tk.hasMoreTokens())
+
+		while (tk.hasMoreTokens())
 			words.add(tk.nextToken());
-		
+
 		return words;
 	}
 }

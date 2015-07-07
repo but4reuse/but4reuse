@@ -55,8 +55,7 @@ public class BodyElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords()
-	{
+	public ArrayList<String> getWords() {
 		return new ArrayList<String>();
 	}
 }

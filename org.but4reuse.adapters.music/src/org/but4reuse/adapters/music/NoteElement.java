@@ -36,7 +36,7 @@ public class NoteElement extends AbstractElement {
 						&& another.note.getDurationRelativeToMeasure() == note.getDurationRelativeToMeasure()
 						&& another.note.getPitch().equals(note.getPitch())
 						&& another.note.getAccidental().equals(note.getAccidental())
-						&& another.note.isGrace()==note.isGrace()) {
+						&& another.note.isGrace() == note.isGrace()) {
 					if (another.note.isRest()) {
 						// This is enough for two silences
 						return 1;
@@ -60,10 +60,9 @@ public class NoteElement extends AbstractElement {
 	public String getText() {
 		return note.toString();
 	}
-	
+
 	@Override
-	public ArrayList<String> getWords()
-	{
+	public ArrayList<String> getWords() {
 		return new ArrayList<String>();
 	}
 

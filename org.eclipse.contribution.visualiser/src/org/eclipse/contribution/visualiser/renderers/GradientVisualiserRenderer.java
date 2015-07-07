@@ -24,12 +24,12 @@ public class GradientVisualiserRenderer extends DefaultVisualiserRenderer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#paintColumn(org.eclipse.swt.graphics.GC,
-	 *      org.eclipse.contribution.visualiser.interfaces.IMember, int,
-	 *      boolean)
+	 * @see
+	 * org.eclipse.contribution.visualiser.views.VisualiserRendering#paintColumn
+	 * (org.eclipse.swt.graphics.GC,
+	 * org.eclipse.contribution.visualiser.interfaces.IMember, int, boolean)
 	 */
-	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth,
-			int colHeight, boolean affected) {
+	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth, int colHeight, boolean affected) {
 		if (affected) {
 			gc.setForeground(ColorConstants.white);
 			gc.setBackground(lightGrayGradientColor);
@@ -42,6 +42,5 @@ public class GradientVisualiserRenderer extends DefaultVisualiserRenderer {
 		gc.setForeground(outlineColor);
 		gc.drawRectangle(x, yoff, colWidth, colHeight);
 	}
-
 
 }

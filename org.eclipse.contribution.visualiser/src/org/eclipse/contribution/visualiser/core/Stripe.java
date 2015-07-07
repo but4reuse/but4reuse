@@ -55,10 +55,10 @@ public class Stripe implements Comparable {
 	public int hashCode() {
 		// To obey the contract, return a hashcode that is a function of all the
 		// variables used in the equals method.
-		
-		int result = 17; 	// Begin with a non-zero number so that result is not
+
+		int result = 17; // Begin with a non-zero number so that result is not
 							// zero. (Value not important).
-		result = 37 * result + depth; 	// Multiply by 37 (value not relevant) to
+		result = 37 * result + depth; // Multiply by 37 (value not relevant) to
 										// increase possible range of hashcodes
 		result = 37 * result + offset;
 		result = 37 * result + stringifyKinds().hashCode();

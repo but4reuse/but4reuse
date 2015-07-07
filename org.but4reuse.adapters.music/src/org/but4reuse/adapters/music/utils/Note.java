@@ -143,7 +143,7 @@ public class Note {
 	public void setGrace(boolean grace) {
 		this.grace = grace;
 	}
-	
+
 	public String getAlter() {
 		return alter;
 	}
@@ -151,7 +151,7 @@ public class Note {
 	public void setAlter(String alter) {
 		this.alter = alter;
 	}
-	
+
 	public boolean isStaccato() {
 		return staccato;
 	}

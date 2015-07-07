@@ -5,6 +5,7 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleMarkupKind;
 
 /**
  * Feature Markup Kind
+ * 
  * @author jabier.martinez
  */
 public class FeatureMarkupKind extends SimpleMarkupKind {
@@ -22,6 +23,5 @@ public class FeatureMarkupKind extends SimpleMarkupKind {
 	public void setFeature(Feature feature) {
 		this.feature = feature;
 	}
-
 
 }

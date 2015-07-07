@@ -30,7 +30,7 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
 		BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-		
+
 		for (Object o : markupProvider.getAllMarkupKinds()) {
 			IMarkupKind kind = (IMarkupKind) o;
 			if (menu.getActive(kind)) {
@@ -39,26 +39,28 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 					BlockMarkupKind markupKind = (BlockMarkupKind) kind;
 					Block block = markupKind.getBlock();
 					StringBuilder sText = new StringBuilder();
-					for (BlockElement blockElement : block.getOwnedBlockElements()){
-						IElement element = (IElement)blockElement.getElementWrappers().get(0).getElement();
+					for (BlockElement blockElement : block.getOwnedBlockElements()) {
+						IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
 						sText.append(element.getText() + "\n");
 					}
-					
+
 					// Remove the last \n
 					if (sText.length() > 0) {
 						sText.setLength(sText.length() - 1);
 					}
-					
+
 					// Show
 					// TODO Show also the artefacts where the block is present
-					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(Display.getCurrent().getActiveShell(),
-							markupKind.getName(), block.getOwnedBlockElements().size() + " Elements", sText.toString());
+					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(Display
+							.getCurrent().getActiveShell(), markupKind.getName(), block.getOwnedBlockElements().size()
+							+ " Elements", sText.toString());
 					dialog.open();
-					if(dialog.name!=null && !dialog.name.equals(block.getName())){
+					if (dialog.name != null && !dialog.name.equals(block.getName())) {
 						block.setName(dialog.name);
-						AdaptedModel adaptedModel = (AdaptedModel)block.eContainer();
+						AdaptedModel adaptedModel = (AdaptedModel) block.eContainer();
 						// TODO feature model!
-						VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(), adaptedModel, null, new NullProgressMonitor());
+						VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(), adaptedModel,
+								null, new NullProgressMonitor());
 					}
 				}
 			}
@@ -74,6 +76,5 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 	public void init(IViewPart view) {
 		menu = (Menu) view;
 	}
-
 
 }

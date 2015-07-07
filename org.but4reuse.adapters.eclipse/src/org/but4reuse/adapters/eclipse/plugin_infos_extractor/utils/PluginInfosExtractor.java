@@ -88,7 +88,7 @@ public class PluginInfosExtractor {
 			Manifest manifest = new Manifest(ips);
 			fillPluginElementInfo(plugin, manifest);
 			ips.close();
-			if (plugin.getName()!=null && plugin.getName().contains("%")) {
+			if (plugin.getName() != null && plugin.getName().contains("%")) {
 				File localizationFile = new File(f, currentLocalization + ".properties");
 				if (localizationFile.exists()) {
 					Properties prop = new Properties();
@@ -126,7 +126,7 @@ public class PluginInfosExtractor {
 			File f = new File(jarFile);
 			JarFile jar = new JarFile(f);
 			fillPluginElementInfo(plugin, jar.getManifest());
-			if (plugin.getName()!=null && plugin.getName().contains("%")) {
+			if (plugin.getName() != null && plugin.getName().contains("%")) {
 				ZipEntry zipEntry = jar.getEntry(currentLocalization + ".properties");
 				if (zipEntry != null) {
 					Properties prop = new Properties();

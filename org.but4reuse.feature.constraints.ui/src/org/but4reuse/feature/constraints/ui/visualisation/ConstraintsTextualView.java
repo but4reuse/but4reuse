@@ -31,6 +31,7 @@ public class ConstraintsTextualView extends ViewPart {
 	}
 
 	@Override
-	public void setFocus() {}
+	public void setFocus() {
+	}
 
 }

@@ -5,6 +5,7 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleMarkupKind;
 
 /**
  * Block Markup Kind
+ * 
  * @author jabier.martinez
  */
 public class BlockMarkupKind extends SimpleMarkupKind {
@@ -18,8 +19,8 @@ public class BlockMarkupKind extends SimpleMarkupKind {
 	public void setBlock(Block block) {
 		this.block = block;
 	}
-	
-	public Block getBlock(){
+
+	public Block getBlock() {
 		return block;
 	}
 

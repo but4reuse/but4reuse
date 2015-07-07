@@ -37,8 +37,8 @@ public class WekaUtils {
 		Map<Block, Attribute> map = new HashMap<Block, Attribute>();
 		FastVector values = new FastVector(2);
 		// this order is important for the results in fast vectors
-        values.addElement("0");
-        values.addElement("1");
+		values.addElement("0");
+		values.addElement("1");
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Attribute a = new Attribute(block.getName(), values);
 			attributes.addElement(a);
@@ -70,6 +70,7 @@ public class WekaUtils {
 
 	/**
 	 * Save arff file
+	 * 
 	 * @param file
 	 * @param instances
 	 * @throws IOException

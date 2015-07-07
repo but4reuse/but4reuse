@@ -114,7 +114,7 @@ public abstract class FSTNodeElement extends AbstractElement {
 		// Check same name and type of all the ancestors
 		FSTNodeElement element1 = element_1;
 		FSTNodeElement element2 = element_2;
-		
+
 		while (element1.getParent() != null) {
 			element1 = element1.getParent();
 			element2 = element2.getParent();
@@ -133,29 +133,24 @@ public abstract class FSTNodeElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords()
-	{
+	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
-		System.out.println("Type : "+type);
-		System.out.println("Name : "+name+"\n");
-		
-		if( type.equalsIgnoreCase("MethodDecl")
-				|| type.equalsIgnoreCase("FieldDecl")
-					|| type.equalsIgnoreCase("ClassDeclaration")
-						|| type.equalsIgnoreCase("Func") )
-		{
-			
+		System.out.println("Type : " + type);
+		System.out.println("Name : " + name + "\n");
+
+		if (type.equalsIgnoreCase("MethodDecl") || type.equalsIgnoreCase("FieldDecl")
+				|| type.equalsIgnoreCase("ClassDeclaration") || type.equalsIgnoreCase("Func")) {
+
 			String sub = name;
-			
-			if(sub.contains("("))
-			{
-				sub = sub.substring(0,sub.indexOf("("));
-				System.out.println("Sub -- "+sub);
+
+			if (sub.contains("(")) {
+				sub = sub.substring(0, sub.indexOf("("));
+				System.out.println("Sub -- " + sub);
 			}
-			
+
 			/*
-			 * We split names using word case.
-			 * For instance MyFunction will become My Function in two words.  
+			 * We split names using word case. For instance MyFunction will
+			 * become My Function in two words.
 			 */
 			for (String w : sub.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
 				words.add(w);

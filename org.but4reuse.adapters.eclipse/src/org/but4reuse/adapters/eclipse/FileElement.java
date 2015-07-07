@@ -57,10 +57,9 @@ public class FileElement extends AbstractElement {
 	}
 
 	@Override
-	public List <String> getWords()
-	{
+	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
-		
+
 		return words;
 	}
 }

@@ -2,7 +2,6 @@
  */
 package org.but4reuse.adaptedmodel.provider;
 
-
 import java.util.Collection;
 import java.util.List;
 
@@ -24,23 +23,18 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link org.but4reuse.adaptedmodel.AdaptedArtefact} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a
+ * {@link org.but4reuse.adaptedmodel.AdaptedArtefact} object. <!--
+ * begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
-public class AdaptedArtefactItemProvider
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class AdaptedArtefactItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This constructs an instance from a factory and a notifier. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdaptedArtefactItemProvider(AdapterFactory adapterFactory) {
@@ -48,9 +42,9 @@ public class AdaptedArtefactItemProvider
 	}
 
 	/**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the property descriptors for the adapted class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -65,55 +59,46 @@ public class AdaptedArtefactItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Artefact feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Artefact feature. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addArtefactPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AdaptedArtefact_artefact_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdaptedArtefact_artefact_feature", "_UI_AdaptedArtefact_type"),
-				 AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__ARTEFACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_AdaptedArtefact_artefact_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_AdaptedArtefact_artefact_feature",
+						"_UI_AdaptedArtefact_type"), AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__ARTEFACT, true,
+				false, true, null, null, null));
 	}
 
 	/**
 	 * This adds a property descriptor for the Owned Element Wrappers feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected void addOwnedElementWrappersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AdaptedArtefact_ownedElementWrappers_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdaptedArtefact_ownedElementWrappers_feature", "_UI_AdaptedArtefact_type"),
-				 AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_AdaptedArtefact_ownedElementWrappers_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_AdaptedArtefact_ownedElementWrappers_feature",
+						"_UI_AdaptedArtefact_type"),
+				AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS, true, false, true, null, null,
+				null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This specifies how to implement {@link #getChildren} and is used to
+	 * deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand},
+	 * {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in
+	 * {@link #createCommand}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -126,22 +111,23 @@ public class AdaptedArtefactItemProvider
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
+		// Check the type of the specified child object and return the proper
+		// feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This returns AdaptedArtefact.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns AdaptedArtefact.gif. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -150,25 +136,26 @@ public class AdaptedArtefactItemProvider
 	}
 
 	/**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns the label text for the adapted class. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 * 
 	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String name = ((AdaptedArtefact)object).getArtefact().getName();
-		if(name!=null){
+		String name = ((AdaptedArtefact) object).getArtefact().getName();
+		if (name != null) {
 			return name;
 		}
 		return getString("_UI_AdaptedArtefact_type");
 	}
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to
+	 * update any cached children and by creating a viewer notification, which
+	 * it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -176,34 +163,33 @@ public class AdaptedArtefactItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AdaptedArtefact.class)) {
-			case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
+		case AdaptedModelPackage.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			return;
 		}
 		super.notifyChanged(notification);
 	}
 
 	/**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s
+	 * describing the children that can be created under this object. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add
-			(createChildParameter
-				(AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS,
-				 AdaptedModelFactory.eINSTANCE.createElementWrapper()));
+		newChildDescriptors.add(createChildParameter(
+				AdaptedModelPackage.Literals.ADAPTED_ARTEFACT__OWNED_ELEMENT_WRAPPERS,
+				AdaptedModelFactory.eINSTANCE.createElementWrapper()));
 	}
 
 	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Return the resource locator for this item provider's resources. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override

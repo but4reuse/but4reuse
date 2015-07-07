@@ -87,8 +87,7 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords()
-	{
+	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
 		words.add(value);
 		return words;

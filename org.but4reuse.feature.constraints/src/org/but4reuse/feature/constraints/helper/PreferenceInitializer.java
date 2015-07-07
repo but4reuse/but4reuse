@@ -8,7 +8,8 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * Initialize Constraints discovery preferences by selecting only the default algorithm
+ * Initialize Constraints discovery preferences by selecting only the default
+ * algorithm
  * 
  * @author jabier.martinez
  * 

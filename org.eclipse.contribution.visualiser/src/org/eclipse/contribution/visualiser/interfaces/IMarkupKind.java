@@ -20,27 +20,31 @@ public interface IMarkupKind {
 
 	/**
 	 * Get the name to display
+	 * 
 	 * @return markup kind name
 	 */
 	public String getName();
-	
+
 	/**
-	 * Get the full name, which is displayed as the tooltip in the menu
-	 * Clients should return the result of getName if no full name exists
+	 * Get the full name, which is displayed as the tooltip in the menu Clients
+	 * should return the result of getName if no full name exists
+	 * 
 	 * @return
 	 */
 	public String getFullName();
-	
+
 	/**
 	 * Get the image to display
+	 * 
 	 * @return markup kind image
 	 */
 	public Image getIcon();
-	
+
 	/**
 	 * Show this kind in the Visualiser Menu?
+	 * 
 	 * @return true if kind should be shown
 	 */
 	public boolean showInMenu();
-	
+
 }

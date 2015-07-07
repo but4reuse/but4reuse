@@ -40,21 +40,22 @@ public class VisualiserImages {
 
 	/**
 	 * Get the URL for an icon file
+	 * 
 	 * @param name
 	 * @return
 	 * @throws MalformedURLException
 	 */
 	private static URL makeIconFileURL(String name) throws MalformedURLException {
 		if (iconBaseURL == null) {
-			String pathSuffix= "icons/"; //$NON-NLS-1$ 
-			iconBaseURL= new URL(VisualiserPlugin.getDefault().getBundle().getEntry("/"), pathSuffix); //$NON-NLS-1$
-		}			
+			String pathSuffix = "icons/"; //$NON-NLS-1$ 
+			iconBaseURL = new URL(VisualiserPlugin.getDefault().getBundle().getEntry("/"), pathSuffix); //$NON-NLS-1$
+		}
 		return new URL(iconBaseURL, name);
-	}	
-
+	}
 
 	/**
 	 * Create an image with the given name in the icons/cme directory.
+	 * 
 	 * @param name
 	 * @return the ImageDescriptor created
 	 */
