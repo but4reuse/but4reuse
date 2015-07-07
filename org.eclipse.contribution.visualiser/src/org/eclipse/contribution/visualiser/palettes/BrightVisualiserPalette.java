@@ -31,16 +31,16 @@ public class BrightVisualiserPalette extends DefaultVisualiserPalette {
 
 	protected static RGB brightYellow = new RGB(244, 241, 22);
 
-	private static RGB[] rgbList = new RGB[] { brightBlue, brightGreen,
-			brightPurple, brightPink, brightOrange, brightCyan, brightYellow,
+	private static RGB[] rgbList = new RGB[] { brightBlue, brightGreen, brightPurple, brightPink, brightOrange,
+			brightCyan, brightYellow,
 			// now use some dark but high-contrast colours from default palette
-			red5, green5, cyan5, blue5, purple5, orange5, swamp5, mint5,
-			lightblue5, indigo5, pink5 };
+			red5, green5, cyan5, blue5, purple5, orange5, swamp5, mint5, lightblue5, indigo5, pink5 };
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserPalette#getRGBValues()
+	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserPalette#
+	 * getRGBValues()
 	 */
 	public RGB[] getRGBValues() {
 		return rgbList;

@@ -75,10 +75,11 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 					// check predefined
 					List<IAdapter> defaultAdapters = null;
 					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
-					if(artefactModel instanceof ArtefactModel){
-						defaultAdapters = AdaptersHelper.getAdaptersByIds(((ArtefactModel)artefactModel).getAdapters());
+					if (artefactModel instanceof ArtefactModel) {
+						defaultAdapters = AdaptersHelper
+								.getAdaptersByIds(((ArtefactModel) artefactModel).getAdapters());
 					}
-					
+
 					// Adapter selection by user
 					adap = AdaptersSelectionDialog.show("Create Graph Visualisation", artefact, defaultAdapters);
 
@@ -97,16 +98,16 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									AdaptedArtefact adaptedArtefact = AdaptedModelHelper.adapt(artefact, adap, monitor);
 									AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 									adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
-									
+
 									Block fakeBlock = AdaptedModelFactory.eINSTANCE.createBlock();
 									fakeBlock.setName("GraphBlock");
-									for(ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()){
+									for (ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()) {
 										BlockElement blockElement = AdaptedModelFactory.eINSTANCE.createBlockElement();
 										blockElement.getElementWrappers().add(ew);
 										fakeBlock.getOwnedBlockElements().add(blockElement);
 									}
 									adaptedModel.getOwnedBlocks().add(fakeBlock);
-									
+
 									// Create the graph
 									Graph graph = GraphVisualisation.createElementsGraph(adaptedModel, monitor);
 
@@ -120,13 +121,13 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									} catch (Exception e) {
 										e.printStackTrace();
 									}
-									
+
 									// Refresh
 									IResource iResource = WorkbenchUtils.getIResourceFromURI(graphURI);
-									if(iResource!=null){
+									if (iResource != null) {
 										WorkbenchUtils.refreshIResource(iResource);
 									}
-									
+
 									monitor.worked(1);
 									monitor.done();
 								}

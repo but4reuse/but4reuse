@@ -6,14 +6,15 @@ import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 
 /**
  * Element Stripe
+ * 
  * @author jabier.martinez
  */
 public class ElementStripe extends Stripe {
 
 	private IElement element;
-	
+
 	public ElementStripe(IMarkupKind blockKind, int i, int j) {
-		super(blockKind,i,j);
+		super(blockKind, i, j);
 	}
 
 	@Override

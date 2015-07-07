@@ -39,39 +39,42 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 	FeatureList featureList;
 	List<IAdapter> adapters;
 	ArtefactModel artefactModel;
-	
+
 	@Override
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
 			Object featureListObject = ((IStructuredSelection) selection).getFirstElement();
 			if (featureListObject instanceof FeatureList) {
 				featureList = ((FeatureList) featureListObject);
-				
+
 				artefactModel = FeatureListHelper.getArtefactModel(featureList);
-				
+
 				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
-				
+
 				// Adapter selection by user
-				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters );
+				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters);
 
 				if (!adapters.isEmpty()) {
 					// Launch Progress dialog
 					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
 							.getActiveShell());
-					
+
 					try {
 						progressDialog.run(true, true, new IRunnableWithProgress() {
 							@Override
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
 
-								// Adapting each active artefact + calculating blocks + constraints discovery + feature location + prepare visualisations
-								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1 + VisualisationsHelper.getSelectedVisualisations().size();
+								// Adapting each active artefact + calculating
+								// blocks + constraints discovery + feature
+								// location + prepare visualisations
+								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1
+										+ VisualisationsHelper.getSelectedVisualisations().size();
 								monitor.beginTask("Feature Identification", totalWork);
-								
+
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
 								AdaptedModelManager.setFeatureList(featureList);
-								
+
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
@@ -79,7 +82,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
-								
+
 								monitor.subTask("Constraints discovery");
 								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
 										.getSelectedConstraintsDiscoveryAlgorithms();
@@ -87,7 +90,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								for (IConstraintsDiscovery constraintsDiscovery : constraintsDiscoveryAlgorithms) {
 									List<IConstraint> discovered = constraintsDiscovery.discover(null, adaptedModel,
 											null, monitor);
-									if (constraints.isEmpty()){
+									if (constraints.isEmpty()) {
 										constraints.addAll(discovered);
 									} else {
 										// Only add the ones that are not
@@ -101,7 +104,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 													break;
 												}
 											}
-											if(!found){
+											if (!found) {
 												toBeAdded.add(d);
 											}
 										}
@@ -110,15 +113,16 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								}
 								adaptedModel.setConstraints(constraints);
 								monitor.worked(1);
-								
+
 								monitor.subTask("Feature location");
-								IFeatureLocation featureLocationAlgorithm = FeatureLocationHelper.getSelectedFeatureLocation();
+								IFeatureLocation featureLocationAlgorithm = FeatureLocationHelper
+										.getSelectedFeatureLocation();
 								featureLocationAlgorithm.locateFeatures(featureList, adaptedModel, monitor);
 								monitor.worked(1);
-								
+
 								monitor.subTask("Preparing visualisations");
 								VisualisationsHelper.notifyVisualisations(featureList, adaptedModel, null, monitor);
-								
+
 								monitor.worked(1);
 								monitor.done();
 							}
@@ -127,7 +131,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 						e.printStackTrace();
 					}
 				}
-				
+
 			}
 		}
 	}

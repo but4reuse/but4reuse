@@ -1,6 +1,8 @@
 package org.but4reuse.adapters.csv;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -84,4 +86,10 @@ public class CellElement extends AbstractElement implements IMarkerElement {
 		return column;
 	}
 
+	@Override
+	public ArrayList<String> getWords() {
+		ArrayList<String> words = new ArrayList<String>();
+		words.add(value);
+		return words;
+	}
 }

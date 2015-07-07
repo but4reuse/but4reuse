@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * that a Block will have only one BlockElement that will reference to the
  * similar Elements from the Artefacts. This way we have an algorithm that
  * provides finer-granularity than the IntersectionsBlockCreationAlgorithm
+ * 
  * @author jabier.martinez
  */
 public class SimilarElementsBlocksCreationAlgorithm implements IBlockCreationAlgorithm {

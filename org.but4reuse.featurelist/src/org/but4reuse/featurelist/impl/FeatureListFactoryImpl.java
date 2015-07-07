@@ -13,35 +13,35 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class FeatureListFactoryImpl extends EFactoryImpl implements FeatureListFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static FeatureListFactory init() {
 		try {
-			FeatureListFactory theFeatureListFactory = (FeatureListFactory)EPackage.Registry.INSTANCE.getEFactory(FeatureListPackage.eNS_URI);
+			FeatureListFactory theFeatureListFactory = (FeatureListFactory) EPackage.Registry.INSTANCE
+					.getEFactory(FeatureListPackage.eNS_URI);
 			if (theFeatureListFactory != null) {
 				return theFeatureListFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new FeatureListFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FeatureListFactoryImpl() {
@@ -49,23 +49,25 @@ public class FeatureListFactoryImpl extends EFactoryImpl implements FeatureListF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case FeatureListPackage.FEATURE_LIST: return createFeatureList();
-			case FeatureListPackage.FEATURE: return createFeature();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case FeatureListPackage.FEATURE_LIST:
+			return createFeatureList();
+		case FeatureListPackage.FEATURE:
+			return createFeature();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FeatureList createFeatureList() {
@@ -74,8 +76,8 @@ public class FeatureListFactoryImpl extends EFactoryImpl implements FeatureListF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Feature createFeature() {
@@ -84,17 +86,17 @@ public class FeatureListFactoryImpl extends EFactoryImpl implements FeatureListF
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public FeatureListPackage getFeatureListPackage() {
-		return (FeatureListPackage)getEPackage();
+		return (FeatureListPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -103,4 +105,4 @@ public class FeatureListFactoryImpl extends EFactoryImpl implements FeatureListF
 		return FeatureListPackage.eINSTANCE;
 	}
 
-} //FeatureListFactoryImpl
+} // FeatureListFactoryImpl

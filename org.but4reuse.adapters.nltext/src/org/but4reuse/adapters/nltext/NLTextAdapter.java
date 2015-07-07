@@ -13,8 +13,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * NLText Adapter
+ * 
  * @author jabier.martinez
- *
+ * 
  */
 public class NLTextAdapter implements IAdapter {
 

@@ -20,25 +20,28 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Block</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Block</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getOwnedBlockElements <em>Owned Block Elements</em>}</li>
- *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getCorrespondingFeatures <em>Corresponding Features</em>}</li>
- *   <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getOwnedBlockElements
+ * <em>Owned Block Elements</em>}</li>
+ * <li>
+ * {@link org.but4reuse.adaptedmodel.impl.BlockImpl#getCorrespondingFeatures
+ * <em>Corresponding Features</em>}</li>
+ * <li>{@link org.but4reuse.adaptedmodel.impl.BlockImpl#getName <em>Name</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	/**
-	 * The cached value of the '{@link #getOwnedBlockElements() <em>Owned Block Elements</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getOwnedBlockElements()
+	 * <em>Owned Block Elements</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getOwnedBlockElements()
 	 * @generated
 	 * @ordered
@@ -46,9 +49,10 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	protected EList<BlockElement> ownedBlockElements;
 
 	/**
-	 * The cached value of the '{@link #getCorrespondingFeatures() <em>Corresponding Features</em>}' reference list.
-	 * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getCorrespondingFeatures()
+	 * <em>Corresponding Features</em>}' reference list. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * 
 	 * @see #getCorrespondingFeatures()
 	 * @generated
 	 * @ordered
@@ -57,8 +61,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -67,8 +71,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -76,8 +80,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected BlockImpl() {
@@ -85,8 +89,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -95,32 +99,34 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<BlockElement> getOwnedBlockElements() {
 		if (ownedBlockElements == null) {
-			ownedBlockElements = new EObjectContainmentEList<BlockElement>(BlockElement.class, this, AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS);
+			ownedBlockElements = new EObjectContainmentEList<BlockElement>(BlockElement.class, this,
+					AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS);
 		}
 		return ownedBlockElements;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public EList<Feature> getCorrespondingFeatures() {
 		if (correspondingFeatures == null) {
-			correspondingFeatures = new EObjectResolvingEList<Feature>(Feature.class, this, AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES);
+			correspondingFeatures = new EObjectResolvingEList<Feature>(Feature.class, this,
+					AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES);
 		}
 		return correspondingFeatures;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -128,8 +134,8 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -140,108 +146,109 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
-				return ((InternalEList<?>)getOwnedBlockElements()).basicRemove(otherEnd, msgs);
+		case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
+			return ((InternalEList<?>) getOwnedBlockElements()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
-				return getOwnedBlockElements();
-			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
-				return getCorrespondingFeatures();
-			case AdaptedModelPackage.BLOCK__NAME:
-				return getName();
+		case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
+			return getOwnedBlockElements();
+		case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
+			return getCorrespondingFeatures();
+		case AdaptedModelPackage.BLOCK__NAME:
+			return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
-				getOwnedBlockElements().clear();
-				getOwnedBlockElements().addAll((Collection<? extends BlockElement>)newValue);
-				return;
-			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
-				getCorrespondingFeatures().clear();
-				getCorrespondingFeatures().addAll((Collection<? extends Feature>)newValue);
-				return;
-			case AdaptedModelPackage.BLOCK__NAME:
-				setName((String)newValue);
-				return;
+		case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
+			getOwnedBlockElements().clear();
+			getOwnedBlockElements().addAll((Collection<? extends BlockElement>) newValue);
+			return;
+		case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
+			getCorrespondingFeatures().clear();
+			getCorrespondingFeatures().addAll((Collection<? extends Feature>) newValue);
+			return;
+		case AdaptedModelPackage.BLOCK__NAME:
+			setName((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
-				getOwnedBlockElements().clear();
-				return;
-			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
-				getCorrespondingFeatures().clear();
-				return;
-			case AdaptedModelPackage.BLOCK__NAME:
-				setName(NAME_EDEFAULT);
-				return;
+		case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
+			getOwnedBlockElements().clear();
+			return;
+		case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
+			getCorrespondingFeatures().clear();
+			return;
+		case AdaptedModelPackage.BLOCK__NAME:
+			setName(NAME_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
-				return ownedBlockElements != null && !ownedBlockElements.isEmpty();
-			case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
-				return correspondingFeatures != null && !correspondingFeatures.isEmpty();
-			case AdaptedModelPackage.BLOCK__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case AdaptedModelPackage.BLOCK__OWNED_BLOCK_ELEMENTS:
+			return ownedBlockElements != null && !ownedBlockElements.isEmpty();
+		case AdaptedModelPackage.BLOCK__CORRESPONDING_FEATURES:
+			return correspondingFeatures != null && !correspondingFeatures.isEmpty();
+		case AdaptedModelPackage.BLOCK__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
@@ -250,4 +257,4 @@ public class BlockImpl extends MinimalEObjectImpl.Container implements Block {
 		return result.toString();
 	}
 
-} //BlockImpl
+} // BlockImpl

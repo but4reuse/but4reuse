@@ -41,17 +41,18 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * Dialog containing Visualiser preferences
- * Mostly copied from org.eclipse.jface.preference.PreferenceDialog
+ * Dialog containing Visualiser preferences Mostly copied from
+ * org.eclipse.jface.preference.PreferenceDialog
  */
-public class VisualiserPreferencesDialog extends Dialog implements IPreferencePageContainer{
+public class VisualiserPreferencesDialog extends Dialog implements IPreferencePageContainer {
 
 	public static final String PREF_DLG_TITLE_IMG = "visualiser_preference_dialog_title_image"; //$NON-NLS-1$
 	public static final String PREF_DLG_IMG_TITLE_ERROR = DLG_IMG_MESSAGE_ERROR; //$NON-NLS-1$
 
 	static {
 		ImageRegistry reg = JFaceResources.getImageRegistry();
-		reg.put(PREF_DLG_TITLE_IMG, ImageDescriptor.createFromFile(PreferenceDialog.class, "images/pref_dialog_title.gif")); //$NON-NLS-1$
+		reg.put(PREF_DLG_TITLE_IMG,
+				ImageDescriptor.createFromFile(PreferenceDialog.class, "images/pref_dialog_title.gif")); //$NON-NLS-1$
 	}
 	private Label titleImage;
 	private CLabel messageLabel;
@@ -65,32 +66,31 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 	private boolean showingError = false;
 	private VisualiserPreferencePage visPage;
 	private String errorMessage;
-	
+
 	/**
 	 * Default constructor
+	 * 
 	 * @param parentShell
 	 */
 	public VisualiserPreferencesDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
-	
 	/**
 	 * Override to set the title
 	 */
 	protected void configureShell(Shell shell) {
-	   super.configureShell(shell);
-	   shell.setText(VisualiserMessages.VisualiserPreferencePage_title);
+		super.configureShell(shell);
+		shell.setText(VisualiserMessages.VisualiserPreferencePage_title);
 	}
 
-	
 	/**
 	 * Create the contents of the dialog
 	 */
 	protected Control createDialogArea(Composite parent) {
 		GridData gd;
 		Composite composite = (Composite) super.createDialogArea(parent);
-		
+
 		// Build the title area and separator line
 		Composite titleComposite = new Composite(composite, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -102,7 +102,7 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		titleComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		createTitleArea(titleComposite);
-		
+
 		// Build the Page container
 		Composite pageContainer = createPageContainer(composite);
 		gd = new GridData(GridData.FILL_BOTH);
@@ -119,11 +119,11 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		return composite;
 	}
 
-
 	/**
 	 * Creates the dialog's title area.
-	 *
-	 * @param parent the SWT parent for the title area composite
+	 * 
+	 * @param parent
+	 *            the SWT parent for the title area composite
 	 * @return the created title area composite
 	 */
 	private Composite createTitleArea(Composite parent) {
@@ -147,9 +147,8 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		titleArea.setLayoutData(layoutData);
 		titleArea.setBackground(background);
 
-		RGB rgb = new RGB (171, 168, 165);
-		final Color borderColor =
-			new Color(titleArea.getDisplay(), rgb);
+		RGB rgb = new RGB(171, 168, 165);
+		final Color borderColor = new Color(titleArea.getDisplay(), rgb);
 
 		titleArea.addPaintListener(new PaintListener() {
 			public void paintControl(PaintEvent e) {
@@ -192,19 +191,17 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		return titleArea;
 	}
 
-
 	/**
-	 * Display the given error message. The currently displayed message
-	 * is saved and will be redisplayed when the error message is set
-	 * to <code>null</code>.
-	 *
-	 * @param newErrorMessage the errorMessage to display or <code>null</code>
+	 * Display the given error message. The currently displayed message is saved
+	 * and will be redisplayed when the error message is set to
+	 * <code>null</code>.
+	 * 
+	 * @param newErrorMessage
+	 *            the errorMessage to display or <code>null</code>
 	 */
 	public void setErrorMessage(String newErrorMessage) {
 		// Any change?
-		if (errorMessage == null
-			? newErrorMessage == null
-			: errorMessage.equals(newErrorMessage))
+		if (errorMessage == null ? newErrorMessage == null : errorMessage.equals(newErrorMessage))
 			return;
 
 		errorMessage = newErrorMessage;
@@ -214,14 +211,15 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 				showingError = false;
 				messageLabel.setBackground(normalMsgAreaBackground);
 				messageLabel.setImage(null);
-				titleImage.setImage(
-					JFaceResources.getImage(PREF_DLG_TITLE_IMG));
+				titleImage.setImage(JFaceResources.getImage(PREF_DLG_TITLE_IMG));
 			}
 
-			// avoid calling setMessage in case it is overridden to call setErrorMessage, 
+			// avoid calling setMessage in case it is overridden to call
+			// setErrorMessage,
 			// which would result in a recursive infinite loop
 			if (message == null)
-				//this should probably never happen since setMessage does this conversion....
+				// this should probably never happen since setMessage does this
+				// conversion....
 				message = ""; //$NON-NLS-1$
 			messageLabel.setText(message);
 			messageLabel.setImage(messageImage);
@@ -235,14 +233,11 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 
 				// lazy initialize the error background color and image
 				if (errorMsgAreaBackground == null) {
-					errorMsgAreaBackground =
-						JFaceColors.getErrorBackground(
-							messageLabel.getDisplay());
-					errorMsgImage =
-						JFaceResources.getImage(PREF_DLG_IMG_TITLE_ERROR);
+					errorMsgAreaBackground = JFaceColors.getErrorBackground(messageLabel.getDisplay());
+					errorMsgImage = JFaceResources.getImage(PREF_DLG_IMG_TITLE_ERROR);
 				}
 
-				// show the error	
+				// show the error
 				normalMsgAreaBackground = messageLabel.getBackground();
 				messageLabel.setBackground(errorMsgAreaBackground);
 				messageLabel.setImage(errorMsgImage);
@@ -252,7 +247,6 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		titleArea.layout(true);
 	}
 
-		
 	/**
 	 * Creates the inner page container.
 	 */
@@ -268,80 +262,78 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		return result;
 	}
 
-
 	/**
 	 * Get the preference store
+	 * 
 	 * @see org.eclipse.jface.preference.IPreferencePageContainer#getPreferenceStore()
 	 */
 	public IPreferenceStore getPreferenceStore() {
 		return VisualiserPlugin.getDefault().getPreferenceStore();
 	}
 
-	
 	/**
 	 * Update the enabled state of buttons in the page
+	 * 
 	 * @see org.eclipse.jface.preference.IPreferencePageContainer#updateButtons()
 	 */
 	public void updateButtons() {
 	}
-
 
 	/**
 	 * Set the message text. If the message line currently displays an error,
 	 * the message is stored and will be shown after a call to clearErrorMessage
 	 * <p>
 	 * Shortcut for <code>setMessage(newMessage, NONE)</code>
-	 * </p> 
+	 * </p>
 	 * 
-	 * @param newMessage the message, or <code>null</code> to clear
-	 *   the message
+	 * @param newMessage
+	 *            the message, or <code>null</code> to clear the message
 	 */
 	public void setMessage(String newMessage) {
 		setMessage(newMessage, IMessageProvider.NONE);
 	}
 
-
 	/**
-	 * Sets the message for this dialog with an indication of what type
-	 * of message it is.
+	 * Sets the message for this dialog with an indication of what type of
+	 * message it is.
 	 * <p>
-	 * The valid message types are one of <code>NONE</code>, 
+	 * The valid message types are one of <code>NONE</code>,
 	 * <code>INFORMATION</code>, <code>WARNING</code>, or <code>ERROR</code>.
 	 * </p>
 	 * <p>
-	 * Note that for backward compatibility, a message of type <code>ERROR</code> 
-	 * is different than an error message (set using <code>setErrorMessage</code>). 
-	 * An error message overrides the current message until the error message is 
-	 * cleared. This method replaces the current message and does not affect the 
-	 * error message.
+	 * Note that for backward compatibility, a message of type
+	 * <code>ERROR</code> is different than an error message (set using
+	 * <code>setErrorMessage</code>). An error message overrides the current
+	 * message until the error message is cleared. This method replaces the
+	 * current message and does not affect the error message.
 	 * </p>
-	 *
-	 * @param newMessage the message, or <code>null</code> to clear
-	 *   the message
-	 * @param newType the message type
+	 * 
+	 * @param newMessage
+	 *            the message, or <code>null</code> to clear the message
+	 * @param newType
+	 *            the message type
 	 */
 	public void setMessage(String newMessage, int newType) {
 		Image newImage = null;
 
 		if (newMessage != null) {
 			switch (newType) {
-				case IMessageProvider.NONE :
-					break;
-				case IMessageProvider.INFORMATION :
-					newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_INFO);
-					break;
-				case IMessageProvider.WARNING :
-					newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_WARNING);
-					break;
-				case IMessageProvider.ERROR :
-					newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_ERROR);
-					break;
+			case IMessageProvider.NONE:
+				break;
+			case IMessageProvider.INFORMATION:
+				newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_INFO);
+				break;
+			case IMessageProvider.WARNING:
+				newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_WARNING);
+				break;
+			case IMessageProvider.ERROR:
+				newImage = JFaceResources.getImage(DLG_IMG_MESSAGE_ERROR);
+				break;
 			}
 		}
 
 		showMessage(newMessage, newImage);
 	}
-
 
 	/**
 	 * Show the new message
@@ -364,9 +356,9 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		}
 	}
 
-
 	/**
 	 * Update the message
+	 * 
 	 * @see org.eclipse.jface.preference.IPreferencePageContainer#updateMessage()
 	 */
 	public void updateMessage() {
@@ -383,7 +375,7 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		else
 			messageLabel.setFont(JFaceResources.getDialogFont());
 
-		// Set the message and error message	
+		// Set the message and error message
 		if (pageMessage == null) {
 			setMessage(visPage.getTitle());
 		} else {
@@ -392,14 +384,14 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		setErrorMessage(pageErrorMessage);
 	}
 
-
 	/**
 	 * Update the title
+	 * 
 	 * @see org.eclipse.jface.preference.IPreferencePageContainer#updateTitle()
 	 */
-	public void updateTitle() {		
+	public void updateTitle() {
 	}
-	
+
 	/**
 	 * Disposes the preference page
 	 */
@@ -409,10 +401,10 @@ public class VisualiserPreferencesDialog extends Dialog implements IPreferencePa
 		}
 		return super.close();
 	}
-	
+
 	/**
-	 * Called when OK is pressed in the dialog.
-	 * Send OK to the visualiser prefernce page contained in this dialog
+	 * Called when OK is pressed in the dialog. Send OK to the visualiser
+	 * prefernce page contained in this dialog
 	 */
 	protected void okPressed() {
 		visPage.performOk();

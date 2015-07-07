@@ -63,7 +63,7 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 		if (javaSearchResult == null) {
 			return null;
 		}
-		
+
 		List cachedValue = (List) markupCache.get(member);
 		if (cachedValue != null) {
 			return cachedValue;
@@ -75,8 +75,8 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 
 		List stripeList = new ArrayList();
 		if (ProviderManager.getContentProvider() instanceof JDTSearchResultsContentProvider) {
-			IJavaProject jp = ((JDTSearchResultsContentProvider) ProviderManager
-					.getContentProvider()).getCurrentProject();
+			IJavaProject jp = ((JDTSearchResultsContentProvider) ProviderManager.getContentProvider())
+					.getCurrentProject();
 			if (jp != null) {
 				List list = getMarkupInfo(member);
 				if (list == null) {
@@ -99,14 +99,14 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 	}
 
 	/**
-	 * Returns a list of line numbers corresponding to the search results
-	 * for the given IMember
+	 * Returns a list of line numbers corresponding to the search results for
+	 * the given IMember
 	 * 
 	 * @param IMember
 	 * @return List of Integers
 	 */
 	private List getMarkupInfo(IMember member) {
-		
+
 		if (javaSearchResult == null) {
 			return null;
 		}
@@ -136,8 +136,7 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 			if (file != null && (file.getFullPath().equals(r.getFullPath()))) {
 				Match[] matches = javaSearchResult.computeContainedMatches(javaSearchResult, file);
 				for (int j = 0; j < matches.length; j++) {
-					int lineNumber = JDTUtils.getLineNumber(cu, matches[j]
-							.getOffset());
+					int lineNumber = JDTUtils.getLineNumber(cu, matches[j].getOffset());
 					lineNumbers.add(new Integer(lineNumber));
 				}
 			}
@@ -146,8 +145,8 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 	}
 
 	/**
-	 * Get all the markup kinds - which in this case is the label for the 
-	 * last run search (if it was a java search)
+	 * Get all the markup kinds - which in this case is the label for the last
+	 * run search (if it was a java search)
 	 * 
 	 * @return a Set of Strings
 	 */
@@ -161,7 +160,7 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 		if (kinds.size() > 0) {
 			return kinds;
 		}
-		return null;		
+		return null;
 	}
 
 	/**
@@ -176,8 +175,7 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 			if (member instanceof JDTMember) {
 				IJavaElement jEl = ((JDTMember) member).getResource();
 				if (jEl != null) {
-					JDTUtils
-							.openInEditor(jEl.getResource(), stripe.getOffset());
+					JDTUtils.openInEditor(jEl.getResource(), stripe.getOffset());
 				}
 			}
 			return false;
@@ -185,10 +183,9 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 		return true;
 	}
 
-
 	/**
-	 * Static inner class VisualiserPropertyListener which responds to 
-	 * changes in the Search View. 
+	 * Static inner class VisualiserPropertyListener which responds to changes
+	 * in the Search View.
 	 */
 	static class VisualiserPropertyListener implements IPropertyListener {
 
@@ -198,42 +195,44 @@ public class JDTSearchResultsMarkupProvider extends SimpleMarkupProvider {
 				ISearchResult searchResult = searchView.getCurrentSearchResult();
 				if (searchResult instanceof JavaSearchResult) {
 					isJavaSearch = true;
-					if (((JavaSearchResult)searchResult).equals(javaSearchResult)) {
+					if (((JavaSearchResult) searchResult).equals(javaSearchResult)) {
 					} else {
 						resetCache();
 					}
-					javaSearchResult = (JavaSearchResult)searchResult;
+					javaSearchResult = (JavaSearchResult) searchResult;
 				} else {
 					isJavaSearch = false;
 					javaSearchResult = null;
-					// need to refresh() visualiser here otherwise when use history
-					// to populate the search view with a search result which isn't 
-					// a java one, then takes quite a few clicks to populate the 
+					// need to refresh() visualiser here otherwise when use
+					// history
+					// to populate the search view with a search result which
+					// isn't
+					// a java one, then takes quite a few clicks to populate the
 					// visualiser
-					
+
 				}
 				VisualiserPlugin.refresh();
 			}
 		}
 	}
-	
+
 	/**
-	 * @return Returns whether the last run search is a 
-	 * JavaSearch or not.
+	 * @return Returns whether the last run search is a JavaSearch or not.
 	 */
 	public boolean isJavaSearch() {
 		return isJavaSearch;
 	}
-	
+
 	/**
-	 * Sets whether the search currently in the search results view
-	 * is a JavaSearch or not
+	 * Sets whether the search currently in the search results view is a
+	 * JavaSearch or not
 	 * 
 	 * @param isJavaSearch
 	 */
 	public void setJavaSearch(boolean isJavaSearch) {
 		JDTSearchResultsMarkupProvider.isJavaSearch = isJavaSearch;
 	}
+
 	/**
 	 * Sets the last run JavaSearchResult
 	 * 

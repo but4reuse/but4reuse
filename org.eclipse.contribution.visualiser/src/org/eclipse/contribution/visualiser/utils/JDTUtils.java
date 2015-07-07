@@ -30,25 +30,28 @@ public class JDTUtils {
 	/**
 	 * Open the resource in the editor and highlight the given line if greater
 	 * then zero.
-	 * @param res the resource
-	 * @param lineNumber the number of the line to be selected
+	 * 
+	 * @param res
+	 *            the resource
+	 * @param lineNumber
+	 *            the number of the line to be selected
 	 */
-	public static void openInEditor(IResource res, int lineNumber){
+	public static void openInEditor(IResource res, int lineNumber) {
 		try {
 			IMarker marker = res.createMarker(IMarker.MARKER);
-			if(lineNumber>=0){
+			if (lineNumber >= 0) {
 				marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
 			}
 			openInEditor(marker);
-			marker.delete();			
-		}
-		catch (CoreException coreEx) {
+			marker.delete();
+		} catch (CoreException coreEx) {
 			VisualiserPlugin.logException(coreEx);
 		}
-	}	
-	
+	}
+
 	/**
 	 * Open the editor at the location of the given marker.
+	 * 
 	 * @param marker
 	 */
 	public static void openInEditor(IMarker marker) {
@@ -59,28 +62,29 @@ public class JDTUtils {
 			VisualiserPlugin.logException(e);
 		}
 	}
-	
+
 	/**
 	 * Get the line number for the class declaration in the given IJavaElement,
-	 * which should be an ICompilationUnit.  If not found returns 0.
+	 * which should be an ICompilationUnit. If not found returns 0.
+	 * 
 	 * @param jElem
 	 * @return line number
 	 */
-	public static int getClassDeclLineNum(IJavaElement jElem){
+	public static int getClassDeclLineNum(IJavaElement jElem) {
 		if (jElem instanceof ICompilationUnit) {
 			try {
 				ICompilationUnit cUnit = (ICompilationUnit) jElem;
 				IType type = cUnit.findPrimaryType();
-				if(type != null) {
-					return getLineNumFromOffset(cUnit,type.getNameRange().getOffset());
+				if (type != null) {
+					return getLineNumFromOffset(cUnit, type.getNameRange().getOffset());
 				}
 			} catch (JavaModelException jme) {
 				jme.printStackTrace();
 			}
 		}
-		return 0;		
+		return 0;
 	}
-	
+
 	/**
 	 * Get the line number for the given offset in the given ICompilationUnit
 	 * 
@@ -89,19 +93,15 @@ public class JDTUtils {
 	 * 
 	 * @return int lineNumber
 	 */
-	private static int getLineNumFromOffset(ICompilationUnit cUnit, int offSet){
+	private static int getLineNumFromOffset(ICompilationUnit cUnit, int offSet) {
 		try {
 			String source = cUnit.getSource();
 			IType type = cUnit.findPrimaryType();
-			if(type != null) {
+			if (type != null) {
 				String sourcetodeclaration = source.substring(0, offSet);
 				int lines = 0;
 				char[] chars = new char[sourcetodeclaration.length()];
-				sourcetodeclaration.getChars(
-					0,
-					sourcetodeclaration.length(),
-					chars,
-					0);
+				sourcetodeclaration.getChars(0, sourcetodeclaration.length(), chars, 0);
 				for (int i = 0; i < chars.length; i++) {
 					if (chars[i] == '\n') {
 						lines++;
@@ -112,11 +112,11 @@ public class JDTUtils {
 		} catch (JavaModelException jme) {
 			jme.printStackTrace();
 		}
-		return 0;		
+		return 0;
 	}
 
 	public static int getLineNumber(ICompilationUnit cUnit, int offSet) {
 		return getLineNumFromOffset(cUnit, offSet);
 	}
-	
+
 }

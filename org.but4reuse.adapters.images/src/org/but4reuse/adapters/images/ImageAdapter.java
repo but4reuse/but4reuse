@@ -56,7 +56,7 @@ public class ImageAdapter implements IAdapter {
 					pixel.alpha = imageData.getAlpha(x, y);
 				}
 				// Only add if it is not completely transparent
-				if(pixel.alpha!=0){
+				if (pixel.alpha != 0) {
 					pixel.position = new Point(x, y);
 					// A pixel depends on its position
 					pixel.addDependency(new PositionDependencyObject(pixel.position));
@@ -77,33 +77,34 @@ public class ImageAdapter implements IAdapter {
 			// Create file if it does not exist
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
-			
+
 			// Calculate max width and max height
 			int maxWidth = -1;
 			int maxHeight = -1;
-			for(IElement element : elements){
-				if(element instanceof PixelElement){
+			for (IElement element : elements) {
+				if (element instanceof PixelElement) {
 					PixelElement pElement = (PixelElement) element;
-					if(maxWidth < pElement.position.x){
+					if (maxWidth < pElement.position.x) {
 						maxWidth = pElement.position.x;
 					}
-					if(maxHeight < pElement.position.y){
+					if (maxHeight < pElement.position.y) {
 						maxHeight = pElement.position.y;
 					}
 				}
 			}
-			
+
 			// Start creating the image
 			int IMAGE_DEPTH = 32;
-			ImageData imageData = ImageUtils.createEmptyDirectPaletteImageData(maxWidth + 1, maxHeight + 1, IMAGE_DEPTH);
-			for(IElement element : elements){
-				if(element instanceof PixelElement){
+			ImageData imageData = ImageUtils
+					.createEmptyDirectPaletteImageData(maxWidth + 1, maxHeight + 1, IMAGE_DEPTH);
+			for (IElement element : elements) {
+				if (element instanceof PixelElement) {
 					PixelElement pElement = (PixelElement) element;
 					imageData.setAlpha(pElement.position.x, pElement.position.y, pElement.alpha);
 					imageData.setPixel(pElement.position.x, pElement.position.y, pElement.color.hashCode());
 				}
 			}
-			
+
 			// Save it
 			ImageUtils.saveImageToFile(imageData, file.getAbsolutePath(), SWT.IMAGE_PNG);
 		} catch (Exception e) {

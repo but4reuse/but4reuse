@@ -114,14 +114,15 @@ public class EMFUtils {
 		options.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
 		options.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
 		// Do not throw anything if dangling references
-		// options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);		
+		// options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
+		// XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
 		try {
 			resource.save(options);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	/**
 	 * Save resource ignoring dangling
 	 * 
@@ -133,7 +134,7 @@ public class EMFUtils {
 		options.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
 		options.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
 		// Do not throw anything if dangling references
-		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);		
+		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
 		try {
 			resource.save(options);
 		} catch (IOException e) {

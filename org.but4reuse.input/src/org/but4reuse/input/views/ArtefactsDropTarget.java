@@ -10,13 +10,14 @@ import org.eclipse.ui.part.ResourceTransfer;
 
 /**
  * Artefacts Drop Target
+ * 
  * @author jabier.martinez
  */
 public class ArtefactsDropTarget {
 
 	static int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT;
 	ArtefactsDropTargetEffect dropTargetEffect;
-			
+
 	public ArtefactsDropTarget(Control control) {
 		DropTarget dropTarget = new DropTarget(control, operations);
 		final TextTransfer textTransfer = TextTransfer.getInstance();

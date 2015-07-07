@@ -27,7 +27,6 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-
 /**
  * The main plugin class for the Visualiser plugin.
  */
@@ -38,12 +37,11 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	public static int LOGLEVEL = 0;
 
 	public static Visualiser visualiser;
-	
+
 	public static Menu menu;
-	
+
 	private static VisualiserPlugin plugin;
-	
-	
+
 	/**
 	 * 3.0 compatible Plugin constructor
 	 */
@@ -53,7 +51,8 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Getter method for the provider manager 
+	 * Getter method for the provider manager
+	 * 
 	 * @return the provider manager
 	 */
 	public static ProviderManager getProviderManager() {
@@ -65,20 +64,20 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	 */
 	public static void refresh() {
 		if (visualiser != null && visualiser.getSite() != null) {
-			if(visualiser.getSite().getPage().isPartVisible(visualiser)) {		
+			if (visualiser.getSite().getPage().isPartVisible(visualiser)) {
 				VisualiserUpdateJob.getInstance().schedule();
 			} else {
 				visualiser.setNeedsUpdating();
 			}
 		}
 	}
-		 
+
 	/**
 	 * Gets the active workbench window
 	 */
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		return getDefault().getWorkbench().getActiveWorkbenchWindow();
-	}	
+	}
 
 	/**
 	 * Returns the shared instance as VisualiserPlugin is a singleton.
@@ -86,7 +85,6 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	public static VisualiserPlugin getDefault() {
 		return plugin;
 	}
-
 
 	/**
 	 * Returns the workspace instance.
@@ -105,11 +103,10 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 		VisualiserPlugin.visualiser.setVisContentProvider(ProviderManager.getContentProvider());
 		VisualiserPlugin.visualiser.setVisMarkupProvider(ProviderManager.getMarkupProvider());
 		ProviderManager.getContentProvider().activate();
-		if(VisualiserPlugin.menu != null) {
+		if (VisualiserPlugin.menu != null) {
 			VisualiserPlugin.refresh();
 		}
 	}
-
 
 	/**
 	 * Remove the Visualiser view
@@ -117,7 +114,6 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	public void removeVisualiser() {
 		VisualiserPlugin.visualiser = null;
 	}
-
 
 	/**
 	 * Set the Visualiser Menu view
@@ -128,11 +124,10 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 		// and activate the markup provider
 		VisualiserPlugin.menu.setVisMarkupProvider(ProviderManager.getMarkupProvider());
 		ProviderManager.getMarkupProvider().activate();
-		if(VisualiserPlugin.visualiser != null) {
+		if (VisualiserPlugin.visualiser != null) {
 			VisualiserPlugin.refresh();
 		}
 	}
-
 
 	/**
 	 * Remove the Visualiser Menu view
@@ -141,21 +136,24 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 		VisualiserPlugin.menu = null;
 	}
 
-
 	/**
-	 * Log the given message at the given log level. 
+	 * Log the given message at the given log level.
+	 * 
 	 * @param logLevel
 	 * @param message
 	 */
 	public static void log(int logLevel, String message) {
-		if (logLevel<=LOGLEVEL) {
-		    System.err.println(message);		
-			VisualiserPlugin.getDefault().getLog().log(new Status(Status.INFO, "org.eclipse.contribution.visualiser", 0, message, null)); //$NON-NLS-1$
+		if (logLevel <= LOGLEVEL) {
+			System.err.println(message);
+			VisualiserPlugin.getDefault().getLog()
+					.log(new Status(Status.INFO, "org.eclipse.contribution.visualiser", 0, message, null)); //$NON-NLS-1$
 		}
 	}
 
 	/**
-	 * Write the given exception or error to the log file (without displaying a dialog)
+	 * Write the given exception or error to the log file (without displaying a
+	 * dialog)
+	 * 
 	 * @param e
 	 */
 	public static void logException(Throwable e) {
@@ -173,8 +171,8 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * This method is called upon plug-in activation - process any 
-	 * defined extensions and add the resource change listener.
+	 * This method is called upon plug-in activation - process any defined
+	 * extensions and add the resource change listener.
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -191,31 +189,31 @@ public class VisualiserPlugin extends AbstractUIPlugin {
 }
 
 /*
- *  Job that updates the Visualiser
- * This update job includes collecting the visualization data, wheras
- * the two redraw jobs in the Visualiser and Menu classes only cover the redrawing.
+ * Job that updates the Visualiser This update job includes collecting the
+ * visualization data, wheras the two redraw jobs in the Visualiser and Menu
+ * classes only cover the redrawing.
  */
 class VisualiserUpdateJob extends Job {
-		 private static VisualiserUpdateJob theJob;
-		 
-		 private VisualiserUpdateJob(String name){
-		 		 super (name);
-		 }
-		 
-		 public static VisualiserUpdateJob getInstance() {
-		 		 if(theJob == null) {
-		 		 		 theJob = new VisualiserUpdateJob(VisualiserMessages.Jobs_VisualiserUpdate);
-		 		 		 theJob.setUser(true);
-		 		 		 theJob.setPriority(Job.INTERACTIVE);
-		 		 }
-		 		 return theJob;
-		 }
-		 
-		 public IStatus run(IProgressMonitor monitor) {
-	 		 if (VisualiserPlugin.visualiser!=null) {
-	 		 	VisualiserPlugin.visualiser.updateDisplay(true, monitor);
-	 		 }
-	 		 return Status.OK_STATUS;
-		 }
-		 
+	private static VisualiserUpdateJob theJob;
+
+	private VisualiserUpdateJob(String name) {
+		super(name);
+	}
+
+	public static VisualiserUpdateJob getInstance() {
+		if (theJob == null) {
+			theJob = new VisualiserUpdateJob(VisualiserMessages.Jobs_VisualiserUpdate);
+			theJob.setUser(true);
+			theJob.setPriority(Job.INTERACTIVE);
+		}
+		return theJob;
+	}
+
+	public IStatus run(IProgressMonitor monitor) {
+		if (VisualiserPlugin.visualiser != null) {
+			VisualiserPlugin.visualiser.updateDisplay(true, monitor);
+		}
+		return Status.OK_STATUS;
+	}
+
 }

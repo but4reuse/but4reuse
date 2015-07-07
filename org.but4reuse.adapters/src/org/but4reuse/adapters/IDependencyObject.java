@@ -20,11 +20,12 @@ public interface IDependencyObject {
 	 * @return the maximum number of owners that a ownership relation must have
 	 */
 	public int getMaxDependencies(String dependencyID);
-	
+
 	/**
 	 * Get dependency object text
+	 * 
 	 * @return
 	 */
 	public String getDependencyObjectText();
-	
+
 }

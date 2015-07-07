@@ -25,8 +25,7 @@ public class FileStructureAdapterPreferencePage extends FieldEditorPreferencePag
 	 */
 	public void createFieldEditors() {
 		BooleanFieldEditor bfe = new BooleanFieldEditor(CONTENT_CHECK,
-				"Similarity: Apart from relative paths, use also checksums with MD5",
-				getFieldEditorParent());
+				"Similarity: Apart from relative paths, use also checksums with MD5", getFieldEditorParent());
 		addField(bfe);
 	}
 

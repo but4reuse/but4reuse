@@ -20,6 +20,7 @@ public class ImageUtils {
 
 	/**
 	 * Save image to file
+	 * 
 	 * @param imageData
 	 * @param imagePath
 	 * @param format
@@ -32,6 +33,7 @@ public class ImageUtils {
 
 	/**
 	 * Check if a file is an image based on the extension
+	 * 
 	 * @param fileName
 	 * @return true if it is an image
 	 */
@@ -54,6 +56,7 @@ public class ImageUtils {
 
 	/**
 	 * Get image from absolute path
+	 * 
 	 * @param absolutePath
 	 * @return
 	 */
@@ -71,6 +74,7 @@ public class ImageUtils {
 
 	/**
 	 * Create an empty direct palette image data
+	 * 
 	 * @param width
 	 * @param height
 	 * @param depth

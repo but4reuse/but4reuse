@@ -28,7 +28,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
  * @author jabier.martinez
  */
 public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
-	
+
 	public void reset() {
 		if (this.getAllMembers() != null) {
 			this.getAllMembers().clear();
@@ -72,9 +72,6 @@ public class FeaturesOnBlocksContentProvider extends SimpleContentProvider {
 		// This must be called to show the overlapping cases
 		markupProvider.processMarkups();
 	}
-
-
-
 
 	public static boolean isBlockInFeature(Block block, Feature feature) {
 		List<Artefact> artefacts = feature.getImplementedInArtefacts();

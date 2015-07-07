@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Feature-Specific feature location heuristic Only those Blocks that are ALWAYS
- * for a given Feature are interesting. 
+ * for a given Feature are interesting.
  * 
  * @author jabier.martinez
  */
@@ -45,7 +45,7 @@ public class FeatureSpecificHeuristicFeatureLocation implements IFeatureLocation
 
 			// This is a hook for the non conservative version
 			post(constraints, blocks);
-			
+
 			for (Block b : blocks) {
 				b.getCorrespondingFeatures().add(feature);
 			}
@@ -54,6 +54,7 @@ public class FeatureSpecificHeuristicFeatureLocation implements IFeatureLocation
 
 	/**
 	 * This method is intended to be overriden
+	 * 
 	 * @param constraints
 	 * @param blocks
 	 */

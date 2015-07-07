@@ -124,9 +124,10 @@ public class EclipseAdapter implements IAdapter {
 			// in the case of source code plugins, line will be null but no
 			// problem
 			plugin.setBundleInfoLine(line);
-			
-			if(plugin.getName()==null || plugin.getName().contains("%")){
-				System.out.println("EclipseAdapter.adapt() No name found for: " + plugin.isFragment() +  "  " + plugin.getSymbName());
+
+			if (plugin.getName() == null || plugin.getName().contains("%")) {
+				System.out.println("EclipseAdapter.adapt() No name found for: " + plugin.isFragment() + "  "
+						+ plugin.getSymbName());
 			}
 		}
 

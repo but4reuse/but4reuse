@@ -48,20 +48,23 @@ public class BlocksOnFeaturesContentProvider extends SimpleContentProvider {
 		IGroup group = new SimpleGroup("Features");
 		this.addGroup(group);
 		// get the markup provider
-		FeaturesMarkupProvider markupProvider = (FeaturesMarkupProvider) FeaturesOnBlocksVisualisation.getFeaturesOnBlocksProvider().getMarkupInstance();
+		FeaturesMarkupProvider markupProvider = (FeaturesMarkupProvider) FeaturesOnBlocksVisualisation
+				.getFeaturesOnBlocksProvider().getMarkupInstance();
 		Map<Feature, IMarkupKind> map = markupProvider.getFeaturesAndNames();
 
 		// Add blocks as members
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			IMember member = new SimpleMember(block.getName());
 			member.setSize(block.getOwnedBlockElements().size());
-			// TODO Do not touch tooltip, unfortunately it is used by Visualiser for the action when we right click an artefact
-			// member.setTooltip(member.getFullname() + "\nElements: " + block.getOwnedBlockElements().size());
-			
+			// TODO Do not touch tooltip, unfortunately it is used by Visualiser
+			// for the action when we right click an artefact
+			// member.setTooltip(member.getFullname() + "\nElements: " +
+			// block.getOwnedBlockElements().size());
+
 			// Add stripes
-			for(Feature feature : featureList.getOwnedFeatures()){
-				
-				if(percentageOfBlockInFeature(block, feature)>0){
+			for (Feature feature : featureList.getOwnedFeatures()) {
+
+				if (percentageOfBlockInFeature(block, feature) > 0) {
 					IMarkupKind featureKind = map.get(feature);
 					Stripe stripe = new Stripe(featureKind, 0, member.getSize());
 					markupProvider.addMarkup(member.getFullname(), stripe);
@@ -78,19 +81,19 @@ public class BlocksOnFeaturesContentProvider extends SimpleContentProvider {
 		List<Artefact> artefacts = feature.getImplementedInArtefacts();
 		List<Artefact> foundArtefacts = new ArrayList<Artefact>();
 		List<BlockElement> blockElements = block.getOwnedBlockElements();
-		for(BlockElement be : blockElements){
-			for(ElementWrapper ew : be.getElementWrappers()){
-				AdaptedArtefact aa = (AdaptedArtefact)ew.eContainer();
-				for(Artefact a : artefacts){
-					if(aa.getArtefact().equals(a)){
-						if(!foundArtefacts.contains(a)){
+		for (BlockElement be : blockElements) {
+			for (ElementWrapper ew : be.getElementWrappers()) {
+				AdaptedArtefact aa = (AdaptedArtefact) ew.eContainer();
+				for (Artefact a : artefacts) {
+					if (aa.getArtefact().equals(a)) {
+						if (!foundArtefacts.contains(a)) {
 							foundArtefacts.add(a);
 						}
 					}
 				}
 			}
 		}
-		return new Double(foundArtefacts.size())/new Double(artefacts.size());
+		return new Double(foundArtefacts.size()) / new Double(artefacts.size());
 	}
 
 	@Override

@@ -13,35 +13,35 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactModelFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static ArtefactModelFactory init() {
 		try {
-			ArtefactModelFactory theArtefactModelFactory = (ArtefactModelFactory)EPackage.Registry.INSTANCE.getEFactory(ArtefactModelPackage.eNS_URI);
+			ArtefactModelFactory theArtefactModelFactory = (ArtefactModelFactory) EPackage.Registry.INSTANCE
+					.getEFactory(ArtefactModelPackage.eNS_URI);
 			if (theArtefactModelFactory != null) {
 				return theArtefactModelFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new ArtefactModelFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ArtefactModelFactoryImpl() {
@@ -49,24 +49,27 @@ public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactMo
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ArtefactModelPackage.ARTEFACT_MODEL: return createArtefactModel();
-			case ArtefactModelPackage.ARTEFACT: return createArtefact();
-			case ArtefactModelPackage.COMPOSED_ARTEFACT: return createComposedArtefact();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case ArtefactModelPackage.ARTEFACT_MODEL:
+			return createArtefactModel();
+		case ArtefactModelPackage.ARTEFACT:
+			return createArtefact();
+		case ArtefactModelPackage.COMPOSED_ARTEFACT:
+			return createComposedArtefact();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ArtefactModel createArtefactModel() {
@@ -75,8 +78,8 @@ public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactMo
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Artefact createArtefact() {
@@ -85,8 +88,8 @@ public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactMo
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ComposedArtefact createComposedArtefact() {
@@ -95,17 +98,17 @@ public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactMo
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ArtefactModelPackage getArtefactModelPackage() {
-		return (ArtefactModelPackage)getEPackage();
+		return (ArtefactModelPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -114,4 +117,4 @@ public class ArtefactModelFactoryImpl extends EFactoryImpl implements ArtefactMo
 		return ArtefactModelPackage.eINSTANCE;
 	}
 
-} //ArtefactModelFactoryImpl
+} // ArtefactModelFactoryImpl

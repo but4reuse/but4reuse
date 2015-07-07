@@ -14,7 +14,7 @@ import org.but4reuse.utils.files.FileUtils;
  */
 public class FeatureHelper {
 
-	public static final String  FEATURE_XML = "feature.xml";
+	public static final String FEATURE_XML = "feature.xml";
 	public static final String FEATURES_FOLDER = "features";
 
 	public static List<ActualFeature> getFeaturesOfEclipse(String eclipseInstallationURI) {

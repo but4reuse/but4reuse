@@ -14,6 +14,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * Feature location helper
+ * 
  * @author jabier.martinez
  */
 public class FeatureLocationHelper {
@@ -21,13 +22,14 @@ public class FeatureLocationHelper {
 	public static final String FEATURELOCATION_EXTENSIONPOINT = "org.but4reuse.feature.location";
 
 	private static List<IFeatureLocation> cache_featurelocation;
-	
+
 	/**
 	 * Get all the registered feature location algorithms
+	 * 
 	 * @return
 	 */
 	public static List<IFeatureLocation> getAllFeatureLocation() {
-		if(cache_featurelocation!=null){
+		if (cache_featurelocation != null) {
 			return cache_featurelocation;
 		}
 		List<IFeatureLocation> blockCreationAlgorithms = new ArrayList<IFeatureLocation>();
@@ -35,7 +37,8 @@ public class FeatureLocationHelper {
 				FEATURELOCATION_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				blockCreationAlgorithms.add((IFeatureLocation) adapterExtensionPoint.createExecutableExtension("class"));
+				blockCreationAlgorithms
+						.add((IFeatureLocation) adapterExtensionPoint.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -44,8 +47,9 @@ public class FeatureLocationHelper {
 		return blockCreationAlgorithms;
 	}
 
-	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle().getSymbolicName());
-	
+	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
+			.getSymbolicName());
+
 	public static IPreferenceStore getPreferenceStore() {
 		return Activator.getDefault().getPreferenceStore();
 	}
@@ -56,7 +60,7 @@ public class FeatureLocationHelper {
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
 				IFeatureLocation oneAlgo = (IFeatureLocation) adapterExtensionPoint.createExecutableExtension("class");
-				if(oneAlgo.getClass().equals(algo.getClass())){
+				if (oneAlgo.getClass().equals(algo.getClass())) {
 					String name = adapterExtensionPoint.getAttribute("name");
 					return name;
 				}
@@ -69,8 +73,8 @@ public class FeatureLocationHelper {
 	}
 
 	public static IFeatureLocation getSelectedFeatureLocation() {
-		for(IFeatureLocation algo : getAllFeatureLocation()){
-			if(isAlgorithmSelected(algo)){
+		for (IFeatureLocation algo : getAllFeatureLocation()) {
+			if (isAlgorithmSelected(algo)) {
 				return algo;
 			}
 		}
@@ -82,5 +86,5 @@ public class FeatureLocationHelper {
 		IPreferenceStore prefs = getPreferenceStore();
 		return prefs.getBoolean(algoName);
 	}
-	
+
 }

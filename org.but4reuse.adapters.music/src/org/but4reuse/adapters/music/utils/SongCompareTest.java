@@ -11,12 +11,12 @@ public class SongCompareTest {
 			parser2.parseMusicXML();
 			List<Note> song1 = parser.getNotesOfSong();
 			System.out.println("\n\n-------------SONG 1");
-			for(Note n : song1){
+			for (Note n : song1) {
 				System.out.println(n);
 			}
 			System.out.println("\n\n-------------SONG 2");
 			List<Note> song2 = parser2.getNotesOfSong();
-			for(Note n : song2){
+			for (Note n : song2) {
 				System.out.println(n);
 			}
 			System.out.println("\n\n-------------COMMON NOTES");

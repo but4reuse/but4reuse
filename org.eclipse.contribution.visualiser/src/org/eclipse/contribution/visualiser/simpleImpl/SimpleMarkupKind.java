@@ -15,41 +15,49 @@ import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.swt.graphics.Image;
 
 /**
- * Simple implementation of IMarkupKind.  Will show in the Menu by default and can contain an image as well as 
- * a name.  Also implements comparable and compares by name.
+ * Simple implementation of IMarkupKind. Will show in the Menu by default and
+ * can contain an image as well as a name. Also implements comparable and
+ * compares by name.
  */
 public class SimpleMarkupKind implements IMarkupKind, Comparable {
-	
+
 	private final String name;
 	private final Image icon;
 	private final String fullName;
 
 	/**
 	 * Constructor
-	 * @param name - name of the kind
+	 * 
+	 * @param name
+	 *            - name of the kind
 	 */
 	public SimpleMarkupKind(String name) {
 		this.name = name;
 		this.icon = null;
 		this.fullName = name;
 	}
-	
-	
+
 	/**
 	 * Constructor
-	 * @param name - name of the kind
-	 * @param icon - image
+	 * 
+	 * @param name
+	 *            - name of the kind
+	 * @param icon
+	 *            - image
 	 */
 	public SimpleMarkupKind(String name, Image icon) {
 		this.icon = icon;
 		this.name = name;
-		this.fullName = name; 
+		this.fullName = name;
 	}
 
 	/**
 	 * Constructor
-	 * @param name - name of the kind
-	 * @param fullName - fullName
+	 * 
+	 * @param name
+	 *            - name of the kind
+	 * @param fullName
+	 *            - fullName
 	 */
 	public SimpleMarkupKind(String name, String tooltip) {
 		this.icon = null;
@@ -59,26 +67,30 @@ public class SimpleMarkupKind implements IMarkupKind, Comparable {
 
 	/**
 	 * Constructor
-	 * @param name - name of the kind
-	 * @param icon - image
+	 * 
+	 * @param name
+	 *            - name of the kind
+	 * @param icon
+	 *            - image
 	 */
 	public SimpleMarkupKind(String name, String tooltip, Image icon) {
 		this.icon = icon;
 		this.name = name;
-		this.fullName = tooltip; 
+		this.fullName = tooltip;
 	}
-	
+
 	/**
 	 * Get the name of this kind.
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IMarkupKind#getName()
 	 */
 	public String getName() {
 		return name;
 	}
 
-	
 	/**
 	 * Get the icon for this kind.
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IMarkupKind#getIcon()
 	 */
 	public Image getIcon() {
@@ -87,6 +99,7 @@ public class SimpleMarkupKind implements IMarkupKind, Comparable {
 
 	/**
 	 * Ask whether or not to show this kind in the Visualiser Menu.
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IMarkupKind#showInMenu()
 	 */
 	public boolean showInMenu() {
@@ -97,30 +110,29 @@ public class SimpleMarkupKind implements IMarkupKind, Comparable {
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object object) {
-		if(object instanceof SimpleMarkupKind && name != null) {
-			int nameC = name.compareTo(((SimpleMarkupKind)object).name);
-			if(nameC == 0) {
-				return fullName.compareTo(((SimpleMarkupKind)object).fullName);
+		if (object instanceof SimpleMarkupKind && name != null) {
+			int nameC = name.compareTo(((SimpleMarkupKind) object).name);
+			if (nameC == 0) {
+				return fullName.compareTo(((SimpleMarkupKind) object).fullName);
 			}
 			return nameC;
 		}
 		return 0;
 	}
-	
-	
+
 	/**
 	 * Override the equals method to compare based on fields
 	 */
 	public boolean equals(Object object) {
-		if(object instanceof SimpleMarkupKind) {
-			SimpleMarkupKind smk = (SimpleMarkupKind)object;
-			if(smk.name.equals(name)) {
-				if(smk.fullName.equals(fullName)) {
-					if(icon == null) {
+		if (object instanceof SimpleMarkupKind) {
+			SimpleMarkupKind smk = (SimpleMarkupKind) object;
+			if (smk.name.equals(name)) {
+				if (smk.fullName.equals(fullName)) {
+					if (icon == null) {
 						if (smk.icon == null) {
 							return true;
 						}
-					} else if(icon.equals(smk.icon)) {
+					} else if (icon.equals(smk.icon)) {
 						return true;
 					}
 				}
@@ -128,28 +140,30 @@ public class SimpleMarkupKind implements IMarkupKind, Comparable {
 		}
 		return false;
 	}
-	
-	
+
 	/**
 	 * Override hashCode because we have overriden the equals method.
 	 */
 	public int hashCode() {
-		if(icon == null) {
-			return name.hashCode() + (37 * fullName.hashCode()); // multiply by arbitrary value of 37 to increase variation 
-		} 
+		if (icon == null) {
+			return name.hashCode() + (37 * fullName.hashCode()); // multiply by
+																	// arbitrary
+																	// value of
+																	// 37 to
+																	// increase
+																	// variation
+		}
 		return name.hashCode() + (37 * fullName.hashCode()) + icon.hashCode();
 	}
-	
-	
+
 	/**
-	 * Get the String representation of this kind.  Returns the name.
+	 * Get the String representation of this kind. Returns the name.
 	 */
-	public String toString(){
+	public String toString() {
 		return name;
 	}
 
-
-	/** 
+	/**
 	 * Get the fullName
 	 */
 	public String getFullName() {

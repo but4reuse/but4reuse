@@ -46,7 +46,7 @@ public class InputDropView extends ViewPart {
 	private void createDropFunctionality() {
 		dropTarget = new ArtefactsDropTarget(canvas);
 	}
-	
+
 	@Override
 	public void setFocus() {
 		// do nothing

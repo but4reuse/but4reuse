@@ -65,8 +65,7 @@ public class RendererManager {
 			String name = VisualiserPreferences.getRendererName();
 			if ((name != null) && (name.length() > 0)) {
 				// find the renderer with the given name
-				for (Iterator iter = getAllRendererDefinitions().iterator(); iter
-						.hasNext();) {
+				for (Iterator iter = getAllRendererDefinitions().iterator(); iter.hasNext();) {
 					RendererDefinition r = (RendererDefinition) iter.next();
 					if (r.getName().equals(name)) {
 						current = r;
@@ -88,8 +87,7 @@ public class RendererManager {
 	 * @return the RendererDefinition with the given name
 	 */
 	public static RendererDefinition getRendererByName(String name) {
-		for (Iterator iter = getAllRendererDefinitions().iterator(); iter
-				.hasNext();) {
+		for (Iterator iter = getAllRendererDefinitions().iterator(); iter.hasNext();) {
 			RendererDefinition r = (RendererDefinition) iter.next();
 			if (r.getName().equals(name)) {
 				return r;
@@ -107,7 +105,7 @@ public class RendererManager {
 	 */
 	public static void setCurrentRendererByName(String name) {
 		RendererDefinition r = getRendererByName(name);
-		if (r!=null) {
+		if (r != null) {
 			current = r;
 		}
 	}
@@ -125,8 +123,7 @@ public class RendererManager {
 		for (Iterator iter = renderers.iterator(); iter.hasNext();) {
 			RendererDefinition r = (RendererDefinition) iter.next();
 			if (r.getRenderer() instanceof DefaultVisualiserRenderer) {
-				if (r.getRenderer().getClass().getName().equals(
-						DEFAULT_RENDERER_CLASS)) {
+				if (r.getRenderer().getClass().getName().equals(DEFAULT_RENDERER_CLASS)) {
 					return r;
 				}
 			}
@@ -139,8 +136,7 @@ public class RendererManager {
 	 */
 	private static void initialiseRendererDefinitions() {
 		renderers = new ArrayList();
-		IExtensionPoint exP = Platform.getExtensionRegistry()
-				.getExtensionPoint(RENDERER_EXTENSION);
+		IExtensionPoint exP = Platform.getExtensionRegistry().getExtensionPoint(RENDERER_EXTENSION);
 		IExtension[] exs = exP.getExtensions();
 
 		for (int i = 0; i < exs.length; i++) {
@@ -150,8 +146,7 @@ public class RendererManager {
 					Object ext = ces[j].createExecutableExtension("class"); //$NON-NLS-1$
 					if (ext instanceof IVisualiserRenderer) {
 						String name = ces[j].getAttribute("name"); //$NON-NLS-1$
-						RendererDefinition rd = new RendererDefinition(name,
-								(IVisualiserRenderer) ext);
+						RendererDefinition rd = new RendererDefinition(name, (IVisualiserRenderer) ext);
 						renderers.add(rd);
 					}
 				} catch (CoreException e) {
