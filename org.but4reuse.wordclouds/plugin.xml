@@ -22,7 +22,7 @@
             class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
             icon="icons/cloud.png"
             id="org.but4reuse.wordclouds.view"
-            name="WorldClouds"
+            name="WordClouds"
             restorable="true">
       </view>
    </extension>
