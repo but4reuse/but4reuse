@@ -19,7 +19,7 @@
          point="org.eclipse.ui.views">
       <view
             category="org.but4reuse.views.category"
-            class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
+            class="org.but4reuse.worldclouds.WordCloudVis"
             icon="icons/cloud.png"
             id="org.but4reuse.wordclouds.view"
             name="WordClouds"
@@ -29,7 +29,7 @@
    <extension
          point="org.but4reuse.visualisation">
       <visualisation
-            class="org.but4reuse.worldcouds.visualisation.WordCloudVisualisation"
+            class="org.but4reuse.worldclouds.WordCloudVisualisation"
             name="Word Cloud">
       </visualisation>
    </extension>
