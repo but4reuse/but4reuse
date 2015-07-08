@@ -44,12 +44,10 @@ public class SentenceElement extends AbstractElement {
 		/*
 		 * We split the sentence with special char like : ' ' ',' '|' ...
 		 */
-		StringTokenizer tk = new StringTokenizer(sentence, " ²&~\"#'{}()[]-|`_\\^°,.;/§");
+		StringTokenizer tk = new StringTokenizer(sentence," :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 		ArrayList<String> words = new ArrayList<String>();
-
 		while (tk.hasMoreTokens())
 			words.add(tk.nextToken());
-
 		return words;
 	}
 
