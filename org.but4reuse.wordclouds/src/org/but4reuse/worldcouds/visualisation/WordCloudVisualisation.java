@@ -9,6 +9,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
@@ -74,10 +75,7 @@ public class WordCloudVisualisation implements IVisualisation {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-
-				/*
-				 * WorkbenchUtils.forceShowView("org.but4reuse.wordclouds.view");
-				 */
+				WorkbenchUtils.forceShowView("org.but4reuse.wordclouds.view");
 				WordCloudVis.update(0, false);
 			}
 		});

@@ -27,4 +27,5 @@ Import-Package: org.but4reuse.adaptedmodel,
 Bundle-ClassPath: .,
  Jars/
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.but4reuse.utils

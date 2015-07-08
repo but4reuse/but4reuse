@@ -135,8 +135,8 @@ public abstract class FSTNodeElement extends AbstractElement {
 	@Override
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
-		System.out.println("Type : " + type);
-		System.out.println("Name : " + name + "\n");
+		// System.out.println("Type : " + type);
+		// System.out.println("Name : " + name + "\n");
 
 		if (type.equalsIgnoreCase("MethodDecl") || type.equalsIgnoreCase("FieldDecl")
 				|| type.equalsIgnoreCase("ClassDeclaration") || type.equalsIgnoreCase("Func")) {
@@ -145,7 +145,7 @@ public abstract class FSTNodeElement extends AbstractElement {
 
 			if (sub.contains("(")) {
 				sub = sub.substring(0, sub.indexOf("("));
-				System.out.println("Sub -- " + sub);
+				// System.out.println("Sub -- " + sub);
 			}
 
 			/*

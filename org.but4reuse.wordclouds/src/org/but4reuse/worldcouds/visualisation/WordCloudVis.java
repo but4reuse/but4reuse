@@ -1,7 +1,5 @@
 package org.but4reuse.worldcouds.visualisation;
 
-import java.text.DecimalFormat;
-
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -9,11 +7,11 @@ import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -195,11 +193,11 @@ public class WordCloudVis extends ViewPart {
 		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1) {
 			Cloud c2 = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 			for (Tag t : c2.tags())
-				singleton.getList().add(t.getName() + " - " +String.format("%.2f",t.getScore()));
+				singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
 
 		} else
 			for (Tag t : c.tags())
-				singleton.getList().add(t.getName() + " - " + String.format("%.2f",t.getScore()));
+				singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
@@ -208,7 +206,7 @@ public class WordCloudVis extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-
+		// TODO use grid layout data with span etc. no absolute positions
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginTop = 5;
 		gridLayout.marginRight = 5;
@@ -224,16 +222,16 @@ public class WordCloudVis extends ViewPart {
 		c1.setLayoutData(gd_c1);
 		c1.setBounds(0, 0, 101, 135);
 
-		Label lblWordList = new Label(c1, SWT.NORMAL| SWT.CENTER);
+		Label lblWordList = new Label(c1, SWT.NORMAL | SWT.CENTER);
 		lblWordList.setBounds(41, 4, 89, 24);
 		lblWordList.setFont(new Font(Display.getCurrent(), "Sylfaen", 12, SWT.BOLD));
 		lblWordList.setText(" Word List ");
 
-		list = new List(c1, SWT.BORDER);
-		list.setBounds(5, 34, 157, 304);
-
 		combo = new Combo(c1, SWT.NONE | SWT.READ_ONLY);
-		combo.setBounds(5, 343, 157, 23);
+		combo.setBounds(5, 34, 157, 23);
+
+		list = new List(c1, SWT.BORDER | SWT.V_SCROLL);
+		list.setBounds(5, 64, 157, 304);
 
 		renameAll = new Button(c1, SWT.NONE);
 		renameAll.setLocation(5, 372);
@@ -246,11 +244,8 @@ public class WordCloudVis extends ViewPart {
 		renameOne.setText("Rename Current Auto");
 
 		tabFolder = new TabFolder(parent, SWT.NONE);
-		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-		gd_tabFolder.heightHint = 410;
-		gd_tabFolder.widthHint = 500;
+		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 		tabFolder.setLayoutData(gd_tabFolder);
-		tabFolder.setBounds(0, 0, 122, 43);
 
 		TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
 		tbtmNewItem.setText("Word Cloud");
@@ -355,10 +350,9 @@ public class WordCloudVis extends ViewPart {
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
 						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-						if (c.tags().size() > 0)
-						{
+						if (c.tags().size() > 0) {
 							Tag last = c.tags().get(0);
-						
+
 							for (Tag t : c.tags()) {
 								if (t.getWeight() > last.getWeight())
 									last = t;
@@ -393,18 +387,16 @@ public class WordCloudVis extends ViewPart {
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
 					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 						c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-				
-					if(c.tags().size() > 0)
-					{
+
+					if (c.tags().size() > 0) {
 						Tag last = c.tags().get(0);
-							for (Tag t : c.tags()) {
-								if (t.getWeight() > last.getWeight())
-									last = t;
-							}
+						for (Tag t : c.tags()) {
+							if (t.getWeight() > last.getWeight())
+								last = t;
+						}
 						b.setName(last.getName());
 					}
-					
-					
+
 					WordCloudVis.update(combo.getSelectionIndex(), true);
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
@@ -448,42 +440,41 @@ public class WordCloudVis extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				Combo c = (Combo) e.getSource();
 				WordCloudVis.update(c.getSelectionIndex(), true);
-
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-
+				// do nothing
 			}
 		});
 
 		/*
-		 * When you click on an item from the list it will rename the selected
-		 * block with the value of the selected item.
+		 * When you double click on an item from the list it will rename the
+		 * selected block with the value of the selected item.
 		 */
-		list.addSelectionListener(new SelectionListener() {
-
+		list.addMouseListener(new MouseListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDoubleClick(MouseEvent e) {
 				List l = (List) e.getSource();
-
 				Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(combo.getSelectionIndex());
 				String newName = l.getItem(l.getSelectionIndex());
 				int ind = newName.indexOf(" - ");
 				b.setName(newName.substring(0, ind));
 				WordCloudVis.update(combo.getSelectionIndex(), true);
-
 				VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 						AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
-
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				// do nothing
+			}
 
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// do nothing
 			}
 		});
 
@@ -498,12 +489,13 @@ public class WordCloudVis extends ViewPart {
 				if (ind == 1)
 					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 				for (Tag t : c.tags())
-					WordCloudVis.getSingleton().getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+					WordCloudVis.getSingleton().getList()
+							.add(t.getName() + " - " + String.format("%.2f", t.getScore()));
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-
+				// do nothing
 			}
 		});
 
