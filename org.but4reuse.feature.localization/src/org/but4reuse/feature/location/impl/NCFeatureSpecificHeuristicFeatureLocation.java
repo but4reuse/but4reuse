@@ -6,7 +6,6 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.feature.constraints.IConstraint;
 
-
 /**
  * Feature-Specific feature location heuristic Only those Blocks that are ALWAYS
  * for a given Feature are interesting. From this set of Blocks we create a

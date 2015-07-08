@@ -82,7 +82,7 @@ public class Visualiser extends ViewPart {
 	private Action memberViewAction;
 
 	private Action zoomInAction;
-	
+
 	private Action zoomOutAction;
 
 	private boolean inGroupView = false;
@@ -94,13 +94,13 @@ public class Visualiser extends ViewPart {
 	private int maxBarWidth = 200;
 
 	private String title;
-	
+
 	private boolean upToDate;
-	
+
 	private String zoomString;
-	
-		 private static Job redrawJob;
-		 
+
+	private static Job redrawJob;
+
 	public Visualiser() {
 		VisualiserPlugin.getDefault().setVisualiser(this);
 	}
@@ -108,10 +108,12 @@ public class Visualiser extends ViewPart {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 * @see
+	 * org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
 	public void createPartControl(Composite parent) {
-		try {	
+		try {
 			getSite().getPage().showView("org.eclipse.contribution.visualiser.views.Menu"); //$NON-NLS-1$
 		} catch (PartInitException pie) {
 			VisualiserPlugin.logException(pie);
@@ -119,7 +121,7 @@ public class Visualiser extends ViewPart {
 		visCanvas = new VisualiserCanvas(parent, this);
 		visCanvas.addPaintListener(new PaintListener() {
 			public void paintControl(final PaintEvent event) {
-				if(!upToDate) {
+				if (!upToDate) {
 					VisualiserPlugin.refresh();
 				}
 			}
@@ -129,16 +131,20 @@ public class Visualiser extends ViewPart {
 		memberViewAction.setChecked(true);
 		String title = ProviderManager.getCurrent().getTitle();
 		refreshTitle(title);
-		
-		// Add an empty ISelectionProvider so that this view works with dynamic help (bug 104331)
+
+		// Add an empty ISelectionProvider so that this view works with dynamic
+		// help (bug 104331)
 		getSite().setSelectionProvider(new ISelectionProvider() {
 			public void addSelectionChangedListener(ISelectionChangedListener listener) {
 			}
+
 			public ISelection getSelection() {
 				return null;
 			}
+
 			public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 			}
+
 			public void setSelection(ISelection selection) {
 			}
 		});
@@ -147,7 +153,7 @@ public class Visualiser extends ViewPart {
 	public void setNeedsUpdating() {
 		upToDate = false;
 	}
-	
+
 	/**
 	 * Adds actions to the action bar.
 	 */
@@ -202,9 +208,9 @@ public class Visualiser extends ViewPart {
 	private void makeActionPreferences() {
 		preferencesAction = new Action() {
 			public void run() {
-				String id= "org.eclipse.contribution.visualiser.prefspage"; //$NON-NLS-1$
-				PreferencesUtil.createPreferenceDialogOn(Visualiser.this.getViewSite().getShell(),
-						id, new String[] { id }, null).open();
+				String id = "org.eclipse.contribution.visualiser.prefspage"; //$NON-NLS-1$
+				PreferencesUtil.createPreferenceDialogOn(Visualiser.this.getViewSite().getShell(), id,
+						new String[] { id }, null).open();
 			}
 		};
 		preferencesAction.setText(VisualiserMessages.Preferences_24);
@@ -230,12 +236,11 @@ public class Visualiser extends ViewPart {
 
 				setChecked(inLimitMode);
 				updateDisplay(false); // aspectDrawing.limit(canvas,
-									  // in_limit_mode);
+										// in_limit_mode);
 			}
 		};
 		limitAction.setText(VisualiserMessages.Limit_view_9);
-		limitAction
-				.setToolTipText(VisualiserMessages.Limits_visualisation_to_affected_bars_only_10);
+		limitAction.setToolTipText(VisualiserMessages.Limits_visualisation_to_affected_bars_only_10);
 		limitAction.setImageDescriptor(VisualiserImages.LIMIT_MODE);
 	}
 
@@ -266,8 +271,7 @@ public class Visualiser extends ViewPart {
 		};
 		fitToViewAction.setText(VisualiserMessages.Absolute_Proportions);
 		fitToViewAction.setToolTipText(VisualiserMessages.Absolute_Proportions);
-		fitToViewAction
-				.setImageDescriptor(VisualiserImages.FIT_TO_VIEW);
+		fitToViewAction.setImageDescriptor(VisualiserImages.FIT_TO_VIEW);
 	}
 
 	/**
@@ -318,7 +322,7 @@ public class Visualiser extends ViewPart {
 
 	/**
 	 * Make the zoom-out action
-	 *
+	 * 
 	 */
 	private void makeActionZoomout() {
 		zoomOutAction = new Action() {
@@ -330,8 +334,7 @@ public class Visualiser extends ViewPart {
 		zoomOutAction.setToolTipText(VisualiserMessages.Zooms_out_7);
 		zoomOutAction.setImageDescriptor(VisualiserImages.ZOOM_OUT);
 	}
-		
-	
+
 	/**
 	 * Make the zoom-in action
 	 */
@@ -349,10 +352,11 @@ public class Visualiser extends ViewPart {
 	public void zoominSetEnabled(boolean enabled) {
 		zoomInAction.setEnabled(enabled);
 	}
+
 	public void zoomoutSetEnabled(boolean enabled) {
 		zoomOutAction.setEnabled(enabled);
 	}
-	
+
 	/**
 	 * Activate group mode
 	 */
@@ -383,19 +387,18 @@ public class Visualiser extends ViewPart {
 	}
 
 	private void refreshTitle() {
-		String s = VisualiserMessages.Visualiser
-				+ " - " + title; //$NON-NLS-1$
+		String s = VisualiserMessages.Visualiser + " - " + title; //$NON-NLS-1$
 		if ((zoomString != null) && (zoomString.length() > 0)) {
 			s += " (" + zoomString + ")"; //$NON-NLS-1$//$NON-NLS-2$
 		}
 		this.setContentDescription(s);
 	}
-	
+
 	public void setZoomString(String s) {
 		zoomString = s;
 		refreshTitle();
 	}
-	
+
 	/**
 	 * Set the maximum bar width for the view in pixels
 	 * 
@@ -436,7 +439,7 @@ public class Visualiser extends ViewPart {
 	public void dispose() {
 		super.dispose();
 		redrawJob = null;
-		VisualiserPlugin.visualiser=null;
+		VisualiserPlugin.visualiser = null;
 		visCanvas.dispose();
 		visCanvas = null;
 	}
@@ -446,29 +449,29 @@ public class Visualiser extends ViewPart {
 	 * menu has changed.
 	 */
 	public void draw() {
- 		 getVisualiserRedrawJob().schedule();
+		getVisualiserRedrawJob().schedule();
 	}
 
-	 private synchronized Job getVisualiserRedrawJob() {
- 		 if (redrawJob == null) {
-	 		 redrawJob = new UIJob(VisualiserMessages.Jobs_VisualiserRedraw) {
+	private synchronized Job getVisualiserRedrawJob() {
+		if (redrawJob == null) {
+			redrawJob = new UIJob(VisualiserMessages.Jobs_VisualiserRedraw) {
 
- 		 		 public IStatus runInUIThread(IProgressMonitor monitor) {
- 		 		 		if ((visCanvas!=null) && !visCanvas.isDisposed()) {
- 		 		 			visCanvas.redraw(data);
- 		 		 			upToDate = true;
- 		 		 		}		 		 		
- 		 		 		return Status.OK_STATUS;
- 		 		 }
-	 		 };
- 		 }
- 		 return redrawJob;
-	 }
+				public IStatus runInUIThread(IProgressMonitor monitor) {
+					if ((visCanvas != null) && !visCanvas.isDisposed()) {
+						visCanvas.redraw(data);
+						upToDate = true;
+					}
+					return Status.OK_STATUS;
+				}
+			};
+		}
+		return redrawJob;
+	}
 
-	 public void updateDisplay(boolean updateMenu) {
-	 	updateDisplay(updateMenu, new NullProgressMonitor());
-	 }
-	 
+	public void updateDisplay(boolean updateMenu) {
+		updateDisplay(updateMenu, new NullProgressMonitor());
+	}
+
 	/**
 	 * Update the display
 	 */
@@ -496,7 +499,7 @@ public class Visualiser extends ViewPart {
 		}
 		monitor.worked(1);
 		monitor.setTaskName(VisualiserMessages.Jobs_Drawing);
-		draw();	
+		draw();
 		monitor.done();
 	}
 
@@ -551,15 +554,13 @@ public class Visualiser extends ViewPart {
 	/**
 	 * Set the current content provider
 	 * 
-	 * @param vcp -
-	 *            the current IContentProvider
+	 * @param vcp
+	 *            - the current IContentProvider
 	 */
 	public void setVisContentProvider(IContentProvider vcp) {
 		contentP = vcp;
-		memberViewImage = vcp.getMemberViewIcon() == null ? VisualiserImages.MEMBER_VIEW
-				: vcp.getMemberViewIcon();
-		groupViewImage = vcp.getGroupViewIcon() == null ? VisualiserImages.GROUP_VIEW
-				: vcp.getGroupViewIcon();
+		memberViewImage = vcp.getMemberViewIcon() == null ? VisualiserImages.MEMBER_VIEW : vcp.getMemberViewIcon();
+		groupViewImage = vcp.getGroupViewIcon() == null ? VisualiserImages.GROUP_VIEW : vcp.getGroupViewIcon();
 		if (groupViewAction != null) {
 			groupViewAction.setImageDescriptor(groupViewImage);
 		}
@@ -575,8 +576,8 @@ public class Visualiser extends ViewPart {
 	/**
 	 * Set the current markup provider
 	 * 
-	 * @param vmp -
-	 *            the current IMarkupProvider
+	 * @param vmp
+	 *            - the current IMarkupProvider
 	 */
 	public void setVisMarkupProvider(IMarkupProvider vmp) {
 		markupP = vmp;
@@ -584,6 +585,7 @@ public class Visualiser extends ViewPart {
 
 	/**
 	 * Only show kinds affecting the member or group with the given name
+	 * 
 	 * @param name
 	 */
 	protected void onlyShowColorsAffecting(String name) {
@@ -592,10 +594,10 @@ public class Visualiser extends ViewPart {
 		boolean found = false;
 		for (Iterator it = members.iterator(); it.hasNext();) {
 			IMember member = (IMember) it.next();
-			if(member.getToolTip().equals(name)){
+			if (member.getToolTip().equals(name)) {
 				found = true;
 				List markups = markupP.getMemberMarkups(member);
-				if(markups == null){
+				if (markups == null) {
 					VisualiserPlugin.menu.onlyShow(null);
 					return;
 				}
@@ -604,21 +606,21 @@ public class Visualiser extends ViewPart {
 					List kinds = stripe.getKinds();
 					for (Iterator it3 = kinds.iterator(); it3.hasNext();) {
 						IMarkupKind kind = (IMarkupKind) it3.next();
-						if(!names.contains(kind.getName())){
+						if (!names.contains(kind.getName())) {
 							names.add(kind.getName());
 						}
 					}
 				}
 			}
-		
+
 		}
-		if(!found){   // name is name of a group, not a member.
+		if (!found) { // name is name of a group, not a member.
 			List groups = contentP.getAllGroups();
 			for (Iterator it = groups.iterator(); it.hasNext();) {
 				IGroup group = (IGroup) it.next();
-				if(group.getToolTip().equals(name)){
+				if (group.getToolTip().equals(name)) {
 					List markups = markupP.getGroupMarkups(group);
-					if(markups == null){
+					if (markups == null) {
 						VisualiserPlugin.menu.onlyShow(null);
 						return;
 					}
@@ -627,7 +629,7 @@ public class Visualiser extends ViewPart {
 						List kinds = stripe.getKinds();
 						for (Iterator it3 = kinds.iterator(); it3.hasNext();) {
 							IMarkupKind kind = (IMarkupKind) it3.next();
-							if(!names.contains(kind.getName())){
+							if (!names.contains(kind.getName())) {
 								names.add(kind.getName());
 							}
 						}
@@ -638,7 +640,6 @@ public class Visualiser extends ViewPart {
 		VisualiserPlugin.menu.onlyShow(names);
 	}
 
-	
 	/**
 	 * Handle a click that has occurred on the bar chart.
 	 * 
@@ -646,27 +647,23 @@ public class Visualiser extends ViewPart {
 	 * @param stripe
 	 * @param buttonClicked
 	 */
-	protected void handleClick(IMember member, Stripe stripe,
-			int buttonClicked) {
+	protected void handleClick(IMember member, Stripe stripe, int buttonClicked) {
 
-		boolean proceed = contentP.processMouseclick((member != null ? member
-				: null), (stripe != null ? true : false), buttonClicked);
+		boolean proceed = contentP.processMouseclick((member != null ? member : null), (stripe != null ? true : false),
+				buttonClicked);
 
 		if (stripe != null)
-			proceed = markupP.processMouseclick(
-					(member != null ? member : null), stripe, 
-					buttonClicked)
-					&& proceed;
+			proceed = markupP.processMouseclick((member != null ? member : null), stripe, buttonClicked) && proceed;
 
 		if (proceed) {
 
 			if (buttonClicked != 3) { // Left hand or middle mouse button click
-				//stackContext();
+				// stackContext();
 				if (inGroupView) {
 					// IF
-					//   someone has clicked on a group
+					// someone has clicked on a group
 					// THEN
-					//   Switch to subselect mode, and to the member view showing
+					// Switch to subselect mode, and to the member view showing
 					// all the members of that group
 					activateMemberView();
 				} else {
@@ -681,10 +678,10 @@ public class Visualiser extends ViewPart {
 	 * If the current log-level is greater than or equal to the level given, log
 	 * the message.
 	 * 
-	 * @param level -
-	 *            the level
-	 * @param string -
-	 *            the message
+	 * @param level
+	 *            - the level
+	 * @param string
+	 *            - the message
 	 */
 	private static void log(int level, String string) {
 		if (level <= VisualiserPlugin.LOGLEVEL)

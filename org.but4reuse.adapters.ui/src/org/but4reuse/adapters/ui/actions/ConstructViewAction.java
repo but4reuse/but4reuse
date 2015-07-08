@@ -82,7 +82,7 @@ public class ConstructViewAction implements IViewActionDelegate {
 						ElementWrapper elementWrapper = blockElement.getElementWrappers().get(0);
 						IElement element = (IElement) elementWrapper.getElement();
 						IAdapter adapter = AdaptersHelper.getAdapter(element);
-						if(adapter==null){
+						if (adapter == null) {
 							// TODO Report the error to the user
 							System.out.println("No adapter declared for " + element.getClass());
 							break;
@@ -108,7 +108,7 @@ public class ConstructViewAction implements IViewActionDelegate {
 			progressDialog.run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-					
+
 					// Number of adapters + total numbers of elements
 					int totalWork = adaptersMap.keySet().size() + numberOfElements;
 					monitor.beginTask("Construction", totalWork);

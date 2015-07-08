@@ -22,6 +22,7 @@ import org.eclipse.ui.part.ViewPart;
 
 /**
  * Debug/profiling view, requires RenderingMonitorInfo aspect
+ * 
  * @author matt
  */
 public class RenderingMonitor extends ViewPart {
@@ -59,7 +60,7 @@ public class RenderingMonitor extends ViewPart {
 	private static int imageKB;
 
 	private static int widthHint = 80;
-	
+
 	public RenderingMonitor() {
 		super();
 		instance = this;
@@ -68,15 +69,15 @@ public class RenderingMonitor extends ViewPart {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPart#createPartControl(org.eclipse.swt.widgets
+	 * .Composite)
 	 */
 	public void createPartControl(Composite parent) {
 		Group group = new Group(parent, SWT.NONE);
 		group.setLayout(new GridLayout(3, true));
-		group
-				.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-						| GridData.HORIZONTAL_ALIGN_FILL
-						| GridData.VERTICAL_ALIGN_FILL));
+		group.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL
+				| GridData.VERTICAL_ALIGN_FILL));
 		group.setText("Visualiser rendering information"); //$NON-NLS-1$
 
 		// row 1
@@ -94,12 +95,12 @@ public class RenderingMonitor extends ViewPart {
 		GridData gd = new GridData();
 		gd.widthHint = widthHint;
 		fpsText.setLayoutData(gd);
-		if (numValues==0) {
+		if (numValues == 0) {
 			fpsText.setText("0 fps"); //$NON-NLS-1$
 		} else {
 			setAverage((float) runningTotal / numValues);
 		}
-		
+
 		ipText = new Text(group, SWT.SINGLE);
 		gd = new GridData();
 		gd.widthHint = widthHint;
@@ -139,16 +140,16 @@ public class RenderingMonitor extends ViewPart {
 		gd = new GridData();
 		gd.widthHint = widthHint;
 		dsText.setLayoutData(gd);
-		dsText.setText(dataSize+" bars"); //$NON-NLS-1$
-		
+		dsText.setText(dataSize + " bars"); //$NON-NLS-1$
+
 		// row 5
 		label = new Label(group, SWT.NONE);
 		label.setText("Time of geometry calc:"); //$NON-NLS-1$
-		
+
 		label = new Label(group, SWT.NONE);
-		
+
 		label = new Label(group, SWT.NONE);
-		
+
 		// row 6
 		geomText = new Text(group, SWT.SINGLE);
 		gd = new GridData();
@@ -171,7 +172,7 @@ public class RenderingMonitor extends ViewPart {
 	 * @see org.eclipse.ui.IWorkbenchPart#setFocus()
 	 */
 	public void setFocus() {
-		//fpsText.setFocus();
+		// fpsText.setFocus();
 	}
 
 	public static void logTime(long time) {

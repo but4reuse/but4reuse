@@ -10,35 +10,35 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedModelFactory {
 	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static AdaptedModelFactory init() {
 		try {
-			AdaptedModelFactory theAdaptedModelFactory = (AdaptedModelFactory)EPackage.Registry.INSTANCE.getEFactory(AdaptedModelPackage.eNS_URI);
+			AdaptedModelFactory theAdaptedModelFactory = (AdaptedModelFactory) EPackage.Registry.INSTANCE
+					.getEFactory(AdaptedModelPackage.eNS_URI);
 			if (theAdaptedModelFactory != null) {
 				return theAdaptedModelFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new AdaptedModelFactoryImpl();
 	}
 
 	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdaptedModelFactoryImpl() {
@@ -46,26 +46,31 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case AdaptedModelPackage.ADAPTED_MODEL: return createAdaptedModel();
-			case AdaptedModelPackage.ADAPTED_ARTEFACT: return createAdaptedArtefact();
-			case AdaptedModelPackage.ELEMENT_WRAPPER: return createElementWrapper();
-			case AdaptedModelPackage.BLOCK: return createBlock();
-			case AdaptedModelPackage.BLOCK_ELEMENT: return createBlockElement();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case AdaptedModelPackage.ADAPTED_MODEL:
+			return createAdaptedModel();
+		case AdaptedModelPackage.ADAPTED_ARTEFACT:
+			return createAdaptedArtefact();
+		case AdaptedModelPackage.ELEMENT_WRAPPER:
+			return createElementWrapper();
+		case AdaptedModelPackage.BLOCK:
+			return createBlock();
+		case AdaptedModelPackage.BLOCK_ELEMENT:
+			return createBlockElement();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdaptedModel createAdaptedModel() {
@@ -74,8 +79,8 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdaptedArtefact createAdaptedArtefact() {
@@ -84,8 +89,8 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public ElementWrapper createElementWrapper() {
@@ -94,8 +99,8 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Block createBlock() {
@@ -104,8 +109,8 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public BlockElement createBlockElement() {
@@ -114,17 +119,17 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AdaptedModelPackage getAdaptedModelPackage() {
-		return (AdaptedModelPackage)getEPackage();
+		return (AdaptedModelPackage) getEPackage();
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @deprecated
 	 * @generated
 	 */
@@ -133,4 +138,4 @@ public class AdaptedModelFactoryImpl extends EFactoryImpl implements AdaptedMode
 		return AdaptedModelPackage.eINSTANCE;
 	}
 
-} //AdaptedModelFactoryImpl
+} // AdaptedModelFactoryImpl

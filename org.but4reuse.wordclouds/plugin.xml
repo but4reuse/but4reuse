@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactWordCloud"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action1"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.but4reuse.views.category"
+            class="org.but4reuse.worldcouds.visualisation.WordCloudVis"
+            icon="icons/cloud.png"
+            id="org.but4reuse.wordclouds.view"
+            name="WordClouds"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.worldcouds.visualisation.WordCloudVisualisation"
+            name="Word Cloud">
+      </visualisation>
+   </extension>
+
+</plugin>

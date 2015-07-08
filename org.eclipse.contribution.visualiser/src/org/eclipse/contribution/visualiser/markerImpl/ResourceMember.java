@@ -15,24 +15,24 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleMember;
 import org.eclipse.contribution.visualiser.text.VisualiserMessages;
 import org.eclipse.core.resources.IResource;
 
-
 /**
  * Member that has an IResource (normally a file) associated with it
  */
 public class ResourceMember extends SimpleMember {
 
 	protected IResource resource;
-	
+
 	/**
-	 * @param name - name
-	 * @param resource - associated IResource
+	 * @param name
+	 *            - name
+	 * @param resource
+	 *            - associated IResource
 	 */
 	public ResourceMember(String name, IResource resource) {
 		super(name);
 		this.resource = resource;
 	}
-	
-	
+
 	/**
 	 * @return Returns the resource.
 	 */
@@ -40,23 +40,23 @@ public class ResourceMember extends SimpleMember {
 		return resource;
 	}
 
-	
 	/**
 	 * Get the full name for this member
 	 */
 	public String getFullname() {
 		return resource.getProjectRelativePath().toString();
 	}
-	
-	
+
 	/**
-	 * @param resource The resource to set.
+	 * @param resource
+	 *            The resource to set.
 	 */
 	public void setResource(IResource resource) {
 		this.resource = resource;
 	}
-	
+
 	public String toString() {
-		return VisualiserMessages.ResourceMember + ":[" + resource.getFullPath() + "] " + VisualiserMessages.Size + ":[" + size.toString()+"]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return VisualiserMessages.ResourceMember
+				+ ":[" + resource.getFullPath() + "] " + VisualiserMessages.Size + ":[" + size.toString() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 }

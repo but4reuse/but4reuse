@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 
@@ -23,7 +24,6 @@ public class PluginElement extends FileElement {
 	// The same thing for absoluthPath
 	private ArrayList<String> require_Bundles;
 
-	
 	@Override
 	public double similarity(IElement anotherElement) {
 		// When they have the same relative URI
@@ -39,7 +39,7 @@ public class PluginElement extends FileElement {
 		}
 		return 0;
 	}
-	
+
 	public ArrayList<String> getRequire_Bundles() {
 		return require_Bundles;
 	}
@@ -95,7 +95,7 @@ public class PluginElement extends FileElement {
 	public void setVersion(String pluginVersion) {
 		this.pluginVersion = pluginVersion;
 	}
-	
+
 	public String getBundleInfoLine() {
 		return bundleInfoLine;
 	}
@@ -103,7 +103,6 @@ public class PluginElement extends FileElement {
 	public void setBundleInfoLine(String bundleInfoLine) {
 		this.bundleInfoLine = bundleInfoLine;
 	}
-
 
 	public String getName() {
 		return name;
@@ -120,9 +119,9 @@ public class PluginElement extends FileElement {
 	public void setFragmentHost(String fragmentHost) {
 		this.fragmentHost = fragmentHost;
 	}
-	
-	public boolean isFragment(){
-		return fragmentHost!=null;
+
+	public boolean isFragment() {
+		return fragmentHost != null;
 	}
 
 	@Override
@@ -131,5 +130,15 @@ public class PluginElement extends FileElement {
 		int result = 1;
 		result = prime * result + ((getSymbName() == null) ? 0 : getSymbName().hashCode());
 		return result;
+	}
+
+	@Override
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		if (name != null)
+			for (String w : name.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+				words.add(w);
+			}
+		return words;
 	}
 }

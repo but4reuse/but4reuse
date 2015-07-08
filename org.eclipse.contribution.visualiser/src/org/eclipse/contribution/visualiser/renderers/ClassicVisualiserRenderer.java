@@ -29,7 +29,7 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 
 	private int spacing = 4;
 
-	private int columnTitleHeight = -1;//18;
+	private int columnTitleHeight = -1;// 18;
 
 	private int margin = 6;
 
@@ -38,7 +38,9 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserRenderer#getSpacing()
+	 * @see
+	 * org.eclipse.contribution.visualiser.interfaces.IVisualiserRenderer#getSpacing
+	 * ()
 	 */
 	public int getSpacing() {
 		return spacing;
@@ -47,7 +49,8 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#getColumnHeaderHeight()
+	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#
+	 * getColumnHeaderHeight()
 	 */
 	public int getColumnHeaderHeight() {
 		if (columnTitleHeight < 0) {
@@ -68,7 +71,8 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserRenderer#getMarginSize()
+	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserRenderer#
+	 * getMarginSize()
 	 */
 	public int getMarginSize() {
 		return margin;
@@ -77,8 +81,9 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#paintColumnHeader(org.eclipse.swt.graphics.GC,
-	 *      org.eclipse.contribution.visualiser.interfaces.IMember, int)
+	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#
+	 * paintColumnHeader(org.eclipse.swt.graphics.GC,
+	 * org.eclipse.contribution.visualiser.interfaces.IMember, int)
 	 */
 	public void paintColumnHeader(GC gc, IMember m, int x, int colWidth) {
 		int title_y_start = getMarginSize();
@@ -99,19 +104,18 @@ public class ClassicVisualiserRenderer implements IVisualiserRenderer {
 		gc.drawLine(x, title_y_start, x, title_y_start + title_y_height);
 		gc.drawLine(x, title_y_start, x + colWidth, title_y_start);
 		gc.setForeground(ColorConstants.black);
-		gc.drawLine(x + colWidth, title_y_start, x + colWidth, title_y_start
-				+ title_y_height);
+		gc.drawLine(x + colWidth, title_y_start, x + colWidth, title_y_start + title_y_height);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.views.VisualiserRendering#paintColumn(org.eclipse.swt.graphics.GC,
-	 *      org.eclipse.contribution.visualiser.interfaces.IMember, int,
-	 *      boolean)
+	 * @see
+	 * org.eclipse.contribution.visualiser.views.VisualiserRendering#paintColumn
+	 * (org.eclipse.swt.graphics.GC,
+	 * org.eclipse.contribution.visualiser.interfaces.IMember, int, boolean)
 	 */
-	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth,
-			int colHeight, boolean affected) {
+	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth, int colHeight, boolean affected) {
 		if (affected) {
 			gc.setBackground(ColorConstants.white);
 		} else {

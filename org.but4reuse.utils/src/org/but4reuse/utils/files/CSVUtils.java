@@ -9,27 +9,30 @@ import java.util.List;
 
 /**
  * CSV Utils
+ * 
  * @author jabier.martinez
  */
 public class CSVUtils {
-	
+
 	/**
 	 * export a matrix to a comma separated value (csv) file
+	 * 
 	 * @param uri
-	 * @param a matrix (line, columns) of objects
+	 * @param a
+	 *            matrix (line, columns) of objects
 	 */
-	public static void exportCSV(URI uri, List<List<Object>> texts){
+	public static void exportCSV(URI uri, List<List<Object>> texts) {
 		// Create csv file
 		StringBuilder csvText = new StringBuilder();
 		for (List<?> list : texts) {
-			for(Object text : list){
+			for (Object text : list) {
 				String a = "";
-				if(text !=null){
+				if (text != null) {
 					a = text.toString();
 				}
 				csvText.append(a + ";");
 			}
-			csvText.setLength(csvText.length()-1);
+			csvText.setLength(csvText.length() - 1);
 			csvText.append("\n");
 		}
 		// Save file
@@ -43,24 +46,26 @@ public class CSVUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * export a matrix to a comma separated value (csv) file
+	 * 
 	 * @param uri
-	 * @param a matrix (line, columns) of objects
+	 * @param a
+	 *            matrix (line, columns) of objects
 	 */
-	public static void exportCSV(URI uri, Object[][] texts){
+	public static void exportCSV(URI uri, Object[][] texts) {
 		// Create csv file
 		StringBuilder csvText = new StringBuilder();
 		for (Object[] list : texts) {
-			for(Object text : list){
+			for (Object text : list) {
 				String a = "";
-				if(text !=null){
+				if (text != null) {
 					a = text.toString();
 				}
 				csvText.append(a + ";");
 			}
-			csvText.setLength(csvText.length()-1);
+			csvText.setLength(csvText.length() - 1);
 			csvText.append("\n");
 		}
 		// Save file
@@ -74,5 +79,5 @@ public class CSVUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

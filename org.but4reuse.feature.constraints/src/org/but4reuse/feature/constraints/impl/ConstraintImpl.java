@@ -7,6 +7,7 @@ import org.but4reuse.feature.constraints.IConstraint;
 
 /**
  * Provisional binary operator constraint implementation
+ * 
  * @author jabier.martinez
  */
 public class ConstraintImpl implements IConstraint {
@@ -17,7 +18,7 @@ public class ConstraintImpl implements IConstraint {
 	String text;
 	List<String> explanations;
 	int numberOfReasons;
-	
+
 	@Override
 	public Block getBlock1() {
 		return block1;
@@ -70,7 +71,7 @@ public class ConstraintImpl implements IConstraint {
 
 	@Override
 	public String getText() {
-		if(getType().equals(IConstraint.FREETEXT)){
+		if (getType().equals(IConstraint.FREETEXT)) {
 			return text;
 		}
 		return getBlock1().getName() + " " + getType() + " " + getBlock2().getName();
@@ -80,6 +81,5 @@ public class ConstraintImpl implements IConstraint {
 	public void setText(String text) {
 		this.text = text;
 	}
-
 
 }

@@ -21,8 +21,8 @@ public class Elements2FST {
 		ArrayList<FSTNode> retained = new ArrayList<FSTNode>();
 		for (IElement element : elements) {
 			// if it is a BodyElement create the parent
-			if(element instanceof BodyElement){
-				BodyElement be = (BodyElement)element;
+			if (element instanceof BodyElement) {
+				BodyElement be = (BodyElement) element;
 				element = be.getParent();
 			}
 			// calculate elements to keep
@@ -34,7 +34,7 @@ public class Elements2FST {
 				if (rootOfFeatures.contains(rootOfNode)) {
 					List<FSTNode> clones = clone(np);
 					for (FSTNode d : clones) {
-						if (!checkNode(retained, d)){
+						if (!checkNode(retained, d)) {
 							retained.add(d);
 						}
 					}

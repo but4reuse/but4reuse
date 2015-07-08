@@ -14,7 +14,7 @@ public class BlocksOnArtefactsVisualisation implements IVisualisation {
 
 	ProviderDefinition definition;
 	BlockElementsMarkupProvider markupProvider;
-	
+
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
@@ -53,19 +53,19 @@ public class BlocksOnArtefactsVisualisation implements IVisualisation {
 			public void run() {
 				// Set only this visualiser as the current one
 				for (ProviderDefinition definition2 : ProviderManager.getAllProviderDefinitions()) {
-					if(definition2!=definition){
+					if (definition2 != definition) {
 						definition2.setEnabled(false);
 					}
 				}
 				definition.setEnabled(true);
-				
+
 				// Otherwise Block 0 is not White
 				markupProvider.resetColours();
-				
+
 				// Force to show the visualiser views if not shown
 				WorkbenchUtils.forceShowView("org.eclipse.contribution.visualiser.views.Visualiser");
 				WorkbenchUtils.forceShowView("org.eclipse.contribution.visualiser.views.Menu");
-				
+
 				// Refresh
 				VisualiserPlugin.refresh();
 			}

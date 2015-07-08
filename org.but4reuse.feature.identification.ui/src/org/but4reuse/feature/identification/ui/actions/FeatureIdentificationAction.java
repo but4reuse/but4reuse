@@ -48,7 +48,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 				artefactModel = ((ArtefactModel) art);
 
 				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
-				
+
 				// Adapter selection by user
 				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters);
 

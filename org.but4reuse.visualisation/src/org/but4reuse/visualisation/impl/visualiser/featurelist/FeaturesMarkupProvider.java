@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * Features Markup Provider
+ * 
  * @author jabier.martinez
  */
 public class FeaturesMarkupProvider extends SimpleMarkupProvider {

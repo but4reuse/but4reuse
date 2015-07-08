@@ -93,15 +93,14 @@ public class FileStructureAdapter implements IAdapter {
 						// Create parent folders structure
 						URI newDirectoryURI = uri.resolve(fileElement.getRelativeURI());
 						File destinationFile = FileUtils.getFile(newDirectoryURI);
-						if (destinationFile!=null && !destinationFile.getParentFile().exists()) {
+						if (destinationFile != null && !destinationFile.getParentFile().exists()) {
 							destinationFile.getParentFile().mkdirs();
 						}
-						if (destinationFile!=null && !destinationFile.exists()) {
+						if (destinationFile != null && !destinationFile.exists()) {
 							// Copy the content. In the case of a folder, its
 							// content is not copied
 							File file = FileUtils.getFile(fileElement.getUri());
-							Files.copy(file.toPath(), destinationFile.toPath(),
-									StandardCopyOption.REPLACE_EXISTING);
+							Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 						}
 					} catch (IOException e) {
 						e.printStackTrace();

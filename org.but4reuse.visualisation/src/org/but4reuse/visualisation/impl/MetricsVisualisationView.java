@@ -23,6 +23,7 @@ public class MetricsVisualisationView extends ViewPart {
 	}
 
 	@Override
-	public void setFocus() {}
+	public void setFocus() {
+	}
 
 }

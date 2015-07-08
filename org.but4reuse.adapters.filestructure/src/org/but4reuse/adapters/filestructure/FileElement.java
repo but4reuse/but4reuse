@@ -2,6 +2,9 @@ package org.but4reuse.adapters.filestructure;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.filestructure.activator.Activator;
@@ -99,4 +102,28 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 		this.uri = uri;
 	}
 
+	@Override
+	public ArrayList<String> getWords() {
+		ArrayList<String> words = new ArrayList<String>();
+
+		// words.add(uri.getPath());
+		/*
+		 * We split path with chars '/' and '\' in order to have the name of
+		 * each folder. We split folder name using word case. For instance
+		 * EmptyFolder will become Empty Folder.
+		 */
+
+		StringTokenizer tk = new StringTokenizer(uri.getPath(), "/\\");
+
+		while (tk.hasMoreTokens()) {
+			String s = tk.nextToken();
+			System.out.println(s);
+			for (String w : s.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+				StringTokenizer tk2 = new StringTokenizer(w, "-. ");
+				while (tk2.hasMoreTokens())
+					words.add(tk2.nextToken());
+			}
+		}
+		return words;
+	}
 }

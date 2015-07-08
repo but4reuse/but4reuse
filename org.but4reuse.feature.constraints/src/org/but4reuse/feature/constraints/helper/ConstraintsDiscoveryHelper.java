@@ -14,6 +14,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * Constraints discovery helper
+ * 
  * @author jabier.martinez
  */
 public class ConstraintsDiscoveryHelper {
@@ -21,21 +22,23 @@ public class ConstraintsDiscoveryHelper {
 	public static final String CONSTRAINTSDISCOVERY_EXTENSIONPOINT = "org.but4reuse.constraints.discovery";
 
 	private static List<IConstraintsDiscovery> cache_constraintsdiscoveryalgorithms;
-	
+
 	/**
 	 * Get all the registered constraints discovery algorithms
+	 * 
 	 * @return
 	 */
 	public static List<IConstraintsDiscovery> getAllConstraintsDiscoveryAlgorithms() {
-		if(cache_constraintsdiscoveryalgorithms!=null){
+		if (cache_constraintsdiscoveryalgorithms != null) {
 			return cache_constraintsdiscoveryalgorithms;
 		}
 		List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = new ArrayList<IConstraintsDiscovery>();
-		IConfigurationElement[] constraintsDiscoveryExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				CONSTRAINTSDISCOVERY_EXTENSIONPOINT);
+		IConfigurationElement[] constraintsDiscoveryExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(CONSTRAINTSDISCOVERY_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : constraintsDiscoveryExtensionPoints) {
 			try {
-				constraintsDiscoveryAlgorithms.add((IConstraintsDiscovery) adapterExtensionPoint.createExecutableExtension("class"));
+				constraintsDiscoveryAlgorithms.add((IConstraintsDiscovery) adapterExtensionPoint
+						.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -44,8 +47,9 @@ public class ConstraintsDiscoveryHelper {
 		return constraintsDiscoveryAlgorithms;
 	}
 
-	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle().getSymbolicName());
-	
+	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
+			.getSymbolicName());
+
 	public static IPreferenceStore getPreferenceStore() {
 		return Activator.getDefault().getPreferenceStore();
 	}
@@ -55,8 +59,9 @@ public class ConstraintsDiscoveryHelper {
 				CONSTRAINTSDISCOVERY_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				IConstraintsDiscovery oneAlgo = (IConstraintsDiscovery) adapterExtensionPoint.createExecutableExtension("class");
-				if(oneAlgo.getClass().equals(algo.getClass())){
+				IConstraintsDiscovery oneAlgo = (IConstraintsDiscovery) adapterExtensionPoint
+						.createExecutableExtension("class");
+				if (oneAlgo.getClass().equals(algo.getClass())) {
 					String name = adapterExtensionPoint.getAttribute("name");
 					return name;
 				}
@@ -70,8 +75,8 @@ public class ConstraintsDiscoveryHelper {
 
 	public static List<IConstraintsDiscovery> getSelectedConstraintsDiscoveryAlgorithms() {
 		List<IConstraintsDiscovery> selected = new ArrayList<IConstraintsDiscovery>();
-		for(IConstraintsDiscovery algo : getAllConstraintsDiscoveryAlgorithms()){
-			if(isAlgorithmSelected(algo)){
+		for (IConstraintsDiscovery algo : getAllConstraintsDiscoveryAlgorithms()) {
+			if (isAlgorithmSelected(algo)) {
 				selected.add(algo);
 			}
 		}
@@ -83,5 +88,5 @@ public class ConstraintsDiscoveryHelper {
 		IPreferenceStore prefs = getPreferenceStore();
 		return prefs.getBoolean(algoName);
 	}
-	
+
 }
