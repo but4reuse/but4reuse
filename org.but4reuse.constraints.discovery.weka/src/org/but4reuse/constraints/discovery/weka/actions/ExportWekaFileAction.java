@@ -30,8 +30,7 @@ public class ExportWekaFileAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		// Get output uri from user
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Weka arff file URI", "Insert folder URI for the weka file",
-				"platform:/resource/projectName/weka.arff");
+				"Weka arff file URI", "Insert folder URI for the weka file", "platform:/resource/projectName/weka.arff");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
@@ -41,28 +40,27 @@ public class ExportWekaFileAction implements IViewActionDelegate {
 
 		// Create instances
 		Instances instances = WekaUtils.createInstances(adaptedModel);
-		
+
 		// Save it and refresh
 		try {
 			URI uri = new URI(constructionURI);
 			File file = FileUtils.getFile(uri);
-			WekaUtils.save(file,instances);
+			WekaUtils.save(file, instances);
 			IResource res = WorkbenchUtils.getIResourceFromURI(uri);
-			if(res!=null){
+			if (res != null) {
 				WorkbenchUtils.refreshIResource(res);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 
 	}
-	
+
 	@Override
 	public void init(IViewPart view) {
 

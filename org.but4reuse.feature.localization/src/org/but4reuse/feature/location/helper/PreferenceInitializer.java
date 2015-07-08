@@ -8,7 +8,8 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * Intialize Feature location preferences by selecting only the default algorithm
+ * Intialize Feature location preferences by selecting only the default
+ * algorithm
  * 
  * @author jabier.martinez
  * 

@@ -12,7 +12,6 @@ package org.eclipse.contribution.visualiser.interfaces;
 
 import java.util.List;
 
-
 /**
  * The IGroup interface is a simple extension of IMember that supports children
  * members.
@@ -20,12 +19,11 @@ import java.util.List;
 public interface IGroup extends IMember {
 
 	/**
-	 * Return list of all children in this group, the list should
-	 * contain IMembers.
+	 * Return list of all children in this group, the list should contain
+	 * IMembers.
 	 */
 	List getMembers();
 
-	
 	/**
 	 * Add a new IMember to this group.
 	 */

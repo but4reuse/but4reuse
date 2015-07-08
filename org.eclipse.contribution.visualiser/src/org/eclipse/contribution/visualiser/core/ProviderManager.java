@@ -80,8 +80,7 @@ public class ProviderManager {
 	 */
 	public static void initialise() {
 		contentProviders = new ArrayList();
-		IExtensionPoint exP = Platform.getExtensionRegistry()
-				.getExtensionPoint(PROVIDER_EXTENSION);
+		IExtensionPoint exP = Platform.getExtensionRegistry().getExtensionPoint(PROVIDER_EXTENSION);
 		IExtension[] exs = exP.getExtensions();
 
 		for (int i = 0; i < exs.length; i++) {
@@ -91,13 +90,11 @@ public class ProviderManager {
 					Object ext = ces[j].createExecutableExtension("contentProviderClass"); //$NON-NLS-1$
 
 					if (ext instanceof IContentProvider) {
-						markupP = (IMarkupProvider) ces[j]
-								.createExecutableExtension("markupProviderClass"); //$NON-NLS-1$
+						markupP = (IMarkupProvider) ces[j].createExecutableExtension("markupProviderClass"); //$NON-NLS-1$
 						markupP.initialise();
 						contentP = (IContentProvider) ext;
 						contentP.initialise();
-						ProviderDefinition cpdef = new ProviderDefinition(
-								ces[j].getAttribute("id"), //$NON-NLS-1$
+						ProviderDefinition cpdef = new ProviderDefinition(ces[j].getAttribute("id"), //$NON-NLS-1$
 								ces[j].getAttribute("name"), contentP, markupP); //$NON-NLS-1$
 						contentProviders.add(cpdef);
 						String desc = ces[j].getAttribute("description"); //$NON-NLS-1$
@@ -110,8 +107,7 @@ public class ProviderManager {
 						String priorityString = ces[j].getAttribute("priority"); //$NON-NLS-1$
 						if (priorityString != null) {
 							try {
-								cpdef.setPriority(new Integer(priorityString)
-										.intValue());
+								cpdef.setPriority(new Integer(priorityString).intValue());
 							} catch (NumberFormatException e) {
 							}
 						}
@@ -138,8 +134,7 @@ public class ProviderManager {
 			// sort providers according to priority, highest priority first
 			Collections.sort(contentProviders, new Comparator() {
 				public int compare(Object o1, Object o2) {
-					return ((ProviderDefinition) o2).getPriority()
-							- ((ProviderDefinition) o1).getPriority();
+					return ((ProviderDefinition) o2).getPriority() - ((ProviderDefinition) o1).getPriority();
 				}
 			});
 			// If the user has previously selected a provider set it to be
@@ -149,8 +144,7 @@ public class ProviderManager {
 			String provider = VisualiserPreferences.getProvider();
 			boolean set = false;
 			for (int i = 0; i < contentProviders.size(); i++) {
-				ProviderDefinition cp = (ProviderDefinition) contentProviders
-						.get(i);
+				ProviderDefinition cp = (ProviderDefinition) contentProviders.get(i);
 				String name = cp.getName();
 				if (provider.equals(name)) {
 					cp.setEnabled(true);
@@ -159,8 +153,7 @@ public class ProviderManager {
 				}
 			}
 			if (!set) {
-				ProviderDefinition cp = (ProviderDefinition) contentProviders
-						.get(0);
+				ProviderDefinition cp = (ProviderDefinition) contentProviders.get(0);
 				cp.setEnabled(true);
 			}
 		}
@@ -182,8 +175,7 @@ public class ProviderManager {
 	 * Get all provider definitions
 	 */
 	public static ProviderDefinition[] getAllProviderDefinitions() {
-		return (ProviderDefinition[]) contentProviders
-				.toArray(new ProviderDefinition[0]);
+		return (ProviderDefinition[]) contentProviders.toArray(new ProviderDefinition[0]);
 	}
 
 	/**
@@ -204,7 +196,7 @@ public class ProviderManager {
 	public static void setCurrent(ProviderDefinition definition) {
 		boolean needToUpdateVisualiser = false;
 		currentPD = definition;
-		//TODO: Ought to compare the provider instance rather than elements of
+		// TODO: Ought to compare the provider instance rather than elements of
 		// it
 		if (!contentP.equals(definition.getContentProvider()))
 			needToUpdateVisualiser = true;
@@ -212,18 +204,18 @@ public class ProviderManager {
 			needToUpdateVisualiser = true;
 
 		PaletteManager.resetCurrent();
-		
+
 		// De-activate the previous provider
 		markupP.deactivate();
 		contentP.deactivate();
-		
+
 		contentP = definition.getContentProvider();
 		markupP = definition.getMarkupInstance();
-		
+
 		// Activate the new provider
 		markupP.activate();
 		contentP.activate();
-		
+
 		if (needToUpdateVisualiser) {
 			if (VisualiserPlugin.visualiser != null) {
 				VisualiserPlugin.visualiser.setVisContentProvider(contentP);

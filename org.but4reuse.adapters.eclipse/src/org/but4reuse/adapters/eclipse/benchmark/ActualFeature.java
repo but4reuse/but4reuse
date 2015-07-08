@@ -10,7 +10,7 @@ import org.but4reuse.artefactmodel.Artefact;
  * 
  * @author jabier.martinez
  */
-public class ActualFeature implements Comparable<ActualFeature>{
+public class ActualFeature implements Comparable<ActualFeature> {
 	private String id;
 	private String name;
 	private String description;
@@ -35,7 +35,7 @@ public class ActualFeature implements Comparable<ActualFeature>{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -43,12 +43,11 @@ public class ActualFeature implements Comparable<ActualFeature>{
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public int compareTo(ActualFeature another) {
 		return id.compareTo(another.getId());
 	}
-	
 
 	public List<String> getIncludedFeatures() {
 		return includedFeatures;

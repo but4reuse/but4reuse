@@ -1,5 +1,7 @@
 package org.but4reuse.adapters.graphs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.but4reuse.adapters.IElement;
@@ -12,23 +14,24 @@ import com.tinkerpop.blueprints.Edge;
 
 /**
  * Edge Element
+ * 
  * @author jabier.martinez
  */
 public class EdgeElement extends AbstractElement {
 
 	private Edge edge = null;
-	
+
 	@Override
 	public double similarity(IElement anotherElement) {
-		if(anotherElement instanceof EdgeElement){
+		if (anotherElement instanceof EdgeElement) {
 			EdgeElement edgeElement = (EdgeElement) anotherElement;
 			String id = Activator.getDefault().getPreferenceStore().getString(GraphsAdapterPreferencePage.EDGE_ID);
-			if(id==null || id.isEmpty()){
-				if(edgeElement.getEdge().getId().equals(edge.getId())){
+			if (id == null || id.isEmpty()) {
+				if (edgeElement.getEdge().getId().equals(edge.getId())) {
 					return 1;
 				}
-			}else{
-				if(edgeElement.getEdge().getProperty(id).equals(edge.getProperty(id))){
+			} else {
+				if (edgeElement.getEdge().getProperty(id).equals(edge.getProperty(id))) {
 					return 1;
 				}
 			}
@@ -40,10 +43,11 @@ public class EdgeElement extends AbstractElement {
 	public String getText() {
 		String properties = "";
 		Set<String> keys = edge.getPropertyKeys();
-		for(String key : keys){
+		for (String key : keys) {
 			properties = properties + ", " + key + "=" + edge.getProperty(key);
 		}
-		return "E: id=" + edge.getId() + " fromTo=" + edge.getVertex(Direction.OUT).getId() + "->" + edge.getVertex(Direction.IN).getId() + properties;
+		return "E: id=" + edge.getId() + " fromTo=" + edge.getVertex(Direction.OUT).getId() + "->"
+				+ edge.getVertex(Direction.IN).getId() + properties;
 	}
 
 	public Edge getEdge() {
@@ -54,4 +58,10 @@ public class EdgeElement extends AbstractElement {
 		this.edge = edge;
 	}
 
+	@Override
+	public ArrayList<String> getWords() {
+		ArrayList<String> words = new ArrayList<String>();
+		words.add(edge.getId().toString());
+		return words;
+	}
 }

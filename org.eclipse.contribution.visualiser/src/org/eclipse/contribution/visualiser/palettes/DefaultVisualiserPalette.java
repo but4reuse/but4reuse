@@ -141,14 +141,12 @@ public class DefaultVisualiserPalette implements IVisualiserPalette {
 
 	protected static RGB pink5 = new RGB(128, 0, 64);
 
-	protected static RGB[] rgbList = new RGB[] { cyan2, blue2, purple2, swamp2,
-			orange2, indigo2, lightblue2, red2, yellow2, green2, pink2, mint2,
-			red4, yellow4, green4, cyan4, blue4, purple4, orange4, swamp4,
-			mint4, lightblue4, indigo4, pink4, red3, yellow3, green3, cyan3,
-			blue3, purple3, orange3, swamp3, mint3, lightblue3, indigo3, pink3,
-			red1, yellow1, green1, cyan1, blue1, purple1, orange1, swamp1,
-			mint1, lightblue1, indigo1, pink1, red5, yellow5, green5, cyan5,
-			blue5, purple5, orange5, swamp5, mint5, lightblue5, indigo5, pink5 };
+	protected static RGB[] rgbList = new RGB[] { cyan2, blue2, purple2, swamp2, orange2, indigo2, lightblue2, red2,
+			yellow2, green2, pink2, mint2, red4, yellow4, green4, cyan4, blue4, purple4, orange4, swamp4, mint4,
+			lightblue4, indigo4, pink4, red3, yellow3, green3, cyan3, blue3, purple3, orange3, swamp3, mint3,
+			lightblue3, indigo3, pink3, red1, yellow1, green1, cyan1, blue1, purple1, orange1, swamp1, mint1,
+			lightblue1, indigo1, pink1, red5, yellow5, green5, cyan5, blue5, purple5, orange5, swamp5, mint5,
+			lightblue5, indigo5, pink5 };
 
 	/**
 	 * Returns a colour with random R,G and B values that are between 50 and 250
@@ -166,7 +164,8 @@ public class DefaultVisualiserPalette implements IVisualiserPalette {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserPalette#getRGBValues()
+	 * @see org.eclipse.contribution.visualiser.interfaces.IVisualiserPalette#
+	 * getRGBValues()
 	 */
 	public RGB[] getRGBValues() {
 		return rgbList;

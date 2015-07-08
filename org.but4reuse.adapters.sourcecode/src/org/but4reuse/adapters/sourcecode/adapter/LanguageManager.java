@@ -8,18 +8,17 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * The current language
  */
 public class LanguageManager {
-	
+
 	private static ILanguage LANGUAGE;
-	
-	public static HashMap<FSTNode, String> filesNames=
-				new HashMap<FSTNode, String>();
+
+	public static HashMap<FSTNode, String> filesNames = new HashMap<FSTNode, String>();
 
 	public static ILanguage getLanguage() {
 		return LANGUAGE;
 	}
-	
+
 	public static void setLanguage(ILanguage iLanguage) {
 		LANGUAGE = iLanguage;
 	}
-	
+
 }

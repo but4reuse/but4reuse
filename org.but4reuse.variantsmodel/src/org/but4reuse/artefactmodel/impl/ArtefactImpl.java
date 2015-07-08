@@ -11,27 +11,31 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Artefact</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '
+ * <em><b>Artefact</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getArtefactURI <em>Artefact URI</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDescription <em>Description</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#isActive <em>Active</em>}</li>
- *   <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDate <em>Date</em>}</li>
+ * <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getName <em>Name
+ * </em>}</li>
+ * <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getArtefactURI <em>
+ * Artefact URI</em>}</li>
+ * <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDescription <em>
+ * Description</em>}</li>
+ * <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#isActive <em>Active
+ * </em>}</li>
+ * <li>{@link org.but4reuse.artefactmodel.impl.ArtefactImpl#getDate <em>Date
+ * </em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefact {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -40,8 +44,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -49,9 +53,9 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getArtefactURI() <em>Artefact URI</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getArtefactURI() <em>Artefact URI</em>}
+	 * ' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getArtefactURI()
 	 * @generated
 	 * @ordered
@@ -59,9 +63,9 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	protected static final String ARTEFACT_URI_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getArtefactURI() <em>Artefact URI</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getArtefactURI() <em>Artefact URI</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getArtefactURI()
 	 * @generated
 	 * @ordered
@@ -69,9 +73,9 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	protected String artefactURI = ARTEFACT_URI_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getDescription() <em>Description</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDescription()
 	 * @generated
 	 * @ordered
@@ -79,9 +83,9 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getDescription() <em>Description</em>}'
+	 * attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDescription()
 	 * @generated
 	 * @ordered
@@ -90,8 +94,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 
 	/**
 	 * The default value of the '{@link #isActive() <em>Active</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isActive()
 	 * @generated
 	 * @ordered
@@ -100,8 +104,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 
 	/**
 	 * The cached value of the '{@link #isActive() <em>Active</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #isActive()
 	 * @generated
 	 * @ordered
@@ -110,8 +114,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDate()
 	 * @generated
 	 * @ordered
@@ -120,8 +124,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 
 	/**
 	 * The cached value of the '{@link #getDate() <em>Date</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getDate()
 	 * @generated
 	 * @ordered
@@ -129,8 +133,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	protected Date date = DATE_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	protected ArtefactImpl() {
@@ -138,8 +142,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -148,8 +152,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getName() {
@@ -157,8 +161,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setName(String newName) {
@@ -169,8 +173,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getArtefactURI() {
@@ -178,20 +182,21 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setArtefactURI(String newArtefactURI) {
 		String oldArtefactURI = artefactURI;
 		artefactURI = newArtefactURI;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__ARTEFACT_URI, oldArtefactURI, artefactURI));
+			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__ARTEFACT_URI,
+					oldArtefactURI, artefactURI));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public String getDescription() {
@@ -199,20 +204,21 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__DESCRIPTION, oldDescription, description));
+			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__DESCRIPTION,
+					oldDescription, description));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public boolean isActive() {
@@ -220,20 +226,21 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setActive(boolean newActive) {
 		boolean oldActive = active;
 		active = newActive;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__ACTIVE, oldActive, active));
+			eNotify(new ENotificationImpl(this, Notification.SET, ArtefactModelPackage.ARTEFACT__ACTIVE, oldActive,
+					active));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public Date getDate() {
@@ -241,8 +248,8 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public void setDate(Date newDate) {
@@ -253,112 +260,113 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ArtefactModelPackage.ARTEFACT__NAME:
-				return getName();
-			case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
-				return getArtefactURI();
-			case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
-				return getDescription();
-			case ArtefactModelPackage.ARTEFACT__ACTIVE:
-				return isActive();
-			case ArtefactModelPackage.ARTEFACT__DATE:
-				return getDate();
+		case ArtefactModelPackage.ARTEFACT__NAME:
+			return getName();
+		case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
+			return getArtefactURI();
+		case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
+			return getDescription();
+		case ArtefactModelPackage.ARTEFACT__ACTIVE:
+			return isActive();
+		case ArtefactModelPackage.ARTEFACT__DATE:
+			return getDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ArtefactModelPackage.ARTEFACT__NAME:
-				setName((String)newValue);
-				return;
-			case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
-				setArtefactURI((String)newValue);
-				return;
-			case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
-				setDescription((String)newValue);
-				return;
-			case ArtefactModelPackage.ARTEFACT__ACTIVE:
-				setActive((Boolean)newValue);
-				return;
-			case ArtefactModelPackage.ARTEFACT__DATE:
-				setDate((Date)newValue);
-				return;
+		case ArtefactModelPackage.ARTEFACT__NAME:
+			setName((String) newValue);
+			return;
+		case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
+			setArtefactURI((String) newValue);
+			return;
+		case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
+			setDescription((String) newValue);
+			return;
+		case ArtefactModelPackage.ARTEFACT__ACTIVE:
+			setActive((Boolean) newValue);
+			return;
+		case ArtefactModelPackage.ARTEFACT__DATE:
+			setDate((Date) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ArtefactModelPackage.ARTEFACT__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
-				setArtefactURI(ARTEFACT_URI_EDEFAULT);
-				return;
-			case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
-				setDescription(DESCRIPTION_EDEFAULT);
-				return;
-			case ArtefactModelPackage.ARTEFACT__ACTIVE:
-				setActive(ACTIVE_EDEFAULT);
-				return;
-			case ArtefactModelPackage.ARTEFACT__DATE:
-				setDate(DATE_EDEFAULT);
-				return;
+		case ArtefactModelPackage.ARTEFACT__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
+			setArtefactURI(ARTEFACT_URI_EDEFAULT);
+			return;
+		case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
+			setDescription(DESCRIPTION_EDEFAULT);
+			return;
+		case ArtefactModelPackage.ARTEFACT__ACTIVE:
+			setActive(ACTIVE_EDEFAULT);
+			return;
+		case ArtefactModelPackage.ARTEFACT__DATE:
+			setDate(DATE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ArtefactModelPackage.ARTEFACT__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
-				return ARTEFACT_URI_EDEFAULT == null ? artefactURI != null : !ARTEFACT_URI_EDEFAULT.equals(artefactURI);
-			case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
-				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case ArtefactModelPackage.ARTEFACT__ACTIVE:
-				return active != ACTIVE_EDEFAULT;
-			case ArtefactModelPackage.ARTEFACT__DATE:
-				return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
+		case ArtefactModelPackage.ARTEFACT__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case ArtefactModelPackage.ARTEFACT__ARTEFACT_URI:
+			return ARTEFACT_URI_EDEFAULT == null ? artefactURI != null : !ARTEFACT_URI_EDEFAULT.equals(artefactURI);
+		case ArtefactModelPackage.ARTEFACT__DESCRIPTION:
+			return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+		case ArtefactModelPackage.ARTEFACT__ACTIVE:
+			return active != ACTIVE_EDEFAULT;
+		case ArtefactModelPackage.ARTEFACT__DATE:
+			return DATE_EDEFAULT == null ? date != null : !DATE_EDEFAULT.equals(date);
 		}
 		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
@@ -375,4 +383,4 @@ public class ArtefactImpl extends MinimalEObjectImpl.Container implements Artefa
 		return result.toString();
 	}
 
-} //ArtefactImpl
+} // ArtefactImpl

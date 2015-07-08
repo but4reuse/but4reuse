@@ -71,13 +71,13 @@ public class PixelManualComparison implements IManualComparison {
 		public int open() {
 			Shell shell = new Shell(getParent(), getStyle());
 			shell.setText(getText());
-			
+
 			Monitor primary = shell.getDisplay().getPrimaryMonitor();
-		    Rectangle bounds = primary.getBounds();
-		    Rectangle rect = shell.getBounds();
-		    int x = bounds.x + (bounds.width - rect.width) / 2;
-		    int y = bounds.y + (bounds.height - rect.height) / 2;
-		   
+			Rectangle bounds = primary.getBounds();
+			Rectangle rect = shell.getBounds();
+			int x = bounds.x + (bounds.width - rect.width) / 2;
+			int y = bounds.y + (bounds.height - rect.height) / 2;
+
 			shell.setLocation(x, y);
 			createContents(shell);
 			shell.pack();
@@ -99,13 +99,13 @@ public class PixelManualComparison implements IManualComparison {
 			GridData data = new GridData();
 			data.horizontalSpan = 3;
 			label.setLayoutData(data);
-			
+
 			Label label1 = new Label(shell, SWT.NONE);
 			label1.setText(element.getText());
 			data = new GridData();
 			data.horizontalSpan = 3;
 			label1.setLayoutData(data);
-			
+
 			Label label2 = new Label(shell, SWT.NONE);
 			label2.setText(anotherElement.getText());
 			data = new GridData();

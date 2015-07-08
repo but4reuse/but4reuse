@@ -1,6 +1,8 @@
 package org.but4reuse.adapters.eclipse;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -54,4 +56,10 @@ public class FileElement extends AbstractElement {
 		this.uri = uri;
 	}
 
+	@Override
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+
+		return words;
+	}
 }

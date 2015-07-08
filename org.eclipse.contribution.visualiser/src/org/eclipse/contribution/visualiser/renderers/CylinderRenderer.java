@@ -19,23 +19,23 @@ public class CylinderRenderer extends GradientVisualiserRenderer {
 	/**
 	 * Paint cylinders, with 'highlight' just a bit to the left of center.
 	 */
-	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth,
-			int colHeight, boolean affected) {
-		
+	public void paintColumn(GC gc, IMember m, int x, int yoff, int colWidth, int colHeight, boolean affected) {
+
 		if (affected) {
 			gc.setForeground(lightGrayGradientColor);
 			gc.setBackground(ColorConstants.white);
-			gc.fillGradientRectangle(x, yoff, (int)(colWidth*0.33)+1, colHeight, false);
+			gc.fillGradientRectangle(x, yoff, (int) (colWidth * 0.33) + 1, colHeight, false);
 			gc.setBackground(lightGrayGradientColor);
 			gc.setForeground(ColorConstants.white);
-			gc.fillGradientRectangle(x+((int)(colWidth*0.33)), yoff, (int)(colWidth*0.66)+1, colHeight, false);
+			gc.fillGradientRectangle(x + ((int) (colWidth * 0.33)), yoff, (int) (colWidth * 0.66) + 1, colHeight, false);
 		} else {
 			gc.setForeground(ColorConstants.darkGray);
 			gc.setBackground(ColorConstants.lightGray);
-			gc.fillGradientRectangle(x, yoff, (int)(colWidth*0.33)+1, colHeight, false);
+			gc.fillGradientRectangle(x, yoff, (int) (colWidth * 0.33) + 1, colHeight, false);
 			gc.setForeground(ColorConstants.lightGray);
 			gc.setBackground(ColorConstants.darkGray);
-			gc.fillGradientRectangle(x+((int)(colWidth*0.33))+1, yoff, (int)(colWidth*0.66)+1, colHeight, false);
+			gc.fillGradientRectangle(x + ((int) (colWidth * 0.33)) + 1, yoff, (int) (colWidth * 0.66) + 1, colHeight,
+					false);
 		}
 		gc.setForeground(outlineColor);
 		gc.drawRectangle(x, yoff, colWidth, colHeight);

@@ -9,14 +9,13 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * URI selection dialog
+ * 
  * @author jabier.martinez
  */
 
-
-
 public class URISelectionDialog extends InputDialog {
 
-	static IInputValidator validator = new IInputValidator(){
+	static IInputValidator validator = new IInputValidator() {
 
 		@Override
 		public String isValid(String newText) {
@@ -27,13 +26,11 @@ public class URISelectionDialog extends InputDialog {
 			}
 			return null;
 		}
-		
+
 	};
-	
+
 	public URISelectionDialog(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue) {
 		super(parentShell, dialogTitle, dialogMessage, initialValue, validator);
 	}
-	
-
 
 }

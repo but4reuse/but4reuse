@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * List of plugins per feature
+ * 
  * @author jabier.martinez
  */
 public class EclipseFeatureLocationPluginsVisualisation implements IVisualisation {
@@ -37,10 +38,11 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 	public void show() {
 		// TODO modify visualisation extension to allow adapter specific
 		// visualisation.
-		if (featureList != null && featureList.getName()!=null && featureList.getName().contains("eclipse")) {
+		if (featureList != null && featureList.getName() != null && featureList.getName().contains("eclipse")) {
 
 			// TODO improve getting this resource
-			IResource res = EMFUtils.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource());
+			IResource res = EMFUtils.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact()
+					.eResource());
 			File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
 
 			// create folder
@@ -52,16 +54,16 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 				File file = new File(newFolder, feature.getId() + ".txt");
 				List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
 				for (Block b : blocks) {
-					for(BlockElement be : b.getOwnedBlockElements()){
+					for (BlockElement be : b.getOwnedBlockElements()) {
 						Object o = be.getElementWrappers().get(0).getElement();
-						if(o instanceof PluginElement){
-							text.append(((PluginElement)o).getSymbName() + "\n");
+						if (o instanceof PluginElement) {
+							text.append(((PluginElement) o).getSymbName() + "\n");
 						}
 					}
 				}
 				// remove last \n
-				if(text.length()>0){
-					text.setLength(text.length()-1);
+				if (text.length() > 0) {
+					text.setLength(text.length() - 1);
 				}
 				try {
 					FileUtils.writeFile(file, text.toString());
@@ -69,14 +71,13 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 					e.printStackTrace();
 				}
 			}
-			
+
 			// Create precision and recall file
 			File actualFeatures = new File(artefactModelFile.getParentFile(), "actualFeatures");
-			if(actualFeatures.exists()){
+			if (actualFeatures.exists()) {
 				PrecisionRecall.createResultsFile(actualFeatures, newFolder);
 			}
-			
-			
+
 			// Refresh
 			WorkbenchUtils.refreshIResource(res.getParent());
 		}

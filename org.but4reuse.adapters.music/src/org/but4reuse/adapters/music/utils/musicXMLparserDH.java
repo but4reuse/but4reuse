@@ -309,7 +309,7 @@ public class musicXMLparserDH {
 						if (!thisnote.getElementsByTag("grace").isEmpty()) {
 							note.setGrace(true);
 						}
-						
+
 						if (!thisnote.getElementsByTag("staccato").isEmpty()) {
 							note.setStaccato(true);
 						}

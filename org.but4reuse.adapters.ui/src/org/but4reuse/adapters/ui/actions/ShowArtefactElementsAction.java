@@ -25,6 +25,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Show Elements Action
+ * 
  * @author jabier.martinez
  */
 public class ShowArtefactElementsAction implements IObjectActionDelegate {
@@ -40,14 +41,15 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
 				if (art instanceof Artefact) {
 					artefact = ((Artefact) art);
-					
+
 					// check predefined
 					List<IAdapter> defaultAdapters = null;
 					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
-					if(artefactModel instanceof ArtefactModel){
-						defaultAdapters = AdaptersHelper.getAdaptersByIds(((ArtefactModel)artefactModel).getAdapters());
+					if (artefactModel instanceof ArtefactModel) {
+						defaultAdapters = AdaptersHelper
+								.getAdaptersByIds(((ArtefactModel) artefactModel).getAdapters());
 					}
-					 
+
 					// Adapter selection by user
 					adap = AdaptersSelectionDialog.show("Show elements", artefact, defaultAdapters);
 

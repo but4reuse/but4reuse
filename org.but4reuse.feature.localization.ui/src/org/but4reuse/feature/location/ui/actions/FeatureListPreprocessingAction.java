@@ -44,14 +44,14 @@ public class FeatureListPreprocessingAction implements IObjectActionDelegate {
 				Shell shell = new Shell(display);
 				shell.setLayout(new GridLayout(1, true));
 				shell.setText("Feature List Preprocessing");
-				
+
 				final Button button0 = new Button(shell, SWT.PUSH);
 				button0.setText("Add Core Feature if it does not exist");
 				button0.addSelectionListener(new SelectionListener() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						for(Feature f : featureList.getOwnedFeatures()){
-							if(FeatureListHelper.isCoreFeature(artefactModel, f)){
+						for (Feature f : featureList.getOwnedFeatures()) {
+							if (FeatureListHelper.isCoreFeature(artefactModel, f)) {
 								button0.setEnabled(false);
 								return;
 							}
@@ -125,7 +125,7 @@ public class FeatureListPreprocessingAction implements IObjectActionDelegate {
 					public void widgetDefaultSelected(SelectionEvent e) {
 					}
 				});
-				
+
 				final Button button_w = new Button(shell, SWT.PUSH);
 				button_w.setText("Add 2-wise, 3-wise and 4-wise Feature Interactions existing in the artefacts");
 				button_w.addSelectionListener(new SelectionListener() {

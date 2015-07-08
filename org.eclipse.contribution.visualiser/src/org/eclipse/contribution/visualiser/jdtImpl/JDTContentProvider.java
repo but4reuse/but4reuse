@@ -44,18 +44,17 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 
-public class JDTContentProvider
-	implements IContentProvider, ISelectionListener {
+public class JDTContentProvider implements IContentProvider, ISelectionListener {
 
 	protected IJavaProject currentProject;
 	private IResource currentlySelectedResource;
 	protected IJavaElement currentlySelectedJE;
 
-
 	/**
 	 * Given a compilation unit, work out the number of lines in its source.
 	 * 
-	 * @param element Compilation unit to investigate
+	 * @param element
+	 *            Compilation unit to investigate
 	 * @return number of lines in the compilation unit
 	 */
 	protected int getLength(ICompilationUnit element) {
@@ -76,31 +75,29 @@ public class JDTContentProvider
 
 	}
 
-
 	/**
-	 * Simple trace routine - we can turn trace on and off by commenting out the body.
+	 * Simple trace routine - we can turn trace on and off by commenting out the
+	 * body.
 	 */
 	public void trace(String string) {
 		System.err.println(string);
 	}
 
-
-	/** 
-	 * Keeps the currentResource and currentProject information up to date
-	 * in this class, as this method is called whenever a user changes
-	 * their selection in the workspace.
+	/**
+	 * Keeps the currentResource and currentProject information up to date in
+	 * this class, as this method is called whenever a user changes their
+	 * selection in the workspace.
 	 */
 	public void selectionChanged(IWorkbenchPart iwp, ISelection is) {
-		if(!(ProviderManager.getContentProvider().equals(this))){
+		if (!(ProviderManager.getContentProvider().equals(this))) {
 			return;
 		}
-		
+
 		boolean updateRequired = false;
 
 		try {
 			if (is instanceof IStructuredSelection) {
-				IStructuredSelection structuredSelection =
-					(IStructuredSelection) is;
+				IStructuredSelection structuredSelection = (IStructuredSelection) is;
 				Object o = structuredSelection.getFirstElement();
 
 				if (o != null) {
@@ -109,14 +106,15 @@ public class JDTContentProvider
 					} else if (o instanceof IJavaElement) {
 						IJavaElement je = (IJavaElement) o;
 						currentlySelectedJE = je;
-						if(je.getUnderlyingResource() != null){
-							if (!je.getUnderlyingResource().equals(currentlySelectedResource)) updateRequired=true;
+						if (je.getUnderlyingResource() != null) {
+							if (!je.getUnderlyingResource().equals(currentlySelectedResource))
+								updateRequired = true;
 							currentlySelectedResource = je.getUnderlyingResource();
 							// Might be null!
 						}
 						if (je.getJavaProject() != null) {
 							setCurrentProject(je.getJavaProject());
-						} 
+						}
 					}
 				}
 			} else if (is instanceof ITextSelection) {
@@ -125,21 +123,22 @@ public class JDTContentProvider
 				VisualiserPlugin.refresh();
 			}
 		} catch (JavaModelException jme) {
-		    VisualiserPlugin.logException(jme);
+			VisualiserPlugin.logException(jme);
 		}
 	}
-	
+
 	/**
 	 * Get all members for the given group
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#getAllMembers(org.eclipse.contribution.visualiser.interfaces.IGroup)
 	 */
 	public List getAllMembers(IGroup group) {
 		return group.getMembers();
 	}
 
-	
 	/**
 	 * Get all members
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#getAllMembers()
 	 */
 	public List getAllMembers() {
@@ -147,34 +146,28 @@ public class JDTContentProvider
 		List retval = null;
 
 		// Depending on what is selected, the members are different things...
-		
+
 		// (1) Project is currently selected
-		if (currentlySelectedResource instanceof IProject
-			&& !(currentlySelectedJE instanceof IPackageFragment)) {
+		if (currentlySelectedResource instanceof IProject && !(currentlySelectedJE instanceof IPackageFragment)) {
 			retval = new ArrayList();
-			if(getCurrentProject()!=null){			
+			if (getCurrentProject() != null) {
 				List pkgfrags = getAllJDTGroups(getCurrentProject());
-				for (Iterator pkgfragiter = pkgfrags.iterator();
-					pkgfragiter.hasNext();
-					) {
+				for (Iterator pkgfragiter = pkgfrags.iterator(); pkgfragiter.hasNext();) {
 					IGroup grp = (IGroup) pkgfragiter.next();
 					retval.addAll(grp.getMembers());
 				}
 			}
 		} else if (currentlySelectedJE instanceof IPackageFragment) {
 			retval = new ArrayList();
-			JDTGroup group =
-				getGroupForFragment((IPackageFragment) currentlySelectedJE);
-			if(group != null) {
+			JDTGroup group = getGroupForFragment((IPackageFragment) currentlySelectedJE);
+			if (group != null) {
 				retval.addAll(group.getMembers());
 			}
-			
+
 		} else {
 			retval = new ArrayList();
 			List pkgfrags = getAllJDTGroups(getCurrentProject());
-			for (Iterator pkgfragiter = pkgfrags.iterator();
-				pkgfragiter.hasNext();
-				) {
+			for (Iterator pkgfragiter = pkgfrags.iterator(); pkgfragiter.hasNext();) {
 				IGroup grp = (IGroup) pkgfragiter.next();
 				List mems = grp.getMembers();
 				for (Iterator memIter = mems.iterator(); memIter.hasNext();) {
@@ -190,16 +183,16 @@ public class JDTContentProvider
 		return retval;
 	}
 
-	
 	/**
 	 * Initialise
+	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#initialise()
 	 */
 	public void initialise() {
 		if (VisualiserPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow() != null) {
-			VisualiserPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow()
-				.getSelectionService().addSelectionListener(this);
-		}	
+			VisualiserPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getSelectionService()
+					.addSelectionListener(this);
+		}
 	}
 
 	/**
@@ -212,20 +205,18 @@ public class JDTContentProvider
 	 * restored. This method should not be used when the provider is
 	 * initialised, because that may occur before the other views have been
 	 * created.
-	 *  
+	 * 
 	 */
 	public void lookForData() {
 		IWorkbenchWindow iww = VisualiserPlugin.getActiveWorkbenchWindow();
 		if (iww != null) {
 			IWorkbenchPage iwp = iww.getActivePage();
 			if (iwp != null) {
-				String[] views = new String[] { JavaUI.ID_PACKAGES_VIEW,
-						JavaUI.ID_PROJECTS_VIEW, JavaUI.ID_PACKAGES };
+				String[] views = new String[] { JavaUI.ID_PACKAGES_VIEW, JavaUI.ID_PROJECTS_VIEW, JavaUI.ID_PACKAGES };
 				for (int i = 0; i < views.length; i++) {
 					IViewPart ivp = iwp.findView(views[i]);
 					if (ivp != null) {
-						ISelectionProvider isp = ivp.getViewSite()
-								.getSelectionProvider();
+						ISelectionProvider isp = ivp.getViewSite().getSelectionProvider();
 						if (isp != null) {
 							ISelection is = isp.getSelection();
 							if (is instanceof IStructuredSelection) {
@@ -250,29 +241,27 @@ public class JDTContentProvider
 
 	/**
 	 * Process a mouse click on a member
-	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#processMouseclick(IMember, boolean, int)
+	 * 
+	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#processMouseclick(IMember,
+	 *      boolean, int)
 	 */
-	public boolean processMouseclick(
-		IMember member,
-		boolean markupWasClicked,
-		int buttonClicked) {
-		
-		if(buttonClicked != 1){
-			return true;	
+	public boolean processMouseclick(IMember member, boolean markupWasClicked, int buttonClicked) {
+
+		if (buttonClicked != 1) {
+			return true;
 		}
-		if(markupWasClicked) {
+		if (markupWasClicked) {
 			return false;
 		}
-		if(member instanceof JDTMember) {
-			IJavaElement jEl = ((JDTMember)member).getResource();
-			if(jEl != null) {
+		if (member instanceof JDTMember) {
+			IJavaElement jEl = ((JDTMember) member).getResource();
+			if (jEl != null) {
 				JDTUtils.openInEditor(jEl.getResource(), JDTUtils.getClassDeclLineNum(jEl));
 			}
 		}
-		
+
 		return false;
 	}
-
 
 	/**
 	 * Get all groups
@@ -283,35 +272,33 @@ public class JDTContentProvider
 		// Depending on what is selected, the groups are different things...
 
 		// (1) Project is currently selected
-		if (currentlySelectedResource instanceof IProject
-		    && !(currentlySelectedJE instanceof IPackageFragment)) {
+		if (currentlySelectedResource instanceof IProject && !(currentlySelectedJE instanceof IPackageFragment)) {
 			retval = getAllJDTGroups(getCurrentProject());
 		} else if (currentlySelectedJE instanceof IPackageFragment) {
 			retval = new ArrayList();
-			JDTGroup oneGroup =
-				getGroupForFragment((IPackageFragment) currentlySelectedJE);
+			JDTGroup oneGroup = getGroupForFragment((IPackageFragment) currentlySelectedJE);
 			retval.add(oneGroup);
 		} else {
-		    retval = new ArrayList();
-		    List pkgfrags = getAllJDTGroups(getCurrentProject());
-		    for (Iterator pkgfragiter = pkgfrags.iterator(); pkgfragiter.hasNext();) {
+			retval = new ArrayList();
+			List pkgfrags = getAllJDTGroups(getCurrentProject());
+			for (Iterator pkgfragiter = pkgfrags.iterator(); pkgfragiter.hasNext();) {
 				IGroup grp = (IGroup) pkgfragiter.next();
-			  	List mems = grp.getMembers();
-			  	for (Iterator memIter = mems.iterator(); memIter.hasNext();) {
+				List mems = grp.getMembers();
+				for (Iterator memIter = mems.iterator(); memIter.hasNext();) {
 					JDTMember element = (JDTMember) memIter.next();
 					if (element.getResource().equals(currentlySelectedJE)) {
 						retval.add(element.getContainingGroup());
 						break;
 					}
 				}
-		    }
-	    }
+			}
+		}
 		return retval;
 	}
 
-	
 	/**
 	 * Get a JDTGroup to represent the give IPackageFragment (Java package)
+	 * 
 	 * @param ipf
 	 * @return the JDTGroup created
 	 */
@@ -324,12 +311,14 @@ public class JDTContentProvider
 						jdtg = new JDTGroup("[" + VisualiserMessages.Default + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				} else {
-					jdtg = new JDTGroup(ipf.getElementName()/*resource.getName()*/);
+					jdtg = new JDTGroup(ipf.getElementName()/*
+															 * resource.getName()
+															 */);
 				}
-				if (jdtg!=null) {
-					
+				if (jdtg != null) {
+
 					List members = getMembersForPackage(ipf);
-					if(members.size() == 0){
+					if (members.size() == 0) {
 						return null;
 					}
 					jdtg.addMembers(members);
@@ -341,15 +330,15 @@ public class JDTContentProvider
 		return jdtg;
 	}
 
-
 	/**
 	 * Get all package fragments for the given Java project
+	 * 
 	 * @param JP
 	 * @return List of JDTGroups
 	 */
 	public List getAllJDTGroups(IJavaProject JP) {
 		List returningPackages = new LinkedList();
-		if(JP != null) {
+		if (JP != null) {
 			try {
 				IPackageFragment fragments[] = JP.getPackageFragments();
 				for (int i = 0; i < fragments.length; i++) {
@@ -364,9 +353,9 @@ public class JDTContentProvider
 		return returningPackages;
 	}
 
-
 	/**
 	 * Get all JDT members for the given IPackageFragment (Java package)
+	 * 
 	 * @param PF
 	 * @return List of JDTMembers
 	 */
@@ -376,14 +365,13 @@ public class JDTContentProvider
 			if (containsUsefulStuff(PF)) {
 				IJavaElement[] ijes = PF.getChildren();
 				for (int j = 0; j < ijes.length; j++) {
-					if (ijes[j].getElementType()
-						== IJavaElement.COMPILATION_UNIT) {
+					if (ijes[j].getElementType() == IJavaElement.COMPILATION_UNIT) {
 						String memberName = ijes[j].getElementName();
-						if(memberName.endsWith(".java")){ //$NON-NLS-1$
-							memberName = memberName.substring(0, memberName.length() - 5); 					
+						if (memberName.endsWith(".java")) { //$NON-NLS-1$
+							memberName = memberName.substring(0, memberName.length() - 5);
 						}
 						JDTMember member = new JDTMember(memberName, ijes[j]);
-						member.setSize(getLength((ICompilationUnit)ijes[j]));
+						member.setSize(getLength((ICompilationUnit) ijes[j]));
 						returningClasses.add(member);
 					}
 				}
@@ -394,9 +382,9 @@ public class JDTContentProvider
 		return returningClasses;
 	}
 
-	
 	/**
 	 * Returns true if this package fragment has Java classes in it.
+	 * 
 	 * @param fragment
 	 * @return true if the package fragment contains Java classes
 	 */
@@ -414,14 +402,12 @@ public class JDTContentProvider
 		return true;
 	}
 
-
 	/**
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#getMemberViewIcon()
 	 */
 	public ImageDescriptor getMemberViewIcon() {
 		return VisualiserImages.CLASS_VIEW;
 	}
-
 
 	/**
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#getGroupViewIcon()
@@ -430,31 +416,30 @@ public class JDTContentProvider
 		return VisualiserImages.PACKAGE_VIEW;
 	}
 
-
 	/**
 	 * Set the current project
-	 * @param currentProject - the current IJavaProject
+	 * 
+	 * @param currentProject
+	 *            - the current IJavaProject
 	 */
 	protected void setCurrentProject(IJavaProject currentProject) {
 		this.currentProject = currentProject;
 	}
 
-
 	/**
 	 * Get the current project
+	 * 
 	 * @return current IJavaProject
 	 */
 	public IJavaProject getCurrentProject() {
 		return currentProject;
 	}
 
-
-	/** 
+	/**
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#activate()
 	 */
 	public void activate() {
 	}
-
 
 	/**
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#deactivate()

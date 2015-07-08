@@ -56,15 +56,16 @@ public class WorkbenchUtils {
 	}
 
 	/**
-	 * Try to force to show a view
-	 * If not UI-thread, use Display.getDefault().asyncExec(new Runnable() {
+	 * Try to force to show a view If not UI-thread, use
+	 * Display.getDefault().asyncExec(new Runnable() {
+	 * 
 	 * @param viewId
 	 * @return
 	 */
 	public static IViewPart forceShowView(String viewId) {
 		try {
 			IWorkbenchWindow ww = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			if(ww!=null && ww.getActivePage()!=null){
+			if (ww != null && ww.getActivePage() != null) {
 				return ww.getActivePage().showView(viewId);
 			}
 			return null;
@@ -83,7 +84,7 @@ public class WorkbenchUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Refresh resource
 	 */
@@ -94,7 +95,6 @@ public class WorkbenchUtils {
 			e.printStackTrace();
 		}
 	}
-	
 
 	/**
 	 * Open a file in its default editor
@@ -132,15 +132,15 @@ public class WorkbenchUtils {
 	 * @return File
 	 */
 	public static File getFileFromIResource(IResource resource) {
-		if(resource instanceof IProject){
+		if (resource instanceof IProject) {
 			// for some reason rawlocation in projects return null
-			IProject project = (IProject)resource;
-			if(!project.exists()){
+			IProject project = (IProject) resource;
+			if (!project.exists()) {
 				return null;
 			}
 			return project.getLocation().makeAbsolute().toFile();
 		}
-		if(resource.getRawLocation()!=null){
+		if (resource.getRawLocation() != null) {
 			return resource.getRawLocation().makeAbsolute().toFile();
 		}
 		return null;
@@ -165,11 +165,12 @@ public class WorkbenchUtils {
 		IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 		return win.getActivePage();
 	}
-	
+
 	/**
 	 * Convert IResource to URI
 	 * 
-	 * @param platform uri, for example platform:/resource/projectName/myFile
+	 * @param platform
+	 *            uri, for example platform:/resource/projectName/myFile
 	 * @return the iresource or null
 	 */
 	public static IResource getIResourceFromURI(URI uri) {
@@ -179,7 +180,7 @@ public class WorkbenchUtils {
 		IPath path = new Path(uri.getPath());
 		path = path.removeFirstSegments(1);
 		// if the segment count is 1 then it is an IProject
-		if(path.segmentCount()==1){
+		if (path.segmentCount() == 1) {
 			return root.getProject(path.segment(0));
 		}
 		return root.getFile(path);
@@ -187,6 +188,7 @@ public class WorkbenchUtils {
 
 	/**
 	 * Error reporting
+	 * 
 	 * @param resource
 	 * @param line
 	 * @param msg
@@ -203,6 +205,5 @@ public class WorkbenchUtils {
 			e.printStackTrace();
 		}
 	}
-	
 
 }

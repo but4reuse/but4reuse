@@ -55,13 +55,13 @@ public class CSVAdapter implements IAdapter {
 					// Create cell element
 					CellElement cellElement = new CellElement(cell, row, column);
 					// Add dependency to its position
-					cellElement.addDependency(new PositionDependencyObject(new Point(row,column)));
+					cellElement.addDependency(new PositionDependencyObject(new Point(row, column)));
 					// Add marker
 					// TODO now the marker is on the whole line, adjust to
 					// column also
 					cellElement.setMarkerInfo(uri, row);
 					elements.add(cellElement);
-					
+
 					column++;
 				}
 				row++;

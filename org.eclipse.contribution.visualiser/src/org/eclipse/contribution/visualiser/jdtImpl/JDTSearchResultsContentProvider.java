@@ -27,27 +27,26 @@ import org.eclipse.search2.internal.ui.SearchView;
 public class JDTSearchResultsContentProvider extends JDTContentProvider {
 
 	private static VisualiserPropertyListener visListenerInstance = null;
-	
+
 	private ISearchResultViewPart searchView = null;
-	
 
 	/**
-	 * Get all members - returns null if last search to populate the search view 
+	 * Get all members - returns null if last search to populate the search view
 	 * wasn't a java search.
 	 * 
 	 * @see org.eclipse.contribution.visualiser.interfaces.IContentProvider#getAllMembers()
 	 */
 	public List getAllMembers() {
-		if(ProviderManager.getMarkupProvider() instanceof JDTSearchResultsMarkupProvider) {
-			((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).resetMarkupsAndKinds();
+		if (ProviderManager.getMarkupProvider() instanceof JDTSearchResultsMarkupProvider) {
+			((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider()).resetMarkupsAndKinds();
 			updateSearchInformation();
-			if (!((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).isJavaSearch()) {
+			if (!((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider()).isJavaSearch()) {
 				return new ArrayList();
 			}
 		}
 		return super.getAllMembers();
 	}
-	
+
 	private void updateSearchInformation() {
 		if (SearchPlugin.getActivePage() != null && NewSearchUI.getSearchResultView() != null) {
 			if (searchView == null) {
@@ -57,20 +56,21 @@ public class JDTSearchResultsContentProvider extends JDTContentProvider {
 				visListenerInstance = new VisualiserPropertyListener();
 			}
 			if (visListenerInstance == null) {
-				visListenerInstance = new VisualiserPropertyListener();					
+				visListenerInstance = new VisualiserPropertyListener();
 			}
 			searchView.addPropertyListener(visListenerInstance);
 			if (searchView instanceof SearchView) {
-				SearchView sv = (SearchView)searchView;
+				SearchView sv = (SearchView) searchView;
 				if (sv.getCurrentSearchResult() instanceof JavaSearchResult) {
-					((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).setJavaSearch(true);
-					((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).setJavaSearchResult((JavaSearchResult)sv.getCurrentSearchResult());
+					((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider()).setJavaSearch(true);
+					((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider())
+							.setJavaSearchResult((JavaSearchResult) sv.getCurrentSearchResult());
 				} else {
-					((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).setJavaSearch(false);
-					((JDTSearchResultsMarkupProvider)ProviderManager.getMarkupProvider()).setJavaSearchResult(null);						
+					((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider()).setJavaSearch(false);
+					((JDTSearchResultsMarkupProvider) ProviderManager.getMarkupProvider()).setJavaSearchResult(null);
 				}
 			}
-		}		
+		}
 	}
-	
+
 }

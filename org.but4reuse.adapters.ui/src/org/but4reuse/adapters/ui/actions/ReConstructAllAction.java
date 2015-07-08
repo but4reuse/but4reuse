@@ -48,12 +48,12 @@ public class ReConstructAllAction implements IViewActionDelegate {
 
 			// construct each adapted artefact
 			for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
-				
+
 				// separate the elements by its adapter
 				Map<String, List<IElement>> elementsMapByAdapter = new HashMap<String, List<IElement>>();
 				Map<String, IAdapter> adaptersMap = new HashMap<String, IAdapter>();
 				String name = AdaptedModelHelper.getArtefactName(aa.getArtefact());
-				
+
 				for (ElementWrapper ew : aa.getOwnedElementWrappers()) {
 					Object oElement = ew.getElement();
 					if (oElement instanceof IElement) {
@@ -75,7 +75,7 @@ public class ReConstructAllAction implements IViewActionDelegate {
 						}
 					}
 				}
-				
+
 				// here we have all the info to start the construction
 				String artefactConstructionURI = constructionURI + name + "/";
 				URI artefactURI = new URI(artefactConstructionURI);

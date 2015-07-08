@@ -58,8 +58,10 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
 			IMember member = new SimpleMember(adaptedArtefact.getArtefact().getName());
 			member.setSize(adaptedArtefact.getOwnedElementWrappers().size());
-			// TODO Do not touch tooltip, unfortunately it is used by Visualiser for the action when we right click an artefact
-			// member.setTooltip(member.getFullname() + "\nElements: " + adaptedArtefact.getOwnedElementWrappers().size());
+			// TODO Do not touch tooltip, unfortunately it is used by Visualiser
+			// for the action when we right click an artefact
+			// member.setTooltip(member.getFullname() + "\nElements: " +
+			// adaptedArtefact.getOwnedElementWrappers().size());
 			int i = 0;
 			for (ElementWrapper elementWrapper : adaptedArtefact.getOwnedElementWrappers()) {
 				List<BlockElement> blockElements = elementWrapper.getBlockElements();
@@ -98,35 +100,37 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 			if (memberName.contains("/")) {
 				memberName = memberName.substring(memberName.lastIndexOf("/") + 1, memberName.length());
 			}
-			
+
 			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
 			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-			
+
 			// Get colors and initialize lines
 			List<Color> colors = new ArrayList<Color>();
 			List<List<Integer>> lines = new ArrayList<List<Integer>>();
-			Map<Object,Integer> kindIndexMap = new HashMap<Object,Integer>();
+			Map<Object, Integer> kindIndexMap = new HashMap<Object, Integer>();
 			Object[] markups2 = markupProvider.getAllMarkupKinds().toArray();
-			for (int i=0; i<markups2.length; i ++) {
-				IMarkupKind mk = (IMarkupKind)markups2[i];
+			for (int i = 0; i < markups2.length; i++) {
+				IMarkupKind mk = (IMarkupKind) markups2[i];
 				kindIndexMap.put(mk, i);
 				colors.add(markupProvider.getColorFor(mk));
 				lines.add(new ArrayList<Integer>());
 			}
-			
+
 			List<?> stripes = markupProvider.getMemberMarkups(member);
 			String sText = "";
-			for(int i=0; i<stripes.size(); i++){
-				ElementStripe stripe = (ElementStripe)stripes.get(i);
+			for (int i = 0; i < stripes.size(); i++) {
+				ElementStripe stripe = (ElementStripe) stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText + ((ElementStripe)stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("\r", " ") + "\n";
+				sText = sText
+						+ ((ElementStripe) stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ")
+								.replaceAll("\r", " ") + "\n";
 			}
-			
+
 			// Remove the last \n
 			if (sText.length() > 0) {
 				sText = sText.substring(0, sText.length() - 1);
 			}
-			
+
 			ScrollableMessageLineColorsDialog dialog = new ScrollableMessageLineColorsDialog(Display.getCurrent()
 					.getActiveShell(), memberName, stripes.size() + " Elements", sText, lines, colors);
 			dialog.open();

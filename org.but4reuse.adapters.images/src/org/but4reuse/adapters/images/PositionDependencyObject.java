@@ -5,6 +5,7 @@ import org.eclipse.swt.graphics.Point;
 
 /**
  * Position dependency object
+ * 
  * @author jabier.martinez
  */
 public class PositionDependencyObject implements IDependencyObject {

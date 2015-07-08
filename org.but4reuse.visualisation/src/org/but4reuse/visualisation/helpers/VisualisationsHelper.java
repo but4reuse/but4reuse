@@ -85,11 +85,11 @@ public class VisualisationsHelper {
 		}
 		return "No name";
 	}
-	
+
 	public static List<IVisualisation> getSelectedVisualisations() {
 		List<IVisualisation> selected = new ArrayList<IVisualisation>();
-		for(IVisualisation algo : getAllVisualisations()){
-			if(isVisualisationSelected(algo)){
+		for (IVisualisation algo : getAllVisualisations()) {
+			if (isVisualisationSelected(algo)) {
 				selected.add(algo);
 			}
 		}

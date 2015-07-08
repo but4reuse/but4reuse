@@ -68,7 +68,6 @@ public interface IVisualiserRenderer {
 	 * @param affected
 	 *            indicates whether this column is affected by any stripes
 	 */
-	public void paintColumn(GC gc, IMember m, int x, int y, int colWidth,
-			int colHeight, boolean affected);
+	public void paintColumn(GC gc, IMember m, int x, int y, int colWidth, int colHeight, boolean affected);
 
 }

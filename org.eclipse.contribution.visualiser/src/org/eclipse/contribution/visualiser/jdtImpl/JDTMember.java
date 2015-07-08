@@ -14,9 +14,8 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleMember;
 import org.eclipse.contribution.visualiser.text.VisualiserMessages;
 import org.eclipse.jdt.core.IJavaElement;
 
-
 /**
- * The JDT implementation of IMember.  
+ * The JDT implementation of IMember.
  */
 public class JDTMember extends SimpleMember {
 
@@ -24,17 +23,20 @@ public class JDTMember extends SimpleMember {
 
 	/**
 	 * Default constructor
-	 * @param name - the member's name
-	 * @param je - the corresponding IJavaElement
+	 * 
+	 * @param name
+	 *            - the member's name
+	 * @param je
+	 *            - the corresponding IJavaElement
 	 */
-	public JDTMember(String name,IJavaElement je) {
+	public JDTMember(String name, IJavaElement je) {
 		super(name);
 		javaElement = je;
 	}
-	
-	
+
 	/**
 	 * Gets the Java element represented by this member
+	 * 
 	 * @return the IJavaElement represented
 	 */
 	public IJavaElement getResource() {
@@ -42,7 +44,8 @@ public class JDTMember extends SimpleMember {
 	}
 
 	public String toString() {
-		return  VisualiserMessages.JDTMember +  ":["+fullname+"] " + VisualiserMessages.Size + ":[" + size.toString() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		return VisualiserMessages.JDTMember
+				+ ":[" + fullname + "] " + VisualiserMessages.Size + ":[" + size.toString() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 
 }

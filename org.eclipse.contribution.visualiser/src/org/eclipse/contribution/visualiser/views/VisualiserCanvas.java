@@ -126,17 +126,15 @@ public class VisualiserCanvas extends Canvas {
 	private TimerTask postToolTipTask;
 
 	private Shell toolTip;
-	
+
 	private Menu contextMenu;
 
-		 
 	/**
 	 * @param parent
 	 * @param vis
 	 */
 	public VisualiserCanvas(Composite parent, Visualiser vis) {
-		super(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND
-				| SWT.BORDER);
+		super(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.NO_BACKGROUND | SWT.BORDER);
 		this.visualiser = vis;
 		addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent event) {
@@ -161,8 +159,7 @@ public class VisualiserCanvas extends Canvas {
 					if (is instanceof StripeGeom) {
 						s = ((StripeGeom) is).stripe;
 					}
-					visualiser.handleClick(is.getMember(), s, 
-							e.button);
+					visualiser.handleClick(is.getMember(), s, e.button);
 				}
 			}
 
@@ -224,7 +221,6 @@ public class VisualiserCanvas extends Canvas {
 		setupContextMenu();
 	}
 
-
 	private void setSelectedItem(ISelectable newItem) {
 		// Update the context menu
 		if (selectedItem == null && newItem != null) {
@@ -235,17 +231,13 @@ public class VisualiserCanvas extends Canvas {
 		selectedItem = newItem;
 	}
 
-	
-
 	private void setupContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 
 		final Action onlyShowAction = new Action() {
 			public void run() {
 				if (selectedItem != null) {
-					VisualiserPlugin.visualiser
-							.onlyShowColorsAffecting(selectedItem.getMember()
-									.getFullname());
+					VisualiserPlugin.visualiser.onlyShowColorsAffecting(selectedItem.getMember().getFullname());
 				}
 			}
 		};
@@ -281,7 +273,7 @@ public class VisualiserCanvas extends Canvas {
 							label = ((ISelectable) o).getMember().getToolTip();
 						}
 						Point dp = toDisplay(event.x, event.y);
-						showToolTip(label,dp);
+						showToolTip(label, dp);
 					}
 				}
 			});
@@ -298,8 +290,8 @@ public class VisualiserCanvas extends Canvas {
 		tipLabel.setText(text);
 		Point size = toolTip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 		toolTip.setBounds(point.x, point.y + 20, size.x, size.y);
-		toolTip.setVisible (true);
-		
+		toolTip.setVisible(true);
+
 		dismissToolTipTask = new TimerTask() {
 			public void run() {
 				Display.getDefault().syncExec(new Runnable() {
@@ -311,7 +303,7 @@ public class VisualiserCanvas extends Canvas {
 		};
 		timer.schedule(dismissToolTipTask, 5000);
 	}
-	
+
 	/**
 	 * Cancels any tooltip timers and any showing tooltips
 	 */
@@ -326,7 +318,7 @@ public class VisualiserCanvas extends Canvas {
 			dismissToolTipTask = null;
 		}
 		// remove any active tooltips
-		if (toolTip!=null && !toolTip.isDisposed()) {
+		if (toolTip != null && !toolTip.isDisposed()) {
 			toolTip.dispose();
 			toolTip = null;
 		}
@@ -349,8 +341,7 @@ public class VisualiserCanvas extends Canvas {
 				if (selectedItem instanceof StripeGeom) {
 					s = ((StripeGeom) selectedItem).stripe;
 				}
-				visualiser.handleClick(selectedItem.getMember(),
-						s, 1);
+				visualiser.handleClick(selectedItem.getMember(), s, 1);
 			}
 		} else if (ke.character == '\t') {
 			scrollToSelection = true;
@@ -392,7 +383,7 @@ public class VisualiserCanvas extends Canvas {
 				int x = selectedItem.getBounds().x; // relative to column
 				x += selectedItem.getIndex() * colWidth;
 				Point dp = toDisplay(x, selectedItem.getBounds().y);
-				showToolTip(label,dp);
+				showToolTip(label, dp);
 			}
 		} else if (ke.keyCode == SWT.ESC) {
 			cancelToolTip();
@@ -428,11 +419,9 @@ public class VisualiserCanvas extends Canvas {
 			// select last object in previous column
 			int ni = selectedItem.getIndex() - 1;
 			if (ni >= 0) {
-				BarGeom bg = (BarGeom) columns[ni].barList
-						.get(columns[ni].barList.size() - 1);
+				BarGeom bg = (BarGeom) columns[ni].barList.get(columns[ni].barList.size() - 1);
 				if (bg.stripeList.size() > 0) {
-					setSelectedItem((StripeGeom) bg.stripeList
-							.get(bg.stripeList.size() - 1));
+					setSelectedItem((StripeGeom) bg.stripeList.get(bg.stripeList.size() - 1));
 				} else {
 					setSelectedItem(bg);
 				}
@@ -443,8 +432,7 @@ public class VisualiserCanvas extends Canvas {
 			if (ni >= 0) {
 				BarGeom bg = (BarGeom) columns[ind].barList.get(ni);
 				if (bg.stripeList.size() > 0) {
-					setSelectedItem((StripeGeom) bg.stripeList
-							.get(bg.stripeList.size() - 1));
+					setSelectedItem((StripeGeom) bg.stripeList.get(bg.stripeList.size() - 1));
 				} else {
 					setSelectedItem(bg);
 				}
@@ -483,8 +471,7 @@ public class VisualiserCanvas extends Canvas {
 		if (selectedItem == null) {
 			setSelectedItem(columns[0]);
 		} else if (selectedItem instanceof ColumnGeom) {
-			setSelectedItem((BarGeom) ((ColumnGeom) selectedItem).barList
-					.get(0));
+			setSelectedItem((BarGeom) ((ColumnGeom) selectedItem).barList.get(0));
 		} else if (selectedItem instanceof BarGeom) {
 			BarGeom bg = (BarGeom) selectedItem;
 			if (bg.stripeList.size() > 0) {
@@ -527,8 +514,7 @@ public class VisualiserCanvas extends Canvas {
 			if (ni >= 0) {
 				if (columns[ni].barList.size() > 1) {
 					// choose closest bar vertically
-					setSelectedItem(closestVertically(selectedItem,
-							columns[ni].barList));
+					setSelectedItem(closestVertically(selectedItem, columns[ni].barList));
 				} else {
 					setSelectedItem((BarGeom) columns[ni].barList.get(0));
 				}
@@ -538,8 +524,7 @@ public class VisualiserCanvas extends Canvas {
 			if (ni >= 0) {
 				// move to closest stripe regardless of bar
 				List allStripes = new ArrayList();
-				for (Iterator iter = columns[ni].barList.iterator(); iter
-						.hasNext();) {
+				for (Iterator iter = columns[ni].barList.iterator(); iter.hasNext();) {
 					BarGeom bg = (BarGeom) iter.next();
 					allStripes.addAll(bg.stripeList);
 				}
@@ -549,8 +534,7 @@ public class VisualiserCanvas extends Canvas {
 					// no stripes, select nearest (or only) bar
 					if (columns[ni].barList.size() > 1) {
 						// choose closest bar vertically
-						setSelectedItem(closestVertically(selectedItem,
-								columns[ni].barList));
+						setSelectedItem(closestVertically(selectedItem, columns[ni].barList));
 					} else {
 						setSelectedItem((BarGeom) columns[ni].barList.get(0));
 					}
@@ -573,8 +557,7 @@ public class VisualiserCanvas extends Canvas {
 			if (ni < columns.length) {
 				if (columns[ni].barList.size() > 1) {
 					// choose closest bar vertically
-					setSelectedItem(closestVertically(selectedItem,
-							columns[ni].barList));
+					setSelectedItem(closestVertically(selectedItem, columns[ni].barList));
 				} else {
 					setSelectedItem((BarGeom) columns[ni].barList.get(0));
 				}
@@ -584,8 +567,7 @@ public class VisualiserCanvas extends Canvas {
 			if (ni < columns.length) {
 				// move to closest stripe regardless of bar
 				List allStripes = new ArrayList();
-				for (Iterator iter = columns[ni].barList.iterator(); iter
-						.hasNext();) {
+				for (Iterator iter = columns[ni].barList.iterator(); iter.hasNext();) {
 					BarGeom bg = (BarGeom) iter.next();
 					allStripes.addAll(bg.stripeList);
 				}
@@ -595,8 +577,7 @@ public class VisualiserCanvas extends Canvas {
 					// no stripes, select nearest (or only) bar
 					if (columns[ni].barList.size() > 1) {
 						// choose closest bar vertically
-						setSelectedItem(closestVertically(selectedItem,
-								columns[ni].barList));
+						setSelectedItem(closestVertically(selectedItem, columns[ni].barList));
 					} else {
 						setSelectedItem((BarGeom) columns[ni].barList.get(0));
 					}
@@ -653,7 +634,7 @@ public class VisualiserCanvas extends Canvas {
 
 		// remove top and left margins
 		x -= mh;
-		//y -= renderer.getMarginSize();
+		// y -= renderer.getMarginSize();
 
 		int width = scale(colWidth);
 		int spacing = getScaledSpacing();
@@ -671,21 +652,17 @@ public class VisualiserCanvas extends Canvas {
 					} else {
 						// check we're not off the bottom of the column
 						if (y <= columns[col].bounds.y
-								+ scale(columns[col].bounds.height
-										- getRenderer().getColumnHeaderHeight())
+								+ scale(columns[col].bounds.height - getRenderer().getColumnHeaderHeight())
 								+ getRenderer().getColumnHeaderHeight()) {
 							List bars = columns[col].barList;
 							for (int i = 0; i < bars.size(); i++) {
 								BarGeom bg = (BarGeom) bars.get(i);
-								if (y <= scaleExH(bg.bounds.y)
-										+ scale(bg.bounds.height)) {
+								if (y <= scaleExH(bg.bounds.y) + scale(bg.bounds.height)) {
 									List stripes = bg.stripeList;
 									for (int j = 0; j < stripes.size(); j++) {
-										StripeGeom sg = (StripeGeom) stripes
-												.get(j);
+										StripeGeom sg = (StripeGeom) stripes.get(j);
 										if ((y >= scaleExH(sg.bounds.y))
-												&& (y <= scaleExH(sg.bounds.y)
-														+ scaleStripeHeight(sg.bounds.height))) {
+												&& (y <= scaleExH(sg.bounds.y) + scaleStripeHeight(sg.bounds.height))) {
 											return sg;
 										}
 									}
@@ -712,7 +689,7 @@ public class VisualiserCanvas extends Canvas {
 		this.data = data;
 
 		if ((data == null) || (data.size() == 0)) {
-			redraw(); // still paint, so we get the "no data" message			
+			redraw(); // still paint, so we get the "no data" message
 			return;
 		}
 
@@ -720,16 +697,15 @@ public class VisualiserCanvas extends Canvas {
 		lastSelected = null;
 
 		// remove any active tooltips
-		if (toolTip!=null && !toolTip.isDisposed()) {
+		if (toolTip != null && !toolTip.isDisposed()) {
 			toolTip.dispose();
 		}
 
 		calculateGeom();
 
 		dataChanged = true;
-		redraw();		
+		redraw();
 	}
-		 		 		 		 		 
 
 	/**
 	 * Return the given zoom factor after fitting it within the required zoom
@@ -748,7 +724,7 @@ public class VisualiserCanvas extends Canvas {
 
 	/**
 	 * Zoom in and repaint, if not at maximum zoom already
-	 *  
+	 * 
 	 */
 	public void zoomIn() {
 		int newZoom = zoomValidRange(zoomFactor + 1);
@@ -768,7 +744,7 @@ public class VisualiserCanvas extends Canvas {
 
 	/**
 	 * Zoom out and repaint, if not at minumum zoom already
-	 *  
+	 * 
 	 */
 	public void zoomOut() {
 		int newZoom = zoomValidRange(zoomFactor - 1);
@@ -799,8 +775,7 @@ public class VisualiserCanvas extends Canvas {
 
 		if (visualiser.isGroupView()) {
 			for (int i = 0; i < data.size(); i++) {
-				int y = getRenderer().getMarginSize()
-						+ getRenderer().getColumnHeaderHeight();
+				int y = getRenderer().getMarginSize() + getRenderer().getColumnHeaderHeight();
 				IGroup ig = (IGroup) data.get(i);
 				List mems = ig.getMembers();
 				int size = 0;
@@ -817,8 +792,8 @@ public class VisualiserCanvas extends Canvas {
 					calculateStripeGeom(m, b);
 					y += h;
 				}
-				columns[i].bounds = new Rectangle(0, getRenderer().getMarginSize(),
-						colWidth, size + getRenderer().getColumnHeaderHeight());
+				columns[i].bounds = new Rectangle(0, getRenderer().getMarginSize(), colWidth, size
+						+ getRenderer().getColumnHeaderHeight());
 				if (size > maxSize) {
 					maxSize = size;
 				}
@@ -830,8 +805,8 @@ public class VisualiserCanvas extends Canvas {
 				columns[i] = new ColumnGeom(i);
 				columns[i].member = m;
 				int h = heightOfMember(m);
-				columns[i].bounds = new Rectangle(0, getRenderer().getMarginSize(),
-						colWidth, h + getRenderer().getColumnHeaderHeight());
+				columns[i].bounds = new Rectangle(0, getRenderer().getMarginSize(), colWidth, h
+						+ getRenderer().getColumnHeaderHeight());
 				if (h > maxSize) {
 					maxSize = h;
 				}
@@ -852,25 +827,20 @@ public class VisualiserCanvas extends Canvas {
 			vScale = (float) maxSize / viewH;
 			maxSize = viewH;
 			for (int i = 0; i < columns.length; i++) {
-				columns[i].bounds.height = (int) ((columns[i].bounds.height - hh)
-						/ vScale + hh);
+				columns[i].bounds.height = (int) ((columns[i].bounds.height - hh) / vScale + hh);
 				List bars = columns[i].barList;
 				for (int j = 0; j < bars.size(); j++) {
 					BarGeom bg = (BarGeom) bars.get(j);
 					bg.bounds.height /= vScale;
 					int oldy = bg.bounds.y;
-					bg.bounds.y = (int) ((bg.bounds.y - hh - mh) / vScale) + hh
-							+ mh;
+					bg.bounds.y = (int) ((bg.bounds.y - hh - mh) / vScale) + hh + mh;
 					List stripes = bg.stripeList;
 					for (int k = 0; k < stripes.size(); k++) {
 						StripeGeom sg = (StripeGeom) stripes.get(k);
-						sg.bounds.y = (int) ((sg.bounds.y - oldy) / vScale)
-								+ bg.bounds.y;
+						sg.bounds.y = (int) ((sg.bounds.y - oldy) / vScale) + bg.bounds.y;
 						// make sure stripe is contained within bar
-						if (sg.bounds.y + sg.bounds.height > bg.bounds.y
-								+ bg.bounds.height) {
-							sg.bounds.height = bg.bounds.y + bg.bounds.height
-									- sg.bounds.y;
+						if (sg.bounds.y + sg.bounds.height > bg.bounds.y + bg.bounds.height) {
+							sg.bounds.height = bg.bounds.y + bg.bounds.height - sg.bounds.y;
 						}
 						List kinds = sg.kindList;
 						for (int l = 0; l < kinds.size(); l++) {
@@ -903,8 +873,7 @@ public class VisualiserCanvas extends Canvas {
 				int activeKinds = 0;
 				for (int i = 0; i < s.getKinds().size(); i++) {
 					IMarkupKind kind = (IMarkupKind) s.getKinds().get(i);
-					if (VisualiserPlugin.menu == null
-							|| VisualiserPlugin.menu.getActive(kind)) {
+					if (VisualiserPlugin.menu == null || VisualiserPlugin.menu.getActive(kind)) {
 						activeKinds++;
 					}
 				}
@@ -932,23 +901,18 @@ public class VisualiserCanvas extends Canvas {
 					sg.member = m;
 					sg.stripe = s;
 					b.stripeList.add(sg);
-					sg.bounds = new Rectangle(b.bounds.x + 1,
-							b.bounds.y + ypos, colWidth - 2, stripeH);
+					sg.bounds = new Rectangle(b.bounds.x + 1, b.bounds.y + ypos, colWidth - 2, stripeH);
 					for (int i = 0; i < s.getKinds().size(); i++) {
 						IMarkupKind kind = (IMarkupKind) s.getKinds().get(i);
-						if (VisualiserPlugin.menu == null
-								|| VisualiserPlugin.menu.getActive(kind)) {
+						if (VisualiserPlugin.menu == null || VisualiserPlugin.menu.getActive(kind)) {
 							KindGeom kg = new KindGeom();
 							sg.kindList.add(kg);
-							kg.color = visualiser.getVisMarkupProvider()
-									.getColorFor(kind);
-							if(kg.color == null) {
+							kg.color = visualiser.getVisMarkupProvider().getColorFor(kind);
+							if (kg.color == null) {
 								throw new NullPointerException(VisualiserMessages.getColorForError);
 							}
-							int nw = (((across + 1) * colWidth) / activeKinds)
-									- ((across * colWidth) / activeKinds);
-							Rectangle kindRect = new Rectangle(b.bounds.x + 1
-									+ (across * colWidth) / activeKinds,
+							int nw = (((across + 1) * colWidth) / activeKinds) - ((across * colWidth) / activeKinds);
+							Rectangle kindRect = new Rectangle(b.bounds.x + 1 + (across * colWidth) / activeKinds,
 									b.bounds.y + ypos, nw - 1, sg.bounds.height);
 							kg.bounds = kindRect;
 							across++;
@@ -965,8 +929,8 @@ public class VisualiserCanvas extends Canvas {
 	/**
 	 * Performs a single pass through the list of stripes looking for stripes
 	 * that spill off the bottom of the parent column. Any such stripes are
-	 * moved up to fit, or if the column is too small, they are moved up
-	 * as much as possible, then the height is reduced as required.
+	 * moved up to fit, or if the column is too small, they are moved up as much
+	 * as possible, then the height is reduced as required.
 	 * 
 	 * @param stripeList
 	 */
@@ -991,11 +955,11 @@ public class VisualiserCanvas extends Canvas {
 			}
 		}
 	}
-	
+
 	/**
 	 * Performs a single pass through the list of stripes, attempting to space
-	 * out overlapping stripes. Make sure we don't move a stripe off the top
-	 * or bottom of the parent column.
+	 * out overlapping stripes. Make sure we don't move a stripe off the top or
+	 * bottom of the parent column.
 	 * 
 	 * @param stripeList
 	 */
@@ -1006,8 +970,7 @@ public class VisualiserCanvas extends Canvas {
 			if (i > 0) {
 				sg2 = (StripeGeom) stripeList.get(i - 1);
 				if (sg1.overlaps(sg2)) {
-					if (sg1.bounds.y + sg1.bounds.height <
-							sg1.parent.bounds.y + sg1.parent.bounds.y) {
+					if (sg1.bounds.y + sg1.bounds.height < sg1.parent.bounds.y + sg1.parent.bounds.y) {
 						sg1.moveVertically(1);
 					}
 				}
@@ -1032,7 +995,7 @@ public class VisualiserCanvas extends Canvas {
 	 * Calculate the appropriate width for the visualiser columns, based on the
 	 * defined minimum and maximum values, size of the view, and the number of
 	 * columns.
-	 *  
+	 * 
 	 */
 	private void calculateWidth() {
 		if ((data == null) || (data.size() <= 0)) {
@@ -1103,7 +1066,7 @@ public class VisualiserCanvas extends Canvas {
 	private IVisualiserRenderer getRenderer() {
 		return RendererManager.getCurrentRenderer().getRenderer();
 	}
-	
+
 	/**
 	 * The main paint routine - the start of the rendering process
 	 * 
@@ -1112,28 +1075,26 @@ public class VisualiserCanvas extends Canvas {
 	private void paint(GC gc) {
 		Rectangle clientRect = getClientArea();
 
-		if ((screenImg == null)
-				|| (clientRect.width > screenImg.getBounds().width)
+		if ((screenImg == null) || (clientRect.width > screenImg.getBounds().width)
 				|| clientRect.height > screenImg.getBounds().height) {
 			if (screenImg != null) {
 				screenImg.dispose();
 			}
-			screenImg = new Image(getDisplay(), clientRect.width,
-					clientRect.height);
+			screenImg = new Image(getDisplay(), clientRect.width, clientRect.height);
 		}
 		GC sgc = new GC(screenImg);
 
 		// clear to bg colour
 		sgc.setBackground(VIS_BG_COLOUR);
 		sgc.fillRectangle(screenImg.getBounds());
-		
+
 		if ((data == null) || (data.size() == 0)) {
 			String empty = ""; //$NON-NLS-1$
 			if (ProviderManager.getCurrent() != null) {
-				empty = ProviderManager.getCurrent().getEmptyMessage() != null ? ProviderManager.getCurrent().getEmptyMessage() : ""; //$NON-NLS-1$
+				empty = ProviderManager.getCurrent().getEmptyMessage() != null ? ProviderManager.getCurrent()
+						.getEmptyMessage() : ""; //$NON-NLS-1$
 			}
-			sgc.drawText(empty, getRenderer().getMarginSize(), getRenderer()
-					.getMarginSize());
+			sgc.drawText(empty, getRenderer().getMarginSize(), getRenderer().getMarginSize());
 			// If the data is null, ask the provider to get to find something
 			// to display. But don't if the data is non-null but zero length,
 			// otherwise the provider is likely to return a zero length list
@@ -1143,8 +1104,7 @@ public class VisualiserCanvas extends Canvas {
 					&& (visualiser.contentP instanceof JDTContentProvider)) {
 				getDisplay().asyncExec(new Runnable() {
 					public void run() {
-						((JDTContentProvider) visualiser.contentP)
-								.lookForData();
+						((JDTContentProvider) visualiser.contentP).lookForData();
 					}
 				});
 			}
@@ -1167,10 +1127,8 @@ public class VisualiserCanvas extends Canvas {
 				dataChanged = false;
 				zoomChanged = false;
 				setSelectedItem(null);
-				reqWidth = data.size() * eachWidth + 2
-						* getRenderer().getMarginSize();
-				reqHeight = scale(maxSize) + 2 * getRenderer().getMarginSize()
-						+ getRenderer().getColumnHeaderHeight();
+				reqWidth = data.size() * eachWidth + 2 * getRenderer().getMarginSize();
+				reqHeight = scale(maxSize) + 2 * getRenderer().getMarginSize() + getRenderer().getColumnHeaderHeight();
 
 				// we MUST dispose any previous Image
 				if (cImg != null) {
@@ -1201,7 +1159,7 @@ public class VisualiserCanvas extends Canvas {
 			// render just those columns that should be partially or fully
 			// visible
 			for (int i = startcol; i < data.size() && (x < clientRect.width); i++) {
-				//System.out.println("i="+i);
+				// System.out.println("i="+i);
 				ImageData idata = null;
 				if (colImgDataSR[i] != null) {
 					idata = (ImageData) colImgDataSR[i].get();
@@ -1213,10 +1171,8 @@ public class VisualiserCanvas extends Canvas {
 					colImgDataSR[i] = new SoftReference(idata);
 				}
 				Image tmpImg = new Image(getDisplay(), idata);
-				int ch = Math.min(clientRect.height - 1,
-						cImg.getBounds().height - 1);
-				sgc.drawImage(tmpImg, 0, scrollv, eachWidth, ch, x, 0,
-						eachWidth, ch);
+				int ch = Math.min(clientRect.height - 1, cImg.getBounds().height - 1);
+				sgc.drawImage(tmpImg, 0, scrollv, eachWidth, ch, x, 0, eachWidth, ch);
 				tmpImg.dispose();
 				x += eachWidth;
 			}
@@ -1228,8 +1184,7 @@ public class VisualiserCanvas extends Canvas {
 		}
 
 		// finally paint offscreen image onto the view
-		gc.drawImage(screenImg, 0, 0, clientRect.width, clientRect.height, 0,
-				0, clientRect.width, clientRect.height);
+		gc.drawImage(screenImg, 0, 0, clientRect.width, clientRect.height, 0, 0, clientRect.width, clientRect.height);
 		sgc.dispose();
 	}
 
@@ -1241,7 +1196,7 @@ public class VisualiserCanvas extends Canvas {
 	 * @return rendered ImageData
 	 */
 	private ImageData paintColumn(int index) {
-		//System.out.println("rendering column index="+index);
+		// System.out.println("rendering column index="+index);
 		IMember m = (IMember) data.get(index);
 		GC gc = new GC(cImg);
 
@@ -1258,8 +1213,8 @@ public class VisualiserCanvas extends Canvas {
 			List stripes = bg.stripeList;
 			if (stripes.size() > 0) {
 				// affected by stripes
-				getRenderer().paintColumn(gc, m, bg.bounds.x, scaleExH(bg.bounds.y),
-						scale(bg.bounds.width), scale(bg.bounds.height), true);
+				getRenderer().paintColumn(gc, m, bg.bounds.x, scaleExH(bg.bounds.y), scale(bg.bounds.width),
+						scale(bg.bounds.height), true);
 				for (int j = 0; j < stripes.size(); j++) {
 					List kinds = ((StripeGeom) stripes.get(j)).kindList;
 					for (int k = 0; k < kinds.size(); k++) {
@@ -1269,16 +1224,14 @@ public class VisualiserCanvas extends Canvas {
 						} else {
 							gc.setBackground(kg.color);
 						}
-						gc.fillRectangle((k == 0) ? kg.bounds.x
-								: scale(kg.bounds.x), scaleExH(kg.bounds.y),
-								scale(kg.bounds.width),
-								scaleStripeHeight(kg.bounds.height));
+						gc.fillRectangle((k == 0) ? kg.bounds.x : scale(kg.bounds.x), scaleExH(kg.bounds.y),
+								scale(kg.bounds.width), scaleStripeHeight(kg.bounds.height));
 					}
 				}
 			} else {
 				// not affected by stripes
-				getRenderer().paintColumn(gc, m, bg.bounds.x, scaleExH(bg.bounds.y),
-						scale(bg.bounds.width), scale(bg.bounds.height), false);
+				getRenderer().paintColumn(gc, m, bg.bounds.x, scaleExH(bg.bounds.y), scale(bg.bounds.width),
+						scale(bg.bounds.height), false);
 			}
 		}
 
@@ -1293,8 +1246,7 @@ public class VisualiserCanvas extends Canvas {
 	 */
 	private void paintSelection(GC gc) {
 		Rectangle r = selectedItem.getBounds();
-		int x = getRenderer().getMarginSize() + selectedItem.getIndex()
-				* (scale(colWidth) + getScaledSpacing()) + r.x
+		int x = getRenderer().getMarginSize() + selectedItem.getIndex() * (scale(colWidth) + getScaledSpacing()) + r.x
 				- getHorizontalBar().getSelection();
 		int y = scaleExH(r.y) - getVerticalBar().getSelection();
 
@@ -1304,8 +1256,8 @@ public class VisualiserCanvas extends Canvas {
 		int n = 0;
 		if (selectedItem instanceof ColumnGeom) {
 			n = 1;
-			height = scale(r.height - getRenderer().getColumnHeaderHeight())
-					+ getRenderer().getColumnHeaderHeight() + 1;
+			height = scale(r.height - getRenderer().getColumnHeaderHeight()) + getRenderer().getColumnHeaderHeight()
+					+ 1;
 			y = r.y - getVerticalBar().getSelection();
 			height += 2;
 		} else if (selectedItem instanceof BarGeom) {
@@ -1314,8 +1266,7 @@ public class VisualiserCanvas extends Canvas {
 			height = scaleStripeHeight(r.height) + 1;
 		}
 
-		Rectangle outer = new Rectangle(x - 3 - n, y - 3, width + 6 + n,
-				height + 4);
+		Rectangle outer = new Rectangle(x - 3 - n, y - 3, width + 6 + n, height + 4);
 		if (scrollToSelection) {
 			// Check that the selection is visible, if not adjust the scrollbars
 			// accordingly. We only want to do this when the user is navigating
@@ -1327,8 +1278,7 @@ public class VisualiserCanvas extends Canvas {
 				getVerticalBar().setSelection(scrollv - offset);
 				redraw();
 				return;
-			} else if ((outer.y + outer.height > clip.y + clip.height)
-					&& (clip.height >= outer.height)) {
+			} else if ((outer.y + outer.height > clip.y + clip.height) && (clip.height >= outer.height)) {
 				// off the bottom - extra condition above is to avoid moving
 				// up if doing so would cause the top of the selection to go off
 				// the top, to prevent the view getting
@@ -1340,8 +1290,7 @@ public class VisualiserCanvas extends Canvas {
 				return;
 			} else if (outer.x + outer.width + 1 > clip.x + clip.width) {
 				// off the right
-				int offset = (outer.x + outer.width + 1)
-						- (clip.x + clip.width);
+				int offset = (outer.x + outer.width + 1) - (clip.x + clip.width);
 				int scrollh = getHorizontalBar().getSelection();
 				getHorizontalBar().setSelection(scrollh + offset);
 				redraw();
@@ -1366,9 +1315,8 @@ public class VisualiserCanvas extends Canvas {
 					PatternVisualiserRenderer.getPatternRenderer().setDitherPattern(gc, kg.color.getRGB());
 				} else {
 					gc.setBackground(kg.color);
-				}				
-				gc.fillRectangle(scale(kg.bounds.x) + x - 1, y,
-						scale(kg.bounds.width),
+				}
+				gc.fillRectangle(scale(kg.bounds.x) + x - 1, y, scale(kg.bounds.width),
 						scaleStripeHeight(kg.bounds.height));
 			}
 		}
@@ -1391,16 +1339,13 @@ public class VisualiserCanvas extends Canvas {
 		if (visualiser.isFitToView()) {
 			return v;
 		}
-		return (zoomFactor * (v - getRenderer().getMarginSize() - getRenderer()
-				.getColumnHeaderHeight()))
-				/ zoomSc
-				+ getRenderer().getMarginSize()
-				+ getRenderer().getColumnHeaderHeight();
+		return (zoomFactor * (v - getRenderer().getMarginSize() - getRenderer().getColumnHeaderHeight())) / zoomSc
+				+ getRenderer().getMarginSize() + getRenderer().getColumnHeaderHeight();
 	}
 
 	/**
-	 * Calculate stripe height scaled to zoom factor, but make sure it ends
-	 * up at least 1 pixel high.
+	 * Calculate stripe height scaled to zoom factor, but make sure it ends up
+	 * at least 1 pixel high.
 	 * 
 	 * @param v
 	 * @return scaled height

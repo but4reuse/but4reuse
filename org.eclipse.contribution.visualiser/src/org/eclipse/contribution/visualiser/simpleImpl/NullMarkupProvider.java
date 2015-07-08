@@ -24,14 +24,13 @@ import org.eclipse.swt.graphics.Color;
  * The null marker provider, just returns nulls for all questions it gets asked.
  */
 public class NullMarkupProvider implements IMarkupProvider {
-	
-		/**
+
+	/**
 	 * Get the markups for the given member - returns null
 	 */
 	public List getMemberMarkups(IMember member) {
 		return null;
 	}
-
 
 	/**
 	 * Get the markups for the given group - returns null
@@ -40,14 +39,12 @@ public class NullMarkupProvider implements IMarkupProvider {
 		return null;
 	}
 
-
 	/**
 	 * Get the colour for the given String - returns null
 	 */
 	public Color getColorFor(IMarkupKind string) {
 		return null;
 	}
-
 
 	/**
 	 * Get the set of all markup kinds - returns null
@@ -56,13 +53,11 @@ public class NullMarkupProvider implements IMarkupProvider {
 		return null;
 	}
 
-
 	/**
 	 * Initialise the provider - does nothing
 	 */
 	public void initialise() {
 	}
-
 
 	/**
 	 * Set the colour for the given String - does nothing
@@ -70,23 +65,22 @@ public class NullMarkupProvider implements IMarkupProvider {
 	public void setColorFor(IMarkupKind kind, Color color) {
 	}
 
-	
 	/**
-	 * Processs a mouse click on a stripe.  Does nothing.  Returns true - default behavior
-	 * should be performed.
-	 * @see org.eclipse.contribution.visualiser.interfaces.IMarkupProvider#processMouseclick(IMember, Stripe, int)
+	 * Processs a mouse click on a stripe. Does nothing. Returns true - default
+	 * behavior should be performed.
+	 * 
+	 * @see org.eclipse.contribution.visualiser.interfaces.IMarkupProvider#processMouseclick(IMember,
+	 *      Stripe, int)
 	 */
 	public boolean processMouseclick(IMember member, Stripe stripe, int buttonClicked) {
 		return true;
 	}
-
 
 	/**
 	 * Activate the provider
 	 */
 	public void activate() {
 	}
-
 
 	/**
 	 * Deactivate the provider
