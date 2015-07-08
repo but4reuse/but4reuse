@@ -92,8 +92,8 @@ public class WordCloudVisualisation implements IVisualisation {
 	 */
 	private static void addWords(Cloud cloud, List<String> words) {
 		for (String word : words) {
-			word.trim();
-			cloud.addTag(new Tag(word));
+			String s = word.trim();
+			cloud.addTag(new Tag(s));
 		}
 	}
 
