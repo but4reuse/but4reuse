@@ -36,7 +36,7 @@ public class EMFAdapter implements IAdapter {
 	// This will store the comparison method used during the analysis
 	// TODO support different comparison methods for the same analysis
 	static IComparisonMethod comparisonMethod = null;
-	
+
 	/**
 	 * Adaptable if we can load an EObject from the URI
 	 */

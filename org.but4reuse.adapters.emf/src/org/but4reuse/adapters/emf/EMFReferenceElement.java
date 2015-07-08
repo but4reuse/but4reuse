@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.emf;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
@@ -33,25 +34,31 @@ public class EMFReferenceElement extends AbstractElement {
 			}
 			referenceText = referenceText.substring(0, referenceText.length() - ", ".length());
 		}
-		return "Reference: [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + this.eReference.getName()
-				+ "] [Value->" + referenceText + "]";
+		return "Reference: [Owner->" + EMFUtils.getText(owner) + "] [Ref->" + this.eReference.getName() + "] [Value->"
+				+ referenceText + "]";
 	}
 
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFReferenceElement) {
 			EMFReferenceElement targetCP = (EMFReferenceElement) anotherElement;
-			if (DiffMergeUtils.isEqualEObjectReference(EMFAdapter.getComparisonMethod(), owner, eReference, referenced, targetCP.owner,
-					targetCP.eReference, targetCP.referenced)) {
+			if (DiffMergeUtils.isEqualEObjectReference(EMFAdapter.getComparisonMethod(), owner, eReference, referenced,
+					targetCP.owner, targetCP.eReference, targetCP.referenced)) {
 				return 1;
 			}
 		}
 		return 0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return EMFAdapter.getHashCode(owner);
+	}
+
+	@Override
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		return words;
 	}
 
 }

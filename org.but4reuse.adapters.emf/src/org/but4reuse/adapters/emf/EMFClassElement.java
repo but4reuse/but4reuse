@@ -1,5 +1,8 @@
 package org.but4reuse.adapters.emf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -42,6 +45,19 @@ public class EMFClassElement extends AbstractElement {
 	@Override
 	public int hashCode() {
 		return EMFAdapter.getHashCode(eObject);
+	}
+
+	@Override
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		String className = EMFUtils.getText(eObject);
+		if (className != null) {
+			String[] tokens = className.split("[\\W]");
+			for (String s : tokens) {
+				words.add(s);
+			}
+		}
+		return words;
 	}
 
 }

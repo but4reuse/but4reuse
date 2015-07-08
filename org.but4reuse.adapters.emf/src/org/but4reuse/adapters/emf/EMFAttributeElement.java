@@ -1,5 +1,8 @@
 package org.but4reuse.adapters.emf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -28,8 +31,8 @@ public class EMFAttributeElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof EMFAttributeElement) {
 			EMFAttributeElement targetElement = (EMFAttributeElement) anotherElement;
-			if (DiffMergeUtils.isEqualEObjectAttribute(EMFAdapter.getComparisonMethod(), owner, eAttribute, value, targetElement.owner, targetElement.eAttribute,
-					targetElement.value)) {
+			if (DiffMergeUtils.isEqualEObjectAttribute(EMFAdapter.getComparisonMethod(), owner, eAttribute, value,
+					targetElement.owner, targetElement.eAttribute, targetElement.value)) {
 				return 1;
 			}
 		}
@@ -41,4 +44,16 @@ public class EMFAttributeElement extends AbstractElement {
 		return EMFAdapter.getHashCode(owner);
 	}
 
+	@Override
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		String valueName = value.toString();
+		if (valueName != null) {
+			String[] tokens = valueName.split("[\\W]");
+			for (String s : tokens) {
+				words.add(s);
+			}
+		}
+		return words;
+	}
 }
