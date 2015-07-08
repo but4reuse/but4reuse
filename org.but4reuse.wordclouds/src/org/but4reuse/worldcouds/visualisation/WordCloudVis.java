@@ -1,5 +1,7 @@
 package org.but4reuse.worldcouds.visualisation;
 
+import java.text.DecimalFormat;
+
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -193,11 +195,11 @@ public class WordCloudVis extends ViewPart {
 		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1) {
 			Cloud c2 = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 			for (Tag t : c2.tags())
-				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
+				singleton.getList().add(t.getName() + " - " +String.format("%.2f",t.getScore()));
 
 		} else
 			for (Tag t : c.tags())
-				singleton.getList().add(t.getName() + " - " + t.getScoreInt());
+				singleton.getList().add(t.getName() + " - " + String.format("%.2f",t.getScore()));
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
@@ -222,8 +224,7 @@ public class WordCloudVis extends ViewPart {
 		c1.setLayoutData(gd_c1);
 		c1.setBounds(0, 0, 101, 135);
 
-		Label lblWordList = new Label(c1, SWT.BORDER | SWT.SHADOW_IN | SWT.CENTER);
-		lblWordList.setBackground(new Color(Display.getCurrent(), new RGB(245, 245, 245)));
+		Label lblWordList = new Label(c1, SWT.NORMAL| SWT.CENTER);
 		lblWordList.setBounds(41, 4, 89, 24);
 		lblWordList.setFont(new Font(Display.getCurrent(), "Sylfaen", 12, SWT.BOLD));
 		lblWordList.setText(" Word List ");
@@ -354,15 +355,16 @@ public class WordCloudVis extends ViewPart {
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
 						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-						if (c.tags().size() == 0)
-							return;
-
-						Tag last = c.tags().get(0);
-						for (Tag t : c.tags()) {
-							if (t.getWeight() > last.getWeight())
-								last = t;
+						if (c.tags().size() > 0)
+						{
+							Tag last = c.tags().get(0);
+						
+							for (Tag t : c.tags()) {
+								if (t.getWeight() > last.getWeight())
+									last = t;
+							}
+							b.setName(last.getName());
 						}
-						b.setName(last.getName());
 						ind++;
 					}
 					WordCloudVis.update(combo.getSelectionIndex(), true);
@@ -391,15 +393,18 @@ public class WordCloudVis extends ViewPart {
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
 					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 						c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-					if (c.tags().size() == 0)
-						return;
-
-					Tag last = c.tags().get(0);
-					for (Tag t : c.tags()) {
-						if (t.getWeight() > last.getWeight())
-							last = t;
+				
+					if(c.tags().size() > 0)
+					{
+						Tag last = c.tags().get(0);
+							for (Tag t : c.tags()) {
+								if (t.getWeight() > last.getWeight())
+									last = t;
+							}
+						b.setName(last.getName());
 					}
-					b.setName(last.getName());
+					
+					
 					WordCloudVis.update(combo.getSelectionIndex(), true);
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
@@ -493,7 +498,7 @@ public class WordCloudVis extends ViewPart {
 				if (ind == 1)
 					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
 				for (Tag t : c.tags())
-					WordCloudVis.getSingleton().getList().add(t.getName() + " - " + t.getScore());
+					WordCloudVis.getSingleton().getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
 			}
 
 			@Override
