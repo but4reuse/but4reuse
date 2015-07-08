@@ -59,9 +59,14 @@ public class EdgeElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords() {
-		ArrayList<String> words = new ArrayList<String>();
-		words.add(edge.getId().toString());
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		String id = Activator.getDefault().getPreferenceStore().getString(GraphsAdapterPreferencePage.EDGE_ID);
+		if (id == null || id.isEmpty()) {
+			words.add(edge.getId().toString());
+		} else {
+			words.add(edge.getProperty(id).toString());
+		}
 		return words;
 	}
 }

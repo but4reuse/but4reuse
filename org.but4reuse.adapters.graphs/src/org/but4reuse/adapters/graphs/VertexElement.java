@@ -57,9 +57,14 @@ public class VertexElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords() {
-		ArrayList<String> words = new ArrayList<String>();
-		words.add(vertex.getId().toString());
+	public List<String> getWords() {
+		List<String> words = new ArrayList<String>();
+		String id = Activator.getDefault().getPreferenceStore().getString(GraphsAdapterPreferencePage.NODE_ID);
+		if (id == null || id.isEmpty()) {
+			words.add(vertex.getId().toString());
+		} else {
+			words.add(vertex.getProperty(id).toString());
+		}
 		return words;
 	}
 
