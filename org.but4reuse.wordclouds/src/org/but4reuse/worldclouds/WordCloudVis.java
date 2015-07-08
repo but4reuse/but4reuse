@@ -1,5 +1,7 @@
 package org.but4reuse.worldclouds;
 
+import java.util.ArrayList;
+
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
@@ -343,21 +345,21 @@ public class WordCloudVis extends ViewPart {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-
+					
 					int ind = 0;
+					ArrayList<String> names = new ArrayList<String>();
+
 					for (Block b : AdaptedModelManager.getAdaptedModel().getOwnedBlocks()) {
 
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
 						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-						if (c.tags().size() > 0) {
-							Tag last = c.tags().get(0);
-
-							for (Tag t : c.tags()) {
-								if (t.getWeight() > last.getWeight())
-									last = t;
-							}
-							b.setName(last.getName());
+						
+						String name = WordCloudUtil.rename(names, c);
+						if(name != null)
+						{	names.add(name);
+							System.out.println("New Name = "+name+"|");
+							b.setName(name);
 						}
 						ind++;
 					}
@@ -384,19 +386,18 @@ public class WordCloudVis extends ViewPart {
 
 					int ind = combo.getSelectionIndex();
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
+					ArrayList<String> names = new ArrayList<String>();
+					for(Block bl : AdaptedModelManager.getAdaptedModel().getOwnedBlocks())
+					{
+						if(b == bl)
+							continue;
+						names.add(bl.getName());
+					}
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
 					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 						c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-
-					if (c.tags().size() > 0) {
-						Tag last = c.tags().get(0);
-						for (Tag t : c.tags()) {
-							if (t.getWeight() > last.getWeight())
-								last = t;
-						}
-						b.setName(last.getName());
-					}
-
+					String name = WordCloudUtil.rename(names, c);
+					b.setName(name);
 					WordCloudVis.update(combo.getSelectionIndex(), true);
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
