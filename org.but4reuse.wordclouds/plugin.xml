@@ -14,6 +14,17 @@
                label="Show Word Cloud">
          </action>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowFeatureWordCloud"
+            objectClass="org.but4reuse.featurelist.Feature">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action2"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.views">

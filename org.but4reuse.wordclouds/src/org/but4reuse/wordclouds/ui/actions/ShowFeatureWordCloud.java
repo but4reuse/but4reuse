@@ -1,17 +1,11 @@
 package org.but4reuse.wordclouds.ui.actions;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IAdapter;
-import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.helper.AdaptersHelper;
-import org.but4reuse.adapters.impl.AbstractElement;
-import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
-import org.but4reuse.artefactmodel.Artefact;
-import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.featurelist.Feature;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,53 +23,46 @@ import org.mcavallo.opencloud.Cloud;
  *         create a new window where a word cloud will be drawn
  */
 
-public class ShowArtefactWordCloud implements IObjectActionDelegate {
+public class ShowFeatureWordCloud implements IObjectActionDelegate {
 
 	ISelection selection;
-	Artefact artefact = null;
+	Feature feature = null;
 	List<IAdapter> adap;
 	Cloud c = new Cloud();
-	int widthWin = 700, heightWin = 700;
+	int widthWin = 600, heightWin = 600;
 
 	@Override
 	public void run(IAction action) {
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
-		artefact = null;
+		feature = null;
 		if (selection instanceof IStructuredSelection) {
-			for (Object art : ((IStructuredSelection) selection).toArray()) {
-				if (art instanceof Artefact) {
-					artefact = ((Artefact) art);
-
-					// check predefined
-					List<IAdapter> defaultAdapters = null;
-					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
-					if (artefactModel instanceof ArtefactModel) {
-						defaultAdapters = AdaptersHelper
-								.getAdaptersByIds(((ArtefactModel) artefactModel).getAdapters());
-					}
-
-					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefact, defaultAdapters);
-
-					if (!adap.isEmpty()) {
-						// Launch Progress dialog
+			for (Object feat : ((IStructuredSelection) selection).toArray()) {
+				if (feat instanceof Feature) {
+					feature = ((Feature) feat);
 
 						c.clear();
-						for (IAdapter adapter : adap) {
-							List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
-							for (IElement element : elements) {
-								AbstractElement ab = (AbstractElement) element;
-								for (String s : ab.getWords())
-									c.addTag(s);
+						StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+						
+						while (tk.hasMoreTokens()) {
+							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+								c.addTag(w);
 							}
+						}
+						
+						tk = new StringTokenizer(feature.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+						
+						while (tk.hasMoreTokens()) {
+							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+								c.addTag(w);
+							}
+
 						}
 
 						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
 						win.setSize(widthWin, heightWin);
-						win.setText("Word Cloud for artefact " + artefact.getName());
+						win.setText("Word Cloud for feature" + feature.getName());
 
-					
 						Composite comp = new Composite(win, SWT.NORMAL);
 						comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
 						
@@ -84,7 +71,6 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 						WordCloudUtil.drawWordCloud(comp, c);
 
-					}
 				}
 			}
 		}
