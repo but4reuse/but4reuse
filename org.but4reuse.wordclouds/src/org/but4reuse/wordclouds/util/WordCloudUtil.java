@@ -127,73 +127,49 @@ public class WordCloudUtil {
 		}
 		return cloud_IDF;
 	}
-	
-	public static boolean checkName(List<String> list,String name)
 
-	{
-
-		for(String s : list)
-
-		{
-
-			if(s.compareToIgnoreCase(name) == 0)
-
+	public static boolean checkName(List<String> list, String name) {
+		for (String s : list) {
+			if (s.compareToIgnoreCase(name) == 0)
 				return false;
-
 		}
-
 		return true;
-
 	}
 
-	
-
-	public static String rename(List<String> names,Cloud c)
-	{
-		if(c.tags().size() == 0)
+	public static String rename(List<String> names, Cloud c) {
+		if (c.tags().size() == 0)
 			return null;
 
 		Cloud c_cp = new Cloud(c);
 		Tag t = null;
-	    double score = 0;
+		double score = 0;
 		String name = "";
-		
-		for(Tag tag : c_cp.tags())
-		{
-			if(tag.getScore() > score)
-			{
+
+		for (Tag tag : c_cp.tags()) {
+			if (tag.getScore() > score) {
 				t = tag;
 				score = tag.getScore();
 			}
 		}
-		
-		
+
 		c_cp.removeTag(t);
 		name = t.getName();
-		String nameTmp= name;
+		String nameTmp = name;
 		int cpt = 1;
-		
-		while(!checkName(names, name))
 
-		{
-			if(c_cp.tags().size() != 0)
-			{
+		while (!checkName(names, name)) {
+			if (c_cp.tags().size() != 0) {
 				c_cp.removeTag(t);
 				score = 0;
-				for(Tag tag : c_cp.tags())
-
-				{
-					if(tag.getScore() > score)
-					{
+				for (Tag tag : c_cp.tags()) {
+					if (tag.getScore() > score) {
 						t = tag;
 						score = tag.getScore();
 					}
 				}
-				name+="_"+t.getName();
-			}
-			else
-			{
-				name = nameTmp+"_"+cpt;
+				name += "_" + t.getName();
+			} else {
+				name = nameTmp + "_" + cpt;
 				cpt++;
 			}
 		}

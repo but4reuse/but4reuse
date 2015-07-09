@@ -345,7 +345,7 @@ public class WordCloudVis extends ViewPart {
 			public void handleEvent(Event event) {
 				switch (event.type) {
 				case SWT.Selection:
-					
+
 					int ind = 0;
 					ArrayList<String> names = new ArrayList<String>();
 
@@ -354,11 +354,10 @@ public class WordCloudVis extends ViewPart {
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
 						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
 							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-						
+
 						String name = WordCloudUtil.rename(names, c);
-						if(name != null)
-						{	names.add(name);
-							System.out.println("New Name = "+name+"|");
+						if (name != null) {
+							names.add(name);
 							b.setName(name);
 						}
 						ind++;
@@ -387,9 +386,8 @@ public class WordCloudVis extends ViewPart {
 					int ind = combo.getSelectionIndex();
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
 					ArrayList<String> names = new ArrayList<String>();
-					for(Block bl : AdaptedModelManager.getAdaptedModel().getOwnedBlocks())
-					{
-						if(b == bl)
+					for (Block bl : AdaptedModelManager.getAdaptedModel().getOwnedBlocks()) {
+						if (b == bl)
 							continue;
 						names.add(bl.getName());
 					}
