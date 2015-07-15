@@ -8,45 +8,31 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public class ArrayElement extends AbstractElement implements IJsonElement {
-	public IJsonValuedElement parent;
-
-	public ArrayElement(IJsonValuedElement parent) {
+	
+	public IJsonElement parent;
+	
+	public ArrayElement(IJsonElement parent) {
 		this.parent = parent;
 	}
-
+	
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ArrayElement) {
-			ArrayElement obj = (ArrayElement) anotherElement;
-
-			if (this.parent.similarity(obj.parent) == 1)
-				return 1;
+			ArrayElement elt = (ArrayElement) anotherElement;
+			
+			return this.parent.similarity(elt.parent);
 		}
 		return 0;
 	}
 
 	@Override
 	public String getText() {
-		return this.parent.getText("[]");
+		return this.parent.getText() + "[]";
 	}
 
 	@Override
-	public String getText(String childrenText) {
-		return this.parent.getText("[" + childrenText + "]");
-	}
-
-	@Override
-	public int getMaxDependencies(String dependencyID) {
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public int getMinDependencies(String dependencyID) {
-		return Integer.MIN_VALUE;
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
+	public JsonValue construct(JsonObject root, JsonValue value) {
 		return this.parent.construct(root, new JsonArray());
 	}
+
 }
