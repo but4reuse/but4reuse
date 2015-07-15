@@ -44,5 +44,12 @@
             name="Word Cloud">
       </visualisation>
    </extension>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.wordclouds.feature.location.FeatureLocationWordCloud"
+            name="Word Cloud Feature Location">
+      </feature.location>
+   </extension>
 
 </plugin>
