@@ -41,21 +41,25 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 					feature = ((Feature) feat);
 
 						c.clear();
-						StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-						
-						while (tk.hasMoreTokens()) {
-							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-								c.addTag(w);
+						if(((Feature) feat).getName() != null)
+						{	
+							StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+							
+							while (tk.hasMoreTokens()) {
+								for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+									c.addTag(w);
+								}
 							}
-						}
+						}	
+						if(feature.getDescription() != null)
+						{
+							StringTokenizer tk = new StringTokenizer(feature.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 						
-						tk = new StringTokenizer(feature.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-						
-						while (tk.hasMoreTokens()) {
-							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-								c.addTag(w);
+							while (tk.hasMoreTokens()) {
+								for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+									c.addTag(w);
+								}
 							}
-
 						}
 
 						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);

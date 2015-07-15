@@ -227,7 +227,7 @@ public class WordCloudUtil {
 		
 		for(Tag t : tags1)
 			nbMots+=t.getScoreInt();
-		for(int i = 0; i<tags1.size() && cpt/nbMots < tauxCmp  ;i++)
+		for(int i = 0; i<tags1.size() ;i++)
 		{
 			Tag t1 = tags1.get(i);
 			Tag t2 = c2.getTag(t1.getName());
