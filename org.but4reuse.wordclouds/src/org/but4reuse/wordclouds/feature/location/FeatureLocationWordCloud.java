@@ -51,6 +51,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		for(Feature f : featureList.getOwnedFeatures())
 		{
 			monitor.subTask("Locating " + f.getName()+" ...");
+			cloud_f.clear();
 			if(f.getName() != null)
 			{
 				StringTokenizer tk = new StringTokenizer(f.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
@@ -77,7 +78,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 			for(Cloud c : list)
 			{
 				Block b = adaptedModel.getOwnedBlocks().get(list.indexOf(c));
-				double d = WordCloudUtil.compareWordCloud(cloud_f, c);
+				double d = WordCloudUtil.cmpClouds(cloud_f, c);
 				
 				if(d > 0.65){
 					b.getCorrespondingFeatures().add(f);

@@ -202,7 +202,7 @@ public class WordCloudUtil {
 		
 		if(nbCmp1 <= 0)
 			nbCmp1 = Math.min(5, tags1.size());
-		if(nbCmp1 >= 1)
+		else if(nbCmp1 >= tags1.size())
 			nbCmp1 = (int)(tags1.size()*0.3);
 		
 		for(int i = 0 ; i<nbCmp1;i++){
