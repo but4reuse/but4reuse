@@ -1,4 +1,4 @@
-package org.but4reuse.worldcouds.visualisation;
+package org.but4reuse.wordclouds.visualisation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,8 +92,8 @@ public class WordCloudVisualisation implements IVisualisation {
 	 */
 	private static void addWords(Cloud cloud, List<String> words) {
 		for (String word : words) {
-			word.trim();
-			cloud.addTag(new Tag(word));
+			String s = word.trim();
+			cloud.addTag(new Tag(s));
 		}
 	}
 
