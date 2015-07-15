@@ -43,7 +43,6 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 			}
 			list.add(cloud);
 		} 
-		System.out.println(list.size());
 		Cloud cloud_f = new Cloud(Case.CAPITALIZATION);
 		cloud_f.setMaxWeight(50);
 		cloud_f.setMinWeight(5);
