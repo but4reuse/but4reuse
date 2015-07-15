@@ -177,56 +177,13 @@ public class WordCloudUtil {
 		return name;
 
 	}
-	/**
-	 * It will define if c1 looks like c2.
-	 * @param c1 The first cloud.
-	 * @param c2 The second cloud.
-	 * @return The success rate.
-	 */
-	public static double compareWordCloud(Cloud c1,Cloud c2)
-	{
-		int cpt1 = 0;
-		
-		List<Tag>tags1 = c1.tags(new Tag.ScoreComparatorDesc());
-		
-		/*
-		 * We define how many comparison we have to do.
-		 * The size for the biggest word cloud is 50 and 50/160 = .3
-		 * We want to make 30% of comparison for the biggest cloud
-		 * If the cloud is smallest we'll make less comparisons. 
-		 */
-		double taux = tags1.size() / 160;
-		
-		int nbCmp1 = (int)(tags1.size()*taux);
-		
-		
-		if(nbCmp1 <= 0)
-			nbCmp1 = Math.min(5, tags1.size());
-		else if(nbCmp1 >= tags1.size())
-			nbCmp1 = (int)(tags1.size()*0.3);
-		
-		for(int i = 0 ; i<nbCmp1;i++){
-			
-			Tag t1 = tags1.get(i);
-			Tag t2 = c2.getTag(t1.getName()); 
-			if(t2 != null)
-				cpt1++;
-			
-		}
-		
-		return ((double)(cpt1))/nbCmp1;
-	}
 	
 	 public static double cmpClouds(Cloud c1, Cloud c2)
 	 {
 		double cpt = 0;
 		int res = 0;
 		List<Tag>tags1 = c1.tags(new Tag.ScoreComparatorDesc());
-		int nbMots = 0;
-		double tauxCmp = 0.7;
 		
-		for(Tag t : tags1)
-			nbMots+=t.getScoreInt();
 		for(int i = 0; i<tags1.size() ;i++)
 		{
 			Tag t1 = tags1.get(i);
