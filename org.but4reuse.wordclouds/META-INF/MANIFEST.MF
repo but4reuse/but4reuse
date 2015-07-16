@@ -13,9 +13,11 @@ Import-Package: org.but4reuse.adaptedmodel,
  org.but4reuse.adapters.impl,
  org.but4reuse.adapters.ui,
  org.but4reuse.artefactmodel,
+ org.but4reuse.feature.location,
  org.but4reuse.featurelist,
  org.but4reuse.visualisation,
  org.but4reuse.visualisation.helpers,
+ org.eclipse.emf.common.notify,
  org.eclipse.emf.common.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.util,
@@ -28,4 +30,5 @@ Bundle-ClassPath: .,
  Jars/
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.but4reuse.utils
+ org.but4reuse.utils,
+ org.but4reuse.adaptedmodel
