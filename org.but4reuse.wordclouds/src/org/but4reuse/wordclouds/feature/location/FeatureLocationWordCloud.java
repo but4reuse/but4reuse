@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 
+import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
@@ -77,9 +80,10 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 			for(Cloud c : list)
 			{
 				Block b = adaptedModel.getOwnedBlocks().get(list.indexOf(c));
+				if(!checkArtefact(b, f, adaptedModel))
+					continue;
 				double d = WordCloudUtil.cmpClouds(cloud_f, c);
-				
-				if(d > 0.65){
+				if(d >= 0.65){
 					b.getCorrespondingFeatures().add(f);
 				}
 			}
@@ -88,6 +92,17 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		
 	}
 	
+	private static boolean checkArtefact(Block b,Feature f,AdaptedModel adaptedModel)
+	{
+		for(Artefact art : f.getImplementedInArtefacts())
+		{
+			AdaptedArtefact adaptedArt = AdaptedModelHelper.getAdaptedArtefact(adaptedModel, art);
+			if(AdaptedModelHelper.getBlocksOfAdaptedArtefact(adaptedArt).contains(b))
+				return true;
+				
+		}
+		return false;
+	}
 	
 
 }

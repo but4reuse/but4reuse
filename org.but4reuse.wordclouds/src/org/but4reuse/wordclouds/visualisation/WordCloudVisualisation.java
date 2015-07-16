@@ -7,6 +7,8 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
@@ -54,17 +56,21 @@ public class WordCloudVisualisation implements IVisualisation {
 			 * getWords for having several strings which could be used as block
 			 * name.
 			 */
-			for (BlockElement e : b.getOwnedBlockElements()) {
+			for(IElement e :  (AdaptedModelHelper.getElementsOfBlock(b)))
+			{
+				addWords(cloud, ((AbstractElement)e).getWords());
+			}
+			/*for (BlockElement e : b.getOwnedBlockElements()) {
 				for (ElementWrapper wr : e.getElementWrappers()) {
 					AbstractElement element = (AbstractElement) (wr.getElement());
 
 					/*
 					 * We put each string in the cloud.
-					 */
+					 *//*
 					addWords(cloud, element.getWords());
 				}
 
-			}
+			}*/
 			clouds.add(cloud);
 		}
 
