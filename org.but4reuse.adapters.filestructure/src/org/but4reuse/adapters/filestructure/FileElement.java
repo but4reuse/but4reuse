@@ -3,7 +3,6 @@ package org.but4reuse.adapters.filestructure;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
@@ -117,7 +116,6 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 
 		while (tk.hasMoreTokens()) {
 			String s = tk.nextToken();
-			System.out.println(s);
 			for (String w : s.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
 				StringTokenizer tk2 = new StringTokenizer(w, "-. ");
 				while (tk2.hasMoreTokens())
