@@ -23,6 +23,7 @@ import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
+import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -64,6 +65,10 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 							@Override
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
+
+								// Set default output
+								AdaptedModelManager.setDefaultOutput(EMFUtils.getIResource(artefactModel.eResource())
+										.getParent());
 
 								// Adapting each active artefact + calculating
 								// blocks + constraints discovery + feature

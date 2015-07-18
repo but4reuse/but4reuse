@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
@@ -16,6 +17,7 @@ import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.contribution.visualiser.interfaces.IMember;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -34,9 +36,14 @@ public class CreateConfigurationsAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		try {
 			// Get construction uri from user
+			String out = "/projectName";
+			IContainer output = AdaptedModelManager.getDefaultOutput();
+			if (output != null) {
+				out = output.getFullPath().toString();
+			}
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Construction URI", "Insert folder URI for the configurations",
-					"platform:/resource/projectName/configs/");
+					"Construction URI", "Insert folder URI for the configurations", "platform:/resource" + out
+							+ "/configs/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}

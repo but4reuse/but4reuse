@@ -19,6 +19,7 @@ import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
+import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -62,6 +63,10 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 							@Override
 							public void run(IProgressMonitor monitor) throws InvocationTargetException,
 									InterruptedException {
+
+								// Set default output
+								AdaptedModelManager.setDefaultOutput(EMFUtils.getIResource(artefactModel.eResource())
+										.getParent());
 
 								// Adapting each active artefact + calculating
 								// blocks + constraints discovery + prepare

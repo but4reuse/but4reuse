@@ -12,6 +12,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
@@ -21,6 +22,7 @@ import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.graphs.GraphVisualisation;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
@@ -53,8 +55,13 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 	public void run(IAction action) {
 
 		// Get the graph uri from user
+		String out = "/projectName";
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		if (output != null) {
+			out = output.getFullPath().toString();
+		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(), "Graph URI",
-				"Insert Graph URI", "platform:/resource/projectName/elements.graphml");
+				"Insert Graph URI", "platform:/resource" + out + "/elements.graphml");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
