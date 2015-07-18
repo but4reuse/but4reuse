@@ -10,6 +10,7 @@ import java.util.Map;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
@@ -21,6 +22,7 @@ import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockMarkupKind;
 import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
 import org.eclipse.contribution.visualiser.views.Menu;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -48,8 +50,13 @@ public class ConstructViewAction implements IViewActionDelegate {
 	public void run(IAction action) {
 
 		// Get construction uri from user
+		String out = "/projectName";
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		if (output != null) {
+			out = output.getFullPath().toString();
+		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Construction URI", "Insert Construction URI", "platform:/resource/projectName/");
+				"Construction URI", "Insert Construction URI", "platform:/resource" + out + "/");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}

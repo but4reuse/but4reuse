@@ -7,6 +7,7 @@ import java.util.Map;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.FeatureList;
+import org.eclipse.core.resources.IContainer;
 
 /**
  * Adapted Model Manager
@@ -20,6 +21,7 @@ public class AdaptedModelManager {
 	private static FeatureList featureList = null;
 	private static List<IAdapter> adapters = null;
 	private static Map<String, Long> elapsedTimeRegistry = new LinkedHashMap<String, Long>();
+	private static IContainer defaultOutput = null;
 
 	public static AdaptedModel getAdaptedModel() {
 		return adaptedModel;
@@ -59,6 +61,14 @@ public class AdaptedModelManager {
 
 	public static void setFeatureList(FeatureList featureList) {
 		AdaptedModelManager.featureList = featureList;
+	}
+
+	public static IContainer getDefaultOutput() {
+		return defaultOutput;
+	}
+
+	public static void setDefaultOutput(IContainer defaultOutput) {
+		AdaptedModelManager.defaultOutput = defaultOutput;
 	}
 
 }

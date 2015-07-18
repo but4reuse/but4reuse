@@ -9,6 +9,7 @@ import org.but4reuse.constraints.discovery.weka.utils.WekaUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -29,8 +30,13 @@ public class ExportWekaFileAction implements IViewActionDelegate {
 	@Override
 	public void run(IAction action) {
 		// Get output uri from user
+		String out = "/projectName";
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		if (output != null) {
+			out = output.getFullPath().toString();
+		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Weka arff file URI", "Insert folder URI for the weka file", "platform:/resource/projectName/weka.arff");
+				"Weka arff file URI", "Insert folder URI for the weka file", "platform:/resource" + out + "/weka.arff");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}

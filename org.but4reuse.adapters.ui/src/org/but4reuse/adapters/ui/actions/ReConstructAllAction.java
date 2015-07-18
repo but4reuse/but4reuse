@@ -16,6 +16,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -36,9 +37,14 @@ public class ReConstructAllAction implements IViewActionDelegate {
 	public void run(IAction action) {
 		try {
 			// Get construction uri from user
+			String out = "/projectName";
+			IContainer output = AdaptedModelManager.getDefaultOutput();
+			if (output != null) {
+				out = output.getFullPath().toString();
+			}
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Re-Construction URI", "Insert folder URI for the artefacts re-construction",
-					"platform:/resource/projectName/reconstruction/");
+					"Re-Construction URI", "Insert folder URI for the artefacts re-construction", "platform:/resource"
+							+ out + "/reconstruction/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}

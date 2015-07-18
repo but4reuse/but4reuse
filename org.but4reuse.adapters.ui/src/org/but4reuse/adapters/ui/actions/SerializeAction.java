@@ -12,6 +12,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -35,8 +36,13 @@ public class SerializeAction implements IViewActionDelegate {
 	public void run(IAction action) {
 
 		// Get construction uri from user
+		String out = "/projectName";
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		if (output != null) {
+			out = output.getFullPath().toString();
+		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Construction URI", "Insert Construction URI", "platform:/resource/projectName/analysis.adaptedmodel");
+				"Construction URI", "Insert Construction URI", "platform:/resource" + out + "/analysis.adaptedmodel");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}

@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.feature.constraints,
  org.but4reuse.adapters.emf,
- org.eclipse.emf.diffmerge
+ org.eclipse.emf.diffmerge,
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.emf.cvl

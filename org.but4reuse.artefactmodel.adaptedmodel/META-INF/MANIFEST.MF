@@ -16,5 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore,
  org.but4reuse.artefactmodel;visibility:=reexport,
  org.but4reuse.featurelist;visibility:=reexport,
- org.but4reuse.adapters
+ org.but4reuse.adapters,
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy

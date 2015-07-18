@@ -5,6 +5,7 @@ import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.emf.cvl.CVLModelsExtractor;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.eclipse.contribution.visualiser.views.Menu;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,17 +24,22 @@ public class CreateCVLAction implements IViewActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-			// Get construction uri from user
-			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"CVL container URI", "Insert container URI for CVL model", "platform:/resource/projectName/cvl/");
-			if (inputDialog.open() != Dialog.OK) {
-				return;
-			}
-			String constructionURI = inputDialog.getValue();			
-			AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
+		// Get construction uri from user
+		String out = "/projectName";
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		if (output != null) {
+			out = output.getFullPath().toString();
+		}
+		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
+				"CVL container URI", "Insert container URI for CVL model", "platform:/resource" + out + "/cvl/");
+		if (inputDialog.open() != Dialog.OK) {
+			return;
+		}
+		String constructionURI = inputDialog.getValue();
+		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 
-			// Call the extractor
-			CVLModelsExtractor.createCVLModels(constructionURI, adaptedModel);
+		// Call the extractor
+		CVLModelsExtractor.createCVLModels(constructionURI, adaptedModel);
 	}
 
 	@Override
