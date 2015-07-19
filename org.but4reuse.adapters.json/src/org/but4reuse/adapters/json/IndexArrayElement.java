@@ -1,11 +1,11 @@
 package org.but4reuse.adapters.json;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
@@ -14,93 +14,126 @@ import com.eclipsesource.json.JsonValue;
  * Using a set of IDs.
  */
 
+/*
+ * Before blocks creation, each IndexArrayElement has an unique id_elt.
+ * After blocks creation, similar IndexArrayElements share the same unique id_elt.
+ * id_elt is used to handle the merging of atomics elements in construct algorithm.
+ */
+
 public class IndexArrayElement extends AbstractElement implements IJsonElement {
-	
-	public int id_file;
+
 	public int id_elt;
-	public IJsonElement parent;
-	
-	public ArrayList<Integer> filesCompared;
-	public HashMap<Integer, IndexArrayElement> elementsCompared;
-	
-	public IndexArrayElement(int id_file, int id_elt, IJsonElement parent) {
-		this.id_file = id_file;
+	public ArrayElement parent;
+
+	public ArrayList<Integer> similarFiles; // list of each file where a similar
+											// IndexArrayElement has been found.
+	public ArrayList<IndexArrayElement> similarIndexes; // list of a similar
+														// IndexArrayElements
+														// already found.
+
+	public IndexArrayElement(int id_file, int id_elt, ArrayElement parent) {
 		this.id_elt = id_elt;
 		this.parent = parent;
-		
-		this.filesCompared = new ArrayList<Integer>();
-		this.elementsCompared = new HashMap<Integer, IndexArrayElement>();
+
+		this.similarFiles = new ArrayList<Integer>();
+		this.similarFiles.add(id_file);
+		this.similarIndexes = new ArrayList<IndexArrayElement>();
+		this.similarIndexes.add(this);
 	}
-	
+
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof IndexArrayElement) {
 			IndexArrayElement elt = (IndexArrayElement) anotherElement;
-			
-			if (this.similarity(elt, new ArrayList<String>()) == 1) {
-				this.filesCompared.add(elt.id_file);
-				this.elementsCompared.put(elt.id_elt, elt);
-				
-				elt.filesCompared.add(this.id_file);
-				elt.elementsCompared.put(this.id_elt, this);
-				
-				return 1;
-			}
-		}
-		
-		return 0;
-	}
-	
-	private double similarity(IndexArrayElement elt, ArrayList<String> excluded) {
-		if (excluded.contains(this.id_elt + "_" + elt.id_elt) || excluded.contains(elt.id_elt + "_" + this.id_elt)) {
-			return 1;
-		}
-		
-		if (this.id_file == elt.id_file) {
+
 			if (this.id_elt == elt.id_elt) {
 				return 1;
-			} else {
-				return 0;
+			}
+
+			for (int file : this.similarFiles) {
+				if (elt.similarFiles.contains(file)) {
+					return 0;
+				}
+			}
+
+			for (int file : elt.similarFiles) {
+				if (this.similarFiles.contains(file)) {
+					return 0;
+				}
+			}
+
+			if (this.parent.similarity(elt.parent) == 1) {
+
+				ArrayList<Integer> files = new ArrayList<Integer>();
+				ArrayList<IndexArrayElement> indexes = new ArrayList<IndexArrayElement>();
+
+				files.addAll(this.similarFiles);
+				files.addAll(elt.similarFiles);
+
+				indexes.addAll(this.similarIndexes);
+				indexes.addAll(elt.similarIndexes);
+
+				for (IndexArrayElement indArrElt : indexes) {
+					indArrElt.id_elt = this.id_elt;
+					indArrElt.similarFiles = files;
+					indArrElt.similarIndexes = indexes;
+				}
+
+				return 1;
 			}
 		}
-		
-		if (this.elementsCompared.containsKey(elt.id_elt) || elt.elementsCompared.containsKey(this.id_elt)) {
-			return 1;
-		}
-		
-		if (this.filesCompared.contains(elt.id_file) || elt.filesCompared.contains(this.id_file)) {
-			return 0;
-		}
-		
-		if (this.parent.similarity(elt.parent) == 0) {
-			return 0;
-		}
-		
-		excluded.add(this.id_elt + "_" + elt.id_elt);
-		
-		for (int id : this.elementsCompared.keySet()) {
-			if (elt.similarity(this.elementsCompared.get(id), excluded) == 0) {
-				return 0;
-			}
-		}
-		
-		for (int id : elt.elementsCompared.keySet()) {
-			if (this.similarity(elt.elementsCompared.get(id), excluded) == 0) {
-				return 0;
-			}
-		}
-		
+
+		return 0;
+	}
+
+	@Override
+	public int getMaxDependencies(String dependencyID) {
 		return 1;
 	}
-	
+
+	@Override
+	public int getMinDependencies(String dependencyID) {
+		return 1;
+	}
+
 	@Override
 	public String getText() {
-		return this.parent.getText();
+		return this.parent.getText() + "_[" + this.id_elt + "]";
 	}
 
 	@Override
 	public JsonValue construct(JsonObject root, JsonValue value) {
-		return null;
+		JsonArray array = this.parent.construct(root).asArray();
+		int index = JsonTools.getIndexArray(this.parent.id_array, this.id_elt);
+
+		if (index >= array.size()) {
+			array.add(value);
+			return value;
+		} else {
+			JsonValue lastValue = array.get(index);
+
+			if (lastValue == null || lastValue == JsonValue.NULL) {
+				array.set(index, value);
+				return value;
+			}
+			if (value == null || value == JsonValue.NULL) {
+				return lastValue;
+			}
+			if (lastValue.isObject() && value.isObject()) {
+				return lastValue;
+			}
+			if (lastValue.isArray() && value.isArray()) {
+				return lastValue;
+			}
+
+			array.set(index, value);
+			return value;
+		}
+	}
+
+	@Override
+	public JsonValue construct(JsonObject root) {
+		return this.construct(root, JsonValue.NULL);
 	}
 
 }

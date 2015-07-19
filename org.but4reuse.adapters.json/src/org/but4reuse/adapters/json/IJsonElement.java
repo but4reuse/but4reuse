@@ -6,5 +6,7 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public interface IJsonElement extends IElement {
+	public JsonValue construct(JsonObject root);
+
 	public JsonValue construct(JsonObject root, JsonValue value);
 }
