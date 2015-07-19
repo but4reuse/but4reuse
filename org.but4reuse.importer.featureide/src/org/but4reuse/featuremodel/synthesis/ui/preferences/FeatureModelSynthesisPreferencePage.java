@@ -2,8 +2,6 @@ package org.but4reuse.featuremodel.synthesis.ui.preferences;
 
 import java.util.List;
 
-import org.but4reuse.feature.constraints.IConstraintsDiscovery;
-import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.featuremodel.synthesis.fmcreators.FeatureModelCreatorsHelper;
 import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
