@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.but4reuse.extension.featureide" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.but4reuse.featuremodel.synthesis" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.but4reuse.extension.featureide" id="org.but4reuse.extensions.featureide.fmcreators" name="Feature Model Creators"/>
+         <meta.schema plugin="org.but4reuse.featuremodel.synthesis" id="org.but4reuse.featuremodel.synthesis.fmcreators" name="Feature Model Creators"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

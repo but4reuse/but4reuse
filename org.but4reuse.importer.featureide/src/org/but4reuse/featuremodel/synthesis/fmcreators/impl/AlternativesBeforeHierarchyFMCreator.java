@@ -1,5 +1,7 @@
-package org.but4reuse.extension.featureide.fmcreators.impl;
+package org.but4reuse.featuremodel.synthesis.fmcreators.impl;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,10 +9,12 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
-import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
-import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
+import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
+import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
+import org.but4reuse.utils.files.FileUtils;
 
 import de.ovgu.featureide.fm.core.Feature;
 import de.ovgu.featureide.fm.core.FeatureModel;
@@ -31,7 +35,8 @@ import de.ovgu.featureide.fm.core.FeatureModel;
 public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreator {
 
 	@Override
-	public FeatureModel createFeatureModel(AdaptedModel adaptedModel) {
+	public void createFeatureModel(URI outputContainer) {
+		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		// TODO Check for loops in the Requires graph.
 		// Assumption is that there is no loops in the Requires constraints
 		// between blocks as it happens with the default block identification
@@ -233,7 +238,15 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		}
 		root.setChildren(toTheRoot);
 
-		return fm;
+		// Save
+		try {
+			URI fmURI = new URI(outputContainer + this.getClass().getSimpleName() + ".xml");
+			File fmFile = FileUtils.getFile(fmURI);
+			FileUtils.createFile(fmFile);
+			FeatureIDEUtils.save(fm, fmFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

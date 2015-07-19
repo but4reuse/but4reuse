@@ -13,6 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.visualisation,
  org.but4reuse.feature.constraints,
  org.but4reuse.feature.location,
- org.but4reuse.blockcreation
+ org.but4reuse.blockcreation,
+ org.but4reuse.utils,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

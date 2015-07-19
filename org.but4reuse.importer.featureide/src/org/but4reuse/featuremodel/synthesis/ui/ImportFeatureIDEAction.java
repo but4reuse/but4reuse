@@ -1,4 +1,4 @@
-package org.but4reuse.extension.featureide.ui;
+package org.but4reuse.featuremodel.synthesis.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;

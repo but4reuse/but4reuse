@@ -1,18 +1,17 @@
-package org.but4reuse.extension.featureide.ui;
+package org.but4reuse.featuremodel.synthesis.ui;
 
-import java.io.File;
 import java.net.URI;
 import java.util.List;
 
-import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
-import org.but4reuse.extension.featureide.fmcreators.FeatureModelCreatorsHelper;
-import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
-import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
+import org.but4reuse.featuremodel.synthesis.fmcreators.FeatureModelCreatorsHelper;
+import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.contribution.visualiser.views.Menu;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -44,19 +43,19 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}
-			String constructionURI = inputDialog.getValue();
-			AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
-
-			// Get the registered fm creators
-			List<IFeatureModelCreator> featureModelCreators = FeatureModelCreatorsHelper.getAllFeatureModelCreators();
+			String constructionString = inputDialog.getValue();
+			URI constructionURI = new URI(constructionString);
+			// Get the selected fm creators
+			List<IFeatureModelCreator> featureModelCreators = FeatureModelCreatorsHelper
+					.getSelectedFeatureModelCreators();
 
 			// Create fm with each of them
 			for (IFeatureModelCreator fmc : featureModelCreators) {
-				URI fmURI = new URI(constructionURI + fmc.getClass().getSimpleName() + ".xml");
-				File fmFile = FileUtils.getFile(fmURI);
-				FileUtils.createFile(fmFile);
-				FeatureIDEUtils.exportFeatureModel(fmURI, adaptedModel, fmc);
+				fmc.createFeatureModel(constructionURI);
 			}
+
+			// Refresh
+			WorkbenchUtils.refreshAllWorkspace();
 
 		} catch (Exception e) {
 			e.printStackTrace();

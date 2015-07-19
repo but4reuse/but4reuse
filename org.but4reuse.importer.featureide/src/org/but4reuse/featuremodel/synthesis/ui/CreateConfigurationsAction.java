@@ -1,4 +1,4 @@
-package org.but4reuse.extension.featureide.ui;
+package org.but4reuse.featuremodel.synthesis.ui;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
-import org.but4reuse.extension.featureide.utils.FeatureIDEUtils;
+import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsContentProvider;

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Featureide
-Bundle-SymbolicName: org.but4reuse.extension.featureide;singleton:=true
+Bundle-Name: FeatureModel Synthesis
+Bundle-SymbolicName: org.but4reuse.featuremodel.synthesis;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.but4reuse.extension.featureide.activator.Activator
+Bundle-Activator: org.but4reuse.featuremodel.synthesis.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -15,4 +15,4 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.extension.featureide.fmcreators
+Export-Package: org.but4reuse.featuremodel.synthesis.fmcreators

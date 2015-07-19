@@ -1,4 +1,4 @@
-package org.but4reuse.extension.featureide.utils;
+package org.but4reuse.featuremodel.synthesis.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.but4reuse.adaptedmodel.AdaptedModel;
-import org.but4reuse.extension.featureide.fmcreators.IFeatureModelCreator;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
@@ -31,14 +29,13 @@ import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelWriter;
  */
 public class FeatureIDEUtils {
 
-	public static void exportFeatureModel(URI featureModelURI, AdaptedModel adaptedModel, IFeatureModelCreator fmCreator) {
+	public static void exportFeatureModel(URI featureModelURI, FeatureModel fm) {
 		File fmFile = FileUtils.getFile(featureModelURI);
 		try {
 			FileUtils.createFile(fmFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		FeatureModel fm = fmCreator.createFeatureModel(adaptedModel);
 		save(fm, fmFile);
 		// Refresh in case of workspace
 		IFile file = WorkbenchUtils.getIFileFromFile(fmFile);

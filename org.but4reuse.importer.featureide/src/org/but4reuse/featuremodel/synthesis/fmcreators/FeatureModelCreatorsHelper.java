@@ -1,11 +1,13 @@
-package org.but4reuse.extension.featureide.fmcreators;
+package org.but4reuse.featuremodel.synthesis.fmcreators;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.featuremodel.synthesis.activator.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
  * Feature Model Creators Helper
@@ -14,7 +16,7 @@ import org.eclipse.core.runtime.Platform;
  */
 public class FeatureModelCreatorsHelper {
 
-	private static final String FEATUREMODELCREATORS_EXTENSIONPOINT = "org.but4reuse.extensions.featureide.fmcreators";
+	private static final String FEATUREMODELCREATORS_EXTENSIONPOINT = "org.but4reuse.featuremodel.synthesis.fmcreators";
 
 	/**
 	 * Get all feature model creators
@@ -54,6 +56,51 @@ public class FeatureModelCreatorsHelper {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Get algorithm name
+	 * 
+	 * @param algo
+	 * @return the name
+	 */
+	public static String getAlgorithmName(IFeatureModelCreator algo) {
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+				FEATUREMODELCREATORS_EXTENSIONPOINT);
+		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+			try {
+				IFeatureModelCreator oneAlgo = (IFeatureModelCreator) adapterExtensionPoint
+						.createExecutableExtension("class");
+				if (oneAlgo.getClass().equals(algo.getClass())) {
+					String name = adapterExtensionPoint.getAttribute("name");
+					return name;
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return "No name";
+	}
+
+	public static List<IFeatureModelCreator> getSelectedFeatureModelCreators() {
+		List<IFeatureModelCreator> selected = new ArrayList<IFeatureModelCreator>();
+		for (IFeatureModelCreator algo : getAllFeatureModelCreators()) {
+			if (isAlgorithmSelected(algo)) {
+				selected.add(algo);
+			}
+		}
+		return selected;
+	}
+
+	public static boolean isAlgorithmSelected(IFeatureModelCreator algo) {
+		String algoName = getAlgorithmName(algo);
+		IPreferenceStore prefs = getPreferenceStore();
+		return prefs.getBoolean(algoName);
+	}
+
+	public static IPreferenceStore getPreferenceStore() {
+		return Activator.getDefault().getPreferenceStore();
 	}
 
 }
