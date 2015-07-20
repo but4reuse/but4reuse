@@ -27,6 +27,7 @@ import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
@@ -49,6 +50,12 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 				featureList = ((FeatureList) featureListObject);
 
 				artefactModel = FeatureListHelper.getArtefactModel(featureList);
+
+				if (artefactModel == null) {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), "",
+							"No artefact model is associated to this feature list");
+					return;
+				}
 
 				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
 
