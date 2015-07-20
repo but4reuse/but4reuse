@@ -40,39 +40,38 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
 
-						c.clear();
-						if(((Feature) feat).getName() != null)
-						{	
-							StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-							
-							while (tk.hasMoreTokens()) {
-								for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-									c.addTag(w);
-								}
-							}
-						}	
-						if(feature.getDescription() != null)
-						{
-							StringTokenizer tk = new StringTokenizer(feature.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-						
-							while (tk.hasMoreTokens()) {
-								for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-									c.addTag(w);
-								}
+					c.clear();
+					if (((Feature) feat).getName() != null) {
+						StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+
+						while (tk.hasMoreTokens()) {
+							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+								c.addTag(w);
 							}
 						}
+					}
+					if (feature.getDescription() != null) {
+						StringTokenizer tk = new StringTokenizer(feature.getDescription(),
+								" :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
-						win.setSize(widthWin, heightWin);
-						win.setText("Word Cloud for feature" + feature.getName());
+						while (tk.hasMoreTokens()) {
+							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+								c.addTag(w);
+							}
+						}
+					}
 
-						Composite comp = new Composite(win, SWT.NORMAL);
-						comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
-						
-						win.open();
-						win.update();
+					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
+					win.setSize(widthWin, heightWin);
+					win.setText("Word Cloud for feature" + feature.getName());
 
-						WordCloudUtil.drawWordCloud(comp, c);
+					Composite comp = new Composite(win, SWT.NORMAL);
+					comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
+
+					win.open();
+					win.update();
+
+					WordCloudUtil.drawWordCloud(comp, c);
 
 				}
 			}

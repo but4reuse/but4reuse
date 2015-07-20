@@ -128,6 +128,16 @@ public class WordCloudUtil {
 		return cloud_IDF;
 	}
 
+	/**
+	 * 
+	 * It'll check if a name is already used as name.
+	 * 
+	 * @param list
+	 *            A list which contains all name used.
+	 * @param name
+	 *            The name that we want check.
+	 * @return True if the name is not present in the list, false otherwise.
+	 */
 	public static boolean checkName(List<String> list, String name) {
 		for (String s : list) {
 			if (s.compareToIgnoreCase(name) == 0)
@@ -136,6 +146,16 @@ public class WordCloudUtil {
 		return true;
 	}
 
+	/**
+	 * It will return a name not present in names. It'll combine words with the
+	 * better weight in the cloud to create a name.
+	 * 
+	 * @param names
+	 *            Existing name list.
+	 * @param c
+	 *            Word Cloud which contains words to use to create the name.
+	 * @return a new name.
+	 */
 	public static String rename(List<String> names, Cloud c) {
 		if (c.tags().size() == 0)
 			return null;
@@ -177,23 +197,40 @@ public class WordCloudUtil {
 		return name;
 
 	}
-	
-	 public static double cmpClouds(Cloud c1, Cloud c2)
-	 {
+
+	/**
+	 * It'll compare c1 with c2.
+	 * 
+	 * @param c1
+	 *            The first cloud.
+	 * @param c2
+	 *            The second cloud.
+	 * @return A rate which is the percent of words from c1 found in c2.
+	 */
+
+	public static double cmpClouds(Cloud c1, Cloud c2) {
 		double cpt = 0;
 		int res = 0;
-		List<Tag>tags1 = c1.tags(new Tag.ScoreComparatorDesc());
-		
-		for(int i = 0; i<tags1.size() ;i++)
-		{
+
+		// We get all tags in c1 sorted.
+		List<Tag> tags1 = c1.tags(new Tag.ScoreComparatorDesc());
+
+		/*
+		 * For each tag in c1 me check if he is in c2. if it's right we add in
+		 * res the tag score. In the same time we make the score sum.
+		 * 
+		 * I use tags score to make comparison because if we found just words
+		 * which is not important in the cloud it won't be relevant.
+		 */
+		for (int i = 0; i < tags1.size(); i++) {
 			Tag t1 = tags1.get(i);
 			Tag t2 = c2.getTag(t1.getName());
-			if(t2 != null)
-			   res+=t1.getScoreInt();
-			cpt+=t1.getScoreInt();
-				
+			if (t2 != null)
+				res += t1.getScoreInt();
+			cpt += t1.getScoreInt();
+
 		}
-		
-		 return (double)(res)/cpt;
-	 }
+
+		return (double) (res) / cpt;
+	}
 }

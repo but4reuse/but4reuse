@@ -74,10 +74,9 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 
-					
 						Composite comp = new Composite(win, SWT.NORMAL);
 						comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
-						
+
 						win.open();
 						win.update();
 
