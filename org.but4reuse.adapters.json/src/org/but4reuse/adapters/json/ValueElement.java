@@ -30,7 +30,7 @@ public class ValueElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		return this.parent.getText() + "(value : " + this.value.toString() + ")";
+		return this.parent.getText() + "_" + this.value.toString();
 	}
 
 	@Override

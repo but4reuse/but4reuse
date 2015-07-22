@@ -98,7 +98,7 @@ public class IndexArrayElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		return this.parent.getText() + "_[" + this.id_elt + "]";
+		return this.parent.getText();
 	}
 
 	@Override

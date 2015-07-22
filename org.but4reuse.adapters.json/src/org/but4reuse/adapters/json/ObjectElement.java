@@ -26,12 +26,12 @@ public class ObjectElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		return this.parent.getText() + "{}";
+		return this.parent.getText() + "_{}";
 	}
 
 	@Override
 	public JsonValue construct(JsonObject root, JsonValue value) {
-		return this.construct(root);
+		return this.parent.construct(root, value);
 	}
 
 	@Override

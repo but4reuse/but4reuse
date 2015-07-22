@@ -46,11 +46,16 @@ public class JsonAdapter implements IAdapter {
 			JsonObject json = JsonObject.readFrom(br);
 			int id_file = JsonTools.generateId();
 
+			JsonTools.setPathsToIgnore();
+
 			for (String key : json.names()) {
 				KeyElement keyElt = new KeyElement(key);
 				elements.add(keyElt);
-				adapt(id_file, elements, json.get(key), keyElt).addDependency(keyElt);
-				;
+
+				ArrayList<String> paths = new ArrayList<String>();
+				paths.add(key);
+
+				adapt(id_file, elements, json.get(key), keyElt, paths).addDependency(keyElt);
 			}
 
 		} catch (Exception e) {
@@ -71,7 +76,6 @@ public class JsonAdapter implements IAdapter {
 				elements.add(keyElt);
 				keyElt.addDependency(objElt);
 				adapt(id_file, elements, jsonObj.get(key), keyElt).addDependency(keyElt);
-				;
 			}
 
 			return objElt;
@@ -86,6 +90,74 @@ public class JsonAdapter implements IAdapter {
 			while (iter.hasNext()) {
 				IndexArrayElement indArrElt = new IndexArrayElement(id_file, JsonTools.generateId(), arrElt);
 				adapt(id_file, elements, iter.next(), indArrElt).addDependency(arrElt);
+			}
+
+			return arrElt;
+		}
+
+		ValueElement valElt = new ValueElement(jsonVal, (IJsonElement) parent);
+		elements.add(valElt);
+
+		return valElt;
+	}
+
+	private AbstractElement adapt(int id_file, List<IElement> elements, JsonValue jsonVal, AbstractElement parent,
+			ArrayList<String> paths) {
+		ArrayList<String> possiblePaths = JsonTools.matchPossiblePaths(paths);
+
+		if (possiblePaths.size() == 0) {
+			return adapt(id_file, elements, jsonVal, parent);
+		}
+
+		if (JsonTools.containIgnoredPath(possiblePaths)) {
+			IgnoredElement elt = new IgnoredElement(jsonVal, (IJsonElement) parent);
+			elements.add(elt);
+			return elt;
+		}
+
+		if (jsonVal instanceof JsonObject) {
+			possiblePaths = JsonTools.addToPaths(possiblePaths, "{}");
+
+			JsonObject jsonObj = jsonVal.asObject();
+			ObjectElement objElt = new ObjectElement((IJsonElement) parent);
+			elements.add(objElt);
+
+			if (JsonTools.containIgnoredPath(possiblePaths)) {
+				IgnoredElement elt = new IgnoredElement(jsonVal, objElt);
+				elements.add(elt);
+				elt.addDependency(objElt);
+			} else {
+				for (String key : jsonObj.names()) {
+					KeyElement keyElt = new KeyElement(key, objElt);
+					elements.add(keyElt);
+					keyElt.addDependency(objElt);
+					adapt(id_file, elements, jsonObj.get(key), keyElt, possiblePaths).addDependency(keyElt);
+				}
+			}
+
+			return objElt;
+		}
+
+		if (jsonVal instanceof JsonArray) {
+			ArrayList<String> possiblePaths_1 = JsonTools.addToPaths(possiblePaths, "[]");
+
+			JsonArray jsonArr = jsonVal.asArray();
+			ArrayElement arrElt = new ArrayElement(JsonTools.generateId(), (IJsonElement) parent);
+			elements.add(arrElt);
+
+			if (JsonTools.containIgnoredPath(possiblePaths_1)) {
+				IgnoredElement elt = new IgnoredElement(jsonVal, arrElt);
+				elements.add(elt);
+				elt.addDependency(arrElt);
+			} else {
+				for (int index = 0; index < jsonArr.size(); index++) {
+					ArrayList<String> possiblePaths_2 = new ArrayList<String>();
+					possiblePaths_2.addAll(possiblePaths_1);
+					possiblePaths_2.addAll(JsonTools.addToPaths(possiblePaths, "[" + index + "]"));
+
+					IndexArrayElement indArrElt = new IndexArrayElement(id_file, JsonTools.generateId(), arrElt);
+					adapt(id_file, elements, jsonArr.get(index), indArrElt, possiblePaths_2).addDependency(arrElt);
+				}
 			}
 
 			return arrElt;
