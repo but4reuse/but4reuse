@@ -41,6 +41,10 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 					feature = ((Feature) feat);
 
 					c.clear();
+					/*
+					 * Here we split the feature name and description for
+					 * getting words
+					 */
 					if (((Feature) feat).getName() != null) {
 						StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 

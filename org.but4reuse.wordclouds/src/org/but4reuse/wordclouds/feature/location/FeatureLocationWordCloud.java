@@ -22,12 +22,15 @@ import org.mcavallo.opencloud.Cloud.Case;
 public class FeatureLocationWordCloud implements IFeatureLocation {
 
 	public static double rateMin = 0.65;
+
 	@Override
 	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
 
+		/*
+		 * Word cloud creation for each block
+		 */
 		ArrayList<Cloud> list = new ArrayList<Cloud>();
 		for (Block b : adaptedModel.getOwnedBlocks()) {
-			// Creation cloud for block
 			Cloud cloud = new Cloud(Case.CAPITALIZATION);
 			cloud.setMaxWeight(50);
 			cloud.setMinWeight(5);
@@ -45,13 +48,16 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 		ArrayList<Cloud> clouds = new ArrayList<Cloud>();
 
-		// Create Cloud for feature
+		// Word Cloud creation for each feature
 		for (Feature f : featureList.getOwnedFeatures()) {
 			Cloud cloud_f = new Cloud(Case.CAPITALIZATION);
 			cloud_f.setMaxWeight(50);
 			cloud_f.setMinWeight(5);
 			cloud_f.setMaxTagsToDisplay(50);
 
+			/*
+			 * Here we split the feature name
+			 */
 			if (f.getName() != null) {
 				StringTokenizer tk = new StringTokenizer(f.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 
@@ -61,7 +67,9 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 					}
 				}
 			}
-
+			/*
+			 * Here we split the feature description
+			 */
 			if (f.getDescription() != null) {
 				StringTokenizer tk = new StringTokenizer(f.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 				while (tk.hasMoreTokens()) {
@@ -73,7 +81,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 			clouds.add(cloud_f);
 		}
 
-		// Create Cloud IDF (feature)
+		// Word cloud IDF calculation for feature
 		ArrayList<Cloud> clouds_IDF = new ArrayList<Cloud>();
 		for (Cloud c : clouds) {
 			clouds_IDF.add(WordCloudUtil.getCloudIDF(clouds, c));
@@ -85,10 +93,10 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Block b = adaptedModel.getOwnedBlocks().get(list.indexOf(c));
 
-				// Check if block and feature are in the same artefact
-				if (!checkArtefact(b, f, adaptedModel))
-					continue;
-
+				/*
+				 * // Check if block and feature are in the same artefact if
+				 * (!checkArtefact(b, f, adaptedModel)) continue;
+				 */
 				double d = WordCloudUtil.cmpClouds(clouds_IDF.get(i), c);
 				if (d >= rateMin) {
 					b.getCorrespondingFeatures().add(f);

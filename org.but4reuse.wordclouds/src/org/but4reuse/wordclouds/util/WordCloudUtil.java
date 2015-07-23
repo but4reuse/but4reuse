@@ -89,12 +89,12 @@ public class WordCloudUtil {
 	private static int nbCloudsContainTag(List<Cloud> clouds, Tag tag) {
 		int cpt = 0;
 		for (Cloud c : clouds) {
-			for (Tag t : c.tags()) {
-				if (t.getName().equalsIgnoreCase(tag.getName())) {
+			for (Tag t : c.tags())
+				if (t.getName().compareToIgnoreCase(tag.getName()) == 0) {
 					cpt++;
 					break;
 				}
-			}
+
 		}
 		return cpt;
 	}
@@ -116,10 +116,13 @@ public class WordCloudUtil {
 		cloud_IDF.setMaxTagsToDisplay(50);
 		cloud_IDF.setMinWeight(5);
 		cloud_IDF.setMaxWeight(50);
+		int nbMots = 0;
+		for (Tag t : c.tags())
+			nbMots += t.getScoreInt();
 		for (Tag tag : c.tags()) {
 			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
 			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);
-			double score = tag.getScore() * idf;
+			double score = (tag.getScore() / nbMots) * idf;
 
 			Tag t = new Tag(tag.getName(), score);
 			cloud_IDF.addTag(t);
@@ -233,4 +236,5 @@ public class WordCloudUtil {
 
 		return (double) (res) / cpt;
 	}
+
 }
