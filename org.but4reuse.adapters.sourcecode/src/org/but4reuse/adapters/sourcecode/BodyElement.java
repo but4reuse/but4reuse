@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.sourcecode;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -59,11 +58,9 @@ public class BodyElement extends AbstractElement {
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
 
-		StringTokenizer tk = new StringTokenizer(body, " :!?=*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-		while (tk.hasMoreTokens()) {
-			String w = tk.nextToken();
-			if (checkWord(w))
-				words.add(w);
+		if(parent != null)
+		{
+			words.addAll(parent.getWords());
 		}
 		return words;
 	}
