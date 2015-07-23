@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.sourcecode;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -56,6 +57,31 @@ public class BodyElement extends AbstractElement {
 
 	@Override
 	public ArrayList<String> getWords() {
-		return new ArrayList<String>();
+		ArrayList<String> words = new ArrayList<String>();
+
+		StringTokenizer tk = new StringTokenizer(body, " :!?=*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+		while (tk.hasMoreTokens()) {
+			String w = tk.nextToken();
+			if (checkWord(w))
+				words.add(w);
+		}
+		return words;
 	}
+
+	public static boolean checkWord(String w) {
+		if (w.compareToIgnoreCase("int") == 0 || w.compareToIgnoreCase("integer") == 0
+				|| w.compareToIgnoreCase("float") == 0 || w.compareToIgnoreCase("boolean") == 0
+				|| w.compareToIgnoreCase("double") == 0 || w.compareToIgnoreCase("string") == 0
+				|| w.compareToIgnoreCase("long") == 0 || w.compareToIgnoreCase("char") == 0
+				|| w.compareToIgnoreCase("unsigned") == 0 || w.compareToIgnoreCase("public") == 0
+				|| w.compareToIgnoreCase("private") == 0 || w.compareToIgnoreCase("final") == 0
+				|| w.compareToIgnoreCase("static") == 0 || w.compareToIgnoreCase("this") == 0
+				|| w.compareToIgnoreCase("while") == 0 || w.compareToIgnoreCase("for") == 0
+				|| w.compareToIgnoreCase("null") == 0 || w.compareToIgnoreCase("do") == 0
+				|| w.compareToIgnoreCase("new") == 0 || w.compareToIgnoreCase("new") == 0
+				|| w.compareToIgnoreCase("if") == 0 || w.compareToIgnoreCase("else") == 0)
+			return false;
+		return true;
+	}
+
 }
