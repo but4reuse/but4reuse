@@ -191,18 +191,18 @@ public class WordCloudVis extends ViewPart {
 			singleton.getCombo().add(b.getName());
 		singleton.getCombo().select(index);
 
-		Cloud c = WordCloudVisualisation.getClouds().get(index);
-		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1) {
-			Cloud c2 = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
-			for (Tag t : c2.tags())
-				singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+		Cloud c = null;
 
-		} else
-			for (Tag t : c.tags())
-				singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+			c = WordCloudVisualisation.getCloudsIDF().get(index);
+		else
+			c = WordCloudVisualisation.getClouds().get(index);
+
+		for (Tag t : c.tags())
+			singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
-		WordCloudUtil.drawWordCloudIDF(singleton.getSCompositeIDF(), WordCloudVisualisation.getClouds(), index);
+		WordCloudUtil.drawWordCloud(singleton.getSCompositeIDF(), c);
 
 	}
 
@@ -312,8 +312,7 @@ public class WordCloudVis extends ViewPart {
 
 				} else {
 					win.setSize(1000, 4000);
-					c = WordCloudVisualisation.getClouds().get(i);
-					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+					c = WordCloudVisualisation.getCloudsIDF().get(i);
 					name += " IDF";
 				}
 
@@ -353,7 +352,7 @@ public class WordCloudVis extends ViewPart {
 
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
 						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
-							c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+							c = WordCloudVisualisation.getCloudsIDF().get(ind);
 
 						String name = WordCloudUtil.rename(names, c);
 						if (name != null) {
@@ -393,7 +392,7 @@ public class WordCloudVis extends ViewPart {
 					}
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
 					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
-						c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+						c = WordCloudVisualisation.getCloudsIDF().get(ind);
 					String name = WordCloudUtil.rename(names, c);
 					b.setName(name);
 					WordCloudVis.update(combo.getSelectionIndex(), true);
@@ -484,12 +483,19 @@ public class WordCloudVis extends ViewPart {
 				int ind = ((TabFolder) (e.getSource())).getSelectionIndex();
 				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
 				WordCloudVis.getSingleton().getList().removeAll();
-				Cloud c = WordCloudVisualisation.getClouds().get(i);
-				if (ind == 1)
-					c = WordCloudUtil.getCloudIDF(WordCloudVisualisation.getClouds(), c);
+				Cloud c = null;
+				if (ind == 0) {
+					c = WordCloudVisualisation.getClouds().get(i);
+					WordCloudUtil.drawWordCloud(cmp, c);
+				} else {
+					c = WordCloudVisualisation.getCloudsIDF().get(i);
+					WordCloudUtil.drawWordCloud(cmpIDF, c);
+				}
+
 				for (Tag t : c.tags())
 					WordCloudVis.getSingleton().getList()
 							.add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+
 			}
 
 			@Override

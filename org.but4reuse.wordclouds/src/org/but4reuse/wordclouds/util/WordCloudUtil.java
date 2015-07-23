@@ -1,5 +1,6 @@
 package org.but4reuse.wordclouds.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -55,80 +56,6 @@ public class WordCloudUtil {
 			x += spaceHint + l.getBounds().width;
 		}
 
-	}
-
-	/**
-	 * The same method than drawWordCloud but here we use inverse documents
-	 * frequency to define the size for strings.
-	 * 
-	 * @param cmp
-	 *            The composite where the word cloud will be drawn.
-	 * @param clouds
-	 *            The clouds list.
-	 * @param ind_cloud
-	 *            The index for the cloud that we want to draw.
-	 */
-	public static void drawWordCloudIDF(Composite cmp, List<Cloud> clouds, int ind_cloud) {
-
-		Cloud cloud = clouds.get(ind_cloud);
-		Cloud cloud_IDF = WordCloudUtil.getCloudIDF(clouds, cloud);
-
-		drawWordCloud(cmp, cloud_IDF);
-
-	}
-
-	/**
-	 * Count how many cloud contain the Tag tag
-	 * 
-	 * @param clouds
-	 *            Cloud list where we search.
-	 * @param tag
-	 *            The tag that we want to find.
-	 * @return How many time we find the tag.
-	 */
-	private static int nbCloudsContainTag(List<Cloud> clouds, Tag tag) {
-		int cpt = 0;
-		for (Cloud c : clouds) {
-			for (Tag t : c.tags())
-				if (t.getName().compareToIgnoreCase(tag.getName()) == 0) {
-					cpt++;
-					break;
-				}
-
-		}
-		return cpt;
-	}
-
-	/**
-	 * This method will create a new word cloud using inverse document frequency
-	 * 
-	 * @param clouds
-	 *            The word cloud list.
-	 * @param c
-	 *            The starting cloud.
-	 * @return A new word cloud.
-	 */
-	public static Cloud getCloudIDF(List<Cloud> clouds, Cloud c) {
-		int nbBlock_isPresent = 0;
-		int nbBlock = clouds.size();
-
-		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
-		cloud_IDF.setMaxTagsToDisplay(50);
-		cloud_IDF.setMinWeight(5);
-		cloud_IDF.setMaxWeight(50);
-		int nbMots = 0;
-		for (Tag t : c.tags())
-			nbMots += t.getScoreInt();
-		for (Tag tag : c.tags()) {
-			nbBlock_isPresent = nbCloudsContainTag(clouds, tag);
-			double idf = Math.log(((double) nbBlock) / (double) nbBlock_isPresent);
-			double score = (tag.getScore() / nbMots) * idf;
-
-			Tag t = new Tag(tag.getName(), score);
-			cloud_IDF.addTag(t);
-
-		}
-		return cloud_IDF;
 	}
 
 	/**
@@ -235,6 +162,96 @@ public class WordCloudUtil {
 		}
 
 		return (double) (res) / cpt;
+	}
+
+	/**
+	 * It will create a word cloud using TD-IDF formula
+	 * 
+	 * @param list
+	 *            An ArrayList of String ArrayList, each sub list contains all
+	 *            words in one of your "Document"
+	 * @param index
+	 *            The index of the list that we want use to create the word
+	 *            cloud
+	 * @return A new word cloud
+	 */
+	public static Cloud createWordCloudIDF(ArrayList<ArrayList<String>> list, int index) {
+		double nbBlock = list.size();
+		double nbWords = list.get(index).size();
+
+		ArrayList<String> wordsChecked = new ArrayList<String>();
+
+		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
+		cloud_IDF.setMaxTagsToDisplay(50);
+		cloud_IDF.setMinWeight(5);
+		cloud_IDF.setMaxWeight(50);
+
+		for (String w : list.get(index)) {
+			/*
+			 * If we already add this words in the cloud we check the next
+			 * words.
+			 */
+			if (countNbTimesWord(wordsChecked, w) != 0)
+				continue;
+			/*
+			 * Here the score of the word w is calculated Formula TD-IDF (
+			 * https://fr.wikipedia.org/wiki/TF-IDF )
+			 */
+
+			double nbBlock_isPresent = nbDocContainsWords(list, w);
+			double nbTimeW = countNbTimesWord(list.get(index), w);
+			double idf = Math.log(nbBlock / nbBlock_isPresent);
+			double td = (nbTimeW / nbWords);
+			double score = td * idf;
+
+			cloud_IDF.addTag(new Tag(w, score));
+			wordsChecked.add(w);
+
+		}
+
+		return cloud_IDF;
+
+	}
+
+	/**
+	 * Count how many lists contain the string word
+	 * 
+	 * @param list
+	 *            It will search the word in each sub list of list parameter.
+	 * @param words
+	 *            The word that we want to find.
+	 * @return How many time we find the tag.
+	 */
+
+	private static int nbDocContainsWords(ArrayList<ArrayList<String>> list, String word) {
+		int cpt = 0;
+		for (ArrayList<String> l : list) {
+			for (String w : l) {
+				if (w.compareToIgnoreCase(word) == 0) {
+					cpt++;
+					break;
+				}
+			}
+		}
+		return cpt;
+	}
+
+	/**
+	 * Count how many time the String word is found in words
+	 * 
+	 * @param words
+	 *            The words list where we search.
+	 * @param word
+	 *            The word that we want to search.
+	 * @return how many time the word was found.
+	 */
+	private static int countNbTimesWord(ArrayList<String> words, String word) {
+		int cpt = 0;
+		for (String w : words) {
+			if (w.compareToIgnoreCase(word) == 0)
+				cpt++;
+		}
+		return cpt;
 	}
 
 }
