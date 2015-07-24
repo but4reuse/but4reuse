@@ -51,5 +51,12 @@
             name="Word Cloud Feature Location">
       </feature.location>
    </extension>
+   <extension
+         point="org.but4reuse.constraints.discovery">
+      <constraintsDiscovery
+            class="org.but4reuse.wordclouds.similarity.WordCloudConstraintsDiscovery"
+            name="Term-based constraints discovery">
+      </constraintsDiscovery>
+   </extension>
 
 </plugin>

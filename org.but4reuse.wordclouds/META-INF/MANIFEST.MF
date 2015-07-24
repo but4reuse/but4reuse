@@ -29,4 +29,6 @@ Bundle-ClassPath: .,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.but4reuse.utils,
- org.but4reuse.adaptedmodel
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.feature.constraints,
+ org.but4reuse.feature.constraints
