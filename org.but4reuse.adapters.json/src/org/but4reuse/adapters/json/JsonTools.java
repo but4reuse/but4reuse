@@ -3,9 +3,12 @@ package org.but4reuse.adapters.json;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.json.activator.Activator;
 
 public class JsonTools {
@@ -43,8 +46,10 @@ public class JsonTools {
 		String delimiter = Activator.getDefault().getPreferenceStore().getString("DELIMITER");
 		String paths = Activator.getDefault().getPreferenceStore().getString("PATHS");
 
-		for (String path : Arrays.asList(paths.split(delimiter))) {
-			addPathToIgnore(path);
+		if (delimiter.compareTo("") != 0) {
+			for (String path : Arrays.asList(paths.split(delimiter))) {
+				addPathToIgnore(path);
+			}
 		}
 	}
 
@@ -83,5 +88,13 @@ public class JsonTools {
 			newPaths.add(path + "_" + elt);
 		}
 		return newPaths;
+	}
+
+	public static void addElement(Map<Integer, List<IElement>> elements, IElement element, int depth) {
+		if (!elements.containsKey(depth)) {
+			elements.put(depth, new ArrayList<IElement>());
+		}
+
+		elements.get(depth).add(element);
 	}
 }

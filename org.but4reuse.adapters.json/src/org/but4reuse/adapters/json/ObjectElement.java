@@ -9,9 +9,16 @@ import com.eclipsesource.json.JsonValue;
 public class ObjectElement extends AbstractElement implements IJsonElement {
 
 	public IJsonElement parent;
+	public JsonObject content;
 
 	public ObjectElement(IJsonElement parent) {
 		this.parent = parent;
+		this.content = null;
+	}
+
+	public ObjectElement(IJsonElement parent, JsonObject content) {
+		this.parent = parent;
+		this.content = content;
 	}
 
 	@Override
@@ -19,14 +26,26 @@ public class ObjectElement extends AbstractElement implements IJsonElement {
 		if (anotherElement instanceof ObjectElement) {
 			ObjectElement elt = (ObjectElement) anotherElement;
 
-			return this.parent.similarity(elt.parent);
+			if (this.content == null) {
+				if (elt.content == null) {
+					return this.parent.similarity(elt.parent);
+				}
+			} else {
+				if (elt.content != null && this.content.equals(elt.content)) {
+					return this.parent.similarity(elt.parent);
+				}
+			}
 		}
 		return 0;
 	}
 
 	@Override
 	public String getText() {
-		return this.parent.getText() + "_{}";
+		if (this.content == null) {
+			return this.parent.getText() + "_{}";
+		} else {
+			return this.parent.getText() + "_{}_" + this.content.toString();
+		}
 	}
 
 	@Override
@@ -36,7 +55,10 @@ public class ObjectElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, new JsonObject());
+		if (this.content == null) {
+			return this.parent.construct(root, new JsonObject());
+		} else {
+			return this.parent.construct(root, this.content);
+		}
 	}
-
 }

@@ -19,6 +19,7 @@ public class ArrayElement extends AbstractElement implements IJsonElement {
 
 	public int id_array;
 	public IJsonElement parent;
+	public JsonArray content;
 
 	public ArrayList<ArrayElement> similarArrays; // List of similar arrays
 													// already found. So the
@@ -29,6 +30,16 @@ public class ArrayElement extends AbstractElement implements IJsonElement {
 	public ArrayElement(int id_array, IJsonElement parent) {
 		this.id_array = id_array;
 		this.parent = parent;
+		this.content = null;
+
+		this.similarArrays = new ArrayList<ArrayElement>();
+		this.similarArrays.add(this);
+	}
+
+	public ArrayElement(int id_array, IJsonElement parent, JsonArray content) {
+		this.id_array = id_array;
+		this.parent = parent;
+		this.content = content;
 
 		this.similarArrays = new ArrayList<ArrayElement>();
 		this.similarArrays.add(this);
@@ -43,19 +54,38 @@ public class ArrayElement extends AbstractElement implements IJsonElement {
 				return 1;
 			}
 
-			if (this.parent.similarity(elt.parent) == 1) {
+			if (this.content == null) {
+				if (elt.content == null) {
+					if (this.parent.similarity(elt.parent) == 1) {
 
-				ArrayList<ArrayElement> arrays = new ArrayList<ArrayElement>();
+						ArrayList<ArrayElement> arrays = new ArrayList<ArrayElement>();
 
-				arrays.addAll(this.similarArrays);
-				arrays.addAll(elt.similarArrays);
+						arrays.addAll(this.similarArrays);
+						arrays.addAll(elt.similarArrays);
 
-				for (ArrayElement arrElt : arrays) {
-					arrElt.id_array = this.id_array;
-					arrElt.similarArrays = arrays;
+						for (ArrayElement arrElt : arrays) {
+							arrElt.id_array = this.id_array;
+							arrElt.similarArrays = arrays;
+						}
+
+						return 1;
+					}
 				}
+			} else if (elt.content != null && this.content.equals(elt.content)) {
+				if (this.parent.similarity(elt.parent) == 1) {
 
-				return 1;
+					ArrayList<ArrayElement> arrays = new ArrayList<ArrayElement>();
+
+					arrays.addAll(this.similarArrays);
+					arrays.addAll(elt.similarArrays);
+
+					for (ArrayElement arrElt : arrays) {
+						arrElt.id_array = this.id_array;
+						arrElt.similarArrays = arrays;
+					}
+
+					return 1;
+				}
 			}
 		}
 		return 0;
@@ -63,7 +93,11 @@ public class ArrayElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		return this.parent.getText() + "_[]";
+		if (this.content == null) {
+			return this.parent.getText() + "_[]";
+		} else {
+			return this.parent.getText() + "_[]_" + this.content.toString();
+		}
 	}
 
 	@Override
@@ -73,6 +107,10 @@ public class ArrayElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, new JsonArray());
+		if (this.content == null) {
+			return this.parent.construct(root, new JsonArray());
+		} else {
+			return this.parent.construct(root, this.content);
+		}
 	}
 }
