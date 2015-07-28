@@ -22,6 +22,7 @@ import org.mcavallo.opencloud.Cloud;
 public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 
 	final private static double rateMin = 0.9;
+	
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {
@@ -56,6 +57,8 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		/* 
 		 * Constraints Discovery Requires
 		 */
+		
+		
 		long start = System.currentTimeMillis();
 		for(int i = 0; i< nb_Block;i++)
 		{
@@ -70,7 +73,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 				Cloud cloud_b2 = clouds.get(j);
 				Block b2 = adaptedModel.getOwnedBlocks().get(j);
 				
-				monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
+				monitor.subTask("Checking Requires Relations for " + b1.getName() + " and " + b2.getName());
 				
 				if(monitor.isCanceled())
 					return constraintList;
