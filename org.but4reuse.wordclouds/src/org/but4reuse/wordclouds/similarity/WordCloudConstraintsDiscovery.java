@@ -93,7 +93,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		AdaptedModelManager.registerTime("Constraints discovery [Requires] ", System.currentTimeMillis() - start);
 
 		/*
-		 * Constraints discovery Mutually Exclusion 
+		 * Constraints discovery Mutually Exclusion
 		 */
 		start = System.currentTimeMillis();
 		for (int i = 0; i < nb_Block; i++) {
@@ -128,7 +128,8 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 				}
 			}
 		}
-		AdaptedModelManager.registerTime("Constraints discovery [Mutually Exclusion] ", System.currentTimeMillis() - start);
+		AdaptedModelManager.registerTime("Constraints discovery [Mutually Exclusion] ", System.currentTimeMillis()
+				- start);
 
 		return constraintList;
 	}
@@ -190,24 +191,25 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 	 * @return A set of strings which explain why b1 require b2"
 	 */
 	public ArrayList<String> createConstraintMessageRequires(Block b1, Block b2, double similarity) {
-		
-		ArrayList<String>explanations = new ArrayList<String>();
+
+		ArrayList<String> explanations = new ArrayList<String>();
 		String s = b1.getName() + " similarity  to " + b2.getName() + " : " + String.format("%.2f", similarity);
 		explanations.add(s);
-		
+
 		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
 			if (blocks.contains(b1)) {
 				if (blocks.contains(b2))
-					explanations.add(b1.getName()+" and "+b2.getName()+" are present in "+art.getArtefact().getName());
+					explanations.add(b1.getName() + " and " + b2.getName() + " are present in "
+							+ art.getArtefact().getName());
 			}
 		}
 		return explanations;
 	}
-	
-	
+
 	/**
-	 * Create a an simple String ArrayList about why b1 and b2 mutually exclude themselves
+	 * Create a an simple String ArrayList about why b1 and b2 mutually exclude
+	 * themselves
 	 * 
 	 * @param b1
 	 *            The first block
@@ -215,19 +217,21 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 	 *            The second block
 	 * @param similarity
 	 *            The similarity between b1 and b2
-	 * @return A set of strings which explain why b1 and b2 mutually exclude themselves"
+	 * @return A set of strings which explain why b1 and b2 mutually exclude
+	 *         themselves"
 	 */
 	public ArrayList<String> createConstraintMessageExclusion(Block b1, Block b2, double similarity) {
-		
-		ArrayList<String>explanations = new ArrayList<String>();
+
+		ArrayList<String> explanations = new ArrayList<String>();
 		String s = b1.getName() + " similarity  to " + b2.getName() + " : " + String.format("%.2f", similarity);
 		explanations.add(s);
-		
+
 		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
 			if (blocks.contains(b1)) {
 				if (!blocks.contains(b2))
-					explanations.add(b1.getName()+" is present in "+art.getArtefact().getName()+" and "+b2.getName()+" isn't");
+					explanations.add(b1.getName() + " is present in " + art.getArtefact().getName() + " and "
+							+ b2.getName() + " isn't");
 			}
 		}
 		return explanations;
