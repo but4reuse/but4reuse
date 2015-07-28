@@ -83,13 +83,52 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 					constraint.setType(IConstraint.REQUIRES);
 					constraint.setBlock1(b1);
 					constraint.setBlock2(b2);
-					constraint.setText(createConstraintMessage(b1, b2, similarity));
-					constraint.setNumberOfReasons(1);
+					ArrayList<String> explanations = createConstraintMessageRequires(b1, b2, similarity);
+					constraint.setExplanations(explanations);
+					constraint.setNumberOfReasons(explanations.size());
 					constraintList.add(constraint);
 				}
 			}
 		}
 		AdaptedModelManager.registerTime("Constraints discovery [Requires] ", System.currentTimeMillis() - start);
+
+		/*
+		 * Constraints discovery Mutually Exclusion 
+		 */
+		start = System.currentTimeMillis();
+		for (int i = 0; i < nb_Block; i++) {
+			Block b1 = adaptedModel.getOwnedBlocks().get(i);
+			Cloud cloud_b1 = clouds.get(i);
+			for (int j = 0; j < nb_Block; j++) {
+				if (i == j || j < i)
+					continue;
+
+				Cloud cloud_b2 = clouds.get(j);
+				Block b2 = adaptedModel.getOwnedBlocks().get(j);
+
+				monitor.subTask("Checking Exclude Relations for " + b1.getName() + " and " + b2.getName());
+
+				if (monitor.isCanceled())
+					return constraintList;
+
+				/*
+				 * We check if c1 is close to c2 (similarity) and if we never
+				 * have b1 and b2 in the same artefact
+				 */
+				double similarity = WordCloudUtil.cmpClouds(cloud_b1, cloud_b2);
+				if (neverInSameArtefact(adaptedModel.getOwnedAdaptedArtefacts(), b1, b2) && similarity > rateMin) {
+					IConstraint constraint = new ConstraintImpl();
+					constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
+					constraint.setBlock1(b1);
+					constraint.setBlock2(b2);
+					ArrayList<String> explanations = createConstraintMessageExclusion(b1, b2, similarity);
+					constraint.setExplanations(explanations);
+					constraint.setNumberOfReasons(explanations.size());
+					constraintList.add(constraint);
+				}
+			}
+		}
+		AdaptedModelManager.registerTime("Constraints discovery [Mutually Exclusion] ", System.currentTimeMillis() - start);
 
 		return constraintList;
 	}
@@ -117,7 +156,30 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 	}
 
 	/**
-	 * Create a simple string about the similarity between b1 and b2
+	 * Check if we never find blocks b1 and b2 in the same artefact
+	 * 
+	 * @param artefacts
+	 *            Artefacts List
+	 * @param b1
+	 *            The first block
+	 * @param b2
+	 *            The second block
+	 * @return True if b1 and b2 are never in the same artefact. Otherwise false
+	 */
+	public boolean neverInSameArtefact(EList<AdaptedArtefact> artefacts, Block b1, Block b2) {
+
+		for (AdaptedArtefact art : artefacts) {
+			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
+			if (blocks.contains(b1)) {
+				if (blocks.contains(b2))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Create a an simple String ArrayList about why b1 requires b2
 	 * 
 	 * @param b1
 	 *            The first block
@@ -125,11 +187,49 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 	 *            The second block
 	 * @param similarity
 	 *            The similarity between b1 and b2
-	 * @return A string which looks like : " b1 similarity to b2 :  0.6"
+	 * @return A set of strings which explain why b1 require b2"
 	 */
-	public String createConstraintMessage(Block b1, Block b2, double similarity) {
+	public ArrayList<String> createConstraintMessageRequires(Block b1, Block b2, double similarity) {
+		
+		ArrayList<String>explanations = new ArrayList<String>();
 		String s = b1.getName() + " similarity  to " + b2.getName() + " : " + String.format("%.2f", similarity);
-
-		return s;
+		explanations.add(s);
+		
+		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
+			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
+			if (blocks.contains(b1)) {
+				if (blocks.contains(b2))
+					explanations.add(b1.getName()+" and "+b2.getName()+" are present in "+art.getArtefact().getName());
+			}
+		}
+		return explanations;
+	}
+	
+	
+	/**
+	 * Create a an simple String ArrayList about why b1 and b2 mutually exclude themselves
+	 * 
+	 * @param b1
+	 *            The first block
+	 * @param b2
+	 *            The second block
+	 * @param similarity
+	 *            The similarity between b1 and b2
+	 * @return A set of strings which explain why b1 and b2 mutually exclude themselves"
+	 */
+	public ArrayList<String> createConstraintMessageExclusion(Block b1, Block b2, double similarity) {
+		
+		ArrayList<String>explanations = new ArrayList<String>();
+		String s = b1.getName() + " similarity  to " + b2.getName() + " : " + String.format("%.2f", similarity);
+		explanations.add(s);
+		
+		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
+			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
+			if (blocks.contains(b1)) {
+				if (!blocks.contains(b2))
+					explanations.add(b1.getName()+" is present in "+art.getArtefact().getName()+" and "+b2.getName()+" isn't");
+			}
+		}
+		return explanations;
 	}
 }
