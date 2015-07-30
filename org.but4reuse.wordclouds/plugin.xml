@@ -58,5 +58,20 @@
             name="Term-based constraints discovery">
       </constraintsDiscovery>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.constraints.discovery.ui.page"
+            class="org.but4reuse.wordclouds.similarity.TermBasedConstraintsDiscoveryPreferences"
+            id="org.but4reuse.wordcloud.similarity.TermBasedConstraintsDiscovery"
+            name="Term-Based">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.wordclouds.similarity.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>
