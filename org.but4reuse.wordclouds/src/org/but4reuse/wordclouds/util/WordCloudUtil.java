@@ -161,6 +161,9 @@ public class WordCloudUtil {
 
 		}
 
+		if(cpt == 0)
+			return 0;
+		
 		return (double) (res) / cpt;
 	}
 
