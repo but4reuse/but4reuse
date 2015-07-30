@@ -45,11 +45,13 @@ public class JsonTools {
 	public static void setPathsToIgnore() {
 		String delimiter = Activator.getDefault().getPreferenceStore().getString("DELIMITER");
 		String paths = Activator.getDefault().getPreferenceStore().getString("PATHS");
-
+		
 		if (delimiter.compareTo("") != 0) {
 			for (String path : Arrays.asList(paths.split(delimiter))) {
 				addPathToIgnore(path);
 			}
+		} else {
+			addPathToIgnore(paths);
 		}
 	}
 

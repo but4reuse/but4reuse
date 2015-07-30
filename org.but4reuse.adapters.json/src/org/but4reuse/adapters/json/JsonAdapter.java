@@ -35,7 +35,18 @@ public class JsonAdapter implements IAdapter {
 		}
 		return false;
 	}
-
+	
+	/*
+	 * Syntax : Path to ignore.
+	 * elements separeted by underscore
+	 * element can be :
+	 * key,
+	 * value,
+	 * array [],
+	 * index of an array [index],
+	 * object {}
+	 */
+	
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		Map<Integer, List<IElement>> elements = new HashMap<Integer, List<IElement>>();
@@ -130,7 +141,7 @@ public class JsonAdapter implements IAdapter {
 	private AbstractElement adapt(int id_file, Map<Integer, List<IElement>> elements, JsonValue jsonVal,
 			AbstractElement parent, ArrayList<String> paths, int depth) {
 		ArrayList<String> possiblePaths = JsonTools.matchPossiblePaths(paths);
-
+		
 		if (possiblePaths.size() == 0) {
 			return adapt(id_file, elements, jsonVal, parent, depth);
 		}
@@ -163,7 +174,7 @@ public class JsonAdapter implements IAdapter {
 					KeyElement keyElt = new KeyElement(key, objElt);
 					JsonTools.addElement(elements, keyElt, depth);
 					keyElt.addDependency(objElt);
-					adapt(id_file, elements, jsonObj.get(key), keyElt, possiblePaths, depth + 1).addDependency(keyElt);
+					adapt(id_file, elements, jsonObj.get(key), keyElt, JsonTools.addToPaths(possiblePaths, key), depth + 1).addDependency(keyElt);
 				}
 			}
 
