@@ -2,6 +2,7 @@ package org.but4reuse.adapters.eclipse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 
@@ -135,10 +136,15 @@ public class PluginElement extends FileElement {
 	@Override
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
-		if (name != null)
-			for (String w : name.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-				words.add(w);
+		if (name != null) {
+			StringTokenizer tk = new StringTokenizer(name, " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
+			while (tk.hasMoreTokens()) {
+				for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+					words.add(w);
+				}
 			}
+
+		}
 		return words;
 	}
 }

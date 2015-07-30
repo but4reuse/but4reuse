@@ -135,26 +135,28 @@ public abstract class FSTNodeElement extends AbstractElement {
 	@Override
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
-		// System.out.println("Type : " + type);
-		// System.out.println("Name : " + name + "\n");
 
-		if (type.equalsIgnoreCase("MethodDecl") || type.equalsIgnoreCase("FieldDecl")
-				|| type.equalsIgnoreCase("ClassDeclaration") || type.equalsIgnoreCase("Func")) {
+		String sub = name;
 
-			String sub = name;
+		if (sub.contains("("))
+			sub = sub.substring(0, sub.indexOf("("));
 
-			if (sub.contains("(")) {
-				sub = sub.substring(0, sub.indexOf("("));
-				// System.out.println("Sub -- " + sub);
-			}
+		for (int i = 0; i < getWeight(); i++)
+			words.add(new String(sub));
 
-			/*
-			 * We split names using word case. For instance MyFunction will
-			 * become My Function in two words.
-			 */
-			for (String w : sub.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
-				words.add(w);
-		}
 		return words;
 	}
+
+	private int getWeight() {
+
+		if (type.compareToIgnoreCase("MethodDecl") == 0 || type.compareToIgnoreCase("Func") == 0)
+			return 10;
+		else if (type.compareToIgnoreCase("ClassDeclaration") == 0)
+			return 25;
+		else if (type.compareToIgnoreCase("ConstructorDecl") == 0)
+			return 15;
+		else
+			return 0;
+	}
+
 }

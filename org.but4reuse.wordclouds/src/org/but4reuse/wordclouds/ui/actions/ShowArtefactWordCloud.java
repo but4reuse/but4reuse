@@ -16,7 +16,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -35,7 +34,7 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 	Artefact artefact = null;
 	List<IAdapter> adap;
 	Cloud c = new Cloud();
-	int widthWin = 600, heightWin = 600;
+	int widthWin = 700, heightWin = 700;
 
 	@Override
 	public void run(IAction action) {
@@ -75,10 +74,9 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 
-						ScrolledComposite cmp = new ScrolledComposite(win, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-						cmp.setBounds(5, 5, widthWin - 15, heightWin - 40);
-						Composite comp = new Composite(cmp, SWT.NORMAL);
-						comp.setBounds(0, 0, cmp.getBounds().width * 2, cmp.getBounds().height * 2);
+						Composite comp = new Composite(win, SWT.NORMAL);
+						comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
+
 						win.open();
 						win.update();
 
