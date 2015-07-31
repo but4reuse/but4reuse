@@ -73,5 +73,20 @@
             class="org.but4reuse.wordclouds.similarity.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.feature.location.ui.page"
+            class="org.but4reuse.wordclouds.feature.location.FeaturesLocationPreferences"
+            id="org.but4reuse.wordclouds.page1"
+            name="WordCloud Location">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.feature.location.helper.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

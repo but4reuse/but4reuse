@@ -36,7 +36,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		/*
 		 * Gathering words from blocks in order to create words cloud IDF
 		 */
-	
+
 		for (int i = 0; i < nb_Block; i++) {
 			ArrayList<String> list = new ArrayList<String>();
 			Block b = adaptedModel.getOwnedBlocks().get(i);
@@ -60,32 +60,31 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		 */
 
 		long start = System.currentTimeMillis();
-		
+
 		boolean requires = Activator.getDefault().getPreferenceStore()
 				.getBoolean(TermBasedConstraintsDiscoveryPreferences.REQUIRES);
 		rateMin = Activator.getDefault().getPreferenceStore()
 				.getDouble(TermBasedConstraintsDiscoveryPreferences.HIGHT_SIM);
-		
-		if(requires)
-		{	
+
+		if (requires) {
 			for (int i = 0; i < nb_Block; i++) {
 				Block b1 = adaptedModel.getOwnedBlocks().get(i);
 				Cloud cloud_b1 = clouds.get(i);
 				for (int j = 0; j < nb_Block; j++) {
 					if (i == j)
 						continue;
-	
+
 					Cloud cloud_b2 = clouds.get(j);
 					Block b2 = adaptedModel.getOwnedBlocks().get(j);
-	
+
 					monitor.subTask("Checking Requires Relations for " + b1.getName() + " and " + b2.getName());
-	
+
 					if (monitor.isCanceled())
 						return constraintList;
-	
+
 					/*
-					 * We check if c1 is close to c2 (similarity) and if each time
-					 * we have b1 in an artefact there is b2 in it too.
+					 * We check if c1 is close to c2 (similarity) and if each
+					 * time we have b1 in an artefact there is b2 in it too.
 					 */
 					double similarity = WordCloudUtil.cmpClouds(cloud_b1, cloud_b2);
 					if (inSameArtefact(adaptedModel.getOwnedAdaptedArtefacts(), b1, b2) && similarity > rateMin) {
@@ -108,27 +107,26 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		start = System.currentTimeMillis();
 		boolean excludes = Activator.getDefault().getPreferenceStore()
 				.getBoolean(TermBasedConstraintsDiscoveryPreferences.EXCLUDES);
-	
-		if(excludes)
-		{
+
+		if (excludes) {
 			for (int i = 0; i < nb_Block; i++) {
 				Block b1 = adaptedModel.getOwnedBlocks().get(i);
 				Cloud cloud_b1 = clouds.get(i);
 				for (int j = 0; j < nb_Block; j++) {
 					if (i == j || j < i)
 						continue;
-	
+
 					Cloud cloud_b2 = clouds.get(j);
 					Block b2 = adaptedModel.getOwnedBlocks().get(j);
-	
+
 					monitor.subTask("Checking Exclude Relations for " + b1.getName() + " and " + b2.getName());
-	
+
 					if (monitor.isCanceled())
 						return constraintList;
-	
+
 					/*
-					 * We check if c1 is close to c2 (similarity) and if we never
-					 * have b1 and b2 in the same artefact
+					 * We check if c1 is close to c2 (similarity) and if we
+					 * never have b1 and b2 in the same artefact
 					 */
 					double similarity = WordCloudUtil.cmpClouds(cloud_b1, cloud_b2);
 					if (neverInSameArtefact(adaptedModel.getOwnedAdaptedArtefacts(), b1, b2) && similarity > rateMin) {
