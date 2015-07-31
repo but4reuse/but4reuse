@@ -18,9 +18,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferencesHelper.AUTOMATIC_EQUAL_THRESHOLD, 100);
+		store.setDefault(PreferencesHelper.AUTOMATIC_EQUAL_THRESHOLD, 1.00);
 		store.setDefault(PreferencesHelper.ASK_USER, false);
-		store.setDefault(PreferencesHelper.ASK_USER_THRESHOLD, 90);
+		store.setDefault(PreferencesHelper.ASK_USER_THRESHOLD, 0.90);
 		store.setDefault(PreferencesHelper.ASK_USER_DEACTIVATED_FOR_THIS_TIME, false);
 		store.setDefault(PreferencesHelper.ADAPT_CONCURRENTLY, false);
 	}

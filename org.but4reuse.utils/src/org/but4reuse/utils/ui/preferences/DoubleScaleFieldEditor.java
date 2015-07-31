@@ -110,8 +110,6 @@ public class DoubleScaleFieldEditor extends FieldEditor {
 
 			@Override
 			public void verifyText(VerifyEvent e) {
-				// TODO Auto-generated method stub
-
 				e.doit = false;
 				String value_t = text.getText();
 				/*

@@ -31,11 +31,11 @@ public class PreferencesHelper {
 	}
 
 	public static double getAutomaticEqualThreshold() {
-		return (new Double(prefs.getInt(AUTOMATIC_EQUAL_THRESHOLD, 100))).doubleValue() / 100;
+		return prefs.getDouble(AUTOMATIC_EQUAL_THRESHOLD, 1.00);
 	}
 
 	public static double getManualEqualThreshold() {
-		return (new Double(prefs.getInt(ASK_USER_THRESHOLD, 90))).doubleValue() / 100;
+		return prefs.getDouble(ASK_USER_THRESHOLD, 0.9);
 	}
 
 	public static boolean isManualEqualActivated() {
