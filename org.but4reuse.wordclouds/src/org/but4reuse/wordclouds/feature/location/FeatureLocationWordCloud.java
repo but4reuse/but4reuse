@@ -1,6 +1,7 @@
 package org.but4reuse.wordclouds.feature.location;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -9,6 +10,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
@@ -17,11 +19,10 @@ import org.mcavallo.opencloud.Cloud;
 
 public class FeatureLocationWordCloud implements IFeatureLocation {
 
-	public static double rateMin = 0.65;
-
 	@Override
-	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
-
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			IProgressMonitor monitor) {
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		/*
 		 * We gather all words for each blocks
 		 */
@@ -100,33 +101,13 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Feature f = featureList.getOwnedFeatures().get(i);
 				double d = WordCloudUtil.cmpClouds(clouds_IDF_Features.get(i), c);
-				if (d >= rateMin) {
-					b.getCorrespondingFeatures().add(f);
+				if (d > 0.00) {
+					locatedFeatures.add(new LocatedFeature(f, b, d));
 				}
 			}
 
 		}
-
+		return locatedFeatures;
 	}
-	/*
-	 * /**
-	 * 
-	 * @param b The bloc tested
-	 * 
-	 * @param fThe feature tested
-	 * 
-	 * @param adaptedModel The adapted model
-	 * 
-	 * @return True if the block and the feature are in the same artefact.
-	 */
-	/*
-	 * private static boolean checkArtefact(Block b, Feature f, AdaptedModel
-	 * adaptedModel) { for (Artefact art : f.getImplementedInArtefacts()) {
-	 * AdaptedArtefact adaptedArt =
-	 * AdaptedModelHelper.getAdaptedArtefact(adaptedModel, art); if
-	 * (AdaptedModelHelper.getBlocksOfAdaptedArtefact(adaptedArt).contains(b))
-	 * return true;
-	 * 
-	 * } return false; }
-	 */
+
 }

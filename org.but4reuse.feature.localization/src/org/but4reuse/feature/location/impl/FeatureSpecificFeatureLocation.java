@@ -9,6 +9,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,7 +22,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FeatureSpecificFeatureLocation implements IFeatureLocation {
 
 	@Override
-	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		for (Feature f : featureList.getOwnedFeatures()) {
 			List<Block> featureBlocks = null;
 			// Here we calculate the common blocks of the artefacts that
@@ -45,9 +47,11 @@ public class FeatureSpecificFeatureLocation implements IFeatureLocation {
 				}
 			}
 			for (Block commonBlock : featureBlocks) {
-				commonBlock.getCorrespondingFeatures().add(f);
+				// Add the located features
+				locatedFeatures.add(new LocatedFeature(f,commonBlock,1));
 			}
 		}
+		return locatedFeatures;
 	}
 
 }

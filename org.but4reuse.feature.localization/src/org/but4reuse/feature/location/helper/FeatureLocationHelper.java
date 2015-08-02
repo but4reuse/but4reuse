@@ -21,6 +21,8 @@ public class FeatureLocationHelper {
 
 	public static final String FEATURELOCATION_EXTENSIONPOINT = "org.but4reuse.feature.location";
 
+	public static final String LOCATION_THRESHOLD_PREFERENCE = "LOCATION_THRESHOLD_PREFERENCE";
+
 	private static List<IFeatureLocation> cache_featurelocation;
 
 	/**

@@ -8,6 +8,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,13 +22,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FeatureSpecificHeuristicFeatureLocation implements IFeatureLocation {
 
 	@Override
-	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			IProgressMonitor monitor) {
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		String[][] matrix = ConstraintsHelper.createMatrixOfPresenceOfBlocksInFeatures(featureList, adaptedModel);
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		// for each feature
 		for (int r = 1; r < matrix.length; r++) {
 			if (monitor.isCanceled()) {
-				return;
+				return locatedFeatures;
 			}
 			Feature feature = featureList.getOwnedFeatures().get(r - 1);
 			monitor.subTask("Locating " + feature.getName());
@@ -47,9 +50,11 @@ public class FeatureSpecificHeuristicFeatureLocation implements IFeatureLocation
 			post(constraints, blocks);
 
 			for (Block b : blocks) {
-				b.getCorrespondingFeatures().add(feature);
+				// add the located features
+				locatedFeatures.add(new LocatedFeature(feature, b, 1));
 			}
 		}
+		return locatedFeatures;
 	}
 
 	/**

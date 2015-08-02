@@ -20,6 +20,7 @@ import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
@@ -36,6 +37,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * Feature Location Action
+ * 
+ * @author jabier.martinez
+ * 
+ */
 public class FeatureLocationAction implements IObjectActionDelegate {
 
 	FeatureList featureList;
@@ -129,7 +136,22 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								monitor.subTask("Feature location");
 								IFeatureLocation featureLocationAlgorithm = FeatureLocationHelper
 										.getSelectedFeatureLocation();
-								featureLocationAlgorithm.locateFeatures(featureList, adaptedModel, monitor);
+								List<LocatedFeature> locatedFeatures = featureLocationAlgorithm.locateFeatures(
+										featureList, adaptedModel, monitor);
+								// get the location threshold
+								double threshold = FeatureLocationHelper.getPreferenceStore().getDouble(
+										FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE);
+								// realize the feature location that are greater
+								// or equal to the threshold
+								for (LocatedFeature locatedFeature : locatedFeatures) {
+									if (locatedFeature.getConfidence() >= threshold) {
+										if (!locatedFeature.getBlock().getCorrespondingFeatures()
+												.contains(locatedFeature.getFeature())) {
+											locatedFeature.getBlock().getCorrespondingFeatures()
+													.add(locatedFeature.getFeature());
+										}
+									}
+								}
 								monitor.worked(1);
 
 								monitor.subTask("Preparing visualisations");
