@@ -44,7 +44,9 @@ public class DoubleScaleFieldEditor extends FieldEditor {
 
 	@Override
 	protected void adjustForNumColumns(int numColumns) {
-		((GridData) parent.getLayoutData()).horizontalSpan = numColumns;
+		if (parent.getLayoutData() != null) {
+			((GridData) parent.getLayoutData()).horizontalSpan = numColumns;
+		}
 	}
 
 	@Override

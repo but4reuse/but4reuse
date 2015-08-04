@@ -18,6 +18,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault(FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE, 0.8);
 		List<IFeatureLocation> algos = FeatureLocationHelper.getAllFeatureLocation();
 		for (IFeatureLocation algo : algos) {
 			String algoName = FeatureLocationHelper.getAlgorithmName(algo);

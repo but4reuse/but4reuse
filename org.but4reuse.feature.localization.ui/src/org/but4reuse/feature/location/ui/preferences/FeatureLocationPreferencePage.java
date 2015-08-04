@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.helper.FeatureLocationHelper;
+import org.but4reuse.utils.ui.preferences.DoubleScaleFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -32,6 +33,11 @@ public class FeatureLocationPreferencePage extends FieldEditorPreferencePage imp
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
+		// Location threshold
+		DoubleScaleFieldEditor scale = new DoubleScaleFieldEditor(FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE,
+				"Located feature threshold", getFieldEditorParent());
+		addField(scale);
+		// Selection of algorithm
 		List<IFeatureLocation> algos = FeatureLocationHelper.getAllFeatureLocation();
 		for (IFeatureLocation algo : algos) {
 			String algoName = FeatureLocationHelper.getAlgorithmName(algo);

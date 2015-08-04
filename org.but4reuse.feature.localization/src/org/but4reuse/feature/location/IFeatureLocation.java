@@ -1,5 +1,7 @@
 package org.but4reuse.feature.location;
 
+import java.util.List;
+
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -15,6 +17,8 @@ public interface IFeatureLocation {
 	 * 
 	 * @param featureList
 	 * @param adaptedModel
+	 * @return list of located features
 	 */
-	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor);
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			IProgressMonitor monitor);
 }
