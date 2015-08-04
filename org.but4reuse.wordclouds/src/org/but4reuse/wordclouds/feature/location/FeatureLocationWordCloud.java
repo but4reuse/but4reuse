@@ -1,6 +1,7 @@
 package org.but4reuse.wordclouds.feature.location;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -9,9 +10,9 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
-import org.but4reuse.utils.nlp.UselessWordsRemover;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,17 +20,15 @@ import org.mcavallo.opencloud.Cloud;
 
 public class FeatureLocationWordCloud implements IFeatureLocation {
 
-	
-
 	@Override
-	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
-
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			IProgressMonitor monitor) {
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		/*
 		 * We gather all words for each blocks
 		 */
-		double rateMin = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
+        double rate = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
 		ArrayList<ArrayList<String>> listBlocksWords;
-		System.out.println("Rate : "+rateMin);
 		listBlocksWords = new ArrayList<ArrayList<String>>();
 
 		for (Block b : adaptedModel.getOwnedBlocks()) {
@@ -45,7 +44,6 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 				}
 			}
 
-			
 			listBlocksWords.add(l);
 		}
 
@@ -81,7 +79,6 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 					}
 				}
 			}
-			UselessWordsRemover.removeUselessWords(l);
 			listFeaturesWords.add(l);
 		}
 
@@ -105,13 +102,13 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Feature f = featureList.getOwnedFeatures().get(i);
 				double d = WordCloudUtil.cmpClouds(clouds_IDF_Features.get(i), c);
-				if (d >= rateMin) {
-					b.getCorrespondingFeatures().add(f);
+				if (d >rate) {
+					locatedFeatures.add(new LocatedFeature(f, b, d));
 				}
 			}
 
 		}
-
+		return locatedFeatures;
 	}
 
 }
