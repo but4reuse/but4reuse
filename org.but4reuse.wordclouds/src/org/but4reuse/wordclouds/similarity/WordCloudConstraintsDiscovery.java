@@ -22,7 +22,6 @@ import org.mcavallo.opencloud.Cloud;
 
 public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 
-	private static double rateMin = 0.9;
 
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
@@ -63,7 +62,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 
 		boolean requires = Activator.getDefault().getPreferenceStore()
 				.getBoolean(TermBasedConstraintsDiscoveryPreferences.REQUIRES);
-		rateMin = Activator.getDefault().getPreferenceStore()
+		double rateMin = Activator.getDefault().getPreferenceStore()
 				.getDouble(TermBasedConstraintsDiscoveryPreferences.HIGHT_SIM);
 
 		if (requires) {
