@@ -19,7 +19,7 @@ import org.mcavallo.opencloud.Cloud;
 
 public class FeatureLocationWordCloud implements IFeatureLocation {
 
-	public static double rateMin;
+	
 
 	@Override
 	public void locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
@@ -27,7 +27,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		/*
 		 * We gather all words for each blocks
 		 */
-		rateMin = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
+		double rateMin = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
 		ArrayList<ArrayList<String>> listBlocksWords;
 		System.out.println("Rate : "+rateMin);
 		listBlocksWords = new ArrayList<ArrayList<String>>();
