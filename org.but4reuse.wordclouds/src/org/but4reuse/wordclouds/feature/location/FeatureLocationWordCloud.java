@@ -45,7 +45,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 				}
 			}
 
-			UselessWordsRemover.removeUselessWords(l);
+			
 			listBlocksWords.add(l);
 		}
 
