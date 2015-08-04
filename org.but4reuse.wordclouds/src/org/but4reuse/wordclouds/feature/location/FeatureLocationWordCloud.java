@@ -28,7 +28,8 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		 * We gather all words for each blocks
 		 */
         double rate = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
-		ArrayList<ArrayList<String>> listBlocksWords;
+		
+        ArrayList<ArrayList<String>> listBlocksWords;
 		listBlocksWords = new ArrayList<ArrayList<String>>();
 
 		for (Block b : adaptedModel.getOwnedBlocks()) {

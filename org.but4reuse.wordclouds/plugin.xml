@@ -85,7 +85,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.but4reuse.feature.location.helper.PreferenceInitializer">
+            class="org.but4reuse.wordclouds.feature.location.PreferenceInitializer">
       </initializer>
    </extension>
 
