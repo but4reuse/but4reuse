@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.utils.nlp.UselessWordsRemover;
 
 /**
  * Plugin Element
@@ -143,8 +144,9 @@ public class PluginElement extends FileElement {
 					words.add(w);
 				}
 			}
-
+			
 		}
+		UselessWordsRemover.removeUselessWords(words);
 		return words;
 	}
 }
