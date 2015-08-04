@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lsi
+Bundle-SymbolicName: org.but4reuse.feature.location.lsi
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.feature.location.lsi.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Import-Package: org.but4reuse.adaptedmodel,
+ org.but4reuse.adaptedmodel.helpers,
+ org.but4reuse.adapters,
+ org.but4reuse.adapters.impl,
+ org.but4reuse.artefactmodel,
+ org.but4reuse.feature.location,
+ org.but4reuse.featurelist,
+ org.eclipse.emf.common.util
