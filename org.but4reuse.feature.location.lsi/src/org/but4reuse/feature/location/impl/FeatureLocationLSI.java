@@ -73,6 +73,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		Matrix v = svd.getV();
 		Matrix s = svd.getS();
 		Matrix q = s.times(v.getMatrix(0,v.getRowDimension(),v.getColumnDimension()-1,v.getColumnDimension()-1));
+		
 		Vec3d veqQ = new Vec3d(0, 0, 0);
 		for(int i =0;i< v.getRowDimension()-1;i++)
 		{

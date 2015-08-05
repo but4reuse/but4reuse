@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Lsi
-Bundle-SymbolicName: org.but4reuse.feature.location.lsi
+Bundle-SymbolicName: org.but4reuse.feature.location.lsi;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.feature.location.lsi.activator.Activator
 Require-Bundle: org.eclipse.ui,
