@@ -14,6 +14,7 @@ import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.utils.nlp.UselessWordsRemover;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -81,6 +82,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 					}
 				}
 			}
+			UselessWordsRemover.removeUselessWords(l);
 			listFeaturesWords.add(l);
 		}
 
