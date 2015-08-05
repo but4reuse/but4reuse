@@ -11,6 +11,7 @@ import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
+import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.wordclouds.activator.Activator;
@@ -27,8 +28,8 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		/*
 		 * We gather all words for each blocks
 		 */
-        double rate = Activator.getDefault().getPreferenceStore().getDouble(FeaturesLocationPreferences.HIGHT_SIM);
-		
+         double threshold = FeatureLocationHelper.getPreferenceStore().getDouble(
+    							FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE);
         ArrayList<ArrayList<String>> listBlocksWords;
 		listBlocksWords = new ArrayList<ArrayList<String>>();
 
@@ -103,7 +104,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Feature f = featureList.getOwnedFeatures().get(i);
 				double d = WordCloudUtil.cmpClouds(clouds_IDF_Features.get(i), c);
-				if (d >rate) {
+				if (d >threshold) {
 					locatedFeatures.add(new LocatedFeature(f, b, d));
 				}
 			}
