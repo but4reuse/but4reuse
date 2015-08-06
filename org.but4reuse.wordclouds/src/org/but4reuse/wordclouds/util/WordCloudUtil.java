@@ -41,6 +41,7 @@ public class WordCloudUtil {
 			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC);
 			l.setFont(f);
 			l.setText(t.getName());
+			l.setToolTipText(String.format("%.2f", t.getScore()));
 			l.pack();
 
 			if (x + l.getBounds().width > cmp.getBounds().width * 0.70 - 25) {

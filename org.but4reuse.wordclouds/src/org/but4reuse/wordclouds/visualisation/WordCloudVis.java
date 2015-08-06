@@ -329,7 +329,7 @@ public class WordCloudVis extends ViewPart {
 				win.update();
 
 				WordCloudUtil.drawWordCloud(comp, c);
-				addWordCloudListeners(cmp,i);
+				addWordCloudListeners(comp,i);
 			}
 
 			@Override
@@ -491,9 +491,11 @@ public class WordCloudVis extends ViewPart {
 				if (ind == 0) {
 					c = WordCloudVisualisation.getClouds().get(i);
 					WordCloudUtil.drawWordCloud(cmp, c);
+					addWordCloudListeners(cmp,i);
 				} else {
 					c = WordCloudVisualisation.getCloudsIDF().get(i);
 					WordCloudUtil.drawWordCloud(cmpIDF, c);
+					addWordCloudListeners(cmpIDF, i);
 				}
 
 				for (Tag t : c.tags())
