@@ -29,8 +29,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		/*
 		 * We gather all words for each blocks
 		 */
-         double threshold = FeatureLocationHelper.getPreferenceStore().getDouble(
-    							FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE);
+        
         ArrayList<ArrayList<String>> listBlocksWords;
 		listBlocksWords = new ArrayList<ArrayList<String>>();
 
@@ -106,7 +105,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Feature f = featureList.getOwnedFeatures().get(i);
 				double d = WordCloudUtil.cmpClouds(clouds_IDF_Features.get(i), c);
-				if (d >threshold) {
+				if (d >0.0) {
 					locatedFeatures.add(new LocatedFeature(f, b, d));
 				}
 			}

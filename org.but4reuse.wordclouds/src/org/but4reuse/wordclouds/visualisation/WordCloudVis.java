@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
+import org.but4reuse.wordclouds.util.WordCloudListener;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -19,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -203,7 +205,8 @@ public class WordCloudVis extends ViewPart {
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloud(singleton.getSCompositeIDF(), c);
-
+		addWordCloudListeners(singleton.getSComposite(),index);
+		addWordCloudListeners(singleton.getSCompositeIDF(),index);
 	}
 
 	@Override
@@ -326,6 +329,7 @@ public class WordCloudVis extends ViewPart {
 				win.update();
 
 				WordCloudUtil.drawWordCloud(comp, c);
+				addWordCloudListeners(cmp,i);
 			}
 
 			@Override
@@ -519,4 +523,15 @@ public class WordCloudVis extends ViewPart {
 
 	}
 
+	/**
+	* Add Word Cloud listeners to change names when clicking on one word
+	* 
+	* @param composite
+	*            containing the labels
+	*/
+	static private void addWordCloudListeners(Composite cloudComposite, int blockIndex) {
+		for (final Control c : cloudComposite.getChildren()) {
+			c.addMouseListener(new WordCloudListener(blockIndex));
+		}
+	}
 }
