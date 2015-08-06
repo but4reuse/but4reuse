@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.feature.location.impl.FeatureLocationLSI"
+            name="Latent Semantic Indexing Location">
+      </feature.location>
+   </extension>
+
+</plugin>
