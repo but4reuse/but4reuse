@@ -1,7 +1,6 @@
 package org.but4reuse.feature.location.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import Jama.Matrix;
 import Jama.SingularValueDecomposition;
 
-import com.sun.javafx.geom.Vec3d;
 
 public class FeatureLocationLSI implements IFeatureLocation {
 
@@ -31,7 +29,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
 			IProgressMonitor monitor) {
 		
-		
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		
 		for (Feature f : featureList.getOwnedFeatures())
 		{	
@@ -39,6 +37,10 @@ public class FeatureLocationLSI implements IFeatureLocation {
 					new ArrayList<HashMap<String,Integer>>();
 			ArrayList<Block> featureBlocks = new ArrayList<Block>();
 			
+			/*
+			 * We gather all words for each block of artefacts where the feature f is implemented
+			 * we count one time a bloc
+			 */
 			for (Artefact a : f.getImplementedInArtefacts()) 
 			{
 				AdaptedArtefact aa = AdaptedModelHelper.getAdaptedArtefact(adaptedModel, a);
@@ -61,30 +63,65 @@ public class FeatureLocationLSI implements IFeatureLocation {
 								 t.put(tmp, 1);
 						 }
 					 }
+					 /*
+					  * we add all words form the block in a list
+					  */
 					 list.add(t);
 				 }
 			}
-			
+		
+		/*
+		 * if the list is empty we it means we found 0 zero block 
+		 * so it's not necessary to continue with the feature
+		 */
+		if(list.size() == 0)
+			continue;
+		
 		list.add(getFeatureWords(f));
 		
+		/*
+		 * Here we use the LSI for comparing words from the feature and words form the block
+		 * https://fr.wikipedia.org/wiki/Analyse_s%C3%A9mantique_latente
+		 * 
+		 */
 		Matrix m = new Matrix(createMatrix(list));
 		SingularValueDecomposition svd = m.svd();
 		
 		Matrix v = svd.getV();
 		Matrix s = svd.getS();
-		Matrix q = s.times(v.getMatrix(0,v.getRowDimension(),v.getColumnDimension()-1,v.getColumnDimension()-1));
+		Matrix q = s.times(v.getMatrix(0,v.getRowDimension()-1,v.getColumnDimension()-1,v.getColumnDimension()-1));
 		
-		Vec3d veqQ = new Vec3d(0, 0, 0);
+		Matrix mVecQ = s.times(q);
+		
+		Vector3d vecQ = new Vector3d(mVecQ.get(0,0), mVecQ.get(1, 0), mVecQ.get(2,0));
+		
 		for(int i =0;i< v.getRowDimension()-1;i++)
 		{
-			Matrix vector = s.times(v.getMatrix(0,v.getRowDimension(),i,i));		
+			Matrix vector = s.times(v.getMatrix(0,v.getRowDimension()-1,i,i));
+			Matrix vector2 = s.times(vector);
+			Vector3d vecDoc = new Vector3d(vector2.get(0,0), vector2.get(1, 0), vector2.get(2,0));
+			
+			double cos = cosine(vecQ, vecDoc);
+			/*
+			 * If the cosine between the feature vector and the block vector is > 0 it means 
+			 * that it's relevant to think that there is links between words form block and
+			 * words from feature.
+			 */
+			if(cos > 0)
+				locatedFeatures.add(new LocatedFeature(f,featureBlocks.get(i),cos));
 		}
-	
+		
 		
 		}
-		return null;
+		return locatedFeatures;
 	}
 
+	/**
+	 * It will give the words from the feature
+	 * @param f The feature
+	 * @return A Hashmap with the words from the description and feature name.
+	 * For each words we have how many time it was found
+	 */
 	static public HashMap<String,Integer>getFeatureWords(Feature f)
 	{
 		HashMap<String,Integer> featureWords = new HashMap<String, Integer>();
@@ -92,31 +129,35 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			StringTokenizer tk = new StringTokenizer(f.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 
 			while (tk.hasMoreTokens()) {
-				for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-					String tmp = w.toLowerCase();
+					String tmp = tk.nextToken().toLowerCase();
 					 if(featureWords.containsKey(tmp))
 						featureWords.put(tmp,featureWords.get(tmp)+1);
 					 else
 						 featureWords.put(tmp, 1);
-				 }
 				}
 			}
 		
 		if (f.getDescription() != null) {
 			StringTokenizer tk = new StringTokenizer(f.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 			while (tk.hasMoreTokens()) {
-				for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-					String tmp = w.toLowerCase();
+				
+					String tmp = tk.nextToken().toLowerCase();
 					 if(featureWords.containsKey(tmp))
 						featureWords.put(tmp,featureWords.get(tmp)+1);
 					 else
 						 featureWords.put(tmp, 1);
-				}
 			}
 		}
 		return featureWords;
 	}
 	
+	/**
+	 * A Matrix which represents the words found in several documents
+	 * In a row there is how many time a word is found in each document
+	 * In a columns there is how many time each words is found in a document
+	 * @param list HashMap which contains for each documents the words found ant how many time it was found.
+	 * @return A matrix
+	 */
 	public static double[][] createMatrix(ArrayList<HashMap<String,Integer>> list)
 	{
 		ArrayList<String> words = new ArrayList<String>();
@@ -138,16 +179,16 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		if (cpt == 0)
 			return null;
 		
-		double matrix [][] = new double[list.size()][cpt];
+		double matrix [][] = new double[cpt][list.size()];
 		int i = 0;
 		for(HashMap<String,Integer> t : list)
 		{
 			for(String w : words)
 			{
 				if(t.containsKey(w))
-					matrix[i][words.indexOf(w)]=t.get(w);
+					matrix[words.indexOf(w)][i]=t.get(w);
 				else
-					matrix[i][words.indexOf(w)]=0;
+					matrix[words.indexOf(w)][i]=0;
 			}
 			i++;
 		}
@@ -155,9 +196,19 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		return matrix;
 	}
 	
-	public static double cosine(Vec3d u, Vec3d v)
+	/**
+	 * Calule the cosine between two vector
+	 * @param u The vector U
+	 * @param v The vector V
+	 * @return The cosine
+	 */
+	public static double cosine(Vector3d u, Vector3d v)
 	{
-		return u.x*v.x+u.y*v.y+u.z*v.z;
+		double scalaire = u.x*v.x+u.y*v.y+u.z*v.z;
+		double normeU = Math.sqrt(u.x*u.x+u.y*u.y+u.z*u.z);
+		double normeV = Math.sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+
+		return  scalaire / (normeU*normeV);
 	}
 	
 }

@@ -15,3 +15,5 @@ Import-Package: org.but4reuse.adaptedmodel,
  org.but4reuse.feature.location,
  org.but4reuse.featurelist,
  org.eclipse.emf.common.util
+Bundle-ClassPath: Jars/,
+ .
