@@ -40,7 +40,7 @@ public class UselessWordsRemover {
 			int cpt = 0;
 			for(int i = 0;i< out.length;i++)
 			{
-				if(out[i].equals("IN"))
+				if(out[i].equals("IN") || out[i].equals("CD"))
 				{
 					words.remove(i-cpt);
 					cpt++;
