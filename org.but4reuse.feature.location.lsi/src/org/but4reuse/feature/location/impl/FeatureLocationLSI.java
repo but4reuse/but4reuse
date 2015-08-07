@@ -107,6 +107,8 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			 * that it's relevant to think that there is links between words form block and
 			 * words from feature.
 			 */
+			cos++;
+			cos/=2;
 			if(cos > 0)
 				locatedFeatures.add(new LocatedFeature(f,featureBlocks.get(i),cos));
 		}
