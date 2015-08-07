@@ -1,5 +1,6 @@
 package org.but4reuse.adaptedmodel.manager;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class AdaptedModelManager {
 
 	private static AdaptedModel adaptedModel = null;
 	private static FeatureList featureList = null;
-	private static List<IAdapter> adapters = null;
+	private static List<IAdapter> adapters = new ArrayList<IAdapter>();
 	private static Map<String, Long> elapsedTimeRegistry = new LinkedHashMap<String, Long>();
 	private static IContainer defaultOutput = null;
 

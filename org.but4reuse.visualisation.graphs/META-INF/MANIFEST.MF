@@ -21,4 +21,5 @@ Bundle-ClassPath: libs/blueprints-core-2.6.0.jar,
 Export-Package: com.tinkerpop.blueprints,
  com.tinkerpop.blueprints.impls.tg,
  com.tinkerpop.blueprints.util.io.graphml,
+ org.but4reuse.visualisation.graphs,
  org.but4reuse.visualisation.graphs.utils
