@@ -205,8 +205,8 @@ public class WordCloudVis extends ViewPart {
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloud(singleton.getSCompositeIDF(), c);
-		addWordCloudListeners(singleton.getSComposite(),index);
-		addWordCloudListeners(singleton.getSCompositeIDF(),index);
+		addWordCloudListeners(singleton.getSComposite(), index);
+		addWordCloudListeners(singleton.getSCompositeIDF(), index);
 	}
 
 	@Override
@@ -329,7 +329,7 @@ public class WordCloudVis extends ViewPart {
 				win.update();
 
 				WordCloudUtil.drawWordCloud(comp, c);
-				addWordCloudListeners(comp,i);
+				addWordCloudListeners(comp, i);
 			}
 
 			@Override
@@ -491,7 +491,7 @@ public class WordCloudVis extends ViewPart {
 				if (ind == 0) {
 					c = WordCloudVisualisation.getClouds().get(i);
 					WordCloudUtil.drawWordCloud(cmp, c);
-					addWordCloudListeners(cmp,i);
+					addWordCloudListeners(cmp, i);
 				} else {
 					c = WordCloudVisualisation.getCloudsIDF().get(i);
 					WordCloudUtil.drawWordCloud(cmpIDF, c);
@@ -526,11 +526,11 @@ public class WordCloudVis extends ViewPart {
 	}
 
 	/**
-	* Add Word Cloud listeners to change names when clicking on one word
-	* 
-	* @param composite
-	*            containing the labels
-	*/
+	 * Add Word Cloud listeners to change names when clicking on one word
+	 * 
+	 * @param composite
+	 *            containing the labels
+	 */
 	static private void addWordCloudListeners(Composite cloudComposite, int blockIndex) {
 		for (final Control c : cloudComposite.getChildren()) {
 			c.addMouseListener(new WordCloudListener(blockIndex));

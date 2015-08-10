@@ -22,7 +22,6 @@ import org.mcavallo.opencloud.Cloud;
 
 public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 
-
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {

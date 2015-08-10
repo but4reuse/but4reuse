@@ -29,8 +29,8 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		/*
 		 * We gather all words for each blocks
 		 */
-        
-        ArrayList<ArrayList<String>> listBlocksWords;
+
+		ArrayList<ArrayList<String>> listBlocksWords;
 		listBlocksWords = new ArrayList<ArrayList<String>>();
 
 		for (Block b : adaptedModel.getOwnedBlocks()) {
@@ -105,7 +105,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 				Feature f = featureList.getOwnedFeatures().get(i);
 				double d = WordCloudUtil.cmpClouds(clouds_IDF_Features.get(i), c);
-				if (d >0.0) {
+				if (d > 0.0) {
 					locatedFeatures.add(new LocatedFeature(f, b, d));
 				}
 			}

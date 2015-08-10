@@ -9,15 +9,14 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Label;
 
-public class WordCloudListener implements MouseListener{
-	
+public class WordCloudListener implements MouseListener {
+
 	private final int blockIndex;
-	
-	public WordCloudListener(int blockIndex)
-	{
+
+	public WordCloudListener(int blockIndex) {
 		this.blockIndex = blockIndex;
 	}
-	
+
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 	}
@@ -27,8 +26,7 @@ public class WordCloudListener implements MouseListener{
 		if (e.getSource() instanceof Label) {
 			// Change block name
 			String newName = ((Label) e.getSource()).getText();
-			Block b = AdaptedModelManager.getAdaptedModel().
-					getOwnedBlocks().get(blockIndex);
+			Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(blockIndex);
 			b.setName(newName);
 
 			VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
