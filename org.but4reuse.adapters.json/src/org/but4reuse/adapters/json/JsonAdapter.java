@@ -7,16 +7,13 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.impl.AbstractElement;
-import org.but4reuse.adapters.json.activator.Activator;
+import org.but4reuse.adapters.json.tools.AdapterTools;
+import org.but4reuse.adapters.json.tools.JsonElement;
+import org.but4reuse.adapters.json.tools.Paths;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -35,192 +32,149 @@ public class JsonAdapter implements IAdapter {
 		}
 		return false;
 	}
-	
-	/*
-	 * Syntax : Path to ignore.
-	 * elements separeted by underscore
-	 * element can be :
-	 * key,
-	 * value,
-	 * array [],
-	 * index of an array [index],
-	 * object {}
-	 */
-	
+
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
-		Map<Integer, List<IElement>> elements = new HashMap<Integer, List<IElement>>();
-		File file = FileUtils.getFile(uri);
+		int id_file = AdapterTools.getUniqueId();
+
+		Paths absolute_paths_to_ignore = AdapterTools.getAbsolutePathsToIgnore();
+		Paths relative_paths_to_ignore = AdapterTools.getRelativePathsToIgnore();
+		Paths absolute_paths_unsplittable = AdapterTools.getAbsolutePathsUnsplittable();
+		Paths relative_paths_unsplittable = AdapterTools.getRelativePathsUnsplittable();
+
+		List<IElement> atomicJsonElementList = new ArrayList<IElement>();
+		List<JsonElement> jsonElementList = new ArrayList<JsonElement>();
 
 		try {
+			File file = FileUtils.getFile(uri);
 			FileInputStream fstream = new FileInputStream(file);
 			DataInputStream in = new DataInputStream(fstream);
 			InputStreamReader isr = new InputStreamReader(in);
 			BufferedReader br = new BufferedReader(isr);
 
-			JsonObject json = JsonObject.readFrom(br);
-			int id_file = JsonTools.generateId();
+			JsonObject root = JsonObject.readFrom(br);
+			for (String name : root.names()) {
+				KeyElement keyElement = new KeyElement(name, null);
+				atomicJsonElementList.add(0, keyElement);
+				jsonElementList.add(new JsonElement(new Paths(name), root.get(name), keyElement, keyElement));
+			}
 
-			JsonTools.setPathsToIgnore();
+			while (jsonElementList.size() > 0) {
+				JsonElement jsonElement = jsonElementList.remove(0);
+				Paths paths = jsonElement.paths;
+				JsonValue jsonValue = jsonElement.jsonValue;
+				AbstractJsonElement parent = jsonElement.parent;
+				AbstractJsonElement dependency = jsonElement.dependency;
 
-			for (String key : json.names()) {
-				KeyElement keyElt = new KeyElement(key);
-				JsonTools.addElement(elements, keyElt, 1);
+				if (paths.matches(absolute_paths_to_ignore) || paths.matches(relative_paths_to_ignore)) {
+					IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
+					ignoredElement.addDependency(dependency);
+					atomicJsonElementList.add(0, ignoredElement);
+					continue;
+				}
+				if (paths.matches(absolute_paths_unsplittable) || paths.matches(relative_paths_unsplittable)) {
+					JsonValue compare = AdapterTools.removePaths(jsonValue, paths, absolute_paths_to_ignore,
+							relative_paths_to_ignore);
+					UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
+					unsplittableElement.addDependency(dependency);
+					atomicJsonElementList.add(0, unsplittableElement);
+					continue;
+				}
 
-				ArrayList<String> paths = new ArrayList<String>();
-				paths.add(key);
+				if (jsonValue.isObject()) {
+					Paths currentPaths = new Paths(paths);
+					currentPaths.extend("{}");
+					currentPaths.add("{}");
 
-				adapt(id_file, elements, json.get(key), keyElt, paths, 2).addDependency(keyElt);
+					if (currentPaths.matches(absolute_paths_to_ignore)
+							|| currentPaths.matches(relative_paths_to_ignore)) {
+						IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
+						ignoredElement.addDependency(dependency);
+						atomicJsonElementList.add(0, ignoredElement);
+						continue;
+					}
+					if (currentPaths.matches(absolute_paths_unsplittable)
+							|| currentPaths.matches(relative_paths_unsplittable)) {
+						JsonValue compare = AdapterTools.removePaths(jsonValue, currentPaths, absolute_paths_to_ignore,
+								relative_paths_to_ignore);
+						UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
+						unsplittableElement.addDependency(dependency);
+						atomicJsonElementList.add(0, unsplittableElement);
+						continue;
+					}
+
+					JsonObject jsonObject = jsonValue.asObject();
+					ObjectElement objectElement = new ObjectElement(parent);
+					objectElement.addDependency(dependency);
+					atomicJsonElementList.add(0, objectElement);
+
+					for (String name : jsonObject.names()) {
+						currentPaths = new Paths(paths);
+						currentPaths.extend(name);
+						currentPaths.add(name);
+
+						KeyElement keyElement = new KeyElement(name, objectElement);
+						keyElement.addDependency(objectElement);
+						atomicJsonElementList.add(0, keyElement);
+
+						jsonElementList
+								.add(new JsonElement(currentPaths, jsonObject.get(name), keyElement, keyElement));
+					}
+
+				} else if (jsonValue.isArray()) {
+					Paths currentPaths = new Paths(paths);
+					currentPaths.extend("[]");
+					currentPaths.add("[]");
+
+					if (currentPaths.matches(absolute_paths_to_ignore)
+							|| currentPaths.matches(relative_paths_to_ignore)) {
+						IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
+						ignoredElement.addDependency(dependency);
+						atomicJsonElementList.add(0, ignoredElement);
+						continue;
+					}
+					if (currentPaths.matches(absolute_paths_unsplittable)
+							|| currentPaths.matches(relative_paths_unsplittable)) {
+						JsonValue compare = AdapterTools.removePaths(jsonValue, currentPaths, absolute_paths_to_ignore,
+								relative_paths_to_ignore);
+						UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
+						unsplittableElement.addDependency(dependency);
+						atomicJsonElementList.add(0, unsplittableElement);
+						continue;
+					}
+
+					JsonArray jsonArray = jsonValue.asArray();
+					ArrayElement arrayElement = new ArrayElement(parent);
+					arrayElement.addDependency(dependency);
+					atomicJsonElementList.add(0, arrayElement);
+
+					for (int index = 0; index < jsonArray.size(); index++) {
+						currentPaths = new Paths(paths);
+						currentPaths.extend("[]", "[" + index + "]");
+						currentPaths.add("[]");
+						currentPaths.add("[" + index + "]");
+
+						IndexArrayElement indexArrayElement = new IndexArrayElement(id_file, arrayElement);
+						jsonElementList.add(new JsonElement(currentPaths, jsonArray.get(index), indexArrayElement,
+								arrayElement));
+					}
+				} else {
+					ValueElement valueElement = new ValueElement(parent, jsonValue);
+					valueElement.addDependency(dependency);
+					atomicJsonElementList.add(0, valueElement);
+				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		List<Integer> index = new ArrayList<>(elements.keySet());
-		Collections.sort(index);
-		Collections.reverse(index);
-		List<IElement> finalListElements = new ArrayList<IElement>();
-
-		for (int depth : index) {
-			finalListElements.addAll(elements.get(depth));
-		}
-
-		return finalListElements;
-	}
-
-	private AbstractElement adapt(int id_file, Map<Integer, List<IElement>> elements, JsonValue jsonVal,
-			AbstractElement parent, int depth) {
-		if (jsonVal instanceof JsonObject) {
-			if (Activator.getDefault().getPreferenceStore().getBoolean("OBJECT")) {
-				ObjectElement objElt = new ObjectElement((IJsonElement) parent, jsonVal.asObject());
-				JsonTools.addElement(elements, objElt, depth);
-				return objElt;
-			}
-
-			JsonObject jsonObj = jsonVal.asObject();
-			ObjectElement objElt = new ObjectElement((IJsonElement) parent);
-			JsonTools.addElement(elements, objElt, depth);
-
-			for (String key : jsonObj.names()) {
-				KeyElement keyElt = new KeyElement(key, objElt);
-				JsonTools.addElement(elements, keyElt, depth);
-				keyElt.addDependency(objElt);
-				adapt(id_file, elements, jsonObj.get(key), keyElt, depth + 1).addDependency(keyElt);
-			}
-
-			return objElt;
-		}
-
-		if (jsonVal instanceof JsonArray) {
-			if (Activator.getDefault().getPreferenceStore().getBoolean("ARRAY")) {
-				ArrayElement arrElt = new ArrayElement(JsonTools.generateId(), (IJsonElement) parent, jsonVal.asArray());
-				JsonTools.addElement(elements, arrElt, depth);
-				return arrElt;
-			}
-			
-			JsonArray jsonArr = jsonVal.asArray();
-			ArrayElement arrElt = new ArrayElement(JsonTools.generateId(), (IJsonElement) parent);
-			JsonTools.addElement(elements, arrElt, depth);
-			Iterator<JsonValue> iter = jsonArr.iterator();
-
-			while (iter.hasNext()) {
-				IndexArrayElement indArrElt = new IndexArrayElement(id_file, JsonTools.generateId(), arrElt);
-				adapt(id_file, elements, iter.next(), indArrElt, depth + 1).addDependency(arrElt);
-			}
-
-			return arrElt;
-		}
-
-		ValueElement valElt = new ValueElement(jsonVal, (IJsonElement) parent);
-		JsonTools.addElement(elements, valElt, depth);
-
-		return valElt;
-	}
-
-	private AbstractElement adapt(int id_file, Map<Integer, List<IElement>> elements, JsonValue jsonVal,
-			AbstractElement parent, ArrayList<String> paths, int depth) {
-		ArrayList<String> possiblePaths = JsonTools.matchPossiblePaths(paths);
-		
-		if (possiblePaths.size() == 0) {
-			return adapt(id_file, elements, jsonVal, parent, depth);
-		}
-
-		if (JsonTools.containIgnoredPath(possiblePaths)) {
-			IgnoredElement elt = new IgnoredElement(jsonVal, (IJsonElement) parent);
-			JsonTools.addElement(elements, elt, depth);
-			return elt;
-		}
-
-		if (jsonVal instanceof JsonObject) {
-			if (Activator.getDefault().getPreferenceStore().getBoolean("OBJECT")) {
-				ObjectElement objElt = new ObjectElement((IJsonElement) parent, jsonVal.asObject());
-				JsonTools.addElement(elements, objElt, depth);
-				return objElt;
-			}
-
-			possiblePaths = JsonTools.addToPaths(possiblePaths, "{}");
-
-			JsonObject jsonObj = jsonVal.asObject();
-			ObjectElement objElt = new ObjectElement((IJsonElement) parent);
-			JsonTools.addElement(elements, objElt, depth);
-
-			if (JsonTools.containIgnoredPath(possiblePaths)) {
-				IgnoredElement elt = new IgnoredElement(jsonVal, objElt);
-				JsonTools.addElement(elements, elt, depth);
-				elt.addDependency(objElt);
-			} else {
-				for (String key : jsonObj.names()) {
-					KeyElement keyElt = new KeyElement(key, objElt);
-					JsonTools.addElement(elements, keyElt, depth);
-					keyElt.addDependency(objElt);
-					adapt(id_file, elements, jsonObj.get(key), keyElt, JsonTools.addToPaths(possiblePaths, key), depth + 1).addDependency(keyElt);
-				}
-			}
-
-			return objElt;
-		}
-
-		if (jsonVal instanceof JsonArray) {
-			if (Activator.getDefault().getPreferenceStore().getBoolean("ARRAY")) {
-				ArrayElement arrElt = new ArrayElement(JsonTools.generateId(), (IJsonElement) parent, jsonVal.asArray());
-				JsonTools.addElement(elements, arrElt, depth);
-				return arrElt;
-			}
-			
-			ArrayList<String> possiblePaths_1 = JsonTools.addToPaths(possiblePaths, "[]");
-
-			JsonArray jsonArr = jsonVal.asArray();
-			ArrayElement arrElt = new ArrayElement(JsonTools.generateId(), (IJsonElement) parent);
-			JsonTools.addElement(elements, arrElt, depth);
-
-			if (JsonTools.containIgnoredPath(possiblePaths_1)) {
-				IgnoredElement elt = new IgnoredElement(jsonVal, arrElt);
-				JsonTools.addElement(elements, elt, depth);
-				elt.addDependency(arrElt);
-			} else {
-				for (int index = 0; index < jsonArr.size(); index++) {
-					ArrayList<String> possiblePaths_2 = new ArrayList<String>();
-					possiblePaths_2.addAll(possiblePaths_1);
-					possiblePaths_2.addAll(JsonTools.addToPaths(possiblePaths, "[" + index + "]"));
-
-					IndexArrayElement indArrElt = new IndexArrayElement(id_file, JsonTools.generateId(), arrElt);
-					adapt(id_file, elements, jsonArr.get(index), indArrElt, possiblePaths_2, depth + 1).addDependency(
-							arrElt);
-				}
-			}
-
-			return arrElt;
-		}
-
-		ValueElement valElt = new ValueElement(jsonVal, (IJsonElement) parent);
-		JsonTools.addElement(elements, valElt, depth);
-
-		return valElt;
+		return atomicJsonElementList;
 	}
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
+		AdapterTools.reset();
 		try {
 			if (uri.toString().endsWith("/")) {
 				uri = new URI(uri.toString() + "jsonConstruction.json");
@@ -231,7 +185,7 @@ public class JsonAdapter implements IAdapter {
 			JsonObject root = new JsonObject();
 
 			for (IElement elt : elements) {
-				IJsonElement jsonElt = (IJsonElement) elt;
+				AbstractJsonElement jsonElt = (AbstractJsonElement) elt;
 				jsonElt.construct(root);
 			}
 

@@ -26,6 +26,9 @@
             <element
                   element="org.but4reuse.adapters.json.IgnoredElement">
             </element>
+            <element
+                  element="org.but4reuse.adapters.json.UnsplittableElement">
+            </element>
          </elements>
       </adapter>
    </extension>

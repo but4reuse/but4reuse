@@ -1,38 +1,34 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.impl.AbstractElement;
 
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-public class KeyElement extends AbstractElement implements IJsonElement {
+public class KeyElement extends AbstractJsonElement {
+	public String name;
+	public ObjectElement parent;
 
-	public String key;
-	public IJsonElement parent;
-
-	public KeyElement(String key, IJsonElement parent) {
-		this.key = key;
+	public KeyElement(String name, ObjectElement parent) {
+		this.name = name;
 		this.parent = parent;
-	}
-
-	public KeyElement(String key) {
-		this.key = key;
-		this.parent = null;
 	}
 
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof KeyElement) {
-			KeyElement elt = (KeyElement) anotherElement;
-
-			if (this.parent == null) {
-				if (elt.parent == null && this.key.compareTo(elt.key) == 0) {
-					return 1;
-				}
-			} else {
-				if (this.key.compareTo(elt.key) == 0) {
-					return this.parent.similarity(elt.parent);
+			KeyElement keyElement = (KeyElement) anotherElement;
+			if (this.name.compareTo(keyElement.name) == 0) {
+				if (this.parent == null) {
+					if (keyElement.parent == null)
+						return 1;
+					else
+						return 0;
+				} else {
+					if (keyElement.parent == null)
+						return 0;
+					else
+						return this.parent.similarity(keyElement.parent);
 				}
 			}
 		}
@@ -41,11 +37,10 @@ public class KeyElement extends AbstractElement implements IJsonElement {
 
 	@Override
 	public String getText() {
-		if (this.parent == null) {
-			return this.key;
-		} else {
-			return this.parent.getText() + "_" + this.key;
-		}
+		if (parent == null)
+			return name;
+		else
+			return parent.getText() + "_" + name;
 	}
 
 	@Override
@@ -59,38 +54,34 @@ public class KeyElement extends AbstractElement implements IJsonElement {
 	}
 
 	@Override
-	public JsonValue construct(JsonObject root, JsonValue value) {
-		JsonObject json;
-
-		if (this.parent == null) {
-			json = root;
-		} else {
-			json = this.parent.construct(root).asObject();
-		}
-
-		JsonValue lastValue = json.get(this.key);
-
-		if (lastValue == null || lastValue == JsonValue.NULL) {
-			json.set(this.key, value);
-			return value;
-		}
-		if (value == null || value == JsonValue.NULL) {
-			return lastValue;
-		}
-		if (lastValue.isObject() && value.isObject()) {
-			return lastValue;
-		}
-		if (lastValue.isArray() && value.isArray()) {
-			return lastValue;
-		}
-
-		json.set(this.key, value);
-		return value;
+	public JsonValue construct(JsonObject root) {
+		return this.construct(root, JsonValue.NULL);
 	}
 
 	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.construct(root, JsonValue.NULL);
+	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
+		JsonObject jsonObject = null;
+
+		if (this.parent == null)
+			jsonObject = root;
+		else
+			jsonObject = this.parent.construct(root).asObject();
+
+		JsonValue lastJsonValue = jsonObject.get(this.name);
+
+		if (lastJsonValue == null || lastJsonValue == JsonValue.NULL) {
+			jsonObject.set(name, jsonValue);
+			return jsonValue;
+		}
+		if (jsonValue == JsonValue.NULL)
+			return lastJsonValue;
+		if (lastJsonValue.isObject() && jsonValue.isObject())
+			return lastJsonValue;
+		if (lastJsonValue.isArray() && jsonValue.isArray())
+			return lastJsonValue;
+
+		jsonObject.set(name, jsonValue);
+		return jsonValue;
 	}
 
 }
