@@ -96,22 +96,7 @@ public class IndexArrayElement extends AbstractJsonElement {
 	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
 		this.parent.construct(root);
 		this.parent.array.add(this.indexesAhead, this.similarIds, jsonValue);
-		;
 		return jsonValue;
-		/*
-		 * JsonArray array = this.parent.construct(root).asArray(); int index =
-		 * AdapterTools.getIndexArray(this.parent.id, this.id);
-		 * 
-		 * if (index >= array.size()) { array.add(jsonValue); return jsonValue;
-		 * } else { JsonValue lastValue = array.get(index);
-		 * 
-		 * if (lastValue == null || lastValue == JsonValue.NULL) {
-		 * array.set(index, jsonValue); return jsonValue; } if (jsonValue ==
-		 * JsonValue.NULL) return lastValue; if (lastValue.isObject() &&
-		 * jsonValue.isObject()) return lastValue; if (lastValue.isArray() &&
-		 * jsonValue.isArray()) return lastValue;
-		 * 
-		 * array.set(index, jsonValue); return jsonValue; }
-		 */}
+	}
 
 }

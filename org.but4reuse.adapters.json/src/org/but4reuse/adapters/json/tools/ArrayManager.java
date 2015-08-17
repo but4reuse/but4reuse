@@ -35,18 +35,5 @@ public class ArrayManager {
 			value = tmp;
 		}
 		this.jsonArray.add(value);
-		/*
-		 * System.out.println(this.jsonArray.toString());
-		 * System.out.println(this.indexes.toString()); for(IndexArrayElement in
-		 * : indexesAhead) System.out.print(in.id + " "); System.out.println();
-		 * System.out.println(ids.toString());
-		 * System.out.println(jsonValue.toString()); System.out.println();
-		 * 
-		 * /* jsonArray.add(jsonValue); this.indexes.add(ids);
-		 * System.out.println(this.jsonArray.toString());
-		 * System.out.println(this.indexes.toString()); System.out.println();
-		 * for(IndexArrayElement in : indexesAhead) { for(int ind :
-		 * in.similarIds) System.out.print(ind + " "); System.out.println(); }
-		 * System.out.println();
-		 */}
+}
 }

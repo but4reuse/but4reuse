@@ -160,10 +160,7 @@ public class JsonAdapter implements IAdapter {
 						jsonElementList.add(new JsonElement(currentPaths,
 								jsonArray.get(index), indexArrayElement,
 								arrayElement));
-
-						// System.out.println(jsonArray.get(index).toString());
-						// System.out.println(indexesAhead);
-						// System.out.println("\n---\n");
+						
 						indexesAhead.add(indexArrayElement);
 					}
 				} else {
@@ -203,7 +200,6 @@ public class JsonAdapter implements IAdapter {
 
 			for (IElement elt : elements) {
 				AbstractJsonElement jsonElt = (AbstractJsonElement) elt;
-				System.out.println(jsonElt.getText());
 				jsonElt.construct(root);
 			}
 
