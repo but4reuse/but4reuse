@@ -28,7 +28,7 @@ public class KeyElement extends AbstractJsonElement {
 					if (keyElement.parent == null)
 						return 0;
 					else
-						return this.parent.similarity(keyElement.parent);
+						this.parent.similarity(keyElement.parent);
 				}
 			}
 		}
@@ -74,10 +74,6 @@ public class KeyElement extends AbstractJsonElement {
 			return jsonValue;
 		}
 		if (jsonValue == JsonValue.NULL)
-			return lastJsonValue;
-		if (lastJsonValue.isObject() && jsonValue.isObject())
-			return lastJsonValue;
-		if (lastJsonValue.isArray() && jsonValue.isArray())
 			return lastJsonValue;
 
 		jsonObject.set(name, jsonValue);

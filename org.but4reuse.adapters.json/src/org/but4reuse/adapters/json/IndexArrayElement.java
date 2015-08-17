@@ -6,7 +6,6 @@ import java.util.List;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 
-import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
@@ -16,8 +15,11 @@ public class IndexArrayElement extends AbstractJsonElement {
 	public int id;
 	public List<Integer> similarFiles;
 	public List<IndexArrayElement> similarIndexes;
+	public List<Integer> similarIds;
+	public List<IndexArrayElement> indexesAhead;
 
-	public IndexArrayElement(int id_file, ArrayElement parent) {
+	public IndexArrayElement(int id_file, ArrayElement parent,
+			List<IndexArrayElement> ahead) {
 		this.id_file = id_file;
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
@@ -25,13 +27,19 @@ public class IndexArrayElement extends AbstractJsonElement {
 		this.similarIndexes = new ArrayList<IndexArrayElement>();
 		this.similarFiles.add(id_file);
 		this.similarIndexes.add(this);
+		this.similarIds = new ArrayList<Integer>();
+		this.similarIds.add(this.id);
+		this.indexesAhead = new ArrayList<IndexArrayElement>();
+		for (IndexArrayElement index : ahead)
+			this.indexesAhead.add(index);
 	}
 
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof IndexArrayElement) {
 			IndexArrayElement elt = (IndexArrayElement) anotherElement;
-			if (this.id == elt.id)
+			if (this.similarIds.contains(elt.id)
+					|| elt.similarIds.contains(this.id))
 				return 1;
 
 			for (int file : this.similarFiles)
@@ -45,6 +53,8 @@ public class IndexArrayElement extends AbstractJsonElement {
 			if (this.parent.similarity(elt.parent) == 1) {
 				ArrayList<Integer> files = new ArrayList<Integer>();
 				ArrayList<IndexArrayElement> indexes = new ArrayList<IndexArrayElement>();
+				ArrayList<Integer> simIds = new ArrayList<Integer>();
+				ArrayList<IndexArrayElement> ahead = new ArrayList<IndexArrayElement>();
 
 				files.addAll(this.similarFiles);
 				files.addAll(elt.similarFiles);
@@ -52,11 +62,19 @@ public class IndexArrayElement extends AbstractJsonElement {
 				indexes.addAll(this.similarIndexes);
 				indexes.addAll(elt.similarIndexes);
 
+				simIds.addAll(this.similarIds);
+				simIds.addAll(elt.similarIds);
+
+				ahead.addAll(this.indexesAhead);
+				ahead.addAll(elt.indexesAhead);
+
 				for (IndexArrayElement indArrElt : indexes) {
-					indArrElt.id = this.id;
 					indArrElt.similarFiles = files;
 					indArrElt.similarIndexes = indexes;
+					indArrElt.similarIds = simIds;
+					indArrElt.indexesAhead = ahead;
 				}
+
 				return 1;
 			}
 		}
@@ -76,29 +94,24 @@ public class IndexArrayElement extends AbstractJsonElement {
 
 	@Override
 	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		JsonArray array = this.parent.construct(root).asArray();
-		int index = AdapterTools.getIndexArray(this.parent.id, this.id);
-
-		if (index >= array.size()) {
-			array.add(jsonValue);
-			return jsonValue;
-		} else {
-			JsonValue lastValue = array.get(index);
-
-			if (lastValue == null || lastValue == JsonValue.NULL) {
-				array.set(index, jsonValue);
-				return jsonValue;
-			}
-			if (jsonValue == JsonValue.NULL)
-				return lastValue;
-			if (lastValue.isObject() && jsonValue.isObject())
-				return lastValue;
-			if (lastValue.isArray() && jsonValue.isArray())
-				return lastValue;
-
-			array.set(index, jsonValue);
-			return jsonValue;
-		}
-	}
+		this.parent.construct(root);
+		this.parent.array.add(this.indexesAhead, this.similarIds, jsonValue);
+		;
+		return jsonValue;
+		/*
+		 * JsonArray array = this.parent.construct(root).asArray(); int index =
+		 * AdapterTools.getIndexArray(this.parent.id, this.id);
+		 * 
+		 * if (index >= array.size()) { array.add(jsonValue); return jsonValue;
+		 * } else { JsonValue lastValue = array.get(index);
+		 * 
+		 * if (lastValue == null || lastValue == JsonValue.NULL) {
+		 * array.set(index, jsonValue); return jsonValue; } if (jsonValue ==
+		 * JsonValue.NULL) return lastValue; if (lastValue.isObject() &&
+		 * jsonValue.isObject()) return lastValue; if (lastValue.isArray() &&
+		 * jsonValue.isArray()) return lastValue;
+		 * 
+		 * array.set(index, jsonValue); return jsonValue; }
+		 */}
 
 }

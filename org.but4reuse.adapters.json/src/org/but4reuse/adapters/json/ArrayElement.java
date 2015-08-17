@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.json.tools.AdapterTools;
+import org.but4reuse.adapters.json.tools.ArrayManager;
 
-import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public class ArrayElement extends AbstractJsonElement {
 	public AbstractJsonElement parent;
-	public int id;
+	public ArrayManager array;
 	public List<ArrayElement> similarArrays;
 
 	public ArrayElement(AbstractJsonElement parent) {
 		this.parent = parent;
-		this.id = AdapterTools.getUniqueId();
+		this.array = null;
 		this.similarArrays = new ArrayList<ArrayElement>();
 		this.similarArrays.add(this);
 	}
@@ -26,16 +25,10 @@ public class ArrayElement extends AbstractJsonElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ArrayElement) {
 			ArrayElement arrayElement = (ArrayElement) anotherElement;
-			if (this.id == arrayElement.id)
-				return 1;
 			if (this.parent.similarity(arrayElement.parent) == 1) {
-				List<ArrayElement> arrays = new ArrayList<ArrayElement>();
-				arrays.addAll(this.similarArrays);
-				arrays.addAll(arrayElement.similarArrays);
-				for (ArrayElement array : arrays) {
-					array.id = this.id;
-					array.similarArrays = arrays;
-				}
+				this.similarArrays.add(arrayElement);
+				arrayElement.similarArrays.add(this);
+
 				return 1;
 			}
 		}
@@ -49,7 +42,13 @@ public class ArrayElement extends AbstractJsonElement {
 
 	@Override
 	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, new JsonArray());
+		if (this.array == null) {
+			this.array = new ArrayManager();
+			for (ArrayElement arrElt : this.similarArrays)
+				arrElt.array = this.array;
+			this.parent.construct(root, this.array.jsonArray);
+		}
+		return this.array.jsonArray;
 	}
 
 	@Override

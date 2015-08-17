@@ -10,7 +10,8 @@ public class UnsplittableElement extends AbstractJsonElement {
 	public JsonValue compare;
 	public AbstractJsonElement parent;
 
-	public UnsplittableElement(JsonValue content, JsonValue compare, AbstractJsonElement parent) {
+	public UnsplittableElement(JsonValue content, JsonValue compare,
+			AbstractJsonElement parent) {
 		this.content = content;
 		this.compare = compare;
 		this.parent = parent;

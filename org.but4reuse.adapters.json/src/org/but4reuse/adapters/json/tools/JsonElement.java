@@ -10,7 +10,8 @@ public class JsonElement {
 	public AbstractJsonElement parent;
 	public AbstractJsonElement dependency;
 
-	public JsonElement(Paths paths, JsonValue jsonValue, AbstractJsonElement parent, AbstractJsonElement dependency) {
+	public JsonElement(Paths paths, JsonValue jsonValue,
+			AbstractJsonElement parent, AbstractJsonElement dependency) {
 		this.paths = paths;
 		this.jsonValue = jsonValue;
 		this.parent = parent;
