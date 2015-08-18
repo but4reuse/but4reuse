@@ -68,45 +68,56 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		for (Feature f : featureList.getOwnedFeatures()) {
 			
 
-			/*
-			 * We add features words in all words we already gathered
-			 */
-			HashMap<String,Integer> featureWords = getFeatureWords(f);
-			ArrayList<HashMap<String,Integer>> tmp = (ArrayList<HashMap<String,Integer>>)list.clone();
-			tmp.add(featureWords);
+		
+			double vecQ [] = createQuery(list, getFeatureWords(f));
+			
 
 			/*
 			 * Here we use the LSI for comparing words from the feature and
 			 * words form the block
 			 * https://fr.wikipedia.org/wiki/Analyse_s%C3%A9mantique_latente
 			 */
-			Matrix m = new Matrix(createMatrix(tmp));
+			
+			
+			
+			Matrix m = new Matrix(createMatrix(list));
 			SingularValueDecomposition svd = m.svd();
 
-			Matrix v = svd.getV().transpose();
+			Matrix v = svd.getV();
 			Matrix s = svd.getS();
-			Matrix q = s.times(v.getMatrix(0, v.getRowDimension() - 1, v.getColumnDimension() - 1,
-					v.getColumnDimension() - 1));
-
-			double vecQ []= q.getColumnPackedCopy();
+			Matrix u = svd.getU();
+			
+			
+		
+			
+			boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
+			int nbDim;
+			
+			double dim =Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
+			if(fixed)
+				nbDim = (int)dim;
+			else
+			{
+				nbDim = (int)(dim * m.getRowDimension());
+			}
+			nbDim = Math.min(nbDim, m.getRowDimension());
+			
+			Matrix sk = s.getMatrix(0,nbDim-1,0,nbDim-1);
+			Matrix uk = u.getMatrix(0, u.getRowDimension()-1,0,nbDim-1);
 		    
-			for (int i = 0; i < featureBlocks.size(); i++) {
+			Matrix q = new Matrix(vecQ, vecQ.length);
+		   
+		    q = (sk.inverse().times(uk.transpose()).times(q));
+			
+		    for (int i = 0; i < m.getColumnDimension(); i++) {
 				Block b = featureBlocks.get(i);
-				Matrix vector = s.times(v.getMatrix(0, v.getRowDimension() - 1, i, i));
+				Matrix ve = m.getMatrix(0,v.getRowDimension()-1,i,i);
+				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
 				
 				double vecDoc[]  =  vector.getColumnPackedCopy();
-				
-				boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
-				int nbDim;
-				double dim =Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
-				if(fixed)
-					nbDim = (int)dim;
-				else
-				{
-					nbDim = (int)(dim * vecQ.length);
-				}
+			
 
-				double cos =cosine(vecQ, vecDoc,nbDim);
+				double cos =cosine(q.getColumnPackedCopy(), vecDoc);
 				/*
 				 * If the cosine between the feature vector and the block vector
 				 * is > 0 it means that it's relevant to think that there are
@@ -170,6 +181,47 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		return featureWords;
 	}
 
+	static public double [] createQuery(ArrayList<HashMap<String,Integer>> list, HashMap<String,Integer>map)
+	{
+		ArrayList<String> words = new ArrayList<String>();
+
+		/*
+		 * We count all different words In the matrix we must have for each
+		 * words how many times it was found in the document even if it's 0
+		 */
+		int cpt = 0;
+		for (HashMap<String, Integer> t : list) {
+			for (String s : t.keySet()) {
+				if (!words.contains(s)) {
+					cpt++;
+					words.add(s);
+				}
+			}
+		}
+
+		/*
+		 * We sort the words list ( From LSI not necessary but made generally)
+		 */
+		Collections.sort(words);
+		if (cpt == 0)
+			return null;
+		
+		double tab[] = new double[words.size()];
+		
+		int i = 0;
+		for (String w : words) {
+			if (map.containsKey(w))
+				tab[i] = map.get(w);
+			else
+				// If a words isn't in the HashMap it means that the word
+				// did appear in the document so we see it time
+				tab[i] = 0;
+		}
+		
+		
+		
+		return tab;
+	}
 	/**
 	 * A Matrix which represents the words found in several documents In rows
 	 * there are how many times a word is found in each document In columns
@@ -234,24 +286,23 @@ public class FeatureLocationLSI implements IFeatureLocation {
 	 *            The vector V
 	 * @return The cosine
 	 */
-	public static double cosine(double  u[], double v[], int nbDim) {
+	public static double cosine(double  u[], double v[]) {
 		/*
 		 * the formula for cosine between vector U and V is ( U * V ) / ( ||U||
 		 * * ||V|| )
 		 */
 
 		double scalaire = 0.0;
-		nbDim = Math.min(nbDim,u.length);
-		for(int i = 0; i<nbDim;i++)
+		for(int i = 0; i<u.length;i++)
 			scalaire+=u[i]*v[i];
 		
 		double normeU =0.0;
-		for(int i = 0; i< nbDim;i++)
+		for(int i = 0; i< u.length;i++)
 			normeU+=u[i]*u[i];
 		normeU = Math.sqrt(normeU);
 		
 		double normeV = 0.0;
-		for(int i = 0; i<nbDim;i++)
+		for(int i = 0; i<v.length;i++)
 			normeV+=v[i]*v[i];
 		normeV = Math.sqrt(normeV);
 
@@ -261,4 +312,6 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			val = -1;
 		return 	val;
 	}
+	
+	
 }
