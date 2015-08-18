@@ -98,9 +98,9 @@ public class FeatureLocationLSI implements IFeatureLocation {
 				nbDim = (int)dim;
 			else
 			{
-				nbDim = (int)(dim * m.getRowDimension());
+				nbDim = (int)(dim * s.getRowDimension());
 			}
-			nbDim = Math.min(nbDim, m.getRowDimension());
+			nbDim = Math.min(nbDim, s.getRowDimension());
 			
 			Matrix sk = s.getMatrix(0,nbDim-1,0,nbDim-1);
 			Matrix uk = u.getMatrix(0, u.getRowDimension()-1,0,nbDim-1);
@@ -111,7 +111,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			
 		    for (int i = 0; i < m.getColumnDimension(); i++) {
 				Block b = featureBlocks.get(i);
-				Matrix ve = m.getMatrix(0,v.getRowDimension()-1,i,i);
+				Matrix ve = m.getMatrix(0,m.getRowDimension()-1,i,i);
 				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
 				
 				double vecDoc[]  =  vector.getColumnPackedCopy();
