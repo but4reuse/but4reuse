@@ -216,6 +216,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 				// If a words isn't in the HashMap it means that the word
 				// did appear in the document so we see it time
 				tab[i] = 0;
+			i++;
 		}
 		
 		
