@@ -11,7 +11,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-		store.setDefault(LSIPreferencePage.DIM, 25);
+		store.setDefault(LSIPreferencePage.DIM, 0.5);
 		store.setDefault(LSIPreferencePage.FIXED, true);
 	}
 

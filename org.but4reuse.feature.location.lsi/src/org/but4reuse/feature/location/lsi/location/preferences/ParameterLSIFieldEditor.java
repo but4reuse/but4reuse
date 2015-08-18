@@ -9,8 +9,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Text;
@@ -18,10 +16,9 @@ import org.eclipse.swt.widgets.Text;
 public class ParameterLSIFieldEditor extends FieldEditor {
 
 	private Composite parent;
-	private int value;
+	private double value;
 	private boolean isFixed;
 	private String valueName;
-	private Composite cmp;
     private Scale scale;
     private Text text;
     private Button rate;
@@ -31,6 +28,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
   	public ParameterLSIFieldEditor(String preferenceName, String name, Composite parent, String valueName) {
 		super(preferenceName, name, parent);
 		this.valueName = valueName;
+		
 	}
 
 	@Override
@@ -63,6 +61,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 				// TODO Auto-generated method stub
 				isFixed = false;
 				update();
+				
 			}
 			
 			@Override
@@ -126,23 +125,55 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 
 	@Override
 	protected void doLoad() {
-		value = getPreferenceStore().getInt(getPreferenceName());
+		value = getPreferenceStore().getDouble(getPreferenceName());
 		isFixed = getPreferenceStore().getBoolean(valueName);
-		scale.setSelection(value);
-		text.setText(value+"");
+		if(isFixed)
+		{
+			rate.setSelection(false);
+			fixed.setSelection(true);
+			scaleL.change(Type.INT, 1.0,300.0);
+			scale.setSelection((int)value);
+			text.setText(value+"");
+		}
+		else
+		{
+			rate.setSelection(true);
+			fixed.setSelection(false);
+			scaleL.change(Type.DOUBLE, 0.0,1.0);
+			scale.setSelection((int)(value*100));
+			text.setText(value*100+"");
+		}
+		
 	}
 
 	@Override
 	protected void doLoadDefault() {
 		value = getPreferenceStore().getDefaultInt(getPreferenceName());
-		isFixed = getPreferenceStore().getBoolean(valueName);
-		scale.setSelection(value);
-		text.setText(value+"");
+		isFixed = getPreferenceStore().getDefaultBoolean(valueName);
+		if(isFixed)
+		{
+			rate.setSelection(false);
+			fixed.setSelection(true);
+			scaleL.change(Type.INT, 1.0,300.0);
+			scale.setSelection((int)value);
+			text.setText(value+"");
+		}
+		else
+		{
+			rate.setSelection(true);
+			fixed.setSelection(false);
+			scaleL.change(Type.DOUBLE, 0.0,1.0);
+			scale.setSelection((int)(value*100));
+			text.setText(value*100+"");
+		}
+		
 	}
 
 	@Override
 	protected void doStore() {
 		value = scale.getSelection();
+		if(!isFixed)
+			value /=100.0;
 		getPreferenceStore().setValue(getPreferenceName(), value);
 		getPreferenceStore().setValue(valueName, isFixed);
 	}
