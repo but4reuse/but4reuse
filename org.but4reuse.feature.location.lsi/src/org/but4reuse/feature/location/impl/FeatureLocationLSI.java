@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
-import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
+import org.but4reuse.feature.location.lsi.activator.Activator;
+import org.but4reuse.feature.location.lsi.location.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,73 +29,84 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			IProgressMonitor monitor) {
 
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
+		ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
+		ArrayList<Block> featureBlocks = new ArrayList<Block>();
 
-		for (Feature f : featureList.getOwnedFeatures()) {
-			ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
-			ArrayList<Block> featureBlocks = new ArrayList<Block>();
+		/*
+		 * We gather all words for each block 
+		 */
 
-			/*
-			 * We gather all words for each block of artefacts where the feature
-			 * f is implemented we count one time each block
-			 */
-			for (Artefact a : f.getImplementedInArtefacts()) {
-				AdaptedArtefact aa = AdaptedModelHelper.getAdaptedArtefact(adaptedModel, a);
-				for (Block b : AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa)) {
-					if (featureBlocks.contains(b))
-						continue;
-					featureBlocks.add(b);
-					HashMap<String, Integer> t = new HashMap<String, Integer>();
+			for (Block b : adaptedModel.getOwnedBlocks()) {
+				
+				featureBlocks.add(b);
+				HashMap<String, Integer> t = new HashMap<String, Integer>();
 
-					for (IElement e : AdaptedModelHelper.getElementsOfBlock(b)) {
-						List<String> words = ((AbstractElement) e).getWords();
-						for (String w : words) {
-							String tmp = w.toLowerCase();
-							if (t.containsKey(tmp))
-								t.put(tmp, t.get(tmp) + 1);
-							else
-								t.put(tmp, 1);
-						}
+				for (IElement e : AdaptedModelHelper.getElementsOfBlock(b)) {
+					List<String> words = ((AbstractElement) e).getWords();
+					for (String w : words) {
+						String tmp = w.toLowerCase();
+						if (t.containsKey(tmp))
+							t.put(tmp, t.get(tmp) + 1);
+						else
+							t.put(tmp, 1);
 					}
-					/*
-					 * we add all words form the block in a list
-					 */
-					list.add(t);
 				}
+				/*
+				 * we add all words form the block in a list
+				 */
+				list.add(t);
 			}
 
-			/*
-			 * if the list is empty it means we found 0 zero block for the
-			 * current feature so it's not necessary to continue with the
-			 * feature
-			 */
-			if (list.size() == 0)
-				continue;
+		/*
+		 * if the list is empty it means we found 0 zero block for the
+		 * current feature so it's not necessary to continue with the
+		 * feature
+		 */
+		if (list.size() == 0)
+			return locatedFeatures;
+		
+		for (Feature f : featureList.getOwnedFeatures()) {
+			
 
-			list.add(getFeatureWords(f));
+			/*
+			 * We add features words in all words we already gathered
+			 */
+			HashMap<String,Integer> featureWords = getFeatureWords(f);
+			ArrayList<HashMap<String,Integer>> tmp = (ArrayList<HashMap<String,Integer>>)list.clone();
+			tmp.add(featureWords);
 
 			/*
 			 * Here we use the LSI for comparing words from the feature and
 			 * words form the block
 			 * https://fr.wikipedia.org/wiki/Analyse_s%C3%A9mantique_latente
 			 */
-			Matrix m = new Matrix(createMatrix(list));
+			Matrix m = new Matrix(createMatrix(tmp));
 			SingularValueDecomposition svd = m.svd();
 
-			Matrix v = svd.getV();
+			Matrix v = svd.getV().transpose();
 			Matrix s = svd.getS();
 			Matrix q = s.times(v.getMatrix(0, v.getRowDimension() - 1, v.getColumnDimension() - 1,
 					v.getColumnDimension() - 1));
 
-			Matrix mVecQ = s.times(q);
-
-			Vector3d vecQ = new Vector3d(mVecQ.get(0, 0), mVecQ.get(1, 0), mVecQ.get(2, 0));
-
-			for (int i = 0; i < v.getRowDimension() - 1; i++) {
+			double vecQ []= q.getColumnPackedCopy();
+		    
+			for (int i = 0; i < featureBlocks.size(); i++) {
+				Block b = featureBlocks.get(i);
 				Matrix vector = s.times(v.getMatrix(0, v.getRowDimension() - 1, i, i));
-				Matrix vector2 = s.times(vector);
-				Vector3d vecDoc = new Vector3d(vector2.get(0, 0), vector2.get(1, 0), vector2.get(2, 0));
+				
+				double vecDoc[]  =  vector.getColumnPackedCopy();
+				
+				boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
+				int nbDim;
+				double dim =Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
+				if(fixed)
+					nbDim = (int)dim;
+				else
+				{
+					nbDim = (int)(dim * vecQ.length);
+				}
 
-				double cos = cosine(vecQ, vecDoc);
+				double cos =cosine(vecQ, vecDoc,nbDim);
 				/*
 				 * If the cosine between the feature vector and the block vector
 				 * is > 0 it means that it's relevant to think that there are
@@ -106,8 +117,8 @@ public class FeatureLocationLSI implements IFeatureLocation {
 				// 0 and 1
 				cos++;
 				cos /= 2;
-				if (cos > 0)
-					locatedFeatures.add(new LocatedFeature(f, featureBlocks.get(i), cos));
+				if (cos >0.0)
+					locatedFeatures.add(new LocatedFeature(f, b, cos));
 			}
 
 		}
@@ -223,17 +234,31 @@ public class FeatureLocationLSI implements IFeatureLocation {
 	 *            The vector V
 	 * @return The cosine
 	 */
-	public static double cosine(Vector3d u, Vector3d v) {
+	public static double cosine(double  u[], double v[], int nbDim) {
 		/*
 		 * the formula for cosine between vector U and V is ( U * V ) / ( ||U||
 		 * * ||V|| )
 		 */
 
-		double scalaire = u.x * v.x + u.y * v.y + u.z * v.z;
-		double normeU = Math.sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
-		double normeV = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+		double scalaire = 0.0;
+		nbDim = Math.min(nbDim,u.length);
+		for(int i = 0; i<nbDim;i++)
+			scalaire+=u[i]*v[i];
+		
+		double normeU =0.0;
+		for(int i = 0; i< nbDim;i++)
+			normeU+=u[i]*u[i];
+		normeU = Math.sqrt(normeU);
+		
+		double normeV = 0.0;
+		for(int i = 0; i<nbDim;i++)
+			normeV+=v[i]*v[i];
+		normeV = Math.sqrt(normeV);
 
-		return scalaire / (normeU * normeV);
+		double val  =scalaire / (normeU * normeV);
+
+		if(Double.isNaN(val))
+			val = -1;
+		return 	val;
 	}
-
 }
