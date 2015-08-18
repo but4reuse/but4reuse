@@ -1,0 +1,166 @@
+package org.but4reuse.feature.location.lsi.location.preferences;
+
+import org.but4reuse.feature.location.lsi.location.preferences.ScaleLabled.Type;
+import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Scale;
+import org.eclipse.swt.widgets.Text;
+
+public class ParameterLSIFieldEditor extends FieldEditor {
+
+	private Composite parent;
+	private int value;
+	private boolean isFixed;
+	private String valueName;
+	private Composite cmp;
+    private Scale scale;
+    private Text text;
+    private Button rate;
+    private Button fixed;
+    private ScaleLabled scaleL;
+	
+  	public ParameterLSIFieldEditor(String preferenceName, String name, Composite parent, String valueName) {
+		super(preferenceName, name, parent);
+		this.valueName = valueName;
+	}
+
+	@Override
+	protected void adjustForNumColumns(int numColumns) {
+		if (parent.getLayoutData() != null) {
+			((GridData) parent.getLayoutData()).horizontalSpan = numColumns;
+		}
+	}
+
+	@Override
+	protected void doFillIntoGrid(Composite parent, int numColumns) {
+		
+		this.parent =parent;
+		text = null;
+		scale = null;
+		Group gr = new Group(parent, SWT.NORMAL);
+		GridData data = new GridData();
+		data.horizontalSpan = numColumns;
+		data.heightHint = 40;
+		
+		gr.setData(data);
+		gr.setLayout(new FillLayout());
+		rate = new Button(gr, SWT.RADIO);
+		rate.setText("Rate");
+		rate.setToolTipText("Set how many percent of dimension that you want use");
+		rate.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				isFixed = false;
+				update();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		fixed = new Button(gr, SWT.RADIO);
+		fixed.setText("Fixed Value");
+		fixed.setToolTipText("Set How many dimensions you want (Max)");
+		fixed.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				isFixed = true;
+				update();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
+		data = new GridData();
+		data.horizontalSpan = numColumns;
+		data.heightHint = 40;
+		scale = new Scale(parent, SWT.NORMAL);
+		scale.setData(data);
+		
+		
+		data = new GridData();
+		data.horizontalSpan = 2;
+		data.heightHint = 15;
+		text  = new Text(parent, SWT.BORDER);
+		scale.setData(data);
+		  if(rate.getSelection())
+		    	scaleL = new ScaleLabled(scale, text, Type.DOUBLE, 0.0,1.0);
+		    else
+		    	scaleL = new ScaleLabled(scale, text, Type.INT, 1.0,300.0);
+		  
+		if(isFixed)
+		{
+			rate.setSelection(false);
+			fixed.setSelection(true);
+		}
+		else
+		{
+			rate.setSelection(false);
+			fixed.setSelection(true);
+		}
+		update();
+		
+	    
+	}
+
+	@Override
+	protected void doLoad() {
+		value = getPreferenceStore().getInt(getPreferenceName());
+		isFixed = getPreferenceStore().getBoolean(valueName);
+		scale.setSelection(value);
+		text.setText(value+"");
+	}
+
+	@Override
+	protected void doLoadDefault() {
+		value = getPreferenceStore().getDefaultInt(getPreferenceName());
+		isFixed = getPreferenceStore().getBoolean(valueName);
+		scale.setSelection(value);
+		text.setText(value+"");
+	}
+
+	@Override
+	protected void doStore() {
+		value = scale.getSelection();
+		getPreferenceStore().setValue(getPreferenceName(), value);
+		getPreferenceStore().setValue(valueName, isFixed);
+	}
+
+
+	@Override
+	public int getNumberOfControls() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
+
+	private void update()
+	{
+		
+		  if(rate.getSelection())
+			  scaleL.change(Type.DOUBLE, 0.0,1.0);
+		    else
+		      scaleL.change(Type.INT, 1.0,300.0);
+	    
+	}
+}
