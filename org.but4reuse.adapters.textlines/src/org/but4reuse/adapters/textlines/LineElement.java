@@ -2,7 +2,6 @@ package org.but4reuse.adapters.textlines;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;

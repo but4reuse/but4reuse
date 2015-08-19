@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.nltext;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;

@@ -2,7 +2,6 @@ package org.but4reuse.adapters.eclipse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.nlp.UselessWordsRemover;
