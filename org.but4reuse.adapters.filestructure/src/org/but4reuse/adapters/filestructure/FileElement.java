@@ -11,6 +11,7 @@ import org.but4reuse.adapters.filestructure.preferences.FileStructureAdapterPref
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -116,10 +117,8 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 
 		while (tk.hasMoreTokens()) {
 			String s = tk.nextToken();
-			for (String w : s.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-				StringTokenizer tk2 = new StringTokenizer(w, "-. ");
-				while (tk2.hasMoreTokens())
-					words.add(tk2.nextToken());
+			for (String w : StringUtils.splitWords(s)) {
+				words.add(w);
 			}
 		}
 		return words;

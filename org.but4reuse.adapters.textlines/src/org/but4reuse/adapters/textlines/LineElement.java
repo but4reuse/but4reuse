@@ -9,6 +9,7 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.utils.nlp.similarity.LevenshteinDistance;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -81,11 +82,11 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 
 	@Override
 	public ArrayList<String> getWords() {
-		StringTokenizer tk = new StringTokenizer(line, " ²&~\"#'{}()[]-|`_\\^°,.;/§");
 		ArrayList<String> words = new ArrayList<String>();
 
-		while (tk.hasMoreTokens())
-			words.add(tk.nextToken());
+		for (String s : StringUtils.splitString(line))
+			for (String w : StringUtils.splitWords(s))
+				words.add(w);
 
 		return words;
 	}

@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.nlp.UselessWordsRemover;
+import org.but4reuse.utils.strings.StringUtils;
 
 /**
  * Plugin Element
@@ -138,13 +139,11 @@ public class PluginElement extends FileElement {
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
 		if (name != null) {
-			StringTokenizer tk = new StringTokenizer(name, " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-			while (tk.hasMoreTokens()) {
-				for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-					words.add(w);
-				}
+			{
+				for (String s : StringUtils.splitString(name))
+					for (String w : StringUtils.splitWords(s))
+						words.add(w);
 			}
-			
 		}
 		UselessWordsRemover.removeUselessWords(words);
 		return words;
