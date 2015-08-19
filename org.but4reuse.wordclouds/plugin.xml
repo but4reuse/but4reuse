@@ -25,6 +25,39 @@
                label="Show Word Cloud">
          </action>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactWordCloudIDF"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloudIDF"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action3"
+               label="Show TD-IDF Word Cloud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowFeatureWordCloudIDF"
+            objectClass="org.but4reuse.featurelist.Feature">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloudIDF"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action4"
+               label="Show TD-IDF Word CLoud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactModelWordCloud"
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactModelWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action3"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -62,7 +95,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.but4reuse.constraints.discovery.ui.page"
-            class="org.but4reuse.wordclouds.similarity.TermBasedConstraintsDiscoveryPreferences"
+            class="org.but4reuse.wordclouds.preferences.TermBasedConstraintsDiscoveryPreferences"
             id="org.but4reuse.wordcloud.similarity.TermBasedConstraintsDiscovery"
             name="Term-Based">
       </page>
@@ -70,8 +103,17 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.but4reuse.wordclouds.similarity.PreferenceInitializer">
+            class="org.but4reuse.wordclouds.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.wordclouds.preferences.WordCloudPreferences"
+            id="org.but4reuse.wordclouds.page"
+            name="WordCloud">
+      </page>
    </extension>
 
 </plugin>

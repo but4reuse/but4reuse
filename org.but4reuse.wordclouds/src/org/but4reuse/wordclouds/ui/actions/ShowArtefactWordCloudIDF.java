@@ -1,7 +1,12 @@
 package org.but4reuse.wordclouds.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.adaptedmodel.AdaptedArtefact;
+import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
@@ -12,6 +17,7 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.IAction;
@@ -30,7 +36,7 @@ import org.mcavallo.opencloud.Cloud;
  *         create a new window where a word cloud will be drawn
  */
 
-public class ShowArtefactWordCloud implements IObjectActionDelegate {
+public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 
 	ISelection selection;
 	Artefact artefact = null;
@@ -43,6 +49,9 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
+
+		ArrayList<ArrayList<String>> list = null;
+
 		artefact = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
@@ -64,6 +73,24 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 						// Launch Progress dialog
 
 						c.clear();
+						if (list == null) {
+							list = new ArrayList<ArrayList<String>>();
+
+							for (Artefact a : ((ArtefactModel) artefactModel).getOwnedArtefacts()) {
+								ArrayList<String> l = new ArrayList<String>();
+								for (IAdapter adapter : adap) {
+
+									List<IElement> elements = AdaptersHelper.getElements(a, adapter);
+									for (IElement element : elements) {
+										AbstractElement ab = (AbstractElement) element;
+										for (String s : ab.getWords())
+											l.add(s);
+									}
+								}
+								list.add(l);
+							}
+						}
+
 						for (IAdapter adapter : adap) {
 							List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
 							for (IElement element : elements) {
@@ -82,6 +109,9 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 						win.open();
 						win.update();
+
+						c = WordCloudUtil.createWordCloudIDF(list, ((ArtefactModel) artefactModel).getOwnedArtefacts()
+								.indexOf(artefact));
 
 						WordCloudUtil.drawWordCloud(comp, c);
 

@@ -1,4 +1,4 @@
-package org.but4reuse.wordclouds.similarity;
+package org.but4reuse.wordclouds.preferences;
 
 import org.but4reuse.wordclouds.activator.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
@@ -14,6 +14,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(TermBasedConstraintsDiscoveryPreferences.EXCLUDES, true);
 		store.setDefault(TermBasedConstraintsDiscoveryPreferences.REQUIRES, true);
 		store.setDefault(TermBasedConstraintsDiscoveryPreferences.HIGHT_SIM, 0.5);
+		store.setDefault(WordCloudPreferences.WORDCLOUD_NB_W, 50);
 
 	}
 

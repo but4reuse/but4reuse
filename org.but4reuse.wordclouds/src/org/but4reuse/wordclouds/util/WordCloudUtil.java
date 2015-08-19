@@ -3,6 +3,8 @@ package org.but4reuse.wordclouds.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
@@ -186,7 +188,8 @@ public class WordCloudUtil {
 		ArrayList<String> wordsChecked = new ArrayList<String>();
 
 		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
-		cloud_IDF.setMaxTagsToDisplay(50);
+		cloud_IDF.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
+				.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 		cloud_IDF.setMinWeight(5);
 		cloud_IDF.setMaxWeight(50);
 

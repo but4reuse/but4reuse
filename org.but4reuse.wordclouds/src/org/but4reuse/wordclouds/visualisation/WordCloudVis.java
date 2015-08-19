@@ -201,7 +201,7 @@ public class WordCloudVis extends ViewPart {
 			c = WordCloudVisualisation.getClouds().get(index);
 
 		for (Tag t : c.tags())
-			singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+			singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getNormScore()));
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloud(singleton.getSCompositeIDF(), c);
@@ -500,7 +500,7 @@ public class WordCloudVis extends ViewPart {
 
 				for (Tag t : c.tags())
 					WordCloudVis.getSingleton().getList()
-							.add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+							.add(t.getName() + " - " + String.format("%.2f", t.getNormScore()));
 
 			}
 

@@ -1,10 +1,15 @@
 package org.but4reuse.wordclouds.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
+import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
@@ -25,7 +30,7 @@ import org.mcavallo.opencloud.Cloud;
  *         create a new window where a word cloud will be drawn
  */
 
-public class ShowFeatureWordCloud implements IObjectActionDelegate {
+public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 
 	ISelection selection;
 	Feature feature = null;
@@ -39,11 +44,35 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
 		feature = null;
+
+		ArrayList<ArrayList<String>> list = null;
+		FeatureList fList = null;
+
 		if (selection instanceof IStructuredSelection) {
 			for (Object feat : ((IStructuredSelection) selection).toArray()) {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
 
+					if (list == null) {
+						list = new ArrayList<ArrayList<String>>();
+						fList = (FeatureList) feature.eContainer();
+
+						for (Feature f : fList.getOwnedFeatures()) {
+
+							ArrayList<String> l = new ArrayList<String>();
+							if (f.getName() != null) {
+								for (String s : StringUtils.splitString(f.getName()))
+									for (String w : StringUtils.splitWords(s))
+										l.add(w);
+							}
+							if (f.getDescription() != null) {
+								for (String s : StringUtils.splitString(f.getDescription()))
+									for (String w : StringUtils.splitWords(s))
+										l.add(w);
+							}
+							list.add(l);
+						}
+					}
 					c.clear();
 					/*
 					 * Here we split the feature name and description for
@@ -69,7 +98,7 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 
 					win.open();
 					win.update();
-
+					c = WordCloudUtil.createWordCloudIDF(list, fList.getOwnedFeatures().indexOf(feature));
 					WordCloudUtil.drawWordCloud(comp, c);
 
 				}

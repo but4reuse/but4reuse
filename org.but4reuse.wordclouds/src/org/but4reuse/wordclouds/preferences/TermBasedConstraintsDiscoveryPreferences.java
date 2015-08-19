@@ -1,4 +1,4 @@
-package org.but4reuse.wordclouds.similarity;
+package org.but4reuse.wordclouds.preferences;
 
 import org.but4reuse.utils.ui.preferences.DoubleScaleFieldEditor;
 import org.but4reuse.wordclouds.activator.Activator;

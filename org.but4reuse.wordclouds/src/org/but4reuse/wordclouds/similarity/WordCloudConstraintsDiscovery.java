@@ -15,6 +15,7 @@ import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.impl.ConstraintImpl;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.TermBasedConstraintsDiscoveryPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
