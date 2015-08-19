@@ -1,6 +1,6 @@
 package org.but4reuse.feature.location.lsi.location.preferences;
 
-import org.but4reuse.feature.location.lsi.location.preferences.ScaleLabled.Type;
+import org.but4reuse.utils.ui.preferences.ScaleLabel;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,7 +23,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
     private Text text;
     private Button rate;
     private Button fixed;
-    private ScaleLabled scaleL;
+    private ScaleLabel scaleL;
 	
   	public ParameterLSIFieldEditor(String preferenceName, String name, Composite parent, String valueName) {
 		super(preferenceName, name, parent);
@@ -97,16 +97,15 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 		scale = new Scale(parent, SWT.NORMAL);
 		scale.setData(data);
 		
-		
 		data = new GridData();
 		data.horizontalSpan = 2;
 		data.heightHint = 15;
 		text  = new Text(parent, SWT.BORDER);
 		scale.setData(data);
 		  if(rate.getSelection())
-		    	scaleL = new ScaleLabled(scale, text, Type.DOUBLE, 0.0,1.0);
+		    	scaleL = new ScaleLabel(scale, text, ScaleLabel.Type.DOUBLE, 0.0,1.0);
 		    else
-		    	scaleL = new ScaleLabled(scale, text, Type.INT, 1.0,300.0);
+		    	scaleL = new ScaleLabel(scale, text, ScaleLabel.Type.INT, 1.0,300.0);
 		  
 		if(isFixed)
 		{
@@ -131,7 +130,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 		{
 			rate.setSelection(false);
 			fixed.setSelection(true);
-			scaleL.change(Type.INT, 1.0,300.0);
+			scaleL.change(ScaleLabel.Type.INT, 1.0,300.0);
 			scale.setSelection((int)value);
 			text.setText(value+"");
 		}
@@ -139,7 +138,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 		{
 			rate.setSelection(true);
 			fixed.setSelection(false);
-			scaleL.change(Type.DOUBLE, 0.0,1.0);
+			scaleL.change(ScaleLabel.Type.DOUBLE, 0.0,1.0);
 			scale.setSelection((int)(value*100));
 			text.setText(value*100+"");
 		}
@@ -154,7 +153,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 		{
 			rate.setSelection(false);
 			fixed.setSelection(true);
-			scaleL.change(Type.INT, 1.0,300.0);
+			scaleL.change(ScaleLabel.Type.INT, 1.0,300.0);
 			scale.setSelection((int)value);
 			text.setText(value+"");
 		}
@@ -162,7 +161,7 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 		{
 			rate.setSelection(true);
 			fixed.setSelection(false);
-			scaleL.change(Type.DOUBLE, 0.0,1.0);
+			scaleL.change(ScaleLabel.Type.DOUBLE, 0.0,1.0);
 			scale.setSelection((int)(value*100));
 			text.setText(value*100+"");
 		}
@@ -189,9 +188,9 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 	{
 		
 		  if(rate.getSelection())
-			  scaleL.change(Type.DOUBLE, 0.0,1.0);
+			  scaleL.change(ScaleLabel.Type.DOUBLE, 0.0,1.0);
 		    else
-		      scaleL.change(Type.INT, 1.0,300.0);
+		      scaleL.change(ScaleLabel.Type.INT, 1.0,300.0);
 	    
 	}
 }

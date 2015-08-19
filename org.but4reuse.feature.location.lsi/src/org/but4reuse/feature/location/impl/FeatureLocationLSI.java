@@ -106,7 +106,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			Matrix uk = u.getMatrix(0, u.getRowDimension()-1,0,nbDim-1);
 		    
 			Matrix q = new Matrix(vecQ, vecQ.length);
-		   
+		    
 		    q = (sk.inverse().times(uk.transpose()).times(q));
 			
 		    for (int i = 0; i < m.getColumnDimension(); i++) {
