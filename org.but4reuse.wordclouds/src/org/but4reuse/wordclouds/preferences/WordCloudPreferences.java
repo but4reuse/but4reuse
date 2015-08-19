@@ -2,8 +2,6 @@ package org.but4reuse.wordclouds.preferences;
 
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 

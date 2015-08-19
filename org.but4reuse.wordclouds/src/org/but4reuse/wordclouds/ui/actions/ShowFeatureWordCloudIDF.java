@@ -2,14 +2,10 @@ package org.but4reuse.wordclouds.ui.actions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
-import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
-import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
-import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.preferences.WordCloudPreferences;

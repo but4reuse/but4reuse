@@ -1,7 +1,6 @@
 package org.but4reuse.wordclouds.ui.actions;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
