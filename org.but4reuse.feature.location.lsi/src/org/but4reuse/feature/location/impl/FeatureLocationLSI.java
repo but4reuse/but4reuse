@@ -77,7 +77,6 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			Matrix m = new Matrix(createMatrix(list));
 			SingularValueDecomposition svd = m.svd();
 
-			Matrix v = svd.getV();
 			Matrix s = svd.getS();
 			Matrix u = svd.getU();
 
