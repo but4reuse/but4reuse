@@ -33,91 +33,80 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		ArrayList<Block> featureBlocks = new ArrayList<Block>();
 
 		/*
-		 * We gather all words for each block 
+		 * We gather all words for each block
 		 */
 
-			for (Block b : adaptedModel.getOwnedBlocks()) {
-				
-				featureBlocks.add(b);
-				HashMap<String, Integer> t = new HashMap<String, Integer>();
+		for (Block b : adaptedModel.getOwnedBlocks()) {
 
-				for (IElement e : AdaptedModelHelper.getElementsOfBlock(b)) {
-					List<String> words = ((AbstractElement) e).getWords();
-					for (String w : words) {
-						String tmp = w.toLowerCase();
-						if (t.containsKey(tmp))
-							t.put(tmp, t.get(tmp) + 1);
-						else
-							t.put(tmp, 1);
-					}
+			featureBlocks.add(b);
+			HashMap<String, Integer> t = new HashMap<String, Integer>();
+
+			for (IElement e : AdaptedModelHelper.getElementsOfBlock(b)) {
+				List<String> words = ((AbstractElement) e).getWords();
+				for (String w : words) {
+					String tmp = w.toLowerCase();
+					if (t.containsKey(tmp))
+						t.put(tmp, t.get(tmp) + 1);
+					else
+						t.put(tmp, 1);
 				}
-				/*
-				 * we add all words form the block in a list
-				 */
-				list.add(t);
 			}
+			/*
+			 * we add all words form the block in a list
+			 */
+			list.add(t);
+		}
 
 		/*
-		 * if the list is empty it means we found 0 zero block for the
-		 * current feature so it's not necessary to continue with the
-		 * feature
+		 * if the list is empty it means we found 0 zero block for the current
+		 * feature so it's not necessary to continue with the feature
 		 */
 		if (list.size() == 0)
 			return locatedFeatures;
-		
-		for (Feature f : featureList.getOwnedFeatures()) {
-			
 
-		
-			double vecQ [] = createQuery(list, getFeatureWords(f));
-			
+		for (Feature f : featureList.getOwnedFeatures()) {
+
+			double vecQ[] = createQuery(list, getFeatureWords(f));
 
 			/*
 			 * Here we use the LSI for comparing words from the feature and
 			 * words form the block
 			 * https://fr.wikipedia.org/wiki/Analyse_s%C3%A9mantique_latente
 			 */
-			
-			
-			
+
 			Matrix m = new Matrix(createMatrix(list));
 			SingularValueDecomposition svd = m.svd();
 
 			Matrix v = svd.getV();
 			Matrix s = svd.getS();
 			Matrix u = svd.getU();
-			
-			
-		
-			
+
 			boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
 			int nbDim;
-			
-			double dim =Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
-			if(fixed)
-				nbDim = (int)dim;
-			else
-			{
-				nbDim = (int)(dim * s.getRowDimension());
+
+			double dim = Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
+			if (fixed)
+				nbDim = (int) dim;
+			else {
+				nbDim = (int) (dim * s.getRowDimension());
 			}
 			nbDim = Math.min(nbDim, s.getRowDimension());
-			
-			Matrix sk = s.getMatrix(0,nbDim-1,0,nbDim-1);
-			Matrix uk = u.getMatrix(0, u.getRowDimension()-1,0,nbDim-1);
-		    
-			Matrix q = new Matrix(vecQ, vecQ.length);
-		    
-		    q = (sk.inverse().times(uk.transpose()).times(q));
-			
-		    for (int i = 0; i < m.getColumnDimension(); i++) {
-				Block b = featureBlocks.get(i);
-				Matrix ve = m.getMatrix(0,m.getRowDimension()-1,i,i);
-				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
-				
-				double vecDoc[]  =  vector.getColumnPackedCopy();
-			
 
-				double cos =cosine(q.getColumnPackedCopy(), vecDoc);
+			Matrix sk = s.getMatrix(0, nbDim - 1, 0, nbDim - 1);
+			Matrix uk = u.getMatrix(0, u.getRowDimension() - 1, 0, nbDim - 1);
+
+			Matrix q = new Matrix(vecQ, vecQ.length);
+
+			q = (sk.inverse().times(uk.transpose()).times(q));
+
+			for (int i = 0; i < m.getColumnDimension(); i++) {
+				Block b = featureBlocks.get(i);
+				Matrix ve = m.getMatrix(0, m.getRowDimension() - 1, i, i);
+				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
+
+				double vecDoc[] = vector.getColumnPackedCopy();
+
+				double cos = cosine(q.getColumnPackedCopy(), vecDoc);
 				/*
 				 * If the cosine between the feature vector and the block vector
 				 * is > 0 it means that it's relevant to think that there are
@@ -128,7 +117,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 				// 0 and 1
 				cos++;
 				cos /= 2;
-				if (cos >0.0)
+				if (cos > 0.0)
 					locatedFeatures.add(new LocatedFeature(f, b, cos));
 			}
 
@@ -181,8 +170,7 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		return featureWords;
 	}
 
-	static public double [] createQuery(ArrayList<HashMap<String,Integer>> list, HashMap<String,Integer>map)
-	{
+	static public double[] createQuery(ArrayList<HashMap<String, Integer>> list, HashMap<String, Integer> map) {
 		ArrayList<String> words = new ArrayList<String>();
 
 		/*
@@ -205,9 +193,9 @@ public class FeatureLocationLSI implements IFeatureLocation {
 		Collections.sort(words);
 		if (cpt == 0)
 			return null;
-		
+
 		double tab[] = new double[words.size()];
-		
+
 		int i = 0;
 		for (String w : words) {
 			if (map.containsKey(w))
@@ -218,11 +206,10 @@ public class FeatureLocationLSI implements IFeatureLocation {
 				tab[i] = 0;
 			i++;
 		}
-		
-		
-		
+
 		return tab;
 	}
+
 	/**
 	 * A Matrix which represents the words found in several documents In rows
 	 * there are how many times a word is found in each document In columns
@@ -287,32 +274,31 @@ public class FeatureLocationLSI implements IFeatureLocation {
 	 *            The vector V
 	 * @return The cosine
 	 */
-	public static double cosine(double  u[], double v[]) {
+	public static double cosine(double u[], double v[]) {
 		/*
 		 * the formula for cosine between vector U and V is ( U * V ) / ( ||U||
 		 * * ||V|| )
 		 */
 
 		double scalaire = 0.0;
-		for(int i = 0; i<u.length;i++)
-			scalaire+=u[i]*v[i];
-		
-		double normeU =0.0;
-		for(int i = 0; i< u.length;i++)
-			normeU+=u[i]*u[i];
+		for (int i = 0; i < u.length; i++)
+			scalaire += u[i] * v[i];
+
+		double normeU = 0.0;
+		for (int i = 0; i < u.length; i++)
+			normeU += u[i] * u[i];
 		normeU = Math.sqrt(normeU);
-		
+
 		double normeV = 0.0;
-		for(int i = 0; i<v.length;i++)
-			normeV+=v[i]*v[i];
+		for (int i = 0; i < v.length; i++)
+			normeV += v[i] * v[i];
 		normeV = Math.sqrt(normeV);
 
-		double val  =scalaire / (normeU * normeV);
+		double val = scalaire / (normeU * normeV);
 
-		if(Double.isNaN(val))
+		if (Double.isNaN(val))
 			val = -1;
-		return 	val;
+		return val;
 	}
-	
-	
+
 }

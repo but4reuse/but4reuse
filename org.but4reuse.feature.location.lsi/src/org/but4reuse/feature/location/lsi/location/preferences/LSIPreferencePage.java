@@ -7,25 +7,24 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class LSIPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	
 	static final public String DIM = "NB_DIMENSION";
 	static final public String FIXED = "IS_FIXED";
 	private ParameterLSIFieldEditor field;
-	
+
 	public LSIPreferencePage() {
 		super();
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
-	
+
 	@Override
 	public void init(IWorkbench workbench) {
-	
+
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		
-		field = new ParameterLSIFieldEditor(DIM, " ", getFieldEditorParent(),FIXED);
+
+		field = new ParameterLSIFieldEditor(DIM, " ", getFieldEditorParent(), FIXED);
 		addField(field);
 	}
 
