@@ -4,19 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.json.tools.ArrayManager;
+import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.json.tools.AdapterTools;
 
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
-
-public class ArrayElement extends AbstractJsonElement {
-	public AbstractJsonElement parent;
-	public ArrayManager array;
+public class ArrayElement extends AbstractElement {
+	public AbstractElement parent;
+	public int id;
 	public List<ArrayElement> similarArrays;
 
-	public ArrayElement(AbstractJsonElement parent) {
+	public ArrayElement(AbstractElement parent) {
 		this.parent = parent;
-		this.array = null;
+		this.id = AdapterTools.getUniqueId();
 		this.similarArrays = new ArrayList<ArrayElement>();
 		this.similarArrays.add(this);
 	}
@@ -25,10 +23,20 @@ public class ArrayElement extends AbstractJsonElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ArrayElement) {
 			ArrayElement arrayElement = (ArrayElement) anotherElement;
+			
+			if (this.id == arrayElement.id)
+				return 1;
+			
 			if (this.parent.similarity(arrayElement.parent) == 1) {
-				this.similarArrays.add(arrayElement);
-				arrayElement.similarArrays.add(this);
-
+				List<ArrayElement> similarArrays = new ArrayList<ArrayElement>();
+				similarArrays.addAll(this.similarArrays);
+				similarArrays.addAll(arrayElement.similarArrays);
+				
+				for (ArrayElement currentArray : similarArrays) {
+					currentArray.id = this.id;
+					currentArray.similarArrays = similarArrays;
+				}
+				
 				return 1;
 			}
 		}
@@ -38,21 +46,5 @@ public class ArrayElement extends AbstractJsonElement {
 	@Override
 	public String getText() {
 		return parent.getText() + "_[]";
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		if (this.array == null) {
-			this.array = new ArrayManager();
-			for (ArrayElement arrElt : this.similarArrays)
-				arrElt.array = this.array;
-			this.parent.construct(root, this.array.jsonArray);
-		}
-		return this.array.jsonArray;
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		return this.construct(root);
 	}
 }

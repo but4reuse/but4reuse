@@ -1,17 +1,17 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
-import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-public class UnsplittableElement extends AbstractJsonElement {
+public class UnsplittableElement extends AbstractElement {
 	public JsonValue content;
 	public JsonValue compare;
-	public AbstractJsonElement parent;
+	public AbstractElement parent;
 
 	public UnsplittableElement(JsonValue content, JsonValue compare,
-			AbstractJsonElement parent) {
+			AbstractElement parent) {
 		this.content = content;
 		this.compare = compare;
 		this.parent = parent;
@@ -31,15 +31,4 @@ public class UnsplittableElement extends AbstractJsonElement {
 	public String getText() {
 		return parent.getText() + "_/UNSPLITTABLE/_" + content.toString();
 	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, this.content);
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		return this.construct(root);
-	}
-
 }

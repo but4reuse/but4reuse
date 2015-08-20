@@ -11,7 +11,9 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
+import org.but4reuse.adapters.json.tools.JsonConstruct;
 import org.but4reuse.adapters.json.tools.JsonElement;
 import org.but4reuse.adapters.json.tools.Paths;
 import org.but4reuse.adapters.json.tools.PathsTools;
@@ -34,14 +36,21 @@ public class JsonAdapter implements IAdapter {
 		}
 		return false;
 	}
-
+	
+	public Paths getPathsToIgnore() {
+		return PathsTools.getPathsToIgnore();
+	}
+	public Paths getPathsUnsplittable() {
+		return PathsTools.getPathsUnsplittable();
+	}
+	
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		int id_file = AdapterTools.getUniqueId();
-
-		Paths pathsToIgnore = PathsTools.getPathsToIgnore();
-		Paths pathsUnsplittable = PathsTools.getPathsUnsplittable();
-
+		
+		Paths pathsToIgnore = this.getPathsToIgnore();
+		Paths pathsUnsplittable = this.getPathsUnsplittable();
+		
 		List<IElement> atomicJsonElementList = new ArrayList<IElement>();
 		List<JsonElement> jsonElementList = new ArrayList<JsonElement>();
 
@@ -64,8 +73,8 @@ public class JsonAdapter implements IAdapter {
 				JsonElement jsonElement = jsonElementList.remove(0);
 				Paths paths = jsonElement.paths;
 				JsonValue jsonValue = jsonElement.jsonValue;
-				AbstractJsonElement parent = jsonElement.parent;
-				AbstractJsonElement dependency = jsonElement.dependency;
+				AbstractElement parent = jsonElement.parent;
+				AbstractElement dependency = jsonElement.dependency;
 
 				if (paths.matches(pathsToIgnore)) {
 					IgnoredElement ignoredElement = new IgnoredElement(
@@ -189,18 +198,12 @@ public class JsonAdapter implements IAdapter {
 
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
+			
+			JsonConstruct construct = new JsonConstruct();
 			JsonObject root = new JsonObject();
-
+			
 			for (IElement elt : elements) {
-				if (elt instanceof ObjectElement)
-					((ObjectElement) elt).jsonObject = null;
-				if (elt instanceof ArrayElement)
-					((ArrayElement) elt).array = null;
-			}
-
-			for (IElement elt : elements) {
-				AbstractJsonElement jsonElt = (AbstractJsonElement) elt;
-				jsonElt.construct(root);
+				construct.construct(root, elt);
 			}
 
 			FileUtils.appendToFile(file,
@@ -209,5 +212,5 @@ public class JsonAdapter implements IAdapter {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

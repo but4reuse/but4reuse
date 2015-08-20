@@ -4,29 +4,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.json.tools.AdapterTools;
 
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 
-public class ObjectElement extends AbstractJsonElement {
-	public AbstractJsonElement parent;
-	public JsonObject jsonObject;
+public class ObjectElement extends AbstractElement {
+	public AbstractElement parent;
+	public int id;
 	public List<ObjectElement> similarObjects;
 
-	public ObjectElement(AbstractJsonElement parent) {
+	public ObjectElement(AbstractElement parent) {
 		this.parent = parent;
-		this.jsonObject = null;
+		this.id = AdapterTools.getUniqueId();
 		this.similarObjects = new ArrayList<ObjectElement>();
+		this.similarObjects.add(this);
 	}
 
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ObjectElement) {
 			ObjectElement objectElement = (ObjectElement) anotherElement;
+			
+			if (this.id == objectElement.id)
+				return 1;
+			
 			if (this.parent.similarity(objectElement.parent) == 1) {
-				this.similarObjects.add(objectElement);
-				objectElement.similarObjects.add(this);
-
+				List<ObjectElement> similarObjects = new ArrayList<ObjectElement>();
+				similarObjects.addAll(this.similarObjects);
+				similarObjects.addAll(objectElement.similarObjects);
+				
+				for (ObjectElement currentObject : similarObjects) {
+					currentObject.id = this.id;
+					currentObject.similarObjects = similarObjects;
+				}
+				
 				return 1;
 
 			}
@@ -38,21 +49,4 @@ public class ObjectElement extends AbstractJsonElement {
 	public String getText() {
 		return parent.getText() + "_{}";
 	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		if (this.jsonObject == null) {
-			this.jsonObject = new JsonObject();
-			for (ObjectElement objElt : this.similarObjects)
-				objElt.jsonObject = this.jsonObject;
-			this.parent.construct(root, this.jsonObject);
-		}
-		return this.jsonObject;
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		return this.construct(root);
-	}
-
 }

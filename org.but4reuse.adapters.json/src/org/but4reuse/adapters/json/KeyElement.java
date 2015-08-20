@@ -1,11 +1,10 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 
-public class KeyElement extends AbstractJsonElement {
+public class KeyElement extends AbstractElement {
 	public String name;
 	public ObjectElement parent;
 
@@ -28,7 +27,7 @@ public class KeyElement extends AbstractJsonElement {
 					if (keyElement.parent == null)
 						return 0;
 					else
-						this.parent.similarity(keyElement.parent);
+						return this.parent.similarity(keyElement.parent);
 				}
 			}
 		}
@@ -52,32 +51,4 @@ public class KeyElement extends AbstractJsonElement {
 	public int getMinDependencies(String dependencyID) {
 		return 1;
 	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.construct(root, JsonValue.NULL);
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		JsonObject jsonObject = null;
-
-		if (this.parent == null)
-			jsonObject = root;
-		else
-			jsonObject = this.parent.construct(root).asObject();
-
-		JsonValue lastJsonValue = jsonObject.get(this.name);
-
-		if (lastJsonValue == null || lastJsonValue == JsonValue.NULL) {
-			jsonObject.set(name, jsonValue);
-			return jsonValue;
-		}
-		if (jsonValue == JsonValue.NULL)
-			return lastJsonValue;
-
-		jsonObject.set(name, jsonValue);
-		return jsonValue;
-	}
-
 }

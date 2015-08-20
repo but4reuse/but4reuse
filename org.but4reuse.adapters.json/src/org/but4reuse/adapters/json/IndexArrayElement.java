@@ -4,18 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 
-public class IndexArrayElement extends AbstractJsonElement {
+public class IndexArrayElement extends AbstractElement {
 	public int id_file;
 	public ArrayElement parent;
 	public int id;
 	public List<Integer> similarFiles;
 	public List<IndexArrayElement> similarIndexes;
-	public List<Integer> similarIds;
 	public List<IndexArrayElement> indexesAhead;
 
 	public IndexArrayElement(int id_file, ArrayElement parent,
@@ -23,12 +21,13 @@ public class IndexArrayElement extends AbstractJsonElement {
 		this.id_file = id_file;
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
+		
 		this.similarFiles = new ArrayList<Integer>();
-		this.similarIndexes = new ArrayList<IndexArrayElement>();
 		this.similarFiles.add(id_file);
+		
+		this.similarIndexes = new ArrayList<IndexArrayElement>();
 		this.similarIndexes.add(this);
-		this.similarIds = new ArrayList<Integer>();
-		this.similarIds.add(this.id);
+		
 		this.indexesAhead = new ArrayList<IndexArrayElement>();
 		for (IndexArrayElement index : ahead)
 			this.indexesAhead.add(index);
@@ -38,8 +37,8 @@ public class IndexArrayElement extends AbstractJsonElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof IndexArrayElement) {
 			IndexArrayElement elt = (IndexArrayElement) anotherElement;
-			if (this.similarIds.contains(elt.id)
-					|| elt.similarIds.contains(this.id))
+			
+			if (this.id == elt.id)
 				return 1;
 
 			for (int file : this.similarFiles)
@@ -53,7 +52,6 @@ public class IndexArrayElement extends AbstractJsonElement {
 			if (this.parent.similarity(elt.parent) == 1) {
 				ArrayList<Integer> files = new ArrayList<Integer>();
 				ArrayList<IndexArrayElement> indexes = new ArrayList<IndexArrayElement>();
-				ArrayList<Integer> simIds = new ArrayList<Integer>();
 				ArrayList<IndexArrayElement> ahead = new ArrayList<IndexArrayElement>();
 
 				files.addAll(this.similarFiles);
@@ -62,17 +60,14 @@ public class IndexArrayElement extends AbstractJsonElement {
 				indexes.addAll(this.similarIndexes);
 				indexes.addAll(elt.similarIndexes);
 
-				simIds.addAll(this.similarIds);
-				simIds.addAll(elt.similarIds);
-
 				ahead.addAll(this.indexesAhead);
 				ahead.addAll(elt.indexesAhead);
 
 				for (IndexArrayElement indArrElt : indexes) {
 					indArrElt.similarFiles = files;
 					indArrElt.similarIndexes = indexes;
-					indArrElt.similarIds = simIds;
 					indArrElt.indexesAhead = ahead;
+					indArrElt.id = this.id;
 				}
 
 				return 1;
@@ -86,17 +81,4 @@ public class IndexArrayElement extends AbstractJsonElement {
 	public String getText() {
 		return parent.getText();
 	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.construct(root, JsonValue.NULL);
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		this.parent.construct(root);
-		this.parent.array.add(this.indexesAhead, this.similarIds, jsonValue);
-		return jsonValue;
-	}
-
 }

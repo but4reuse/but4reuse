@@ -1,15 +1,15 @@
 package org.but4reuse.adapters.json;
 
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 
-import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
-public class IgnoredElement extends AbstractJsonElement {
+public class IgnoredElement extends AbstractElement {
 	public JsonValue jsonValue;
-	public AbstractJsonElement parent;
+	public AbstractElement parent;
 
-	public IgnoredElement(JsonValue jsonValue, AbstractJsonElement parent) {
+	public IgnoredElement(JsonValue jsonValue, AbstractElement parent) {
 		this.jsonValue = jsonValue;
 		this.parent = parent;
 	}
@@ -27,15 +27,4 @@ public class IgnoredElement extends AbstractJsonElement {
 	public String getText() {
 		return parent.getText() + "_/IGNORED/_" + jsonValue.toString();
 	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, this.jsonValue);
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root, JsonValue jsonValue) {
-		return this.construct(root);
-	}
-
 }
