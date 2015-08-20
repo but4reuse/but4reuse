@@ -36,21 +36,22 @@ public class JsonAdapter implements IAdapter {
 		}
 		return false;
 	}
-	
+
 	public Paths getPathsToIgnore() {
 		return PathsTools.getPathsToIgnore();
 	}
+
 	public Paths getPathsUnsplittable() {
 		return PathsTools.getPathsUnsplittable();
 	}
-	
+
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		int id_file = AdapterTools.getUniqueId();
-		
+
 		Paths pathsToIgnore = this.getPathsToIgnore();
 		Paths pathsUnsplittable = this.getPathsUnsplittable();
-		
+
 		List<IElement> atomicJsonElementList = new ArrayList<IElement>();
 		List<JsonElement> jsonElementList = new ArrayList<JsonElement>();
 
@@ -169,7 +170,7 @@ public class JsonAdapter implements IAdapter {
 						jsonElementList.add(new JsonElement(currentPaths,
 								jsonArray.get(index), indexArrayElement,
 								arrayElement));
-						
+
 						indexesAhead.add(indexArrayElement);
 					}
 				} else {
@@ -190,7 +191,6 @@ public class JsonAdapter implements IAdapter {
 	@Override
 	public void construct(URI uri, List<IElement> elements,
 			IProgressMonitor monitor) {
-		AdapterTools.reset();
 		try {
 			if (uri.toString().endsWith("/")) {
 				uri = new URI(uri.toString() + "jsonConstruction.json");
@@ -198,10 +198,10 @@ public class JsonAdapter implements IAdapter {
 
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
-			
+
 			JsonConstruct construct = new JsonConstruct();
 			JsonObject root = new JsonObject();
-			
+
 			for (IElement elt : elements) {
 				construct.construct(root, elt);
 			}
@@ -212,5 +212,5 @@ public class JsonAdapter implements IAdapter {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

@@ -3,7 +3,6 @@ package org.but4reuse.adapters.json;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 
-
 public class KeyElement extends AbstractElement {
 	public String name;
 	public ObjectElement parent;

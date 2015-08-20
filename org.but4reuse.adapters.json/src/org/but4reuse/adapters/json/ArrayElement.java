@@ -23,20 +23,20 @@ public class ArrayElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ArrayElement) {
 			ArrayElement arrayElement = (ArrayElement) anotherElement;
-			
+
 			if (this.id == arrayElement.id)
 				return 1;
-			
+
 			if (this.parent.similarity(arrayElement.parent) == 1) {
 				List<ArrayElement> similarArrays = new ArrayList<ArrayElement>();
 				similarArrays.addAll(this.similarArrays);
 				similarArrays.addAll(arrayElement.similarArrays);
-				
+
 				for (ArrayElement currentArray : similarArrays) {
 					currentArray.id = this.id;
 					currentArray.similarArrays = similarArrays;
 				}
-				
+
 				return 1;
 			}
 		}

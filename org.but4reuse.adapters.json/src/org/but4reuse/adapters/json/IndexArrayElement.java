@@ -7,7 +7,6 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 
-
 public class IndexArrayElement extends AbstractElement {
 	public int id_file;
 	public ArrayElement parent;
@@ -21,13 +20,13 @@ public class IndexArrayElement extends AbstractElement {
 		this.id_file = id_file;
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
-		
+
 		this.similarFiles = new ArrayList<Integer>();
 		this.similarFiles.add(id_file);
-		
+
 		this.similarIndexes = new ArrayList<IndexArrayElement>();
 		this.similarIndexes.add(this);
-		
+
 		this.indexesAhead = new ArrayList<IndexArrayElement>();
 		for (IndexArrayElement index : ahead)
 			this.indexesAhead.add(index);
@@ -37,7 +36,7 @@ public class IndexArrayElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof IndexArrayElement) {
 			IndexArrayElement elt = (IndexArrayElement) anotherElement;
-			
+
 			if (this.id == elt.id)
 				return 1;
 
