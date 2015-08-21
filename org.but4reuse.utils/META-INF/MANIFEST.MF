@@ -17,6 +17,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.utils.emf,
  org.but4reuse.utils.files,
+ org.but4reuse.utils.strings,
  org.but4reuse.utils.ui.dialogs,
  org.but4reuse.utils.ui.preferences,
  org.but4reuse.utils.workbench
