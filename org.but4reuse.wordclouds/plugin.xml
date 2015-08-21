@@ -109,7 +109,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.but4reuse.page"
+            category="org.but4reuse.visualisation.ui.page"
             class="org.but4reuse.wordclouds.preferences.WordCloudPreferences"
             id="org.but4reuse.wordclouds.page"
             name="WordCloud">

@@ -33,6 +33,8 @@ public class WordCloudUtil {
 	public static void drawWordCloud(Composite cmp, Cloud cloud) {
 		int x = 10, y = 10;
 		int maxH = 0;
+		cmp.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
 		for (Control c : cmp.getChildren())
 			c.dispose();
 		cmp.update();
@@ -40,6 +42,8 @@ public class WordCloudUtil {
 		for (Tag t : cloud.tags()) {
 
 			Label l = new Label(cmp, SWT.NORMAL);
+			l.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
 			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC);
 			l.setFont(f);
 			l.setText(t.getName());
