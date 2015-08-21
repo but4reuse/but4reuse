@@ -77,9 +77,14 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			Matrix m = new Matrix(createMatrix(list));
 			SingularValueDecomposition svd = m.svd();
 
+			// Here we get the singular value matix
 			Matrix s = svd.getS();
+			// Here the U matrix from SVD -> M = U*S*V
 			Matrix u = svd.getU();
 
+			/*
+			 * Here we get the number of dimensions
+			 */
 			boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
 			int nbDim;
 
@@ -89,18 +94,35 @@ public class FeatureLocationLSI implements IFeatureLocation {
 			else {
 				nbDim = (int) (dim * s.getRowDimension());
 			}
+
+			// We check if the matrix is not to small, and update the number of
+			// dimensions
 			nbDim = Math.min(nbDim, s.getRowDimension());
 
+			/*
+			 * Here, rand-reduce The the U and S matrix are sorted by singular
+			 * value the highest to the smallest so we just remove the last rows
+			 * and columns.
+			 */
 			Matrix sk = s.getMatrix(0, nbDim - 1, 0, nbDim - 1);
 			Matrix uk = u.getMatrix(0, u.getRowDimension() - 1, 0, nbDim - 1);
 
 			Matrix q = new Matrix(vecQ, vecQ.length);
 
+			/*
+			 * Here we define the new query vector in the new space. Formula For
+			 * the query q (column vector) : qk = Sk^-1 * Uk^t * q
+			 */
 			q = (sk.inverse().times(uk.transpose()).times(q));
 
 			for (int i = 0; i < m.getColumnDimension(); i++) {
 				Block b = featureBlocks.get(i);
+				// Here we get the document vector
 				Matrix ve = m.getMatrix(0, m.getRowDimension() - 1, i, i);
+				/*
+				 * Here we difine the document vector in the new space Formula
+				 * For a document d (columns vector) : dk = Sk^-1 * Uk^t * d
+				 */
 				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
 
 				double vecDoc[] = vector.getColumnPackedCopy();
