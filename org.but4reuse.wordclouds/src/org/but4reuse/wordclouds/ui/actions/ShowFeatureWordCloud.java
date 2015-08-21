@@ -1,10 +1,12 @@
 package org.but4reuse.wordclouds.ui.actions;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
+import org.but4reuse.utils.strings.StringUtils;
+import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,6 +34,7 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
+		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
 		feature = null;
@@ -46,23 +49,14 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 					 * getting words
 					 */
 					if (((Feature) feat).getName() != null) {
-						StringTokenizer tk = new StringTokenizer(feature.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-
-						while (tk.hasMoreTokens()) {
-							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+						for (String s : StringUtils.splitString(feature.getName()))
+							for (String w : StringUtils.splitWords(s))
 								c.addTag(w);
-							}
-						}
 					}
 					if (feature.getDescription() != null) {
-						StringTokenizer tk = new StringTokenizer(feature.getDescription(),
-								" :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-
-						while (tk.hasMoreTokens()) {
-							for (String w : tk.nextToken().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
+						for (String s : StringUtils.splitString(feature.getDescription()))
+							for (String w : StringUtils.splitWords(s))
 								c.addTag(w);
-							}
-						}
 					}
 
 					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);

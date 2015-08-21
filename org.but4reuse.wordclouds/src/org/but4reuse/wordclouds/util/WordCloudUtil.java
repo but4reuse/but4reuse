@@ -3,6 +3,8 @@ package org.but4reuse.wordclouds.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
@@ -31,6 +33,8 @@ public class WordCloudUtil {
 	public static void drawWordCloud(Composite cmp, Cloud cloud) {
 		int x = 10, y = 10;
 		int maxH = 0;
+		cmp.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
 		for (Control c : cmp.getChildren())
 			c.dispose();
 		cmp.update();
@@ -38,9 +42,12 @@ public class WordCloudUtil {
 		for (Tag t : cloud.tags()) {
 
 			Label l = new Label(cmp, SWT.NORMAL);
+			l.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
 			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC);
 			l.setFont(f);
 			l.setText(t.getName());
+			l.setToolTipText(String.format("%.2f", t.getScore()));
 			l.pack();
 
 			if (x + l.getBounds().width > cmp.getBounds().width * 0.70 - 25) {
@@ -161,14 +168,14 @@ public class WordCloudUtil {
 
 		}
 
-		if(cpt == 0)
+		if (cpt == 0)
 			return 0;
-		
-		return (double) (res) / cpt;
+
+		return (res) / cpt;
 	}
 
 	/**
-	 * It will create a word cloud using TD-IDF formula
+	 * It will create a word cloud using TF-IDF formula
 	 * 
 	 * @param list
 	 *            An ArrayList of String ArrayList, each sub list contains all
@@ -185,7 +192,8 @@ public class WordCloudUtil {
 		ArrayList<String> wordsChecked = new ArrayList<String>();
 
 		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
-		cloud_IDF.setMaxTagsToDisplay(50);
+		cloud_IDF.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
+				.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 		cloud_IDF.setMinWeight(5);
 		cloud_IDF.setMaxWeight(50);
 
@@ -197,7 +205,7 @@ public class WordCloudUtil {
 			if (countNbTimesWord(wordsChecked, w) != 0)
 				continue;
 			/*
-			 * Here the score of the word w is calculated Formula TD-IDF (
+			 * Here the score of the word w is calculated Formula TF-IDF (
 			 * https://fr.wikipedia.org/wiki/TF-IDF )
 			 */
 

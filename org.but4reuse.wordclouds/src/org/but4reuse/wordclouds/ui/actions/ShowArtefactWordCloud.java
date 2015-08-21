@@ -9,6 +9,8 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -38,6 +40,7 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
+		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 		c.setMaxWeight(50);
 		c.setMinWeight(5);
 		artefact = null;

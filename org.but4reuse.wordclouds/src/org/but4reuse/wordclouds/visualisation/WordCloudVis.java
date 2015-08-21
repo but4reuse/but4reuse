@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
+import org.but4reuse.wordclouds.util.WordCloudListener;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
@@ -19,6 +20,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
@@ -199,11 +201,12 @@ public class WordCloudVis extends ViewPart {
 			c = WordCloudVisualisation.getClouds().get(index);
 
 		for (Tag t : c.tags())
-			singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+			singleton.getList().add(t.getName() + " - " + String.format("%.2f", t.getNormScore()));
 
 		WordCloudUtil.drawWordCloud(singleton.getSComposite(), c);
 		WordCloudUtil.drawWordCloud(singleton.getSCompositeIDF(), c);
-
+		addWordCloudListeners(singleton.getSComposite(), index);
+		addWordCloudListeners(singleton.getSCompositeIDF(), index);
 	}
 
 	@Override
@@ -256,7 +259,7 @@ public class WordCloudVis extends ViewPart {
 		tbtmNewItem.setControl(sCmp);
 
 		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_1.setText("Word Cloud TD-IDF");
+		tbtmNewItem_1.setText("Word Cloud TF-IDF");
 
 		ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem_1.setControl(sCmpIDF);
@@ -326,6 +329,7 @@ public class WordCloudVis extends ViewPart {
 				win.update();
 
 				WordCloudUtil.drawWordCloud(comp, c);
+				addWordCloudListeners(comp, i);
 			}
 
 			@Override
@@ -487,14 +491,16 @@ public class WordCloudVis extends ViewPart {
 				if (ind == 0) {
 					c = WordCloudVisualisation.getClouds().get(i);
 					WordCloudUtil.drawWordCloud(cmp, c);
+					addWordCloudListeners(cmp, i);
 				} else {
 					c = WordCloudVisualisation.getCloudsIDF().get(i);
 					WordCloudUtil.drawWordCloud(cmpIDF, c);
+					addWordCloudListeners(cmpIDF, i);
 				}
 
 				for (Tag t : c.tags())
 					WordCloudVis.getSingleton().getList()
-							.add(t.getName() + " - " + String.format("%.2f", t.getScore()));
+							.add(t.getName() + " - " + String.format("%.2f", t.getNormScore()));
 
 			}
 
@@ -519,4 +525,15 @@ public class WordCloudVis extends ViewPart {
 
 	}
 
+	/**
+	 * Add Word Cloud listeners to change names when clicking on one word
+	 * 
+	 * @param composite
+	 *            containing the labels
+	 */
+	static private void addWordCloudListeners(Composite cloudComposite, int blockIndex) {
+		for (final Control c : cloudComposite.getChildren()) {
+			c.addMouseListener(new WordCloudListener(blockIndex));
+		}
+	}
 }
