@@ -1,11 +1,11 @@
 package org.but4reuse.adapters.nltext;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.nlp.similarity.WS4JComparer;
+import org.but4reuse.utils.strings.StringUtils;
 
 /**
  * SentenceElement
@@ -44,10 +44,9 @@ public class SentenceElement extends AbstractElement {
 		/*
 		 * We split the sentence with special char like : ' ' ',' '|' ...
 		 */
-		StringTokenizer tk = new StringTokenizer(sentence," :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
 		ArrayList<String> words = new ArrayList<String>();
-		while (tk.hasMoreTokens())
-			words.add(tk.nextToken());
+		for (String s : StringUtils.splitString(sentence))
+			words.add(s);
 		return words;
 	}
 

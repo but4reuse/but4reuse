@@ -34,28 +34,29 @@ public class FeatureInfosExtractor {
 			// Get the id
 			String id = doc.getDocumentElement().getAttribute("id");
 			actualFeature.setId(id);
-			
+
 			// Get the name
 			String name = doc.getDocumentElement().getAttribute("label");
-			if(name.contains("%")){
+			if (name.contains("%")) {
 				String key = PropertiesFileUtils.getKey(name);
-				name = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),  key);
+				name = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"), key);
 			}
 			actualFeature.setName(name);
-			
+
 			// Get the description
 			String description = doc.getDocumentElement().getElementsByTagName("description").item(0).getTextContent();
-			if(description.startsWith("\n")){
+			if (description.startsWith("\n")) {
 				description = description.replaceFirst("\n", "");
 			}
-			if(description.contains("%")){
-				description = description.replaceAll("\\s+","");
+			if (description.contains("%")) {
+				description = description.replaceAll("\\s+", "");
 				String key = PropertiesFileUtils.getKey(description);
-				description = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),  key);
+				description = PropertiesFileUtils
+						.getValue(new File(xmlFile.getParentFile(), "feature.properties"), key);
 			}
 			actualFeature.setDescription(description);
-			if(description.contains("%")){
-				
+			if (description.contains("%")) {
+
 			}
 
 			// Get the list of plugins of the feature

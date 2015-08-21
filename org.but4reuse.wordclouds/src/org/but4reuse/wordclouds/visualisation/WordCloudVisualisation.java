@@ -11,6 +11,8 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
+import org.but4reuse.wordclouds.activator.Activator;
+import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
@@ -55,7 +57,8 @@ public class WordCloudVisualisation implements IVisualisation {
 			cloud = new Cloud(Case.CAPITALIZATION);
 			cloud.setMaxWeight(50);
 			cloud.setMinWeight(5);
-			cloud.setMaxTagsToDisplay(50);
+			cloud.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
+					.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
 			ArrayList<String> list = new ArrayList<String>();
 			/*
 			 * For each block we get all elements owned We use the method
