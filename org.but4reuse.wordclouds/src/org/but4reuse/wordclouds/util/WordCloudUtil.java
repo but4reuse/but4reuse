@@ -171,7 +171,7 @@ public class WordCloudUtil {
 	}
 
 	/**
-	 * It will create a word cloud using TD-IDF formula
+	 * It will create a word cloud using TF-IDF formula
 	 * 
 	 * @param list
 	 *            An ArrayList of String ArrayList, each sub list contains all
@@ -201,7 +201,7 @@ public class WordCloudUtil {
 			if (countNbTimesWord(wordsChecked, w) != 0)
 				continue;
 			/*
-			 * Here the score of the word w is calculated Formula TD-IDF (
+			 * Here the score of the word w is calculated Formula TF-IDF (
 			 * https://fr.wikipedia.org/wiki/TF-IDF )
 			 */
 

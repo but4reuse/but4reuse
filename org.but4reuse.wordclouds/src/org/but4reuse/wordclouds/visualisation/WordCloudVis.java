@@ -259,7 +259,7 @@ public class WordCloudVis extends ViewPart {
 		tbtmNewItem.setControl(sCmp);
 
 		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
-		tbtmNewItem_1.setText("Word Cloud TD-IDF");
+		tbtmNewItem_1.setText("Word Cloud TF-IDF");
 
 		ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem_1.setControl(sCmpIDF);

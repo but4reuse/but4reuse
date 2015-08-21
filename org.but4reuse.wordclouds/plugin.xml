@@ -33,7 +33,7 @@
                class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloudIDF"
                icon="icons/cloud.png"
                id="org.but4reuse.wordclouds.action3"
-               label="Show TD-IDF Word Cloud">
+               label="Show TF-IDF Word Cloud">
          </action>
       </objectContribution>
       <objectContribution
@@ -44,7 +44,7 @@
                class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloudIDF"
                icon="icons/cloud.png"
                id="org.but4reuse.wordclouds.action4"
-               label="Show TD-IDF Word CLoud">
+               label="Show TF-IDF Word CLoud">
          </action>
       </objectContribution>
       <objectContribution
