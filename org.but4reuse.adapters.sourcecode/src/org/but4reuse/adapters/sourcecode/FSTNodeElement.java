@@ -141,6 +141,7 @@ public abstract class FSTNodeElement extends AbstractElement {
 		if (sub.contains("("))
 			sub = sub.substring(0, sub.indexOf("("));
 
+		
 		for (int i = 0; i < getWeight(); i++)
 			words.add(new String(sub));
 
@@ -150,11 +151,11 @@ public abstract class FSTNodeElement extends AbstractElement {
 	private int getWeight() {
 
 		if (type.compareToIgnoreCase("MethodDecl") == 0 || type.compareToIgnoreCase("Func") == 0)
-			return 10;
+			return 1;
 		else if (type.compareToIgnoreCase("ClassDeclaration") == 0)
-			return 25;
+			return 3;
 		else if (type.compareToIgnoreCase("ConstructorDecl") == 0)
-			return 15;
+			return 2;
 		else
 			return 0;
 	}
