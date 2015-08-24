@@ -37,20 +37,17 @@ public class JsonAdapter implements IAdapter {
 		return false;
 	}
 
-	public Paths getPathsToIgnore() {
-		return PathsTools.getPathsToIgnore();
-	}
-
-	public Paths getPathsUnsplittable() {
-		return PathsTools.getPathsUnsplittable();
-	}
-
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
-		int id_file = AdapterTools.getUniqueId();
+		Paths pathsToIgnore = PathsTools.getPathsToIgnore();
+		Paths pathsUnsplittable = PathsTools.getPathsUnsplittable();
 
-		Paths pathsToIgnore = this.getPathsToIgnore();
-		Paths pathsUnsplittable = this.getPathsUnsplittable();
+		return adapt(uri, monitor, pathsToIgnore, pathsUnsplittable);
+	}
+
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor,
+			Paths pathsToIgnore, Paths pathsUnsplittable) {
+		int id_file = AdapterTools.getUniqueId();
 
 		List<IElement> atomicJsonElementList = new ArrayList<IElement>();
 		List<JsonElement> jsonElementList = new ArrayList<JsonElement>();
@@ -199,18 +196,21 @@ public class JsonAdapter implements IAdapter {
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
 
-			JsonConstruct construct = new JsonConstruct();
-			JsonObject root = new JsonObject();
-
-			for (IElement elt : elements) {
-				construct.construct(root, elt);
-			}
+			JsonObject root = construct(elements, monitor);
 
 			FileUtils.appendToFile(file,
 					root.toString(WriterConfig.PRETTY_PRINT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public JsonObject construct(List<IElement> elements,
+			IProgressMonitor monitor) {
+		JsonConstruct construct = new JsonConstruct();
+		for (IElement elt : elements)
+			construct.construct(elt);
+		return construct.root;
 	}
 
 }

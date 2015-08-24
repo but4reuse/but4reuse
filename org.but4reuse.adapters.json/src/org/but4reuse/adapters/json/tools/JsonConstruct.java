@@ -19,22 +19,23 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public class JsonConstruct {
+	public JsonObject root;
 	private Map<Integer, JsonObject> objectMap;
 	private Map<Integer, JsonArray> arrayMap;
 	private Map<Integer, List<Integer>> arrayIndexes;
 
 	public JsonConstruct() {
+		this.root = new JsonObject();
 		this.objectMap = new HashMap<Integer, JsonObject>();
 		this.arrayMap = new HashMap<Integer, JsonArray>();
 		this.arrayIndexes = new HashMap<Integer, List<Integer>>();
 	}
 
-	public JsonValue construct(JsonObject root, IElement element) {
-		return construct(root, element, null);
+	public JsonValue construct(IElement element) {
+		return construct(element, null);
 	}
 
-	private JsonValue construct(JsonObject root, IElement element,
-			JsonValue value) {
+	private JsonValue construct(IElement element, JsonValue value) {
 		if (element instanceof ArrayElement) {
 			ArrayElement arrayElement = (ArrayElement) element;
 			int id = arrayElement.id;
@@ -42,20 +43,19 @@ public class JsonConstruct {
 			if (this.arrayMap.get(id) == null) {
 				JsonArray jsonArray = new JsonArray();
 				this.arrayMap.put(id, jsonArray);
-				this.construct(root, arrayElement.parent, jsonArray);
+				this.construct(arrayElement.parent, jsonArray);
 			}
 
 			return this.arrayMap.get(id);
 		}
 		if (element instanceof IgnoredElement) {
 			IgnoredElement ignoredElement = (IgnoredElement) element;
-			return construct(root, ignoredElement.parent,
-					ignoredElement.jsonValue);
+			return construct(ignoredElement.parent, ignoredElement.jsonValue);
 		}
 		if (element instanceof IndexArrayElement) {
 			IndexArrayElement indexArrayElement = (IndexArrayElement) element;
-			JsonArray jsonArray = construct(root, indexArrayElement.parent,
-					null).asArray();
+			JsonArray jsonArray = construct(indexArrayElement.parent, null)
+					.asArray();
 
 			List<Integer> idsAhead = new ArrayList<Integer>();
 			for (IndexArrayElement currentIndex : indexArrayElement.indexesAhead)
@@ -88,10 +88,9 @@ public class JsonConstruct {
 			JsonObject jsonObject;
 
 			if (keyElement.parent == null)
-				jsonObject = root;
+				jsonObject = this.root;
 			else
-				jsonObject = construct(root, keyElement.parent, null)
-						.asObject();
+				jsonObject = construct(keyElement.parent, null).asObject();
 
 			JsonValue currentValue = jsonObject.get(keyElement.name);
 
@@ -111,20 +110,19 @@ public class JsonConstruct {
 			if (this.objectMap.get(id) == null) {
 				JsonObject jsonObject = new JsonObject();
 				this.objectMap.put(id, jsonObject);
-				this.construct(root, objectElement.parent, jsonObject);
+				this.construct(objectElement.parent, jsonObject);
 			}
 
 			return this.objectMap.get(id);
 		}
 		if (element instanceof UnsplittableElement) {
 			UnsplittableElement unsplittableElement = (UnsplittableElement) element;
-			return construct(root, unsplittableElement.parent,
+			return construct(unsplittableElement.parent,
 					unsplittableElement.content);
 		}
 		if (element instanceof ValueElement) {
 			ValueElement valueElement = (ValueElement) element;
-			return this.construct(root, valueElement.parent,
-					valueElement.jsonValue);
+			return this.construct(valueElement.parent, valueElement.jsonValue);
 		}
 		return value;
 	}
