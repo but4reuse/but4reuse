@@ -12,3 +12,6 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.but4reuse.utils.files
 Bundle-ClassPath: lib/minimal-json-0.9.3.jar,
  .
+Export-Package: com.eclipsesource.json,
+ org.but4reuse.adapters.json,
+ org.but4reuse.adapters.json.tools

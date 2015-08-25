@@ -1,52 +1,50 @@
 package org.but4reuse.adapters.json;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.json.tools.AdapterTools;
 
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
+public class ArrayElement extends AbstractElement {
+	public AbstractElement parent;
+	public int id;
+	public List<ArrayElement> similarArrays;
 
-public class ArrayElement extends AbstractElement implements IJsonElement {
-	public IJsonValuedElement parent;
-
-	public ArrayElement(IJsonValuedElement parent) {
+	public ArrayElement(AbstractElement parent) {
 		this.parent = parent;
+		this.id = AdapterTools.getUniqueId();
+		this.similarArrays = new ArrayList<ArrayElement>();
+		this.similarArrays.add(this);
 	}
 
 	@Override
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ArrayElement) {
-			ArrayElement obj = (ArrayElement) anotherElement;
+			ArrayElement arrayElement = (ArrayElement) anotherElement;
 
-			if (this.parent.similarity(obj.parent) == 1)
+			if (this.id == arrayElement.id)
 				return 1;
+
+			if (this.parent.similarity(arrayElement.parent) == 1) {
+				List<ArrayElement> similarArrays = new ArrayList<ArrayElement>();
+				similarArrays.addAll(this.similarArrays);
+				similarArrays.addAll(arrayElement.similarArrays);
+
+				for (ArrayElement currentArray : similarArrays) {
+					currentArray.id = this.id;
+					currentArray.similarArrays = similarArrays;
+				}
+
+				return 1;
+			}
 		}
 		return 0;
 	}
 
 	@Override
 	public String getText() {
-		return this.parent.getText("[]");
-	}
-
-	@Override
-	public String getText(String childrenText) {
-		return this.parent.getText("[" + childrenText + "]");
-	}
-
-	@Override
-	public int getMaxDependencies(String dependencyID) {
-		return Integer.MAX_VALUE;
-	}
-
-	@Override
-	public int getMinDependencies(String dependencyID) {
-		return Integer.MIN_VALUE;
-	}
-
-	@Override
-	public JsonValue construct(JsonObject root) {
-		return this.parent.construct(root, new JsonArray());
+		return parent.getText() + "_[]";
 	}
 }
