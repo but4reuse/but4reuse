@@ -117,7 +117,7 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 
 		while (tk.hasMoreTokens()) {
 			String s = tk.nextToken();
-			for (String w : StringUtils.splitWords(s)) {
+			for (String w : StringUtils.splitCamelCase(s)) {
 				words.add(w);
 			}
 		}

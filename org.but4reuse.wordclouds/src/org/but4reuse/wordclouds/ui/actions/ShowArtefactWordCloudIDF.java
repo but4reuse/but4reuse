@@ -10,8 +10,6 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
-import org.but4reuse.wordclouds.activator.Activator;
-import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -41,9 +39,6 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-		c.setMaxWeight(50);
-		c.setMinWeight(5);
 
 		ArrayList<ArrayList<String>> list = null;
 
@@ -65,7 +60,8 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefact, defaultAdapters);
 
 					if (!adap.isEmpty()) {
-						// Launch Progress dialog
+
+						List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
 
 						c.clear();
 						if (list == null) {
@@ -78,20 +74,15 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 									List<IElement> elements = AdaptersHelper.getElements(a, adapter);
 									for (IElement element : elements) {
 										AbstractElement ab = (AbstractElement) element;
-										for (String s : ab.getWords())
-											l.add(s);
+										for (String s : ab.getWords()) {
+											// check if it is a user defined stop word
+											if (!stopWords.contains(s)) {
+												l.add(s);
+											}
+										}
 									}
 								}
 								list.add(l);
-							}
-						}
-
-						for (IAdapter adapter : adap) {
-							List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
-							for (IElement element : elements) {
-								AbstractElement ab = (AbstractElement) element;
-								for (String s : ab.getWords())
-									c.addTag(s);
 							}
 						}
 

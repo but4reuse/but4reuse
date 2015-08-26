@@ -45,7 +45,7 @@ public class SentenceElement extends AbstractElement {
 		 * We split the sentence with special char like : ' ' ',' '|' ...
 		 */
 		ArrayList<String> words = new ArrayList<String>();
-		for (String s : StringUtils.splitString(sentence))
+		for (String s : StringUtils.tokenizeString(sentence))
 			words.add(s);
 		return words;
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
+import org.but4reuse.utils.strings.StringUtils;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -28,6 +29,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	private Map<String, List<IDependencyObject>> dependants = new LinkedHashMap<String, List<IDependencyObject>>();
 	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
 	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
+	private Map<String, Object> data = new HashMap<String, Object>();
 
 	@Override
 	/**
@@ -67,6 +69,15 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 			return Integer.MIN_VALUE;
 		}
 		return minDependencies.get(dependencyID);
+	}
+
+	@Override
+	public Map<String, Object> getData() {
+		return data;
+	}
+
+	public void addData(String dataID, Object dataObject){
+		data.put(dataID, dataObject);
 	}
 
 	public void setMaximumDependencies(String dependencyID, int number) {
@@ -191,12 +202,12 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		return getText();
 	}
 
+	/**
+	 * Default implementation of get words
+	 * @return tokenize and split CamelCase
+	 */
 	public List<String> getWords() {
-		List<String> l = new ArrayList<String>();
-		for (String w : getText().split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
-			l.add(w);
-
-		return l;
+		return StringUtils.tokenizeAndCamelCase(getText());
 	}
 
 }

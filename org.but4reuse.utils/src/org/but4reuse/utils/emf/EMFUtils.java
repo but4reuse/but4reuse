@@ -46,6 +46,9 @@ public class EMFUtils {
 					ComposedAdapterFactory.Descriptor.Registry.INSTANCE), new BasicCommandStack());
 			Resource resource = editingDomain.createResource(uri.toString());
 			resource.load(null);
+			if (resource.getContents().isEmpty()) {
+				return null;
+			}
 			return resource.getContents().get(0);
 		} catch (IOException e) {
 			return null;

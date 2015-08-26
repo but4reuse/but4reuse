@@ -56,7 +56,8 @@ public class ShowArtefactModelWordCloud implements IObjectActionDelegate {
 					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefactM, defaultAdapters);
 
 					if (!adap.isEmpty()) {
-						// Launch Progress dialog
+
+						List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
 
 						c.clear();
 						for (IAdapter adapter : adap) {
@@ -64,8 +65,13 @@ public class ShowArtefactModelWordCloud implements IObjectActionDelegate {
 								List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
 								for (IElement element : elements) {
 									AbstractElement ab = (AbstractElement) element;
-									for (String s : ab.getWords())
-										c.addTag(s);
+									for (String s : ab.getWords()) {
+										// check if it is a user defined stop
+										// word
+										if (!stopWords.contains(s)) {
+											c.addTag(s);
+										}
+									}
 								}
 
 							}

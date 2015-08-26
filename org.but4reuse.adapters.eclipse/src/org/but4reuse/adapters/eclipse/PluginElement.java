@@ -138,10 +138,8 @@ public class PluginElement extends FileElement {
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
 		if (name != null) {
-			{
-				for (String s : StringUtils.splitString(name))
-					for (String w : StringUtils.splitWords(s))
-						words.add(w);
+			for (String s : StringUtils.tokenizeAndCamelCase(name)) {
+				words.add(s);
 			}
 		}
 		UselessWordsRemover.removeUselessWords(words);

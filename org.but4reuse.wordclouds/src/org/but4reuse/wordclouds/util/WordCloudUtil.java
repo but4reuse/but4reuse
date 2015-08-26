@@ -1,6 +1,7 @@
 package org.but4reuse.wordclouds.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.but4reuse.wordclouds.activator.Activator;
@@ -263,6 +264,19 @@ public class WordCloudUtil {
 				cpt++;
 		}
 		return cpt;
+	}
+	
+	/**
+	 * Get stop words defined in preferences
+	 * @return a non list of stop words
+	 */
+	public static List<String> getUserDefinedStopWords(){
+		List<String> stopWords = new ArrayList<String>();
+		String stopWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.STOP_WORDS);
+		if(stopWordsString == null || stopWordsString.isEmpty()){
+			return stopWords;
+		}
+		return Arrays.asList(stopWordsString.split(","));
 	}
 
 }

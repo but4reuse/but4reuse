@@ -45,6 +45,20 @@ public interface IElement extends IDependencyObject {
 	 */
 	public Map<String, List<IDependencyObject>> getDependencies();
 
+	/**
+	 * The inverse of dependencies
+	 * 
+	 * @return A Map of relationIDs as keys and the list of elements or objects
+	 *         that depends on the element.
+	 */
 	public Map<String, List<IDependencyObject>> getDependants();
 
+	/**
+	 * This is to get extra information that the element may provide for some
+	 * specific purpose. This way the adapters can provide extra information to
+	 * be used, for example, inside a visualisation
+	 * 
+	 * @return a map of string keys and its associated object
+	 */
+	public Map<String, Object> getData();
 }

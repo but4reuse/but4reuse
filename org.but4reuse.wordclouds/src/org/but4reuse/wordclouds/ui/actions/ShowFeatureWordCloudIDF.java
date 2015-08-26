@@ -7,8 +7,6 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.strings.StringUtils;
-import org.but4reuse.wordclouds.activator.Activator;
-import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -36,9 +34,6 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 
 	@Override
 	public void run(IAction action) {
-		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-		c.setMaxWeight(50);
-		c.setMinWeight(5);
 		feature = null;
 
 		ArrayList<ArrayList<String>> list = null;
@@ -49,6 +44,8 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
 
+					List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
+
 					if (list == null) {
 						list = new ArrayList<ArrayList<String>>();
 						fList = (FeatureList) feature.eContainer();
@@ -57,37 +54,28 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 
 							ArrayList<String> l = new ArrayList<String>();
 							if (f.getName() != null) {
-								for (String s : StringUtils.splitString(f.getName()))
-									for (String w : StringUtils.splitWords(s))
-										l.add(w);
+								for (String s : StringUtils.tokenizeAndCamelCase(f.getName())) {
+									if (!stopWords.contains(s)) {
+										l.add(s);
+									}
+								}
 							}
 							if (f.getDescription() != null) {
-								for (String s : StringUtils.splitString(f.getDescription()))
-									for (String w : StringUtils.splitWords(s))
-										l.add(w);
+								for (String s : StringUtils.tokenizeAndCamelCase(f.getDescription())) {
+									if (!stopWords.contains(s)) {
+										l.add(s);
+									}
+								}
 							}
 							list.add(l);
 						}
 					}
+
 					c.clear();
-					/*
-					 * Here we split the feature name and description for
-					 * getting words
-					 */
-					if (((Feature) feat).getName() != null) {
-						for (String s : StringUtils.splitString(feature.getName()))
-							for (String w : StringUtils.splitWords(s))
-								c.addTag(w);
-					}
-					if (feature.getDescription() != null) {
-						for (String s : StringUtils.splitString(feature.getDescription()))
-							for (String w : StringUtils.splitWords(s))
-								c.addTag(w);
-					}
 
 					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
 					win.setSize(widthWin, heightWin);
-					win.setText("Word Cloud for feature" + feature.getName());
+					win.setText("Word Cloud for feature " + feature.getName());
 
 					Composite comp = new Composite(win, SWT.NORMAL);
 					comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);

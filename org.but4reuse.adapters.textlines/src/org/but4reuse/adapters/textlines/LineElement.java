@@ -1,14 +1,12 @@
 package org.but4reuse.adapters.textlines;
 
 import java.net.URI;
-import java.util.ArrayList;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.utils.nlp.similarity.LevenshteinDistance;
-import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -79,14 +77,4 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 		this.lineNumber = lineNumber;
 	}
 
-	@Override
-	public ArrayList<String> getWords() {
-		ArrayList<String> words = new ArrayList<String>();
-
-		for (String s : StringUtils.splitString(line))
-			for (String w : StringUtils.splitWords(s))
-				words.add(w);
-
-		return words;
-	}
 }

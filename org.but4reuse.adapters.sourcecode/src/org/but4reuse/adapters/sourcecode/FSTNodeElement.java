@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.sourcecode.adapter.LanguageManager;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.strings.StringUtils;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -142,8 +144,10 @@ public abstract class FSTNodeElement extends AbstractElement {
 			sub = sub.substring(0, sub.indexOf("("));
 
 		
-		for (int i = 0; i < getWeight(); i++)
-			words.add(new String(sub));
+		for (int i = 0; i < getWeight(); i++){
+			List<String> a = StringUtils.splitCamelCase(sub);
+			words.addAll(a);
+		}
 
 		return words;
 	}

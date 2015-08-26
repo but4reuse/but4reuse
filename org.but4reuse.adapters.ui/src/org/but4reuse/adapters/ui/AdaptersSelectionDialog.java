@@ -103,6 +103,7 @@ public class AdaptersSelectionDialog {
 							Display.getCurrent().getActiveShell(),
 							"Adapters selection",
 							"It seems that no adapter is available for your artefact type or some problems occurred. Please, check the Problems view.");
+			correctAdapters = new ArrayList<IAdapter>();
 		}
 
 		// Prepare Adapters selection dialog

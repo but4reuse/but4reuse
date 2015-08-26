@@ -43,25 +43,31 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
 
+					List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
+
 					c.clear();
 					/*
 					 * Here we split the feature name and description for
 					 * getting words
 					 */
 					if (((Feature) feat).getName() != null) {
-						for (String s : StringUtils.splitString(feature.getName()))
-							for (String w : StringUtils.splitWords(s))
-								c.addTag(w);
+						for (String s : StringUtils.tokenizeAndCamelCase(feature.getName())) {
+							if (!stopWords.contains(s)) {
+								c.addTag(s);
+							}
+						}
 					}
 					if (feature.getDescription() != null) {
-						for (String s : StringUtils.splitString(feature.getDescription()))
-							for (String w : StringUtils.splitWords(s))
-								c.addTag(w);
+						for (String s : StringUtils.tokenizeAndCamelCase(feature.getDescription())) {
+							if (!stopWords.contains(s)) {
+								c.addTag(s);
+							}
+						}
 					}
 
 					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
 					win.setSize(widthWin, heightWin);
-					win.setText("Word Cloud for feature" + feature.getName());
+					win.setText("Word Cloud for feature " + feature.getName());
 
 					Composite comp = new Composite(win, SWT.NORMAL);
 					comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);

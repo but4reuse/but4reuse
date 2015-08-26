@@ -58,8 +58,7 @@ public class FileElement extends AbstractElement {
 
 	@Override
 	public List<String> getWords() {
-		List<String> words = new ArrayList<String>();
-
-		return words;
+		// always empty list
+		return new ArrayList<String>();
 	}
 }
