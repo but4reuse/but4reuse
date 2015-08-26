@@ -20,13 +20,10 @@ public class TermBasedConstraintsDiscoveryPreferences extends FieldEditorPrefere
 
 	@Override
 	public void init(IWorkbench workbench) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void createFieldEditors() {
-		// TODO Auto-generated method stub
 		BooleanFieldEditor bfeR = new BooleanFieldEditor(REQUIRES, "Requires", getFieldEditorParent());
 		addField(bfeR);
 		BooleanFieldEditor bfeE = new BooleanFieldEditor(EXCLUDES, "Mutual exclusion", getFieldEditorParent());

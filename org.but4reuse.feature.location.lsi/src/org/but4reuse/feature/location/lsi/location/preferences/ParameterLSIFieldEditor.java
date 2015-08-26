@@ -58,16 +58,12 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				isFixed = false;
 				update();
-
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 
@@ -78,15 +74,12 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
 				isFixed = true;
 				update();
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-
 			}
 		});
 
@@ -168,7 +161,6 @@ public class ParameterLSIFieldEditor extends FieldEditor {
 
 	@Override
 	public int getNumberOfControls() {
-		// TODO Auto-generated method stub
 		return 4;
 	}
 
