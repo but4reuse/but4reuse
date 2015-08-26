@@ -8,11 +8,11 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 
 public class ObjectElement extends AbstractElement {
-	public AbstractElement parent;
+	public IElement parent;
 	public int id;
 	public List<ObjectElement> similarObjects;
 
-	public ObjectElement(AbstractElement parent) {
+	public ObjectElement(IElement parent) {
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
 		this.similarObjects = new ArrayList<ObjectElement>();
@@ -24,10 +24,13 @@ public class ObjectElement extends AbstractElement {
 		if (anotherElement instanceof ObjectElement) {
 			ObjectElement objectElement = (ObjectElement) anotherElement;
 
-			if (this.id == objectElement.id)
+			if (this.id == objectElement.id) {
 				return 1;
+			}
 
-			if (this.parent.similarity(objectElement.parent) == 1) {
+			// both parents are the root, or check the parents similarity
+			if ((parent == null && objectElement.parent == null)
+					|| (parent != null && parent.similarity(objectElement.parent) == 1)) {
 				List<ObjectElement> similarObjects = new ArrayList<ObjectElement>();
 				similarObjects.addAll(this.similarObjects);
 				similarObjects.addAll(objectElement.similarObjects);
@@ -46,6 +49,10 @@ public class ObjectElement extends AbstractElement {
 
 	@Override
 	public String getText() {
+		// return empty string for the root
+		if (parent == null) {
+			return "";
+		}
 		return parent.getText() + "_{}";
 	}
 }

@@ -1,16 +1,16 @@
 package org.but4reuse.adapters.json.tools;
 
-import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.IElement;
+
 import com.eclipsesource.json.JsonValue;
 
 public class JsonElement {
 	public Paths paths;
 	public JsonValue jsonValue;
-	public AbstractElement parent;
-	public AbstractElement dependency;
+	public IElement parent;
+	public IElement dependency;
 
-	public JsonElement(Paths paths, JsonValue jsonValue,
-			AbstractElement parent, AbstractElement dependency) {
+	public JsonElement(Paths paths, JsonValue jsonValue, IElement parent, IElement dependency) {
 		this.paths = paths;
 		this.jsonValue = jsonValue;
 		this.parent = parent;

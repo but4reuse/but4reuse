@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 import org.but4reuse.adapters.json.tools.JsonConstruct;
 import org.but4reuse.adapters.json.tools.JsonElement;
@@ -30,8 +29,7 @@ public class JsonAdapter implements IAdapter {
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		File file = FileUtils.getFile(uri);
-		if (file != null && file.exists() && !file.isDirectory()
-				&& FileUtils.isExtension(file, "json")) {
+		if (file != null && file.exists() && !file.isDirectory() && FileUtils.isExtension(file, "json")) {
 			return true;
 		}
 		return false;
@@ -45,68 +43,85 @@ public class JsonAdapter implements IAdapter {
 		return adapt(uri, monitor, pathsToIgnore, pathsUnsplittable);
 	}
 
-	public List<IElement> adapt(URI uri, IProgressMonitor monitor,
-			Paths pathsToIgnore, Paths pathsUnsplittable) {
+	/**
+	 * This is intended to be overriden in adapters that specialize the json
+	 * adapter by providing a predefined set of paths to ignore etc.
+	 * 
+	 * @param uri
+	 * @param monitor
+	 * @param pathsToIgnore
+	 * @param pathsUnsplittable
+	 * @return the list of elements
+	 */
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor, Paths pathsToIgnore, Paths pathsUnsplittable) {
 		int id_file = AdapterTools.getUniqueId();
 
+		// the list that will be returned
 		List<IElement> atomicJsonElementList = new ArrayList<IElement>();
-		List<JsonElement> jsonElementList = new ArrayList<JsonElement>();
+
+		// this is a queue to iteratively feed the atomic json element list
+		List<JsonElement> jsonElementQueue = new ArrayList<JsonElement>();
 
 		try {
+			// Load json file
 			File file = FileUtils.getFile(uri);
 			FileInputStream fstream = new FileInputStream(file);
 			DataInputStream in = new DataInputStream(fstream);
 			InputStreamReader isr = new InputStreamReader(in);
 			BufferedReader br = new BufferedReader(isr);
-
 			JsonObject root = JsonObject.readFrom(br);
+
+			// Add root
+			ObjectElement rootElement = new ObjectElement(null);
+			atomicJsonElementList.add(rootElement);
+
+			// Initialize the queue with the root's children
 			for (String name : root.names()) {
-				KeyElement keyElement = new KeyElement(name, null);
+				KeyElement keyElement = new KeyElement(name, rootElement);
+				keyElement.addDependency(rootElement);
 				atomicJsonElementList.add(0, keyElement);
-				jsonElementList.add(new JsonElement(new Paths(name), root
-						.get(name), keyElement, keyElement));
+				jsonElementQueue.add(new JsonElement(new Paths(name), root.get(name), keyElement, keyElement));
 			}
 
-			while (jsonElementList.size() > 0) {
-				JsonElement jsonElement = jsonElementList.remove(0);
+			// while the queue is empty
+			while (!jsonElementQueue.isEmpty()) {
+				JsonElement jsonElement = jsonElementQueue.remove(0);
 				Paths paths = jsonElement.paths;
 				JsonValue jsonValue = jsonElement.jsonValue;
-				AbstractElement parent = jsonElement.parent;
-				AbstractElement dependency = jsonElement.dependency;
+				IElement parent = jsonElement.parent;
+				IElement dependency = jsonElement.dependency;
 
+				// paths to ignore
 				if (paths.matches(pathsToIgnore)) {
-					IgnoredElement ignoredElement = new IgnoredElement(
-							jsonValue, parent);
+					IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
 					ignoredElement.addDependency(dependency);
 					atomicJsonElementList.add(0, ignoredElement);
 					continue;
 				}
+
+				// paths unsplittable
 				if (paths.matches(pathsUnsplittable)) {
-					JsonValue compare = PathsTools.removePaths(jsonValue,
-							paths, pathsToIgnore);
-					UnsplittableElement unsplittableElement = new UnsplittableElement(
-							jsonValue, compare, parent);
+					JsonValue compare = PathsTools.removePaths(jsonValue, paths, pathsToIgnore);
+					UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
 					unsplittableElement.addDependency(dependency);
 					atomicJsonElementList.add(0, unsplittableElement);
 					continue;
 				}
 
+				// Object
 				if (jsonValue.isObject()) {
 					Paths currentPaths = new Paths(paths);
 					currentPaths.extend("{}");
 
 					if (currentPaths.matches(pathsToIgnore)) {
-						IgnoredElement ignoredElement = new IgnoredElement(
-								jsonValue, parent);
+						IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
 						ignoredElement.addDependency(dependency);
 						atomicJsonElementList.add(0, ignoredElement);
 						continue;
 					}
 					if (currentPaths.matches(pathsUnsplittable)) {
-						JsonValue compare = PathsTools.removePaths(jsonValue,
-								currentPaths, pathsToIgnore);
-						UnsplittableElement unsplittableElement = new UnsplittableElement(
-								jsonValue, compare, parent);
+						JsonValue compare = PathsTools.removePaths(jsonValue, currentPaths, pathsToIgnore);
+						UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
 						unsplittableElement.addDependency(dependency);
 						atomicJsonElementList.add(0, unsplittableElement);
 						continue;
@@ -121,31 +136,28 @@ public class JsonAdapter implements IAdapter {
 						currentPaths = new Paths(paths);
 						currentPaths.extend(name);
 
-						KeyElement keyElement = new KeyElement(name,
-								objectElement);
+						KeyElement keyElement = new KeyElement(name, objectElement);
 						keyElement.addDependency(objectElement);
 						atomicJsonElementList.add(0, keyElement);
 
-						jsonElementList.add(new JsonElement(currentPaths,
-								jsonObject.get(name), keyElement, keyElement));
+						jsonElementQueue
+								.add(new JsonElement(currentPaths, jsonObject.get(name), keyElement, keyElement));
 					}
 
+					// Array
 				} else if (jsonValue.isArray()) {
 					Paths currentPaths = new Paths(paths);
 					currentPaths.extend("[]");
 
 					if (currentPaths.matches(pathsToIgnore)) {
-						IgnoredElement ignoredElement = new IgnoredElement(
-								jsonValue, parent);
+						IgnoredElement ignoredElement = new IgnoredElement(jsonValue, parent);
 						ignoredElement.addDependency(dependency);
 						atomicJsonElementList.add(0, ignoredElement);
 						continue;
 					}
 					if (currentPaths.matches(pathsUnsplittable)) {
-						JsonValue compare = PathsTools.removePaths(jsonValue,
-								currentPaths, pathsToIgnore);
-						UnsplittableElement unsplittableElement = new UnsplittableElement(
-								jsonValue, compare, parent);
+						JsonValue compare = PathsTools.removePaths(jsonValue, currentPaths, pathsToIgnore);
+						UnsplittableElement unsplittableElement = new UnsplittableElement(jsonValue, compare, parent);
 						unsplittableElement.addDependency(dependency);
 						atomicJsonElementList.add(0, unsplittableElement);
 						continue;
@@ -162,17 +174,16 @@ public class JsonAdapter implements IAdapter {
 						currentPaths = new Paths(paths);
 						currentPaths.extend("[]", "[" + index + "]");
 
-						IndexArrayElement indexArrayElement = new IndexArrayElement(
-								id_file, arrayElement, indexesAhead);
-						jsonElementList.add(new JsonElement(currentPaths,
-								jsonArray.get(index), indexArrayElement,
+						IndexArrayElement indexArrayElement = new IndexArrayElement(id_file, arrayElement, indexesAhead);
+						jsonElementQueue.add(new JsonElement(currentPaths, jsonArray.get(index), indexArrayElement,
 								arrayElement));
 
 						indexesAhead.add(indexArrayElement);
 					}
+
+					// Value
 				} else {
-					ValueElement valueElement = new ValueElement(parent,
-							jsonValue);
+					ValueElement valueElement = new ValueElement(parent, jsonValue);
 					valueElement.addDependency(dependency);
 					atomicJsonElementList.add(0, valueElement);
 				}
@@ -186,9 +197,9 @@ public class JsonAdapter implements IAdapter {
 	}
 
 	@Override
-	public void construct(URI uri, List<IElement> elements,
-			IProgressMonitor monitor) {
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		try {
+			// use default name if folder was provided
 			if (uri.toString().endsWith("/")) {
 				uri = new URI(uri.toString() + "jsonConstruction.json");
 			}
@@ -196,20 +207,21 @@ public class JsonAdapter implements IAdapter {
 			File file = FileUtils.getFile(uri);
 			FileUtils.createFile(file);
 
+			// Construct
 			JsonObject root = construct(elements, monitor);
 
-			FileUtils.appendToFile(file,
-					root.toString(WriterConfig.PRETTY_PRINT));
+			// Save to file and pretty print
+			FileUtils.appendToFile(file, root.toString(WriterConfig.PRETTY_PRINT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public JsonObject construct(List<IElement> elements,
-			IProgressMonitor monitor) {
+	public JsonObject construct(List<IElement> elements, IProgressMonitor monitor) {
 		JsonConstruct construct = new JsonConstruct();
-		for (IElement elt : elements)
+		for (IElement elt : elements) {
 			construct.construct(elt);
+		}
 		return construct.root;
 	}
 

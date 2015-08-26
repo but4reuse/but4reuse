@@ -8,11 +8,11 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.json.tools.AdapterTools;
 
 public class ArrayElement extends AbstractElement {
-	public AbstractElement parent;
+	public IElement parent;
 	public int id;
 	public List<ArrayElement> similarArrays;
 
-	public ArrayElement(AbstractElement parent) {
+	public ArrayElement(IElement parent) {
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
 		this.similarArrays = new ArrayList<ArrayElement>();

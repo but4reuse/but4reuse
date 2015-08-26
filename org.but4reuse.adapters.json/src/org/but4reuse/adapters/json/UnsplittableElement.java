@@ -8,10 +8,9 @@ import com.eclipsesource.json.JsonValue;
 public class UnsplittableElement extends AbstractElement {
 	public JsonValue content;
 	public JsonValue compare;
-	public AbstractElement parent;
+	public IElement parent;
 
-	public UnsplittableElement(JsonValue content, JsonValue compare,
-			AbstractElement parent) {
+	public UnsplittableElement(JsonValue content, JsonValue compare, IElement parent) {
 		this.content = content;
 		this.compare = compare;
 		this.parent = parent;
@@ -21,8 +20,9 @@ public class UnsplittableElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof UnsplittableElement) {
 			UnsplittableElement unsplittableElement = (UnsplittableElement) anotherElement;
-			if (this.compare.equals(unsplittableElement.compare))
+			if (this.compare.equals(unsplittableElement.compare)) {
 				return this.parent.similarity(unsplittableElement.parent);
+			}
 		}
 		return 0;
 	}

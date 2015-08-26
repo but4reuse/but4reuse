@@ -54,8 +54,7 @@ public class JsonConstruct {
 		}
 		if (element instanceof IndexArrayElement) {
 			IndexArrayElement indexArrayElement = (IndexArrayElement) element;
-			JsonArray jsonArray = construct(indexArrayElement.parent, null)
-					.asArray();
+			JsonArray jsonArray = construct(indexArrayElement.parent, null).asArray();
 
 			List<Integer> idsAhead = new ArrayList<Integer>();
 			for (IndexArrayElement currentIndex : indexArrayElement.indexesAhead)
@@ -117,8 +116,7 @@ public class JsonConstruct {
 		}
 		if (element instanceof UnsplittableElement) {
 			UnsplittableElement unsplittableElement = (UnsplittableElement) element;
-			return construct(unsplittableElement.parent,
-					unsplittableElement.content);
+			return construct(unsplittableElement.parent, unsplittableElement.content);
 		}
 		if (element instanceof ValueElement) {
 			ValueElement valueElement = (ValueElement) element;

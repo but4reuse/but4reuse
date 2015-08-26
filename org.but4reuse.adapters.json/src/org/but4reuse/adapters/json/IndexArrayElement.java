@@ -15,8 +15,7 @@ public class IndexArrayElement extends AbstractElement {
 	public List<IndexArrayElement> similarIndexes;
 	public List<IndexArrayElement> indexesAhead;
 
-	public IndexArrayElement(int id_file, ArrayElement parent,
-			List<IndexArrayElement> ahead) {
+	public IndexArrayElement(int id_file, ArrayElement parent, List<IndexArrayElement> ahead) {
 		this.id_file = id_file;
 		this.parent = parent;
 		this.id = AdapterTools.getUniqueId();
@@ -28,8 +27,9 @@ public class IndexArrayElement extends AbstractElement {
 		this.similarIndexes.add(this);
 
 		this.indexesAhead = new ArrayList<IndexArrayElement>();
-		for (IndexArrayElement index : ahead)
+		for (IndexArrayElement index : ahead) {
 			this.indexesAhead.add(index);
+		}
 	}
 
 	@Override
@@ -37,16 +37,21 @@ public class IndexArrayElement extends AbstractElement {
 		if (anotherElement instanceof IndexArrayElement) {
 			IndexArrayElement elt = (IndexArrayElement) anotherElement;
 
-			if (this.id == elt.id)
+			if (this.id == elt.id) {
 				return 1;
+			}
 
-			for (int file : this.similarFiles)
-				if (elt.similarFiles.contains(file))
+			for (int file : this.similarFiles) {
+				if (elt.similarFiles.contains(file)) {
 					return 0;
+				}
+			}
 
-			for (int file : elt.similarFiles)
-				if (this.similarFiles.contains(file))
+			for (int file : elt.similarFiles) {
+				if (this.similarFiles.contains(file)) {
 					return 0;
+				}
+			}
 
 			if (this.parent.similarity(elt.parent) == 1) {
 				ArrayList<Integer> files = new ArrayList<Integer>();

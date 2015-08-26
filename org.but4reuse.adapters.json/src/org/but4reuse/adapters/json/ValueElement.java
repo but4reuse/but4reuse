@@ -6,10 +6,10 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import com.eclipsesource.json.JsonValue;
 
 public class ValueElement extends AbstractElement {
-	public AbstractElement parent;
+	public IElement parent;
 	public JsonValue jsonValue;
 
-	public ValueElement(AbstractElement parent, JsonValue jsonValue) {
+	public ValueElement(IElement parent, JsonValue jsonValue) {
 		this.parent = parent;
 		this.jsonValue = jsonValue;
 	}
@@ -18,8 +18,9 @@ public class ValueElement extends AbstractElement {
 	public double similarity(IElement anotherElement) {
 		if (anotherElement instanceof ValueElement) {
 			ValueElement valueElement = (ValueElement) anotherElement;
-			if (this.jsonValue.equals(valueElement.jsonValue))
+			if (this.jsonValue.equals(valueElement.jsonValue)) {
 				return this.parent.similarity(valueElement.parent);
+			}
 		}
 		return 0;
 	}

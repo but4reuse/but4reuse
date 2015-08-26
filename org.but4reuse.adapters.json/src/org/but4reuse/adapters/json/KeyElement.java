@@ -18,15 +18,17 @@ public class KeyElement extends AbstractElement {
 			KeyElement keyElement = (KeyElement) anotherElement;
 			if (this.name.compareTo(keyElement.name) == 0) {
 				if (this.parent == null) {
-					if (keyElement.parent == null)
+					if (keyElement.parent == null) {
 						return 1;
-					else
+					} else {
 						return 0;
+					}
 				} else {
-					if (keyElement.parent == null)
+					if (keyElement.parent == null) {
 						return 0;
-					else
+					} else {
 						return this.parent.similarity(keyElement.parent);
+					}
 				}
 			}
 		}
@@ -35,10 +37,11 @@ public class KeyElement extends AbstractElement {
 
 	@Override
 	public String getText() {
-		if (parent == null)
+		if (parent.parent == null) {
 			return name;
-		else
+		} else {
 			return parent.getText() + "_" + name;
+		}
 	}
 
 	@Override

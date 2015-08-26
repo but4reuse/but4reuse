@@ -7,9 +7,9 @@ import com.eclipsesource.json.JsonValue;
 
 public class IgnoredElement extends AbstractElement {
 	public JsonValue jsonValue;
-	public AbstractElement parent;
+	public IElement parent;
 
-	public IgnoredElement(JsonValue jsonValue, AbstractElement parent) {
+	public IgnoredElement(JsonValue jsonValue, IElement parent) {
 		this.jsonValue = jsonValue;
 		this.parent = parent;
 	}

@@ -11,8 +11,7 @@ import com.eclipsesource.json.JsonValue;
 
 public class PathsTools {
 	public static Paths getPathsToIgnore() {
-		String delimiter = Activator.getDefault().getPreferenceStore()
-				.getString(JsonAdapterPreferencePage.DELIMITER);
+		String delimiter = Activator.getDefault().getPreferenceStore().getString(JsonAdapterPreferencePage.DELIMITER);
 		String absolutePaths = Activator.getDefault().getPreferenceStore()
 				.getString(JsonAdapterPreferencePage.ABSOLUTE_PATHS_TO_IGNORE);
 		String relativePaths = Activator.getDefault().getPreferenceStore()
@@ -29,18 +28,11 @@ public class PathsTools {
 	}
 
 	public static Paths getPathsUnsplittable() {
-		String delimiter = Activator.getDefault().getPreferenceStore()
-				.getString(JsonAdapterPreferencePage.DELIMITER);
-		String absolutePaths = Activator
-				.getDefault()
-				.getPreferenceStore()
-				.getString(
-						JsonAdapterPreferencePage.ABSOLUTE_PATHS_UNSPLITTABLE);
-		String relativePaths = Activator
-				.getDefault()
-				.getPreferenceStore()
-				.getString(
-						JsonAdapterPreferencePage.RELATIVE_PATHS_UNSPLITTABLE);
+		String delimiter = Activator.getDefault().getPreferenceStore().getString(JsonAdapterPreferencePage.DELIMITER);
+		String absolutePaths = Activator.getDefault().getPreferenceStore()
+				.getString(JsonAdapterPreferencePage.ABSOLUTE_PATHS_UNSPLITTABLE);
+		String relativePaths = Activator.getDefault().getPreferenceStore()
+				.getString(JsonAdapterPreferencePage.RELATIVE_PATHS_UNSPLITTABLE);
 
 		Paths paths = new Paths();
 
@@ -52,8 +44,7 @@ public class PathsTools {
 		return paths;
 	}
 
-	public static JsonValue removePaths(JsonValue jsonValue, Paths paths,
-			Paths pathsToIgnore) {
+	public static JsonValue removePaths(JsonValue jsonValue, Paths paths, Paths pathsToIgnore) {
 		if (paths.matches(pathsToIgnore))
 			return JsonValue.NULL;
 
@@ -68,10 +59,7 @@ public class PathsTools {
 			for (String name : jsonValue.asObject().names()) {
 				Paths currentPaths = new Paths(paths);
 				currentPaths.extend(name);
-				jsonObject.set(
-						name,
-						removePaths(jsonValue.asObject().get(name),
-								currentPaths, pathsToIgnore));
+				jsonObject.set(name, removePaths(jsonValue.asObject().get(name), currentPaths, pathsToIgnore));
 			}
 			return jsonObject;
 		}
@@ -87,8 +75,7 @@ public class PathsTools {
 				currentPaths = new Paths(paths);
 				currentPaths.extend("[]", "[" + index + "]");
 
-				jsonArray.add(removePaths(jsonValue.asArray().get(index),
-						currentPaths, pathsToIgnore));
+				jsonArray.add(removePaths(jsonValue.asArray().get(index), currentPaths, pathsToIgnore));
 			}
 			return jsonArray;
 		}
