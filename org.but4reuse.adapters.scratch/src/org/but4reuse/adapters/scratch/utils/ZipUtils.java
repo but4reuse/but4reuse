@@ -10,16 +10,14 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
-	public static ZipOutputStream constructZIP(String path)
-			throws FileNotFoundException {
+	public static ZipOutputStream constructZIP(String path) throws FileNotFoundException {
 		FileOutputStream dest = new FileOutputStream(path);
 		BufferedOutputStream buff = new BufferedOutputStream(dest);
 		ZipOutputStream out = new ZipOutputStream(buff);
 		return out;
 	}
 
-	public static void addFileToZip(ZipOutputStream zipOut, File file,
-			String filename) throws Exception {
+	public static void addFileToZip(ZipOutputStream zipOut, File file, String filename) throws Exception {
 		final int BUFFER = 2048;
 		byte data[] = new byte[BUFFER];
 

@@ -43,8 +43,7 @@ public class ScratchAdapter implements IAdapter {
 		Paths pathsUnsplittable = new Paths();
 		pathsUnsplittable.absolutePaths.add("children_[]_{}");
 
-		List<IElement> jsonElementList = jsonAdapter.adapt(uri, monitor,
-				pathsToIgnore, pathsUnsplittable);
+		List<IElement> jsonElementList = jsonAdapter.adapt(uri, monitor, pathsToIgnore, pathsUnsplittable);
 		List<IElement> scratchElementList = new ArrayList<IElement>();
 
 		for (IElement elt : jsonElementList)
@@ -54,8 +53,7 @@ public class ScratchAdapter implements IAdapter {
 	}
 
 	@Override
-	public void construct(URI uri, List<IElement> elements,
-			IProgressMonitor monitor) {
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		try {
 			if (uri.toString().endsWith("/")) {
 				uri = new URI(uri.toString() + "scratchConstruction.sb2");
@@ -68,8 +66,7 @@ public class ScratchAdapter implements IAdapter {
 				jsonElements.add(((ScratchElement) element).element);
 
 			JsonObject root = jsonAdapter.construct(jsonElements, monitor);
-			ZipOutputStream zipOut = ZipUtils.constructZIP(FileUtils
-					.getFile(uri).toPath().toString());
+			ZipOutputStream zipOut = ZipUtils.constructZIP(FileUtils.getFile(uri).toPath().toString());
 
 			String md5 = root.get("penLayerMD5").toString().replace("\"", "");
 			File file = new File("tmp");
@@ -80,42 +77,42 @@ public class ScratchAdapter implements IAdapter {
 
 			int id = 1;
 
-			if (root.get("costumes") != null)
+			if (root.get("costumes") != null) {
 				for (JsonValue value : root.get("costumes").asArray().values()) {
 					JsonObject costume = value.asObject();
 					ScratchUtils.costume(zipOut, costume, id);
 					id++;
 				}
-
-			if (root.get("sounds") != null)
+			}
+			if (root.get("sounds") != null) {
 				for (JsonValue value : root.get("sounds").asArray().values()) {
 					JsonObject sound = value.asObject();
 					ScratchUtils.sound(zipOut, sound, id);
 					id++;
 				}
-
-			if (root.get("children") != null)
+			}
+			if (root.get("children") != null) {
 				for (JsonValue value : root.get("children").asArray().values()) {
 					JsonObject children = value.asObject();
-					if (children.get("costumes") != null)
-						for (JsonValue valueBis : children.get("costumes")
-								.asArray().values()) {
+					if (children.get("costumes") != null) {
+						for (JsonValue valueBis : children.get("costumes").asArray().values()) {
 							JsonObject costume = valueBis.asObject();
 							ScratchUtils.costume(zipOut, costume, id);
 							id++;
 						}
-					if (children.get("sounds") != null)
-						for (JsonValue valueBis : children.get("sounds")
-								.asArray().values()) {
+					}
+					if (children.get("sounds") != null) {
+						for (JsonValue valueBis : children.get("sounds").asArray().values()) {
 							JsonObject sound = valueBis.asObject();
 							ScratchUtils.sound(zipOut, sound, id);
 							id++;
 						}
+					}
 				}
+			}
 
 			file = new File("tmp");
-			FileUtils.appendToFile(file,
-					root.toString(WriterConfig.PRETTY_PRINT));
+			FileUtils.appendToFile(file, root.toString(WriterConfig.PRETTY_PRINT));
 			ZipUtils.addFileToZip(zipOut, file, "project.json");
 			file.delete();
 
