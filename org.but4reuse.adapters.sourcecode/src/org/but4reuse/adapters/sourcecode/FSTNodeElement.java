@@ -164,4 +164,15 @@ public abstract class FSTNodeElement extends AbstractElement {
 			return 0;
 	}
 
+	@Override
+	public int hashCode() {
+		// for the moment, they must have the same name and type to have the
+		// chance of being equal, so this hashcode improves performance
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
 }
