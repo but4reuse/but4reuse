@@ -10,8 +10,6 @@
             name="Java source code">
          <elements>
             <element
-                  element="org.but4reuse.adapters.sourcecode.FSTNodeElement"></element>
-            <element
                   element="org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement"></element>
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
@@ -27,9 +25,6 @@
             id="c"
             name="C source code">
          <elements>
-            <element
-                  element="org.but4reuse.adapters.sourcecode.FSTNodeElement">
-            </element>
             <element
                   element="org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement">
             </element>

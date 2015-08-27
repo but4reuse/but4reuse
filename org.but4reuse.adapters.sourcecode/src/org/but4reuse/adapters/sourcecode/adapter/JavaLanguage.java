@@ -47,6 +47,7 @@ public class JavaLanguage implements ILanguage {
 			return null;
 		} catch (Error error) {
 			// like cide.gparser.TokenMgrError
+			System.err.println(path);
 			error.printStackTrace();
 			return null;
 		}
