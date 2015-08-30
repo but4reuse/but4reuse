@@ -7,6 +7,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.strings.StringUtils;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 
@@ -46,14 +47,7 @@ public class EMFAttributeElement extends AbstractElement {
 
 	@Override
 	public List<String> getWords() {
-		List<String> words = new ArrayList<String>();
 		String valueName = value.toString();
-		if (valueName != null) {
-			String[] tokens = valueName.split("[\\W]");
-			for (String s : tokens) {
-				words.add(s);
-			}
-		}
-		return words;
+		return StringUtils.tokenizeAndCamelCase(valueName);
 	}
 }

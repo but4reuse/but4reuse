@@ -58,6 +58,7 @@ public class EMFReferenceElement extends AbstractElement {
 	@Override
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
+		// empty for the moment
 		return words;
 	}
 
