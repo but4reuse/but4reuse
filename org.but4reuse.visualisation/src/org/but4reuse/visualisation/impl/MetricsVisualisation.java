@@ -67,12 +67,14 @@ public class MetricsVisualisation implements IVisualisation {
 				for (String elementType : iElementTypes) {
 					text.append(elementType.substring(elementType.lastIndexOf(".") + 1, elementType.length()) + ";");
 				}
+				text.setLength(text.length()-1);
 				text.append("\n");
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					text.append(aa.getArtefact().getName() + ";");
 					for (String elementType : iElementTypes) {
 						text.append(AdaptedModelHelper.getNumberOfElementsOfType(aa, elementType) + ";");
 					}
+					text.setLength(text.length()-1);
 					text.append("\n");
 				}
 
@@ -90,12 +92,14 @@ public class MetricsVisualisation implements IVisualisation {
 				for (String elementType : iElementTypes) {
 					text.append(elementType.substring(elementType.lastIndexOf(".") + 1, elementType.length()) + ";");
 				}
+				text.setLength(text.length()-1);
 				text.append("\n");
 				for (Block block : adaptedModel.getOwnedBlocks()) {
 					text.append(block.getName() + ";");
 					for (String elementType : iElementTypes) {
 						text.append(AdaptedModelHelper.getNumberOfElementsOfType(block, elementType) + ";");
 					}
+					text.setLength(text.length()-1);
 					text.append("\n");
 				}
 
@@ -142,6 +146,7 @@ public class MetricsVisualisation implements IVisualisation {
 					for (Block b : adaptedModel.getOwnedBlocks()) {
 						text.append(b.getName() + ";");
 					}
+					text.setLength(text.length()-1);
 					text.append("\n");
 					for (Feature feature : featureList.getOwnedFeatures()) {
 						text.append(feature.getName() + ";");
@@ -153,6 +158,7 @@ public class MetricsVisualisation implements IVisualisation {
 								text.append("0;");
 							}
 						}
+						text.setLength(text.length()-1);
 						text.append("\n");
 					}
 
@@ -191,6 +197,7 @@ public class MetricsVisualisation implements IVisualisation {
 				for (Block b : adaptedModel.getOwnedBlocks()) {
 					text.append(b.getName() + ";");
 				}
+				text.setLength(text.length()-1);
 				text.append("\n");
 				for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 					text.append(aa.getArtefact().getName() + ";");
@@ -202,6 +209,7 @@ public class MetricsVisualisation implements IVisualisation {
 							text.append("0;");
 						}
 					}
+					text.setLength(text.length()-1);
 					text.append("\n");
 				}
 			}
