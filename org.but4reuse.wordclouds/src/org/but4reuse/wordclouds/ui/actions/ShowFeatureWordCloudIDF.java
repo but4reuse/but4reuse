@@ -6,7 +6,7 @@ import java.util.List;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
-import org.but4reuse.utils.strings.StringUtils;
+import org.but4reuse.wordclouds.util.FeatureWordCloudUtil;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -36,7 +36,7 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 	public void run(IAction action) {
 		feature = null;
 
-		ArrayList<ArrayList<String>> list = null;
+		List<List<String>> list = null;
 		FeatureList fList = null;
 
 		if (selection instanceof IStructuredSelection) {
@@ -47,33 +47,17 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 					List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
 
 					if (list == null) {
-						list = new ArrayList<ArrayList<String>>();
+						list = new ArrayList<List<String>>();
 						fList = (FeatureList) feature.eContainer();
 
 						for (Feature f : fList.getOwnedFeatures()) {
-
-							ArrayList<String> l = new ArrayList<String>();
-							if (f.getName() != null) {
-								for (String s : StringUtils.tokenizeAndCamelCase(f.getName())) {
-									if (!stopWords.contains(s)) {
-										l.add(s);
-									}
-								}
-							}
-							if (f.getDescription() != null) {
-								for (String s : StringUtils.tokenizeAndCamelCase(f.getDescription())) {
-									if (!stopWords.contains(s)) {
-										l.add(s);
-									}
-								}
-							}
-							list.add(l);
+							list.add(FeatureWordCloudUtil.getFeatureWords(f, stopWords));
 						}
 					}
 
 					c.clear();
 
-					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
+					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
 					win.setSize(widthWin, heightWin);
 					win.setText("Word Cloud for feature " + feature.getName());
 

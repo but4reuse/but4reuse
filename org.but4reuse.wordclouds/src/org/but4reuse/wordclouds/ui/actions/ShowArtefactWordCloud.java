@@ -78,7 +78,7 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 							}
 						}
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
+						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 

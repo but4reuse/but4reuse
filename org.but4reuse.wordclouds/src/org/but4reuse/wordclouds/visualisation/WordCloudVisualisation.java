@@ -25,8 +25,8 @@ public class WordCloudVisualisation implements IVisualisation {
 	/**
 	 * A list which contains a word cloud for each identified features.
 	 */
-	private static ArrayList<Cloud> clouds;
-	private static ArrayList<Cloud> clouds_idf;
+	private static List<Cloud> clouds;
+	private static List<Cloud> clouds_idf;
 
 	public WordCloudVisualisation() {
 	}
@@ -36,20 +36,22 @@ public class WordCloudVisualisation implements IVisualisation {
 	 * 
 	 * @return the value of the attribute clouds.
 	 */
-	public static ArrayList<Cloud> getClouds() {
+	public static List<Cloud> getClouds() {
 		return clouds;
 	}
 
-	public static ArrayList<Cloud> getCloudsIDF() {
+	public static List<Cloud> getCloudsIDF() {
 		return clouds_idf;
 	}
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 
+		List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
+		
 		clouds = new ArrayList<Cloud>();
 		clouds_idf = new ArrayList<Cloud>();
-		ArrayList<ArrayList<String>> listWords = new ArrayList<ArrayList<String>>();
+		List<List<String>> listWords = new ArrayList<List<String>>();
 
 		for (Block b : adaptedModel.getOwnedBlocks()) {
 
@@ -59,7 +61,7 @@ public class WordCloudVisualisation implements IVisualisation {
 			cloud.setMinWeight(5);
 			cloud.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
 					.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-			ArrayList<String> list = new ArrayList<String>();
+			List<String> list = new ArrayList<String>();
 			/*
 			 * For each block we get all elements owned We use the method
 			 * getWords for having several strings which could be used as block
@@ -67,10 +69,16 @@ public class WordCloudVisualisation implements IVisualisation {
 			 */
 			for (IElement e : (AdaptedModelHelper.getElementsOfBlock(b))) {
 				List<String> words = ((AbstractElement) e).getWords();
+				
+				// remove stop words
+				words.removeAll(stopWords);
+				
 				addWords(cloud, words);
-				for (String s : words)
-					if (s.compareTo("") != 0)
+				for (String s : words) {
+					if (s.compareTo("") != 0) {
 						list.add(s.trim());
+					}
+				}
 			}
 
 			clouds.add(cloud);

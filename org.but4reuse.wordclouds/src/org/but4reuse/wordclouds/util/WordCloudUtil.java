@@ -186,7 +186,7 @@ public class WordCloudUtil {
 	 *            cloud
 	 * @return A new word cloud
 	 */
-	public static Cloud createWordCloudIDF(ArrayList<ArrayList<String>> list, int index) {
+	public static Cloud createWordCloudIDF(List<List<String>> list, int index) {
 		double nbBlock = list.size();
 		double nbWords = list.get(index).size();
 
@@ -235,9 +235,9 @@ public class WordCloudUtil {
 	 * @return How many time we find the tag.
 	 */
 
-	private static int nbDocContainsWords(ArrayList<ArrayList<String>> list, String word) {
+	private static int nbDocContainsWords(List<List<String>> list, String word) {
 		int cpt = 0;
-		for (ArrayList<String> l : list) {
+		for (List<String> l : list) {
 			for (String w : l) {
 				if (w.compareToIgnoreCase(word) == 0) {
 					cpt++;
@@ -257,7 +257,7 @@ public class WordCloudUtil {
 	 *            The word that we want to search.
 	 * @return how many time the word was found.
 	 */
-	private static int countNbTimesWord(ArrayList<String> words, String word) {
+	private static int countNbTimesWord(List<String> words, String word) {
 		int cpt = 0;
 		for (String w : words) {
 			if (w.compareToIgnoreCase(word) == 0)

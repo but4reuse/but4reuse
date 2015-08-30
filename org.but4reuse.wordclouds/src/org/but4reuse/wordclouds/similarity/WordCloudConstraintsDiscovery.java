@@ -30,7 +30,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		List<IConstraint> constraintList = new ArrayList<IConstraint>();
 		int nb_Block = adaptedModel.getOwnedBlocks().size();
 		ArrayList<Cloud> clouds = new ArrayList<Cloud>();
-		ArrayList<ArrayList<String>> listWords = new ArrayList<ArrayList<String>>();
+		List<List<String>> listWords = new ArrayList<List<String>>();
 
 		/*
 		 * Gathering words from blocks in order to create words cloud IDF
@@ -184,8 +184,9 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		for (AdaptedArtefact art : artefacts) {
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
 			if (blocks.contains(b1)) {
-				if (blocks.contains(b2))
+				if (blocks.contains(b2)) {
 					return false;
+				}
 			}
 		}
 		return true;
@@ -211,9 +212,10 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
 			if (blocks.contains(b1)) {
-				if (blocks.contains(b2))
+				if (blocks.contains(b2)) {
 					explanations.add(b1.getName() + " and " + b2.getName() + " are present in "
 							+ art.getArtefact().getName());
+				}
 			}
 		}
 		return explanations;
@@ -241,9 +243,10 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		for (AdaptedArtefact art : AdaptedModelManager.getAdaptedModel().getOwnedAdaptedArtefacts()) {
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(art);
 			if (blocks.contains(b1)) {
-				if (!blocks.contains(b2))
+				if (!blocks.contains(b2)) {
 					explanations.add(b1.getName() + " is present in " + art.getArtefact().getName() + " and "
 							+ b2.getName() + " isn't");
+				}
 			}
 		}
 		return explanations;

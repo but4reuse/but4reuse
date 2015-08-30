@@ -40,7 +40,7 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 
-		ArrayList<ArrayList<String>> list = null;
+		List<List<String>> list = null;
 
 		artefact = null;
 		if (selection instanceof IStructuredSelection) {
@@ -65,7 +65,7 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 
 						c.clear();
 						if (list == null) {
-							list = new ArrayList<ArrayList<String>>();
+							list = new ArrayList<List<String>>();
 
 							for (Artefact a : ((ArtefactModel) artefactModel).getOwnedArtefacts()) {
 								ArrayList<String> l = new ArrayList<String>();
@@ -86,7 +86,7 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 							}
 						}
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
+						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 
