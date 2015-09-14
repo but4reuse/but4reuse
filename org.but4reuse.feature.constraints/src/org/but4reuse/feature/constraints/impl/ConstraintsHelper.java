@@ -237,4 +237,68 @@ public class ConstraintsHelper {
 		}
 		return false;
 	}
+
+	/**
+	 * Number of reasons of requires constraint
+	 * 
+	 * @param adaptedModel
+	 * @param f1
+	 * @param f2
+	 * @return
+	 */
+	public static int getNumberOfReasonsOfRequiresConstraint(AdaptedModel adaptedModel, Feature f1, Feature f2) {
+		int numberOfReasons = 0;
+		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
+			// Only requires, no excludes for the moment
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				// The blocks corresponds to the features
+				if (getBlocksOfFeature(f1, adaptedModel).contains(constraint.getBlock1())
+						&& getBlocksOfFeature(f2, adaptedModel).contains(constraint.getBlock2())) {
+					// increase the number of reasons
+					numberOfReasons += constraint.getNumberOfReasons();
+				}
+			}
+		}
+		return numberOfReasons;
+	}
+
+	/**
+	 * Number of reasons of requires constraint
+	 * 
+	 * @param adaptedModel
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
+	public static int getNumberOfReasonsOfRequiresConstraint(AdaptedModel adaptedModel, Block b1, Block b2) {
+		int numberOfReasons = 0;
+		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
+			// Only requires, no excludes for the moment
+			if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				// The blocks corresponds to the features
+				if (constraint.getBlock1().equals(b1) && constraint.getBlock2().equals(b2)) {
+					// increase the number of reasons
+					numberOfReasons += constraint.getNumberOfReasons();
+				}
+			}
+		}
+		return numberOfReasons;
+	}
+
+	/**
+	 * TODO move Get the blocks that corresponds to a feature
+	 * 
+	 * @param feature
+	 * @param adaptedModel
+	 * @return a non null list of blocks
+	 */
+	public static List<Block> getBlocksOfFeature(Feature feature, AdaptedModel adaptedModel) {
+		List<Block> blocks = new ArrayList<Block>();
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			if (block.getCorrespondingFeatures().contains(feature)) {
+				blocks.add(block);
+			}
+		}
+		return blocks;
+	}
 }
