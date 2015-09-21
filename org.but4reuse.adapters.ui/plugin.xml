@@ -75,6 +75,18 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
+            <viewContribution
+            id="org.but4reuse.adapters.ui.showallblockelements"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowAllBlockElementsAction"
+               icon="icons/showAll.png"
+               id="org.but4reuse.adapters.ui.showallblockelementsaction"
+               label="Show All Block Elements"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
       <viewContribution
             id="org.but4reuse.adapters.ui.reconstructall"
             targetID="org.eclipse.contribution.visualiser.views.Visualiser">
