@@ -27,6 +27,18 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+                  <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.showartefacts.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.ShowFeatureArtefactsMatrixAction"
+               icon="icons/show.png"
+               id="org.but4reuse.feature.localization.ui.featurelist.showartefacts.action"
+               label="Show features artefacts matrix"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
