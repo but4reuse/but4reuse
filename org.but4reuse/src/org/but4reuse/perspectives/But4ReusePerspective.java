@@ -66,6 +66,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 	}
 
 	private void addNewWizardShortcuts() {
+		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.project");// NON-NLS-1
 		factory.addNewWizardShortcut("org.but4reuse.artefactmodel.presentation.ArtefactModelModelWizardID");// NON-NLS-1
 		factory.addNewWizardShortcut("org.but4reuse.featurelist.presentation.FeatureListModelWizardID");// NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");// NON-NLS-1
