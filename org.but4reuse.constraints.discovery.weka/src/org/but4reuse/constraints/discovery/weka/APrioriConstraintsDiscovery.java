@@ -23,7 +23,6 @@ import weka.core.Instances;
  */
 public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 
-	@Override
 	public List<IConstraint> discover(FeatureList featureList, final AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {
 		monitor.subTask("Constraints discovery with APriori association rules learner");

@@ -27,7 +27,6 @@ import weka.core.Instances;
  */
 public class ExportWekaFileAction implements IViewActionDelegate {
 
-	@Override
 	public void run(IAction action) {
 		// Get output uri from user
 		String out = "/projectName";
@@ -62,12 +61,10 @@ public class ExportWekaFileAction implements IViewActionDelegate {
 
 	}
 
-	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 
 	}
 
-	@Override
 	public void init(IViewPart view) {
 
 	}
