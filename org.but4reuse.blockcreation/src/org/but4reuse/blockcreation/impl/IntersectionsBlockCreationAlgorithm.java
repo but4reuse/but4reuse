@@ -59,8 +59,12 @@ public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgori
 				if (artefactIndexes == null) {
 					artefactIndexes = new ArrayList<Integer>();
 				}
-				artefactIndexes.add(i);
-				R.put(e, artefactIndexes);
+				// the same element can be repeated in an artefact, add only
+				// once
+				if (!artefactIndexes.contains(i)) {
+					artefactIndexes.add(i);
+					R.put(e, artefactIndexes);
+				}
 			}
 		}
 
