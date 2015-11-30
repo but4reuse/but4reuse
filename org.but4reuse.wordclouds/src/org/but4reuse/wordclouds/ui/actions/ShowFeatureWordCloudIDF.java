@@ -43,15 +43,13 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 			for (Object feat : ((IStructuredSelection) selection).toArray()) {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
-
-					List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
-
+					
 					if (list == null) {
 						list = new ArrayList<List<String>>();
 						fList = (FeatureList) feature.eContainer();
 
 						for (Feature f : fList.getOwnedFeatures()) {
-							list.add(FeatureWordCloudUtil.getFeatureWords(f, stopWords));
+							list.add(FeatureWordCloudUtil.getFeatureWords(f));
 						}
 					}
 

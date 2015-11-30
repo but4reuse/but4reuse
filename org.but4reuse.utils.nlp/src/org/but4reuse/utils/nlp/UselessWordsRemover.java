@@ -16,6 +16,7 @@ public class UselessWordsRemover {
 
 		InputStream modelIn = null;
 
+		// http://www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html
 		// IN Preposition or subordinating conjunction
 		// DT Determiner: This The
 		// TO To

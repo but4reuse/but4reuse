@@ -34,5 +34,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.but4reuse.feature.constraints,
  org.but4reuse.feature.constraints,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.but4reuse.utils.nlp
 Export-Package: org.but4reuse.wordclouds.util

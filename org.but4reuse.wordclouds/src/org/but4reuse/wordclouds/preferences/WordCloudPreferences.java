@@ -11,6 +11,8 @@ public class WordCloudPreferences extends FieldEditorPreferencePage implements I
 
 	public static final String WORDCLOUD_NB_W = "WORDCLOUD_NB_WORDS";
 	public static final String STOP_WORDS = "STOP_WORDS";
+	public static final String MULTI_WORDS = "MULTI_WORDS";
+	public static final String SYNONYM_WORDS = "SYNONYM_WORDS";
 	
 	public WordCloudPreferences() {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -30,6 +32,14 @@ public class WordCloudPreferences extends FieldEditorPreferencePage implements I
 		// stop words
 		StringFieldEditor sfe = new StringFieldEditor(STOP_WORDS, "Stop words (comma separated): ", getFieldEditorParent());
 		addField(sfe);
+		
+		// multi words
+		StringFieldEditor sfe2 = new StringFieldEditor(MULTI_WORDS, "Multi words (comma separated): ", getFieldEditorParent());
+		addField(sfe2);
+		
+		// synonym words
+		StringFieldEditor sfe3 = new StringFieldEditor(SYNONYM_WORDS, "Synonyms (pairs of words comma separated, first will be kept): ", getFieldEditorParent());
+		addField(sfe3);
 	}
 
 }

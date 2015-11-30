@@ -1,11 +1,11 @@
 package org.but4reuse.wordclouds.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
-import org.but4reuse.wordclouds.activator.Activator;
-import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.FeatureWordCloudUtil;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.jface.action.IAction;
@@ -28,30 +28,25 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 
 	ISelection selection;
 	Feature feature = null;
-	List<IAdapter> adap;
-	Cloud c = new Cloud();	
+	List<IAdapter> adap;	
 	int widthWin = 600, heightWin = 600;
 
 	@Override
 	public void run(IAction action) {
-		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-		c.setMaxWeight(50);
-		c.setMinWeight(5);
+
 		feature = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object feat : ((IStructuredSelection) selection).toArray()) {
 				if (feat instanceof Feature) {
 					feature = ((Feature) feat);
-
-					List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
-
-					c.clear();
-
-					List<String> featureWords = FeatureWordCloudUtil.getFeatureWords(feature, stopWords);
+					List<String> words = new ArrayList<String>();
+					List<String> featureWords = FeatureWordCloudUtil.getFeatureWords(feature);
 					for(String word : featureWords){
-						c.addTag(word);
+						words.add(word);
 					}
 
+					Cloud cloud = Cloudifier.cloudify(words);
+					
 					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
 					win.setSize(widthWin, heightWin);
 					win.setText("Word Cloud for feature " + feature.getName());
@@ -62,7 +57,7 @@ public class ShowFeatureWordCloud implements IObjectActionDelegate {
 					win.open();
 					win.update();
 
-					WordCloudUtil.drawWordCloud(comp, c);
+					WordCloudUtil.drawWordCloud(comp, cloud);
 				}
 			}
 		}

@@ -279,4 +279,22 @@ public class WordCloudUtil {
 		return Arrays.asList(stopWordsString.split(","));
 	}
 
+	public static List<String> getUserDefinedMultiWords() {
+		List<String> multiWords = new ArrayList<String>();
+		String multiWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.MULTI_WORDS);
+		if(multiWordsString == null || multiWordsString.isEmpty()){
+			return multiWords;
+		}
+		return Arrays.asList(multiWordsString.split(","));
+	}
+	
+	public static List<String> getUserDefinedSynonyms() {
+		List<String> synonymWords = new ArrayList<String>();
+		String synonymWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.SYNONYM_WORDS);
+		if(synonymWordsString == null || synonymWordsString.isEmpty()){
+			return synonymWords;
+		}
+		return Arrays.asList(synonymWordsString.split(","));
+	}
+
 }

@@ -1,5 +1,6 @@
 package org.but4reuse.wordclouds.ui.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
@@ -9,8 +10,7 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
-import org.but4reuse.wordclouds.activator.Activator;
-import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -35,14 +35,10 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 	ISelection selection;
 	Artefact artefact = null;
 	List<IAdapter> adap;
-	Cloud c = new Cloud();
 	int widthWin = 700, heightWin = 700;
 
 	@Override
 	public void run(IAction action) {
-		c.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore().getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-		c.setMaxWeight(50);
-		c.setMinWeight(5);
 		artefact = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
@@ -61,24 +57,21 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefact, defaultAdapters);
 
 					if (!adap.isEmpty()) {
-
-						List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
-						
-						c.clear();
+						List<String> words = new ArrayList<String>();
 						for (IAdapter adapter : adap) {
 							List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
 							for (IElement element : elements) {
 								AbstractElement ab = (AbstractElement) element;
-								for (String s : ab.getWords()){
-									// check if it is a user defined stop word
-									if (!stopWords.contains(s)) {
-										c.addTag(s);
-									}
+								for (String s : ab.getWords()) {
+									words.add(s);
 								}
 							}
 						}
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
+						Cloud cloud = Cloudifier.cloudify(words);
+
+						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE
+								| SWT.RESIZE);
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + artefact.getName());
 
@@ -88,8 +81,7 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 						win.open();
 						win.update();
 
-						WordCloudUtil.drawWordCloud(comp, c);
-
+						WordCloudUtil.drawWordCloud(comp, cloud);
 					}
 				}
 			}

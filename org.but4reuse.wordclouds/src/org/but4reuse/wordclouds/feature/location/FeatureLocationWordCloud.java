@@ -42,8 +42,6 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 			listBlocksWords.add(l);
 		}
-
-		List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
 		
 		/*
 		 * We gather all words for each features
@@ -51,7 +49,7 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 		List<List<String>> listFeaturesWords = new ArrayList<List<String>>();
 
 		for (Feature f : featureList.getOwnedFeatures()) {
-			listFeaturesWords.add(FeatureWordCloudUtil.getFeatureWords(f, stopWords));
+			listFeaturesWords.add(FeatureWordCloudUtil.getFeatureWords(f));
 		}
 
 		// Word cloud IDF calculation for feature
