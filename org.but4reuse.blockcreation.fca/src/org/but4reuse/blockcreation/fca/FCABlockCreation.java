@@ -2,6 +2,7 @@ package org.but4reuse.blockcreation.fca;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 
 		// In R we will have, for each element, the indexes of the artefacts
 		// where they appear
-		Map<IElement, List<Integer>> R = new HashMap<IElement, List<Integer>>();
+		LinkedHashMap<IElement, List<Integer>> R = new LinkedHashMap<IElement, List<Integer>>();
 
 		Map<Attribute, IElement> attrIElementMap = new HashMap<Attribute, IElement>();
 
@@ -90,9 +91,8 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 		// Iterate on eewmap to create blocks with their block elements
 		int ei = 0;
 		while (!R.isEmpty()) {
-			// TODO this is not actually needed, returning any ielement from
-			// R.keyset will be enough.
-			IElement e = findMostFrequentElement(R);
+			// get first
+			IElement e = R.keySet().iterator().next();
 
 			// Creates a binary attribute.
 			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
@@ -133,31 +133,25 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 			}
 		}
 
+		blocks = reorderBlocksByFrequency(R, blocks);
+
 		// finished
 		return blocks;
 	}
 
-	/**
-	 * Find most frequent element in the artefacts.
-	 * 
-	 * @param a
-	 *            relation of all elements with the list of artefacts where it
-	 *            appears
-	 * @return the artefact indexes
-	 */
-	public static IElement findMostFrequentElement(Map<IElement, List<Integer>> R) {
-		IElement keyOfMostFrequent = null;
-		int sizeOfMostFrequent = -1;
-
-		for (IElement key : R.keySet()) {
-			int currentSize = R.get(key).size();
-			if (sizeOfMostFrequent < currentSize) {
-				keyOfMostFrequent = key;
-				sizeOfMostFrequent = currentSize;
+	// insertion sort
+	private List<Block> reorderBlocksByFrequency(LinkedHashMap<IElement, List<Integer>> R, List<Block> blocks) {
+		Block temp;
+		for (int i = 1; i < blocks.size(); i++) {
+			for (int j = i; j > 0; j--) {
+				if(blocks.get(j).getOwnedBlockElements().get(0).getElementWrappers().size() > blocks.get(j-1).getOwnedBlockElements().get(0).getElementWrappers().size()){
+					temp = blocks.get(j);
+					blocks.set(j, blocks.get(j - 1));
+					blocks.set(j - 1, temp);
+				}
 			}
 		}
-
-		return keyOfMostFrequent;
+		return blocks;
 	}
 
 }
