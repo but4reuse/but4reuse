@@ -4,9 +4,16 @@
    <extension
          point="org.but4reuse.blockcreation">
       <blockcreation
-            class="org.but4reuse.blockcreation.fca.FCABlockCreation"
-            name="Formal Concepts">
+            class="org.but4reuse.fca.blockcreation.FCABlockCreation"
+            name="Formal Concept Analysis">
       </blockcreation>
+   </extension>
+   <extension
+         point="org.but4reuse.constraints.discovery">
+      <constraintsDiscovery
+            class="org.but4reuse.fca.constraints.discovery.FCAConstraintsDiscovery"
+            name="Formal Concept Analysis constraints discovery">
+      </constraintsDiscovery>
    </extension>
 
 </plugin>

@@ -1,13 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fca
-Bundle-SymbolicName: org.but4reuse.blockcreation.fca;singleton:=true
+Bundle-Name: Formal Concept Analysis
+Bundle-SymbolicName: org.but4reuse.fca;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.but4reuse.blockcreation.fca.activator.Activator
+Bundle-Activator: org.but4reuse.fca.activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.blockcreation,
  org.but4reuse.adaptedmodel,
- org.but4reuse.adapters
+ org.but4reuse.adapters,
+ org.but4reuse.feature.constraints,
+ com.googlecode.erca
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/com.googlecode.erca.jar,
  lib/com.googlecode.exputils.jar,

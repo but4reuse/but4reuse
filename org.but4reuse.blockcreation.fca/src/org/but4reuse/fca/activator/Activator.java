@@ -1,4 +1,4 @@
-package org.but4reuse.blockcreation.fca.activator;
+package org.but4reuse.fca.activator;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

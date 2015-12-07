@@ -1,4 +1,4 @@
-package org.but4reuse.blockcreation.fca;
+package org.but4reuse.fca.blockcreation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
+import org.but4reuse.fca.utils.FCAUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.googlecode.erca.Attribute;
@@ -21,14 +22,11 @@ import com.googlecode.erca.Entity;
 import com.googlecode.erca.ErcaFactory;
 import com.googlecode.erca.clf.Concept;
 import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.framework.algo.ConceptLatticeGenerator;
 import com.googlecode.erca.rcf.FormalContext;
 import com.googlecode.erca.rcf.RcfFactory;
 
 /**
  * Formal Context Analysis block creation
- * 
- * @author jabier.martinez
  * 
  */
 public class FCABlockCreation implements IBlockCreationAlgorithm {
@@ -109,9 +107,7 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 		}
 
 		// Generate concept lattice
-		ConceptLatticeGenerator clg = new ConceptLatticeGenerator(fc);
-		clg.generateConceptLattice();
-		ConceptLattice cl = clg.getConceptLattice();
+		ConceptLattice cl = FCAUtils.createConceptLattice(fc);
 
 		// Add a block for each non empty concept
 		for (Concept c : cl.getConcepts()) {

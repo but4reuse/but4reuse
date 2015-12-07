@@ -443,4 +443,13 @@ public class AdaptedModelHelper {
 		return null;
 	}
 
+	public static Block getBlockByName(AdaptedModel adaptedModel, String blockName) {
+		for(Block block : adaptedModel.getOwnedBlocks()){
+			if(block.getName().equals(blockName)){
+				return block;
+			}
+		}
+		return null;
+	}
+
 }
