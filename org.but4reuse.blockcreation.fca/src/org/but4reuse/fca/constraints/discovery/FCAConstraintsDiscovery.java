@@ -33,7 +33,7 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 		ConceptLattice cl = FCAUtils.createConceptLattice(fc);
 
 		// REQUIRES
-		monitor.subTask("Checking Requires relations");
+		monitor.subTask("FCA: Checking Requires relations");
 		for (Concept c : cl.getConcepts()) {
 			// getIntent returns also the intent of the parents,
 			// getSimplifiedIntent which is the one that only belongs to this
@@ -61,6 +61,7 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 		}
 
 		// EXCLUDES
+		monitor.subTask("FCA: Checking Excludes relations");
 		// No concept have the two features
 		for (Attribute a1 : fc.getAttributes()) {
 			for (Attribute a2 : fc.getAttributes()) {
