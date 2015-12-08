@@ -236,10 +236,34 @@ public class FeatureListHelper {
 		}
 	}
 
+	/**
+	 * Check if a feature is a core/base feature?
+	 * 
+	 * @param artefactModel
+	 * @param feature
+	 * @return if the feature is present in all artefacts
+	 */
 	public static boolean isCoreFeature(ArtefactModel artefactModel, Feature f) {
 		if (f.getImplementedInArtefacts().containsAll(artefactModel.getOwnedArtefacts())) {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Get artefact features
+	 * 
+	 * @param featureList
+	 * @param artefact
+	 * @return the list of features of this artifact
+	 */
+	public static List<Feature> getArtefactFeatures(FeatureList featureList, Artefact a) {
+		List<Feature> features = new ArrayList<Feature>();
+		for (Feature f : featureList.getOwnedFeatures()) {
+			if (f.getImplementedInArtefacts().contains(a)) {
+				features.add(f);
+			}
+		}
+		return features;
 	}
 }

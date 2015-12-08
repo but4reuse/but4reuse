@@ -29,7 +29,7 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {
 		List<IConstraint> constraintList = new ArrayList<IConstraint>();
-		FormalContext fc = FCAUtils.createFormalContext(adaptedModel);
+		FormalContext fc = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
 		ConceptLattice cl = FCAUtils.createConceptLattice(fc);
 
 		// REQUIRES

@@ -9,7 +9,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
  org.but4reuse.feature.constraints,
- com.googlecode.erca
+ com.googlecode.erca,
+ org.but4reuse.feature.location,
+ org.but4reuse.visualisation,
+ org.but4reuse.utils,
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/com.googlecode.erca.jar,
  lib/com.googlecode.exputils.jar,

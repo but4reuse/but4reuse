@@ -15,5 +15,19 @@
             name="Formal Concept Analysis constraints discovery">
       </constraintsDiscovery>
    </extension>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.fca.feature.location.RelationalContextsFeatureLocation"
+            name="Relational Contexts feature location">
+      </feature.location>
+   </extension>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.fca.visualisation.FCAVisualisation"
+            name="Formal Context Analysis visualisations exporter">
+      </visualisation>
+   </extension>
 
 </plugin>
