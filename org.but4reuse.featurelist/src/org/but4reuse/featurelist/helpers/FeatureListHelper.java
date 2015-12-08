@@ -72,6 +72,22 @@ public class FeatureListHelper {
 		}
 		return null;
 	}
+	
+	/**
+	 * get feature by name
+	 * 
+	 * @param featureList
+	 * @param feature name
+	 * @return the feature or null
+	 */
+	public static Feature getFeatureByName(FeatureList featureList, String featureName) {
+		for (Feature feature : featureList.getOwnedFeatures()) {
+			if (feature.getName().equals(featureName)) {
+				return feature;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Get the negations of the features

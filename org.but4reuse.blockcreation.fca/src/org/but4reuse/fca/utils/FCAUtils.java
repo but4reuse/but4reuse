@@ -20,7 +20,6 @@ import com.googlecode.erca.clf.ConceptLattice;
 import com.googlecode.erca.clf.ConceptLatticeFamily;
 import com.googlecode.erca.framework.algo.ClfGenerator;
 import com.googlecode.erca.framework.algo.ConceptLatticeGenerator;
-import com.googlecode.erca.framework.io.out.RcfToXHTML;
 import com.googlecode.erca.rcf.FormalContext;
 import com.googlecode.erca.rcf.RcfFactory;
 import com.googlecode.erca.rcf.RelationalContext;
@@ -243,9 +242,10 @@ public class FCAUtils {
 		rc.setName("BlocksFeatures");
 		rcf.getRelationalContexts().add(rc);
 
-		RcfToXHTML a = new RcfToXHTML(rcf);
-		a.generateCode();
-		System.out.println(a.getCode());
+		// Print
+		// RcfToXHTML a = new RcfToXHTML(rcf);
+		// a.generateCode();
+		// System.out.println(a.getCode());
 
 		ClfGenerator clfGenerator = new ClfGenerator(rcf);
 		try {
@@ -254,5 +254,55 @@ public class FCAUtils {
 			e.printStackTrace();
 		}
 		return clfGenerator.getClf();
+	}
+
+	public static FormalContext createArtefactsFeaturesAndBlocksFormalContext(FeatureList featureList,
+			AdaptedModel adaptedModel) {
+		// Creates a formal context
+		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
+		fc.setName("ArtefactsBlocks");
+
+		// Creates an entity per artefact
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+			Entity ent = ErcaFactory.eINSTANCE.createEntity();
+			ent.setName(aa.getArtefact().getName());
+			fc.getEntities().add(ent);
+		}
+
+		Map<String, BinaryAttribute> featureNameMap = new HashMap<String, BinaryAttribute>();
+
+		// Creates a binary attribute per feature
+		for (Feature feature : featureList.getOwnedFeatures()) {
+			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
+			attr.setName("F: " + feature.getName());
+			fc.getAttributes().add(attr);
+			featureNameMap.put("F: " + feature.getName(), attr);
+		}
+
+		// Add pairs
+		for (Artefact a : FeatureListHelper.getArtefactModel(featureList).getOwnedArtefacts()) {
+			for (Feature feature : FeatureListHelper.getArtefactFeatures(featureList, a)) {
+				fc.addPair(fc.getEntity(a.getName()), featureNameMap.get("F: " + feature.getName()));
+			}
+		}
+
+		Map<String, BinaryAttribute> blockNameMap = new HashMap<String, BinaryAttribute>();
+
+		// Creates a binary attribute per block
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
+			attr.setName("B: " + block.getName());
+			fc.getAttributes().add(attr);
+			blockNameMap.put("B: " + block.getName(), attr);
+		}
+
+		// Add pairs
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+			for (Block block : AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa)) {
+				fc.addPair(fc.getEntity(aa.getArtefact().getName()), blockNameMap.get("B: " + block.getName()));
+			}
+		}
+
+		return fc;
 	}
 }

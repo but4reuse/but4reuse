@@ -14,8 +14,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 
 import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.clf.ConceptLatticeFamily;
-import com.googlecode.erca.framework.io.out.ClfToDot;
 import com.googlecode.erca.framework.io.out.LatticeToDot;
 
 /**
@@ -49,7 +47,7 @@ public class FCAVisualisation implements IVisualisation {
 		// Save conceptLattice
 		ConceptLattice cl = FCAUtils.createConceptLattice(FCAUtils.createArtefactsBlocksFormalContext(adaptedModel));
 		// Save
-		File file = new File(folder, artefactModelFile.getName() + "_conceptLattice.dot");
+		File file = new File(folder, artefactModelFile.getName() + "_artefactsBlocksConceptLattice.dot");
 		LatticeToDot dot = new LatticeToDot(cl);
 		dot.generateCode();
 		try {
@@ -58,17 +56,26 @@ public class FCAVisualisation implements IVisualisation {
 			e.printStackTrace();
 		}
 
-		// If we have feature list then Concept Lattice Family
+		// If we have feature list
 		if (featureList != null) {
-			ConceptLatticeFamily clf = FCAUtils.createArtefactsBlocksFeaturesConceptLatticeFamily(featureList,
-					adaptedModel);
-
-			// Save
-			File file2 = new File(folder, artefactModelFile.getName() + "_conceptLatticeFamily.dot");
-			ClfToDot dot2 = new ClfToDot(clf);
+			ConceptLattice cl2 = FCAUtils.createConceptLattice(FCAUtils
+					.createArtefactsFeaturesFormalContext(featureList));
+			File file2 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesConceptLattice.dot");
+			LatticeToDot dot2 = new LatticeToDot(cl2);
 			dot2.generateCode();
 			try {
 				dot2.toFile(file2.getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			ConceptLattice cl3 = FCAUtils.createConceptLattice(FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(
+					featureList, adaptedModel));
+			File file3 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesBlocksConceptLattice.dot");
+			LatticeToDot dot3 = new LatticeToDot(cl3);
+			dot3.generateCode();
+			try {
+				dot3.toFile(file3.getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
