@@ -63,9 +63,13 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 		// EXCLUDES
 		monitor.subTask("FCA: Checking Excludes relations");
 		// No concept have the two features
-		for (Attribute a1 : fc.getAttributes()) {
-			for (Attribute a2 : fc.getAttributes()) {
-				if (!a1.sameAs(a2)) {
+
+		for (int i = 0; i < fc.getAttributes().size(); i++) {
+			Attribute a1 = fc.getAttributes().get(i);
+			for (int j = 0; j < fc.getAttributes().size(); j++) {
+				Attribute a2 = fc.getAttributes().get(j);
+				// mutual exclude is bidirectional, avoid duplicated
+				if (j != i && i < j) {
 					boolean found = false;
 					for (Concept c : cl.getConcepts()) {
 						if (!c.getSimplifiedIntent().isEmpty()) {
