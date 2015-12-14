@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  * @author jabier.martinez
  */
-public class FeatureSpecificFeatureLocation implements IFeatureLocation {
+public class StrictFeatureSpecificFeatureLocation implements IFeatureLocation {
 
 	@Override
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
