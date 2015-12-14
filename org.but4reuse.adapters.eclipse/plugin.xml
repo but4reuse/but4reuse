@@ -17,11 +17,24 @@
          </elements>
       </adapter>
    </extension>
+      <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.eclipse.EclipseAdapter4Benchmark"
+            icon="icons/icon_eclipse.png"
+            id="eclipse4benchmark"
+            name="Eclipse4Benchmark">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.eclipse.PluginElement"></element>
+         </elements>
+      </adapter>
+   </extension>
    <extension
          point="org.but4reuse.visualisation">
       <visualisation
             class="org.but4reuse.adapters.eclipse.benchmark.visualisations.EclipseFeatureLocationPluginsVisualisation"
-            name="org.but4reuse.adapters.eclipse.benchmark.visualisation">
+            name="Eclipse benchmark specific visualisation">
       </visualisation>
    </extension>
    <extension
@@ -32,8 +45,9 @@
             objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
                class="org.but4reuse.adapters.eclipse.benchmark.actions.ActualFeaturesAction"
+               icon="icons/icon_eclipse.png"
                id="org.but4reuse.adapters.eclipse.benchmark.action"
-               label="Eclipse benchmark"
+               label="Create Eclipse Feature Location Benchmark"
                menubarPath="additions">
          </action>
       </objectContribution>

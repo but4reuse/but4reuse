@@ -110,6 +110,8 @@ public class ActualFeaturesAction implements IObjectActionDelegate {
 					e.printStackTrace();
 				}
 
+
+				
 				// Refresh
 				WorkbenchUtils.refreshIResource(container);
 			}

@@ -1,26 +1,42 @@
 package org.but4reuse.adapters.eclipse.benchmark;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.utils.files.FileUtils;
+
+/**
+ * Precision and Recall
+ * 
+ * Precision: Have I retrieved a lot of junk?
+ * 
+ * Recall: Have I found them?
+ * 
+ * F1: Accuracy metric that combines precision and recall
+ * 
+ * @author jabier.martinez
+ * 
+ */
 public class PrecisionRecall {
 
+	/**
+	 * Create results file and store it in the actual folder parent folder
+	 * 
+	 * @param actualFolder
+	 *            containing txt files with the actual values
+	 * @param retrievedFolder
+	 *            containing txt files with the retrieved values
+	 */
 	public static void createResultsFile(File actualFolder, File retrievedFolder) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Name;Precision;Recall;FScore\n");
 		for (File f : actualFolder.listFiles()) {
 			String name = f.getName().substring(0, f.getName().length() - ".txt".length());
 			File f2 = new File(retrievedFolder, f.getName());
-			List<String> actualLines = getLinesOfFile(f);
+			List<String> actualLines = FileUtils.getLinesOfFile(f);
 			if (!actualLines.isEmpty()) {
-				List<String> retrievedLines = getLinesOfFile(f2);
+				List<String> retrievedLines = FileUtils.getLinesOfFile(f2);
 				double precision = getPrecision(actualLines, retrievedLines);
 				double recall = getRecall(actualLines, retrievedLines);
 				double f1measure = getF1(precision, recall);
@@ -28,8 +44,9 @@ public class PrecisionRecall {
 			}
 		}
 		try {
-			writeFile(new File(actualFolder.getParentFile(), "resultPrecisionRecall_" + System.currentTimeMillis()
-					+ ".csv"), sb.toString());
+			FileUtils.writeFile(
+					new File(actualFolder.getParentFile(), "resultPrecisionRecall_" + System.currentTimeMillis()
+							+ ".csv"), sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -83,36 +100,6 @@ public class PrecisionRecall {
 
 	public static double getF1(double precision, double recall) {
 		return 2 * ((precision * recall) / (precision + recall));
-	}
-
-	/**
-	 * Get lines of a file
-	 * 
-	 * @param file
-	 * @return list of strings
-	 */
-	public static List<String> getLinesOfFile(File file) {
-		List<String> lines = new ArrayList<String>();
-		try {
-			FileInputStream fstream = new FileInputStream(file);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			while ((strLine = br.readLine()) != null) {
-				lines.add(strLine);
-			}
-			in.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return lines;
-	}
-
-	public static void writeFile(File file, String text) throws Exception {
-		BufferedWriter output;
-		output = new BufferedWriter(new FileWriter(file, false));
-		output.append(text);
-		output.close();
 	}
 
 }

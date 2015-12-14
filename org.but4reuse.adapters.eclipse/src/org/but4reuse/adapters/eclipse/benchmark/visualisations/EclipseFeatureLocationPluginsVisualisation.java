@@ -9,6 +9,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.PrecisionRecall;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
+import org.but4reuse.feature.location.LocatedFeaturesManager;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -44,15 +45,16 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			IResource res = EMFUtils.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact()
 					.eResource());
 			File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
-
+			
 			// create folder
-			File newFolder = new File(artefactModelFile.getParentFile(), "eclipseFeatureLocations");
-			newFolder.mkdir();
+			File folderForLocatedFeatures = new File(artefactModelFile.getParentFile(), "eclipseFeatureLocations");
+			folderForLocatedFeatures.mkdir();
 
+			// put the calculated feature locations in one file per feature
 			for (Feature feature : featureList.getOwnedFeatures()) {
 				StringBuilder text = new StringBuilder();
-				File file = new File(newFolder, feature.getId() + ".txt");
-				List<Block> blocks = ConstraintsHelper.getCorrespondingBlocks(adaptedModel, feature);
+				File file = new File(folderForLocatedFeatures, feature.getId() + ".txt");
+				List<Block> blocks = LocatedFeaturesManager.getBlocksOfFeature(feature);
 				for (Block b : blocks) {
 					for (BlockElement be : b.getOwnedBlockElements()) {
 						Object o = be.getElementWrappers().get(0).getElement();
@@ -75,7 +77,7 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			// Create precision and recall file
 			File actualFeatures = new File(artefactModelFile.getParentFile(), "actualFeatures");
 			if (actualFeatures.exists()) {
-				PrecisionRecall.createResultsFile(actualFeatures, newFolder);
+				PrecisionRecall.createResultsFile(actualFeatures, folderForLocatedFeatures);
 			}
 
 			// Refresh

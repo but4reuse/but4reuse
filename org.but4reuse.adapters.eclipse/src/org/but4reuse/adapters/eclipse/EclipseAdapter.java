@@ -126,13 +126,13 @@ public class EclipseAdapter implements IAdapter {
 			plugin.setBundleInfoLine(line);
 
 			if (plugin.getName() == null || plugin.getName().contains("%")) {
-				System.out.println("EclipseAdapter.adapt() No name found for: " + plugin.isFragment() + "  "
-						+ plugin.getSymbName());
+				System.out.println("EclipseAdapter.adapt() No name found: " + " isFragment:" + plugin.isFragment()
+						+ "  " + plugin.getSymbName() + " at " + file.getAbsolutePath());
 			}
 		}
 
 		// Add to the list
-		elements.add(newElement);
+		addElement(elements, newElement);
 
 		// Go for the files in case of folder
 		if (file.isDirectory()) {
@@ -144,6 +144,16 @@ public class EclipseAdapter implements IAdapter {
 				}
 			}
 		}
+	}
+
+	/**
+	 * This method was created just to be overriden by the benchmark adapter
+	 * 
+	 * @param elements
+	 * @param newElement
+	 */
+	protected void addElement(List<IElement> elements, FileElement newElement) {
+		elements.add(newElement);
 	}
 
 	@Override
