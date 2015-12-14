@@ -145,10 +145,10 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								// or equal to the threshold
 								for (LocatedFeature locatedFeature : locatedFeatures) {
 									if (locatedFeature.getConfidence() >= threshold) {
-										if (!locatedFeature.getBlock().getCorrespondingFeatures()
-												.contains(locatedFeature.getFeature())) {
-											locatedFeature.getBlock().getCorrespondingFeatures()
-													.add(locatedFeature.getFeature());
+										for (Block block : locatedFeature.getBlocks()) {
+											if (!block.getCorrespondingFeatures().contains(locatedFeature.getFeature())) {
+												block.getCorrespondingFeatures().add(locatedFeature.getFeature());
+											}
 										}
 									}
 								}
