@@ -22,7 +22,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class StrictFeatureSpecificFeatureLocation implements IFeatureLocation {
 
 	@Override
-	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel, IProgressMonitor monitor) {
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			IProgressMonitor monitor) {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		for (Feature f : featureList.getOwnedFeatures()) {
 			List<Block> featureBlocks = null;
@@ -48,7 +49,7 @@ public class StrictFeatureSpecificFeatureLocation implements IFeatureLocation {
 			}
 			for (Block commonBlock : featureBlocks) {
 				// Add the located features
-				locatedFeatures.add(new LocatedFeature(f,commonBlock,1));
+				locatedFeatures.add(new LocatedFeature(f, commonBlock, 1));
 			}
 		}
 		return locatedFeatures;
