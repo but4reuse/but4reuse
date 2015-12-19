@@ -1,7 +1,9 @@
 package org.but4reuse.feature.location.tf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -30,16 +32,25 @@ public class SFS_TF implements IFeatureLocation {
 
 		// Get all the features of a given block and all its elements
 		for (Block block : adaptedModel.getOwnedBlocks()) {
-			monitor.subTask("Feature location FCA SFS and Term Frequency. Features competing for Elements at " + block.getName());
+			monitor.subTask("Feature location FCA SFS and Term Frequency. Features competing for Elements at "
+					+ block.getName());
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 
+			// Cache of feature words
+			Map<Feature, List<String>> fWordsMap = new HashMap<Feature, List<String>>();
 			// For each element, we associate it to the feature with higher tf
 			for (IElement e : blockElements) {
 				int maxTFfound = 0;
 				List<Feature> maxFeatures = new ArrayList<Feature>();
 				for (Feature f : blockFeatures) {
-					int tf = TermFrequencyUtils.calculateTermFrequency(f, e);
+					List<String> featureWords = fWordsMap.get(f);
+					if (featureWords == null) {
+						featureWords = TermFrequencyUtils.getFeatureWords(f);
+						fWordsMap.put(f, featureWords);
+					}
+					List<String> elementWords = TermFrequencyUtils.getElementWords(e);
+					int tf = TermFrequencyUtils.calculateTermFrequency(featureWords, elementWords);
 					if (tf == maxTFfound) {
 						maxFeatures.add(f);
 					} else if (tf > maxTFfound) {
@@ -55,7 +66,6 @@ public class SFS_TF implements IFeatureLocation {
 			}
 		}
 
-		// System.out.println(locatedFeatures.size());
 		return locatedFeatures;
 	}
 

@@ -60,14 +60,11 @@ public class SFS_TFIDF implements IFeatureLocation {
 					}
 				}
 				// Add to the located features
-				//System.out.println(maxFeatures.size());
 				for (Feature f : maxFeatures) {
 					locatedFeatures.add(new LocatedFeature(f, e, 1));
 				}
 			}
 		}
-
-		// System.out.println(locatedFeatures.size());
 		return locatedFeatures;
 	}
 

@@ -1,7 +1,9 @@
 package org.but4reuse.feature.location.tf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -34,11 +36,19 @@ public class SFS_SharedTerm implements IFeatureLocation {
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 
-			// For each element, we associate it to the feature with higher tf
+			// Cache of feature words
+			Map<Feature,List<String>> fWordsMap = new HashMap<Feature,List<String>>();
+			// For each element, we associate it to the feature with has at least one shared term
 			for (IElement e : blockElements) {
 				List<Feature> maxFeatures = new ArrayList<Feature>();
 				for (Feature f : blockFeatures) {
-					int tf = TermFrequencyUtils.calculateTermFrequency(f, e);
+					List<String> featureWords = fWordsMap.get(f);
+					if (featureWords == null) {
+						featureWords = TermFrequencyUtils.getFeatureWords(f);
+						fWordsMap.put(f, featureWords);
+					}
+					List<String> elementWords = TermFrequencyUtils.getElementWords(e);
+					int tf = TermFrequencyUtils.calculateTermFrequency(featureWords, elementWords);
 					if (tf > 0) {
 						maxFeatures.add(f);
 					}
