@@ -21,6 +21,7 @@ import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
+import org.but4reuse.feature.location.LocatedFeaturesManager;
 import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
@@ -89,7 +90,7 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								// location + prepare visualisations
 								int totalWork = AdaptersHelper.getActiveArtefacts(artefactModel).size() + 1 + 1 + 1
 										+ VisualisationsHelper.getSelectedVisualisations().size();
-								monitor.beginTask("Feature Identification", totalWork);
+								monitor.beginTask("Feature Location", totalWork);
 
 								AdaptedModel adaptedModel = AdaptedModelHelper.adapt(artefactModel, adapters, monitor);
 								AdaptedModelManager.setFeatureList(featureList);
@@ -97,7 +98,13 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
+								long startTime = System.currentTimeMillis();
 								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
+								long stopTime = System.currentTimeMillis();
+								long elapsedTime = stopTime - startTime;
+								AdaptedModelManager.registerTime(
+										"Block identification " + a.getClass().getSimpleName(), elapsedTime);
+
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
@@ -136,15 +143,31 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								monitor.subTask("Feature location");
 								IFeatureLocation featureLocationAlgorithm = FeatureLocationHelper
 										.getSelectedFeatureLocation();
+								startTime = System.currentTimeMillis();
 								List<LocatedFeature> locatedFeatures = featureLocationAlgorithm.locateFeatures(
 										featureList, adaptedModel, monitor);
+								stopTime = System.currentTimeMillis();
+								elapsedTime = stopTime - startTime;
+								AdaptedModelManager.registerTime("Feature location "
+										+ featureLocationAlgorithm.getClass().getSimpleName(), elapsedTime);
+
 								// get the location threshold
 								double threshold = FeatureLocationHelper.getPreferenceStore().getDouble(
 										FeatureLocationHelper.LOCATION_THRESHOLD_PREFERENCE);
 								// realize the feature location that are greater
 								// or equal to the threshold
+
+								// initialize the located features manager
+								LocatedFeaturesManager.setLocatedFeatures(new ArrayList<LocatedFeature>());
 								for (LocatedFeature locatedFeature : locatedFeatures) {
 									if (locatedFeature.getConfidence() >= threshold) {
+										// greater than threshold so feed the
+										// located features manager
+										LocatedFeaturesManager.addLocatedFeature(locatedFeature);
+
+										// TODO maybe remove and just keep the
+										// manager
+										// change adapted model...
 										for (Block block : locatedFeature.getBlocks()) {
 											if (!block.getCorrespondingFeatures().contains(locatedFeature.getFeature())) {
 												block.getCorrespondingFeatures().add(locatedFeature.getFeature());
