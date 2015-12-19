@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.utils.nlp.UselessWordsRemover;
 import org.but4reuse.utils.strings.StringUtils;
 
 /**
@@ -138,11 +137,10 @@ public class PluginElement extends FileElement {
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
 		if (name != null) {
-			for (String s : StringUtils.tokenizeAndCamelCase(name)) {
+			for (String s : StringUtils.tokenizeString(name)) {
 				words.add(s);
 			}
 		}
-		UselessWordsRemover.removeUselessWords(words);
 		return words;
 	}
 }

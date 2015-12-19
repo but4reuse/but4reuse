@@ -154,7 +154,7 @@ public class WordCloudUtil {
 		List<Tag> tags1 = c1.tags(new Tag.ScoreComparatorDesc());
 
 		/*
-		 * For each tag in c1 me check if he is in c2. if it's right we add in
+		 * For each tag in c1 me check if it is in c2. if it's right we add in
 		 * res the tag score. In the same time we make the score sum.
 		 * 
 		 * I use tags score to make comparison because if we found just words
@@ -203,15 +203,16 @@ public class WordCloudUtil {
 			 * If we already add this words in the cloud we check the next
 			 * words.
 			 */
-			if (countNbTimesWord(wordsChecked, w) != 0)
+			if (TermFrequencyUtils.calculateTermFrequency(w, wordsChecked) != 0) {
 				continue;
+			}
 			/*
 			 * Here the score of the word w is calculated Formula TF-IDF (
 			 * https://fr.wikipedia.org/wiki/TF-IDF )
 			 */
 
 			double nbBlock_isPresent = nbDocContainsWords(list, w);
-			double nbTimeW = countNbTimesWord(list.get(index), w);
+			double nbTimeW = TermFrequencyUtils.calculateTermFrequency(w, list.get(index));
 			double idf = Math.log(nbBlock / nbBlock_isPresent);
 			double td = (nbTimeW / nbWords);
 			double score = td * idf;
@@ -249,31 +250,14 @@ public class WordCloudUtil {
 	}
 
 	/**
-	 * Count how many time the String word is found in words
-	 * 
-	 * @param words
-	 *            The words list where we search.
-	 * @param word
-	 *            The word that we want to search.
-	 * @return how many time the word was found.
-	 */
-	private static int countNbTimesWord(List<String> words, String word) {
-		int cpt = 0;
-		for (String w : words) {
-			if (w.compareToIgnoreCase(word) == 0)
-				cpt++;
-		}
-		return cpt;
-	}
-	
-	/**
 	 * Get stop words defined in preferences
+	 * 
 	 * @return a non list of stop words
 	 */
-	public static List<String> getUserDefinedStopWords(){
+	public static List<String> getUserDefinedStopWords() {
 		List<String> stopWords = new ArrayList<String>();
 		String stopWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.STOP_WORDS);
-		if(stopWordsString == null || stopWordsString.isEmpty()){
+		if (stopWordsString == null || stopWordsString.isEmpty()) {
 			return stopWords;
 		}
 		return Arrays.asList(stopWordsString.split(","));
@@ -281,17 +265,19 @@ public class WordCloudUtil {
 
 	public static List<String> getUserDefinedMultiWords() {
 		List<String> multiWords = new ArrayList<String>();
-		String multiWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.MULTI_WORDS);
-		if(multiWordsString == null || multiWordsString.isEmpty()){
+		String multiWordsString = Activator.getDefault().getPreferenceStore()
+				.getString(WordCloudPreferences.MULTI_WORDS);
+		if (multiWordsString == null || multiWordsString.isEmpty()) {
 			return multiWords;
 		}
 		return Arrays.asList(multiWordsString.split(","));
 	}
-	
+
 	public static List<String> getUserDefinedSynonyms() {
 		List<String> synonymWords = new ArrayList<String>();
-		String synonymWordsString = Activator.getDefault().getPreferenceStore().getString(WordCloudPreferences.SYNONYM_WORDS);
-		if(synonymWordsString == null || synonymWordsString.isEmpty()){
+		String synonymWordsString = Activator.getDefault().getPreferenceStore()
+				.getString(WordCloudPreferences.SYNONYM_WORDS);
+		if (synonymWordsString == null || synonymWordsString.isEmpty()) {
 			return synonymWords;
 		}
 		return Arrays.asList(synonymWordsString.split(","));

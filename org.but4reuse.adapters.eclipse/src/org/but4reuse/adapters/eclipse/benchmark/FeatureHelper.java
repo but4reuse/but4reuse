@@ -17,20 +17,16 @@ public class FeatureHelper {
 	public static final String FEATURE_XML = "feature.xml";
 	public static final String FEATURES_FOLDER = "features";
 
-	public static List<ActualFeature> getFeaturesOfEclipse(String eclipseInstallationURI) {
+	public static List<ActualFeature> getFeaturesOfEclipse(String eclipseInstallationURI) throws Exception {
 		List<ActualFeature> actualFeatures = new ArrayList<ActualFeature>();
-		try {
-			File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
-			File featuresFolder = new File(eclipseFile, FEATURES_FOLDER);
-			for (File fFolder : featuresFolder.listFiles()) {
-				if (isAFeature(fFolder)) {
-					ActualFeature f = FeatureInfosExtractor.getFeatureInfos(fFolder.getAbsolutePath());
-					// we assume not repeated features
-					actualFeatures.add(f);
-				}
+		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
+		File featuresFolder = new File(eclipseFile, FEATURES_FOLDER);
+		for (File fFolder : featuresFolder.listFiles()) {
+			if (isAFeature(fFolder)) {
+				ActualFeature f = FeatureInfosExtractor.getFeatureInfos(fFolder.getAbsolutePath());
+				// we assume not repeated features
+				actualFeatures.add(f);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return actualFeatures;
 	}

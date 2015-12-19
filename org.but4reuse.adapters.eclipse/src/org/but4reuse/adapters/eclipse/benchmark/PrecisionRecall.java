@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.feature.location.IFeatureLocation;
+import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.utils.files.FileUtils;
 
 /**
@@ -31,6 +33,7 @@ public class PrecisionRecall {
 	public static void createResultsFile(File actualFolder, File retrievedFolder) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Name;Precision;Recall;FScore\n");
+		int abstractFeatures = 0;
 		for (File f : actualFolder.listFiles()) {
 			String name = f.getName().substring(0, f.getName().length() - ".txt".length());
 			File f2 = new File(retrievedFolder, f.getName());
@@ -41,11 +44,15 @@ public class PrecisionRecall {
 				double recall = getRecall(actualLines, retrievedLines);
 				double f1measure = getF1(precision, recall);
 				sb.append(name + ";" + precision + ";" + recall + ";" + f1measure + "\n");
+			} else {
+				abstractFeatures++;
 			}
 		}
+		System.out.println(abstractFeatures + " were actually abstract features");
+		IFeatureLocation algoUsed = FeatureLocationHelper.getSelectedFeatureLocation();
 		try {
 			FileUtils.writeFile(
-					new File(actualFolder.getParentFile(), "resultPrecisionRecall_" + System.currentTimeMillis()
+					new File(actualFolder.getParentFile(), "resultPrecisionRecall_" + algoUsed.getClass().getSimpleName() + "_" + System.currentTimeMillis()
 							+ ".csv"), sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,17 +96,20 @@ public class PrecisionRecall {
 	public static double getPrecision(List<String> actualLines, List<String> retrievedLines) {
 		List<String> truePositives = getTruePositives(actualLines, retrievedLines);
 		List<String> falsePositives = getFalsePositives(actualLines, retrievedLines);
-		return (double) truePositives.size()
+		double precision = (double) truePositives.size()
 				/ (double) ((double) truePositives.size() + (double) falsePositives.size());
+		return precision;
 	}
 
 	public static double getRecall(List<String> actualLines, List<String> retrievedLines) {
 		List<String> truePositives = getTruePositives(actualLines, retrievedLines);
-		return (double) truePositives.size() / (double) actualLines.size();
+		double recall = (double) truePositives.size() / (double) actualLines.size();
+		return recall;
 	}
 
 	public static double getF1(double precision, double recall) {
-		return 2 * ((precision * recall) / (precision + recall));
+		double f1 = 2 * ((precision * recall) / (precision + recall));
+		return f1;
 	}
 
 }

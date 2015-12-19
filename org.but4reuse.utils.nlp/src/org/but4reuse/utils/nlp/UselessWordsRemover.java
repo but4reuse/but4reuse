@@ -21,8 +21,8 @@ public class UselessWordsRemover {
 		// DT Determiner: This The
 		// TO To
 		// CC Coordinating conjunction: And
-		List<String> tagsToRemoveList = Arrays.asList("IN", "DT", "TO", "CC");
-
+		// WDT WH-determiner that what whatever which whichever
+		List<String> tagsToRemoveList = Arrays.asList("IN", "DT", "TO", "CC", "WDT");
 		try {
 			// Create it only once, expensive otherwise
 			if (tagger == null) {

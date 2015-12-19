@@ -14,6 +14,7 @@ Bundle-ClassPath: .,
  lib/opennlp-uima-1.5.3.jar,
  lib/ws4j-1.0.1.jar,
  lib/org.tartarus.snowball.jar
-Export-Package: org.but4reuse.utils.nlp,
+Export-Package: edu.cmu.lti.ws4j.util,
+ org.but4reuse.utils.nlp,
  org.but4reuse.utils.nlp.similarity,
  org.but4reuse.utils.nlp.stemming

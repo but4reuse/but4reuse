@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.feature.location.tf.SFS_SharedTerm"
+            name="SFS + Shared term">
+      </feature.location>
+      <feature.location
+            class="org.but4reuse.feature.location.tf.SFS_TF"
+            name="SFS + TF">
+      </feature.location>
+      <feature.location
+            class="org.but4reuse.feature.location.tf.SFS_TFIDF"
+            name="SFS + TFIDF">
+      </feature.location>
+   </extension>
+
+</plugin>

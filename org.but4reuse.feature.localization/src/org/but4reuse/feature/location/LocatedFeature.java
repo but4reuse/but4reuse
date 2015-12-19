@@ -37,6 +37,12 @@ public class LocatedFeature {
 		this.confidence = confidence;
 	}
 
+	public LocatedFeature(Feature feature, IElement element, double confidence) {
+		this.feature = feature;
+		addElement(element);
+		this.confidence = confidence;
+	}
+
 	public Feature getFeature() {
 		return feature;
 	}
@@ -63,6 +69,10 @@ public class LocatedFeature {
 
 	public void setElements(List<IElement> elements) {
 		this.elements = elements;
+	}
+	
+	private void addElement(IElement element) {
+		elements.add(element);
 	}
 
 	public double getConfidence() {

@@ -29,18 +29,25 @@ public class Cloudifier {
 		return c;
 	}
 
-	private static List<String> processWords(List<String> words) {
+	public static List<String> processWords(List<String> words) {
 		List<IWordsProcessing> processors = new ArrayList<IWordsProcessing>();
 		
-		processors.add(new CamelCaseSplitter());
+		//processors.add(new CamelCaseSplitter());
 		processors.add(new IgnoreUpperCaseProcessing());
-		processors.add(new StopWordsFilter());
-		processors.add(new MultiWordsFilter());
+		//processors.add(new StopWordsFilter());
+		//processors.add(new MultiWordsFilter());
 		processors.add(new StemmingFilter());
-		processors.add(new SynonymsFilter());
+		//processors.add(new SynonymsFilter());
 		processors.add(new PartOfSpeechTagsFilter());
 		
 		for (IWordsProcessing processor : processors) {
+			words = processor.processWords(words);
+		}
+		return words;
+	}
+	
+	public static List<String> processWords(List<String> words, List<IWordsProcessing> processors) {
+		for(IWordsProcessing processor : processors){
 			words = processor.processWords(words);
 		}
 		return words;

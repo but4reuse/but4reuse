@@ -6,7 +6,7 @@
          point="org.but4reuse.feature.location">
       <feature.location
             class="org.but4reuse.feature.location.impl.StrictFeatureSpecificFeatureLocation"
-            name="Strict Feature-Specific Location">
+            name="Strict Feature-Specific location (SFS)">
       </feature.location>
       <feature.location
             class="org.but4reuse.feature.location.impl.FeatureSpecificHeuristicFeatureLocation"

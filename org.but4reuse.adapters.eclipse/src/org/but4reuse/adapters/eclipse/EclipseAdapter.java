@@ -125,10 +125,11 @@ public class EclipseAdapter implements IAdapter {
 			// problem
 			plugin.setBundleInfoLine(line);
 
-			if (plugin.getName() == null || plugin.getName().contains("%")) {
-				System.out.println("EclipseAdapter.adapt() No name found: " + " isFragment:" + plugin.isFragment()
-						+ "  " + plugin.getSymbName() + " at " + file.getAbsolutePath());
-			}
+//			if (plugin.getName() == null || plugin.getName().contains("%")) {
+//				System.out.println("EclipseAdapter.adapt() No name found: " + " isFragment:" + plugin.isFragment()
+//						+ "  " + plugin.getSymbName() + " at " + file.getAbsolutePath());
+//			}
+
 		}
 
 		// Add to the list

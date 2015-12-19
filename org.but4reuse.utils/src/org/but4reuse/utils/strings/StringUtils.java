@@ -20,7 +20,10 @@ public class StringUtils {
 		string = string.replaceAll("\\s"," ");
 		StringTokenizer tk = new StringTokenizer(string, " :!?*+²&~\"#'{}()[]|`_\\^°,.;/§");
 		while (tk.hasMoreTokens()) {
-			list.add(tk.nextToken());
+			String token = tk.nextToken();
+			if(!token.equals("-")){
+				list.add(token);
+			}
 		}
 		return list;
 	}

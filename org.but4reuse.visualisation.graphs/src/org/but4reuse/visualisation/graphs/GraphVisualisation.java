@@ -21,6 +21,7 @@ import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
+import org.but4reuse.visualisation.graphs.utils.GraphUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -29,7 +30,6 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
-import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter;
 
 /**
  * Graph visualisation
@@ -65,23 +65,11 @@ public class GraphVisualisation implements IVisualisation {
 
 		// Save 1
 		File file = new File(graphsFolder, artefactModelFile.getName() + "_elements.graphml");
-		try {
-			GraphMLWriter writer = new GraphMLWriter(graph);
-			writer.setNormalize(true);
-			writer.outputGraph(file.getAbsolutePath());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		GraphUtils.saveGraph(graph, file);
 
 		// Save 2
 		File file2 = new File(graphsFolder, artefactModelFile.getName() + "_blocks.graphml");
-		try {
-			GraphMLWriter writer = new GraphMLWriter(graphBlocks);
-			writer.setNormalize(true);
-			writer.outputGraph(file2.getAbsolutePath());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		GraphUtils.saveGraph(graphBlocks, file2);
 
 		// Refresh
 		WorkbenchUtils.refreshIResource(res.getParent());
@@ -188,6 +176,7 @@ public class GraphVisualisation implements IVisualisation {
 						Vertex two = graph.getVertex(id2);
 						Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
 						edge.setProperty("dependencyType", depKey);
+						edge.setProperty("Label", depKey);
 					}
 				}
 			}

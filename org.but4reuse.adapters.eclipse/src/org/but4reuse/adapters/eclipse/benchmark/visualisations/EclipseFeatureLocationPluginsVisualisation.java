@@ -6,10 +6,12 @@ import java.util.List;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.PrecisionRecall;
-import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
+import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.LocatedFeaturesManager;
+import org.but4reuse.feature.location.LocatedFeaturesUtils;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -54,7 +56,11 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			for (Feature feature : featureList.getOwnedFeatures()) {
 				StringBuilder text = new StringBuilder();
 				File file = new File(folderForLocatedFeatures, feature.getId() + ".txt");
-				List<Block> blocks = LocatedFeaturesManager.getBlocksOfFeature(feature);
+				
+				List<LocatedFeature> locatedFeatures = LocatedFeaturesManager.getLocatedFeatures();
+				
+				// Add plugins of whole blocks
+				List<Block> blocks = LocatedFeaturesUtils.getBlocksOfFeature(locatedFeatures, feature);
 				for (Block b : blocks) {
 					for (BlockElement be : b.getOwnedBlockElements()) {
 						Object o = be.getElementWrappers().get(0).getElement();
@@ -63,6 +69,16 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 						}
 					}
 				}
+				
+				// Add plugins
+				List<IElement> plugins = LocatedFeaturesUtils.getElementsOfFeature(locatedFeatures, feature);
+				for(IElement element : plugins){
+					if (element instanceof PluginElement) {
+						text.append(((PluginElement) element).getSymbName() + "\n");
+					}
+				}
+				
+				
 				// remove last \n
 				if (text.length() > 0) {
 					text.setLength(text.length() - 1);
@@ -75,7 +91,7 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			}
 
 			// Create precision and recall file
-			File actualFeatures = new File(artefactModelFile.getParentFile(), "actualFeatures");
+			File actualFeatures = new File(artefactModelFile.getParentFile(), "benchmark/actualFeatures");
 			if (actualFeatures.exists()) {
 				PrecisionRecall.createResultsFile(actualFeatures, folderForLocatedFeatures);
 			}
