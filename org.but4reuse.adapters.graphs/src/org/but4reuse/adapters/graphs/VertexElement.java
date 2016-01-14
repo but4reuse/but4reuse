@@ -30,7 +30,8 @@ public class VertexElement extends AbstractElement {
 					return 1;
 				}
 			} else {
-				if (vertexElement.getVertex().getProperty(id).equals(vertex.getProperty(id))) {
+				if (vertexElement.getVertex().getProperty(id) != null
+						&& vertexElement.getVertex().getProperty(id).equals(vertex.getProperty(id))) {
 					return 1;
 				}
 			}

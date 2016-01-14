@@ -31,7 +31,8 @@ public class EdgeElement extends AbstractElement {
 					return 1;
 				}
 			} else {
-				if (edgeElement.getEdge().getProperty(id).equals(edge.getProperty(id))) {
+				if (edgeElement.getEdge().getProperty(id) != null
+						&& edgeElement.getEdge().getProperty(id).equals(edge.getProperty(id))) {
 					return 1;
 				}
 			}
