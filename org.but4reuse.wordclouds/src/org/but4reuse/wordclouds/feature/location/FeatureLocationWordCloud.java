@@ -12,6 +12,7 @@ import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.FeatureWordCloudUtil;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -56,13 +57,13 @@ public class FeatureLocationWordCloud implements IFeatureLocation {
 
 		List<Cloud> clouds_IDF_Features = new ArrayList<Cloud>();
 		for (int i = 0; i < listFeaturesWords.size(); i++) {
-			clouds_IDF_Features.add(WordCloudUtil.createWordCloudIDF(listFeaturesWords, i));
+			clouds_IDF_Features.add(Cloudifier.cloudifyTFIDF(listFeaturesWords, i));
 		}
 
 		// Word cloud IDF calculation for blocks
 		List<Cloud> clouds_IDF_Blocks = new ArrayList<Cloud>();
 		for (int i = 0; i < listBlocksWords.size(); i++) {
-			clouds_IDF_Blocks.add(WordCloudUtil.createWordCloudIDF(listBlocksWords, i));
+			clouds_IDF_Blocks.add(Cloudifier.cloudifyTFIDF(listBlocksWords, i));
 		}
 
 		for (int i = 0; i < featureList.getOwnedFeatures().size(); i++) {

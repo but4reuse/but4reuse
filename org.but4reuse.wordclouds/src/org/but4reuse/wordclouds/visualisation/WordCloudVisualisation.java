@@ -11,14 +11,10 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
-import org.but4reuse.wordclouds.activator.Activator;
-import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
-import org.but4reuse.wordclouds.util.WordCloudUtil;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.mcavallo.opencloud.Cloud;
-import org.mcavallo.opencloud.Tag;
-import org.mcavallo.opencloud.Cloud.Case;
 
 public class WordCloudVisualisation implements IVisualisation {
 
@@ -46,49 +42,28 @@ public class WordCloudVisualisation implements IVisualisation {
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
-
-		List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
-		
 		clouds = new ArrayList<Cloud>();
 		clouds_idf = new ArrayList<Cloud>();
 		List<List<String>> listWords = new ArrayList<List<String>>();
 
 		for (Block b : adaptedModel.getOwnedBlocks()) {
-
-			Cloud cloud = null;
-			cloud = new Cloud(Case.CAPITALIZATION);
-			cloud.setMaxWeight(50);
-			cloud.setMinWeight(5);
-			cloud.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
-					.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-			List<String> list = new ArrayList<String>();
 			/*
 			 * For each block we get all elements owned We use the method
 			 * getWords for having several strings which could be used as block
 			 * name.
 			 */
+			List<String> words = new ArrayList<String>();
 			for (IElement e : (AdaptedModelHelper.getElementsOfBlock(b))) {
-				List<String> words = ((AbstractElement) e).getWords();
-				
-				// remove stop words
-				words.removeAll(stopWords);
-				
-				addWords(cloud, words);
-				for (String s : words) {
-					if (s.compareTo("") != 0) {
-						list.add(s.trim());
-					}
-				}
+				words.addAll(((AbstractElement) e).getWords());
 			}
-
+			Cloud cloud = Cloudifier.cloudify(words);
 			clouds.add(cloud);
-			listWords.add(list);
+			listWords.add(words);
 		}
 
 		for (int i = 0; i < listWords.size(); i++) {
-			clouds_idf.add(WordCloudUtil.createWordCloudIDF(listWords, i));
+			clouds_idf.add(Cloudifier.cloudifyTFIDF(listWords, i));
 		}
-
 	}
 
 	@Override
@@ -97,25 +72,10 @@ public class WordCloudVisualisation implements IVisualisation {
 			@Override
 			public void run() {
 				WorkbenchUtils.forceShowView("org.but4reuse.wordclouds.view");
-				WordCloudVis.update(0, false);
+				WordCloudView.update(0, false);
 			}
 		});
 
-	}
-
-	/**
-	 * Add strings in a cloud
-	 * 
-	 * @param cloud
-	 *            This is the cloud where strings will be added.
-	 * @param words
-	 *            The list which contains all strings to add in the cloud.
-	 */
-	private static void addWords(Cloud cloud, List<String> words) {
-		for (String word : words) {
-			String s = word.trim();
-			cloud.addTag(new Tag(s));
-		}
 	}
 
 }

@@ -62,7 +62,7 @@ public class TermFrequencyUtils {
 		for (Feature f : features) {
 			featuresWords.add(getFeatureWords(f));
 		}
-		Cloud featureCloud = WordCloudUtil.createWordCloudIDF(featuresWords, featureIndex);
+		Cloud featureCloud = Cloudifier.cloudifyTFIDF(featuresWords, featureIndex);
 		return featureCloud;
 	}
 

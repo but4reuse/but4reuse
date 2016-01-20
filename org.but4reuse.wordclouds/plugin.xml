@@ -30,7 +30,7 @@
             id="org.but4reuse.wordclouds.ShowArtefactWordCloudIDF"
             objectClass="org.but4reuse.artefactmodel.Artefact">
          <action
-               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloudIDF"
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloudTFIDF"
                icon="icons/cloud.png"
                id="org.but4reuse.wordclouds.action3"
                label="Show TF-IDF Word Cloud">
@@ -41,7 +41,7 @@
             id="org.but4reuse.wordclouds.ShowFeatureWordCloudIDF"
             objectClass="org.but4reuse.featurelist.Feature">
          <action
-               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloudIDF"
+               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloudTFIDF"
                icon="icons/cloud.png"
                id="org.but4reuse.wordclouds.action4"
                label="Show TF-IDF Word CLoud">
@@ -63,7 +63,7 @@
          point="org.eclipse.ui.views">
       <view
             category="org.but4reuse.views.category"
-            class="org.but4reuse.wordclouds.visualisation.WordCloudVis"
+            class="org.but4reuse.wordclouds.visualisation.WordCloudView"
             icon="icons/cloud.png"
             id="org.but4reuse.wordclouds.view"
             name="WordClouds"

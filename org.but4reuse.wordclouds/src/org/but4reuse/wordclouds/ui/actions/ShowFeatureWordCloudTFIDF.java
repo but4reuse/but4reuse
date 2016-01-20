@@ -6,6 +6,7 @@ import java.util.List;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.FeatureWordCloudUtil;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.jface.action.IAction;
@@ -24,7 +25,7 @@ import org.mcavallo.opencloud.Cloud;
  *         create a new window where a word cloud will be drawn
  */
 
-public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
+public class ShowFeatureWordCloudTFIDF implements IObjectActionDelegate {
 
 	ISelection selection;
 	Feature feature = null;
@@ -64,7 +65,7 @@ public class ShowFeatureWordCloudIDF implements IObjectActionDelegate {
 
 					win.open();
 					win.update();
-					c = WordCloudUtil.createWordCloudIDF(list, fList.getOwnedFeatures().indexOf(feature));
+					c = Cloudifier.cloudifyTFIDF(list, fList.getOwnedFeatures().indexOf(feature));
 					WordCloudUtil.drawWordCloud(comp, c);
 
 				}

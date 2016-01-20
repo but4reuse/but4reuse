@@ -10,6 +10,7 @@ import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -29,7 +30,7 @@ import org.mcavallo.opencloud.Cloud;
  *         create a new window where a word cloud will be drawn
  */
 
-public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
+public class ShowArtefactWordCloudTFIDF implements IObjectActionDelegate {
 
 	ISelection selection;
 	Artefact artefact = null;
@@ -96,9 +97,8 @@ public class ShowArtefactWordCloudIDF implements IObjectActionDelegate {
 						win.open();
 						win.update();
 
-						c = WordCloudUtil.createWordCloudIDF(list, ((ArtefactModel) artefactModel).getOwnedArtefacts()
-								.indexOf(artefact));
-
+						c = Cloudifier.cloudifyTFIDF(list, ((ArtefactModel) artefactModel).getOwnedArtefacts().indexOf(artefact));
+						
 						WordCloudUtil.drawWordCloud(comp, c);
 
 					}

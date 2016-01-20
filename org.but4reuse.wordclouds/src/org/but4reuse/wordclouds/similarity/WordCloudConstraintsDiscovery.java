@@ -16,6 +16,7 @@ import org.but4reuse.feature.constraints.impl.ConstraintImpl;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.preferences.TermBasedConstraintsDiscoveryPreferences;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.but4reuse.wordclouds.util.WordCloudUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
@@ -52,7 +53,7 @@ public class WordCloudConstraintsDiscovery implements IConstraintsDiscovery {
 		 * Word Cloud IDF creation
 		 */
 		for (int i = 0; i < nb_Block; i++)
-			clouds.add(WordCloudUtil.createWordCloudIDF(listWords, i));
+			clouds.add(Cloudifier.cloudifyTFIDF(listWords, i));
 
 		/*
 		 * Constraints Discovery Requires

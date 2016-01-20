@@ -38,12 +38,12 @@ import org.mcavallo.opencloud.Tag;
  * @author Arthur This class is an eclipse view.
  */
 
-public class WordCloudVis extends ViewPart {
+public class WordCloudView extends ViewPart {
 
 	/**
 	 * The current WorldCloudVis.
 	 */
-	static private WordCloudVis singleton = null;
+	static private WordCloudView singleton = null;
 
 	/**
 	 * The combo control in the view.
@@ -94,7 +94,7 @@ public class WordCloudVis extends ViewPart {
 	/**
 	 * Default constructor.
 	 */
-	public WordCloudVis() {
+	public WordCloudView() {
 
 		super();
 		singleton = this;
@@ -105,7 +105,7 @@ public class WordCloudVis extends ViewPart {
 	 * 
 	 * @return The singleton
 	 */
-	public static WordCloudVis getSingleton() {
+	public static WordCloudView getSingleton() {
 		return singleton;
 	}
 
@@ -195,7 +195,7 @@ public class WordCloudVis extends ViewPart {
 
 		Cloud c = null;
 
-		if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+		if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
 			c = WordCloudVisualisation.getCloudsIDF().get(index);
 		else
 			c = WordCloudVisualisation.getClouds().get(index);
@@ -307,9 +307,9 @@ public class WordCloudVis extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE);
 				Cloud c = null;
-				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
+				int i = WordCloudView.getSingleton().getCombo().getSelectionIndex();
 				String name = "Word Cloud " + AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(i).getName();
-				if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 0) {
+				if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 0) {
 					win.setSize(1000, 2000);
 					c = WordCloudVisualisation.getClouds().get(i);
 
@@ -355,7 +355,7 @@ public class WordCloudVis extends ViewPart {
 					for (Block b : AdaptedModelManager.getAdaptedModel().getOwnedBlocks()) {
 
 						Cloud c = WordCloudVisualisation.getClouds().get(ind);
-						if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+						if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
 							c = WordCloudVisualisation.getCloudsIDF().get(ind);
 
 						String name = WordCloudUtil.rename(names, c);
@@ -365,7 +365,7 @@ public class WordCloudVis extends ViewPart {
 						}
 						ind++;
 					}
-					WordCloudVis.update(combo.getSelectionIndex(), true);
+					WordCloudView.update(combo.getSelectionIndex(), true);
 
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
@@ -395,11 +395,11 @@ public class WordCloudVis extends ViewPart {
 						names.add(bl.getName());
 					}
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
-					if (WordCloudVis.getSingleton().getTabFolder().getSelectionIndex() == 1)
+					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
 						c = WordCloudVisualisation.getCloudsIDF().get(ind);
 					String name = WordCloudUtil.rename(names, c);
 					b.setName(name);
-					WordCloudVis.update(combo.getSelectionIndex(), true);
+					WordCloudView.update(combo.getSelectionIndex(), true);
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 					break;
@@ -425,7 +425,7 @@ public class WordCloudVis extends ViewPart {
 					int ind = combo.getSelectionIndex();
 					Block b = AdaptedModelManager.getAdaptedModel().getOwnedBlocks().get(ind);
 					b.setName(text.getText());
-					WordCloudVis.update(combo.getSelectionIndex(), true);
+					WordCloudView.update(combo.getSelectionIndex(), true);
 					VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 							AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 					break;
@@ -443,7 +443,7 @@ public class WordCloudVis extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Combo c = (Combo) e.getSource();
-				WordCloudVis.update(c.getSelectionIndex(), true);
+				WordCloudView.update(c.getSelectionIndex(), true);
 			}
 
 			@Override
@@ -464,7 +464,7 @@ public class WordCloudVis extends ViewPart {
 				String newName = l.getItem(l.getSelectionIndex());
 				int ind = newName.indexOf(" - ");
 				b.setName(newName.substring(0, ind));
-				WordCloudVis.update(combo.getSelectionIndex(), true);
+				WordCloudView.update(combo.getSelectionIndex(), true);
 				VisualisationsHelper.notifyVisualisations(AdaptedModelManager.getFeatureList(),
 						AdaptedModelManager.getAdaptedModel(), null, new NullProgressMonitor());
 			}
@@ -485,8 +485,8 @@ public class WordCloudVis extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				int ind = ((TabFolder) (e.getSource())).getSelectionIndex();
-				int i = WordCloudVis.getSingleton().getCombo().getSelectionIndex();
-				WordCloudVis.getSingleton().getList().removeAll();
+				int i = WordCloudView.getSingleton().getCombo().getSelectionIndex();
+				WordCloudView.getSingleton().getList().removeAll();
 				Cloud c = null;
 				if (ind == 0) {
 					c = WordCloudVisualisation.getClouds().get(i);
@@ -499,7 +499,7 @@ public class WordCloudVis extends ViewPart {
 				}
 
 				for (Tag t : c.tags())
-					WordCloudVis.getSingleton().getList()
+					WordCloudView.getSingleton().getList()
 							.add(t.getName() + " - " + String.format("%.2f", t.getNormScore()));
 
 			}

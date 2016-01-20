@@ -176,57 +176,6 @@ public class WordCloudUtil {
 	}
 
 	/**
-	 * It will create a word cloud using TF-IDF formula
-	 * 
-	 * @param list
-	 *            An ArrayList of String ArrayList, each sub list contains all
-	 *            words in one of your "Document"
-	 * @param index
-	 *            The index of the list that we want use to create the word
-	 *            cloud
-	 * @return A new word cloud
-	 */
-	public static Cloud createWordCloudIDF(List<List<String>> list, int index) {
-		double nbBlock = list.size();
-		double nbWords = list.get(index).size();
-
-		ArrayList<String> wordsChecked = new ArrayList<String>();
-
-		Cloud cloud_IDF = new Cloud(Case.CAPITALIZATION);
-		cloud_IDF.setMaxTagsToDisplay(Activator.getDefault().getPreferenceStore()
-				.getInt(WordCloudPreferences.WORDCLOUD_NB_W));
-		cloud_IDF.setMinWeight(5);
-		cloud_IDF.setMaxWeight(50);
-
-		for (String w : list.get(index)) {
-			/*
-			 * If we already add this words in the cloud we check the next
-			 * words.
-			 */
-			if (TermFrequencyUtils.calculateTermFrequency(w, wordsChecked) != 0) {
-				continue;
-			}
-			/*
-			 * Here the score of the word w is calculated Formula TF-IDF (
-			 * https://fr.wikipedia.org/wiki/TF-IDF )
-			 */
-
-			double nbBlock_isPresent = nbDocContainsWords(list, w);
-			double nbTimeW = TermFrequencyUtils.calculateTermFrequency(w, list.get(index));
-			double idf = Math.log(nbBlock / nbBlock_isPresent);
-			double td = (nbTimeW / nbWords);
-			double score = td * idf;
-
-			cloud_IDF.addTag(new Tag(w, score));
-			wordsChecked.add(w);
-
-		}
-
-		return cloud_IDF;
-
-	}
-
-	/**
 	 * Count how many lists contain the string word
 	 * 
 	 * @param list
