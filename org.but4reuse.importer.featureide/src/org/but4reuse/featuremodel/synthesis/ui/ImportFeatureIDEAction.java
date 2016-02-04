@@ -3,7 +3,6 @@ package org.but4reuse.featuremodel.synthesis.ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.but4reuse.artefactmodel.Artefact;
@@ -84,11 +83,13 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (UnsupportedModelException e) {
 					e.printStackTrace();
 				}
-				Hashtable<String, de.ovgu.featureide.fm.core.Feature> table = featureModel.getFeatureTable();
+
+//				Incompatibilité v2.7.3
+//				Map<String, de.ovgu.featureide.fm.core.Feature> table = featureModel.getFeatureTable(); 
 
 				// Create/update features
-				for (String fID : table.keySet()) {
-					de.ovgu.featureide.fm.core.Feature f = table.get(fID);
+				for (String fID : featureModel.getFeatureNames()) {
+					de.ovgu.featureide.fm.core.Feature f = featureModel.getFeature(fID);
 					Feature feat = FeatureListHelper.getFeature(featureList, fID);
 					if(feat==null){
 						// it did not exist, create it

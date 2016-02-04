@@ -21,4 +21,3 @@ Export-Package: org.but4reuse.adapters,
  org.but4reuse.adapters.markers,
  org.but4reuse.adapters.preferences
 Import-Package: org.eclipse.core.resources
-#TestModif
