@@ -1,4 +1,4 @@
-package org.butreuse.adapters.eclipse.randomVariant;
+package org.but4reuse.adapters.eclipse.randomVariant;
 
 import java.util.HashMap;
 import java.util.List;

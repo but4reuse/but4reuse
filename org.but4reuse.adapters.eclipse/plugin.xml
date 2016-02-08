@@ -52,7 +52,7 @@
       <objectContribution
             adaptable="false"
             id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
-            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+            objectClass="org.but4reuse.adapters.eclipse.randomVariant">
          <action
                class="org.but4reuse.adapters.eclipse.EclipseAdapter"
                icon="icons/icon_eclipse.png"
