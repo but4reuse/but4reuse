@@ -49,6 +49,19 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+         <action
+               class="org.but4reuse.adapters.eclipse.EclipseAdapter"
+               icon="icons/icon_eclipse.png"
+               id="org.but4reuse.adapters.eclipse.benchmark.Random"
+               label="Create Feature Random"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
+   
 
 </plugin>
