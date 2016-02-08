@@ -1,9 +1,5 @@
 package org.but4reuse.adapters.eclipse.randomVariant;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -11,19 +7,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
-import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
-
 
 public class CreateVariantEclipseRandom implements IObjectActionDelegate {
 
@@ -72,7 +59,7 @@ public class CreateVariantEclipseRandom implements IObjectActionDelegate {
 		final JComponent[] inputs = new JComponent[] {
 				new JLabel(InputMessageText),
 				Input,
-				fc,
+				//fc,
 				new JLabel(OutputMessageText),
 				Output,
 				new JLabel(numberOfVariantText),
@@ -110,42 +97,14 @@ public class CreateVariantEclipseRandom implements IObjectActionDelegate {
 			this.run(action);
 			return;
 		}
+		final JComponent[] input = new JComponent[] {
+				new JLabel(methodeJulien(Input.getText(), Output.getText(), Integer.parseInt(numberVariant.getText()),
+						Integer.parseInt(randomSelector.getText()),invar.isSelected()))
+				
+		};
+		JOptionPane.showMessageDialog(null, input, "Generation Random", JOptionPane.OK_CANCEL_OPTION);
+		
 		System.out.println(" fin methode run ");
-	}
-
-	public static Graph createActualFeaturesGraph(List<ActualFeature> features) {
-		Graph graph = new TinkerGraph();
-		// Add nodes
-		Integer id = 0;
-		Map<ActualFeature, Vertex> fMap = new HashMap<ActualFeature, Vertex>();
-		Map<String, Vertex> idMap = new HashMap<String, Vertex>();
-		for (ActualFeature f : features) {
-			Vertex v = graph.addVertex(id);
-			v.setProperty("Label", f.getId());
-			v.setProperty("Name", f.getName());
-			fMap.put(f, v);
-			idMap.put(f.getId(), v);
-			id++;
-		}
-		// Add edges
-		for (ActualFeature f : features) {
-			Vertex source = fMap.get(f);
-			for (String requi : f.getRequiredFeatures()) {
-				Vertex target = idMap.get(requi);
-				if (source == null || target == null) {
-					System.out.println(f.getId() + " requires " + requi + " but it was not found");
-				} else {
-					Edge e = source.addEdge("required", target);
-					e.setProperty("Label", "required");
-				}
-			}
-			for (String requi : f.getIncludedFeatures()) {
-				Vertex target = idMap.get(requi);
-				Edge e = source.addEdge("included", target);
-				e.setProperty("Label", "included");
-			}
-		}
-		return graph;
 	}
 
 	@Override
@@ -156,6 +115,10 @@ public class CreateVariantEclipseRandom implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 
+	}
+	
+	public String methodeJulien(String in, String out, int number, int rand, boolean check){
+		return "input = "+in+" output = "+out+" nbVar ="+number+" random Select = "+rand+" check = "+check;
 	}
 
 }

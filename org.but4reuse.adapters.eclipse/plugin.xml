@@ -49,19 +49,21 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
             id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
-            objectClass="org.but4reuse.adapters.eclipse.randomVariant">
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
-               class="org.but4reuse.adapters.eclipse.EclipseAdapter"
+               class="org.but4reuse.adapters.eclipse.randomVariant.CreateVariantEclipseRandom"
                icon="icons/icon_eclipse.png"
-               id="org.but4reuse.adapters.eclipse.benchmark.Random"
-               label="Create Feature Random"
+               id="org.but4reuse.adapters.eclipse.benchmark.action"
+               label="Create Random Eclipse"
                menubarPath="additions">
          </action>
       </objectContribution>
    </extension>
-   
 
 </plugin>
