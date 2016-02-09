@@ -28,6 +28,7 @@
          </elements>
       </adapter>
    </extension>
+   
    <extension
          point="org.but4reuse.visualisation">
       <visualisation
