@@ -44,7 +44,7 @@ public class ExportWekaFileAction implements IViewActionDelegate {
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 
 		// Create instances
-		Instances instances = WekaUtils.createInstances(adaptedModel);
+		Instances instances = WekaUtils.createInstances(adaptedModel, false);
 
 		// Save it and refresh
 		try {

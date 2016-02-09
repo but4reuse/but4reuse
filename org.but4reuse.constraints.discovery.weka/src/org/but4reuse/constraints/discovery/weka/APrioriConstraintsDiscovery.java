@@ -29,7 +29,7 @@ public class APrioriConstraintsDiscovery implements IConstraintsDiscovery {
 		List<IConstraint> constraints = new ArrayList<IConstraint>();
 
 		// Create instances, the order of the blocks are maintained
-		Instances m_instances = WekaUtils.createInstances(adaptedModel);
+		Instances m_instances = WekaUtils.createInstances(adaptedModel, false);
 		Apriori apriori = new Apriori();
 		apriori.setMinMetric(1);
 		int m_numRules = 1000;

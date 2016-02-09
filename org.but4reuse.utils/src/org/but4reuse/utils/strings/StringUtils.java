@@ -17,11 +17,15 @@ public class StringUtils {
 		if (string == null) {
 			return list;
 		}
-		string = string.replaceAll("\\s"," ");
+		
+		string = string.replaceAll("\\s", " ");
 		StringTokenizer tk = new StringTokenizer(string, " :!?*+²&~\"#'{}()[]|`_\\^°,.;/§");
 		while (tk.hasMoreTokens()) {
 			String token = tk.nextToken();
-			if(!token.equals("-")){
+			
+
+			
+			if (!token.equals("-")) {
 				list.add(token);
 			}
 		}
@@ -39,20 +43,28 @@ public class StringUtils {
 		if (word == null) {
 			return list;
 		}
-		for (String s : word.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])")) {
-			list.add(s);
+		String[] split = word.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
+
+		for (int i = 0; i < split.length; i++) {
+			// special case e.g. Non-Complete
+			if (split[i].endsWith("-") && i + 1 < split.length) {
+				list.add(split[i] + split[i + 1]);
+			} else {
+				list.add(split[i]);
+			}
 		}
 		return list;
 	}
-	
+
 	/**
 	 * Tokenize and then split CamelCase
+	 * 
 	 * @param word
 	 * @return a non null list of words
 	 */
-	public static List<String> tokenizeAndCamelCase(String word){
+	public static List<String> tokenizeAndCamelCase(String word) {
 		List<String> list = new ArrayList<String>();
-		for(String token : tokenizeString(word)){
+		for (String token : tokenizeString(word)) {
 			list.addAll(splitCamelCase(token));
 		}
 		return list;

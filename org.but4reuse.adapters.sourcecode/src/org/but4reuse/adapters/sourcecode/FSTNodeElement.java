@@ -135,33 +135,20 @@ public abstract class FSTNodeElement extends AbstractElement {
 	}
 
 	@Override
-	public ArrayList<String> getWords() {
-		ArrayList<String> words = new ArrayList<String>();
-
+	public List<String> getWords() {
 		String sub = name;
 
-		if (sub.contains("("))
+		// remove parameter types. e.g. getExtension(File-File)
+		if (sub.contains("(")) {
 			sub = sub.substring(0, sub.indexOf("("));
-
-		
-		for (int i = 0; i < getWeight(); i++){
-			List<String> a = StringUtils.splitCamelCase(sub);
-			words.addAll(a);
 		}
 
-		return words;
-	}
-
-	private int getWeight() {
-
-		if (type.compareToIgnoreCase("MethodDecl") == 0 || type.compareToIgnoreCase("Func") == 0)
-			return 1;
-		else if (type.compareToIgnoreCase("ClassDeclaration") == 0)
-			return 3;
-		else if (type.compareToIgnoreCase("ConstructorDecl") == 0)
-			return 2;
-		else
-			return 0;
+		// sometimes is just this symbol, so return empty
+		if (sub.equals("-")) {
+			return new ArrayList<String>();
+		}
+		// normally is one word, but we still tokenize, e.g. word1_word2
+		return StringUtils.tokenizeString(sub);
 	}
 
 	@Override

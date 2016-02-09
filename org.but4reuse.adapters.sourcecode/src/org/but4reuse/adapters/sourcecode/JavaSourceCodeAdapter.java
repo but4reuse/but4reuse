@@ -33,6 +33,27 @@ public class JavaSourceCodeAdapter implements IAdapter {
 		ReadFSTProduct rp1 = new ReadFSTProduct();
 		rp1.readProduct(uri);
 		List<IElement> elements = rp1.getArtefactElements();
+
+		// Put info in the console for the number of classes and methods
+		int c = 0;
+		int m = 0;
+		for (IElement element : elements) {
+			if (element instanceof FSTNodeElement) {
+				FSTNodeElement e = (FSTNodeElement) element;
+				if (LanguageManager.getLanguage().isMethod(e.getNode())
+						|| LanguageManager.getLanguage().isConstructor(e.getNode())) {
+					m++;
+				}
+			}
+			if (element instanceof FSTNonTerminalNodeElement) {
+				FSTNonTerminalNodeElement e = (FSTNonTerminalNodeElement) element;
+				if (e.getType().equals("ClassDeclaration")) {
+					// || e.getType().equals("InnerClassDecl")) {
+					c++;
+				}
+			}
+		}
+		System.out.println(c + ";" + m);
 		return elements;
 	}
 

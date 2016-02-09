@@ -2,6 +2,7 @@ package org.but4reuse.constraints.discovery.weka.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,18 +32,28 @@ public class WekaUtils {
 	 * @param adaptedModel
 	 * @return
 	 */
-	public static Instances createInstances(AdaptedModel adaptedModel) {
+	public static Instances createInstances(AdaptedModel adaptedModel, boolean ignoreCommonBlocks) {
+
+		// ignore common
+		List<Block> commonBlocks = new ArrayList<Block>();
+		if (ignoreCommonBlocks) {
+			commonBlocks = AdaptedModelHelper.getCommonBlocks(adaptedModel);
+		}
+
 		// declare attributes (the blocks)
-		FastVector attributes = new FastVector(adaptedModel.getOwnedBlocks().size());
+		FastVector attributes = new FastVector(adaptedModel.getOwnedBlocks().size() - commonBlocks.size());
 		Map<Block, Attribute> map = new HashMap<Block, Attribute>();
 		FastVector values = new FastVector(2);
 		// this order is important for the results in fast vectors
 		values.addElement("0");
 		values.addElement("1");
 		for (Block block : adaptedModel.getOwnedBlocks()) {
-			Attribute a = new Attribute(block.getName(), values);
-			attributes.addElement(a);
-			map.put(block, a);
+			// ignore common
+			if (!commonBlocks.contains(block)) {
+				Attribute a = new Attribute(block.getName(), values);
+				attributes.addElement(a);
+				map.put(block, a);
+			}
 		}
 		// feed the instances (the artefacts)
 		String relationName = AdaptedModelHelper.getName(adaptedModel);
@@ -55,12 +66,17 @@ public class WekaUtils {
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
 			// Create the instance
 			List<Block> blocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(adaptedArtefact);
-			Instance instance = new Instance(adaptedModel.getOwnedBlocks().size());
+			// ignore common
+			blocks.removeAll(commonBlocks);
+			Instance instance = new Instance(adaptedModel.getOwnedBlocks().size() - commonBlocks.size());
 			for (Block block : adaptedModel.getOwnedBlocks()) {
-				if (blocks.contains(block)) {
-					instance.setValue(map.get(block), "1");
-				} else {
-					instance.setValue(map.get(block), "0");
+				// ignore common
+				if (!commonBlocks.contains(block)) {
+					if (blocks.contains(block)) {
+						instance.setValue(map.get(block), "1");
+					} else {
+						instance.setValue(map.get(block), "0");
+					}
 				}
 			}
 			instances.add(instance);

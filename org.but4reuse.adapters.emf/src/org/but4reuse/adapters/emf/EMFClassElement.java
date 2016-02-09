@@ -50,7 +50,7 @@ public class EMFClassElement extends AbstractElement {
 	@Override
 	public List<String> getWords() {
 		String className = EMFUtils.getText(eObject);
-		return StringUtils.tokenizeAndCamelCase(className);
+		return StringUtils.tokenizeString(className);
 	}
 
 }

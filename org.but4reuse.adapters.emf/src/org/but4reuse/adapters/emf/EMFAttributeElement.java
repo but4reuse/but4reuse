@@ -1,6 +1,5 @@
 package org.but4reuse.adapters.emf;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IElement;
@@ -48,6 +47,6 @@ public class EMFAttributeElement extends AbstractElement {
 	@Override
 	public List<String> getWords() {
 		String valueName = value.toString();
-		return StringUtils.tokenizeAndCamelCase(valueName);
+		return StringUtils.tokenizeString(valueName);
 	}
 }
