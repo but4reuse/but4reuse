@@ -121,7 +121,6 @@ public class CreateVariantEclipseRandom implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		
 	}
 	
 	public String methodeJulien(String in, String out, int number, int rand, boolean check){
