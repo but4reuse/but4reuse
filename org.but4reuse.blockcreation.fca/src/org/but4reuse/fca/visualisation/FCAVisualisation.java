@@ -13,8 +13,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 
-import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.framework.io.out.LatticeToDot;
+import fr.labri.galatea.ConceptOrder;
+import fr.labri.galatea.Context;
+import fr.labri.galatea.io.GenerateDot;
+import fr.labri.galatea.io.GenerateHTML;
 
 /**
  * Visualisation
@@ -45,23 +47,28 @@ public class FCAVisualisation implements IVisualisation {
 		folder.mkdir();
 
 		// Save conceptLattice
-		ConceptLattice cl = FCAUtils.createConceptLattice(FCAUtils.createArtefactsBlocksFormalContext(adaptedModel));
+		Context fc = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
+		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
 		// Save
 		File file = new File(folder, artefactModelFile.getName() + "_artefactsBlocksConceptLattice.dot");
-		LatticeToDot dot = new LatticeToDot(cl);
+		File fil = new File(folder, artefactModelFile.getName() + "_artefactsBlocks.html");
+		GenerateDot dot = new GenerateDot(cl);
+		GenerateHTML html = new GenerateHTML(fc);
 		dot.generateCode();
+		html.generateCode();
 		try {
 			dot.toFile(file.getAbsolutePath());
+			html.toFile(fil.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		// If we have feature list
 		if (featureList != null) {
-			ConceptLattice cl2 = FCAUtils.createConceptLattice(FCAUtils
+			ConceptOrder cl2 = FCAUtils.createConceptLattice(FCAUtils
 					.createArtefactsFeaturesFormalContext(featureList));
 			File file2 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesConceptLattice.dot");
-			LatticeToDot dot2 = new LatticeToDot(cl2);
+			GenerateDot dot2 = new GenerateDot(cl2);
 			dot2.generateCode();
 			try {
 				dot2.toFile(file2.getAbsolutePath());
@@ -69,10 +76,10 @@ public class FCAVisualisation implements IVisualisation {
 				e.printStackTrace();
 			}
 
-			ConceptLattice cl3 = FCAUtils.createConceptLattice(FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(
+			ConceptOrder cl3 = FCAUtils.createConceptLattice(FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(
 					featureList, adaptedModel));
 			File file3 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesBlocksConceptLattice.dot");
-			LatticeToDot dot3 = new LatticeToDot(cl3);
+			GenerateDot dot3 = new GenerateDot(cl3);
 			dot3.generateCode();
 			try {
 				dot3.toFile(file3.getAbsolutePath());

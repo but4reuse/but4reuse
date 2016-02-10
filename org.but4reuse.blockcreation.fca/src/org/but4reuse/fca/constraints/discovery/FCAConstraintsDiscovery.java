@@ -1,7 +1,9 @@
 package org.but4reuse.fca.constraints.discovery;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -12,12 +14,11 @@ import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.impl.ConstraintImpl;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.EList;
 
-import com.googlecode.erca.Attribute;
-import com.googlecode.erca.clf.Concept;
-import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.rcf.FormalContext;
+import fr.labri.galatea.Attribute;
+import fr.labri.galatea.Concept;
+import fr.labri.galatea.ConceptOrder;
+import fr.labri.galatea.Context;
 
 /**
  * FCA based constraints discovery
@@ -29,8 +30,8 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {
 		List<IConstraint> constraintList = new ArrayList<IConstraint>();
-		FormalContext fc = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
-		ConceptLattice cl = FCAUtils.createConceptLattice(fc);
+		Context fc = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
+		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
 
 		// REQUIRES
 		monitor.subTask("FCA: Checking Requires relations");
@@ -41,10 +42,11 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 			if (!c.getSimplifiedIntent().isEmpty()) {
 				for (Attribute owner : c.getSimplifiedIntent()) {
 					for (Attribute a : c.getIntent()) {
-						if (!owner.sameAs(a)) {
+						if (!owner.equals(a)) {
+							// if (!owner.sameAs(a)) {
 							// add constraint
-							Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, owner.getDescription());
-							Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a.getDescription());
+							Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, owner.getName());
+							Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a.getName());
 							IConstraint constraint = new ConstraintImpl();
 							constraint.setType(IConstraint.REQUIRES);
 							constraint.setBlock1(ownerBlock);
@@ -64,25 +66,22 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 		monitor.subTask("FCA: Checking Excludes relations");
 		// No concept have the two features
 
-		for (int i = 0; i < fc.getAttributes().size(); i++) {
-			Attribute a1 = fc.getAttributes().get(i);
-			for (int j = 0; j < fc.getAttributes().size(); j++) {
-				Attribute a2 = fc.getAttributes().get(j);
+		Set<Attribute> visited = new HashSet<Attribute>();
+		for (Attribute a1 : fc.getAttributes()) {
+			for (Attribute a2 : fc.getAttributes()) {
 				// mutual exclude is bidirectional, avoid duplicated
-				if (j != i && i < j) {
+				if (!a1.equals(a2) && visited.contains(a2)) {
 					boolean found = false;
 					for (Concept c : cl.getConcepts()) {
-						if (!c.getSimplifiedIntent().isEmpty()) {
-							if (contains(c.getIntent(), a1) && contains(c.getIntent(), a2)) {
-								found = true;
-								break;
-							}
+						if (c.getIntent().contains(a1) && c.getIntent().contains(a2)) {
+							found = true;
+							break;
 						}
 					}
 					if (!found) {
 						// add constraint
-						Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, a1.getDescription());
-						Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a2.getDescription());
+						Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, a1.getName());
+						Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a2.getName());
 						IConstraint constraint = new ConstraintImpl();
 						constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
 						constraint.setBlock1(ownerBlock);
@@ -95,24 +94,9 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 					}
 				}
 			}
+			visited.add(a1);
 		}
 		return constraintList;
-	}
-
-	/**
-	 * Apparently equals does not work
-	 * 
-	 * @param attributes
-	 * @param attr
-	 * @return boolean
-	 */
-	private boolean contains(EList<Attribute> attributes, Attribute attr) {
-		for (Attribute a : attributes) {
-			if (attr.sameAs(a)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }

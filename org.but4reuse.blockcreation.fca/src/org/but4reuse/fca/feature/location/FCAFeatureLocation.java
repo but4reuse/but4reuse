@@ -14,10 +14,10 @@ import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.googlecode.erca.Attribute;
-import com.googlecode.erca.clf.Concept;
-import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.rcf.FormalContext;
+import fr.labri.galatea.Attribute;
+import fr.labri.galatea.Concept;
+import fr.labri.galatea.ConceptOrder;
+import fr.labri.galatea.Context;
 
 /**
  * Relational contexts feature location
@@ -25,16 +25,16 @@ import com.googlecode.erca.rcf.FormalContext;
  * @author jabier.martinez
  * 
  */
-public class RelationalContextsFeatureLocation implements IFeatureLocation {
+public class FCAFeatureLocation implements IFeatureLocation {
 
 	@Override
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
 			IProgressMonitor monitor) {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
-		FormalContext artefactsFeaturesAndBlocks = FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(featureList,
+		Context artefactsFeaturesAndBlocks = FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(featureList,
 				adaptedModel);
-		ConceptLattice cl = FCAUtils.createConceptLattice(artefactsFeaturesAndBlocks);
+		ConceptOrder cl = FCAUtils.createConceptLattice(artefactsFeaturesAndBlocks);
 
 		for (Concept concept : cl.getConcepts()) {
 			if (!concept.getSimplifiedIntent().isEmpty()) {
@@ -54,9 +54,9 @@ public class RelationalContextsFeatureLocation implements IFeatureLocation {
 	private List<Feature> getFeaturesOfConcept(FeatureList featureList, Concept concept) {
 		List<Feature> features = new ArrayList<Feature>();
 		for (Attribute a : concept.getSimplifiedIntent()) {
-			if (a.getDescription().startsWith("F: ")) {
+			if (a.getName().startsWith("F: ")) {
 				features.add(FeatureListHelper.getFeatureByName(featureList,
-						a.getDescription().substring("F: ".length())));
+						a.getName().substring("F: ".length())));
 			}
 		}
 		return features;
@@ -65,8 +65,8 @@ public class RelationalContextsFeatureLocation implements IFeatureLocation {
 	private List<Block> getBlocksOfConcept(AdaptedModel adaptedModel, Concept concept) {
 		List<Block> blocks = new ArrayList<Block>();
 		for (Attribute a : concept.getSimplifiedIntent()) {
-			if (a.getDescription().startsWith("B: ")) {
-				blocks.add(AdaptedModelHelper.getBlockByName(adaptedModel, a.getDescription().substring("B: ".length())));
+			if (a.getName().startsWith("B: ")) {
+				blocks.add(AdaptedModelHelper.getBlockByName(adaptedModel, a.getName().substring("B: ".length())));
 			}
 		}
 		return blocks;

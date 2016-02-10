@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
@@ -16,14 +17,13 @@ import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
 import org.but4reuse.fca.utils.FCAUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import com.googlecode.erca.Attribute;
-import com.googlecode.erca.BinaryAttribute;
-import com.googlecode.erca.Entity;
-import com.googlecode.erca.ErcaFactory;
-import com.googlecode.erca.clf.Concept;
-import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.rcf.FormalContext;
-import com.googlecode.erca.rcf.RcfFactory;
+import fr.labri.galatea.Attribute;
+import fr.labri.galatea.BinaryAttribute;
+import fr.labri.galatea.Concept;
+import fr.labri.galatea.ConceptOrder;
+import fr.labri.galatea.Context;
+import fr.labri.galatea.Entity;
+
 
 /**
  * Formal Context Analysis block creation
@@ -35,8 +35,7 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("FormalContext");
+		Context fc = new Context();
 
 		// Blocks Empty
 		List<Block> blocks = new ArrayList<Block>();
@@ -50,15 +49,13 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 		// A map from IElement to the IElementWrappers that contains similar
 		// IElement
 		Map<IElement, List<ElementWrapper>> eewmap = new HashMap<IElement, List<ElementWrapper>>();
-		int n = adaptedArtefacts.size();
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < adaptedArtefacts.size(); i++) {
 
 			// Creates an entity.
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName("Artefact " + i);
-			fc.getEntities().add(ent);
+			Entity ent = new Entity("Artefact " + i);
+			fc.addEntity(ent);
 
-			monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + n);
+			monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + adaptedArtefacts.size());
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
 			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
 
@@ -93,10 +90,9 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 			IElement e = R.keySet().iterator().next();
 
 			// Creates a binary attribute.
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName("Element " + ei);
+			BinaryAttribute attr = new BinaryAttribute("Element " + ei);
 			attrIElementMap.put(attr, e);
-			fc.getAttributes().add(attr);
+			fc.addAttribute(attr);
 			ei++;
 
 			List<Integer> artIndexes = R.get(e);
@@ -107,8 +103,8 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 		}
 
 		// Generate concept lattice
-		ConceptLattice cl = FCAUtils.createConceptLattice(fc);
-
+		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
+		
 		// Add a block for each non empty concept
 		for (Concept c : cl.getConcepts()) {
 			// getIntent returns also the intent of the parents, we are only
@@ -116,7 +112,7 @@ public class FCABlockCreation implements IBlockCreationAlgorithm {
 			// belongs to this concept
 			if (!c.getSimplifiedIntent().isEmpty()) {
 				Block block = AdaptedModelFactory.eINSTANCE.createBlock();
-				List<Attribute> attrs = c.getSimplifiedIntent();
+				Set<Attribute> attrs = c.getSimplifiedIntent();
 				for (Attribute attr : attrs) {
 					IElement e = attrIElementMap.get(attr);
 					BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();

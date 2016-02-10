@@ -1,6 +1,5 @@
 package org.but4reuse.fca.utils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,17 +12,11 @@ import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
 
-import com.googlecode.erca.BinaryAttribute;
-import com.googlecode.erca.Entity;
-import com.googlecode.erca.ErcaFactory;
-import com.googlecode.erca.clf.ConceptLattice;
-import com.googlecode.erca.clf.ConceptLatticeFamily;
-import com.googlecode.erca.framework.algo.ClfGenerator;
-import com.googlecode.erca.framework.algo.ConceptLatticeGenerator;
-import com.googlecode.erca.rcf.FormalContext;
-import com.googlecode.erca.rcf.RcfFactory;
-import com.googlecode.erca.rcf.RelationalContext;
-import com.googlecode.erca.rcf.RelationalContextFamily;
+import fr.labri.galatea.BinaryAttribute;
+import fr.labri.galatea.ConceptOrder;
+import fr.labri.galatea.Context;
+import fr.labri.galatea.Entity;
+import fr.labri.galatea.algo.Ceres;
 
 /**
  * Formal Context Utils
@@ -39,26 +32,23 @@ public class FCAUtils {
 	 * @param adaptedModel
 	 * @return formal context
 	 */
-	public static FormalContext createArtefactsBlocksFormalContext(AdaptedModel adaptedModel) {
+	public static Context createArtefactsBlocksFormalContext(AdaptedModel adaptedModel) {
 
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("ArtefactsBlocks");
+		Context fc = new Context();
 
 		// Creates an entity per artefact
 		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName(aa.getArtefact().getName());
-			fc.getEntities().add(ent);
+			Entity ent = new Entity(aa.getArtefact().getName());
+			fc.addEntity(ent);
 		}
 
 		Map<String, BinaryAttribute> blockNameMap = new HashMap<String, BinaryAttribute>();
 
 		// Creates a binary attribute per block
 		for (Block block : adaptedModel.getOwnedBlocks()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName(block.getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute(block.getName());
+			fc.addAttribute(attr);
 			blockNameMap.put(block.getName(), attr);
 		}
 
@@ -78,26 +68,23 @@ public class FCAUtils {
 	 * @param adaptedModel
 	 * @return formal context
 	 */
-	public static FormalContext createBlocksArtefactsFormalContext(AdaptedModel adaptedModel) {
+	public static Context createBlocksArtefactsFormalContext(AdaptedModel adaptedModel) {
 
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("BlocksArtefacts");
+		Context fc = new Context();
 
 		// Creates an entity per block
 		for (Block b : adaptedModel.getOwnedBlocks()) {
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName(b.getName());
-			fc.getEntities().add(ent);
+			Entity ent = new Entity(b.getName());
+			fc.addEntity(ent);
 		}
 
 		Map<String, BinaryAttribute> artefactNameMap = new HashMap<String, BinaryAttribute>();
 
 		// Creates a binary attribute per artefact
 		for (AdaptedArtefact a : adaptedModel.getOwnedAdaptedArtefacts()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName(a.getArtefact().getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute(a.getArtefact().getName());
+			fc.addAttribute(attr);
 			artefactNameMap.put(a.getArtefact().getName(), attr);
 		}
 
@@ -117,26 +104,23 @@ public class FCAUtils {
 	 * @param featureList
 	 * @return formal context
 	 */
-	public static FormalContext createArtefactsFeaturesFormalContext(FeatureList featureList) {
+	public static Context createArtefactsFeaturesFormalContext(FeatureList featureList) {
 
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("ArtefactsFeatures");
+		Context fc = new Context();
 
 		// Creates an entity per artefact
 		for (Artefact a : FeatureListHelper.getArtefactModel(featureList).getOwnedArtefacts()) {
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName(a.getName());
-			fc.getEntities().add(ent);
+			Entity ent = new Entity(a.getName());
+			fc.addEntity(ent);
 		}
 
 		Map<String, BinaryAttribute> featureNameMap = new HashMap<String, BinaryAttribute>();
 
 		// Creates a binary attribute per feature
 		for (Feature feature : featureList.getOwnedFeatures()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName(feature.getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute(feature.getName());
+			fc.addAttribute(attr);
 			featureNameMap.put(feature.getName(), attr);
 		}
 
@@ -156,26 +140,23 @@ public class FCAUtils {
 	 * @param featureList
 	 * @return formal context
 	 */
-	public static FormalContext createFeaturesArtefactsFormalContext(FeatureList featureList) {
+	public static Context createFeaturesArtefactsFormalContext(FeatureList featureList) {
 
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("ArtefactsFeatures");
+		Context fc = new Context();
 
 		// Creates an entity per feature
 		for (Feature f : featureList.getOwnedFeatures()) {
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName(f.getName());
-			fc.getEntities().add(ent);
+			Entity ent = new Entity(f.getName());
+			fc.addEntity(ent);
 		}
 
 		Map<String, BinaryAttribute> artefactNameMap = new HashMap<String, BinaryAttribute>();
 
 		// Creates a binary attribute per artefact
 		for (Artefact a : FeatureListHelper.getArtefactModel(featureList).getOwnedArtefacts()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName(a.getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute(a.getName());
+			fc.addAttribute(attr);
 			artefactNameMap.put(a.getName(), attr);
 		}
 
@@ -198,84 +179,29 @@ public class FCAUtils {
 	 *            context
 	 * @return concept lattice
 	 */
-	public static ConceptLattice createConceptLattice(FormalContext fc) {
-		ConceptLatticeGenerator clg = new ConceptLatticeGenerator(fc);
-		clg.generateConceptLattice();
-		return clg.getConceptLattice();
+	public static ConceptOrder createConceptLattice(Context fc) {
+		Ceres algo = new Ceres(fc);
+		algo.compute();
+		return algo.getConceptOrder();
 	}
 
-	/**
-	 * Create concept lattice family
-	 * 
-	 * @param relational
-	 *            context family
-	 * @return concept lattice family
-	 */
-	public static ConceptLatticeFamily createConceptLatticeFamily(RelationalContextFamily rcf) {
-		ClfGenerator clfGenerator = new ClfGenerator(rcf);
-		try {
-			clfGenerator.generateClf();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return clfGenerator.getClf();
-	}
-
-	public static ConceptLatticeFamily createArtefactsBlocksFeaturesConceptLatticeFamily(FeatureList featureList,
-			AdaptedModel adaptedModel) {
-		// Creates a relational context family
-		RelationalContextFamily rcf = RcfFactory.eINSTANCE.createRelationalContextFamily();
-
-		// Creates two formal contexts.
-		// artefacts/blocks
-		FormalContext fc1 = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
-		// artefacts/features
-		FormalContext fc2 = FCAUtils.createArtefactsFeaturesFormalContext(featureList);
-		rcf.getFormalContexts().add(fc1);
-		rcf.getFormalContexts().add(fc2);
-
-		// Creates a relational context.
-		RelationalContext rc = RcfFactory.eINSTANCE.createRelationalContext();
-		// rc.setScalingOperator("com.googlecode.erca.framework.algo.scaling.Narrow");
-		rc.setSourceContext(fc1);
-		rc.setTargetContext(fc2);
-		rc.setName("BlocksFeatures");
-		rcf.getRelationalContexts().add(rc);
-
-		// Print
-		// RcfToXHTML a = new RcfToXHTML(rcf);
-		// a.generateCode();
-		// System.out.println(a.getCode());
-
-		ClfGenerator clfGenerator = new ClfGenerator(rcf);
-		try {
-			clfGenerator.generateClf();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return clfGenerator.getClf();
-	}
-
-	public static FormalContext createArtefactsFeaturesAndBlocksFormalContext(FeatureList featureList,
+	public static Context createArtefactsFeaturesAndBlocksFormalContext(FeatureList featureList,
 			AdaptedModel adaptedModel) {
 		// Creates a formal context
-		FormalContext fc = RcfFactory.eINSTANCE.createFormalContext();
-		fc.setName("ArtefactsBlocks");
+		Context fc = new Context();
 
 		// Creates an entity per artefact
 		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
-			Entity ent = ErcaFactory.eINSTANCE.createEntity();
-			ent.setName(aa.getArtefact().getName());
-			fc.getEntities().add(ent);
+			Entity ent = new Entity(aa.getArtefact().getName());
+			fc.addEntity(ent);
 		}
 
 		Map<String, BinaryAttribute> featureNameMap = new HashMap<String, BinaryAttribute>();
 
 		// Creates a binary attribute per feature
 		for (Feature feature : featureList.getOwnedFeatures()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName("F: " + feature.getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute("F: " + feature.getName());
+			fc.addAttribute(attr);
 			featureNameMap.put("F: " + feature.getName(), attr);
 		}
 
@@ -290,9 +216,8 @@ public class FCAUtils {
 
 		// Creates a binary attribute per block
 		for (Block block : adaptedModel.getOwnedBlocks()) {
-			BinaryAttribute attr = ErcaFactory.eINSTANCE.createBinaryAttribute();
-			attr.setName("B: " + block.getName());
-			fc.getAttributes().add(attr);
+			BinaryAttribute attr = new BinaryAttribute("B: " + block.getName());
+			fc.addAttribute(attr);
 			blockNameMap.put("B: " + block.getName(), attr);
 		}
 
