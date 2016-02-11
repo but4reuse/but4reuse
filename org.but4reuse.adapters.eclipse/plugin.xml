@@ -59,10 +59,10 @@
             id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
             objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
-               class="org.but4reuse.adapters.eclipse.generator.CreateVariantEclipseRandom"
+               class="org.but4reuse.adapters.eclipse.generator.actions.CreateEclipseVariantsAction"
                icon="icons/icon_eclipse.png"
-               id="org.but4reuse.adapters.eclipse.benchmark.action"
-               label="Generate Eclipse variantes"
+               id="org.but4reuse.adapters.eclipse.generator.action"
+               label="Generate Eclipse variants"
                menubarPath="additions">
          </action>
       </objectContribution>

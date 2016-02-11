@@ -23,23 +23,24 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	
 	private String input;
 	private String output;
-	private int nbVariantes;
+	private int nbVariants;
 	private int percentage;
 	private boolean saveOnlyMetadata;
 	
 	String generatorSummary;
 	List<IListener> listeners;
 	
-	public VariantsGenerator(String input, String output, int nbVariantes,
+	public VariantsGenerator(String input, String output, int nbVariants,
 			int percentage, boolean saveOnlyMetadata) {
 		this.input = input;
 		this.output = output;
-		this.nbVariantes = nbVariantes;
+		this.nbVariants = nbVariants;
 		this.percentage = percentage;
 		this.saveOnlyMetadata = saveOnlyMetadata;
 	}
 	
 	public void generate() {
+		sendToAll("Starting generate !", "\n");
 		File eclipse = new File(input);
 		File outputFile = new File(output);
 		
@@ -50,14 +51,14 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		
  		try {
 			FileAndDirectoryUtils.deleteFile(outputFile);
-			sendToAll(output + " deleted.\n");
+			sendToAll(output + " deleted", "\n");
 		} catch (Exception e) {
-			sendToAll(output +" not deleted because : "+e+"\n");
+			sendToAll(output +" not deleted because : "+e, "\n");
 		}
 		
 		String name_tmp;
 		String output_variant;
-		for(int i=1; i<=nbVariantes ; i++){
+		for(int i=1; i<=nbVariants ; i++){
 			output_variant = output+File.separator+VARIANT+i;
 			
 			for(File dir : eclipse.listFiles()){  // Parcours tous le contenu
@@ -97,8 +98,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 				}
 					
 			}
-			sendToAll("=> "+output_variant+" fully successed !\n");
+			sendToAll("-> "+output_variant+" fully successed !", "\n");
 		}
+		
+		sendToAll("Generation finished !");
 	}
 	
 	private void copyProcessForPluginsDirectories(File[] allPlugin, String output) throws Exception {
@@ -179,14 +182,14 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	}
 
 	@Override
-	public void sendToAll(String msg) {
+	public void sendToAll(String... msg) {
 		if(listeners!= null && !listeners.isEmpty()){
 			for(IListener oneListener : listeners) oneListener.receive(msg);
 		}
 	}
 
 	@Override
-	public void sendToOne(String msg, IListener listener) {
+	public void sendToOne(IListener listener, String... msg) {
 		if(listeners!= null && !listeners.isEmpty()){
 			int index = listeners.indexOf(listener);
 			listeners.get(index).receive(msg);
