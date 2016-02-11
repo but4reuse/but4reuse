@@ -1,6 +1,5 @@
 package org.but4reuse.adapters.eclipse.generator.actions;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
@@ -37,8 +36,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	private String selectRandomText;
 	private String onlyFeaturesText;
 
-	private JTextField input = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\input\\eclipse.");
-	private JTextField output = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\output");
+	private JTextField input = new JTextField("C:\\");
+	private JTextField output = new JTextField("C:\\");
 	private JTextField numberVariant = new JTextField(0);
 	private JTextField randomSelector = new JTextField(0);
 	private JCheckBox onlyMetaData = new JCheckBox();
@@ -49,13 +48,6 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	private JList<String> jlistRecap;
 	
 	public void run(IAction action) {
-		
-		// TODO: Retirer ces lignes
-		input = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\input\\eclipse.");
-		output = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\output");
-		numberVariant.setText("2");
-		randomSelector.setText("50");
-		onlyMetaData.setSelected(true);
 		
 		if(isAllOK){
 			inputMessageText = "Input path of eclipse package";
