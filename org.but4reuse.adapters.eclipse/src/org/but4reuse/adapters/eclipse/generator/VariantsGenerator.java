@@ -40,7 +40,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	}
 	
 	public void generate() {
-		sendToAll("Starting generate !", "\n");
+		sendToAll("Starting generate !");
 		File eclipse = new File(input);
 		File outputFile = new File(output);
 		
@@ -51,9 +51,9 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		
  		try {
 			FileAndDirectoryUtils.deleteFile(outputFile);
-			sendToAll(output + " deleted", "\n");
+			sendToAll(output + " deleted");
 		} catch (Exception e) {
-			sendToAll(output +" not deleted because : "+e, "\n");
+			sendToAll(output +" not deleted because : "+e+"");
 		}
 		
 		String name_tmp;
@@ -98,7 +98,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 				}
 					
 			}
-			sendToAll("-> "+output_variant+" fully successed !", "\n");
+			sendToAll(output_variant+" fully successed !");
 		}
 		
 		sendToAll("Generation finished !");
@@ -182,14 +182,16 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	}
 
 	@Override
-	public void sendToAll(String... msg) {
-		if(listeners!= null && !listeners.isEmpty()){
-			for(IListener oneListener : listeners) oneListener.receive(msg);
+	public void sendToAll(String msg) {
+		if(msg!= null && listeners!= null && !listeners.isEmpty()){
+			for(IListener oneListener : listeners){
+				oneListener.receive(msg);
+			}
 		}
 	}
 
 	@Override
-	public void sendToOne(IListener listener, String... msg) {
+	public void sendToOne(IListener listener, String msg) {
 		if(listeners!= null && !listeners.isEmpty()){
 			int index = listeners.indexOf(listener);
 			listeners.get(index).receive(msg);

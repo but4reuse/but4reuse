@@ -1,33 +1,36 @@
 package org.but4reuse.adapters.eclipse.generator.actions;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
+import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class CreateEclipseVariantsAction implements IListener, IObjectActionDelegate {
 
-	@SuppressWarnings("unused")
 	private ISelection selection;
+	private CreateEclipseVariantsAction context;
 	
 	public CreateEclipseVariantsAction() {
 		super();
+		this.context = this;
 	}
 	
 	private String inputMessageText;
@@ -36,18 +39,25 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	private String selectRandomText;
 	private String onlyFeaturesText;
 
-	private JTextField input = new JTextField("C:\\");
-	private JTextField output = new JTextField("C:\\");
+	private JTextField input = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\input\\eclipse.");
+	private JTextField output = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\output");
 	private JTextField numberVariant = new JTextField(0);
 	private JTextField randomSelector = new JTextField(0);
 	private JCheckBox onlyMetaData = new JCheckBox();
 //	private JFileChooser fc = new JFileChooser();
 	
 	private boolean isAllOK = true;
-	private ArrayList<String> summaryTexts;
-	private JList<String> jlistRecap;
+	private ScrollableMessageDialog dialog;
+	private String texteWaiting;
 	
 	public void run(IAction action) {
+		
+		// TODO: Retirer ces lignes
+		input = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\input\\eclipse.");
+		output = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\output");
+		numberVariant.setText("2");
+		randomSelector.setText("50");
+		onlyMetaData.setSelected(true);
 		
 		if(isAllOK){
 			inputMessageText = "Input path of eclipse package";
@@ -108,30 +118,64 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			return;
 		}
 		
-		summaryTexts = new ArrayList<String>();
-		jlistRecap = new JList<String>(summaryTexts.toArray(new String[summaryTexts.size()]));
-		final JScrollPane scrollpane = new JScrollPane(jlistRecap);
-		scrollpane.getViewport().add(jlistRecap);
-		JPanel panel = new JPanel(); 
-		panel.add(scrollpane);
-		scrollpane.setPreferredSize(new Dimension(350, 300));
-		jlistRecap.addListSelectionListener(new ListSelectionListener () {
-			public void valueChanged (ListSelectionEvent lse) {
-				jlistRecap.clearSelection(); // Transparence de la sélection
-				jlistRecap.setFocusable(false);
+		final int nbVariantsForThread = nbVariants;
+		final int valRandForThread = valRand;
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				System.out.println("Before generator");
+				VariantsGenerator varGen = new VariantsGenerator(input.getText(), output.getText(), nbVariantsForThread, valRandForThread, onlyMetaData.isSelected());
+				varGen.addListener(context);
+				varGen.generate();
+				
+				Display.getDefault().syncExec(new Runnable() {
+					public void run() {
+						if(dialog != null && !dialog.isDisposed()) dialog.setCloseable(true);
+					}
+				});
+				System.out.println("After generator");
 			}
-		});
+		}).start();
 		
-		new Thread(new Runnable(){
-	        public void run(){
-	        	JOptionPane.showMessageDialog(null, scrollpane, "Summary of variants generation", JOptionPane.PLAIN_MESSAGE);
-	        }
-	    }).start();
+		final Object objSync = new Object();
 		
-		VariantsGenerator varGen = new VariantsGenerator(input.getText(), output.getText(), nbVariants, valRand, onlyMetaData.isSelected());
-		varGen.addListener(this);
-		varGen.generate(); // Synchrone
+		final Shell shell = Display.getCurrent().getActiveShell();
+    	System.out.println("\nBefore dialog");
+    	
+		if (selection instanceof IStructuredSelection) {
+			Object art = ((IStructuredSelection) selection).getFirstElement();
+			if (art instanceof ArtefactModel) {
+				try {
+					// Get the artefact model
+					ArtefactModel artefactModel = ((ArtefactModel) art);
+					artefactModel.setAdapters("eclipse4generator");
+					artefactModel.eResource().save(null);
+					IResource res = EMFUtils.getIResource(artefactModel.eResource());
+					IContainer container = res.getParent();
+
+					WorkbenchUtils.refreshIResource(container);
+					// Show message
+					dialog = new ScrollableMessageDialog(shell,
+							"Summary" , null,
+							"", false);
+					dialog.open();
+					System.out.println("After dialog");
+					synchronized (objSync) {
+						objSync.notify();
+					}
+    			} catch (Exception e) {
+					MessageDialog.openError(
+									shell,
+									"Error in summary dialog",
+									e.toString());
+					e.printStackTrace();
+				}
+			}
+		}
+		System.out.println("after dialog");
 		
+		System.out.println("(CreateEclipseVariantsAction.run) finished");
 	}
 
 	@Override
@@ -144,13 +188,28 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	}
 	
 	@Override
-	public void receive(String... msg) {
-		if(msg != null && msg.length!=0){
-			for(String s : msg){
-				summaryTexts.add(s);
-				System.out.println(s);
-			}
-			jlistRecap.setListData(summaryTexts.toArray(new String[summaryTexts.size()]));
+	public void receive(final String msg) {
+		if(msg != null && !msg.isEmpty()){
+			Display.getDefault().syncExec(new Runnable() {
+				public void run() {
+					if(dialog==null || (dialog!=null && dialog.isDisposed())){
+						if(texteWaiting==null) texteWaiting = msg;
+						else texteWaiting += "\r\n\n" + msg;
+					} else if (!dialog.isDisposed()){
+						String scrollText = dialog.getScrollableText();
+						if(scrollText==null || scrollText.isEmpty()) scrollText = "";
+						else scrollText += "\r\n\n";
+						
+					    if(texteWaiting != null){
+					    	scrollText += texteWaiting + "\r\n\n" + msg;
+					    	texteWaiting = null;
+					    }
+						else scrollText += msg;
+
+						dialog.setScrollableText(scrollText);
+					}
+				}
+			});
 		}
 	}
 	
