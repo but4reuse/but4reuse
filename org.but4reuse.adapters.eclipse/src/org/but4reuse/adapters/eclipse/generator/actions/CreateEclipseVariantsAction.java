@@ -40,11 +40,11 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		this.context = this;
 	}
 	
-	private JTextField input = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\input\\eclipse");
-	private JTextField output = new JTextField("C:\\Users\\JulienM\\Desktop\\PSTL\\output");
-	private JTextField numberVariant = new JTextField(0);
-	private JTextField randomSelector = new JTextField(0);
-	private JCheckBox onlyMetaData = new JCheckBox();
+	private JTextField input;
+	private JTextField output;
+	private JTextField numberVariant;
+	private JTextField randomSelector;
+	private JCheckBox onlyMetaData;
 //	private JFileChooser fc = new JFileChooser();
 	
 	private boolean isAllOK = true;
@@ -57,7 +57,13 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	
 	public void run(IAction action) {
 		
-		if(isAllOK){
+		if(isAllOK){ // init
+			input = new JTextField("C:\\");
+			output = new JTextField("C:\\");
+			numberVariant = new JTextField(0);
+			randomSelector = new JTextField(0);
+			onlyMetaData = new JCheckBox();
+			
 			inputLabel = new JLabel(VariantsUtils.INPUT_TEXT);
 			variantsLabel = new JLabel(VariantsUtils.VARIANTS_NUMBER_TEXT);
 			randomLabel = new JLabel(VariantsUtils.RANDOM_NUMBER_TEXT);
