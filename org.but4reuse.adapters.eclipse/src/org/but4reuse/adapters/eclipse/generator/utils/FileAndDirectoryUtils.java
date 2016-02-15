@@ -99,7 +99,7 @@ public class FileAndDirectoryUtils {
 	 * @throws IOException if the copy is impossible
 	 */
 	public static void deleteFile(File file) throws IOException {
-		if(file != null & file.exists()){
+		if(file != null && file.exists()){
 			FileUtils.forceDelete(file);
 			return;
 		}

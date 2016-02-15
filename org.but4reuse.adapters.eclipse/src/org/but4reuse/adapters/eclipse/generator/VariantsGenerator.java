@@ -11,12 +11,13 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.ISender;
-import static org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils.*;
+import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 
 
 public class VariantsGenerator implements IVariantsGenerator, ISender{
@@ -59,14 +60,14 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		String name_tmp;
 		String output_variant;
 		for(int i=1; i<=nbVariants ; i++){
-			output_variant = output+File.separator+VARIANT+i;
+			output_variant = output+File.separator+VariantsUtils.VARIANT+i;
 			
 			for(File dir : eclipse.listFiles()){  // Parcours tous le contenu
 				name_tmp = dir.getName();
 				
 				if(dir.isDirectory()){
 					
-					if(name_tmp.equals(FEATURES)){
+					if(name_tmp.equals(VariantsUtils.FEATURES)){
 						try {
 							File[] someFeatures = FileAndDirectoryUtils.getSomeFiles(dir.listFiles(), percentage);
 							FileUtils.forceMkdir( new File(output_variant+File.separator+name_tmp) ); 
@@ -75,7 +76,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 						} catch (Exception e) {
 							sendToAll("(Variant "+i+") features error : "+e);
 						}
-					} else if( name_tmp.equals(PLUGINS) ){
+					} else if( name_tmp.equals(VariantsUtils.PLUGINS) ){
 						if(saveOnlyMetadata){
 							try {
 								copyProcessForPluginsDirectories(FileAndDirectoryUtils.getAllSubDirectories(dir), output_variant+File.separator+name_tmp);
@@ -105,8 +106,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	}
 	
 	private void copyProcessForPluginsDirectories(File[] allPlugin, String output) throws Exception {
-		IOFileFilter propertiesFileFilter = FileFilterUtils.nameFileFilter(PLUGINS_PROPERTIES);
-		IOFileFilter metaInfFileFilter = FileFilterUtils.nameFileFilter(META_INF);
+		IOFileFilter propertiesFileFilter = FileFilterUtils.suffixFileFilter(VariantsUtils.PROPERTIES, IOCase.INSENSITIVE);
+		IOFileFilter metaInfFileFilter = FileFilterUtils.nameFileFilter(VariantsUtils.META_INF, IOCase.INSENSITIVE);
 
 		FileFilter filter = FileFilterUtils.or(metaInfFileFilter, propertiesFileFilter);
 
@@ -127,7 +128,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		File onePluginDir;
 
 		for(File oneJar : allJarsInDirectory){
-			jarName = oneJar.getName().replace(JAR, "");
+			jarName = oneJar.getName().replace(VariantsUtils.JAR, "");
 			newOutputForEachJar = output+File.separator+jarName;
 			onePluginDir = new File(newOutputForEachJar);
 			onePluginDir.mkdirs();
@@ -150,8 +151,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 			inputStream = jar.getInputStream(file);
 			boolean isDir = f.isDirectory();
 			String path = f.getPath();
-			boolean containsMeta = path.contains(META_INF);
-			boolean endsWithPluginProp = path.endsWith(PLUGINS_PROPERTIES);
+			boolean containsMeta = path.contains(VariantsUtils.META_INF);
+			boolean endsWithPluginProp = path.endsWith(VariantsUtils.PROPERTIES);
 			try {
 				if(isDir || (!containsMeta && !endsWithPluginProp) ){
 					continue;
