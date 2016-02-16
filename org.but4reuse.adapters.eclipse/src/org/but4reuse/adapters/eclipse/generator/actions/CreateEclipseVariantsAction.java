@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,6 +17,7 @@ import javax.swing.JTextField;
 
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
+import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -63,6 +67,18 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			numberVariant = new JTextField(0);
 			randomSelector = new JTextField(0);
 			onlyMetaData = new JCheckBox();
+			
+			try {
+				Map<String, Object> map = PreferenceUtils.getPreferencesMap(this);
+				input.setText((String) map.get("input"));
+				output.setText((String) map.get("output"));
+				numberVariant.setText((String) map.get("numberVariant"));
+				randomSelector.setText((String) map.get("randomSelector"));
+				onlyMetaData.setSelected( (Boolean) map.get("onlyMetaData"));
+			} catch (IOException | ClassNotFoundException e) {
+				System.out.println("Error for loading preferences");
+			}
+			
 			
 			inputLabel = new JLabel(VariantsUtils.INPUT_TEXT);
 			variantsLabel = new JLabel(VariantsUtils.VARIANTS_NUMBER_TEXT);
@@ -143,6 +159,16 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			this.run(action);
 			return;
 		}
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("input", input.getText());
+		map.put("output", output.getText());
+		map.put("randomSelector", randomSelector.getText());
+		map.put("numberVariant", numberVariant.getText());
+		map.put("onlyMetaData", onlyMetaData.isSelected());
+		try {
+			PreferenceUtils.savePreferencesMap(map, context);
+		} catch (IOException e) {System.out.println("Error for saving preferences");}
 		
 		// Start the generator process
 		final int nbVariantsForThread = nbVariants;
