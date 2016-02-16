@@ -70,11 +70,14 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			
 			try {
 				Map<String, Object> map = PreferenceUtils.getPreferencesMap(this);
-				input.setText((String) map.get("input"));
-				output.setText((String) map.get("output"));
-				numberVariant.setText((String) map.get("numberVariant"));
-				randomSelector.setText((String) map.get("randomSelector"));
-				onlyMetaData.setSelected( (Boolean) map.get("onlyMetaData"));
+				if( map.containsKey("user_name") && map.get("user_name").equals(System.getProperty("user.name")) ){ // Look below, in registration
+					input.setText((String) map.get("input"));
+					output.setText((String) map.get("output"));
+					numberVariant.setText((String) map.get("numberVariant"));
+					randomSelector.setText((String) map.get("randomSelector"));
+					onlyMetaData.setSelected( (Boolean) map.get("onlyMetaData"));
+				}
+				
 			} catch (IOException | ClassNotFoundException e) {
 				System.out.println("Error for loading preferences");
 			}
@@ -166,6 +169,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		map.put("randomSelector", randomSelector.getText());
 		map.put("numberVariant", numberVariant.getText());
 		map.put("onlyMetaData", onlyMetaData.isSelected());
+		map.put("user_name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
 		try {
 			PreferenceUtils.savePreferencesMap(map, context);
 		} catch (IOException e) {System.out.println("Error for saving preferences");}
