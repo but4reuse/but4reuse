@@ -107,4 +107,10 @@ public class CLanguage implements ILanguage {
 		return false;
 	}
 
+	@Override
+	public String getPackageName(FSTNonTerminal nonTerminal) {
+		// TODO ???
+		return "";
+	}
+
 }

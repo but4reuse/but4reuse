@@ -62,4 +62,11 @@ public interface ILanguage {
 	 */
 	public boolean isALanguageProgram(String absolutePath);
 
+	/**
+	 * Get package name
+	 * @param node
+	 * @return package name or empty string
+	 */
+	public String getPackageName(FSTNonTerminal node);
+
 }
