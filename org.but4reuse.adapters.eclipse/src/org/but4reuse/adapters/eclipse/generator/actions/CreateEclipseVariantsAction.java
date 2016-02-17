@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +79,10 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 					onlyMetaData.setSelected( Boolean.parseBoolean(map.get("onlyMetaData")));
 				}
 				
+			} catch (FileNotFoundException e) {
+				System.out.println(e.getMessage());
 			} catch (IOException e) {
+				if(e instanceof FileNotFoundException)
 				System.out.println("Error for loading preferences");
 			}
 			
@@ -173,7 +177,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		try {
 			PreferenceUtils.savePreferencesMap(map, context);
 		} catch (IOException e) {System.out.println("Error for saving preferences");}
-		/*
+		
 		// Start the generator process
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
@@ -230,7 +234,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		System.out.println("after dialog");
 		
 		System.out.println("(CreateEclipseVariantsAction.run) finished");
-		*/
+		
 	}
 
 	@Override
