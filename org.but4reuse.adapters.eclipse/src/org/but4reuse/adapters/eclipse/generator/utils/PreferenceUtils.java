@@ -1,44 +1,80 @@
 package org.but4reuse.adapters.eclipse.generator.utils;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class PreferenceUtils {
 	
-	public static final String PREF_FILE = "prefMap.ser"; 
+	public static final String PREF_FILE = "preferences.properties";
 
-	public static File getPreferencesFile(Object context) throws IOException{
-		ClassLoader classLoader = context.getClass().getClassLoader();
-		URL res = classLoader.getResource(PREF_FILE);
-		return new File(res.getFile());
-	}
 	
-	public static void savePreferencesMap(Map<String,Object> mapToSave, Object context) throws IOException {
-		if(mapToSave!=null && !mapToSave.isEmpty()){
-			File pref = getPreferencesFile(context);
-			FileOutputStream fos = new FileOutputStream(pref);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(mapToSave);
-			oos.close();
-			fos.close();
+	public static void savePreferencesMap(Map<String,String> mapToSave, Object context) throws IOException {
+
+		Properties prop = new Properties();
+		OutputStream output = null;
+
+		try {
+			output = new FileOutputStream(PREF_FILE);
+			
+			for(String key : mapToSave.keySet()){
+				// set the properties value
+				prop.setProperty(key, mapToSave.get(key));
+			}
+			// save properties to project root folder
+			prop.store(output, null);
+
+		} catch (IOException io) {
+			io.printStackTrace();
+		} finally {
+			if (output != null) {
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 		}
+		
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getPreferencesMap(Object context) throws IOException, ClassNotFoundException {
-		HashMap<String, Object> map = null;
-		FileInputStream fis = new FileInputStream(getPreferencesFile(context));
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		map = (HashMap<String, Object>) ois.readObject();
-		ois.close();
-		fis.close();
+	public static Map<String, String> getPreferencesMap(Object context) throws IOException{
+
+		Properties prop = new Properties();
+		InputStream input = null;
+
+		Map<String, String> map = new HashMap<>();
+		try {
+
+			input = new FileInputStream(PREF_FILE);
+
+			// load a properties file
+			prop.load(input);
+
+			map.put("input", prop.getProperty("input"));
+			map.put("output", prop.getProperty("output"));
+			map.put("numberVariant", prop.getProperty("numberVariant"));
+			map.put("randomSelector", prop.getProperty("randomSelector"));
+			map.put("onlyMetaData", prop.getProperty("onlyMetaData"));
+			map.put("user.name", prop.getProperty("user.name"));
+
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return map;
 	}
 	

@@ -69,16 +69,16 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			onlyMetaData = new JCheckBox();
 			
 			try {
-				Map<String, Object> map = PreferenceUtils.getPreferencesMap(this);
-				if( map.containsKey("user_name") && map.get("user_name").equals(System.getProperty("user.name")) ){ // Look below, in registration
+				Map<String, String> map = PreferenceUtils.getPreferencesMap(this);
+				if( map.containsKey("user.name") && map.get("user.name").equals(System.getProperty("user.name")) ){ // Look below, in registration
 					input.setText((String) map.get("input"));
 					output.setText((String) map.get("output"));
 					numberVariant.setText((String) map.get("numberVariant"));
 					randomSelector.setText((String) map.get("randomSelector"));
-					onlyMetaData.setSelected( (Boolean) map.get("onlyMetaData"));
+					onlyMetaData.setSelected( Boolean.parseBoolean(map.get("onlyMetaData")));
 				}
 				
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (IOException e) {
 				System.out.println("Error for loading preferences");
 			}
 			
@@ -163,17 +163,17 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			return;
 		}
 		
-		Map<String, Object> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		map.put("input", input.getText());
 		map.put("output", output.getText());
 		map.put("randomSelector", randomSelector.getText());
 		map.put("numberVariant", numberVariant.getText());
-		map.put("onlyMetaData", onlyMetaData.isSelected());
-		map.put("user_name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
+		map.put("onlyMetaData", ((Boolean)onlyMetaData.isSelected()).toString() );
+		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
 		try {
 			PreferenceUtils.savePreferencesMap(map, context);
 		} catch (IOException e) {System.out.println("Error for saving preferences");}
-		
+		/*
 		// Start the generator process
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
@@ -230,6 +230,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		System.out.println("after dialog");
 		
 		System.out.println("(CreateEclipseVariantsAction.run) finished");
+		*/
 	}
 
 	@Override
