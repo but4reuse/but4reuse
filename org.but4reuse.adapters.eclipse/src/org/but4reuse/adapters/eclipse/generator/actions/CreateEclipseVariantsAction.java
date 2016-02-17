@@ -20,16 +20,10 @@ import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
-import org.but4reuse.artefactmodel.ArtefactModel;
-import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
-import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -37,6 +31,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class CreateEclipseVariantsAction implements IListener, IObjectActionDelegate {
 
+	@SuppressWarnings("unused")
 	private ISelection selection;
 	private CreateEclipseVariantsAction context;
 	
@@ -69,7 +64,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			randomSelector = new JTextField(0);
 			onlyMetaData = new JCheckBox();
 			
-			try {
+			try {  // Load preferences
 				Map<String, String> map = PreferenceUtils.getPreferencesMap(this);
 				if( map.containsKey("user.name") && map.get("user.name").equals(System.getProperty("user.name")) ){ // Look below, in registration
 					input.setText((String) map.get("input"));
@@ -167,6 +162,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			return;
 		}
 		
+		// Saving preferences
 		Map<String, String> map = new HashMap<>();
 		map.put("input", input.getText());
 		map.put("output", output.getText());
@@ -176,11 +172,13 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
 		try {
 			PreferenceUtils.savePreferencesMap(map, context);
-		} catch (IOException e) {System.out.println("Error for saving preferences");}
+		} catch (IOException e) {
+			System.out.println("Error for saving preferences");
+		}
 		
 		// Start the generator process
-		final int nbVariantsForThread = nbVariants;
-		final int valRandForThread = valRand;
+		final int nbVariantsForThread = nbVariants; // final for the thread and because nbVariants and valRand can't be final 
+		final int valRandForThread = valRand;	
 		new Thread(new Runnable() {
 			
 			@Override
@@ -188,7 +186,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 				System.out.println("Before generator");
 				VariantsGenerator varGen = new VariantsGenerator(input.getText(), output.getText(), nbVariantsForThread, valRandForThread, onlyMetaData.isSelected());
 				varGen.addListener(context);
-				varGen.generate();
+				varGen.generate();   // Long time to execute
 				
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
@@ -200,38 +198,19 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		}).start();
 		
 		
-		// Open the Summary Dialog
 		final Shell shell = Display.getCurrent().getActiveShell();
     	System.out.println("\nBefore dialog");
     	
-		if (selection instanceof IStructuredSelection) {
-			Object art = ((IStructuredSelection) selection).getFirstElement();
-			if (art instanceof ArtefactModel) {
-				try {
-					// Get the artefact model
-					ArtefactModel artefactModel = ((ArtefactModel) art);
-					artefactModel.setAdapters(VariantsUtils.ADAPTER_NAME);
-					artefactModel.eResource().save(null);
-					IResource res = EMFUtils.getIResource(artefactModel.eResource());
-					IContainer container = res.getParent();
-
-					WorkbenchUtils.refreshIResource(container);
-					// Show message
-					dialog = new ScrollableMessageDialog(shell,
-							"Summary" , null,
-							"", false);
-					dialog.open();
-					System.out.println("After dialog");
-    			} catch (Exception e) {
-					MessageDialog.openError(
-									shell,
-									"Error in summary dialog",
-									e.toString());
-					e.printStackTrace();
-				}
-			}
+    	// Open the Summary Dialog
+		try{
+			dialog = new ScrollableMessageDialog(shell, "Summary" , null, "", false);
+			dialog.open();
+			System.out.println("After dialog");
+		} catch (Exception e) {
+			MessageDialog.openError(shell,"Error in summary dialog",e.toString());
+			e.printStackTrace();
 		}
-		System.out.println("after dialog");
+		System.out.println("After dialog");
 		
 		System.out.println("(CreateEclipseVariantsAction.run) finished");
 		

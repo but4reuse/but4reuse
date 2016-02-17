@@ -26,29 +26,16 @@ public class PreferenceUtils {
 		Properties prop = new Properties();
 		OutputStream output = null;
 
-		try {
-			output = new FileOutputStream(getPrefFilePath());
-			
-			for(String key : mapToSave.keySet()){
-				// set the properties value
-				prop.setProperty(key, mapToSave.get(key));
-			}
-			// save properties to project root folder
-			prop.store(output, null);
-
-		} catch (IOException io) {
-			io.printStackTrace();
-		} finally {
-			if (output != null) {
-				try {
-					output.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
+		output = new FileOutputStream(getPrefFilePath());
+		for(String key : mapToSave.keySet()){
+			prop.setProperty(key, mapToSave.get(key));
 		}
-		
+		prop.store(output, null);
+
+		if (output != null) {
+			output.close();
+		}
+
 	}
 	
 	public static Map<String, String> getPreferencesMap(Object context) throws IOException{
@@ -60,8 +47,6 @@ public class PreferenceUtils {
 		try {
 
 			input = new FileInputStream(getPrefFilePath());
-
-			// load a properties file
 			prop.load(input);
 
 			map.put("input", prop.getProperty("input"));
@@ -73,15 +58,9 @@ public class PreferenceUtils {
 
 		} catch (FileNotFoundException ex) {
 			throw new FileNotFoundException("Does the \"preferences.properties\" file exist in adapters.eclipse/src/resources ?");
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}finally {
+		} finally {
 			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				input.close();
 			}
 		}
 		return map;
