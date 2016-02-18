@@ -43,6 +43,7 @@ public class JavaLanguage implements ILanguage {
 		try {
 			p.CompilationUnit(false);
 		} catch (ParseException e) {
+			System.err.println(path);
 			e.printStackTrace();
 			return null;
 		} catch (Error error) {
