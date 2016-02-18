@@ -11,7 +11,6 @@ import org.but4reuse.adapters.filestructure.preferences.FileStructureAdapterPref
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.markers.IMarkerElement;
 import org.but4reuse.utils.files.FileUtils;
-import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -105,21 +104,12 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	@Override
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
-
-		// words.add(uri.getPath());
-		/*
-		 * We split path with chars '/' and '\' in order to have the name of
-		 * each folder. We split folder name using word case. For instance
-		 * EmptyFolder will become Empty Folder.
-		 */
-
-		StringTokenizer tk = new StringTokenizer(uri.getPath(), "/\\");
+		// We split path with chars '/' and '\' in order to have the name of
+		StringTokenizer tk = new StringTokenizer(relativeURI.getPath(), "/\\");
 
 		while (tk.hasMoreTokens()) {
 			String s = tk.nextToken();
-			for (String w : StringUtils.splitCamelCase(s)) {
-				words.add(w);
-			}
+			words.add(s);
 		}
 		return words;
 	}
