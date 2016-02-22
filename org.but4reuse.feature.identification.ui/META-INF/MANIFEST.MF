@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.adapters,
  org.but4reuse.adapters.ui,
  org.but4reuse.visualisation,
- org.but4reuse.blockcreation,
+ org.but4reuse.block.identification,
  org.but4reuse.feature.constraints,
  org.but4reuse.utils,
  org.eclipse.core.resources

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.but4reuse.blockcreation" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.but4reuse.block.identification" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.but4reuse.blockcreation" id="org.but4reuse.blockcreation" name="Block Creation Algorithms"/>
+         <meta.schema plugin="org.but4reuse.block.identification" id="org.but4reuse.block.identification" name="Block Identification"/>
       </appinfo>
       <documentation>
-         Block creation algorithms for BUT4Reuse
+         Block identification algorithms for BUT4Reuse
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="blockcreation" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="block.identification" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="blockcreation">
+   <element name="block.identification">
       <complexType>
          <attribute name="name" type="string" use="required">
             <annotation>
@@ -65,7 +65,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.but4reuse.blockcreation.IBlockCreationAlgorithm"/>
+                  <meta.attribute kind="java" basedOn=":org.but4reuse.block.identification.IBlockIdentification"/>
                </appinfo>
             </annotation>
          </attribute>

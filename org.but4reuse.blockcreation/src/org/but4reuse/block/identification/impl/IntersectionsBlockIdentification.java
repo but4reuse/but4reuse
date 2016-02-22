@@ -1,4 +1,4 @@
-package org.but4reuse.blockcreation.impl;
+package org.but4reuse.block.identification.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
+import org.but4reuse.block.identification.IBlockIdentification;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -20,10 +20,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Marcos Aurélio Almeida da Silva and Mikal Ziane Implementation and adaptation
  * by jabier.martinez and tewfik.ziadi
  */
-public class IntersectionsBlockCreationAlgorithm implements IBlockCreationAlgorithm {
+public class IntersectionsBlockIdentification implements IBlockIdentification {
 
 	@Override
-	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
+	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Blocks Empty
 		List<Block> blocks = new ArrayList<Block>();

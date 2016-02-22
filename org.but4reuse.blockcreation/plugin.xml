@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.but4reuse.blockcreation" name="Block Creation Algorithms" schema="schema/org.but4reuse.blockcreation.exsd"/>
+   <extension-point id="org.but4reuse.block.identification" name="Block Identification Algorithms" schema="schema/org.but4reuse.block.identification.exsd"/>
    <extension
-         point="org.but4reuse.blockcreation">
-      <blockcreation
-            class="org.but4reuse.blockcreation.impl.IntersectionsBlockCreationAlgorithm"
+         point="org.but4reuse.block.identification">
+      <block.identification
+            class="org.but4reuse.block.identification.impl.IntersectionsBlockIdentification"
             name="Interdependent elements (Intersections among artefacts)">
-      </blockcreation>
-      <blockcreation
-            class="org.but4reuse.blockcreation.impl.SimilarElementsBlocksCreationAlgorithm"
+      </block.identification>
+      <block.identification
+            class="org.but4reuse.block.identification.impl.SimilarElementsBlockIdentification"
             name="Similar elements">
-      </blockcreation>
+      </block.identification>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.but4reuse.blockcreation.helper.PreferenceInitializer">
+            class="org.but4reuse.block.identification.helper.PreferenceInitializer">
       </initializer>
    </extension>
 

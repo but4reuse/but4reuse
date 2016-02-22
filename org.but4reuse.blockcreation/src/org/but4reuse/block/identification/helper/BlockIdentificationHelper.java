@@ -1,10 +1,10 @@
-package org.but4reuse.blockcreation.helper;
+package org.but4reuse.block.identification.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
-import org.but4reuse.blockcreation.activator.Activator;
+import org.but4reuse.block.identification.IBlockIdentification;
+import org.but4reuse.block.identification.activator.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
@@ -13,38 +13,38 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
- * Block creation helper
+ * Block identification helper
  * 
  * @author jabier.martinez
  */
-public class BlockCreationHelper {
+public class BlockIdentificationHelper {
 
-	public static final String BLOCKCREATION_EXTENSIONPOINT = "org.but4reuse.blockcreation";
+	public static final String BLOCKIDENTIFICATION_EXTENSIONPOINT = "org.but4reuse.block.identification";
 
-	private static List<IBlockCreationAlgorithm> cache_blockcreationalgorithms;
+	private static List<IBlockIdentification> cache_blockidentificationalgorithms;
 
 	/**
 	 * Get all the registered block creation algorithms
 	 * 
 	 * @return
 	 */
-	public static List<IBlockCreationAlgorithm> getAllBlockCreationAlgorithms() {
-		if (cache_blockcreationalgorithms != null) {
-			return cache_blockcreationalgorithms;
+	public static List<IBlockIdentification> getAllBlockIdentificationAlgorithms() {
+		if (cache_blockidentificationalgorithms != null) {
+			return cache_blockidentificationalgorithms;
 		}
-		List<IBlockCreationAlgorithm> blockCreationAlgorithms = new ArrayList<IBlockCreationAlgorithm>();
+		List<IBlockIdentification> blockIdentificationAlgorithms = new ArrayList<IBlockIdentification>();
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				BLOCKCREATION_EXTENSIONPOINT);
+				BLOCKIDENTIFICATION_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				blockCreationAlgorithms.add((IBlockCreationAlgorithm) adapterExtensionPoint
+				blockIdentificationAlgorithms.add((IBlockIdentification) adapterExtensionPoint
 						.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		cache_blockcreationalgorithms = blockCreationAlgorithms;
-		return blockCreationAlgorithms;
+		cache_blockidentificationalgorithms = blockIdentificationAlgorithms;
+		return blockIdentificationAlgorithms;
 	}
 
 	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
@@ -54,12 +54,12 @@ public class BlockCreationHelper {
 		return Activator.getDefault().getPreferenceStore();
 	}
 
-	public static String getAlgorithmName(IBlockCreationAlgorithm algo) {
+	public static String getAlgorithmName(IBlockIdentification algo) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				BLOCKCREATION_EXTENSIONPOINT);
+				BLOCKIDENTIFICATION_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				IBlockCreationAlgorithm oneAlgo = (IBlockCreationAlgorithm) adapterExtensionPoint
+				IBlockIdentification oneAlgo = (IBlockIdentification) adapterExtensionPoint
 						.createExecutableExtension("class");
 				if (oneAlgo.getClass().equals(algo.getClass())) {
 					String name = adapterExtensionPoint.getAttribute("name");
@@ -73,8 +73,8 @@ public class BlockCreationHelper {
 		return "No name";
 	}
 
-	public static IBlockCreationAlgorithm getSelectedBlockCreation() {
-		for (IBlockCreationAlgorithm algo : getAllBlockCreationAlgorithms()) {
+	public static IBlockIdentification getSelectedBlockIdentification() {
+		for (IBlockIdentification algo : getAllBlockIdentificationAlgorithms()) {
 			if (isAlgorithmSelected(algo)) {
 				return algo;
 			}
@@ -82,7 +82,7 @@ public class BlockCreationHelper {
 		return null;
 	}
 
-	public static boolean isAlgorithmSelected(IBlockCreationAlgorithm algo) {
+	public static boolean isAlgorithmSelected(IBlockIdentification algo) {
 		String algoName = getAlgorithmName(algo);
 		IPreferenceStore prefs = getPreferenceStore();
 		return prefs.getBoolean(algoName);

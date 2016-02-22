@@ -1,9 +1,9 @@
-package org.but4reuse.blockcreation.ui.preferences;
+package org.but4reuse.block.identification.ui.preferences;
 
 import java.util.List;
 
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
-import org.but4reuse.blockcreation.helper.BlockCreationHelper;
+import org.but4reuse.block.identification.IBlockIdentification;
+import org.but4reuse.block.identification.helper.BlockIdentificationHelper;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -20,11 +20,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  * preferences can be accessed directly via the preference store.
  */
 
-public class BlockCreationPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class BlockIdentificationPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public BlockCreationPreferencePage() {
+	public BlockIdentificationPreferencePage() {
 		super(GRID);
-		setPreferenceStore(BlockCreationHelper.getPreferenceStore());
+		setPreferenceStore(BlockIdentificationHelper.getPreferenceStore());
 		setDescription("Select only one");
 	}
 
@@ -32,9 +32,9 @@ public class BlockCreationPreferencePage extends FieldEditorPreferencePage imple
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		List<IBlockCreationAlgorithm> algos = BlockCreationHelper.getAllBlockCreationAlgorithms();
-		for (IBlockCreationAlgorithm algo : algos) {
-			String algoName = BlockCreationHelper.getAlgorithmName(algo);
+		List<IBlockIdentification> algos = BlockIdentificationHelper.getAllBlockIdentificationAlgorithms();
+		for (IBlockIdentification algo : algos) {
+			String algoName = BlockIdentificationHelper.getAlgorithmName(algo);
 			BooleanFieldEditor bfe = new BooleanFieldEditor(algoName, algoName, getFieldEditorParent());
 			addField(bfe);
 		}

@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.but4reuse.blockcreation">
-      <blockcreation
-            class="org.but4reuse.fca.blockcreation.FCABlockCreation"
+         point="org.but4reuse.block.identification">
+      <block.identification
+            class="org.but4reuse.fca.block.identification.FCABlockIdentification"
             name="Formal Concept Analysis">
-      </blockcreation>
+      </block.identification>
    </extension>
    <extension
          point="org.but4reuse.constraints.discovery">

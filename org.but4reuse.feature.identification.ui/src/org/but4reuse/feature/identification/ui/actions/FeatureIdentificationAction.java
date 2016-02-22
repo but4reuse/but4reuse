@@ -13,8 +13,8 @@ import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.ArtefactModel;
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
-import org.but4reuse.blockcreation.helper.BlockCreationHelper;
+import org.but4reuse.block.identification.IBlockIdentification;
+import org.but4reuse.block.identification.helper.BlockIdentificationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
@@ -79,9 +79,9 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								monitor.subTask("Calculating existing blocks");
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 
-								IBlockCreationAlgorithm a = BlockCreationHelper.getSelectedBlockCreation();
+								IBlockIdentification a = BlockIdentificationHelper.getSelectedBlockIdentification();
 								long startTime = System.currentTimeMillis();
-								List<Block> blocks = a.createBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
+								List<Block> blocks = a.identifyBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								long stopTime = System.currentTimeMillis();
 								long elapsedTime = stopTime - startTime;
 								AdaptedModelManager.registerTime(

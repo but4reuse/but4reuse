@@ -1,4 +1,4 @@
-package org.but4reuse.fca.blockcreation;
+package org.but4reuse.fca.block.identification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
+import org.but4reuse.block.identification.IBlockIdentification;
 import org.but4reuse.fca.utils.FCAUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -29,10 +29,10 @@ import fr.labri.galatea.Entity;
  * Formal Context Analysis block creation
  * 
  */
-public class FCABlockCreation implements IBlockCreationAlgorithm {
+public class FCABlockIdentification implements IBlockIdentification {
 
 	@Override
-	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
+	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Creates a formal context
 		Context fc = new Context();

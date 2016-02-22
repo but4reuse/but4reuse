@@ -5,9 +5,9 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.but4reuse.page"
-            class="org.but4reuse.blockcreation.ui.preferences.BlockCreationPreferencePage"
-            id="org.but4reuse.blockcreation.ui.page"
-            name="Block Creation">
+            class="org.but4reuse.block.identification.ui.preferences.BlockIdentificationPreferencePage"
+            id="org.but4reuse.block.identification.ui.page"
+            name="Block Identification">
       </page>
    </extension>
 

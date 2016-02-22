@@ -1,4 +1,4 @@
-package org.but4reuse.blockcreation.impl;
+package org.but4reuse.block.identification.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.blockcreation.IBlockCreationAlgorithm;
+import org.but4reuse.block.identification.IBlockIdentification;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -22,10 +22,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  * @author jabier.martinez
  */
-public class SimilarElementsBlocksCreationAlgorithm implements IBlockCreationAlgorithm {
+public class SimilarElementsBlockIdentification implements IBlockIdentification {
 
 	@Override
-	public List<Block> createBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
+	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
 		// Blocks Empty
 		List<Block> blocks = new ArrayList<Block>();
@@ -69,7 +69,7 @@ public class SimilarElementsBlocksCreationAlgorithm implements IBlockCreationAlg
 
 		// Iterate on eewmap to create blocks with their block elements
 		while (!R.isEmpty()) {
-			IElement e = IntersectionsBlockCreationAlgorithm.findMostFrequentElement(R);
+			IElement e = IntersectionsBlockIdentification.findMostFrequentElement(R);
 			// Create Block
 			Block block = AdaptedModelFactory.eINSTANCE.createBlock();
 			BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
