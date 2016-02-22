@@ -30,6 +30,39 @@ public class FeatureHelper {
 		}
 		return actualFeatures;
 	}
+	
+	public static List<ActualFeature> getAllIncludedFeatures(List<ActualFeature> allFeatures, ActualFeature feature){
+		if(allFeatures==null || feature==null) return null;
+		
+		List<ActualFeature> includedFeatures = new ArrayList<>(feature.getIncludedFeatures().size());
+		for(String featureId : feature.getIncludedFeatures()){
+			ActualFeature oneIncludedFeature = getFeatureById(allFeatures, featureId);
+			if(oneIncludedFeature!=null) includedFeatures.add(oneIncludedFeature);
+		}
+		
+		return includedFeatures;
+	}
+	
+	public static List<ActualFeature> getAllRequiredFeatures(List<ActualFeature> allFeatures, ActualFeature feature){
+		if(allFeatures==null || feature==null) return null;
+		
+		List<ActualFeature> requiredFeatures = new ArrayList<>(feature.getRequiredFeatures().size());
+		for(String featureId : feature.getRequiredFeatures()){
+			ActualFeature oneRequiredFeature = getFeatureById(allFeatures, featureId);
+			if(oneRequiredFeature!=null) requiredFeatures.add(oneRequiredFeature);
+		}
+		
+		return requiredFeatures;
+	}
+	
+	public static ActualFeature getFeatureById(List<ActualFeature> allFeatures, String id){
+		if(id == null || id.isEmpty() || allFeatures==null) return null;
+		
+		for(ActualFeature feature : allFeatures){
+			if(feature.getId().equals(id)) return feature;
+		}
+		return null;
+	}
 
 	public static boolean isAFeature(File file) {
 		if (file.getParentFile().getName().equals(FEATURES_FOLDER)) {

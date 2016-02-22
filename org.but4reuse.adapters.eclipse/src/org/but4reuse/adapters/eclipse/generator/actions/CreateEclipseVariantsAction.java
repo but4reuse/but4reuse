@@ -49,7 +49,6 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	
 	private boolean isAllOK = true;
 	private ScrollableMessageDialog dialog;
-	private String texteWaiting;
 	private JLabel inputLabel;
 	private JLabel variantsLabel;
 	private JLabel randomLabel;
@@ -163,15 +162,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		}
 		
 		// Saving preferences
-		Map<String, String> map = new HashMap<>();
-		map.put("input", input.getText());
-		map.put("output", output.getText());
-		map.put("randomSelector", randomSelector.getText());
-		map.put("numberVariant", numberVariant.getText());
-		map.put("onlyMetaData", ((Boolean)onlyMetaData.isSelected()).toString() );
-		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
-		try {
-			PreferenceUtils.savePreferencesMap(map, context);
+		try{
+			PreferenceUtils.savePreferencesMap(getMapWithAllParameters(), context);
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
 		}
@@ -183,36 +175,32 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			
 			@Override
 			public void run() {
-				System.out.println("Before generator");
 				VariantsGenerator varGen = new VariantsGenerator(input.getText(), output.getText(), nbVariantsForThread, valRandForThread, onlyMetaData.isSelected());
 				varGen.addListener(context);
 				varGen.generate();   // Long time to execute
 				
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						if(dialog != null && !dialog.isDisposed()) dialog.setCloseable(true);
+						waitWhileParameterIsNull(dialog);
+						if(!dialog.isDisposed()) dialog.setCloseable(true);
 					}
+
 				});
-				System.out.println("After generator");
 			}
 		}).start();
 		
 		
 		final Shell shell = Display.getCurrent().getActiveShell();
-    	System.out.println("\nBefore dialog");
     	
     	// Open the Summary Dialog
 		try{
 			dialog = new ScrollableMessageDialog(shell, "Summary" , null, "", false);
 			dialog.open();
-			System.out.println("After dialog");
+			synchronized (this) { this.notifyAll(); } // Security for not make things on a null dialog in receive method
 		} catch (Exception e) {
 			MessageDialog.openError(shell,"Error in summary dialog",e.toString());
 			e.printStackTrace();
 		}
-		System.out.println("After dialog");
-		
-		System.out.println("(CreateEclipseVariantsAction.run) finished");
 		
 	}
 
@@ -222,33 +210,57 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	}
 
 	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {}
 	
 	@Override
 	public void receive(final String msg) {
 		if(msg != null && !msg.isEmpty()){
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
-					if(dialog==null || (dialog!=null && dialog.isDisposed())){
-						if(texteWaiting==null) texteWaiting = msg;
-						else texteWaiting += "\r\n\n" + msg;
-					} else if (!dialog.isDisposed()){
+					
+					waitWhileParameterIsNull(dialog);
+					
+					if (!dialog.isDisposed()){
 						String scrollText = dialog.getScrollableText();
-						if(scrollText==null || scrollText.isEmpty()) scrollText = "";
-						else scrollText += "\r\n\n";
-						
-					    if(texteWaiting != null){
-					    	scrollText += texteWaiting + "\r\n\n" + msg;
-					    	texteWaiting = null;
-					    }
-						else scrollText += msg;
+						if(scrollText==null) scrollText = "";
+				    	scrollText += msg + "\r\n\n";
 
 						dialog.setScrollableText(scrollText);
 					}
 				}
 			});
 		}
+	}
+	
+	/**
+	 * This method interrupt the current thread while the parameter is null
+	 */
+	private <T> void waitWhileParameterIsNull(T param) {
+		if(param==null){ // If dialog is null, we wait.
+			synchronized (this) {
+				try {
+					while(param==null){
+						this.wait(); // Double checking method
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Return the Map<String, String> of all parameters (input path, random number, ...) for preferences
+	 */
+	private Map<String, String> getMapWithAllParameters(){
+		Map<String, String> map = new HashMap<>();
+		map.put("input", input.getText());
+		map.put("output", output.getText());
+		map.put("randomSelector", randomSelector.getText());
+		map.put("numberVariant", numberVariant.getText());
+		map.put("onlyMetaData", ((Boolean)onlyMetaData.isSelected()).toString() );
+		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
+		return map;
 	}
 	
 }

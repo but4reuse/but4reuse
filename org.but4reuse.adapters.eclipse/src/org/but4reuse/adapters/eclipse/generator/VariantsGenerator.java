@@ -7,17 +7,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
+import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.ISender;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.eclipse.emf.common.util.URI;
 
 
 public class VariantsGenerator implements IVariantsGenerator, ISender{
@@ -59,48 +62,89 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		
 		String name_tmp;
 		String output_variant;
-		for(int i=1; i<=nbVariants ; i++){
-			output_variant = output+File.separator+VariantsUtils.VARIANT+i;
-			
-			for(File dir : eclipse.listFiles()){  // Parcours tous le contenu
-				name_tmp = dir.getName();
-				
-				if(dir.isDirectory()){
-					
-					if(name_tmp.equals(VariantsUtils.FEATURES)){
-						try {
-							File[] someFeatures = FileAndDirectoryUtils.getSomeFiles(dir.listFiles(), percentage);
-							FileUtils.forceMkdir( new File(output_variant+File.separator+name_tmp) ); 
-							FileAndDirectoryUtils.copyFilesAndDirectories(output_variant+File.separator+name_tmp, someFeatures);
-							sendToAll("(Variant "+i+") features created.");
-						} catch (Exception e) {
-							sendToAll("(Variant "+i+") features error : "+e);
-						}
-					} else if( name_tmp.equals(VariantsUtils.PLUGINS) ){
-						if(saveOnlyMetadata){
-							try {
-								copyProcessForPluginsDirectories(FileAndDirectoryUtils.getAllSubDirectories(dir), output_variant+File.separator+name_tmp);
-								sendToAll("(Variant "+i+") plugins (in dir) created.");
-								copyProcessForPluginsJar(FileAndDirectoryUtils.getAllJarsInDirectory(dir), output_variant+File.separator+name_tmp);
-								sendToAll("(Variant "+i+") plugins (in jar) created.");
-							} catch (Exception e) {
-								sendToAll("(Variant "+i+") plugins error : "+e);
-							}
-						} else {
-							try {
-								FileAndDirectoryUtils.copyDirectory(dir, output);
-								sendToAll("(Variant "+i+") plugins created.");
-							} catch (Exception e) {
-								sendToAll("(Variant "+i+") plugins error : "+e);
-							}
-						}
-					}
-					
-				}
-					
-			}
-			sendToAll(output_variant+" fully successed !");
+		
+		URI inputURI = URI.createFileURI(input);
+		List<ActualFeature> allFeatures;
+		try {
+			allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
+		} catch (Exception e) {
+			sendToAll("Error in generator : Impossible to get all features.");
+			return;
 		}
+		
+		sendToAll("Nombre de features total = "+allFeatures.size());
+		sendToAll("Nombre de plugins total = 416\n");
+		for(int cptVariants=1; cptVariants<=nbVariants ; cptVariants++){
+			output_variant = output+File.separator+VariantsUtils.VARIANT+cptVariants;
+			
+			List<String> pluginsList = new ArrayList<String>();
+			List<ActualFeature> chosenFeatures = new ArrayList<>();
+			
+			for(int cptFeature=0; cptFeature<allFeatures.size(); cptFeature++){
+				ActualFeature oneFeature = allFeatures.get(cptFeature);
+				
+				if(chosenFeatures.contains(oneFeature)) continue; // Has been chosen (required/included)
+				if( !hasBeenChosen(oneFeature)) continue;
+				
+				chosenFeatures.add(oneFeature);
+				
+				// TODO: Change those 2 lines to add all the features from one (private method getAllRequiredAndIncludedFeatures below)
+				chosenFeatures.addAll(FeatureHelper.getAllRequiredFeatures(allFeatures, oneFeature));
+				chosenFeatures.addAll(FeatureHelper.getAllIncludedFeatures(allFeatures, oneFeature));
+				
+				for(String plugin : oneFeature.getPlugins()){
+					if( !pluginsList.contains(plugin) ) pluginsList.add(plugin);
+				}
+				
+					
+			} // end of iterate through allFeatures
+			
+			sendToAll("\nFeatures number (required and included) for variant n°"+cptVariants+"= "+chosenFeatures.size());
+			sendToAll("Plugins number for variant n°"+cptVariants+"= "+pluginsList.size());
+				
+		} // end of nbVariantes
+		
+		
+		
+//			for(File dir : eclipse.listFiles()){  // Parcours tous le contenu
+//				name_tmp = dir.getName();
+//				
+//				if(dir.isDirectory()){
+//					
+//					if(name_tmp.equals(VariantsUtils.FEATURES)){
+//						try {
+//							File[] someFeatures = FileAndDirectoryUtils.getSomeFiles(dir.listFiles(), percentage);
+//							FileUtils.forceMkdir( new File(output_variant+File.separator+name_tmp) ); 
+//							FileAndDirectoryUtils.copyFilesAndDirectories(output_variant+File.separator+name_tmp, someFeatures);
+//							sendToAll("(Variant "+i+") features created.");
+//						} catch (Exception e) {
+//							sendToAll("(Variant "+i+") features error : "+e);
+//						}
+//					} else if( name_tmp.equals(VariantsUtils.PLUGINS) ){
+//						if(saveOnlyMetadata){
+//							try {
+//								copyProcessForPluginsDirectories(FileAndDirectoryUtils.getAllSubDirectories(dir), output_variant+File.separator+name_tmp);
+//								sendToAll("(Variant "+i+") plugins (in dir) created.");
+//								copyProcessForPluginsJar(FileAndDirectoryUtils.getAllJarsInDirectory(dir), output_variant+File.separator+name_tmp);
+//								sendToAll("(Variant "+i+") plugins (in jar) created.");
+//							} catch (Exception e) {
+//								sendToAll("(Variant "+i+") plugins error : "+e);
+//							}
+//						} else {
+//							try {
+//								FileAndDirectoryUtils.copyDirectory(dir, output);
+//								sendToAll("(Variant "+i+") plugins created.");
+//							} catch (Exception e) {
+//								sendToAll("(Variant "+i+") plugins error : "+e);
+//							}
+//						}
+//					}
+//					
+//				}
+//					
+//			}
+//			sendToAll(output_variant+" fully successed !");
+
 		
 		sendToAll("Generation finished !");
 	}
@@ -199,7 +243,18 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		}
 	}
 
+	private boolean hasBeenChosen(ActualFeature feature){
+		if(feature==null || percentage==0) return false;
+		else if (percentage == 100 || Math.random()*100 < percentage) return true;
+		else return false;
+	}
 	
+	private Map<String, ActualFeature> getAllRequiredAndIncludedFeatures(List<ActualFeature> listFeatures, ActualFeature feature){
+		return null;
+		// TODO : Recursive method to obtain all the features from one.
+		// Maybe look at ActualFeature, FeatureHelper.getFeaturesOfEclipse, 
+		// org.but4reuse.featurelist, and more specifically FeatureListHelper.java.
+	}
 	
 
 }
