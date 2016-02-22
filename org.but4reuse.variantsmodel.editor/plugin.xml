@@ -33,6 +33,21 @@
             contributorClass="org.but4reuse.artefactmodel.presentation.ArtefactModelActionBarContributor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.artefactmodel.editor.switchactivate"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.artefactmodel.editor.actions.SwitchActivateAction"
+               enablesFor="*"
+               id="org.but4reuse.artefactmodel.editor.action1"
+               label="Switch Activate/Deactivate Artefact"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
 
 null
 
