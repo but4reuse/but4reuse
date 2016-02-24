@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.zip.ZipOutputStream;
 
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.files.ZipUtils;
 
 import com.eclipsesource.json.JsonObject;
 

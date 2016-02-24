@@ -11,8 +11,8 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.json.JsonAdapter;
 import org.but4reuse.adapters.json.tools.Paths;
 import org.but4reuse.adapters.scratch.utils.ScratchUtils;
-import org.but4reuse.adapters.scratch.utils.ZipUtils;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.files.ZipUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.eclipsesource.json.JsonObject;
