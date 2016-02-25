@@ -3,11 +3,11 @@ package org.but4reuse.adapters.eclipse.generator.actions;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
-import org.but4reuse.adapters.eclipse.generator.utils.ParametersDialog;
+import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
+import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
@@ -31,8 +31,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		this.context = this;
 	}
 	
-	private boolean isAllOK = true;
-	private ScrollableMessageDialog dialog;
+	private SummaryDialog summaryDialog;
 	private ParametersDialog paramDialog;
 	private Map<String, String> prefMap;
 	
@@ -40,17 +39,17 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		
 		if(paramDialog==null){ // Not create a new dialog if it's a "re-open" (parameters not good).
 			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
-		}
-		
-		try {  // Load preferences
-			prefMap = PreferenceUtils.getPreferencesMap();
-			if( prefMap.containsKey("user.name") && prefMap.get("user.name").equals(System.getProperty("user.name")) ){ // Look below, in registration
-				paramDialog.addPreferenceParameters(prefMap);
+			try {  // Load preferences
+				prefMap = PreferenceUtils.getPreferencesMap();
+				if( prefMap.containsKey(PreferenceUtils.PREF_USERNAME) 
+						&& prefMap.get(PreferenceUtils.PREF_USERNAME).equals(System.getProperty(PreferenceUtils.PREF_USERNAME)) ){ // Look below, in registration
+					paramDialog.addPreferenceParameters(prefMap);
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println(e.getMessage());
+			} catch (IOException e) {
+				if(e instanceof FileNotFoundException)	System.out.println("Error for loading preferences");
 			}
-		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-		} catch (IOException e) {
-			if(e instanceof FileNotFoundException)	System.out.println("Error for loading preferences");
 		}
 		
 		if(paramDialog.open() != Window.OK) return; // Open the dialog and stop execution while a button is not pressed
@@ -58,6 +57,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		// Settings checking
 		int valRand=0;
 		int nbVariants=0;
+		boolean isAllOK = true;
 
 		if(!new File(paramDialog.getInputPath()).exists()){
 			paramDialog.setInputState(false);
@@ -99,7 +99,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		
 		// Saving preferences
 		try{
-			PreferenceUtils.savePreferencesMap(getMapWithAllParameters());
+			PreferenceUtils.savePreferencesMap(paramDialog.getInputPath(), paramDialog.getOutputPath(), paramDialog.getRandomSelector(),
+					paramDialog.getVariantsNumber(), Boolean.toString(paramDialog.getOnlyMetadataState()) );
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
 		}
@@ -117,8 +118,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 				
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
-						waitWhileParameterIsNull(dialog);
-						if(!dialog.isDisposed()) dialog.setCloseable(true);
+						waitWhileParameterIsNull(summaryDialog);
+						if(!summaryDialog.isDisposed()) summaryDialog.setCloseable(true);
 					}
 
 				});
@@ -130,8 +131,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
     	
     	// Open the Summary Dialog
 		try{
-			dialog = new ScrollableMessageDialog(shell, "Summary" , null, "", false);
-			dialog.open();
+			summaryDialog = new SummaryDialog(shell, "Summary" , null, "", false);
+			summaryDialog.open();
 			synchronized (this) { this.notifyAll(); } // Security for not make things on a null dialog in receive method
 		} catch (Exception e) {
 			MessageDialog.openError(shell,"Error in summary dialog",e.toString());
@@ -154,14 +155,14 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					
-					waitWhileParameterIsNull(dialog);
+					waitWhileParameterIsNull(summaryDialog);
 					
-					if (!dialog.isDisposed()){
-						String scrollText = dialog.getScrollableText();
+					if (!summaryDialog.isDisposed()){
+						String scrollText = summaryDialog.getScrollableText();
 						if(scrollText==null) scrollText = "";
-				    	scrollText += msg + "\r\n\n";
+				    	scrollText += msg.replaceAll("\n", "\r\n") + "\r\n";
 
-						dialog.setScrollableText(scrollText);
+				    	summaryDialog.setScrollableText(scrollText);
 					}
 				}
 			});
@@ -183,20 +184,6 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Return the Map<String, String> of all parameters (input path, random number, ...) for preferences
-	 */
-	private Map<String, String> getMapWithAllParameters(){
-		Map<String, String> map = new HashMap<>();
-		map.put("input", paramDialog.getInputPath());
-		map.put("output", paramDialog.getOutputPath());
-		map.put("randomSelector", paramDialog.getRandomSelector());
-		map.put("numberVariant", paramDialog.getVariantsNumber());
-		map.put("onlyMetaData", ((Boolean)paramDialog.getOnlyMetadataState()).toString() );
-		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
-		return map;
 	}
 	
 }

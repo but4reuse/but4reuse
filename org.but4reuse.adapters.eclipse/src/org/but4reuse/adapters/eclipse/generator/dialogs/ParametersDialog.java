@@ -1,7 +1,9 @@
-package org.but4reuse.adapters.eclipse.generator.utils;
+package org.but4reuse.adapters.eclipse.generator.dialogs;
 
 import java.util.Map;
 
+import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
+import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -46,12 +48,10 @@ public class ParametersDialog extends Dialog {
 	public ParametersDialog(Shell parentShell) {
 		super(parentShell);
 		red = parentShell.getDisplay().getSystemColor(SWT.COLOR_RED);
-		System.out.println("constructeur");		
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {  // Is call during the open method
-		System.out.println("create dialog");
 		Composite container = (Composite) super.createDialogArea(parent);
 		GridLayout layout = new GridLayout(2, false);
 		layout.marginRight = 5;
@@ -114,6 +114,7 @@ public class ParametersDialog extends Dialog {
 
 		onlyMetaData = new Button(container, SWT.CHECK);
 		onlyMetaData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		onlyMetaData.setSelection(onlyMetadataState);
 	}
 	
 	@Override
@@ -124,7 +125,12 @@ public class ParametersDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(420, 400);
+		return new Point(600, 250);
+	}
+	
+	@Override
+	protected boolean isResizable() {
+		return true; // Allow the user to change the dialog size!
 	}
 
 	@Override
@@ -177,7 +183,11 @@ public class ParametersDialog extends Dialog {
 	 * Call this method before the open method. It put all the preference parameters into the dialog
 	 */
 	public void addPreferenceParameters(Map<String, String> params){
-		
+		inputContent = params.get(PreferenceUtils.PREF_INPUT);
+		outputContent = params.get(PreferenceUtils.PREF_OUTPUT);
+		randomSelectorContent = params.get(PreferenceUtils.PREF_RANDOM);
+		variantsNumberContent = params.get(PreferenceUtils.PREF_VARIANTS);
+		onlyMetadataState = Boolean.parseBoolean(params.get(PreferenceUtils.PREF_METADATA));
 	}
 
 } 

@@ -1,21 +1,11 @@
 package org.but4reuse.adapters.eclipse.generator;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
-import org.apache.commons.io.IOCase;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
+import org.but4reuse.adapters.eclipse.generator.utils.FeaturesAndPluginsDependencies;
 import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.ISender;
@@ -44,7 +34,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	}
 	
 	public void generate() {
-		sendToAll("Starting generate !");
+		sendToAll("Starting generate with :");
+		sendToAll("-input = "+input);
+		sendToAll("-output = "+output);
+		sendToAll("-variants number = "+nbVariants);
+		sendToAll("-percentage = "+percentage+" %");
+		sendToAll("-save only metadata = "+saveOnlyMetadata+"\n");
+		
 		File eclipse = new File(input);
 		File outputFile = new File(output);
 		
@@ -53,14 +49,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 			return; 
 		}
 		
- 		try {
+ 		try {  // Clear the output
 			FileAndDirectoryUtils.deleteFile(outputFile);
-			sendToAll(output + " deleted");
+//			sendToAll("output deleted");
 		} catch (Exception e) {
-			sendToAll(output +" not deleted because : "+e+"");
+//			sendToAll("output not deleted because : "+e.getMessage()+"");
 		}
 		
-		String name_tmp;
 		String output_variant;
 		
 		URI inputURI = URI.createFileURI(input);
@@ -72,41 +67,49 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 			return;
 		}
 		
-		sendToAll("Nombre de features total = "+allFeatures.size());
-		sendToAll("Nombre de plugins total = 416\n");
-		for(int cptVariants=1; cptVariants<=nbVariants ; cptVariants++){
-			output_variant = output+File.separator+VariantsUtils.VARIANT+cptVariants;
+		sendToAll("Total features number at the input = "+allFeatures.size()+"\n");
+//		sendToAll("Total features number at the input = "+allPlugins.size()+"\n");
+		
+		FeaturesAndPluginsDependencies depOperator = new FeaturesAndPluginsDependencies(allFeatures);
+		for(int i=1; i<=nbVariants ; i++){
+			output_variant = output+File.separator+VariantsUtils.VARIANT+i;
 			
 			List<String> pluginsList = new ArrayList<String>();
 			List<ActualFeature> chosenFeatures = new ArrayList<>();
 			
+			int nbSelectedFeatures = 0;
 			for(int cptFeature=0; cptFeature<allFeatures.size(); cptFeature++){
 				ActualFeature oneFeature = allFeatures.get(cptFeature);
+				boolean wasChosen = wasChosen(oneFeature);
+				if(wasChosen) nbSelectedFeatures++;
 				
-				if(chosenFeatures.contains(oneFeature)) continue; // Has been chosen (required/included)
-				if( !hasBeenChosen(oneFeature)) continue;
-				
+				if(chosenFeatures.contains(oneFeature) || !wasChosen) continue; // Check if not exists and apply the random choice
 				chosenFeatures.add(oneFeature);
 				
-				// TODO: Change those 2 lines to add all the features from one (private method getAllRequiredAndIncludedFeatures below)
-				chosenFeatures.addAll(FeatureHelper.getAllRequiredFeatures(allFeatures, oneFeature));
-				chosenFeatures.addAll(FeatureHelper.getAllIncludedFeatures(allFeatures, oneFeature));
-				
-				for(String plugin : oneFeature.getPlugins()){
-					if( !pluginsList.contains(plugin) ) pluginsList.add(plugin);
+				List<ActualFeature> allDependencies = depOperator.getDependencies(oneFeature);
+				if(allDependencies != null){
+					for(ActualFeature depFeat : allDependencies){
+						if(!chosenFeatures.contains(depFeat)) chosenFeatures.add(depFeat); // Avoid duplicates dependencies in the chosenFeatures list
+					}
 				}
+				
+//				for(String plugin : oneFeature.getPlugins()){
+//					if( !pluginsList.contains(plugin) ) pluginsList.add(plugin);
+//				}
 				
 					
 			} // end of iterate through allFeatures
 			
-			sendToAll("\nFeatures number (required and included) for variant n°"+cptVariants+"= "+chosenFeatures.size());
-			sendToAll("Plugins number for variant n°"+cptVariants+"= "+pluginsList.size());
+			sendToAll("Total of features selected with the random for variant nÂ°"+i+" = "+nbSelectedFeatures);
+			sendToAll("Total of features (all selected, including required and \n"
+					+ "included dependencies, direct or indirect) for variant nÂ°"+i+" = "+chosenFeatures.size()+"\n");
+//			sendToAll("Plugins number for variant n0"+i+"= "+pluginsList.size());
 				
 		} // end of nbVariantes
 		
 		
-		
-//			for(File dir : eclipse.listFiles()){  // Parcours tous le contenu
+//		==== Old Part for Files copy (we keep this just in case of...)
+//			for(File dir : eclipse.listFiles()){  // Iterate over the contains
 //				name_tmp = dir.getName();
 //				
 //				if(dir.isDirectory()){
@@ -146,78 +149,78 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 //			sendToAll(output_variant+" fully successed !");
 
 		
-		sendToAll("Generation finished !");
+		sendToAll("\nGeneration finished !");
 	}
 	
-	private void copyProcessForPluginsDirectories(File[] allPlugin, String output) throws Exception {
-		IOFileFilter propertiesFileFilter = FileFilterUtils.suffixFileFilter(VariantsUtils.PROPERTIES, IOCase.INSENSITIVE);
-		IOFileFilter metaInfFileFilter = FileFilterUtils.nameFileFilter(VariantsUtils.META_INF, IOCase.INSENSITIVE);
-
-		FileFilter filter = FileFilterUtils.or(metaInfFileFilter, propertiesFileFilter);
-
-		for(File onePlugin : allPlugin){
-			File[] contentPlugin = onePlugin.listFiles(filter);
-			FileAndDirectoryUtils.copyFilesAndDirectories(output+File.separator+onePlugin.getName(), contentPlugin);
-		}
-	}
-
-	/**
-	 * Extract and copy the content from all the ".jar" files, and paste into the output.
-	 * @param allJarsInDirectory : All the ".jar" files
-	 * @param output : The destination
-	 */
-	private void copyProcessForPluginsJar(File[] allJarsInDirectory, String output) {
-		String jarName;
-		String newOutputForEachJar;
-		File onePluginDir;
-
-		for(File oneJar : allJarsInDirectory){
-			jarName = oneJar.getName().replace(VariantsUtils.JAR, "");
-			newOutputForEachJar = output+File.separator+jarName;
-			onePluginDir = new File(newOutputForEachJar);
-			onePluginDir.mkdirs();
-			
-			try {
-				extractJar(oneJar, onePluginDir);
-			} catch (Exception e) {}
-		}
-	}
-	
-	private void extractJar(File jarFile, File destDir) throws Exception {
-		JarFile jar = new JarFile(jarFile);
-		Enumeration<JarEntry> entries = jar.entries();
-		InputStream inputStream;
-		FileOutputStream fileOutputStream;
-		
-		while (entries.hasMoreElements()) {
-			JarEntry file = (JarEntry) entries.nextElement();
-			File f = new File(destDir + File.separator + file.getName());
-			inputStream = jar.getInputStream(file);
-			boolean isDir = f.isDirectory();
-			String path = f.getPath();
-			boolean containsMeta = path.contains(VariantsUtils.META_INF);
-			boolean endsWithPluginProp = path.endsWith(VariantsUtils.PROPERTIES);
-			try {
-				if(isDir || (!containsMeta && !endsWithPluginProp) ){
-					continue;
-				}
-				fileOutputStream = new FileOutputStream(f);
-			}
-			catch (FileNotFoundException e) {
-				f.getParentFile().mkdirs();
-				fileOutputStream = new FileOutputStream(f);
-			}
-			byte[] b = new byte[16384];
-			int bytes;
-			while ((bytes = inputStream.read(b)) > 0) {
-				fileOutputStream.write(b, 0, bytes);
-			}
-			
-			fileOutputStream.close();
-			inputStream.close();
-		}
-		jar.close();
-	}
+//	private void copyProcessForPluginsDirectories(File[] allPlugin, String output) throws Exception {
+//		IOFileFilter propertiesFileFilter = FileFilterUtils.suffixFileFilter(VariantsUtils.PROPERTIES, IOCase.INSENSITIVE);
+//		IOFileFilter metaInfFileFilter = FileFilterUtils.nameFileFilter(VariantsUtils.META_INF, IOCase.INSENSITIVE);
+//
+//		FileFilter filter = FileFilterUtils.or(metaInfFileFilter, propertiesFileFilter);
+//
+//		for(File onePlugin : allPlugin){
+//			File[] contentPlugin = onePlugin.listFiles(filter);
+//			FileAndDirectoryUtils.copyFilesAndDirectories(output+File.separator+onePlugin.getName(), contentPlugin);
+//		}
+//	}
+//
+//	/**
+//	 * Extract and copy the content from all the ".jar" files, and paste into the output.
+//	 * @param allJarsInDirectory : All the ".jar" files
+//	 * @param output : The destination
+//	 */
+//	private void copyProcessForPluginsJar(File[] allJarsInDirectory, String output) {
+//		String jarName;
+//		String newOutputForEachJar;
+//		File onePluginDir;
+//
+//		for(File oneJar : allJarsInDirectory){
+//			jarName = oneJar.getName().replace(VariantsUtils.JAR, "");
+//			newOutputForEachJar = output+File.separator+jarName;
+//			onePluginDir = new File(newOutputForEachJar);
+//			onePluginDir.mkdirs();
+//			
+//			try {
+//				extractJar(oneJar, onePluginDir);
+//			} catch (Exception e) {}
+//		}
+//	}
+//	
+//	private void extractJar(File jarFile, File destDir) throws Exception {
+//		JarFile jar = new JarFile(jarFile);
+//		Enumeration<JarEntry> entries = jar.entries();
+//		InputStream inputStream;
+//		FileOutputStream fileOutputStream;
+//		
+//		while (entries.hasMoreElements()) {
+//			JarEntry file = (JarEntry) entries.nextElement();
+//			File f = new File(destDir + File.separator + file.getName());
+//			inputStream = jar.getInputStream(file);
+//			boolean isDir = f.isDirectory();
+//			String path = f.getPath();
+//			boolean containsMeta = path.contains(VariantsUtils.META_INF);
+//			boolean endsWithPluginProp = path.endsWith(VariantsUtils.PROPERTIES);
+//			try {
+//				if(isDir || (!containsMeta && !endsWithPluginProp) ){
+//					continue;
+//				}
+//				fileOutputStream = new FileOutputStream(f);
+//			}
+//			catch (FileNotFoundException e) {
+//				f.getParentFile().mkdirs();
+//				fileOutputStream = new FileOutputStream(f);
+//			}
+//			byte[] b = new byte[16384];
+//			int bytes;
+//			while ((bytes = inputStream.read(b)) > 0) {
+//				fileOutputStream.write(b, 0, bytes);
+//			}
+//			
+//			fileOutputStream.close();
+//			inputStream.close();
+//		}
+//		jar.close();
+//	}
 	
 
 	@Override
@@ -243,18 +246,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		}
 	}
 
-	private boolean hasBeenChosen(ActualFeature feature){
+	private boolean wasChosen(ActualFeature feature){
 		if(feature==null || percentage==0) return false;
 		else if (percentage == 100 || Math.random()*100 < percentage) return true;
 		else return false;
 	}
 	
-	private Map<String, ActualFeature> getAllRequiredAndIncludedFeatures(List<ActualFeature> listFeatures, ActualFeature feature){
-		return null;
-		// TODO : Recursive method to obtain all the features from one.
-		// Maybe look at ActualFeature, FeatureHelper.getFeaturesOfEclipse, 
-		// org.but4reuse.featurelist, and more specifically FeatureListHelper.java.
-	}
-	
-
 }

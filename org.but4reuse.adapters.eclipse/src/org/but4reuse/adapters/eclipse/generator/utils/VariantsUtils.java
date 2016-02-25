@@ -19,5 +19,5 @@ public class VariantsUtils {
 	public static final String METADATA_TEXT = "Only save features and plugins metadata";
 	public static final String RANDOM_NUMBER_TEXT = "Value of random selector (between 0 and 100%)";
 	public static final String VALID = "Validate input";
-
+	
 }
