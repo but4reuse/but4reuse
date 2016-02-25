@@ -17,11 +17,12 @@ public class PreferenceUtils {
 
 	public static String getPrefFilePath(){
 		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath(); //Give org.but4reuse.adapters.eclipse
+		if(path.endsWith("bin/")) path = path.substring(0, path.length()-4);
 		path += "src"+File.separator+"resources"+File.separator+PREF_FILE;
 		return path;
 	}
 	
-	public static void savePreferencesMap(Map<String,String> mapToSave, Object context) throws IOException {
+	public static void savePreferencesMap(Map<String,String> mapToSave) throws IOException {
 
 		Properties prop = new Properties();
 		OutputStream output = null;
@@ -38,7 +39,7 @@ public class PreferenceUtils {
 
 	}
 	
-	public static Map<String, String> getPreferencesMap(Object context) throws IOException{
+	public static Map<String, String> getPreferencesMap() throws IOException{
 
 		Properties prop = new Properties();
 		InputStream input = null;
