@@ -1,29 +1,20 @@
 package org.but4reuse.adapters.eclipse.generator.actions;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
+import org.but4reuse.adapters.eclipse.generator.utils.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
-import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -40,120 +31,65 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		this.context = this;
 	}
 	
-	private JTextField input;
-	private JTextField output;
-	private JTextField numberVariant;
-	private JTextField randomSelector;
-	private JCheckBox onlyMetaData;
-//	private JFileChooser fc = new JFileChooser();
-	
 	private boolean isAllOK = true;
 	private ScrollableMessageDialog dialog;
-	private JLabel inputLabel;
-	private JLabel variantsLabel;
-	private JLabel randomLabel;
-	private JButton validButton;
+	private ParametersDialog paramDialog;
+	private Map<String, String> prefMap;
 	
 	public void run(IAction action) {
 		
-		if(isAllOK){ // init
-			input = new JTextField("C:\\");
-			output = new JTextField("C:\\");
-			numberVariant = new JTextField(0);
-			randomSelector = new JTextField(0);
-			onlyMetaData = new JCheckBox();
-			
-			try {  // Load preferences
-				Map<String, String> map = PreferenceUtils.getPreferencesMap(this);
-				if( map.containsKey("user.name") && map.get("user.name").equals(System.getProperty("user.name")) ){ // Look below, in registration
-					input.setText((String) map.get("input"));
-					output.setText((String) map.get("output"));
-					numberVariant.setText((String) map.get("numberVariant"));
-					randomSelector.setText((String) map.get("randomSelector"));
-					onlyMetaData.setSelected( Boolean.parseBoolean(map.get("onlyMetaData")));
-				}
-				
-			} catch (FileNotFoundException e) {
-				System.out.println(e.getMessage());
-			} catch (IOException e) {
-				if(e instanceof FileNotFoundException)
-				System.out.println("Error for loading preferences");
-			}
-			
-			
-			inputLabel = new JLabel(VariantsUtils.INPUT_TEXT);
-			variantsLabel = new JLabel(VariantsUtils.VARIANTS_NUMBER_TEXT);
-			randomLabel = new JLabel(VariantsUtils.RANDOM_NUMBER_TEXT);
-			onlyMetaData.setText(VariantsUtils.METADATA_TEXT);
-			
-			validButton = new JButton(VariantsUtils.VALID);
-			validButton.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if(!new File(input.getText()).exists()){
-						validButton.setForeground(Color.RED);
-					} else {
-						validButton.setForeground(Color.GREEN);
-					}
-				}
-			});
+		if(paramDialog==null){ // Not create a new dialog if it's a "re-open" (parameters not good).
+			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
 		}
 		
-		final JComponent[] inputs = new JComponent[] {
-				inputLabel,
-				input,
-				validButton,
-				new JLabel(VariantsUtils.OUTPUT_TEXT),
-				output,
-				variantsLabel,
-				numberVariant,
-				randomLabel,
-				randomSelector,
-				onlyMetaData
-		};
+		try {  // Load preferences
+			prefMap = PreferenceUtils.getPreferencesMap();
+			if( prefMap.containsKey("user.name") && prefMap.get("user.name").equals(System.getProperty("user.name")) ){ // Look below, in registration
+				paramDialog.addPreferenceParameters(prefMap);
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			if(e instanceof FileNotFoundException)	System.out.println("Error for loading preferences");
+		}
 		
-		int result = JOptionPane.showConfirmDialog(null, inputs, VariantsUtils.PARAMETERS_TITLE,
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-		
-		if(result==JOptionPane.CANCEL_OPTION || result==JOptionPane.CLOSED_OPTION) return;
+		if(paramDialog.open() != Window.OK) return; // Open the dialog and stop execution while a button is not pressed
 		
 		// Settings checking
 		int valRand=0;
 		int nbVariants=0;
-		isAllOK=true;
 
-		if(!new File(input.getText()).exists()){
-			validButton.setForeground(Color.RED);
+		if(!new File(paramDialog.getInputPath()).exists()){
+			paramDialog.setInputState(false);
 			isAllOK = false;
 		} else {
-			validButton.setForeground(Color.GREEN);
+			paramDialog.setInputState(true);
 		}
 		
 		try{
-			valRand=Integer.parseInt(randomSelector.getText());
+			valRand=Integer.parseInt(paramDialog.getRandomSelector());
 			if((valRand<=0 || valRand>100)){
 				isAllOK=false;
-				randomLabel.setForeground(Color.RED);
+				paramDialog.setRandomSelectorState(false);
 			} else {
-				randomLabel.setForeground(null);
+				paramDialog.setRandomSelectorState(true);
 			}
 		}catch(NumberFormatException e){
 			isAllOK=false;
-			randomLabel.setForeground(Color.RED);
+			paramDialog.setRandomSelectorState(false);
 		}
 		
 		try{
-			nbVariants=Integer.parseInt(numberVariant.getText());
-			if(nbVariants<=0 ){
+			nbVariants=Integer.parseInt(paramDialog.getVariantsNumber());
+			if(nbVariants<=0){
 				isAllOK=false;
-				variantsLabel.setForeground(Color.RED);
+				paramDialog.setVariantsNumberState(false);
 			} else {
-				variantsLabel.setForeground(null);
+				paramDialog.setVariantsNumberState(true);
 			}
 		}catch(NumberFormatException e){
 			isAllOK=false;
-			variantsLabel.setForeground(Color.RED);
+			paramDialog.setVariantsNumberState(false);
 		}
 		
 		if(!isAllOK){
@@ -163,7 +99,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		
 		// Saving preferences
 		try{
-			PreferenceUtils.savePreferencesMap(getMapWithAllParameters(), context);
+			PreferenceUtils.savePreferencesMap(getMapWithAllParameters());
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
 		}
@@ -175,7 +111,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			
 			@Override
 			public void run() {
-				VariantsGenerator varGen = new VariantsGenerator(input.getText(), output.getText(), nbVariantsForThread, valRandForThread, onlyMetaData.isSelected());
+				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(), paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, paramDialog.getOnlyMetadataState());
 				varGen.addListener(context);
 				varGen.generate();   // Long time to execute
 				
@@ -254,11 +190,11 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	 */
 	private Map<String, String> getMapWithAllParameters(){
 		Map<String, String> map = new HashMap<>();
-		map.put("input", input.getText());
-		map.put("output", output.getText());
-		map.put("randomSelector", randomSelector.getText());
-		map.put("numberVariant", numberVariant.getText());
-		map.put("onlyMetaData", ((Boolean)onlyMetaData.isSelected()).toString() );
+		map.put("input", paramDialog.getInputPath());
+		map.put("output", paramDialog.getOutputPath());
+		map.put("randomSelector", paramDialog.getRandomSelector());
+		map.put("numberVariant", paramDialog.getVariantsNumber());
+		map.put("onlyMetaData", ((Boolean)paramDialog.getOnlyMetadataState()).toString() );
 		map.put("user.name", System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
 		return map;
 	}
