@@ -11,7 +11,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * Zip Utils
+ * 
+ */
 public class ZipUtils {
+	
+	/**
+	 * Create zip output stream
+	 * @param path
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static ZipOutputStream constructZIP(String path) throws FileNotFoundException {
 		FileOutputStream dest = new FileOutputStream(path);
 		BufferedOutputStream buff = new BufferedOutputStream(dest);
@@ -19,6 +30,13 @@ public class ZipUtils {
 		return out;
 	}
 
+	/**
+	 * Add a file to a zip file
+	 * @param zipOut
+	 * @param file
+	 * @param filename
+	 * @throws Exception
+	 */
 	public static void addFileToZip(ZipOutputStream zipOut, File file, String filename) throws Exception {
 		final int BUFFER = 2048;
 		byte data[] = new byte[BUFFER];
@@ -36,12 +54,10 @@ public class ZipUtils {
 	}
 
 	/**
-	 * Unzip it
+	 * unZip
 	 * 
 	 * @param zipFile
-	 *            input zip file
-	 * @param output
-	 *            zip file output folder
+	 * @param outputFolder
 	 */
 	public static void unZip(File zipFile, File outputFolder) {
 		byte[] buffer = new byte[1024];
@@ -55,15 +71,26 @@ public class ZipUtils {
 				File newFile = new File(outputFolder + File.separator + fileName);
 				// create all non exists folders
 				// else you will hit FileNotFoundException for compressed folder
-				new File(newFile.getParent()).mkdirs();
-				FileOutputStream fos = new FileOutputStream(newFile);
-				int len;
-				while ((len = zis.read(buffer)) > 0) {
-					fos.write(buffer, 0, len);
+				if (ze.isDirectory()) {
+					newFile.mkdirs();
+				} else {
+					newFile.getParentFile().mkdirs();
+					try {
+						FileOutputStream fos = new FileOutputStream(newFile);
+						int len;
+						while ((len = zis.read(buffer)) > 0) {
+							fos.write(buffer, 0, len);
+						}
+						fos.close();
+					} catch (Exception e) {
+						// ouch, at least continue with the next...
+						e.printStackTrace();
+					}
 				}
-				fos.close();
+				// go for the next
 				ze = zis.getNextEntry();
 			}
+			// close
 			zis.closeEntry();
 			zis.close();
 		} catch (IOException ex) {
