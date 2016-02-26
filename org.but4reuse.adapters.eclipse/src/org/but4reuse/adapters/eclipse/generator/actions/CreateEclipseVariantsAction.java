@@ -68,7 +68,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		
 		try{
 			valRand=Integer.parseInt(paramDialog.getRandomSelector());
-			if((valRand<=0 || valRand>100)){
+			if((valRand<0 || valRand>100)){
 				isAllOK=false;
 				paramDialog.setRandomSelectorState(false);
 			} else {

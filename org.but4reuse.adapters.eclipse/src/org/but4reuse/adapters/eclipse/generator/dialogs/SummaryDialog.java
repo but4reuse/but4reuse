@@ -16,7 +16,7 @@ public class SummaryDialog extends ScrollableMessageDialog{
 	
 	@Override
 	protected Point getInitialSize() {
-		return new Point(550, 600);
+		return new Point(600, 650);
 	}
 
 }
