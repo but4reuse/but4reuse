@@ -104,8 +104,9 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	@Override
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
-		// We split path with chars '/' and '\' in order to have the name of
-		StringTokenizer tk = new StringTokenizer(relativeURI.getPath(), "/\\");
+		// We split path with chars '/' and '\' in order to have the names
+		// We also split with dot for separating the extension from the file name
+		StringTokenizer tk = new StringTokenizer(relativeURI.getPath(), "/\\.");
 
 		while (tk.hasMoreTokens()) {
 			String s = tk.nextToken();

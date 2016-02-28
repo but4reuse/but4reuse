@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.filestructure.activator.Activator;
+import org.but4reuse.adapters.filestructure.preferences.FileStructureAdapterPreferencePage;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -21,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class FileStructureAdapter implements IAdapter {
 
 	private URI rootURI;
+	public boolean ignoreFolders;
 
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
@@ -34,6 +37,12 @@ public class FileStructureAdapter implements IAdapter {
 
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
+		ignoreFolders = Activator.getDefault().getPreferenceStore().getBoolean(FileStructureAdapterPreferencePage.IGNORE_FOLDERS);
+		return adapt(uri, monitor, ignoreFolders);
+	}
+	
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor, boolean ignoreFolders){
+		this.ignoreFolders = ignoreFolders;
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
@@ -64,12 +73,14 @@ public class FileStructureAdapter implements IAdapter {
 		newElement.setRelativeURI(rootURI.relativize(file.toURI()));
 
 		// Add dependency to the parent folder
-		if (container != null) {
+		if (!ignoreFolders && container != null) {
 			newElement.addDependency(container);
 		}
 
 		// Add to the list
-		elements.add(newElement);
+		if(!(ignoreFolders && file.isDirectory())){
+			elements.add(newElement);
+		}
 
 		// Go for the files in case of folder
 		if (file.isDirectory()) {
