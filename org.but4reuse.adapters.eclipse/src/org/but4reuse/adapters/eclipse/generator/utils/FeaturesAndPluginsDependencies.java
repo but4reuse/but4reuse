@@ -108,8 +108,26 @@ public class FeaturesAndPluginsDependencies {
 			int nbDirectDepend = oneFeat.getIncludedFeatures().size() + oneFeat.getRequiredFeatures().size();
 			System.out.println("Number of direct dependencies of \""+oneFeat.getId()+"\""+ " = "+nbDirectDepend);
 			
-			if(feat==null) System.out.println("Number of direct and indirect dependencies  = 0\n");
-			else System.out.println("Number of direct and indirect dependencies = "+feat.size()+"\n");
+			if(feat==null){
+				System.out.println("Number of direct and indirect dependencies  = 0\n");
+			}
+			else{
+				System.out.println("Number of direct and indirect dependencies = "+feat.size());
+				for(int j=0; j<feat.size();j++){
+					System.out.print("Path du feature : "+feat.get(j).getId()+" = ");
+					System.out.println(FeatureHelper.PATH.get(feat.get(j)));
+					f=new File(FeatureHelper.PATH.get(feat.get(j)));
+					FileAndDirectoryUtils.copyDirectory(f, map.get("output"));
+				}
+				System.out.println("\n");
+			}
+			
 		}
+		//System.out.println(FeatureHelper.PATH.get(allFeatures.get(1)));
+		System.out.println(allFeatures.size());
+		f = new File(f, "features");
+		u = f.toURI();
+
+		System.out.println(u);
 	}
 }

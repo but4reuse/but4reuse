@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.eclipse.generator;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +100,18 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 				
 					
 			} // end of iterate through allFeatures
+			for(int j=0;j<chosenFeatures.size();j++){
+				System.out.println(FeatureHelper.PATH.get(chosenFeatures.get(j)));
+				File f=new File(FeatureHelper.PATH.get(chosenFeatures.get(j)));
+				try {
+					System.out.println("Entre dans le try");
+					FileAndDirectoryUtils.copyDirectory(f, output);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			
 			sendToAll("Total of features selected with the random for variant n°"+i+" = "+nbSelectedFeatures);
 			sendToAll("Total of features (all selected, including required and \n"

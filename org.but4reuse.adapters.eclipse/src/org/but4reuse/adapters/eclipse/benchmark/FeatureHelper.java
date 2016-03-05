@@ -3,7 +3,9 @@ package org.but4reuse.adapters.eclipse.benchmark;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.utils.files.FileUtils;
 
@@ -16,14 +18,18 @@ public class FeatureHelper {
 
 	public static final String FEATURE_XML = "feature.xml";
 	public static final String FEATURES_FOLDER = "features";
-
+	public static Map<ActualFeature, String> PATH;
+	
+	
 	public static List<ActualFeature> getFeaturesOfEclipse(String eclipseInstallationURI) throws Exception {
+		PATH = new HashMap<>();
 		List<ActualFeature> actualFeatures = new ArrayList<ActualFeature>();
 		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
 		File featuresFolder = new File(eclipseFile, FEATURES_FOLDER);
 		for (File fFolder : featuresFolder.listFiles()) {
 			if (isAFeature(fFolder)) {
 				ActualFeature f = FeatureInfosExtractor.getFeatureInfos(fFolder.getAbsolutePath());
+				PATH.put(f, fFolder.getAbsolutePath());
 				// we assume not repeated features
 				actualFeatures.add(f);
 			}
