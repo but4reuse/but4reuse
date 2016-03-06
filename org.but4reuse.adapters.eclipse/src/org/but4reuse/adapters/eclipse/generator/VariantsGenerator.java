@@ -63,6 +63,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		List<ActualFeature> allFeatures;
 		try {
 			allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
+			FeaturesAndPluginsDependencies.initLinkFeaturesPath(inputURI.toString());
 		} catch (Exception e) {
 			sendToAll("Error in generator : Impossible to get all features.");
 			return;
@@ -101,8 +102,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 					
 			} // end of iterate through allFeatures
 			for(int j=0;j<chosenFeatures.size();j++){
-				System.out.println(FeatureHelper.PATH.get(chosenFeatures.get(j)));
-				File f=new File(FeatureHelper.PATH.get(chosenFeatures.get(j)));
+				System.out.println(FeaturesAndPluginsDependencies.linkFeaturesAndPath.get(chosenFeatures.get(j)));
+				File f=new File(FeaturesAndPluginsDependencies.linkFeaturesAndPath.get(chosenFeatures.get(j)));
 				try {
 					System.out.println("Entre dans le try");
 					FileAndDirectoryUtils.copyDirectory(f, output);
