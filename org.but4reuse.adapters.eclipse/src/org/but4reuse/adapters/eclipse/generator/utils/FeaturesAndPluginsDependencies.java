@@ -18,7 +18,7 @@ public class FeaturesAndPluginsDependencies {
 	private List<ActualFeature> allFeatures;
 	private Map<String, ActualFeature> mapIdWithFeature;
 	private Map<ActualFeature, List<String>> mapFeatureWithDependencies;	
-	public static Map<ActualFeature, String> linkFeaturesAndPath;
+	public Map<ActualFeature, String> linkFeaturesAndPath;
 
 	public FeaturesAndPluginsDependencies(List<ActualFeature> allFeatures){
 		this.allFeatures = allFeatures;
@@ -92,7 +92,7 @@ public class FeaturesAndPluginsDependencies {
 
 	
 	
-	public static void initLinkFeaturesPath(String eclipseInstallationURI) throws Exception{
+	public void initLinkFeaturesPath(String eclipseInstallationURI) throws Exception{
 		linkFeaturesAndPath = new HashMap<>();
 		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
 		File featuresFolder = new File(eclipseFile, "features");
@@ -114,14 +114,18 @@ public class FeaturesAndPluginsDependencies {
 		java.net.URI u = f.toURI();
 		try {
 			allFeatures = FeatureHelper.getFeaturesOfEclipse(u.toString());
-			initLinkFeaturesPath(u.toString());
 		} catch (Exception e1) {
 			System.out.println("Impossible to recover all the features from : "+u.toString());
 			return;
 		}
 		
 		FeaturesAndPluginsDependencies f1 = new FeaturesAndPluginsDependencies(allFeatures);
-		
+		try {
+			f1.initLinkFeaturesPath(u.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (int i=0; i<allFeatures.size(); i++){
 			ActualFeature oneFeat = allFeatures.get(i);
 			List<ActualFeature> feat= f1.getDependencies(oneFeat);
@@ -135,8 +139,8 @@ public class FeaturesAndPluginsDependencies {
 				System.out.println("Number of direct and indirect dependencies = "+feat.size());
 				for(int j=0; j<feat.size();j++){
 					System.out.print("Path du feature : "+feat.get(j).getId()+" = ");
-					System.out.println(linkFeaturesAndPath.get(feat.get(j)));
-					f=new File(linkFeaturesAndPath.get(feat.get(j)));
+					System.out.println(f1.linkFeaturesAndPath.get(feat.get(j)));
+					f=new File(f1.linkFeaturesAndPath.get(feat.get(j)));
 					FileAndDirectoryUtils.copyDirectory(f, map.get("output"));
 				}
 				System.out.println("\n");

@@ -63,7 +63,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		List<ActualFeature> allFeatures;
 		try {
 			allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
-			FeaturesAndPluginsDependencies.initLinkFeaturesPath(inputURI.toString());
 		} catch (Exception e) {
 			sendToAll("Error in generator : Impossible to get all features.");
 			return;
@@ -73,6 +72,12 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 //		sendToAll("Total features number at the input = "+allPlugins.size()+"\n");
 		
 		FeaturesAndPluginsDependencies depOperator = new FeaturesAndPluginsDependencies(allFeatures);
+		try {
+			depOperator.initLinkFeaturesPath(inputURI.toString());
+		} catch (Exception e1) {
+			sendToAll("Error in generator : Impossible to initialize the link between features and their path.");
+			return;
+		}
 		for(int i=1; i<=nbVariants ; i++){
 			output_variant = output+File.separator+VariantsUtils.VARIANT+i;
 			
@@ -102,14 +107,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 					
 			} // end of iterate through allFeatures
 			for(int j=0;j<chosenFeatures.size();j++){
-				System.out.println(FeaturesAndPluginsDependencies.linkFeaturesAndPath.get(chosenFeatures.get(j)));
-				File f=new File(FeaturesAndPluginsDependencies.linkFeaturesAndPath.get(chosenFeatures.get(j)));
+				System.out.println(depOperator.linkFeaturesAndPath.get(chosenFeatures.get(j)));
+				File f=new File(depOperator.linkFeaturesAndPath.get(chosenFeatures.get(j)));
 				try {
-					System.out.println("Entre dans le try");
 					FileAndDirectoryUtils.copyDirectory(f, output);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					sendToAll("Error in generator : Impossible to make the copy.");
+					return;
 				}
 			}
 			
