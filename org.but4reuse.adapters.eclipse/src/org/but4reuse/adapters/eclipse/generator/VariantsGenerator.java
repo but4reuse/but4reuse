@@ -1,9 +1,9 @@
 package org.but4reuse.adapters.eclipse.generator;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.generator.utils.FeaturesAndPluginsDependencies;
@@ -25,8 +25,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 	String generatorSummary;
 	List<IListener> listeners;
 	
-	public VariantsGenerator(String input, String output, int nbVariants,
-			int percentage, boolean saveOnlyMetadata) {
+	public VariantsGenerator(String input, String output, int nbVariants, int percentage, boolean saveOnlyMetadata) {
 		this.input = input;
 		this.output = output;
 		this.nbVariants = nbVariants;
@@ -52,9 +51,9 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		
  		try {  // Clear the output
 			FileAndDirectoryUtils.deleteFile(outputFile);
-//			sendToAll("output deleted");
+			sendToAll("output clear");
 		} catch (Exception e) {
-//			sendToAll("output not deleted because : "+e.getMessage()+"");
+			sendToAll("output not clear");
 		}
 		
 		String output_variant;
@@ -69,15 +68,9 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 		}
 		
 		sendToAll("Total features number at the input = "+allFeatures.size()+"\n");
-//		sendToAll("Total features number at the input = "+allPlugins.size()+"\n");
+//		sendToAll("Total plugins number at the input = "+allPlugins.size()+"\n");
 		
-		FeaturesAndPluginsDependencies depOperator = new FeaturesAndPluginsDependencies(allFeatures);
-		try {
-			depOperator.initLinkFeaturesPath(inputURI.toString());
-		} catch (Exception e1) {
-			sendToAll("Error in generator : Impossible to initialize the link between features and their path.");
-			return;
-		}
+		FeaturesAndPluginsDependencies depOperator = new FeaturesAndPluginsDependencies(allFeatures, inputURI.toString());
 		for(int i=1; i<=nbVariants ; i++){
 			output_variant = output+File.separator+VariantsUtils.VARIANT+i;
 			
@@ -104,17 +97,27 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 //					if( !pluginsList.contains(plugin) ) pluginsList.add(plugin);
 //				}
 				
-					
 			} // end of iterate through allFeatures
-			for(int j=0;j<chosenFeatures.size();j++){
-				System.out.println(depOperator.linkFeaturesAndPath.get(chosenFeatures.get(j)));
-				File f=new File(depOperator.linkFeaturesAndPath.get(chosenFeatures.get(j)));
-				try {
-					FileAndDirectoryUtils.copyDirectory(f, output);
-				} catch (IOException e) {
-					sendToAll("Error in generator : Impossible to make the copy.");
-					return;
+			
+			
+			try { // Create all dirs and copy features and plugins
+				FileUtils.forceMkdir( new File(output_variant) ); 
+				
+				for(File file_eclipse : eclipse.listFiles()){
+					if(!file_eclipse.getName().equals(VariantsUtils.FEATURES) && !file_eclipse.getName().equals(VariantsUtils.PLUGINS)){
+						FileAndDirectoryUtils.copyFilesAndDirectories(output_variant, file_eclipse);
+					}
 				}
+				
+				File[] allFilesFeatures = new File[chosenFeatures.size()];
+				for(int j=0; j<chosenFeatures.size(); j++){
+					allFilesFeatures[j] = new File(depOperator.getPathFromFeature(chosenFeatures.get(j)));
+				}
+					
+				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant+File.separator+VariantsUtils.FEATURES, allFilesFeatures);
+				System.out.println("(Variant "+i+") features created.");
+			} catch (Exception e) {
+				System.out.println("(Variant "+i+") features error : "+e);
 			}
 			
 			
@@ -123,7 +126,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender{
 					+ "included dependencies, direct or indirect) for variant n°"+i+" = "+chosenFeatures.size()+"\n");
 //			sendToAll("Plugins number for variant n0"+i+"= "+pluginsList.size());
 				
-		} // end of nbVariantes
+		} // end of variantes loop
 		
 		
 //		==== Old Part for Files copy (we keep this just in case of...)

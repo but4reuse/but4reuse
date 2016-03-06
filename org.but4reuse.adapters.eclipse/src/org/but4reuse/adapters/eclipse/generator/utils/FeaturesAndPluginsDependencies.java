@@ -3,6 +3,7 @@ package org.but4reuse.adapters.eclipse.generator.utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,36 +17,42 @@ import org.but4reuse.utils.files.FileUtils;
 public class FeaturesAndPluginsDependencies {
 
 	private List<ActualFeature> allFeatures;
+	private String eclipseInstallationURI;
 	private Map<String, ActualFeature> mapIdWithFeature;
 	private Map<ActualFeature, List<String>> mapFeatureWithDependencies;	
-	public Map<ActualFeature, String> linkFeaturesAndPath;
+	private Map<ActualFeature, String> mapFeatureWithPath;
 
-	public FeaturesAndPluginsDependencies(List<ActualFeature> allFeatures){
+	public FeaturesAndPluginsDependencies(List<ActualFeature> allFeatures, String eclipseInstallationURI){
 		this.allFeatures = allFeatures;
+		this.eclipseInstallationURI = eclipseInstallationURI;
 		initMaps();
 	}
 	
 	private void initMaps(){
-		mapIdWithFeature = getMapIdWithFeatureFromListFeatures(allFeatures);
-		mapFeatureWithDependencies = getMapFeatureWithDependenciesFromListFeatures(allFeatures);
-	}
-	
-	private Map<String, ActualFeature> getMapIdWithFeatureFromListFeatures(List<ActualFeature> allFeatures) {
-		if(allFeatures == null || allFeatures.isEmpty()) return null;
-		
-		Map<String, ActualFeature> map = new HashMap<>();
-		for(ActualFeature oneFeature : allFeatures){
-			map.put(oneFeature.getId(), oneFeature);
+		initMapIdWithFeatureFromListFeatures(allFeatures);
+		initMapFeatureWithDependenciesFromListFeatures(allFeatures);
+		try {
+			initMapFeaturesPath(eclipseInstallationURI);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
-		
-		return map;
 	}
 	
-	private Map<ActualFeature, List<String>> getMapFeatureWithDependenciesFromListFeatures(List<ActualFeature> allFeatures) {
-		if(allFeatures == null || allFeatures.isEmpty()) return null;
+	private void initMapIdWithFeatureFromListFeatures(List<ActualFeature> allFeatures) {
+		if(allFeatures == null || allFeatures.isEmpty()) return;
+		
+		mapIdWithFeature = new HashMap<>();
+		for(ActualFeature oneFeature : allFeatures){
+			mapIdWithFeature.put(oneFeature.getId(), oneFeature);
+		}
+	}
+	
+	private void initMapFeatureWithDependenciesFromListFeatures(List<ActualFeature> allFeatures) {
+		if(allFeatures == null || allFeatures.isEmpty()) return;
+
+		mapFeatureWithDependencies = new HashMap<>();
 		List<String> dependencies =null;
 		
-		Map<ActualFeature, List<String>> map = new HashMap<>();
 		for(ActualFeature oneFeature : allFeatures){
 			dependencies=oneFeature.getRequiredFeatures();
 			List<String> included = oneFeature.getIncludedFeatures();
@@ -60,9 +67,20 @@ public class FeaturesAndPluginsDependencies {
 					dependencies=included;
 				}
 			}
-			map.put(oneFeature, dependencies);
+			mapFeatureWithDependencies.put(oneFeature, dependencies);
 		}
-		return map;
+	}
+	
+	private void initMapFeaturesPath(String eclipseInstallationURI) throws URISyntaxException{
+		mapFeatureWithPath = new HashMap<>();
+		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
+		File featuresFolder = new File(eclipseFile, "features");
+		for (File fFolder : featuresFolder.listFiles()) {
+			if (FeatureHelper.isAFeature(fFolder)) {
+				ActualFeature f = FeatureInfosExtractor.getFeatureInfos(fFolder.getAbsolutePath());
+				mapFeatureWithPath.put(f, fFolder.getAbsolutePath());
+			}
+		}
 	}
 	
 	public List<ActualFeature> getDependencies(ActualFeature actual){
@@ -90,20 +108,18 @@ public class FeaturesAndPluginsDependencies {
 		return null;
 	}
 
-	
-	
-	public void initLinkFeaturesPath(String eclipseInstallationURI) throws Exception{
-		linkFeaturesAndPath = new HashMap<>();
-		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
-		File featuresFolder = new File(eclipseFile, "features");
-		for (File fFolder : featuresFolder.listFiles()) {
-			if (FeatureHelper.isAFeature(fFolder)) {
-				ActualFeature f = FeatureInfosExtractor.getFeatureInfos(fFolder.getAbsolutePath());
-				linkFeaturesAndPath.put(f, fFolder.getAbsolutePath());
-			}
+	public List<String> getListPathFromListFeatures(List<ActualFeature> features){
+		List<String> paths = new ArrayList<>(features.size());
+		for(ActualFeature feature : features){
+			if(feature!=null) paths.add(mapFeatureWithPath.get(feature));
 		}
+		return paths;
 	}
 	
+	public String getPathFromFeature(ActualFeature feature){
+		if(feature==null) return null;
+		else return mapFeatureWithPath.get(feature);
+	}
 	
 	
 	public static void main(String[] args) throws IOException{ // Just for tests
@@ -119,13 +135,8 @@ public class FeaturesAndPluginsDependencies {
 			return;
 		}
 		
-		FeaturesAndPluginsDependencies f1 = new FeaturesAndPluginsDependencies(allFeatures);
-		try {
-			f1.initLinkFeaturesPath(u.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		FeaturesAndPluginsDependencies f1 = new FeaturesAndPluginsDependencies(allFeatures, u.toString());
+
 		for (int i=0; i<allFeatures.size(); i++){
 			ActualFeature oneFeat = allFeatures.get(i);
 			List<ActualFeature> feat= f1.getDependencies(oneFeat);
@@ -139,8 +150,8 @@ public class FeaturesAndPluginsDependencies {
 				System.out.println("Number of direct and indirect dependencies = "+feat.size());
 				for(int j=0; j<feat.size();j++){
 					System.out.print("Path du feature : "+feat.get(j).getId()+" = ");
-					System.out.println(f1.linkFeaturesAndPath.get(feat.get(j)));
-					f=new File(f1.linkFeaturesAndPath.get(feat.get(j)));
+//					System.out.println(f1.linkFeaturesAndPath.get(feat.get(j)));
+//					f=new File(f1.linkFeaturesAndPath.get(feat.get(j)));
 					FileAndDirectoryUtils.copyDirectory(f, map.get("output"));
 				}
 				System.out.println("\n");

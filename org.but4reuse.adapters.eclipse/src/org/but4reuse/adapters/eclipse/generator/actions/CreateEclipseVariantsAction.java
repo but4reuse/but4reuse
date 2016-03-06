@@ -10,7 +10,6 @@ import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
-import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -52,7 +51,10 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			}
 		}
 		
-		if(paramDialog.open() != Window.OK) return; // Open the dialog and stop execution while a button is not pressed
+		if(paramDialog.open() != Window.OK){ // Open the dialog and stop execution while a button is not pressed
+			paramDialog=null;
+			return; 
+		}
 		
 		// Settings checking
 		int valRand=0;

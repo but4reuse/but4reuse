@@ -7,6 +7,8 @@ import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
@@ -14,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -53,7 +56,7 @@ public class ParametersDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {  // Is call during the open method
 		Composite container = (Composite) super.createDialogArea(parent);
-		GridLayout layout = new GridLayout(2, false);
+		GridLayout layout = new GridLayout(3, false);
 		layout.marginRight = 5;
 		layout.marginLeft = 10;
 		container.setLayout(layout);
@@ -67,7 +70,7 @@ public class ParametersDialog extends Dialog {
 		return container;
 	}
 
-	private void addInput(Composite container) {
+	private void addInput(final Composite container) {
 		lblInput = new Label(container, SWT.WRAP);
 		lblInput.setText(VariantsUtils.INPUT_TEXT);
 		if(isInputOK!=null && !isInputOK) lblInput.setForeground(red);
@@ -75,9 +78,23 @@ public class ParametersDialog extends Dialog {
 		input = new Text(container, SWT.BORDER);
 		input.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false,	1, 1));
 		input.setText(inputContent);
+		
+		Button button = new Button(container, SWT.PUSH);
+	    button.setText("Browse...");
+	    button.addSelectionListener(new SelectionAdapter() {
+	      public void widgetSelected(SelectionEvent event) {
+	        DirectoryDialog dlg = new DirectoryDialog(container.getShell());
+	        dlg.setFilterPath(inputContent); // Initial path, with the Text contains
+	        dlg.setText("Select the eclipse directory"); // Title
+	        String dir = dlg.open();
+	        if (dir != null) {
+	        	input.setText(dir);
+	        }
+	      }
+	    });
 	}
 	
-	private void addOutput(Composite container) {
+	private void addOutput(final Composite container) {
 		lblOutput = new Label(container, SWT.WRAP);
 		lblOutput.setText(VariantsUtils.OUTPUT_TEXT);
 		if(isOutputOK!=null && !isOutputOK) lblOutput.setForeground(red);
@@ -85,6 +102,20 @@ public class ParametersDialog extends Dialog {
 		output = new Text(container, SWT.BORDER);
 		output.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		output.setText(outputContent);
+		
+		Button button = new Button(container, SWT.PUSH);
+	    button.setText("Browse...");
+	    button.addSelectionListener(new SelectionAdapter() {
+	      public void widgetSelected(SelectionEvent event) {
+	        DirectoryDialog dlg = new DirectoryDialog(container.getShell());
+	        dlg.setFilterPath(outputContent); // Initial path, with the Text contains
+	        dlg.setText("Select the output"); // Title
+	        String dir = dlg.open();
+	        if (dir != null) {
+	        	output.setText(dir);
+	        }
+	      }
+	    });
 	}
 	
 	private void addVariantsNumber(Composite container) {
@@ -94,8 +125,11 @@ public class ParametersDialog extends Dialog {
 		else lblVariantsNumber.setForeground(null);
 
 		variantsNumber = new Text(container, SWT.BORDER);
-		variantsNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		variantsNumber.setText(variantsNumberContent);
+		variantsNumber.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	    variantsNumber.setTextLimit(10);
+
+	    new Label(container, SWT.NONE).setVisible(false);; // Invisible element, because there are 3 columns
 	}
 	
 	private void addRandomSelector(Composite container) {
@@ -104,8 +138,11 @@ public class ParametersDialog extends Dialog {
 		if(isRandomSelectorOK!=null && !isRandomSelectorOK) lblRandomSelector.setForeground(red);
 
 		randomSelector = new Text(container, SWT.BORDER);
-		randomSelector.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		randomSelector.setText(randomSelectorContent);
+		randomSelector.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		randomSelector.setTextLimit(3);
+
+		new Label(container, SWT.NONE).setVisible(false); // Invisible element, because there are 3 columns
 	}
 	
 	private void addOnlyMetadata(Composite container) {
