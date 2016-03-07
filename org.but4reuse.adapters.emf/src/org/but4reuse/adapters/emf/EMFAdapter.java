@@ -152,7 +152,8 @@ public class EMFAdapter implements IAdapter {
 		// For each containment reference
 		for (EReference childReference : containments) {
 			// There could be also transient childs
-			if (!childReference.isDerived() && !childReference.isVolatile() && !childReference.isTransient()) {
+			if (eObject.eIsSet(childReference) && !childReference.isDerived() && !childReference.isVolatile()
+					&& !childReference.isTransient()) {
 
 				// Get list of child
 				List<EObject> childEObjectList = new ArrayList<EObject>();
