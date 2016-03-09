@@ -10,9 +10,14 @@ import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.utils.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
+import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.artefactmodel.ArtefactModelFactory;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -21,7 +26,6 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class CreateEclipseVariantsAction implements IListener, IObjectActionDelegate {
 
-	@SuppressWarnings("unused")
 	private ISelection selection;
 	private CreateEclipseVariantsAction context;
 	
@@ -125,6 +129,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 					}
 
 				});
+				
+				
 			}
 		}).start();
 		
@@ -141,6 +147,22 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			e.printStackTrace();
 		}
 		
+		// get the selection
+		ArtefactModel artefactModel = null;
+		if(selection instanceof IStructuredSelection){
+			artefactModel = (ArtefactModel) ((IStructuredSelection)selection).getFirstElement();
+			artefactModel.getOwnedArtefacts().clear();
+			// create artefact and set some attributes
+			for(int i=1;i<=nbVariantsForThread;i++){
+				Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
+				String output_variant = paramDialog.getOutputPath()+File.separator+VariantsUtils.VARIANT+i;
+				a.setName("Variant"+i);
+				a.setArtefactURI(new File(output_variant).toURI().toString());
+				// add to the artefact model
+				artefactModel.getOwnedArtefacts().add(a);
+			}
+		}
+		
 	}
 
 	@Override
@@ -153,7 +175,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	
 	@Override
 	public void receive(final String msg) {
-		if(msg != null && !msg.isEmpty()){
+		if(msg != null){
 			Display.getDefault().syncExec(new Runnable() {
 				public void run() {
 					
