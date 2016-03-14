@@ -27,21 +27,16 @@ public class ScrollableMessageDialog extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent); // Let
-																			// the
-																			// dialog
-																			// create
-																			// the
-																			// parent
-																			// composite
+		Composite composite = (Composite) super.createDialogArea(parent);
 
 		GridData gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
-		gridData.grabExcessVerticalSpace = true; // Layout vertically, too!
+		// Layout vertically, too!
+		gridData.grabExcessVerticalSpace = true;
 		gridData.verticalAlignment = GridData.FILL;
 
-		Text scrollable = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.READ_ONLY);
+		Text scrollable = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY);
 		scrollable.setLayoutData(gridData);
 		scrollable.setText(scrollableText);
 
@@ -75,6 +70,7 @@ public class ScrollableMessageDialog extends TitleAreaDialog {
 
 	@Override
 	protected boolean isResizable() {
-		return true; // Allow the user to change the dialog size!
+		// Allow the user to change the dialog size!
+		return true;
 	}
 }

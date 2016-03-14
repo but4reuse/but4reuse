@@ -1,7 +1,6 @@
 package org.but4reuse.visualisation.impl.visualiser.adaptedmodel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +10,6 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.utils.files.FileUtils;
-import org.but4reuse.utils.ui.dialogs.ScrollableMessageLineColorsDialog;
-import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.core.Stripe;
 import org.eclipse.contribution.visualiser.interfaces.IGroup;
 import org.eclipse.contribution.visualiser.interfaces.IMarkupKind;
@@ -21,8 +18,6 @@ import org.eclipse.contribution.visualiser.simpleImpl.SimpleContentProvider;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleGroup;
 import org.eclipse.contribution.visualiser.simpleImpl.SimpleMember;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Block content provider
@@ -105,50 +100,7 @@ public class BlocksContentProvider extends SimpleContentProvider {
 	@Override
 	// show selected variant and block elements relation
 	public boolean processMouseclick(IMember member, boolean markupWasClicked, int buttonClicked) {
-		if (!markupWasClicked) {
-			// when names are empty and uri is used we get the last part
-			String memberName = member.getName();
-			if (memberName.contains("/")) {
-				memberName = memberName.substring(memberName.lastIndexOf("/") + 1, memberName.length());
-			}
-
-			ProviderDefinition definition = BlockElementsOnArtefactsVisualisation.getBlockElementsOnVariantsProvider();
-			BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) definition.getMarkupInstance();
-
-			// Get colors and initialize lines
-			List<Color> colors = new ArrayList<Color>();
-			List<List<Integer>> lines = new ArrayList<List<Integer>>();
-			Map<Object, Integer> kindIndexMap = new HashMap<Object, Integer>();
-			Object[] markups2 = markupProvider.getAllMarkupKinds().toArray();
-			for (int i = 0; i < markups2.length; i++) {
-				IMarkupKind mk = (IMarkupKind) markups2[i];
-				kindIndexMap.put(mk, i);
-				colors.add(markupProvider.getColorFor(mk));
-				lines.add(new ArrayList<Integer>());
-			}
-
-			List<?> stripes = markupProvider.getMemberMarkups(member);
-			StringBuffer sText = new StringBuffer("");
-			int nElements = 0;
-			if (stripes != null) {
-				nElements = stripes.size();
-				for (int i = 0; i < stripes.size(); i++) {
-					ElementStripe stripe = (ElementStripe) stripes.get(i);
-					lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-					sText.append(((ElementStripe) stripe).getElement().getText() + "\n");
-				}
-
-				// Remove the last \n
-				if (sText.length() > 0) {
-					sText.setLength(sText.length() - 1);
-				}
-			}
-
-			ScrollableMessageLineColorsDialog dialog = new ScrollableMessageLineColorsDialog(Display.getCurrent()
-					.getActiveShell(), memberName, nElements + " Elements", sText.toString(), lines, colors);
-			dialog.open();
-		}
-		return true;
+		return new BlockElementsContentProvider().processMouseclick(member, markupWasClicked, buttonClicked);
 	}
 
 }

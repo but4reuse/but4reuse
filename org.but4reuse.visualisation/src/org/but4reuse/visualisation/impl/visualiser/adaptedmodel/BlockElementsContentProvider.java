@@ -117,22 +117,22 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 			}
 
 			List<?> stripes = markupProvider.getMemberMarkups(member);
-			String sText = "";
+			StringBuffer sText = new StringBuffer("");
 			for (int i = 0; i < stripes.size(); i++) {
 				ElementStripe stripe = (ElementStripe) stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				sText = sText
-						+ ((ElementStripe) stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ")
-								.replaceAll("\r", " ") + "\n";
+				String elementText = ((ElementStripe) stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("\r", " ");
+				sText.append(elementText);
+				sText.append("\n");
 			}
 
 			// Remove the last \n
 			if (sText.length() > 0) {
-				sText = sText.substring(0, sText.length() - 1);
+				sText.setLength(sText.length() - 1);
 			}
 
 			ScrollableMessageLineColorsDialog dialog = new ScrollableMessageLineColorsDialog(Display.getCurrent()
-					.getActiveShell(), memberName, stripes.size() + " Elements", sText, lines, colors);
+					.getActiveShell(), memberName, stripes.size() + " Elements", sText.toString(), lines, colors);
 			dialog.open();
 		}
 		return true;
