@@ -168,15 +168,23 @@ public class GraphVisualisation implements IVisualisation {
 			// Create the edge
 			for (BlockElement sourcebe : sourcebes) {
 				Integer id1 = idMap.get(sourcebe);
-				Vertex one = graph.getVertex(id1);
-				for (String depKey : depKeyTargetbes.keySet()) {
-					List<BlockElement> targetbes = depKeyTargetbes.get(depKey);
-					for (BlockElement targetbe : targetbes) {
-						Integer id2 = idMap.get(targetbe);
-						Vertex two = graph.getVertex(id2);
-						Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
-						edge.setProperty("dependencyType", depKey);
-						edge.setProperty("Label", depKey);
+				if (id1 == null) {
+					System.err.println("GraphVisualisation error: edge source element was not found");
+				} else {
+					Vertex one = graph.getVertex(id1);
+					for (String depKey : depKeyTargetbes.keySet()) {
+						List<BlockElement> targetbes = depKeyTargetbes.get(depKey);
+						for (BlockElement targetbe : targetbes) {
+							Integer id2 = idMap.get(targetbe);
+							if (id2 == null) {
+								System.err.println("GraphVisualisation error: edge target element was not found");
+							} else {
+								Vertex two = graph.getVertex(id2);
+								Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+								edge.setProperty("dependencyType", depKey);
+								edge.setProperty("Label", depKey);
+							}
+						}
 					}
 				}
 			}
