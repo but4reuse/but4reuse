@@ -148,6 +148,10 @@ public class GraphVisualisation implements IVisualisation {
 					if (ido instanceof IElement) {
 						IElement element = (IElement) ido;
 						List<ElementWrapper> targets = ieews.get(element);
+						if (targets == null) {
+							System.err.println("GraphVisualisation error: target element was not found");
+							continue;
+						}
 						for (ElementWrapper target : targets) {
 							List<BlockElement> blockElements = target.getBlockElements();
 							for (BlockElement blocke : blockElements) {
