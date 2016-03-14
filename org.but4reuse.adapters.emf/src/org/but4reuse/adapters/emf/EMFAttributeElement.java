@@ -19,6 +19,7 @@ public class EMFAttributeElement extends AbstractElement {
 
 	public EAttribute eAttribute;
 	public EObject owner;
+	public IElement ownerElement;
 	public Object value;
 
 	@Override

@@ -21,6 +21,7 @@ import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -57,9 +58,10 @@ public class EMFAdapter implements IAdapter {
 		// First construction primitive is the Resource creation
 		List<IElement> elements = new ArrayList<IElement>();
 		EObject eObject = EMFUtils.getEObject(uri);
-		EMFClassElement element = new EMFClassElement();
+		EMFClassElement element = getEMFElementsFactory().createEMFClassElement();
 		element.isResource = true;
 		element.owner = null;
+		element.ownerElement = null;
 		element.reference = null;
 		element.eObject = eObject;
 		elements.add(element);
@@ -99,7 +101,7 @@ public class EMFAdapter implements IAdapter {
 		List<EAttribute> attributes = eObject.eClass().getEAllAttributes();
 		for (EAttribute attr : attributes) {
 			// is a real attribute
-			if (eObject.eIsSet(attr) && !attr.isDerived() && !attr.isVolatile() && !attr.isTransient()) {
+			if (considerEStructuralFeature(eObject, attr)) {
 				// should it be covered by the diff policy
 				if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
 					Object o = eObject.eGet(attr);
@@ -111,8 +113,9 @@ public class EMFAdapter implements IAdapter {
 						}
 					}
 					if (o != null) {
-						EMFAttributeElement element = new EMFAttributeElement();
+						EMFAttributeElement element = getEMFElementsFactory().createEMFAttributeElement();
 						element.owner = adaptedEObject;
+						element.ownerElement = ownerElement;
 						element.eAttribute = attr;
 						element.value = o;
 						element.addDependency(attr.getName(), ownerElement);
@@ -126,11 +129,10 @@ public class EMFAdapter implements IAdapter {
 		// References
 		List<EReference> references = eObject.eClass().getEAllReferences();
 		for (EReference ref : references) {
-			if (eObject.eIsSet(ref) && !ref.isContainment() && !ref.isContainer() && !ref.isDerived()
-					&& !ref.isVolatile() && !ref.isTransient()) {
+			if (considerEStructuralFeature(eObject, ref) && !ref.isContainment() && !ref.isContainer()) {
 				if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
 					List<EObject> refList = EMFUtils.getReferencedEObjects(eObject, ref);
-					EMFReferenceElement element = new EMFReferenceElement();
+					EMFReferenceElement element = getEMFElementsFactory().createEMFReferenceElement();
 					element.owner = adaptedEObject;
 					element.ownerElement = ownerElement;
 					element.eReference = ref;
@@ -151,10 +153,8 @@ public class EMFAdapter implements IAdapter {
 		List<EReference> containments = eObject.eClass().getEAllContainments();
 		// For each containment reference
 		for (EReference childReference : containments) {
-			// There could be also transient childs
-			if (eObject.eIsSet(childReference) && !childReference.isDerived() && !childReference.isVolatile()
-					&& !childReference.isTransient()) {
-
+			// There could be also transient child
+			if (considerEStructuralFeature(eObject, childReference)) {
 				// Get list of child
 				List<EObject> childEObjectList = new ArrayList<EObject>();
 				if (childReference.isMany()) {
@@ -169,9 +169,10 @@ public class EMFAdapter implements IAdapter {
 				// If the reference had child
 				if (childEObjectList != null && !childEObjectList.isEmpty()) {
 					for (EObject child : childEObjectList) {
-						EMFClassElement element = new EMFClassElement();
+						EMFClassElement element = getEMFElementsFactory().createEMFClassElement();
 						element.eObject = child;
 						element.owner = adaptedEObject;
+						element.ownerElement = ownerElement;
 						element.reference = childReference;
 						element.addDependency(childReference.getName(), ownerElement);
 						// add maximum dependencies
@@ -228,7 +229,7 @@ public class EMFAdapter implements IAdapter {
 	 * @param eObject
 	 * @return an EMFClassElement or null
 	 */
-	private EMFClassElement findClassElement(EObject eObject) {
+	public EMFClassElement findClassElement(EObject eObject) {
 		return eobjectEMFClassElementMap.get(eObject);
 	}
 
@@ -268,6 +269,21 @@ public class EMFAdapter implements IAdapter {
 
 	public static IComparisonMethod getComparisonMethod() {
 		return comparisonMethod;
+	}
+
+	/**
+	 * get the EMF elements factory. This can be used to override and provide
+	 * your own elements that extend the default elements
+	 * 
+	 * @return emf elements factory
+	 */
+	public EMFElementsFactory getEMFElementsFactory() {
+		return new EMFElementsFactory();
+	}
+
+	public boolean considerEStructuralFeature(EObject eObject, EStructuralFeature structuralFeature) {
+		return eObject.eIsSet(structuralFeature) && !structuralFeature.isDerived() && !structuralFeature.isVolatile()
+				&& !structuralFeature.isTransient();
 	}
 
 }

@@ -4,9 +4,7 @@ Bundle-Name: EMF adapter
 Bundle-SymbolicName: org.but4reuse.adapters.emf;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.emf.activator.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.emf.edit,
+Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.utils,
  org.eclipse.emf.diffmerge.ui

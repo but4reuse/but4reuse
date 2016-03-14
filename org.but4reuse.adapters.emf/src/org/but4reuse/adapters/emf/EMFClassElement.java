@@ -21,6 +21,7 @@ public class EMFClassElement extends AbstractElement {
 	public EReference reference;
 	public EObject eObject;
 	public boolean isResource = false;
+	public IElement ownerElement;
 
 	@Override
 	public String getText() {

@@ -24,9 +24,9 @@ public class EMFAdapterPreferencePage extends FieldEditorPreferencePage implemen
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		// This is to be used at your own risk. Use it if you are sure that the matching is based on ids
-		BooleanFieldEditor sfe = new BooleanFieldEditor(XML_ID_HASHING,
-				"Hashing by the extrinsic XML ID",
+		// This is to be used at your own risk. Use it if you are sure that the
+		// matching is based on ids
+		BooleanFieldEditor sfe = new BooleanFieldEditor(XML_ID_HASHING, "Hashing by the extrinsic XML ID",
 				getFieldEditorParent());
 		addField(sfe);
 	}
