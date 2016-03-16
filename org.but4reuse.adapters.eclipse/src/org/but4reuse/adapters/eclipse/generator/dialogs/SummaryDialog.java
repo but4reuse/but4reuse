@@ -24,7 +24,7 @@ public class SummaryDialog extends TitleAreaDialog {
 	private Text scrollable;
 	private boolean isCloseable;
 	private Button okButton;
-	
+
 	public SummaryDialog(Shell parentShell, String title, String text, String scrollableText) {
 		super(parentShell);
 		this.title = title;
@@ -33,7 +33,7 @@ public class SummaryDialog extends TitleAreaDialog {
 		this.isCloseable = true;
 		setHelpAvailable(false);
 	}
-	
+
 	public SummaryDialog(Shell parentShell, String title, String text, String scrollableText, boolean isCloseable) {
 		this(parentShell, title, text, scrollableText);
 		this.isCloseable = isCloseable;
@@ -43,7 +43,7 @@ public class SummaryDialog extends TitleAreaDialog {
 	protected Point getInitialSize() {
 		return new Point(600, 650);
 	}
-	
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
@@ -60,23 +60,25 @@ public class SummaryDialog extends TitleAreaDialog {
 
 		return composite;
 	}
-	
+
 	@Override
 	public void create() {
 		super.create();
 		setTitle(title);
 		setMessage(text, IMessageProvider.INFORMATION);
 	}
-	
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		okButton = createButton(parent, OK, "OK", true);
-		if(!isCloseable) okButton.setEnabled(false);
+		if (!isCloseable)
+			okButton.setEnabled(false);
 		okButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(isCloseable) close();
+				if (isCloseable)
+					close();
 			}
 		});
 	}
@@ -85,25 +87,25 @@ public class SummaryDialog extends TitleAreaDialog {
 	protected boolean isResizable() {
 		return true; // Allow the user to change the dialog size!
 	}
-	
+
 	public void setScrollableText(String str) {
 		this.scrollable.setText(str);
 	}
-	
+
 	public String getScrollableText() {
 		return this.scrollable.getText();
 	}
-	
-	public void setCloseable(boolean isCloseable){
+
+	public void setCloseable(boolean isCloseable) {
 		this.isCloseable = isCloseable;
-		if(this.okButton != null) this.okButton.setEnabled(isCloseable);
+		if (this.okButton != null)
+			this.okButton.setEnabled(isCloseable);
 	}
-	
-	public boolean isDisposed(){
+
+	public boolean isDisposed() {
 		return this.getShell().isDisposed();
 	}
-	
-	
+
 	@Override
 	protected ShellListener getShellListener() {
 		return new ShellAdapter() {
