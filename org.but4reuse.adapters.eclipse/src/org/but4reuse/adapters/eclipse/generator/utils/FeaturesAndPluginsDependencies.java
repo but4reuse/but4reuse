@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.eclipse.generator.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -25,8 +24,9 @@ public class FeaturesAndPluginsDependencies {
 	private Map<ActualFeature, String> mapFeatureWithPath;
 	
 	private List<PluginElement> allPlugins;
-	private Map<String, PluginElement> mapSymbNameWithPlugin;
+	private Map<String, List<PluginElement>> mapSymbNameWithPlugin;
 	private Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies;
+	private List<PluginElement> allPluginsWithoutFeaturesDependencies;
 
 	public FeaturesAndPluginsDependencies(List<ActualFeature> allFeatures, List<PluginElement> allPlugins, String eclipseInstallationURI){
 		this.allFeatures = allFeatures;
@@ -46,6 +46,7 @@ public class FeaturesAndPluginsDependencies {
 		
 		initMapNameWithPlugin(allPlugins);
 		initMapFeatureWithPluginsDependencies(allFeatures);
+		initAllPluginsWithoutFeaturesDependencies(mapFeatureWithPluginsDependencies);
 	}
 	
 	
@@ -141,7 +142,13 @@ public class FeaturesAndPluginsDependencies {
 		
 		mapSymbNameWithPlugin = new HashMap<>();
 		for(PluginElement onePlugin : listPlugins){
-			mapSymbNameWithPlugin.put(onePlugin.getSymbName(), onePlugin);
+			if(mapSymbNameWithPlugin.containsKey(onePlugin.getSymbName())){
+				mapSymbNameWithPlugin.get(onePlugin.getSymbName()).add(onePlugin);
+			} else {
+				List<PluginElement> pluginVersionList = new ArrayList<>(1); // Most of times, there is only one version by SymbName
+				pluginVersionList.add(onePlugin);
+				mapSymbNameWithPlugin.put(onePlugin.getSymbName(), pluginVersionList );
+			}
 		}
 	}
 	
@@ -178,62 +185,49 @@ public class FeaturesAndPluginsDependencies {
 		return null;
 	}
 	
-	private List<PluginElement> getPluginsFromListSymbName(List<String> listIds){
-		if(listIds != null && !listIds.isEmpty()){
-			List<PluginElement> listDependencies = new ArrayList<PluginElement>();
-			for(int i=0; i<listIds.size();i++){
-				PluginElement plugin = mapSymbNameWithPlugin.get(listIds.get(i));
-				if(plugin != null && !listDependencies.contains(plugin)){
-					listDependencies.add(plugin);
+	private void initAllPluginsWithoutFeaturesDependencies(Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies){
+		allPluginsWithoutFeaturesDependencies = new ArrayList<>();
+		allPluginsWithoutFeaturesDependencies.addAll(allPlugins);  // eclipseFull Kepler = 2066 plugins
+		for(PluginElement oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)){ // all Plugins from Features dependencies = 1947
+			allPluginsWithoutFeaturesDependencies.remove(oneP);  // We don't use removeAll because it remove all occurences, but we want to remove just one at each time
+		}
+	}
+	
+	private List<PluginElement> getAllPluginsDependencies(Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies) {
+		List<String> plugins = new ArrayList<>();
+		for(List<String> list : mapFeatureWithPluginsDependencies.values()){
+			for(String s : list){
+				if(!plugins.contains(s)) plugins.add(s);
+			}
+		}
+		return getPluginsFromListSymbName(plugins);
+	}
+
+	private List<PluginElement> getPluginsFromListSymbName(List<String> listSymbName){
+		if(listSymbName != null && !listSymbName.isEmpty()){
+			List<PluginElement> listPlugins = new ArrayList<PluginElement>();
+			for(int i=0; i<listSymbName.size();i++){
+				List<PluginElement> pluginVersions = mapSymbNameWithPlugin.get(listSymbName.get(i));
+				for(PluginElement onePlugin : pluginVersions){
+					if(onePlugin != null && !listPlugins.contains(onePlugin)){
+						listPlugins.add(onePlugin);
+					}
 				}
 			}
-			return listDependencies;
+			return listPlugins;
 		}
 		return null;
 	}
 	
-	
-	public static void main(String[] args) throws IOException{ // Just for tests
-	
-		List<ActualFeature> allFeatures = null;
-		Map<String, String> map = PreferenceUtils.getPreferencesMap();
-		File f = new File(map.get("input"));
-		java.net.URI u = f.toURI();
-		try {
-			allFeatures = FeatureHelper.getFeaturesOfEclipse(u.toString());
-		} catch (Exception e1) {
-			System.out.println("Impossible to recover all the features from : "+u.toString());
-			return;
-		}
-		
-		FeaturesAndPluginsDependencies f1 = new FeaturesAndPluginsDependencies(allFeatures, null, u.toString());
-
-		for (int i=0; i<allFeatures.size(); i++){
-			ActualFeature oneFeat = allFeatures.get(i);
-			List<ActualFeature> feat= f1.getFeaturesDependencies(oneFeat);
-			int nbDirectDepend = oneFeat.getIncludedFeatures().size() + oneFeat.getRequiredFeatures().size();
-			System.out.println("Number of direct dependencies of \""+oneFeat.getId()+"\""+ " = "+nbDirectDepend);
-			
-			if(feat==null){
-				System.out.println("Number of direct and indirect dependencies  = 0\n");
-			}
-			else{
-				System.out.println("Number of direct and indirect dependencies = "+feat.size());
-				for(int j=0; j<feat.size();j++){
-					System.out.print("Path du feature : "+feat.get(j).getId()+" = ");
-//					System.out.println(f1.linkFeaturesAndPath.get(feat.get(j)));
-//					f=new File(f1.linkFeaturesAndPath.get(feat.get(j)));
-					FileAndDirectoryUtils.copyDirectory(f, map.get("output"));
-				}
-				System.out.println("\n");
-			}
-			
-		}
-		//System.out.println(FeatureHelper.PATH.get(allFeatures.get(1)));
-		System.out.println(allFeatures.size());
-		f = new File(f, "features");
-		u = f.toURI();
-
-		System.out.println(u);
+	@SuppressWarnings("unused")
+	private List<String> listPluginToString(List<PluginElement> list){
+		List<String> toList = new ArrayList<>(list.size());
+		for(PluginElement elem : list) toList.add(elem.getSymbName());
+		return toList;
 	}
+
+	public List<PluginElement> getPluginsWithoutAnyFeaturesDependencies() {
+		return allPluginsWithoutFeaturesDependencies;
+	}
+	
 }

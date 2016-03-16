@@ -27,13 +27,11 @@ public class ParametersDialog extends Dialog {
 	private Text output;
 	private Text variantsNumber;
 	private Text randomSelector;
-	private Button onlyMetaData;
 	
 	private Label lblInput;
 	private Label lblOutput;
 	private Label lblVariantsNumber;
 	private Label lblRandomSelector;
-	private Label lblOnlyMetadata;
 	
 	private Boolean isInputOK;
 	private Boolean isOutputOK;
@@ -44,7 +42,6 @@ public class ParametersDialog extends Dialog {
 	private String outputContent = "C:\\";
 	private String variantsNumberContent = "1";
 	private String randomSelectorContent = "100";
-	private boolean onlyMetadataState = true;
 	
 	private Color red;
 
@@ -65,7 +62,6 @@ public class ParametersDialog extends Dialog {
 		addOutput(container);
 		addRandomSelector(container);
 		addVariantsNumber(container);
-		addOnlyMetadata(container);
 		
 		return container;
 	}
@@ -145,15 +141,6 @@ public class ParametersDialog extends Dialog {
 		new Label(container, SWT.NONE).setVisible(false); // Invisible element, because there are 3 columns
 	}
 	
-	private void addOnlyMetadata(Composite container) {
-		lblOnlyMetadata = new Label(container, SWT.NONE);
-		lblOnlyMetadata.setText(VariantsUtils.METADATA_TEXT);
-
-		onlyMetaData = new Button(container, SWT.CHECK);
-		onlyMetaData.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		onlyMetaData.setSelection(onlyMetadataState);
-	}
-	
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
@@ -162,7 +149,7 @@ public class ParametersDialog extends Dialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(700, 400);
+		return new Point(700, 250);
 	}
 	
 	@Override
@@ -176,7 +163,6 @@ public class ParametersDialog extends Dialog {
 		outputContent = output.getText();
 		randomSelectorContent = randomSelector.getText();
 		variantsNumberContent = variantsNumber.getText();
-		onlyMetadataState = onlyMetaData.getSelection();
 		super.okPressed();
 	}
 
@@ -196,10 +182,6 @@ public class ParametersDialog extends Dialog {
 		return randomSelectorContent;
 	}
 	
-	public boolean getOnlyMetadataState() {
-		return onlyMetadataState;
-	}
-
 	public void setInputState(boolean isGood) {
 		isInputOK = isGood;
 	}
@@ -224,7 +206,6 @@ public class ParametersDialog extends Dialog {
 		outputContent = params.get(PreferenceUtils.PREF_OUTPUT);
 		randomSelectorContent = params.get(PreferenceUtils.PREF_RANDOM);
 		variantsNumberContent = params.get(PreferenceUtils.PREF_VARIANTS);
-		onlyMetadataState = Boolean.parseBoolean(params.get(PreferenceUtils.PREF_METADATA));
 	}
 
 } 

@@ -106,7 +106,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		// Saving preferences
 		try{
 			PreferenceUtils.savePreferencesMap(paramDialog.getInputPath(), paramDialog.getOutputPath(), paramDialog.getRandomSelector(),
-					paramDialog.getVariantsNumber(), Boolean.toString(paramDialog.getOnlyMetadataState()) );
+					paramDialog.getVariantsNumber());
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
 		}
@@ -118,7 +118,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			
 			@Override
 			public void run() {
-				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(), paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, paramDialog.getOnlyMetadataState());
+				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(), paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread);
 				varGen.addListener(context);
 				varGen.generate();   // Long time to execute
 				

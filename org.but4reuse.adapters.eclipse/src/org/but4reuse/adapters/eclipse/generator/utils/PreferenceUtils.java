@@ -18,7 +18,6 @@ public class PreferenceUtils {
 	public static final String PREF_OUTPUT = "output";
 	public static final String PREF_RANDOM = "randomSelector";
 	public static final String PREF_VARIANTS = "numberVariant";
-	public static final String PREF_METADATA = "onlyMetaData";
 	public static final String PREF_USERNAME = "user.name";
 
 	public static String getPrefFilePath(){
@@ -29,14 +28,13 @@ public class PreferenceUtils {
 	}
 	
 	public static void savePreferencesMap(String input, String output, String random, 
-			String numberVar, String metadata) throws IOException {
+			String numberVar) throws IOException {
 
 		Map<String, String> mapToSave = new HashMap<>();
 		mapToSave.put(PREF_INPUT, input);
 		mapToSave.put(PREF_OUTPUT, output);
 		mapToSave.put(PREF_RANDOM, random);
 		mapToSave.put(PREF_VARIANTS, numberVar);
-		mapToSave.put(PREF_METADATA, metadata );
 		mapToSave.put(PREF_USERNAME, System.getProperty("user.name")); // Display OUR preferences (maybe an other prefMap.ser was committed)
 		
 		Properties prop = new Properties();
@@ -67,7 +65,6 @@ public class PreferenceUtils {
 			map.put(PREF_OUTPUT, prop.getProperty(PREF_OUTPUT));
 			map.put(PREF_VARIANTS, prop.getProperty(PREF_VARIANTS));
 			map.put(PREF_RANDOM, prop.getProperty(PREF_RANDOM));
-			map.put(PREF_METADATA, prop.getProperty(PREF_METADATA));
 			map.put(PREF_USERNAME, prop.getProperty(PREF_USERNAME));
 
 		} catch (FileNotFoundException ex) {
