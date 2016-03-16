@@ -1,36 +1,71 @@
 package org.but4reuse.adapters.eclipse.generator.dialogs;
 
-import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class SummaryDialog extends ScrollableMessageDialog {
+public class SummaryDialog extends TitleAreaDialog {
 
+	private String title;
+	private String text;
+	private String scrollableText;
 	private Text scrollable;
 	private boolean isCloseable;
-	Button okButton;
+	private Button okButton;
 	
 	public SummaryDialog(Shell parentShell, String title, String text, String scrollableText) {
-		super(parentShell, title, text, scrollableText);
+		super(parentShell);
+		this.title = title;
+		this.text = text;
+		this.scrollableText = scrollableText;
 		this.isCloseable = true;
+		setHelpAvailable(false);
 	}
 	
 	public SummaryDialog(Shell parentShell, String title, String text, String scrollableText, boolean isCloseable) {
-		this(parentShell,title,text,scrollableText);
+		this(parentShell, title, text, scrollableText);
 		this.isCloseable = isCloseable;
 	}
 
 	@Override
 	protected Point getInitialSize() {
 		return new Point(600, 650);
+	}
+	
+	@Override
+	protected Control createDialogArea(Composite parent) {
+		Composite composite = (Composite) super.createDialogArea(parent);
+
+		GridData gridData = new GridData();
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.verticalAlignment = GridData.FILL;
+
+		scrollable = new Text(composite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY);
+		scrollable.setLayoutData(gridData);
+		scrollable.setText(scrollableText);
+
+		return composite;
+	}
+	
+	@Override
+	public void create() {
+		super.create();
+		setTitle(title);
+		setMessage(text, IMessageProvider.INFORMATION);
 	}
 	
 	@Override
