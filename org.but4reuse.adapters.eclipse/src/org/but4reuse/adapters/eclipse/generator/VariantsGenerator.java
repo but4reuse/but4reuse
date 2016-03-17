@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.eclipse.generator;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,18 +46,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		sendToAll("-percentage = " + percentage + " %\n");
 
 		File eclipse = new File(input);
-		File outputFile = new File(output);
 
 		if (!eclipse.exists()) {
 			sendToAll(input + " not exists !");
 			return;
-		}
-
-		// Clear the output
-		try {
-			FileAndDirectoryUtils.deleteFile(outputFile);
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		}
 
 		URI inputURI = new File(input).toURI();
