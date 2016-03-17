@@ -40,30 +40,29 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 
 	public void run(IAction action) {
 
-		if (paramDialog == null) { // Not create a new dialog if it's a
-									// "re-open" (parameters not good).
+		if (paramDialog == null) {
+			// Not create a new dialog if it's a "re-open" (parameters not
+			// good).
 			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
 			try { // Load preferences
 				prefMap = PreferenceUtils.getPreferencesMap();
 				if (prefMap.containsKey(PreferenceUtils.PREF_USERNAME)
 						&& prefMap.get(PreferenceUtils.PREF_USERNAME).equals(
-								System.getProperty(PreferenceUtils.PREF_USERNAME))) { // Look
-																						// below,
-																						// in
-																						// registration
+								System.getProperty(PreferenceUtils.PREF_USERNAME))) {
+					// Look below, in registration
 					paramDialog.addPreferenceParameters(prefMap);
 				}
 			} catch (FileNotFoundException e) {
 				System.out.println(e.getMessage());
 			} catch (IOException e) {
+				e.printStackTrace();
 				if (e instanceof FileNotFoundException)
 					System.out.println("Error for loading preferences");
 			}
 		}
 
-		if (paramDialog.open() != Window.OK) { // Open the dialog and stop
-												// execution while a button is
-												// not pressed
+		if (paramDialog.open() != Window.OK) {
+			// Open the dialog and stop execution while a button is not pressed
 			paramDialog = null;
 			return;
 		}
@@ -91,6 +90,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		} catch (NumberFormatException e) {
 			isAllOK = false;
 			paramDialog.setRandomSelectorState(false);
+			e.printStackTrace();
 		}
 
 		try {
@@ -104,6 +104,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		} catch (NumberFormatException e) {
 			isAllOK = false;
 			paramDialog.setVariantsNumberState(false);
+			e.printStackTrace();
 		}
 
 		if (!isAllOK) {
@@ -117,12 +118,13 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 					paramDialog.getRandomSelector(), paramDialog.getVariantsNumber());
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
+			e.printStackTrace();
 		}
 
 		// Start the generator process
-		final int nbVariantsForThread = nbVariants; // final for the thread and
-													// because nbVariants and
-													// valRand can't be final
+		// final for the thread and because nbVariants and valRand can't be
+		// final
+		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
 		new Thread(new Runnable() {
 
@@ -131,8 +133,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
 						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread);
 				varGen.addListener(context);
-				varGen.generate(); // Long time to execute
-
+				// Long time to execute
+				varGen.generate();
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						waitWhileParameterIsNull(summaryDialog);
@@ -141,9 +143,8 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 					}
 
 				});
-
 			}
-		}).start();
+		}, "Variant Generator Thread").start();
 
 		final Shell shell = Display.getCurrent().getActiveShell();
 
@@ -211,11 +212,13 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 	 * This method interrupt the current thread while the parameter is null
 	 */
 	private <T> void waitWhileParameterIsNull(T param) {
-		if (param == null) { // If dialog is null, we wait.
+		// If dialog is null, we wait.
+		if (param == null) {
 			synchronized (this) {
 				try {
 					while (param == null) {
-						this.wait(); // Double checking method
+						// Double checking method
+						this.wait();
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

@@ -38,11 +38,7 @@ public class EclipseAdapter implements IAdapter {
 		File file = FileUtils.getFile(uri);
 		if (file.isDirectory()) {
 			File pluginsFolder = new File(file.getAbsolutePath() + "/plugins");
-			if (pluginsFolder.exists() && pluginsFolder.isDirectory()) {
-				return true;
-			} else {
-				return false;
-			}
+			return pluginsFolder.exists() && pluginsFolder.isDirectory();
 		}
 		return false;
 	}
@@ -125,10 +121,11 @@ public class EclipseAdapter implements IAdapter {
 			// problem
 			plugin.setBundleInfoLine(line);
 
-//			if (plugin.getName() == null || plugin.getName().contains("%")) {
-//				System.out.println("EclipseAdapter.adapt() No name found: " + " isFragment:" + plugin.isFragment()
-//						+ "  " + plugin.getSymbName() + " at " + file.getAbsolutePath());
-//			}
+			// if (plugin.getName() == null || plugin.getName().contains("%")) {
+			// System.out.println("EclipseAdapter.adapt() No name found: " +
+			// " isFragment:" + plugin.isFragment()
+			// + "  " + plugin.getSymbName() + " at " + file.getAbsolutePath());
+			// }
 
 		}
 

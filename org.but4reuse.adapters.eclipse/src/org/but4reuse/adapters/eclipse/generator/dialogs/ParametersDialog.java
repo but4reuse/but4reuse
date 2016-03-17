@@ -38,10 +38,10 @@ public class ParametersDialog extends Dialog {
 	private Boolean isVariantsNumberOK;
 	private Boolean isRandomSelectorOK;
 
-	private String inputContent = "C:\\";
-	private String outputContent = "C:\\";
-	private String variantsNumberContent = "1";
-	private String randomSelectorContent = "100";
+	private String inputContent = "C:\\eclipse";
+	private String outputContent = "C:\\outputFolder";
+	private String variantsNumberContent = "3";
+	private String randomSelectorContent = "50";
 
 	private Color red;
 
@@ -51,8 +51,8 @@ public class ParametersDialog extends Dialog {
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) { // Is call during the
-															// open method
+	protected Control createDialogArea(Composite parent) {
+		// Is call during the open method
 		Composite container = (Composite) super.createDialogArea(parent);
 		GridLayout layout = new GridLayout(3, false);
 		layout.marginRight = 5;
@@ -82,9 +82,10 @@ public class ParametersDialog extends Dialog {
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				DirectoryDialog dlg = new DirectoryDialog(container.getShell());
-				dlg.setFilterPath(inputContent); // Initial path, with the Text
-													// contains
-				dlg.setText("Select the eclipse directory"); // Title
+				// Initial path, with the Text contains
+				dlg.setFilterPath(inputContent);
+				// Title
+				dlg.setText("Select the eclipse directory");
 				String dir = dlg.open();
 				if (dir != null) {
 					input.setText(dir);
@@ -96,9 +97,9 @@ public class ParametersDialog extends Dialog {
 	private void addOutput(final Composite container) {
 		lblOutput = new Label(container, SWT.WRAP);
 		lblOutput.setText(VariantsUtils.OUTPUT_TEXT);
-		if (isOutputOK != null && !isOutputOK)
+		if (isOutputOK != null && !isOutputOK) {
 			lblOutput.setForeground(red);
-
+		}
 		output = new Text(container, SWT.BORDER);
 		output.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		output.setText(outputContent);
@@ -108,9 +109,10 @@ public class ParametersDialog extends Dialog {
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				DirectoryDialog dlg = new DirectoryDialog(container.getShell());
-				dlg.setFilterPath(outputContent); // Initial path, with the Text
-													// contains
-				dlg.setText("Select the output"); // Title
+				// Initial path, with the Text contains
+				dlg.setFilterPath(outputContent);
+				// Title
+				dlg.setText("Select the output");
 				String dir = dlg.open();
 				if (dir != null) {
 					output.setText(dir);
@@ -146,10 +148,8 @@ public class ParametersDialog extends Dialog {
 		randomSelector.setText(randomSelectorContent);
 		randomSelector.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		randomSelector.setTextLimit(3);
-
-		new Label(container, SWT.NONE).setVisible(false); // Invisible element,
-															// because there are
-															// 3 columns
+		// Invisible element, because there are 3 columns
+		new Label(container, SWT.NONE).setVisible(false);
 	}
 
 	@Override
@@ -165,7 +165,8 @@ public class ParametersDialog extends Dialog {
 
 	@Override
 	protected boolean isResizable() {
-		return true; // Allow the user to change the dialog size!
+		// Allow the user to change the dialog size!
+		return true;
 	}
 
 	@Override

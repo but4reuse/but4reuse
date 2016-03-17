@@ -51,9 +51,8 @@ public class PrecisionRecall {
 		System.out.println(abstractFeatures + " were actually abstract features");
 		IFeatureLocation algoUsed = FeatureLocationHelper.getSelectedFeatureLocation();
 		try {
-			FileUtils.writeFile(
-					new File(actualFolder.getParentFile(), "resultPrecisionRecall_" + algoUsed.getClass().getSimpleName() + "_" + System.currentTimeMillis()
-							+ ".csv"), sb.toString());
+			FileUtils.writeFile(new File(actualFolder.getParentFile(), "resultPrecisionRecall_"
+					+ algoUsed.getClass().getSimpleName() + "_" + System.currentTimeMillis() + ".csv"), sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

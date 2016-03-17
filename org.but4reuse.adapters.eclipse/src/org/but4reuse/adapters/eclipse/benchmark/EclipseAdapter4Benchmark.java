@@ -16,12 +16,14 @@ public class EclipseAdapter4Benchmark extends EclipseAdapter {
 	protected void addElement(List<IElement> elements, FileElement newElement) {
 		if (newElement instanceof PluginElement) {
 			elements.add(newElement);
-			
+
 			// System.out.println(((PluginElement)newElement).getSymbName());
-			
-			//if(((PluginElement)newElement).getName() == null || ((PluginElement)newElement).getName().contains("%")){
-			//	System.out.println(((PluginElement)newElement).getSymbName() + " " + ((PluginElement)newElement).getName());
-			//}
+
+			// if(((PluginElement)newElement).getName() == null ||
+			// ((PluginElement)newElement).getName().contains("%")){
+			// System.out.println(((PluginElement)newElement).getSymbName() +
+			// " " + ((PluginElement)newElement).getName());
+			// }
 		}
 	}
 

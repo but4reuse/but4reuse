@@ -85,7 +85,8 @@ public class SummaryDialog extends TitleAreaDialog {
 
 	@Override
 	protected boolean isResizable() {
-		return true; // Allow the user to change the dialog size!
+		// Allow the user to change the dialog size!
+		return true;
 	}
 
 	public void setScrollableText(String str) {

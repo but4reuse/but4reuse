@@ -47,7 +47,7 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			IResource res = EMFUtils.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact()
 					.eResource());
 			File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
-			
+
 			// create folder
 			File folderForLocatedFeatures = new File(artefactModelFile.getParentFile(), "eclipseFeatureLocations");
 			folderForLocatedFeatures.mkdir();
@@ -56,9 +56,9 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			for (Feature feature : featureList.getOwnedFeatures()) {
 				StringBuilder text = new StringBuilder();
 				File file = new File(folderForLocatedFeatures, feature.getId() + ".txt");
-				
+
 				List<LocatedFeature> locatedFeatures = LocatedFeaturesManager.getLocatedFeatures();
-				
+
 				// Add plugins of whole blocks
 				List<Block> blocks = LocatedFeaturesUtils.getBlocksOfFeature(locatedFeatures, feature);
 				for (Block b : blocks) {
@@ -69,16 +69,15 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 						}
 					}
 				}
-				
+
 				// Add plugins
 				List<IElement> plugins = LocatedFeaturesUtils.getElementsOfFeature(locatedFeatures, feature);
-				for(IElement element : plugins){
+				for (IElement element : plugins) {
 					if (element instanceof PluginElement) {
 						text.append(((PluginElement) element).getSymbName() + "\n");
 					}
 				}
-				
-				
+
 				// remove last \n
 				if (text.length() > 0) {
 					text.setLength(text.length() - 1);

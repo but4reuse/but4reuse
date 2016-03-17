@@ -27,17 +27,6 @@
             </element>
          </elements>
       </adapter>
-      <adapter
-            class="org.but4reuse.adapters.eclipse.generator.EclipseAdapter4Generator"
-            icon="icons/icon_eclipse.png"
-            id="eclipse4generator"
-            name="Eclipse4Generator">
-         <elements>
-            <element
-                  element="org.but4reuse.adapters.eclipse.PluginElement">
-            </element>
-         </elements>
-      </adapter>
    </extension>
    
    

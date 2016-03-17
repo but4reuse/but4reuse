@@ -207,7 +207,7 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 							}
 							nonUniquePlugins++;
 						}
-						text.append("\n");
+						text.append('\n');
 					}
 
 					// Refresh
@@ -215,13 +215,18 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 
 					// Show message
 					ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(),
-							"Creation of Eclipse Benchmark", "Check the actualFeatures folder that was created. Here it is a summary:",
-							artefactModel.getOwnedArtefacts().size() + " packages.\n"
-									+ features.size() + " features found.\n" + nonUniquePlugins
-									+ " plugins are mapped to features.\n" + uniqueIds.size()
-									+ " unique plugins associated to features.\n" + id
-									+ " unique plugins in all the Eclipse packages\n\n" +
-									text.toString());
+							"Creation of Eclipse Benchmark",
+							"Check the actualFeatures folder that was created. Here it is a summary:", artefactModel
+									.getOwnedArtefacts().size()
+									+ " packages.\n"
+									+ features.size()
+									+ " features found.\n"
+									+ nonUniquePlugins
+									+ " plugins are mapped to features.\n"
+									+ uniqueIds.size()
+									+ " unique plugins associated to features.\n"
+									+ id
+									+ " unique plugins in all the Eclipse packages\n\n" + text.toString());
 					dialog.open();
 
 				} catch (Exception e) {

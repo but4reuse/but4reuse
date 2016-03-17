@@ -128,17 +128,19 @@ public class FeaturesAndPluginsDependencies {
 	public List<String> getListPathFromListFeatures(List<ActualFeature> features) {
 		List<String> paths = new ArrayList<>(features.size());
 		for (ActualFeature feature : features) {
-			if (feature != null)
+			if (feature != null) {
 				paths.add(mapFeatureWithPath.get(feature));
+			}
 		}
 		return paths;
 	}
 
 	public String getPathFromFeature(ActualFeature feature) {
-		if (feature == null)
+		if (feature == null) {
 			return null;
-		else
+		} else {
 			return mapFeatureWithPath.get(feature);
+		}
 	}
 
 	/*********** Plugins ************/
@@ -152,16 +154,8 @@ public class FeaturesAndPluginsDependencies {
 			if (mapSymbNameWithPlugin.containsKey(onePlugin.getSymbName())) {
 				mapSymbNameWithPlugin.get(onePlugin.getSymbName()).add(onePlugin);
 			} else {
-				List<PluginElement> pluginVersionList = new ArrayList<>(1); // Most
-																			// of
-																			// times,
-																			// there
-																			// is
-																			// only
-																			// one
-																			// version
-																			// by
-																			// SymbName
+				// Most of times, there is only one version by SymbName
+				List<PluginElement> pluginVersionList = new ArrayList<>(1);
 				pluginVersionList.add(onePlugin);
 				mapSymbNameWithPlugin.put(onePlugin.getSymbName(), pluginVersionList);
 			}
@@ -204,26 +198,13 @@ public class FeaturesAndPluginsDependencies {
 	private void initAllPluginsWithoutFeaturesDependencies(
 			Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies) {
 		allPluginsWithoutFeaturesDependencies = new ArrayList<>();
-		allPluginsWithoutFeaturesDependencies.addAll(allPlugins); // eclipseFull
-																	// Kepler =
-																	// 2066
-																	// plugins
-		for (PluginElement oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) { // all
-																									// Plugins
-																									// from
-																									// Features
-																									// dependencies
-																									// =
-																									// 1947
-			allPluginsWithoutFeaturesDependencies.remove(oneP); // We don't use
-																// removeAll
-																// because it
-																// remove all
-																// occurences,
-																// but we want
-																// to remove
-																// just one at
-																// each time
+		allPluginsWithoutFeaturesDependencies.addAll(allPlugins);
+		// eclipseFull Kepler = 2066 plugins
+		// all Plugins from Features dependencies = 1947
+		for (PluginElement oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) {
+			// We don't use removeAll because it remove all occurrences, but we
+			// want to remove just one at each time
+			allPluginsWithoutFeaturesDependencies.remove(oneP);
 		}
 	}
 
@@ -232,8 +213,9 @@ public class FeaturesAndPluginsDependencies {
 		List<String> plugins = new ArrayList<>();
 		for (List<String> list : mapFeatureWithPluginsDependencies.values()) {
 			for (String s : list) {
-				if (!plugins.contains(s))
+				if (!plugins.contains(s)) {
 					plugins.add(s);
+				}
 			}
 		}
 		return getPluginsFromListSymbName(plugins);
@@ -258,8 +240,9 @@ public class FeaturesAndPluginsDependencies {
 	@SuppressWarnings("unused")
 	private List<String> listPluginToString(List<PluginElement> list) {
 		List<String> toList = new ArrayList<>(list.size());
-		for (PluginElement elem : list)
+		for (PluginElement elem : list) {
 			toList.add(elem.getSymbName());
+		}
 		return toList;
 	}
 

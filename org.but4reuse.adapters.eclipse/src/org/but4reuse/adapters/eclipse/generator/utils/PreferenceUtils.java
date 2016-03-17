@@ -21,12 +21,12 @@ public class PreferenceUtils {
 	public static final String PREF_USERNAME = "user.name";
 
 	public static String getPrefFilePath() {
-		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath(); // Give
-																											// org.but4reuse.adapters.eclipse
-		if (path.endsWith("bin/"))
-			path = path.substring(0, path.length() - 4); // On some OS, it gives
-															// "bin/" in more,
-															// but we don't want
+		// Give org.but4reuse.adapters.eclipse
+		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		if (path.endsWith("bin/")) {
+			// On some OS, it gives "bin/" in more, but we don't want
+			path = path.substring(0, path.length() - 4);
+		}
 		path += "src" + File.separator + "resources" + File.separator + PREF_FILE;
 		return path;
 	}
@@ -39,15 +39,8 @@ public class PreferenceUtils {
 		mapToSave.put(PREF_OUTPUT, output);
 		mapToSave.put(PREF_RANDOM, random);
 		mapToSave.put(PREF_VARIANTS, numberVar);
-		mapToSave.put(PREF_USERNAME, System.getProperty("user.name")); // Display
-																		// OUR
-																		// preferences
-																		// (maybe
-																		// an
-																		// other
-																		// prefMap.ser
-																		// was
-																		// committed)
+		// Display OUR preferences (maybe an other prefMap.ser was committed)
+		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));
 
 		Properties prop = new Properties();
 		OutputStream outputFOS = new FileOutputStream(getPrefFilePath());
