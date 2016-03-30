@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.tests
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.tests.activator.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.but4reuse.adapters
+Bundle-ActivationPolicy: lazy
+Export-Package: org.but4reuse.tests.utils
