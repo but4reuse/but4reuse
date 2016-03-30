@@ -84,17 +84,25 @@ public class AdaptedModelHelper {
 	 * @return
 	 */
 	public static AdaptedArtefact adapt(Artefact artefact, List<IAdapter> adapters, IProgressMonitor monitor) {
-		AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
-		adaptedArtefact.setArtefact(artefact);
-
+		// update the monitor
 		String name = artefact.getName();
 		if (name == null || name.length() == 0) {
 			name = artefact.getArtefactURI();
 		}
 		monitor.subTask("Adapting: " + name);
 
+		// get the elements
 		List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-		for (IElement ele : list) {
+		
+		// create adapted artefact
+		AdaptedArtefact adaptedArtefact = wrapElementsToCreateAdaptedArtefact(list);
+		adaptedArtefact.setArtefact(artefact);
+		return adaptedArtefact;
+	}
+	
+	public static AdaptedArtefact wrapElementsToCreateAdaptedArtefact(List<IElement> elements){
+		AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
+		for (IElement ele : elements) {
 			ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
 			ew.setElement(ele);
 			adaptedArtefact.getOwnedElementWrappers().add(ew);
