@@ -8,7 +8,7 @@ import java.util.Map;
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
-import org.but4reuse.adapters.eclipse.generator.utils.IListener;
+import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;

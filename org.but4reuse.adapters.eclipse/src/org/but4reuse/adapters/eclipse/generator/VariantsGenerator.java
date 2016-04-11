@@ -3,6 +3,7 @@ package org.but4reuse.adapters.eclipse.generator;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -12,10 +13,11 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.generator.utils.FeaturesAndPluginsDependencies;
+import org.but4reuse.adapters.eclipse.generator.dependencies.DependenciesAnalyzer;
+import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
+import org.but4reuse.adapters.eclipse.generator.interfaces.ISender;
+import org.but4reuse.adapters.eclipse.generator.interfaces.IVariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
-import org.but4reuse.adapters.eclipse.generator.utils.IListener;
-import org.but4reuse.adapters.eclipse.generator.utils.ISender;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -51,6 +53,25 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			sendToAll(input + " not exists !");
 			return;
 		}
+		
+		// TODO: remove !
+		try { // Clear the output
+			File outputFile = new File(output);
+			FileAndDirectoryUtils.deleteFile(outputFile);
+		} catch (Exception e) {
+		}
+		
+		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
+			if(input.endsWith("/")) input += "eclipse/";
+			else input += "/eclipse/";
+			eclipse = new File(input);
+		}
+		
+		// check if it's an eclipse directory
+		if(!Arrays.asList(eclipse.list()).containsAll(Arrays.asList(new String[]{"plugins", "features"}))) {
+			sendToAll(input + " is not an eclipse !");
+			return;
+		}
 
 		URI inputURI = new File(input).toURI();
 		List<ActualFeature> allFeatures;
@@ -76,7 +97,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		sendToAll("Total features number in the input = " + allFeatures.size());
 		sendToAll("Total plugins number in the input = " + allPlugins.size() + "\n");
 
-		FeaturesAndPluginsDependencies depOperator = new FeaturesAndPluginsDependencies(allFeatures, allPlugins,
+		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPlugins,
 				inputURI.toString());
 
 		for (int i = 1; i <= nbVariants; i++) {
@@ -95,7 +116,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				chosenFeatures = new ArrayList<>();
 			}
 
-			if (percentage != 100 && percentage != 0) {
+			if (percentage < 100 && percentage > 0) {
 				for (int cptFeature = 0; cptFeature < allFeatures.size(); cptFeature++) {
 					ActualFeature oneFeature = allFeatures.get(cptFeature);
 					boolean wasChosen = wasChosen(oneFeature);
@@ -108,15 +129,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					}
 					chosenFeatures.add(oneFeature);
 
-					if (percentage < 100) {
-						List<ActualFeature> allFeaturesDependencies = depOperator.getFeaturesDependencies(oneFeature);
-						if (allFeaturesDependencies != null) {
-							for (ActualFeature depFeat : allFeaturesDependencies) {
-								if (!chosenFeatures.contains(depFeat)) {
-									// Avoid duplicates dependencies in the
-									// chosenFeatures list
-									chosenFeatures.add(depFeat);
-								}
+					List<ActualFeature> allFeaturesDependencies = depAnalyzer.getFeaturesDependencies(oneFeature);
+					if (allFeaturesDependencies != null) {
+						for (ActualFeature depFeat : allFeaturesDependencies) {
+							if (!chosenFeatures.contains(depFeat)) {
+								// Avoid duplicates dependencies in the
+								// chosenFeatures list
+								chosenFeatures.add(depFeat);
 							}
 						}
 					}
@@ -125,7 +144,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
-					List<PluginElement> allPluginsDependencies = depOperator.getPluginsDependencies(chosenFeature);
+					List<PluginElement> allPluginsDependencies = depAnalyzer.getPluginsDependencies(chosenFeature);
 					if (allPluginsDependencies != null) {
 						for (PluginElement depPlugin : allPluginsDependencies) {
 							// Avoid duplicates dependencies in the plugins list
@@ -136,7 +155,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					}
 				}
 
-				pluginsList.addAll(depOperator.getPluginsWithoutAnyFeaturesDependencies());
+				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
+				pluginsList.addAll(depAnalyzer.getPluginsMandatoriesByInput());
 			}
 			try {
 				// Create all dirs and copy features and plugins
@@ -154,7 +174,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				// features copy
 				File[] allFilesFeatures = new File[chosenFeatures.size()];
 				for (int j = 0; j < chosenFeatures.size(); j++) {
-					allFilesFeatures[j] = new File(depOperator.getPathFromFeature(chosenFeatures.get(j)));
+					allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
 				}
 				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.FEATURES,
 						allFilesFeatures);
@@ -185,6 +205,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		} // end of variants loop
 
 		sendToAll("\nGeneration finished !");
+		
+
 	}
 
 	@Override
