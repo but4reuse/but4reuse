@@ -61,13 +61,14 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			return;
 		}
 		
-		// TODO: remove !
+		// TODO: to remove !
 		try { // Clear the output
 			File outputFile = new File(output);
 			FileAndDirectoryUtils.deleteFile(outputFile);
 		} catch (Exception e) {
 		}
 		
+		// if the eclipse dir is inside the input
 		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
 			if(input.endsWith(File.separator)) input += "eclipse"+File.separator;
 			else input += File.separator+"eclipse"+File.separator;
@@ -143,8 +144,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					if (allFeaturesDependencies != null) {
 						for (ActualFeature depFeat : allFeaturesDependencies) {
 							if (!chosenFeatures.contains(depFeat)) {
-								// Avoid duplicates dependencies in the
-								// chosenFeatures list
+								// Avoid duplicates dependencies in the chosenFeatures list
 								chosenFeatures.add(depFeat);
 							}
 						}
@@ -201,6 +201,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 						allFilesPlugins);
 
 				//TODO : delete
+				// We create a properties file in the variant, for VariantsChecker (to write the status variant in log)
 				Map<String, String> mapToSave = new HashMap<>();
 				mapToSave.put("random", Integer.toString(percentage));
 				mapToSave.put("input", inputDir);
