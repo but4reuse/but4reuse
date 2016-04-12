@@ -263,7 +263,6 @@ public class DependenciesAnalyzer {
 		List<PluginElement> pluginsWithName = new ArrayList<>(3);
 		for(PluginElement plug : allPlugins){
 			if(plug.getSymbName().contains(symbname)){
-				System.out.println(plug.getSymbName());
 				pluginsWithName.add(plug);
 			}
 		}

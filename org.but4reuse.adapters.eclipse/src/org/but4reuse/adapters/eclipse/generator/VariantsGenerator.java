@@ -1,10 +1,15 @@
 package org.but4reuse.adapters.eclipse.generator;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.but4reuse.adapters.IElement;
@@ -41,6 +46,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 	}
 
 	public void generate() {
+		String inputDir;
+		
 		sendToAll("Starting generation with :");
 		sendToAll("-input = " + input);
 		sendToAll("-output = " + output);
@@ -62,9 +69,12 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		}
 		
 		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
-			if(input.endsWith("/")) input += "eclipse/";
-			else input += "/eclipse/";
+			if(input.endsWith(File.separator)) input += "eclipse"+File.separator;
+			else input += File.separator+"eclipse"+File.separator;
 			eclipse = new File(input);
+			inputDir = eclipse.getParentFile().getName();
+		} else {
+			inputDir = eclipse.getName();
 		}
 		
 		// check if it's an eclipse directory
@@ -156,7 +166,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				}
 
 				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-				pluginsList.addAll(depAnalyzer.getPluginsMandatoriesByInput());
+				for(PluginElement one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
+					if(!pluginsList.contains(one_manda)) pluginsList.add(one_manda);
+				}
+				
 			}
 			try {
 				// Create all dirs and copy features and plugins
@@ -187,6 +200,22 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.PLUGINS,
 						allFilesPlugins);
 
+				//TODO : delete
+				Map<String, String> mapToSave = new HashMap<>();
+				mapToSave.put("random", Integer.toString(percentage));
+				mapToSave.put("input", inputDir);
+				
+				Properties prop = new Properties();
+				OutputStream outputFOS = new FileOutputStream(output_variant+File.separator+"VariantParams.properties");
+				for (String key : mapToSave.keySet()) {
+					prop.setProperty(key, mapToSave.get(key));
+				}
+				prop.store(outputFOS, null);
+
+				if (outputFOS != null) {
+					outputFOS.close();
+				}
+				
 				System.out.println("(Variant " + i + ") features created.");
 			} catch (Exception e) {
 				System.out.println("(Variant " + i + ") features error : " + e);
