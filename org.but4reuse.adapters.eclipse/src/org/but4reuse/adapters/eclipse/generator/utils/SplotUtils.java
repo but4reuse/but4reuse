@@ -1,6 +1,9 @@
 package org.but4reuse.adapters.eclipse.generator.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +36,10 @@ public class SplotUtils {
 			else sousSplot +=":"+oneFeat.getId()+r+")";
 			nbDepOneFeatSup1=false;
 		}*/
+		sousSplot+="\n";
+		for(int k=0;k<r.length();k+=2){
+			sousSplot+="	";
+		}
 		sousSplot +=" :m "+oneFeat.getId()+r+")";
 		
 		for(int j=0;j<nbDependences;j++){
@@ -43,32 +50,23 @@ public class SplotUtils {
 	}
 	
 	
-	
-	
-	public static void main(String[] args) throws Exception{
+	public static File exportToSPLOT(List<ActualFeature> actualFeatures){
 		
-		prefMap = PreferenceUtils.getPreferencesMap();
-		
-		String input = prefMap.get(PreferenceUtils.PREF_INPUT);
-		URI inputURI = new File(input).toURI();
-		List<ActualFeature> allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
+
+		if (actualFeatures == null || actualFeatures.isEmpty())
+			return null;
 
 		String splotARetourner="";
-		
-		if (allFeatures == null || allFeatures.isEmpty())
-			return;
 
-		
 		mapIdWithFeature = new HashMap<>();
-		for (ActualFeature oneFeature : allFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
+		for (ActualFeature oneFeature : actualFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 
-		System.out.println(mapIdWithFeature.get("org.eclipse.egit.import"));
 		
-		for(int i=0;i<allFeatures.size();i++){
-			splotARetourner+="<feature_model name=\""+allFeatures.get(i).getName()+"\">\n";
+		for(int i=0;i<actualFeatures.size();i++){
+			splotARetourner+="<feature_model name=\""+actualFeatures.get(i).getName()+"\">\n";
 			
 			splotARetourner+="<meta>\n";
-			splotARetourner+="	<data name=\"description\">"+allFeatures.get(i).getDescription()+"</data>\n";
+			splotARetourner+="	<data name=\"description\">"+actualFeatures.get(i).getDescription()+"</data>\n";
 			/* OPTIONNAL */
 //			splotARetourner+="	<data name=\"creator\"/>\n";
 //			splotARetourner+="	<data name=\"address\"/>\n";
@@ -83,12 +81,12 @@ public class SplotUtils {
 			splotARetourner+="</meta>\n";
 			
 			splotARetourner+="<feature_tree>\n";
-			splotARetourner+="  :r "+allFeatures.get(i).getName()+"(_r)";
+			splotARetourner+="  :r "+actualFeatures.get(i).getId()+"(_r)";
 			List<String> allDependence=null;
-			if(allFeatures.get(i).getRequiredFeatures()!=null)
-				allDependence=allFeatures.get(i).getRequiredFeatures();
-			if(allFeatures.get(i).getIncludedFeatures()!=null)
-				allDependence.addAll(allFeatures.get(i).getIncludedFeatures());
+			if(actualFeatures.get(i).getRequiredFeatures()!=null)
+				allDependence=actualFeatures.get(i).getRequiredFeatures();
+			if(actualFeatures.get(i).getIncludedFeatures()!=null)
+				allDependence.addAll(actualFeatures.get(i).getIncludedFeatures());
 			
 			
 			for(int j=0;j<allDependence.size();j++){
@@ -100,11 +98,94 @@ public class SplotUtils {
 			splotARetourner+="\n";
 			splotARetourner+="</feature_tree>\n";
 			
-			splotARetourner+="-<constraints></constraints>\n";
+			splotARetourner+="<constraints></constraints>\n";
 			
 			splotARetourner+="</feature_model>\n";
 			System.out.println(splotARetourner);
+			if(!(actualFeatures.get(i).getName().contains("\\"))){
+				PrintWriter writer=null;
+				try {
+					writer = new PrintWriter(actualFeatures.get(i).getId()+".xml","UTF-8");
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(writer!=null){
+					writer.print(splotARetourner);
+					writer.close();
+				}
+			}
 			splotARetourner="";
 		}
+		return null;
+		
+	}
+	
+	public static void main(String[] args) throws Exception{
+		
+		prefMap = PreferenceUtils.getPreferencesMap();
+		
+		String input = prefMap.get(PreferenceUtils.PREF_INPUT);
+		URI inputURI = new File(input).toURI();
+		List<ActualFeature> allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
+
+		if (allFeatures == null || allFeatures.isEmpty())
+			return;
+
+		exportToSPLOT(allFeatures);
+		
+//		String splotARetourner="";
+//
+//		mapIdWithFeature = new HashMap<>();
+//		for (ActualFeature oneFeature : allFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
+//
+//		
+//		for(int i=0;i<allFeatures.size();i++){
+//			splotARetourner+="<feature_model name=\""+allFeatures.get(i).getName()+"\">\n";
+//			
+//			splotARetourner+="<meta>\n";
+//			splotARetourner+="	<data name=\"description\">"+allFeatures.get(i).getDescription()+"</data>\n";
+//			/* OPTIONNAL */
+////			splotARetourner+="	<data name=\"creator\"/>\n";
+////			splotARetourner+="	<data name=\"address\"/>\n";
+////			splotARetourner+="	<data name=\"email\"/>\n";
+////			splotARetourner+="	<data name=\"phone\"/>\n";
+////			splotARetourner+="	<data name=\"website\"/>\n";
+////			splotARetourner+="	<data name=\"organization\"/>\n";
+////			splotARetourner+="	<data name=\"department\"/>\n";
+////			splotARetourner+="	<data name=\"date\"/>\n";
+////			splotARetourner+="	<data name=\"reference\"/>\n";
+//			/* END OPTIONNAL */
+//			splotARetourner+="</meta>\n";
+//			
+//			splotARetourner+="<feature_tree>\n";
+//			splotARetourner+="  :r "+allFeatures.get(i).getId()+"(_r)";
+//			List<String> allDependence=null;
+//			if(allFeatures.get(i).getRequiredFeatures()!=null)
+//				allDependence=allFeatures.get(i).getRequiredFeatures();
+//			if(allFeatures.get(i).getIncludedFeatures()!=null)
+//				allDependence.addAll(allFeatures.get(i).getIncludedFeatures());
+//			
+//			
+//			for(int j=0;j<allDependence.size();j++){
+//				if(allDependence.get(j)!=null){
+//					splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
+//				}
+//			}
+//			
+//			splotARetourner+="\n";
+//			splotARetourner+="</feature_tree>\n";
+//			
+//			splotARetourner+="<constraints></constraints>\n";
+//			
+//			splotARetourner+="</feature_model>\n";
+//			System.out.println(splotARetourner);
+//			if(!(allFeatures.get(i).getName().contains("\\"))){
+//				PrintWriter writer= new PrintWriter(allFeatures.get(i).getId()+".xml","UTF-8");
+//				writer.print(splotARetourner);
+//				writer.close();
+//			}
+//			splotARetourner="";
+//		}
 	}
 }
