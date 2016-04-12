@@ -84,9 +84,16 @@ public class SplotUtils {
 			
 			splotARetourner+="<feature_tree>\n";
 			splotARetourner+="  :r "+allFeatures.get(i).getName()+"(_r)";
-			for(int j=0;j<allFeatures.get(i).getRequiredFeatures().size();j++){
-				if(allFeatures.get(i).getRequiredFeatures().get(j)!=null){
-					splotARetourner+=getDependencieTree("(_r_"+(j+1),allFeatures.get(i).getRequiredFeatures().get(j));
+			List<String> allDependence=null;
+			if(allFeatures.get(i).getRequiredFeatures()!=null)
+				allDependence=allFeatures.get(i).getRequiredFeatures();
+			if(allFeatures.get(i).getIncludedFeatures()!=null)
+				allDependence.addAll(allFeatures.get(i).getIncludedFeatures());
+			
+			
+			for(int j=0;j<allDependence.size();j++){
+				if(allDependence.get(j)!=null){
+					splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
 				}
 			}
 			
