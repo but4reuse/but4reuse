@@ -40,7 +40,7 @@ public class SplotUtils {
 		for(int k=0;k<r.length();k+=2){
 			sousSplot+="	";
 		}
-		sousSplot +=" :m "+oneFeat.getId()+r+")";
+		sousSplot +=" :m "+oneFeat.getId()+"("+oneFeat.getName()+")";
 		
 		for(int j=0;j<nbDependences;j++){
 			sousSplot+=getDependencieTree(r+"_"+j,oneFeat.getRequiredFeatures().get(j));
@@ -61,27 +61,26 @@ public class SplotUtils {
 		mapIdWithFeature = new HashMap<>();
 		for (ActualFeature oneFeature : actualFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 
-		
+		splotARetourner+="<feature_model name=\"Eclipse Feature\">\n";
+		splotARetourner+="<meta>\n";
+		/* OPTIONNAL */
+//		splotARetourner+="	<data name=\"description\">"+actualFeatures.get(i).getDescription()+"</data>\n";	
+//		splotARetourner+="	<data name=\"creator\"/>\n";
+//		splotARetourner+="	<data name=\"address\"/>\n";
+//		splotARetourner+="	<data name=\"email\"/>\n";
+//		splotARetourner+="	<data name=\"phone\"/>\n";
+//		splotARetourner+="	<data name=\"website\"/>\n";
+//		splotARetourner+="	<data name=\"organization\"/>\n";
+//		splotARetourner+="	<data name=\"department\"/>\n";
+//		splotARetourner+="	<data name=\"date\"/>\n";
+//		splotARetourner+="	<data name=\"reference\"/>\n";
+		/* END OPTIONNAL */
+		splotARetourner+="</meta>\n";
+		splotARetourner+="<feature_tree>\n";
+		splotARetourner+="  :r Eclipse Feature(Eclipse Feature)\n";
 		for(int i=0;i<actualFeatures.size();i++){
-			splotARetourner+="<feature_model name=\""+actualFeatures.get(i).getName()+"\">\n";
 			
-			splotARetourner+="<meta>\n";
-			splotARetourner+="	<data name=\"description\">"+actualFeatures.get(i).getDescription()+"</data>\n";
-			/* OPTIONNAL */
-//			splotARetourner+="	<data name=\"creator\"/>\n";
-//			splotARetourner+="	<data name=\"address\"/>\n";
-//			splotARetourner+="	<data name=\"email\"/>\n";
-//			splotARetourner+="	<data name=\"phone\"/>\n";
-//			splotARetourner+="	<data name=\"website\"/>\n";
-//			splotARetourner+="	<data name=\"organization\"/>\n";
-//			splotARetourner+="	<data name=\"department\"/>\n";
-//			splotARetourner+="	<data name=\"date\"/>\n";
-//			splotARetourner+="	<data name=\"reference\"/>\n";
-			/* END OPTIONNAL */
-			splotARetourner+="</meta>\n";
-			
-			splotARetourner+="<feature_tree>\n";
-			splotARetourner+="  :r "+actualFeatures.get(i).getId()+"(_r)";
+			splotARetourner+="		:o "+actualFeatures.get(i).getId()+"("+actualFeatures.get(i).getName()+")";
 			List<String> allDependence=null;
 			if(actualFeatures.get(i).getRequiredFeatures()!=null)
 				allDependence=actualFeatures.get(i).getRequiredFeatures();
@@ -96,26 +95,24 @@ public class SplotUtils {
 			}
 			
 			splotARetourner+="\n";
-			splotARetourner+="</feature_tree>\n";
 			
-			splotARetourner+="<constraints></constraints>\n";
-			
-			splotARetourner+="</feature_model>\n";
-			System.out.println(splotARetourner);
-			if(!(actualFeatures.get(i).getName().contains("\\"))){
-				PrintWriter writer=null;
-				try {
-					writer = new PrintWriter(actualFeatures.get(i).getId()+".xml","UTF-8");
-				} catch (FileNotFoundException | UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				if(writer!=null){
-					writer.print(splotARetourner);
-					writer.close();
-				}
-			}
-			splotARetourner="";
+			System.out.println(i);
+		}
+		splotARetourner+="</feature_tree>\n";
+		splotARetourner+="<constraints></constraints>\n";
+		
+		splotARetourner+="</feature_model>\n";
+		
+		PrintWriter writer=null;
+		try {
+			writer = new PrintWriter("EclipseFeature.xml","UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(writer!=null){
+			writer.print(splotARetourner);
+			writer.close();
 		}
 		return null;
 		
