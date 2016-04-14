@@ -120,7 +120,7 @@ public class SplotUtils {
 	
 	public static void main(String[] args) throws Exception{
 		
-		prefMap = PreferenceUtils.getPreferencesMap();
+		prefMap = PreferenceUtils.getPreferences();
 		
 		String input = prefMap.get(PreferenceUtils.PREF_INPUT);
 		URI inputURI = new File(input).toURI();

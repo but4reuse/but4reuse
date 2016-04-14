@@ -252,6 +252,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			for (IListener oneListener : listeners) {
 				oneListener.receive(msg);
 			}
+		} else { // TODO : to remove
+			System.out.println(msg);
 		}
 	}
 

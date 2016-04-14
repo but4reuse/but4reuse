@@ -45,7 +45,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			// good).
 			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
 			try { // Load preferences
-				prefMap = PreferenceUtils.getPreferencesMap();
+				prefMap = PreferenceUtils.getPreferences();
 				if (prefMap.containsKey(PreferenceUtils.PREF_USERNAME)
 						&& prefMap.get(PreferenceUtils.PREF_USERNAME).equals(
 								System.getProperty(PreferenceUtils.PREF_USERNAME))) {
@@ -114,7 +114,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 
 		// Saving preferences
 		try {
-			PreferenceUtils.savePreferencesMap(paramDialog.getInputPath(), paramDialog.getOutputPath(),
+			PreferenceUtils.savePreferences(paramDialog.getInputPath(), paramDialog.getOutputPath(),
 					paramDialog.getRandomSelector(), paramDialog.getVariantsNumber());
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");

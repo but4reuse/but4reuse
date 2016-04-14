@@ -31,15 +31,23 @@ public class PreferenceUtils {
 		return path;
 	}
 
-	public static void savePreferencesMap(String input, String output, String random, String numberVar)
+	public static void savePreferences(String input, String output, String random, String numberVar)
 			throws IOException {
 
 		Map<String, String> mapToSave = new HashMap<>();
-		mapToSave.put(PREF_INPUT, input);
-		mapToSave.put(PREF_OUTPUT, output);
-		mapToSave.put(PREF_RANDOM, random);
-		mapToSave.put(PREF_VARIANTS, numberVar);
-		// Display OUR preferences (maybe an other prefMap.ser was committed)
+		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
+		else mapToSave.put(PREF_INPUT, "");
+		
+		if(output!=null && !output.isEmpty()) mapToSave.put(PREF_OUTPUT, output);
+		else mapToSave.put(PREF_OUTPUT, ""); // TODO : get before
+			
+		if(random!=null && !random.isEmpty()) mapToSave.put(PREF_RANDOM, random);
+		else mapToSave.put(PREF_RANDOM, "");
+			
+		if(numberVar!=null && !numberVar.isEmpty()) mapToSave.put(PREF_VARIANTS, numberVar);
+		else mapToSave.put(PREF_VARIANTS, "");
+			
+		// Display OUR preferences (maybe an other preferences.properties was committed)
 		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));
 
 		Properties prop = new Properties();
@@ -55,7 +63,7 @@ public class PreferenceUtils {
 
 	}
 
-	public static Map<String, String> getPreferencesMap() throws IOException {
+	public static Map<String, String> getPreferences() throws IOException {
 
 		Properties prop = new Properties();
 		InputStream input = null;

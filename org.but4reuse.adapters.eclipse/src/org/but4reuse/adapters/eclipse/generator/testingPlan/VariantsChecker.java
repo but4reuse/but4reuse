@@ -33,7 +33,7 @@ public class VariantsChecker {
 		
 		List<Process> allProcess = new ArrayList<>(3);
 		FileWriter log = new FileWriter(logFile, true);
-		String output =  PreferenceUtils.getPreferencesMap().get(PreferenceUtils.PREF_OUTPUT);
+		String output =  PreferenceUtils.getPreferences().get(PreferenceUtils.PREF_OUTPUT);
 		Scanner scan = new Scanner(System.in);
 		File outputDir = new File(output);
 		
@@ -87,11 +87,11 @@ public class VariantsChecker {
 				
 				InputStream is = null;
 				try {
-					is = new FileInputStream(propFile[0]); // Il n'y a qu'un seul fichier
+					is = new FileInputStream(propFile[0]); // There is only one file
 					Properties prop = new Properties();
 					prop.load(is);
 
-					percentage = prop.getProperty("random"); // Voir VariantGenerator
+					percentage = prop.getProperty("random"); // See VariantGenerator
 					input = prop.getProperty("input");
 					
 				} catch (FileNotFoundException ex) {
@@ -108,7 +108,7 @@ public class VariantsChecker {
 						+ " " + splitDate[5] + " " + splitDate[3];
 						
 				// %%% escape '%'
-				log.write(String.format("(%s) %s(%s) with %s%%.\nError : %s\n\n", dateToString, 
+				log.write(String.format("(%s) %s (%s) with %s%%.\nError : %s\n\n", dateToString, 
 						variant.getName(), input , percentage, error.substring(0, error.length()-1)));
 				log.flush();
 				
