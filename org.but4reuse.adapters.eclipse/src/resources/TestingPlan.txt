@@ -22,11 +22,6 @@ CPP_Java_Modeling_RCP_Scout-10
 Testing_Scout_Standard_Parallel_CPP-10
 Java_JEE_Automotive_Modeling_Testing-10
 
-AllWithoutRCP_Scout-10
-AllWithoutJava_JEE-10
-AllWithoutStandard_DSL-10
-AllWithoutTesting_Reporting-10
-
 All-10
 
 
@@ -53,11 +48,6 @@ Automotive_DSL_JEE_Parallel_Reporting-20
 CPP_Java_Modeling_RCP_Scout-20
 Testing_Scout_Standard_Parallel_CPP-20
 Java_JEE_Automotive_Modeling_Testing-20
-
-AllWithoutRCP_Scout-20
-AllWithoutJava_JEE-20
-AllWithoutStandard_DSL-20
-AllWithoutTesting_Reporting-20
 
 All-20
 
@@ -86,11 +76,6 @@ CPP_Java_Modeling_RCP_Scout-50
 Testing_Scout_Standard_Parallel_CPP-50
 Java_JEE_Automotive_Modeling_Testing-50
 
-AllWithoutRCP_Scout-50
-AllWithoutJava_JEE-50
-AllWithoutStandard_DSL-50
-AllWithoutTesting_Reporting-50
-
 All-50
 
 
@@ -117,10 +102,5 @@ Automotive_DSL_JEE_Parallel_Reporting-100
 CPP_Java_Modeling_RCP_Scout-100
 Testing_Scout_Standard_Parallel_CPP-100
 Java_JEE_Automotive_Modeling_Testing-100
-
-AllWithoutRCP_Scout-100
-AllWithoutJava_JEE-100
-AllWithoutStandard_DSL-100
-AllWithoutTesting_Reporting-100
 
 All-100

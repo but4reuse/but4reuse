@@ -34,18 +34,12 @@ public class PreferenceUtils {
 	public static void savePreferences(String input, String output, String random, String numberVar)
 			throws IOException {
 
-		Map<String, String> mapToSave = new HashMap<>();
-		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
-		else mapToSave.put(PREF_INPUT, "");
+		Map<String, String> mapToSave = getPreferences();
 		
+		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
 		if(output!=null && !output.isEmpty()) mapToSave.put(PREF_OUTPUT, output);
-		else mapToSave.put(PREF_OUTPUT, ""); // TODO : get before
-			
 		if(random!=null && !random.isEmpty()) mapToSave.put(PREF_RANDOM, random);
-		else mapToSave.put(PREF_RANDOM, "");
-			
 		if(numberVar!=null && !numberVar.isEmpty()) mapToSave.put(PREF_VARIANTS, numberVar);
-		else mapToSave.put(PREF_VARIANTS, "");
 			
 		// Display OUR preferences (maybe an other preferences.properties was committed)
 		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import org.apache.commons.io.FileUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 
 /**
@@ -27,13 +28,14 @@ public class VariantsCreator {
 	public static final String TESTING_PLAN = "TestingPlan.txt";
 	public static final String value_separator = "-"; // input-random
 	public static final String input_separator = "_"; //RCP_Java
+	private static final long MB_DIVISEUR = 1048576;
 	
 	
 	public static void main(String[] args) {
 		
 		// TODO: traduire en anglais
 		
-		System.out.print("Votre dossier des input d'Eclipse enregistré est : ");
+		System.out.print("Your directory of Eclipse inputs registered is : ");
 		File inputDir;
 		try {
 			inputDir = new File(PreferenceUtils.getPreferences().get(PreferenceUtils.PREF_INPUT));
@@ -45,13 +47,13 @@ public class VariantsCreator {
 		System.out.println(input);
 		
 		Scanner scan = new Scanner(System.in);
-		System.out.println("Si vous désirez l'utiliser, appuyez sur enter, sinon, écrivez le nouveau :");
+		System.out.println("If you want to use it, press enter, else, write the new :");
 		String newDir = null;
 		while(newDir==null) {
 			newDir = scan.nextLine();
 			if(newDir.isEmpty()) break;
 			else if (!new File(newDir).exists()){
-				System.out.println("Votre chemin n'existe pas. Ressayez...");
+				System.out.println("Your path doesn't exists. Retry...");
 				newDir=null;
 			} else {
 				try {
@@ -86,7 +88,7 @@ public class VariantsCreator {
 		}
 		
 		
-		System.out.println("\nQuel est votre choix de génération de variantes ?\n(Ecrivez le numéro désirez)\n");
+		System.out.println("\nWhat is your generation variants choice ?\n(Write the number)\n");
 		List<String> choices = null;
 		int nbChoices;
 		try {
@@ -111,12 +113,12 @@ public class VariantsCreator {
 			try{
 				choice_int = Integer.parseInt(choice);
 			} catch ( NumberFormatException exc ){
-				System.out.println("Erreur, choisissez un entier entre 1 et "+nbChoices);
+				System.out.println("Error, choose an integer between 1 and "+nbChoices);
 				continue;
 			}
 			
 			if(choice_int!=-1 && (choice_int<1 || choice_int>nbChoices)){
-				System.out.println("Erreur, choisissez un entier entre 1 et "+nbChoices);
+				System.out.println("Error, choose an integer between 1 and "+nbChoices);
 				choice_int = -1;
 				continue;
 			} else {
@@ -136,17 +138,19 @@ public class VariantsCreator {
 			return;
 		}
 		
-		System.out.println("\nLe contenu de "+choice+"%");
+		System.out.println("Content of \""+choice+"%\"");
 		for(Entry<Integer, List<String>> entry : allValues.entrySet()){
 			for(String value : entry.getValue()){
 
 				if(new File(input + value).exists()){
-					System.out.printf("%s : %s (%s)\n", entry.getKey(), value, "exists");
+					System.out.printf("%s : %s (%s, size = %d Mb)\n", entry.getKey(), value, "exists", FileUtils.sizeOfDirectory(new File(input + value))/(MB_DIVISEUR));
 				} else {
 					System.out.printf("%s : %s (%s)\n", entry.getKey(), value, "not exists");
 				}
 			}
 		}
+		
+		//TODO: Call VariantsGenerator(params...).generate();
 		
 		closeAll(testingPlan, fstream, scan);
 	}
