@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.but4reuse.wordclouds.filter" name="Filters" schema="schema/org.but4reuse.wordclouds.filter.exsd"/>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactWordCloud"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action1"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowFeatureWordCloud"
+            objectClass="org.but4reuse.featurelist.Feature">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action2"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactWordCloudIDF"
+            objectClass="org.but4reuse.artefactmodel.Artefact">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactWordCloudTFIDF"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action3"
+               label="Show TF-IDF Word Cloud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowFeatureWordCloudIDF"
+            objectClass="org.but4reuse.featurelist.Feature">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowFeatureWordCloudTFIDF"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action4"
+               label="Show TF-IDF Word CLoud">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.wordclouds.ShowArtefactModelWordCloud"
+            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
+         <action
+               class="org.but4reuse.wordclouds.ui.actions.ShowArtefactModelWordCloud"
+               icon="icons/cloud.png"
+               id="org.but4reuse.wordclouds.action3"
+               label="Show Word Cloud">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.but4reuse.views.category"
+            class="org.but4reuse.wordclouds.visualisation.WordCloudView"
+            icon="icons/cloud.png"
+            id="org.but4reuse.wordclouds.view"
+            name="WordClouds"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.wordclouds.visualisation.WordCloudVisualisation"
+            name="Word Cloud">
+      </visualisation>
+   </extension>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.wordclouds.feature.location.FeatureLocationWordCloud"
+            name="Word Cloud Feature Location">
+      </feature.location>
+   </extension>
+   <extension
+         point="org.but4reuse.constraints.discovery">
+      <constraintsDiscovery
+            class="org.but4reuse.wordclouds.similarity.WordCloudConstraintsDiscovery"
+            name="Term-based constraints discovery">
+      </constraintsDiscovery>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.constraints.discovery.ui.page"
+            class="org.but4reuse.wordclouds.preferences.TermBasedConstraintsDiscoveryPreferences"
+            id="org.but4reuse.wordcloud.similarity.TermBasedConstraintsDiscovery"
+            name="Term-Based">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.wordclouds.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.visualisation.ui.page"
+            class="org.but4reuse.wordclouds.preferences.WordCloudPreferences"
+            id="org.but4reuse.wordclouds.page"
+            name="WordCloud">
+      </page>
+   </extension>
+   <extension
+         point="org.but4reuse.wordclouds.filter">
+      <filter
+            class="org.but4reuse.wordclouds.filters.CamelCaseSplitter"
+            name="CamelCase splitter">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.IgnoreUpperCaseProcessing"
+            name="Ignore upper case">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.MultiWordsFilter"
+            name="Multi words (user defined)">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.NumbersFilter"
+            name="Remove numbers">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.OneCharFilter"
+            name="Remove one char words">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.PartOfSpeechTagsFilter"
+            name="Part of speech tags filter">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.StemmingFilter"
+            name="Stemming filter">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.StopWordsFilter"
+            name="Stop words (user defined)">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.SynonymsFilter"
+            name="Synonyms wordnet (expensive)">
+      </filter>
+      <filter
+            class="org.but4reuse.wordclouds.filters.UserSynonymsFilter"
+            name="Synonyms (user defined)">
+      </filter>
+   </extension>
+
+</plugin>
