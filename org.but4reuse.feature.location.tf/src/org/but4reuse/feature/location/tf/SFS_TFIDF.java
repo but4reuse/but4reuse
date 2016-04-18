@@ -33,8 +33,13 @@ public class SFS_TFIDF implements IFeatureLocation {
 
 		// Get all the features of a given block and all its elements
 		for (Block block : adaptedModel.getOwnedBlocks()) {
+			// user cancel
+			if (monitor.isCanceled()) {
+				return locatedFeatures;
+			}
+			
 			monitor.subTask("Feature location FCA SFS and tf-idf. Features competing for Elements at "
-					+ block.getName());
+					+ block.getName() + " /" + adaptedModel.getOwnedBlocks().size());
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 
