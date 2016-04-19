@@ -26,7 +26,36 @@ public class SplotUtils {
 		String sousSplot="";
 		
 		List<String> allDependence= new ArrayList<String>();
+		allDependence=oneFeat.getIncludedFeatures();
+		/*if(oneFeat.getRequiredFeatures()!=null){
+			allDependence=oneFeat.getRequiredFeatures();
+		}
+		if(oneFeat.getIncludedFeatures()!=null){
+			for(String s : oneFeat.getIncludedFeatures()){
+				if(! allDependence.contains(s)) allDependence.add(s);
+			}
+		}*/
 		
+		sousSplot+="\n";
+		for(int k=0;k<r.length();k+=2){
+			sousSplot+="\t";
+		}
+		sousSplot +=" :m "+oneFeat.getId()+"("+oneFeat.getName()+")";
+		
+		for(int j=0;j<allDependence.size();j++){
+			sousSplot+=getDependencieTree(r+"_"+j,allDependence.get(j));
+		}	
+
+		return sousSplot;
+	}
+	
+public static String getDependencieContraint(String r, String id){
+		
+		ActualFeature oneFeat = mapIdWithFeature.get(id);
+		if(oneFeat==null) return "";
+		String sousSplot="";
+		
+		List<String> allDependence= new ArrayList<String>();
 		if(oneFeat.getRequiredFeatures()!=null){
 			allDependence=oneFeat.getRequiredFeatures();
 		}
@@ -37,13 +66,9 @@ public class SplotUtils {
 		}
 		
 		sousSplot+="\n";
-		for(int k=0;k<r.length();k+=2){
-			sousSplot+="\t";
-		}
-		sousSplot +=" :m "+oneFeat.getId()+"("+oneFeat.getName()+")";
 		
 		for(int j=0;j<allDependence.size();j++){
-			sousSplot+=getDependencieTree(r+"_"+j,allDependence.get(j));
+			sousSplot+=getDependencieContraint(r+"_"+j,allDependence.get(j));
 		}	
 
 		return sousSplot;
@@ -73,7 +98,32 @@ public class SplotUtils {
 			ActualFeature oneFeat = allFeatures.get(i);
 			
 			splotARetourner+="\t:o "+oneFeat.getId()+"("+oneFeat.getName()+")";
-			List<String> allDependence=null;
+//			List<String> allDependence=oneFeat.getIncludedFeatures();
+//			/*if(oneFeat.getRequiredFeatures()!=null){
+//				allDependence=oneFeat.getRequiredFeatures();
+//			}
+//			if(oneFeat.getIncludedFeatures()!=null){
+//				for(String s : oneFeat.getIncludedFeatures()){
+//					if(! allDependence.contains(s)) allDependence.add(s);
+//				}
+//			}*/
+//			
+//			for(int j=0;j<allDependence.size();j++){
+//				if(allDependence.get(j)!=null){
+//					//splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
+//				}
+//			}
+//			
+			splotARetourner+="\n";
+			System.out.println(i);
+		}
+		splotARetourner+="</feature_tree>\n";
+		splotARetourner+="<constraints>";
+		int nbContrainte=1;
+		for(int i=0;i<allFeatures.size();i++){
+			ActualFeature oneFeat = allFeatures.get(i);
+			
+			List<String> allDependence=new ArrayList<String>();
 			if(oneFeat.getRequiredFeatures()!=null){
 				allDependence=oneFeat.getRequiredFeatures();
 			}
@@ -82,18 +132,22 @@ public class SplotUtils {
 					if(! allDependence.contains(s)) allDependence.add(s);
 				}
 			}
-			
 			for(int j=0;j<allDependence.size();j++){
 				if(allDependence.get(j)!=null){
-					splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
+					
+					if(mapIdWithFeature.get(allDependence.get(j))!=null){
+						splotARetourner+="\n";
+						splotARetourner+="constraint_"+nbContrainte+":";
+						splotARetourner+="~"+oneFeat.getName()+" or "
+								+mapIdWithFeature.get(allDependence.get(j)).getName();
+						nbContrainte++;
+					}
+					//splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
 				}
 			}
-			
-			splotARetourner+="\n";
 			System.out.println(i);
 		}
-		splotARetourner+="</feature_tree>\n";
-		splotARetourner+="<constraints></constraints>\n";
+		splotARetourner+= "\n</constraints>\n";
 		
 		splotARetourner+="</feature_model>\n";
 		
