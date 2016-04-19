@@ -27,14 +27,6 @@ public class SplotUtils {
 		
 		List<String> allDependence= new ArrayList<String>();
 		allDependence=oneFeat.getIncludedFeatures();
-		/*if(oneFeat.getRequiredFeatures()!=null){
-			allDependence=oneFeat.getRequiredFeatures();
-		}
-		if(oneFeat.getIncludedFeatures()!=null){
-			for(String s : oneFeat.getIncludedFeatures()){
-				if(! allDependence.contains(s)) allDependence.add(s);
-			}
-		}*/
 		
 		sousSplot+="\n";
 		for(int k=0;k<r.length();k+=2){
@@ -49,7 +41,7 @@ public class SplotUtils {
 		return sousSplot;
 	}
 	
-public static String getDependencieContraint(String r, String id){
+	public static String getDependencieContraint(String r, String id){
 		
 		ActualFeature oneFeat = mapIdWithFeature.get(id);
 		if(oneFeat==null) return "";
@@ -90,30 +82,23 @@ public static String getDependencieContraint(String r, String id){
 
 		splotARetourner+="</meta>\n";
 		splotARetourner+="<feature_tree>\n";
-		splotARetourner+="  :r Eclipse Feature(Eclipse Feature)\n";
+		splotARetourner+="  :r Eclipse Feature(EclipseFeature)\n";
 		
 		System.out.println(allFeatures.size());
 		for(int i=0;i<allFeatures.size();i++){
 			
 			ActualFeature oneFeat = allFeatures.get(i);
+			String name = oneFeat.getName().replace("(", "");
+			name = name.replace(")", "");
+
 			
-			splotARetourner+="\t:o "+oneFeat.getId()+"("+oneFeat.getName()+")";
-//			List<String> allDependence=oneFeat.getIncludedFeatures();
-//			/*if(oneFeat.getRequiredFeatures()!=null){
-//				allDependence=oneFeat.getRequiredFeatures();
-//			}
-//			if(oneFeat.getIncludedFeatures()!=null){
-//				for(String s : oneFeat.getIncludedFeatures()){
-//					if(! allDependence.contains(s)) allDependence.add(s);
-//				}
-//			}*/
-//			
-//			for(int j=0;j<allDependence.size();j++){
-//				if(allDependence.get(j)!=null){
-//					//splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
-//				}
-//			}
-//			
+			String id = oneFeat.getId().replace("(", "");
+			id = id.replace(")", "");
+			id = id.replace(".", "_");
+			id = id.replace("-", "666666");
+			
+			splotARetourner+="\t:o "+name+"("+id+")";
+	
 			splotARetourner+="\n";
 			System.out.println(i);
 		}
@@ -122,6 +107,10 @@ public static String getDependencieContraint(String r, String id){
 		int nbContrainte=1;
 		for(int i=0;i<allFeatures.size();i++){
 			ActualFeature oneFeat = allFeatures.get(i);
+			
+			String id = oneFeat.getId().replace("(", "");
+			id = id.replace(")", "");
+			id = id.replace(".", "_");
 			
 			List<String> allDependence=new ArrayList<String>();
 			if(oneFeat.getRequiredFeatures()!=null){
@@ -138,11 +127,10 @@ public static String getDependencieContraint(String r, String id){
 					if(mapIdWithFeature.get(allDependence.get(j))!=null){
 						splotARetourner+="\n";
 						splotARetourner+="constraint_"+nbContrainte+":";
-						splotARetourner+="~"+oneFeat.getName()+" or "
-								+mapIdWithFeature.get(allDependence.get(j)).getName();
+						splotARetourner+="~"+id+" or "
+								+mapIdWithFeature.get(allDependence.get(j)).getId().replace(".","_").replace("-", "666666").replace("(", "").replace(")", "");
 						nbContrainte++;
 					}
-					//splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
 				}
 			}
 			System.out.println(i);
@@ -177,65 +165,5 @@ public static String getDependencieContraint(String r, String id){
 			return;
 
 		exportToSPLOT(allFeatures);
-		
-		
-		
-		
-		
-		
-/*		
-		String splotARetourner="";
-
-		mapIdWithFeature = new HashMap<>();
-		for (ActualFeature oneFeature : allFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
-
-		
-		for(int i=0;i<allFeatures.size();i++){
-			splotARetourner+="<feature_model name=\""+allFeatures.get(i).getName()+"\">\n";
-			
-			splotARetourner+="<meta>\n";
-			splotARetourner+="	<data name=\"description\">"+allFeatures.get(i).getDescription()+"</data>\n";
-			// OPTIONNAL 
-//			splotARetourner+="	<data name=\"creator\"/>\n";
-//			splotARetourner+="	<data name=\"address\"/>\n";
-//			splotARetourner+="	<data name=\"email\"/>\n";
-//			splotARetourner+="	<data name=\"phone\"/>\n";
-//			splotARetourner+="	<data name=\"website\"/>\n";
-//			splotARetourner+="	<data name=\"organization\"/>\n";
-//			splotARetourner+="	<data name=\"department\"/>\n";
-//			splotARetourner+="	<data name=\"date\"/>\n";
-//			splotARetourner+="	<data name=\"reference\"/>\n";
-			  // END OPTIONNAL
-			splotARetourner+="</meta>\n";
-			
-			splotARetourner+="<feature_tree>\n";
-			splotARetourner+="  :r "+allFeatures.get(i).getId()+"(_r)";
-			List<String> allDependence=null;
-			if(allFeatures.get(i).getRequiredFeatures()!=null)
-				allDependence=allFeatures.get(i).getRequiredFeatures();
-			if(allFeatures.get(i).getIncludedFeatures()!=null)
-				allDependence.addAll(allFeatures.get(i).getIncludedFeatures());
-			
-			
-			for(int j=0;j<allDependence.size();j++){
-				if(allDependence.get(j)!=null){
-					splotARetourner+=getDependencieTree("(_r_"+(j+1),allDependence.get(j));
-				}
-			}
-			
-			splotARetourner+="\n";
-			splotARetourner+="</feature_tree>\n";
-			
-			splotARetourner+="<constraints></constraints>\n";
-			
-			splotARetourner+="</feature_model>\n";
-			System.out.println(splotARetourner);
-			if(!(allFeatures.get(i).getName().contains("\\"))){
-				PrintWriter writer= new PrintWriter(allFeatures.get(i).getId()+".xml","UTF-8");
-				writer.print(splotARetourner);
-				writer.close();
-			}
-			splotARetourner="";
-//		}*/
 	}
 }

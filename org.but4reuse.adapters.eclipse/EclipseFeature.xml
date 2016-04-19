@@ -2,439 +2,1340 @@
 <meta>
 </meta>
 <feature_tree>
-  :r Eclipse Feature(Eclipse Feature)
-	:o br.ufal.ic.colligens.feature(Colligens)
-	:o de.ovgu.featureide.ahead(FeatureIDE extension for AHEAD (optional))
-	:o de.ovgu.featureide.antenna(FeatureIDE extension for Antenna (optional))
-	:o de.ovgu.featureide.aspectj(FeatureIDE extension for AspectJ (optional))
-	:o de.ovgu.featureide.exampleprojects(FeatureIDE example projects (optional))
-	:o de.ovgu.featureide.featurecpp(FeatureIDE extension for FeatureC++ (optional))
-	:o de.ovgu.featureide.featurehouse(FeatureIDE extension for FeatureHouse (optional))
-	:o de.ovgu.featureide.featuremodeling(Feature Modeling (required))
-	:o de.ovgu.featureide.munge.android(FeatureIDE extension for Android with Munge (optional))
-	:o de.ovgu.featureide.munge(FeatureIDE extension for Munge (optional))
-	:o de.ovgu.featureide(FeatureIDE)
-	:o org.eclipse.amalgam.discovery(Extra Modeling Components Installer)
-	:o org.eclipse.cvs.source(Eclipse CVS Client Resources)
-	:o org.eclipse.cvs(Eclipse CVS Client)
-	:o org.eclipse.draw2d.sdk(Graphical Editing Framework Draw2d SDK)
-	:o org.eclipse.draw2d.source(Graphical Editing Framework Draw2d Source Feature)
-	:o org.eclipse.draw2d(Graphical Editing Framework Draw2d)
-	:o org.eclipse.e4.rcp.source(Eclipse e4 Rich Client Platform Developer Resources)
-	:o org.eclipse.e4.rcp(Eclipse e4 Rich Client Platform)
-	:o org.eclipse.egit(Eclipse Git Team Provider)
-	:o org.eclipse.emf.cdo.compare(CDO Model Repository Client (Compare Integration))
-	:o org.eclipse.emf.cdo.doc(CDO Model Repository Documentation)
-	:o org.eclipse.emf.cdo.epp(CDO Model Repository EPP)
-	:o org.eclipse.emf.cdo.examples.installer.source(Source for CDO Model Repository Examples Installer)
-	:o org.eclipse.emf.cdo.examples.installer(CDO Model Repository Examples Installer)
-	:o org.eclipse.emf.cdo.server.db(CDO Model Repository Server DB Store)
-	:o org.eclipse.emf.cdo.server(CDO Model Repository Server)
-	:o org.eclipse.emf.cdo(CDO Model Repository Client)
-	:o org.eclipse.emf.codegen.ecore.source(Source for EMF Ecore Code Generator)
-	:o org.eclipse.emf.codegen.ecore.ui.source(Source for EMF Ecore Code Generator UI)
-	:o org.eclipse.emf.codegen.ecore.ui(EMF Ecore Code Generator UI)
-	:o org.eclipse.emf.codegen.ecore(EMF Ecore Code Generator)
-	:o org.eclipse.emf.codegen.source(Source for EMF Code Generation)
-	:o org.eclipse.emf.codegen.ui.source(Source for EMF Code Generation UI)
-	:o org.eclipse.emf.codegen.ui(EMF Code Generation UI)
-	:o org.eclipse.emf.codegen(EMF Code Generation)
-	:o org.eclipse.emf.common.ui.source(Source for EMF Common UI)
-	:o org.eclipse.emf.common.ui(EMF Common UI)
-	:o org.eclipse.emf.common(EMF Common)
-	:o org.eclipse.emf.compare.ide.ui.source(EMF Compare IDE UI SDK)
-	:o org.eclipse.emf.compare.ide.ui(EMF Compare IDE UI)
-	:o org.eclipse.emf.compare.source(EMF Compare Core SDK)
-	:o org.eclipse.emf.compare(EMF Compare Core)
-	:o org.eclipse.emf.converter.source(Source for EMF Model Converter)
-	:o org.eclipse.emf.converter(EMF Model Converter)
-	:o org.eclipse.emf.databinding.edit.source(Source for EMF Edit Data Binding)
-	:o org.eclipse.emf.databinding.edit(EMF Edit Data Binding)
-	:o org.eclipse.emf.databinding.source(Source for EMF Data Binding)
-	:o org.eclipse.emf.databinding(EMF Data Binding)
-	:o org.eclipse.emf.doc.source(Source for EMF Documentation)
-	:o org.eclipse.emf.doc(EMF Documentation)
-	:o org.eclipse.emf.ecore.edit.source(Source for EMF Ecore Edit)
-	:o org.eclipse.emf.ecore.editor.source(Source for EMF Sample Ecore Editor)
-	:o org.eclipse.emf.ecore.editor(EMF Sample Ecore Editor)
-	:o org.eclipse.emf.ecore.edit(EMF Ecore Edit)
-	:o org.eclipse.emf.ecoretools.sdk(Diagram Editor for Ecore (SDK))
-	:o org.eclipse.emf.ecoretools(Diagram Editor for Ecore)
-	:o org.eclipse.emf.ecore(EMF - Eclipse Modeling Framework Core Runtime)
-	:o org.eclipse.emf.edit.source(Source for EMF Edit)
-	:o org.eclipse.emf.edit.ui.source(Source for EMF Edit UI)
-	:o org.eclipse.emf.edit.ui(EMF Edit UI)
-	:o org.eclipse.emf.edit(EMF Edit)
-	:o org.eclipse.emf.eef.codegen.ecore-feature(Extended Editing Framework - EMF Edit generation using Acceleo)
-	:o org.eclipse.emf.mapping.ecore.editor.source(Source for EMF Ecore Mapping Editor)
-	:o org.eclipse.emf.mapping.ecore.editor(EMF Ecore Mapping Editor)
-	:o org.eclipse.emf.mapping.ecore.source(Source for EMF Ecore Mapping)
-	:o org.eclipse.emf.mapping.ecore(EMF Ecore Mapping)
-	:o org.eclipse.emf.mapping.source(Source for EMF Mapping)
-	:o org.eclipse.emf.mapping.ui.source(Source for EMF Mapping UI)
-	:o org.eclipse.emf.mapping.ui(EMF Mapping UI)
-	:o org.eclipse.emf.mapping(EMF Mapping)
-	:o org.eclipse.emf.query.doc(EMF Model Query Documentation)
-	:o org.eclipse.emf.query.ocl.source(EMF Model Query OCL Integration Source)
-	:o org.eclipse.emf.query.ocl(EMF Model Query OCL Integration)
-	:o org.eclipse.emf.query.sdk(EMF Model Query SDK)
-	:o org.eclipse.emf.query.source(EMF Model Query Source)
-	:o org.eclipse.emf.query(EMF Model Query)
-	:o org.eclipse.emf.sdk(EMF - Eclipse Modeling Framework SDK)
-	:o org.eclipse.emf.source(Source for EMF - Eclipse Modeling Framework Runtime and Tools)
-	:o org.eclipse.emf.transaction.doc(EMF Model Transaction Documentation)
-	:o org.eclipse.emf.transaction.sdk(EMF Model Transaction SDK)
-	:o org.eclipse.emf.transaction.source(EMF Model Transaction Source)
-	:o org.eclipse.emf.transaction(EMF Model Transaction)
-	:o org.eclipse.emf.validation.doc(EMF Validation Framework Documentation)
-	:o org.eclipse.emf.validation.ocl.source(EMF Validation Framework OCL Integration Source)
-	:o org.eclipse.emf.validation.ocl(EMF Validation Framework OCL Integration)
-	:o org.eclipse.emf.validation.sdk(EMF Validation Framework SDK)
-	:o org.eclipse.emf.validation.source(EMF Validation Framework Source)
-	:o org.eclipse.emf.validation(EMF Validation Framework)
-	:o org.eclipse.emf.workspace.doc(EMF Model Transaction Workbench Integration Documentation)
-	:o org.eclipse.emf.workspace.source(EMF Model Transaction Workbench Integration Source)
-	:o org.eclipse.emf.workspace(EMF Model Transaction Workbench Integration)
-	:o org.eclipse.emf(EMF - Eclipse Modeling Framework Runtime and Tools)
-	:o org.eclipse.epp.mpc(Marketplace Client)
-	:o org.eclipse.epp.package.common.feature(EPP Common Package Feature)
-	:o org.eclipse.epp.package.modeling.feature(EPP Modeling Feature)
-	:o org.eclipse.equinox.p2.core.feature.source(Equinox p2 Core Function Source)
-	:o org.eclipse.equinox.p2.core.feature(Equinox p2 Core Function)
-	:o org.eclipse.equinox.p2.discovery.feature(Equinox p2 Discovery)
-	:o org.eclipse.equinox.p2.extras.feature.source(Equinox p2 RCP Management Facilities)
-	:o org.eclipse.equinox.p2.extras.feature(Add-on Function for p2)
-	:o org.eclipse.equinox.p2.rcp.feature.source(Equinox p2 RCP Management Facilities Source)
-	:o org.eclipse.equinox.p2.rcp.feature(Equinox p2 RCP Management Facilities)
-	:o org.eclipse.equinox.p2.user.ui.source(Eclipse p2 Provisioning Developer Resources)
-	:o org.eclipse.equinox.p2.user.ui(Equinox p2 Provisioning for IDEs.)
-	:o org.eclipse.gef.sdk(Graphical Editing Framework GEF SDK)
-	:o org.eclipse.gef.source(Graphical Editing Framework GEF Source Feature)
-	:o org.eclipse.gef(Graphical Editing Framework GEF)
-	:o org.eclipse.gmf.examples.runtime.ui.pde(Graphical Modeling Framework (GMF) Runtime Plug-in Examples)
-	:o org.eclipse.gmf.runtime.notation.sdk(Graphical Modeling Framework (GMF) Notation SDK)
-	:o org.eclipse.gmf.runtime.notation.source(Graphical Modeling Framework (GMF) Notation Sources)
-	:o org.eclipse.gmf.runtime.notation(Graphical Modeling Framework (GMF) Notation)
-	:o org.eclipse.gmf.runtime.sdk(Graphical Modeling Framework (GMF) Runtime SDK)
-	:o org.eclipse.gmf.runtime.thirdparty.source(Graphical Modeling Framework (GMF) Runtime Third-Party Component Sources )
-	:o org.eclipse.gmf.runtime.thirdparty(Graphical Modeling Framework (GMF) Runtime Third-Party Components )
-	:o org.eclipse.gmf.source(Graphical Modeling Framework (GMF) Runtime Sources)
-	:o org.eclipse.gmf(Graphical Modeling Framework (GMF) Runtime)
-	:o org.eclipse.help.source(Eclipse Help Developer Resources)
-	:o org.eclipse.help(Eclipse Help System)
-	:o org.eclipse.jdt.source(Eclipse JDT Plug-in Developer Resources)
-	:o org.eclipse.jdt(Eclipse Java Development Tools)
-	:o org.eclipse.jgit(Java implementation of Git)
-	:o org.eclipse.mylyn.bugzilla_feature(Mylyn Tasks Connector: Bugzilla)
-	:o org.eclipse.mylyn.commons.identity(Mylyn Commons Identity)
-	:o org.eclipse.mylyn.commons.notifications(Mylyn Commons Notifications)
-	:o org.eclipse.mylyn.commons.repositories(Mylyn Commons Repositories)
-	:o org.eclipse.mylyn.commons(Mylyn Commons)
-	:o org.eclipse.mylyn.context_feature(Mylyn Task-Focused Interface)
-	:o org.eclipse.mylyn.discovery(Mylyn Commons Connector: Discovery)
-	:o org.eclipse.mylyn.ide_feature(Mylyn Context Connector: Eclipse IDE)
-	:o org.eclipse.mylyn.java_feature(Mylyn Context Connector: Java Development)
-	:o org.eclipse.mylyn.monitor(Mylyn Commons Connector: Monitor)
-	:o org.eclipse.mylyn.pde_feature(Mylyn Context Connector: Plug-in Development)
-	:o org.eclipse.mylyn.tasks.ide(Mylyn Tasks Connector: Eclipse IDE)
-	:o org.eclipse.mylyn.team_feature(Mylyn Context Connector: Team Support)
-	:o org.eclipse.mylyn.wikitext_feature(Mylyn WikiText)
-	:o org.eclipse.mylyn_feature(Mylyn Task List)
-	:o org.eclipse.net4j.db.h2(Net4j DB Framework H2 Adapter)
-	:o org.eclipse.net4j.db(Net4j DB Framework)
-	:o org.eclipse.net4j.examples.installer.source(Source for Net4j Signalling Platform Examples Installer)
-	:o org.eclipse.net4j.examples.installer(Net4j Signalling Platform Examples Installer)
-	:o org.eclipse.net4j.util.ui(Net4j Utilities UI)
-	:o org.eclipse.net4j.util(Net4j Utilities)
-	:o org.eclipse.net4j(Net4j Signalling Platform Runtime)
-	:o org.eclipse.ocl.all.sdk(OCL End User SDK)
-	:o org.eclipse.ocl.all(OCL Runtime Features)
-	:o org.eclipse.ocl.core.sdk(OCL Core SDK)
-	:o org.eclipse.ocl.doc.source(Source for OCL Documentation)
-	:o org.eclipse.ocl.doc(OCL Documentation)
-	:o org.eclipse.ocl.edit.source(Source for OCL EMF Edit Support)
-	:o org.eclipse.ocl.edit(OCL EMF Edit Support)
-	:o org.eclipse.ocl.source(Source for OCL for Ecore Parser and Interpreter)
-	:o org.eclipse.ocl.ui.source(Source for OCL User Interface)
-	:o org.eclipse.ocl.ui(OCL User Interface)
-	:o org.eclipse.ocl.uml.source(Source for OCL for UML Parser and Interpreter)
-	:o org.eclipse.ocl.uml(OCL for UML Parser and Interpreter)
-	:o org.eclipse.ocl(OCL for Ecore Parser and Interpreter)
-	:o org.eclipse.pde.source(Eclipse PDE Plug-in Developer Resources)
-	:o org.eclipse.pde(Eclipse Plug-in Development Environment)
-	:o org.eclipse.platform.source(Eclipse Platform Plug-in Developer Resources)
-	:o org.eclipse.platform(Eclipse Platform)
-	:o org.eclipse.rcp.configuration(Eclipse Product Configuration)
-	:o org.eclipse.rcp.source(Eclipse RCP Plug-in Developer Resources)
-	:o org.eclipse.rcp(Eclipse RCP)
-	:o org.eclipse.rmf.examples.feature(RMF Examples Feature (Incubation))
-	:o org.eclipse.rmf.reqif10.feature(RMF Core ReqIF Feature (Incubation))
-	:o org.eclipse.rmf.reqif10.pror.feature(RMF ProR Feature (Incubation))
-	:o org.eclipse.rmf.reqif10.thirdparty.feature(RMF Core ReqIF 1.0 Thirdparty Feature (Incubation))
-	:o org.eclipse.sdk(Eclipse Project SDK)
-	:o org.eclipse.uml2.doc(UML2 Documentation)
-	:o org.eclipse.uml2.examples.source(Source for UML2 Examples)
-	:o org.eclipse.uml2.examples(UML2 Examples)
-	:o org.eclipse.uml2.sdk(UML2 Extender SDK)
-	:o org.eclipse.uml2.source(Source for UML2 End-User Features)
-	:o org.eclipse.uml2(UML2 End-User Features)
-	:o org.eclipse.xsd.doc.source(Source for XSD Documentation)
-	:o org.eclipse.xsd.doc(XSD Documentation)
-	:o org.eclipse.xsd.ecore.converter.source(Source for XSD Ecore Converter)
-	:o org.eclipse.xsd.ecore.converter(XSD Ecore Converter)
-	:o org.eclipse.xsd.edit.source(Source for XSD Edit)
-	:o org.eclipse.xsd.editor.source(Source for XSD Sample Editor)
-	:o org.eclipse.xsd.editor(XSD Sample Editor)
-	:o org.eclipse.xsd.edit(XSD Edit)
-	:o org.eclipse.xsd.mapping.editor.source(Source for XSD Mapping Editor)
-	:o org.eclipse.xsd.mapping.editor(XSD Mapping Editor)
-	:o org.eclipse.xsd.mapping.source(Source for XSD Mapping)
-	:o org.eclipse.xsd.mapping(XSD Mapping)
-	:o org.eclipse.xsd.sdk(XSD - XML Schema Definition SDK)
-	:o org.eclipse.xsd.source(Source for XSD - XML Schema Definition Model)
-	:o org.eclipse.xsd(XSD - XML Schema Definition Model)
+  :r Eclipse Feature(EclipseFeature)
+	:o Extra Modeling Components Installer(org_eclipse_amalgam_discovery)
+	:o Eclipse BIRT Chart Context Sensitive Help Documentation(org_eclipse_birt_chart_cshelp)
+	:o Eclipse BIRT Context Sensitive Help Documentation(org_eclipse_birt_cshelp)
+	:o Eclipse BIRT Documentation(org_eclipse_birt_doc)
+	:o Eclipse BIRT Example(org_eclipse_birt_example)
+	:o Eclipse BIRT Report Designer XML Tab Editor(org_eclipse_birt_report_designer_editor_xml_wtp)
+	:o BIRT Framework(org_eclipse_birt)
+	:o C/C++ Autotools support(org_eclipse_cdt_autotools)
+	:o C/C++ GCC Cross Compiler Support(org_eclipse_cdt_build_crossgcc)
+	:o C/C++ Berkeley UPC Unified Parallel C Toolchain Support(org_eclipse_cdt_bupc)
+	:o C/C++ C99 LR Parser(org_eclipse_cdt_core_lrparser_feature)
+	:o C/C++ UPC Unified Parallel C Support(org_eclipse_cdt_core_parser_upc_feature)
+	:o C/C++ Memory View Enhancements(org_eclipse_cdt_debug_ui_memory)
+	:o C/C++ Common GDB Support(org_eclipse_cdt_gdb)
+	:o C/C++ GNU Toolchain Build Support(org_eclipse_cdt_gnu_build)
+	:o C/C++ GNU Toolchain Debug Support(org_eclipse_cdt_gnu_debug)
+	:o C/C++ DSF GDB Debugger Integration(org_eclipse_cdt_gnu_dsf)
+	:o C/C++ Remote Launch Requires RSE Remote System Explorer(org_eclipse_cdt_launch_remote)
+	:o C/C++ Visual C++ Support(org_eclipse_cdt_msw)
+	:o Mylyn Context Connector: C/C++ Development(org_eclipse_cdt_mylyn)
+	:o C/C++ Development Platform(org_eclipse_cdt_platform)
+	:o C/C++ IBM XLC Compiler Support(org_eclipse_cdt_xlc_feature)
+	:o C/C++ Development Tools(org_eclipse_cdt)
+	:o Eclipse CVS Client Resources(org_eclipse_cvs_source)
+	:o Eclipse CVS Client(org_eclipse_cvs)
+	:o Data Tools Platform Tutorial Documentation(org_eclipse_datatools_common_doc_user)
+	:o Data Tools Platform Connectivity Documentation(org_eclipse_datatools_connectivity_doc_user)
+	:o Data Tools Platform Connectivity(org_eclipse_datatools_connectivity_feature)
+	:o Data Tools Platform Open Data Access Designer Core(org_eclipse_datatools_connectivity_oda_designer_core_feature)
+	:o Data Tools Platform Open Data Access Designer(org_eclipse_datatools_connectivity_oda_designer_feature)
+	:o Data Tools Platform Open Data Access Runtime(org_eclipse_datatools_connectivity_oda_feature)
+	:o Data Tools Platform User Documentation(org_eclipse_datatools_doc_user)
+	:o Data Tools Platform Enablement for Apache Derby(org_eclipse_datatools_enablement_apache_derby_feature)
+	:o Data Tools Platform Enablement(org_eclipse_datatools_enablement_feature)
+	:o Data Tools Platform Enablement for HSQLDB(org_eclipse_datatools_enablement_hsqldb_feature)
+	:o Data Tools Platform Enablement for IBM(org_eclipse_datatools_enablement_ibm_feature)
+	:o Data Tools Platform Enablement for Ingres(org_eclipse_datatools_enablement_ingres_feature)
+	:o Data Tools Platform Enablement for JDBC(org_eclipse_datatools_enablement_jdbc_feature)
+	:o Data Tools Platform JDT Enablement(org_eclipse_datatools_enablement_jdt_feature)
+	:o Data Tools Platform Enablement for Microsoft(org_eclipse_datatools_enablement_msft_feature)
+	:o Data Tools Platform Enablement for MySQL(org_eclipse_datatools_enablement_mysql_feature)
+	:o Data Tools Platform Enablement for ODA Designer(org_eclipse_datatools_enablement_oda_designer_feature)
+	:o Data Tools Platform Enablement for ODA Runtime(org_eclipse_datatools_enablement_oda_feature)
+	:o Data Tools Platform Enablement for Oracle(org_eclipse_datatools_enablement_oracle_feature)
+	:o Data Tools Platform Enablement for PostgreSQL(org_eclipse_datatools_enablement_postgresql_feature)
+	:o Data Tools Platform Enablement for SAP MaxDB(org_eclipse_datatools_enablement_sap_feature)
+	:o Data Tools Platform Enablement for Sqlite(org_eclipse_datatools_enablement_sqlite_feature)
+	:o Data Tools Platform Enablement for Sybase(org_eclipse_datatools_enablement_sybase_feature)
+	:o Data Tools Platform Intro(org_eclipse_datatools_intro)
+	:o Data Tools Platform Model Base(org_eclipse_datatools_modelbase_feature)
+	:o Data Tools Platform SQL Development Tools Data Functions(org_eclipse_datatools_sqldevtools_data_feature)
+	:o Data Tools Platform SQL Development Tools DDL Functionality(org_eclipse_datatools_sqldevtools_ddl_feature)
+	:o Data Tools Platform SQL Development Tools DDL Generation Functionality(org_eclipse_datatools_sqldevtools_ddlgen_feature)
+	:o Data Tools Platform SQL Development Tools(org_eclipse_datatools_sqldevtools_feature)
+	:o Data Tools Platform SQL Parsers(org_eclipse_datatools_sqldevtools_parsers_feature)
+	:o Data Tools Platform SQL Development Tools Results View(org_eclipse_datatools_sqldevtools_results_feature)
+	:o Data Tools Platform SQL Schema Object Editor Feature(org_eclipse_datatools_sqldevtools_schemaobjecteditor_feature)
+	:o Data Tools Platform SQL Query Builder(org_eclipse_datatools_sqldevtools_sqlbuilder_feature)
+	:o Data Tools Platform SQL Dev Tools Documentation(org_eclipse_datatools_sqltools_doc_user)
+	:o Graphical Editing Framework Draw2d SDK(org_eclipse_draw2d_sdk)
+	:o Graphical Editing Framework Draw2d Source Feature(org_eclipse_draw2d_source)
+	:o Graphical Editing Framework Draw2d(org_eclipse_draw2d)
+	:o Eclipse e4 Rich Client Platform Developer Resources(org_eclipse_e4_rcp_source)
+	:o Eclipse e4 Rich Client Platform(org_eclipse_e4_rcp)
+	:o Task focused interface for Eclipse Git Team Provider(org_eclipse_egit_mylyn)
+	:o Eclipse Git Team Provider(org_eclipse_egit)
+	:o CDO Model Repository Client Compare Integration(org_eclipse_emf_cdo_compare)
+	:o CDO Model Repository Documentation(org_eclipse_emf_cdo_doc)
+	:o CDO Model Repository EPP(org_eclipse_emf_cdo_epp)
+	:o Source for CDO Model Repository Examples Installer(org_eclipse_emf_cdo_examples_installer_source)
+	:o CDO Model Repository Examples Installer(org_eclipse_emf_cdo_examples_installer)
+	:o CDO Model Repository Server DB Store(org_eclipse_emf_cdo_server_db)
+	:o CDO Model Repository Server(org_eclipse_emf_cdo_server)
+	:o CDO Model Repository Client(org_eclipse_emf_cdo)
+	:o Source for EMF Ecore Code Generator(org_eclipse_emf_codegen_ecore_source)
+	:o Source for EMF Ecore Code Generator UI(org_eclipse_emf_codegen_ecore_ui_source)
+	:o EMF Ecore Code Generator UI(org_eclipse_emf_codegen_ecore_ui)
+	:o EMF Ecore Code Generator(org_eclipse_emf_codegen_ecore)
+	:o Source for EMF Code Generation(org_eclipse_emf_codegen_source)
+	:o Source for EMF Code Generation UI(org_eclipse_emf_codegen_ui_source)
+	:o EMF Code Generation UI(org_eclipse_emf_codegen_ui)
+	:o EMF Code Generation(org_eclipse_emf_codegen)
+	:o Source for EMF Common UI(org_eclipse_emf_common_ui_source)
+	:o EMF Common UI(org_eclipse_emf_common_ui)
+	:o EMF Common(org_eclipse_emf_common)
+	:o EMF Compare GMF Integration(org_eclipse_emf_compare_diagram_gmf)
+	:o EMF Compare IDE UI SDK(org_eclipse_emf_compare_ide_ui_source)
+	:o EMF Compare IDE UI(org_eclipse_emf_compare_ide_ui)
+	:o EMF Compare Core SDK(org_eclipse_emf_compare_source)
+	:o EMF Compare UML2 Integration(org_eclipse_emf_compare_uml2)
+	:o EMF Compare Core(org_eclipse_emf_compare)
+	:o Source for EMF Model Converter(org_eclipse_emf_converter_source)
+	:o EMF Model Converter(org_eclipse_emf_converter)
+	:o Source for EMF Edit Data Binding(org_eclipse_emf_databinding_edit_source)
+	:o EMF Edit Data Binding(org_eclipse_emf_databinding_edit)
+	:o Source for EMF Data Binding(org_eclipse_emf_databinding_source)
+	:o EMF Data Binding(org_eclipse_emf_databinding)
+	:o Source for EMF Documentation(org_eclipse_emf_doc_source)
+	:o EMF Documentation(org_eclipse_emf_doc)
+	:o Source for EMF Ecore Edit(org_eclipse_emf_ecore_edit_source)
+	:o Source for EMF Sample Ecore Editor(org_eclipse_emf_ecore_editor_source)
+	:o EMF Sample Ecore Editor(org_eclipse_emf_ecore_editor)
+	:o EMF Ecore Edit(org_eclipse_emf_ecore_edit)
+	:o Diagram Editor for Ecore SDK(org_eclipse_emf_ecoretools_sdk)
+	:o Diagram Editor for Ecore(org_eclipse_emf_ecoretools)
+	:o EMF - Eclipse Modeling Framework Core Runtime(org_eclipse_emf_ecore)
+	:o Source for EMF Edit(org_eclipse_emf_edit_source)
+	:o Source for EMF Edit UI(org_eclipse_emf_edit_ui_source)
+	:o EMF Edit UI(org_eclipse_emf_edit_ui)
+	:o EMF Edit(org_eclipse_emf_edit)
+	:o Extended Editing Framework - EMF Edit generation using Acceleo(org_eclipse_emf_eef_codegen_ecore666666feature)
+	:o Source for EMF Ecore Mapping Editor(org_eclipse_emf_mapping_ecore_editor_source)
+	:o EMF Ecore Mapping Editor(org_eclipse_emf_mapping_ecore_editor)
+	:o Source for EMF Ecore Mapping(org_eclipse_emf_mapping_ecore_source)
+	:o EMF Ecore Mapping(org_eclipse_emf_mapping_ecore)
+	:o Source for EMF Mapping(org_eclipse_emf_mapping_source)
+	:o Source for EMF Mapping UI(org_eclipse_emf_mapping_ui_source)
+	:o EMF Mapping UI(org_eclipse_emf_mapping_ui)
+	:o EMF Mapping(org_eclipse_emf_mapping)
+	:o MWE Core (org_eclipse_emf_mwe_core)
+	:o MWE UI (org_eclipse_emf_mwe_ui)
+	:o EMF Model Query Documentation(org_eclipse_emf_query_doc)
+	:o EMF Model Query OCL Integration Source(org_eclipse_emf_query_ocl_source)
+	:o EMF Model Query OCL Integration(org_eclipse_emf_query_ocl)
+	:o EMF Model Query SDK(org_eclipse_emf_query_sdk)
+	:o EMF Model Query Source(org_eclipse_emf_query_source)
+	:o EMF Model Query(org_eclipse_emf_query)
+	:o EMF - Eclipse Modeling Framework SDK(org_eclipse_emf_sdk)
+	:o Source for EMF - Eclipse Modeling Framework Runtime and Tools(org_eclipse_emf_source)
+	:o EMF Model Transaction Documentation(org_eclipse_emf_transaction_doc)
+	:o EMF Model Transaction SDK(org_eclipse_emf_transaction_sdk)
+	:o EMF Model Transaction Source(org_eclipse_emf_transaction_source)
+	:o EMF Model Transaction(org_eclipse_emf_transaction)
+	:o EMF Validation Framework Documentation(org_eclipse_emf_validation_doc)
+	:o EMF Validation Framework OCL Integration Source(org_eclipse_emf_validation_ocl_source)
+	:o EMF Validation Framework OCL Integration(org_eclipse_emf_validation_ocl)
+	:o EMF Validation Framework SDK(org_eclipse_emf_validation_sdk)
+	:o EMF Validation Framework Source(org_eclipse_emf_validation_source)
+	:o EMF Validation Framework(org_eclipse_emf_validation)
+	:o EMF Model Transaction Workbench Integration Documentation(org_eclipse_emf_workspace_doc)
+	:o EMF Model Transaction Workbench Integration Source(org_eclipse_emf_workspace_source)
+	:o EMF Model Transaction Workbench Integration(org_eclipse_emf_workspace)
+	:o EMF - Eclipse Modeling Framework Runtime and Tools(org_eclipse_emf)
+	:o Marketplace Client(org_eclipse_epp_mpc)
+	:o EPP Automotive Feature(org_eclipse_epp_package_automotive_feature)
+	:o EPP Common Package Feature(org_eclipse_epp_package_common_feature)
+	:o EPP CPP Feature(org_eclipse_epp_package_cpp_feature)
+	:o EPP Java Package(org_eclipse_epp_package_java_feature)
+	:o Java EE IDE Feature(org_eclipse_epp_package_jee_feature)
+	:o EPP Modeling Feature(org_eclipse_epp_package_modeling_feature)
+	:o EPP Parallel Feature(org_eclipse_epp_package_parallel_feature)
+	:o EPP RCP/RAP Feature(org_eclipse_epp_package_rcp_feature)
+	:o EPP Reporting Feature(org_eclipse_epp_package_reporting_feature)
+	:o EPP Scout Feature(org_eclipse_epp_package_scout_feature)
+	:o Eclipse Standard/SDK Feature(org_eclipse_epp_package_standard_feature)
+	:o EPP Testing Feature(org_eclipse_epp_package_testing_feature)
+	:o Equinox p2 Core Function Source(org_eclipse_equinox_p2_core_feature_source)
+	:o Equinox p2 Core Function(org_eclipse_equinox_p2_core_feature)
+	:o Equinox p2 Discovery(org_eclipse_equinox_p2_discovery_feature)
+	:o Equinox p2 RCP Management Facilities(org_eclipse_equinox_p2_extras_feature_source)
+	:o Add-on Function for p2(org_eclipse_equinox_p2_extras_feature)
+	:o Equinox p2 RCP Management Facilities Source(org_eclipse_equinox_p2_rcp_feature_source)
+	:o Equinox p2 RCP Management Facilities(org_eclipse_equinox_p2_rcp_feature)
+	:o Eclipse p2 Provisioning Developer Resources(org_eclipse_equinox_p2_user_ui_source)
+	:o Equinox p2 Provisioning for IDEs.(org_eclipse_equinox_p2_user_ui)
+	:o Graphical Editing Framework GEF SDK(org_eclipse_gef_sdk)
+	:o Graphical Editing Framework GEF Source Feature(org_eclipse_gef_source)
+	:o Graphical Editing Framework GEF(org_eclipse_gef)
+	:o Graphical Modeling Framework GMF Runtime Plug-in Examples(org_eclipse_gmf_examples_runtime_ui_pde)
+	:o Graphical Modeling Framework GMF Notation SDK(org_eclipse_gmf_runtime_notation_sdk)
+	:o Graphical Modeling Framework GMF Notation Sources(org_eclipse_gmf_runtime_notation_source)
+	:o Graphical Modeling Framework GMF Notation(org_eclipse_gmf_runtime_notation)
+	:o Graphical Modeling Framework GMF Runtime SDK(org_eclipse_gmf_runtime_sdk)
+	:o Graphical Modeling Framework GMF Runtime Third-Party Component Sources (org_eclipse_gmf_runtime_thirdparty_source)
+	:o Graphical Modeling Framework GMF Runtime Third-Party Components (org_eclipse_gmf_runtime_thirdparty)
+	:o Graphical Modeling Framework GMF Runtime Sources(org_eclipse_gmf_source)
+	:o Graphical Modeling Framework GMF Runtime(org_eclipse_gmf)
+	:o Graphiti Incubation(org_eclipse_graphiti_feature)
+	:o Eclipse Help Developer Resources(org_eclipse_help_source)
+	:o Eclipse Help System(org_eclipse_help)
+	:o Eclipse JDT Plug-in Developer Resources(org_eclipse_jdt_source)
+	:o Eclipse Java Development Tools(org_eclipse_jdt)
+	:o Java implementation of Git(org_eclipse_jgit)
+	:o Dali Java Persistence Tools - EclipseLink Common(org_eclipse_jpt_common_eclipselink_feature)
+	:o Dali Java Persistence Tools - Common(org_eclipse_jpt_common_feature)
+	:o Dali Java Persistence Tools - EclipseLink DBWS Support(org_eclipse_jpt_dbws_eclipselink_feature)
+	:o Dali Java Persistence Tools - EclipseLink JAXB Support(org_eclipse_jpt_jaxb_eclipselink_feature)
+	:o Dali Java Persistence Tools - JAXB Support(org_eclipse_jpt_jaxb_feature)
+	:o Dali Java Persistence Tools - EclipseLink JPA Support(org_eclipse_jpt_jpa_eclipselink_feature)
+	:o Dali Java Persistence Tools - JPA Support(org_eclipse_jpt_jpa_feature)
+	:o JSF Tools(org_eclipse_jsf_feature)
+	:o Eclipse Faceted Project Framework JDT Enablement(org_eclipse_jst_common_fproj_enablement_jdt)
+	:o JST Enterprise Core(org_eclipse_jst_enterprise_core_feature)
+	:o Eclipse Java EE Developer Tools(org_eclipse_jst_enterprise_ui_feature)
+	:o JST Enterprise User Documentation(org_eclipse_jst_enterprise_userdoc_feature)
+	:o JSF Tools - Tag Library Metadata Apache Trinidad(org_eclipse_jst_jsf_apache_trinidad_tagsupport_feature)
+	:o JST Server Adapters Extensions(org_eclipse_jst_server_adapters_ext_feature)
+	:o JST Server Adapters(org_eclipse_jst_server_adapters_feature)
+	:o JST Server Core(org_eclipse_jst_server_core_feature)
+	:o JST Server UI(org_eclipse_jst_server_ui_feature)
+	:o JST Server User Documentation(org_eclipse_jst_server_userdoc_feature)
+	:o JSF Tools - Web Page Editor(org_eclipse_jst_webpageeditor_feature)
+	:o Eclipse Java Web Development Core(org_eclipse_jst_web_core_feature)
+	:o Eclipse Java Web Developer Tools(org_eclipse_jst_web_ui_feature)
+	:o Eclipse Java Web Developer Tools User Documentation(org_eclipse_jst_web_userdoc_feature)
+	:o Axis2 Tools(org_eclipse_jst_ws_axis2tools_feature)
+	:o CXF Web Services(org_eclipse_jst_ws_cxf_feature)
+	:o JAX-WS DOM Tools(org_eclipse_jst_ws_jaxws_dom_feature)
+	:o JAX-WS Tools(org_eclipse_jst_ws_jaxws_feature)
+	:o JAX-WS Tools User Documentation(org_eclipse_jst_ws_jaxws_userdoc_feature)
+	:o Jubula Functional Testing(org_eclipse_jubula_feature)
+	:o Library Hover help for devhelp documentation(org_eclipse_linuxtools_cdt_libhover_devhelp_feature)
+	:o C/C++ Library API Documentation Hover Help(org_eclipse_linuxtools_cdt_libhover_feature)
+	:o ChangeLog Management Tools for C/C++(org_eclipse_linuxtools_changelog_c)
+	:o CTF - Common Trace Format(org_eclipse_linuxtools_ctf)
+	:o GCov Integration(org_eclipse_linuxtools_gcov)
+	:o GDB Tracepoint Analysis(org_eclipse_linuxtools_gdbtrace)
+	:o GProf Integration(org_eclipse_linuxtools_gprof_feature)
+	:o LTTng Kernel Analysis(org_eclipse_linuxtools_lttng2_kernel)
+	:o LTTng - Linux Tracing Toolkit(org_eclipse_linuxtools_lttng2)
+	:o RPM Import/Export/Building and Editing Tool(org_eclipse_linuxtools_rpm)
+	:o TMF - Tracing and Monitoring Framework(org_eclipse_linuxtools_tmf)
+	:o m2e - Maven Integration for Eclipse(org_eclipse_m2e_feature)
+	:o m2e - slf4j over logback logging Optional(org_eclipse_m2e_logback_feature)
+	:o m2e-wtp - Maven Integration for WTP(org_eclipse_m2e_wtp_feature)
+	:o m2e-wtp - JAX-RS configurator for WTP Optional(org_eclipse_m2e_wtp_jaxrs_feature)
+	:o m2e-wtp - JPA configurator for WTP Optional(org_eclipse_m2e_wtp_jpa_feature)
+	:o m2e-wtp - JSF configurator for WTP Optional(org_eclipse_m2e_wtp_jsf_feature)
+	:o Mylyn Tasks Connector: Bugzilla(org_eclipse_mylyn_bugzilla_feature)
+	:o Mylyn Builds(org_eclipse_mylyn_builds)
+	:o Mylyn Commons Identity(org_eclipse_mylyn_commons_identity)
+	:o Mylyn Commons Notifications(org_eclipse_mylyn_commons_notifications)
+	:o Mylyn Commons Repositories HTTP Transport(org_eclipse_mylyn_commons_repositories_http)
+	:o Mylyn Commons Repositories(org_eclipse_mylyn_commons_repositories)
+	:o Mylyn Commons(org_eclipse_mylyn_commons)
+	:o Mylyn Task-Focused Interface(org_eclipse_mylyn_context_feature)
+	:o Mylyn Versions Connector: CVS(org_eclipse_mylyn_cvs)
+	:o Mylyn Commons Connector: Discovery(org_eclipse_mylyn_discovery)
+	:o Mylyn Reviews Connector: Gerrit(org_eclipse_mylyn_gerrit_feature)
+	:o Mylyn Versions Connector: Git(org_eclipse_mylyn_git)
+	:o Mylyn Builds Connector: Hudson/Jenkins(org_eclipse_mylyn_hudson)
+	:o Mylyn Context Connector: Eclipse IDE(org_eclipse_mylyn_ide_feature)
+	:o Mylyn Context Connector: Java Development(org_eclipse_mylyn_java_feature)
+	:o Mylyn Commons Connector: Monitor(org_eclipse_mylyn_monitor)
+	:o Mylyn Context Connector: Plug-in Development(org_eclipse_mylyn_pde_feature)
+	:o Mylyn Reviews(org_eclipse_mylyn_reviews_feature)
+	:o Mylyn Tasks Connector: Eclipse IDE(org_eclipse_mylyn_tasks_ide)
+	:o Mylyn Context Connector: Team Support(org_eclipse_mylyn_team_feature)
+	:o Mylyn Versions(org_eclipse_mylyn_versions)
+	:o Mylyn WikiText(org_eclipse_mylyn_wikitext_feature)
+	:o Mylyn Task List(org_eclipse_mylyn_feature)
+	:o Net4j DB Framework H2 Adapter(org_eclipse_net4j_db_h2)
+	:o Net4j DB Framework(org_eclipse_net4j_db)
+	:o Source for Net4j Signalling Platform Examples Installer(org_eclipse_net4j_examples_installer_source)
+	:o Net4j Signalling Platform Examples Installer(org_eclipse_net4j_examples_installer)
+	:o Net4j Utilities UI(org_eclipse_net4j_util_ui)
+	:o Net4j Utilities(org_eclipse_net4j_util)
+	:o Net4j Signalling Platform Runtime(org_eclipse_net4j)
+	:o OCL End User SDK(org_eclipse_ocl_all_sdk)
+	:o OCL Runtime Features(org_eclipse_ocl_all)
+	:o OCL Core SDK(org_eclipse_ocl_core_sdk)
+	:o Source for OCL Documentation(org_eclipse_ocl_doc_source)
+	:o OCL Documentation(org_eclipse_ocl_doc)
+	:o Source for OCL EMF Edit Support(org_eclipse_ocl_edit_source)
+	:o OCL EMF Edit Support(org_eclipse_ocl_edit)
+	:o Source for OCL for Ecore Parser and Interpreter(org_eclipse_ocl_source)
+	:o Source for OCL User Interface(org_eclipse_ocl_ui_source)
+	:o OCL User Interface(org_eclipse_ocl_ui)
+	:o Source for OCL for UML Parser and Interpreter(org_eclipse_ocl_uml_source)
+	:o OCL for UML Parser and Interpreter(org_eclipse_ocl_uml)
+	:o OCL for Ecore Parser and Interpreter(org_eclipse_ocl)
+	:o Eclipse PDE Plug-in Developer Resources(org_eclipse_pde_source)
+	:o Eclipse Plug-in Development Environment(org_eclipse_pde)
+	:o EclipseLink JPA(org_eclipse_persistence_jpa)
+	:o EclipseLink MOXy(org_eclipse_persistence_moxy)
+	:o EclipseLink SDO(org_eclipse_persistence_sdo)
+	:o Linux IntelR Fortran Compiler Support(org_eclipse_photran_intel)
+	:o IBM XL Fortran Compiler Support(org_eclipse_photran_xlf)
+	:o Fortran Development Tools Photran(org_eclipse_photran)
+	:o Eclipse Platform Plug-in Developer Resources(org_eclipse_platform_source)
+	:o Eclipse Platform(org_eclipse_platform)
+	:o PTP Core Components(org_eclipse_ptp_core)
+	:o PTP Scalable Debug Manager SDM(org_eclipse_ptp_debug_sdm)
+	:o PTP External Tools Framework TAU Extension for Fortran(org_eclipse_ptp_etfw_tau_fortran)
+	:o PTP External Tools Framework(org_eclipse_ptp_etfw)
+	:o PTP Fortran Support(org_eclipse_ptp_fortran)
+	:o PTP Parallel Language Development Tools Fortran Support(org_eclipse_ptp_pldt_fortran)
+	:o PTP Parallel Language Development Tools UPC Support(org_eclipse_ptp_pldt_upc)
+	:o PTP Parallel Language Development Tools(org_eclipse_ptp_pldt)
+	:o PTP RDT Remote Tools Support(org_eclipse_ptp_rdt_remotetools)
+	:o PTP CDT Project Synchronization Support(org_eclipse_ptp_rdt_sync_cdt)
+	:o PTP Fortran Project Synchronization Support(org_eclipse_ptp_rdt_sync_fortran)
+	:o PTP Remote Project Synchronization Support(org_eclipse_ptp_rdt_sync)
+	:o PTP RDT XL C/C++ Compiler Support(org_eclipse_ptp_rdt_xlc)
+	:o PTP Remote Development Tools RDT(org_eclipse_ptp_rdt)
+	:o PTP Remote Tools Adapter(org_eclipse_ptp_remote_remotetools)
+	:o PTP Remote System Explorer Adapter(org_eclipse_ptp_remote_rse)
+	:o PTP Remote Terminal Support(org_eclipse_ptp_remote_terminal)
+	:o PTP Remote Tools Services(org_eclipse_ptp_remotetools)
+	:o PTP Remote Services(org_eclipse_ptp_remote)
+	:o PTP Resource Manager for IBM LoadLeveler(org_eclipse_ptp_rm_ibm_ll)
+	:o PTP Resource Manager for IBM Parallel Environment(org_eclipse_ptp_rm_ibm_pe)
+	:o PTP Target System Configuration for IBM Platform LSF(org_eclipse_ptp_rm_ibm_platform_lsf)
+	:o PTP Contributed Target System Configurations(org_eclipse_ptp_rm_jaxb_contrib)
+	:o PTP Resource Manager for SLURM(org_eclipse_ptp_rm_slurm)
+	:o Parallel Tools Platform(org_eclipse_ptp)
+	:o RAP Tools(org_eclipse_rap_tools_feature)
+	:o Eclipse Product Configuration(org_eclipse_rcp_configuration)
+	:o Eclipse RCP Plug-in Developer Resources(org_eclipse_rcp_source)
+	:o Eclipse RCP(org_eclipse_rcp)
+	:o Code Recommenders: 3rd Party Dependencies on Orbit(org_eclipse_recommenders_feature_3rd_orbit)
+	:o Code Recommenders: 3rd Party Dependencies not hosted on Orbit(org_eclipse_recommenders_feature_3rd_rcp_nonorbit)
+	:o Code Recommenders: Chain Completion(org_eclipse_recommenders_feature_completion_rcp_chain)
+	:o Code Recommenders: Intelligent Completion(org_eclipse_recommenders_feature_completion_rcp_intellig)
+	:o Code Recommenders: Subwords Completion(org_eclipse_recommenders_feature_completion_rcp_subwords)
+	:o Code Recommenders: Extended Documentation Platform(org_eclipse_recommenders_feature_extdoc_rcp)
+	:o Code Recommenders: Core Runtime(org_eclipse_recommenders_feature_rcp_core)
+	:o Code Recommenders Developer Tools(org_eclipse_recommenders_feature_rcp)
+	:o Rephraser Engine End-User Runtime(org_eclipse_rephraserengine)
+	:o RSE Core(org_eclipse_rse_core)
+	:o RSE DStore Services(org_eclipse_rse_dstore)
+	:o RSE FTP Service(org_eclipse_rse_ftp)
+	:o RSE Local Services(org_eclipse_rse_local)
+	:o RSE SSH Services(org_eclipse_rse_ssh)
+	:o RSE Telnet Service(org_eclipse_rse_telnet)
+	:o RSE Terminals UI(org_eclipse_rse_terminals)
+	:o Remote System Explorer User Actions(org_eclipse_rse_useractions)
+	:o Remote System Explorer End-User Runtime(org_eclipse_rse)
+	:o Eclipse Scout Runtime Client(org_eclipse_scout_rt_client_source)
+	:o Eclipse Scout Runtime Client Binary only(org_eclipse_scout_rt_client)
+	:o Eclipse Scout Runtime Core(org_eclipse_scout_rt_core_source)
+	:o Eclipse Scout Runtime Core Binary only(org_eclipse_scout_rt_core)
+	:o Eclipse Scout RAP Target(org_eclipse_scout_rt_rap_target)
+	:o Eclipse Scout Runtime(org_eclipse_scout_rt_source)
+	:o Eclipse Scout Runtime Swing(org_eclipse_scout_rt_swing_source)
+	:o Eclipse Scout Runtime Swing Binary only(org_eclipse_scout_rt_swing)
+	:o Eclipse Scout Runtime SWT(org_eclipse_scout_rt_swt_source)
+	:o Eclipse Scout Runtime SWT Binary only(org_eclipse_scout_rt_swt)
+	:o Eclipse Scout Runtime Testing Core(org_eclipse_scout_rt_testing_core_source)
+	:o Eclipse Scout Runtime Testing Core Binary only(org_eclipse_scout_rt_testing_core)
+	:o Eclipse Scout Runtime Testing(org_eclipse_scout_rt_testing_source)
+	:o Eclipse Scout Runtime Testing Swing(org_eclipse_scout_rt_testing_swing_source)
+	:o Eclipse Scout Runtime Testing Swing Binary only(org_eclipse_scout_rt_testing_swing)
+	:o Eclipse Scout Runtime Testing SWT(org_eclipse_scout_rt_testing_swt_source)
+	:o Eclipse Scout Runtime Testing SWT Binary only(org_eclipse_scout_rt_testing_swt)
+	:o Eclipse Scout Runtime Testing Binary only(org_eclipse_scout_rt_testing)
+	:o Eclipse Scout Runtime Binary only(org_eclipse_scout_rt)
+	:o Eclipse Scout SDK RAP(org_eclipse_scout_sdk_rap_source)
+	:o Eclipse Scout SDK RAP Binary only(org_eclipse_scout_sdk_rap)
+	:o Eclipse Scout SDK(org_eclipse_scout_sdk_source)
+	:o Eclipse Scout SDK Binary only(org_eclipse_scout_sdk)
+	:o Eclipse Scout(org_eclipse_scout)
+	:o Eclipse Project SDK(org_eclipse_sdk)
+	:o Target Management Terminal SSH Connector(org_eclipse_tm_terminal_ssh)
+	:o Target Management Terminal Telnet Connector(org_eclipse_tm_terminal_telnet)
+	:o Target Management Terminal View(org_eclipse_tm_terminal_view)
+	:o Target Management Terminal Widget(org_eclipse_tm_terminal)
+	:o UML2 Documentation(org_eclipse_uml2_doc)
+	:o Source for UML2 Examples(org_eclipse_uml2_examples_source)
+	:o UML2 Examples(org_eclipse_uml2_examples)
+	:o UML2 Extender SDK(org_eclipse_uml2_sdk)
+	:o Source for UML2 End-User Features(org_eclipse_uml2_source)
+	:o UML2 End-User Features(org_eclipse_uml2)
+	:o WindowBuilder Core(org_eclipse_wb_core_feature)
+	:o WindowBuilder Java Core(org_eclipse_wb_core_java_feature)
+	:o WindowBuilder Core UI(org_eclipse_wb_core_ui_feature)
+	:o WindowBuilder GroupLayout Support(org_eclipse_wb_layout_group_feature)
+	:o SWT Designer(org_eclipse_wb_rcp_feature)
+	:o Swing Designer(org_eclipse_wb_swing_feature)
+	:o SWT Designer Core(org_eclipse_wb_swt_feature)
+	:o Eclipse Faceted Project Framework(org_eclipse_wst_common_fproj)
+	:o WST Common Core(org_eclipse_wst_common_core_feature)
+	:o WST Common UI(org_eclipse_wst_common_ui_feature)
+	:o JavaScript Development Tools (org_eclipse_wst_jsdt_feature)
+	:o WST Server Adapters(org_eclipse_wst_server_adapters_feature)
+	:o WST Server Core(org_eclipse_wst_server_core_feature)
+	:o WST Server UI(org_eclipse_wst_server_ui_feature)
+	:o WST Server User Documentation(org_eclipse_wst_server_userdoc_feature)
+	:o WST Web Core(org_eclipse_wst_web_core_feature)
+	:o Eclipse Web Developer Tools(org_eclipse_wst_web_ui_feature)
+	:o WST Web User Documentation(org_eclipse_wst_web_userdoc_feature)
+	:o WST Web Services Core(org_eclipse_wst_ws_core_feature)
+	:o Web Services Tools(org_eclipse_wst_ws_ui_feature)
+	:o WST Web Services User Documentation(org_eclipse_wst_ws_userdoc_feature)
+	:o WSDL 1.5 Feature(org_eclipse_wst_ws_wsdl15_feature)
+	:o PscyhoPath XPath 2.0 Processor Feature(org_eclipse_wst_xml_xpath2_processor_feature)
+	:o WST XML Core(org_eclipse_wst_xml_core_feature)
+	:o Eclipse XML Editors and Tools(org_eclipse_wst_xml_ui_feature)
+	:o WST XML User Documentation(org_eclipse_wst_xml_userdoc_feature)
+	:o Eclipse XSL Developer Tools(org_eclipse_wst_xsl_feature)
+	:o Xpand UI (org_eclipse_xpand_ui)
+	:o Xpand (org_eclipse_xpand)
+	:o Source for XSD Documentation(org_eclipse_xsd_doc_source)
+	:o XSD Documentation(org_eclipse_xsd_doc)
+	:o Source for XSD Ecore Converter(org_eclipse_xsd_ecore_converter_source)
+	:o XSD Ecore Converter(org_eclipse_xsd_ecore_converter)
+	:o Source for XSD Edit(org_eclipse_xsd_edit_source)
+	:o Source for XSD Sample Editor(org_eclipse_xsd_editor_source)
+	:o XSD Sample Editor(org_eclipse_xsd_editor)
+	:o XSD Edit(org_eclipse_xsd_edit)
+	:o Source for XSD Mapping Editor(org_eclipse_xsd_mapping_editor_source)
+	:o XSD Mapping Editor(org_eclipse_xsd_mapping_editor)
+	:o Source for XSD Mapping(org_eclipse_xsd_mapping_source)
+	:o XSD Mapping(org_eclipse_xsd_mapping)
+	:o XSD - XML Schema Definition SDK(org_eclipse_xsd_sdk)
+	:o Source for XSD - XML Schema Definition Model(org_eclipse_xsd_source)
+	:o XSD - XML Schema Definition Model(org_eclipse_xsd)
+	:o Xtend Dependencies (org_eclipse_xtend_dependencies)
+	:o Xtend EMF typesystem (org_eclipse_xtend_typesystem_emf)
+	:o Xtend UML2 typesystem (org_eclipse_xtend_typesystem_uml2)
+	:o Xtend XSD typesystem (org_eclipse_xtend_typesystem_xsd)
+	:o Xtend UI (org_eclipse_xtend_ui)
+	:o Xtend (org_eclipse_xtend)
+	:o Xtext Runtime (org_eclipse_xtext_runtime)
+	:o Xtext UI (org_eclipse_xtext_ui)
+	:o Xbase Library(org_eclipse_xtext_xbase_lib)
+	:o Xbase (org_eclipse_xtext_xbase)
+	:o Xtext Xtext UI (org_eclipse_xtext_xtext_ui)
+	:o m2e connector for mavenarchiver pom properties(org_sonatype_m2e_mavenarchiver_feature)
 </feature_tree>
 <constraints>
-constraint_1:~FeatureIDE or Feature Modeling (required)
-constraint_2:~Eclipse CVS Client Resources or Eclipse CVS Client
-constraint_3:~Eclipse CVS Client or Eclipse Platform
-constraint_4:~Graphical Editing Framework Draw2d SDK or Graphical Editing Framework Draw2d
-constraint_5:~Graphical Editing Framework Draw2d SDK or Graphical Editing Framework Draw2d Source Feature
-constraint_6:~Eclipse e4 Rich Client Platform Developer Resources or Eclipse e4 Rich Client Platform
-constraint_7:~Eclipse e4 Rich Client Platform or EMF Common
-constraint_8:~Eclipse e4 Rich Client Platform or EMF - Eclipse Modeling Framework Core Runtime
-constraint_9:~Eclipse Git Team Provider or Java implementation of Git
-constraint_10:~CDO Model Repository EPP or CDO Model Repository Client
-constraint_11:~CDO Model Repository EPP or CDO Model Repository Server
-constraint_12:~CDO Model Repository EPP or Net4j Signalling Platform Runtime
-constraint_13:~CDO Model Repository EPP or Net4j DB Framework
-constraint_14:~CDO Model Repository EPP or Net4j DB Framework H2 Adapter
-constraint_15:~CDO Model Repository EPP or CDO Model Repository Server DB Store
-constraint_16:~CDO Model Repository EPP or CDO Model Repository Examples Installer
-constraint_17:~CDO Model Repository EPP or Net4j Signalling Platform Examples Installer
-constraint_18:~CDO Model Repository EPP or CDO Model Repository Client (Compare Integration)
-constraint_19:~CDO Model Repository EPP or CDO Model Repository Documentation
-constraint_20:~CDO Model Repository Examples Installer or Source for CDO Model Repository Examples Installer
-constraint_21:~EMF Compare IDE UI SDK or EMF Compare IDE UI
-constraint_22:~EMF Compare IDE UI or EMF Compare Core
-constraint_23:~EMF Compare Core SDK or EMF Compare Core
-constraint_24:~Diagram Editor for Ecore (SDK) or Diagram Editor for Ecore
-constraint_25:~EMF Model Query SDK or EMF Model Query
-constraint_26:~EMF Model Query SDK or EMF Model Query OCL Integration
-constraint_27:~EMF Model Query SDK or EMF Model Query Documentation
-constraint_28:~EMF Model Query SDK or EMF Model Query Source
-constraint_29:~EMF Model Query SDK or EMF Model Query OCL Integration Source
-constraint_30:~EMF - Eclipse Modeling Framework SDK or EMF - Eclipse Modeling Framework Runtime and Tools
-constraint_31:~EMF - Eclipse Modeling Framework SDK or Source for EMF - Eclipse Modeling Framework Runtime and Tools
-constraint_32:~EMF - Eclipse Modeling Framework SDK or EMF Documentation
-constraint_33:~EMF - Eclipse Modeling Framework SDK or Source for EMF Documentation
-constraint_34:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Mapping UI
-constraint_35:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Data Binding
-constraint_36:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Edit Data Binding
-constraint_37:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Ecore Mapping
-constraint_38:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Code Generation UI
-constraint_39:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Code Generation
-constraint_40:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Model Converter
-constraint_41:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Sample Ecore Editor
-constraint_42:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Ecore Code Generator
-constraint_43:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Edit
-constraint_44:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Edit UI
-constraint_45:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Ecore Mapping Editor
-constraint_46:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Common UI
-constraint_47:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Mapping
-constraint_48:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Ecore Code Generator UI
-constraint_49:~Source for EMF - Eclipse Modeling Framework Runtime and Tools or Source for EMF Ecore Edit
-constraint_50:~EMF Model Transaction SDK or EMF Validation Framework SDK
-constraint_51:~EMF Model Transaction SDK or EMF Model Query SDK
-constraint_52:~EMF Model Transaction SDK or EMF Model Transaction
-constraint_53:~EMF Model Transaction SDK or EMF Model Transaction Documentation
-constraint_54:~EMF Model Transaction SDK or EMF Model Transaction Workbench Integration
-constraint_55:~EMF Model Transaction SDK or EMF Model Transaction Workbench Integration Documentation
-constraint_56:~EMF Model Transaction SDK or EMF Model Transaction Source
-constraint_57:~EMF Model Transaction SDK or EMF Model Transaction Workbench Integration Source
-constraint_58:~EMF Validation Framework SDK or EMF - Eclipse Modeling Framework SDK
-constraint_59:~EMF Validation Framework SDK or OCL Core SDK
-constraint_60:~EMF Validation Framework SDK or EMF Validation Framework
-constraint_61:~EMF Validation Framework SDK or EMF Validation Framework OCL Integration
-constraint_62:~EMF Validation Framework SDK or EMF Validation Framework Documentation
-constraint_63:~EMF Validation Framework SDK or EMF Validation Framework Source
-constraint_64:~EMF Validation Framework SDK or EMF Validation Framework OCL Integration Source
-constraint_65:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Common
-constraint_66:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Common UI
-constraint_67:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF - Eclipse Modeling Framework Core Runtime
-constraint_68:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Edit
-constraint_69:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Edit UI
-constraint_70:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Ecore Edit
-constraint_71:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Sample Ecore Editor
-constraint_72:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Code Generation
-constraint_73:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Code Generation UI
-constraint_74:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Ecore Code Generator
-constraint_75:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Ecore Code Generator UI
-constraint_76:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Model Converter
-constraint_77:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Data Binding
-constraint_78:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Edit Data Binding
-constraint_79:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Mapping
-constraint_80:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Ecore Mapping
-constraint_81:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Mapping UI
-constraint_82:~EMF - Eclipse Modeling Framework Runtime and Tools or EMF Ecore Mapping Editor
-constraint_83:~Marketplace Client or Equinox p2 Discovery
-constraint_84:~EPP Common Package Feature or Marketplace Client
-constraint_85:~EPP Modeling Feature or Eclipse CVS Client
-constraint_86:~EPP Modeling Feature or Equinox p2 Provisioning for IDEs.
-constraint_87:~EPP Modeling Feature or Eclipse Help System
-constraint_88:~EPP Modeling Feature or Eclipse Java Development Tools
-constraint_89:~EPP Modeling Feature or Eclipse Plug-in Development Environment
-constraint_90:~EPP Modeling Feature or Eclipse Project SDK
-constraint_91:~EPP Modeling Feature or Eclipse RCP
-constraint_92:~EPP Modeling Feature or Mylyn Context Connector: Eclipse IDE
-constraint_93:~EPP Modeling Feature or Mylyn Context Connector: Java Development
-constraint_94:~EPP Modeling Feature or Mylyn Context Connector: Plug-in Development
-constraint_95:~EPP Modeling Feature or Mylyn Tasks Connector: Bugzilla
-constraint_96:~EPP Modeling Feature or Mylyn Task-Focused Interface
-constraint_97:~EPP Modeling Feature or Mylyn Task List
-constraint_98:~EPP Modeling Feature or Mylyn WikiText
-constraint_99:~EPP Modeling Feature or EMF - Eclipse Modeling Framework SDK
-constraint_100:~EPP Modeling Feature or Graphical Editing Framework GEF SDK
-constraint_101:~EPP Modeling Feature or UML2 Extender SDK
-constraint_102:~EPP Modeling Feature or OCL End User SDK
-constraint_103:~EPP Modeling Feature or EMF Model Transaction SDK
-constraint_104:~EPP Modeling Feature or Diagram Editor for Ecore (SDK)
-constraint_105:~EPP Modeling Feature or EMF Model Query SDK
-constraint_106:~EPP Modeling Feature or XSD - XML Schema Definition SDK
-constraint_107:~EPP Modeling Feature or EMF Validation Framework SDK
-constraint_108:~EPP Modeling Feature or EMF Compare Core SDK
-constraint_109:~EPP Modeling Feature or EMF Compare IDE UI SDK
-constraint_110:~EPP Modeling Feature or Extra Modeling Components Installer
-constraint_111:~EPP Modeling Feature or CDO Model Repository EPP
-constraint_112:~EPP Modeling Feature or Graphical Modeling Framework (GMF) Runtime SDK
-constraint_113:~EPP Modeling Feature or Eclipse Git Team Provider
-constraint_114:~EPP Modeling Feature or Extended Editing Framework - EMF Edit generation using Acceleo
-constraint_115:~EPP Modeling Feature or EPP Common Package Feature
-constraint_116:~EPP Modeling Feature or Eclipse Platform
-constraint_117:~Equinox p2 Core Function Source or Equinox p2 Core Function
-constraint_118:~Equinox p2 RCP Management Facilities or Add-on Function for p2
-constraint_119:~Equinox p2 RCP Management Facilities or Equinox p2 Core Function Source
-constraint_120:~Add-on Function for p2 or Equinox p2 Core Function
-constraint_121:~Equinox p2 RCP Management Facilities Source or Equinox p2 RCP Management Facilities
-constraint_122:~Equinox p2 RCP Management Facilities Source or Equinox p2 Core Function Source
-constraint_123:~Equinox p2 RCP Management Facilities or Equinox p2 Core Function
-constraint_124:~Eclipse p2 Provisioning Developer Resources or Equinox p2 Provisioning for IDEs.
-constraint_125:~Eclipse p2 Provisioning Developer Resources or Equinox p2 Core Function Source
-constraint_126:~Eclipse p2 Provisioning Developer Resources or Equinox p2 RCP Management Facilities
-constraint_127:~Eclipse p2 Provisioning Developer Resources or Equinox p2 RCP Management Facilities Source
-constraint_128:~Equinox p2 Provisioning for IDEs. or Equinox p2 Core Function
-constraint_129:~Equinox p2 Provisioning for IDEs. or Add-on Function for p2
-constraint_130:~Equinox p2 Provisioning for IDEs. or Equinox p2 RCP Management Facilities
-constraint_131:~Graphical Editing Framework GEF SDK or Graphical Editing Framework Draw2d SDK
-constraint_132:~Graphical Editing Framework GEF SDK or Graphical Editing Framework GEF
-constraint_133:~Graphical Editing Framework GEF SDK or Graphical Editing Framework GEF Source Feature
-constraint_134:~Graphical Editing Framework GEF or Graphical Editing Framework Draw2d
-constraint_135:~Graphical Modeling Framework (GMF) Runtime Plug-in Examples or Graphical Modeling Framework (GMF) Runtime
-constraint_136:~Graphical Modeling Framework (GMF) Notation SDK or EMF - Eclipse Modeling Framework SDK
-constraint_137:~Graphical Modeling Framework (GMF) Notation SDK or Graphical Modeling Framework (GMF) Notation
-constraint_138:~Graphical Modeling Framework (GMF) Notation SDK or Graphical Modeling Framework (GMF) Notation Sources
-constraint_139:~Graphical Modeling Framework (GMF) Notation or EMF - Eclipse Modeling Framework Core Runtime
-constraint_140:~Graphical Modeling Framework (GMF) Notation or EMF Ecore Edit
-constraint_141:~Graphical Modeling Framework (GMF) Notation or EMF Edit
-constraint_142:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Editing Framework GEF SDK
-constraint_143:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Modeling Framework (GMF) Notation SDK
-constraint_144:~Graphical Modeling Framework (GMF) Runtime SDK or EMF Model Transaction SDK
-constraint_145:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Modeling Framework (GMF) Runtime
-constraint_146:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Modeling Framework (GMF) Runtime Sources
-constraint_147:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Modeling Framework (GMF) Runtime Plug-in Examples
-constraint_148:~Graphical Modeling Framework (GMF) Runtime SDK or Graphical Modeling Framework (GMF) Runtime Third-Party Component Sources 
-constraint_149:~Graphical Modeling Framework (GMF) Runtime or Graphical Modeling Framework (GMF) Notation
-constraint_150:~Graphical Modeling Framework (GMF) Runtime or Graphical Editing Framework GEF
-constraint_151:~Graphical Modeling Framework (GMF) Runtime or EMF Common
-constraint_152:~Graphical Modeling Framework (GMF) Runtime or EMF - Eclipse Modeling Framework Core Runtime
-constraint_153:~Graphical Modeling Framework (GMF) Runtime or EMF Ecore Edit
-constraint_154:~Graphical Modeling Framework (GMF) Runtime or EMF Edit
-constraint_155:~Graphical Modeling Framework (GMF) Runtime or EMF Model Transaction
-constraint_156:~Graphical Modeling Framework (GMF) Runtime or EMF Validation Framework
-constraint_157:~Graphical Modeling Framework (GMF) Runtime or EMF Model Transaction Workbench Integration
-constraint_158:~Graphical Modeling Framework (GMF) Runtime or Graphical Modeling Framework (GMF) Runtime Third-Party Components 
-constraint_159:~Eclipse Help Developer Resources or Eclipse Help System
-constraint_160:~Eclipse JDT Plug-in Developer Resources or Eclipse Java Development Tools
-constraint_161:~Eclipse Java Development Tools or Eclipse Platform
-constraint_162:~Mylyn Tasks Connector: Bugzilla or Mylyn Task List
-constraint_163:~Mylyn Commons Notifications or Mylyn Commons
-constraint_164:~Mylyn Commons Repositories or Mylyn Commons
-constraint_165:~Mylyn Task-Focused Interface or Mylyn Task List
-constraint_166:~Mylyn Context Connector: Eclipse IDE or Mylyn Task-Focused Interface
-constraint_167:~Mylyn Context Connector: Eclipse IDE or Mylyn Context Connector: Team Support
-constraint_168:~Mylyn Context Connector: Eclipse IDE or Mylyn Tasks Connector: Eclipse IDE
-constraint_169:~Mylyn Context Connector: Eclipse IDE or Eclipse CVS Client
-constraint_170:~Mylyn Context Connector: Java Development or Mylyn Task-Focused Interface
-constraint_171:~Mylyn Context Connector: Java Development or Eclipse Java Development Tools
-constraint_172:~Mylyn Context Connector: Plug-in Development or Mylyn Context Connector: Java Development
-constraint_173:~Mylyn Context Connector: Plug-in Development or Eclipse Plug-in Development Environment
-constraint_174:~Mylyn Tasks Connector: Eclipse IDE or Mylyn Task List
-constraint_175:~Mylyn Context Connector: Team Support or Mylyn Task-Focused Interface
-constraint_176:~Mylyn WikiText or Mylyn Task List
-constraint_177:~Mylyn Task List or Mylyn Commons Connector: Discovery
-constraint_178:~Mylyn Task List or Mylyn Commons Connector: Monitor
-constraint_179:~Mylyn Task List or Mylyn Commons
-constraint_180:~Mylyn Task List or Mylyn Commons Identity
-constraint_181:~Mylyn Task List or Mylyn Commons Repositories
-constraint_182:~Mylyn Task List or Mylyn Commons Notifications
-constraint_183:~Net4j DB Framework or Net4j DB Framework H2 Adapter
-constraint_184:~Net4j Signalling Platform Examples Installer or Source for Net4j Signalling Platform Examples Installer
-constraint_185:~Net4j Utilities UI or Net4j Utilities
-constraint_186:~Net4j Signalling Platform Runtime or Net4j Utilities UI
-constraint_187:~OCL End User SDK or OCL Core SDK
-constraint_188:~OCL End User SDK or OCL Documentation
-constraint_189:~OCL End User SDK or Source for OCL Documentation
-constraint_190:~OCL End User SDK or OCL EMF Edit Support
-constraint_191:~OCL End User SDK or Source for OCL EMF Edit Support
-constraint_192:~OCL End User SDK or OCL User Interface
-constraint_193:~OCL End User SDK or Source for OCL User Interface
-constraint_194:~OCL Runtime Features or OCL for Ecore Parser and Interpreter
-constraint_195:~OCL Runtime Features or OCL for UML Parser and Interpreter
-constraint_196:~OCL Core SDK or OCL Runtime Features
-constraint_197:~OCL Core SDK or Source for OCL for Ecore Parser and Interpreter
-constraint_198:~OCL Core SDK or Source for OCL for UML Parser and Interpreter
-constraint_199:~Eclipse PDE Plug-in Developer Resources or Eclipse Plug-in Development Environment
-constraint_200:~Eclipse Plug-in Development Environment or Eclipse Java Development Tools
-constraint_201:~Eclipse Plug-in Development Environment or Eclipse Platform
-constraint_202:~Eclipse Platform Plug-in Developer Resources or Eclipse Platform
-constraint_203:~Eclipse Platform Plug-in Developer Resources or Eclipse RCP Plug-in Developer Resources
-constraint_204:~Eclipse Platform Plug-in Developer Resources or Eclipse p2 Provisioning Developer Resources
-constraint_205:~Eclipse Platform Plug-in Developer Resources or Eclipse Help Developer Resources
-constraint_206:~Eclipse Platform or Eclipse RCP
-constraint_207:~Eclipse Platform or Eclipse Help System
-constraint_208:~Eclipse RCP Plug-in Developer Resources or Eclipse RCP
-constraint_209:~Eclipse RCP Plug-in Developer Resources or Eclipse e4 Rich Client Platform Developer Resources
-constraint_210:~Eclipse RCP or Eclipse e4 Rich Client Platform
-constraint_211:~RMF Core ReqIF Feature (Incubation) or RMF Core ReqIF 1.0 Thirdparty Feature (Incubation)
-constraint_212:~RMF ProR Feature (Incubation) or RMF Core ReqIF Feature (Incubation)
-constraint_213:~Eclipse Project SDK or Eclipse Platform
-constraint_214:~Eclipse Project SDK or Eclipse Platform Plug-in Developer Resources
-constraint_215:~Eclipse Project SDK or Eclipse CVS Client
-constraint_216:~Eclipse Project SDK or Eclipse CVS Client Resources
-constraint_217:~Eclipse Project SDK or Eclipse Java Development Tools
-constraint_218:~Eclipse Project SDK or Eclipse JDT Plug-in Developer Resources
-constraint_219:~Eclipse Project SDK or Eclipse Plug-in Development Environment
-constraint_220:~Eclipse Project SDK or Eclipse PDE Plug-in Developer Resources
-constraint_221:~Eclipse Project SDK or Eclipse Help System
-constraint_222:~Eclipse Project SDK or Eclipse Help Developer Resources
-constraint_223:~UML2 Examples or Source for UML2 Examples
-constraint_224:~UML2 Extender SDK or UML2 End-User Features
-constraint_225:~UML2 Extender SDK or Source for UML2 End-User Features
-constraint_226:~UML2 Extender SDK or UML2 Examples
-constraint_227:~UML2 Extender SDK or UML2 Documentation
-constraint_228:~XSD - XML Schema Definition SDK or XSD - XML Schema Definition Model
-constraint_229:~XSD - XML Schema Definition SDK or Source for XSD - XML Schema Definition Model
-constraint_230:~XSD - XML Schema Definition SDK or XSD Ecore Converter
-constraint_231:~XSD - XML Schema Definition SDK or Source for XSD Ecore Converter
-constraint_232:~XSD - XML Schema Definition SDK or XSD Edit
-constraint_233:~XSD - XML Schema Definition SDK or Source for XSD Edit
-constraint_234:~XSD - XML Schema Definition SDK or XSD Sample Editor
-constraint_235:~XSD - XML Schema Definition SDK or Source for XSD Sample Editor
-constraint_236:~XSD - XML Schema Definition SDK or XSD Mapping
-constraint_237:~XSD - XML Schema Definition SDK or Source for XSD Mapping
-constraint_238:~XSD - XML Schema Definition SDK or XSD Mapping Editor
-constraint_239:~XSD - XML Schema Definition SDK or Source for XSD Mapping Editor
-constraint_240:~XSD - XML Schema Definition SDK or XSD Documentation
-constraint_241:~XSD - XML Schema Definition SDK or Source for XSD Documentation
+constraint_1:~org_eclipse_birt_doc or org_eclipse_datatools_doc_user
+constraint_2:~org_eclipse_birt_example or org_eclipse_datatools_connectivity_oda_designer_feature
+constraint_3:~org_eclipse_birt_example or org_eclipse_datatools_connectivity_oda_feature
+constraint_4:~org_eclipse_birt_example or org_eclipse_datatools_doc_user
+constraint_5:~org_eclipse_birt_report_designer_editor_xml_wtp or org_eclipse_wst_common_ui_feature
+constraint_6:~org_eclipse_birt_report_designer_editor_xml_wtp or org_eclipse_wst_xml_ui_feature
+constraint_7:~org_eclipse_birt or org_eclipse_datatools_sqldevtools_sqlbuilder_feature
+constraint_8:~org_eclipse_birt or org_eclipse_datatools_enablement_feature
+constraint_9:~org_eclipse_birt or org_eclipse_emf_common
+constraint_10:~org_eclipse_birt or org_eclipse_emf_ecore
+constraint_11:~org_eclipse_birt or org_eclipse_datatools_doc_user
+constraint_12:~org_eclipse_birt or org_eclipse_gef
+constraint_13:~org_eclipse_birt or org_eclipse_datatools_modelbase_feature
+constraint_14:~org_eclipse_birt or org_eclipse_draw2d
+constraint_15:~org_eclipse_cdt_core_parser_upc_feature or org_eclipse_cdt_core_lrparser_feature
+constraint_16:~org_eclipse_cdt_mylyn or org_eclipse_cdt_platform
+constraint_17:~org_eclipse_cdt_mylyn or org_eclipse_mylyn_context_feature
+constraint_18:~org_eclipse_cdt or org_eclipse_cdt_platform
+constraint_19:~org_eclipse_cdt or org_eclipse_cdt_gnu_build
+constraint_20:~org_eclipse_cdt or org_eclipse_cdt_gdb
+constraint_21:~org_eclipse_cdt or org_eclipse_cdt_gnu_debug
+constraint_22:~org_eclipse_cdt or org_eclipse_cdt_gnu_dsf
+constraint_23:~org_eclipse_cvs_source or org_eclipse_cvs
+constraint_24:~org_eclipse_cvs or org_eclipse_platform
+constraint_25:~org_eclipse_datatools_connectivity_feature or org_eclipse_datatools_modelbase_feature
+constraint_26:~org_eclipse_datatools_connectivity_oda_designer_core_feature or org_eclipse_emf
+constraint_27:~org_eclipse_datatools_connectivity_oda_designer_core_feature or org_eclipse_datatools_connectivity_oda_feature
+constraint_28:~org_eclipse_datatools_connectivity_oda_designer_core_feature or org_eclipse_datatools_doc_user
+constraint_29:~org_eclipse_datatools_connectivity_oda_designer_core_feature or org_eclipse_datatools_modelbase_feature
+constraint_30:~org_eclipse_datatools_connectivity_oda_designer_feature or org_eclipse_pde
+constraint_31:~org_eclipse_datatools_connectivity_oda_designer_feature or org_eclipse_datatools_connectivity_oda_designer_core_feature
+constraint_32:~org_eclipse_datatools_enablement_apache_derby_feature or org_eclipse_datatools_modelbase_feature
+constraint_33:~org_eclipse_datatools_enablement_apache_derby_feature or org_eclipse_datatools_connectivity_feature
+constraint_34:~org_eclipse_datatools_enablement_apache_derby_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_35:~org_eclipse_datatools_enablement_apache_derby_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_36:~org_eclipse_datatools_enablement_feature or org_eclipse_datatools_modelbase_feature
+constraint_37:~org_eclipse_datatools_enablement_feature or org_eclipse_datatools_connectivity_feature
+constraint_38:~org_eclipse_datatools_enablement_hsqldb_feature or org_eclipse_datatools_modelbase_feature
+constraint_39:~org_eclipse_datatools_enablement_hsqldb_feature or org_eclipse_datatools_connectivity_feature
+constraint_40:~org_eclipse_datatools_enablement_hsqldb_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_41:~org_eclipse_datatools_enablement_ibm_feature or org_eclipse_datatools_modelbase_feature
+constraint_42:~org_eclipse_datatools_enablement_ibm_feature or org_eclipse_datatools_connectivity_feature
+constraint_43:~org_eclipse_datatools_enablement_ibm_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_44:~org_eclipse_datatools_enablement_ingres_feature or org_eclipse_datatools_modelbase_feature
+constraint_45:~org_eclipse_datatools_enablement_ingres_feature or org_eclipse_datatools_connectivity_feature
+constraint_46:~org_eclipse_datatools_enablement_ingres_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_47:~org_eclipse_datatools_enablement_ingres_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_48:~org_eclipse_datatools_enablement_jdbc_feature or org_eclipse_datatools_connectivity_feature
+constraint_49:~org_eclipse_datatools_enablement_jdt_feature or org_eclipse_jdt
+constraint_50:~org_eclipse_datatools_enablement_msft_feature or org_eclipse_datatools_modelbase_feature
+constraint_51:~org_eclipse_datatools_enablement_msft_feature or org_eclipse_datatools_connectivity_feature
+constraint_52:~org_eclipse_datatools_enablement_msft_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_53:~org_eclipse_datatools_enablement_mysql_feature or org_eclipse_datatools_modelbase_feature
+constraint_54:~org_eclipse_datatools_enablement_mysql_feature or org_eclipse_datatools_connectivity_feature
+constraint_55:~org_eclipse_datatools_enablement_mysql_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_56:~org_eclipse_datatools_enablement_oda_designer_feature or org_eclipse_datatools_connectivity_oda_designer_feature
+constraint_57:~org_eclipse_datatools_enablement_oda_designer_feature or org_eclipse_datatools_enablement_oda_feature
+constraint_58:~org_eclipse_datatools_enablement_oda_feature or org_eclipse_datatools_connectivity_oda_feature
+constraint_59:~org_eclipse_datatools_enablement_oracle_feature or org_eclipse_datatools_modelbase_feature
+constraint_60:~org_eclipse_datatools_enablement_oracle_feature or org_eclipse_datatools_connectivity_feature
+constraint_61:~org_eclipse_datatools_enablement_oracle_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_62:~org_eclipse_datatools_enablement_postgresql_feature or org_eclipse_datatools_modelbase_feature
+constraint_63:~org_eclipse_datatools_enablement_postgresql_feature or org_eclipse_datatools_connectivity_feature
+constraint_64:~org_eclipse_datatools_enablement_postgresql_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_65:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_modelbase_feature
+constraint_66:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_connectivity_feature
+constraint_67:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_connectivity_oda_feature
+constraint_68:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_connectivity_oda_designer_feature
+constraint_69:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_70:~org_eclipse_datatools_enablement_sap_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_71:~org_eclipse_datatools_enablement_sqlite_feature or org_eclipse_datatools_modelbase_feature
+constraint_72:~org_eclipse_datatools_enablement_sqlite_feature or org_eclipse_datatools_connectivity_feature
+constraint_73:~org_eclipse_datatools_enablement_sqlite_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_74:~org_eclipse_datatools_enablement_sqlite_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_75:~org_eclipse_datatools_enablement_sybase_feature or org_eclipse_datatools_modelbase_feature
+constraint_76:~org_eclipse_datatools_enablement_sybase_feature or org_eclipse_datatools_connectivity_feature
+constraint_77:~org_eclipse_datatools_enablement_sybase_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_78:~org_eclipse_datatools_enablement_sybase_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_79:~org_eclipse_datatools_modelbase_feature or org_eclipse_emf
+constraint_80:~org_eclipse_datatools_sqldevtools_data_feature or org_eclipse_datatools_modelbase_feature
+constraint_81:~org_eclipse_datatools_sqldevtools_data_feature or org_eclipse_datatools_connectivity_feature
+constraint_82:~org_eclipse_datatools_sqldevtools_data_feature or org_eclipse_datatools_sqldevtools_ddl_feature
+constraint_83:~org_eclipse_datatools_sqldevtools_ddl_feature or org_eclipse_datatools_modelbase_feature
+constraint_84:~org_eclipse_datatools_sqldevtools_ddl_feature or org_eclipse_datatools_connectivity_feature
+constraint_85:~org_eclipse_datatools_sqldevtools_ddl_feature or org_eclipse_datatools_sqldevtools_ddlgen_feature
+constraint_86:~org_eclipse_datatools_sqldevtools_ddlgen_feature or org_eclipse_datatools_modelbase_feature
+constraint_87:~org_eclipse_datatools_sqldevtools_ddlgen_feature or org_eclipse_datatools_connectivity_feature
+constraint_88:~org_eclipse_datatools_sqldevtools_ddlgen_feature or org_eclipse_datatools_sqldevtools_results_feature
+constraint_89:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_gef
+constraint_90:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_modelbase_feature
+constraint_91:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_connectivity_feature
+constraint_92:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_doc_user
+constraint_93:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_94:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_sqldevtools_results_feature
+constraint_95:~org_eclipse_datatools_sqldevtools_feature or org_eclipse_datatools_sqldevtools_ddlgen_feature
+constraint_96:~org_eclipse_datatools_sqldevtools_parsers_feature or org_eclipse_datatools_modelbase_feature
+constraint_97:~org_eclipse_datatools_sqldevtools_results_feature or org_eclipse_datatools_modelbase_feature
+constraint_98:~org_eclipse_datatools_sqldevtools_results_feature or org_eclipse_datatools_connectivity_feature
+constraint_99:~org_eclipse_datatools_sqldevtools_results_feature or org_eclipse_datatools_doc_user
+constraint_100:~org_eclipse_datatools_sqldevtools_schemaobjecteditor_feature or org_eclipse_draw2d
+constraint_101:~org_eclipse_datatools_sqldevtools_schemaobjecteditor_feature or org_eclipse_datatools_sqldevtools_sqlbuilder_feature
+constraint_102:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_emf
+constraint_103:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_gef
+constraint_104:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_modelbase_feature
+constraint_105:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_connectivity_feature
+constraint_106:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_doc_user
+constraint_107:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_enablement_jdbc_feature
+constraint_108:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_sqldevtools_results_feature
+constraint_109:~org_eclipse_datatools_sqldevtools_sqlbuilder_feature or org_eclipse_datatools_sqldevtools_parsers_feature
+constraint_110:~org_eclipse_draw2d_sdk or org_eclipse_draw2d
+constraint_111:~org_eclipse_draw2d_sdk or org_eclipse_draw2d_source
+constraint_112:~org_eclipse_e4_rcp_source or org_eclipse_e4_rcp
+constraint_113:~org_eclipse_e4_rcp or org_eclipse_emf_common
+constraint_114:~org_eclipse_e4_rcp or org_eclipse_emf_ecore
+constraint_115:~org_eclipse_egit_mylyn or org_eclipse_egit
+constraint_116:~org_eclipse_egit_mylyn or org_eclipse_mylyn_team_feature
+constraint_117:~org_eclipse_egit or org_eclipse_jgit
+constraint_118:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo
+constraint_119:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo_server
+constraint_120:~org_eclipse_emf_cdo_epp or org_eclipse_net4j
+constraint_121:~org_eclipse_emf_cdo_epp or org_eclipse_net4j_db
+constraint_122:~org_eclipse_emf_cdo_epp or org_eclipse_net4j_db_h2
+constraint_123:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo_server_db
+constraint_124:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo_examples_installer
+constraint_125:~org_eclipse_emf_cdo_epp or org_eclipse_net4j_examples_installer
+constraint_126:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo_compare
+constraint_127:~org_eclipse_emf_cdo_epp or org_eclipse_emf_cdo_doc
+constraint_128:~org_eclipse_emf_cdo_examples_installer or org_eclipse_emf_cdo_examples_installer_source
+constraint_129:~org_eclipse_emf_compare_diagram_gmf or org_eclipse_emf_compare
+constraint_130:~org_eclipse_emf_compare_diagram_gmf or org_eclipse_emf_compare_ide_ui
+constraint_131:~org_eclipse_emf_compare_diagram_gmf or org_eclipse_gmf_runtime_notation
+constraint_132:~org_eclipse_emf_compare_ide_ui_source or org_eclipse_emf_compare_ide_ui
+constraint_133:~org_eclipse_emf_compare_ide_ui or org_eclipse_emf_compare
+constraint_134:~org_eclipse_emf_compare_source or org_eclipse_emf_compare
+constraint_135:~org_eclipse_emf_compare_uml2 or org_eclipse_emf_compare
+constraint_136:~org_eclipse_emf_compare_uml2 or org_eclipse_emf_compare_ide_ui
+constraint_137:~org_eclipse_emf_ecoretools_sdk or org_eclipse_emf_ecoretools
+constraint_138:~org_eclipse_emf_query_sdk or org_eclipse_emf_query
+constraint_139:~org_eclipse_emf_query_sdk or org_eclipse_emf_query_ocl
+constraint_140:~org_eclipse_emf_query_sdk or org_eclipse_emf_query_doc
+constraint_141:~org_eclipse_emf_query_sdk or org_eclipse_emf_query_source
+constraint_142:~org_eclipse_emf_query_sdk or org_eclipse_emf_query_ocl_source
+constraint_143:~org_eclipse_emf_sdk or org_eclipse_emf
+constraint_144:~org_eclipse_emf_sdk or org_eclipse_emf_source
+constraint_145:~org_eclipse_emf_sdk or org_eclipse_emf_doc
+constraint_146:~org_eclipse_emf_sdk or org_eclipse_emf_doc_source
+constraint_147:~org_eclipse_emf_source or org_eclipse_emf_mapping_ui_source
+constraint_148:~org_eclipse_emf_source or org_eclipse_emf_databinding_source
+constraint_149:~org_eclipse_emf_source or org_eclipse_emf_databinding_edit_source
+constraint_150:~org_eclipse_emf_source or org_eclipse_emf_mapping_ecore_source
+constraint_151:~org_eclipse_emf_source or org_eclipse_emf_codegen_ui_source
+constraint_152:~org_eclipse_emf_source or org_eclipse_emf_codegen_source
+constraint_153:~org_eclipse_emf_source or org_eclipse_emf_converter_source
+constraint_154:~org_eclipse_emf_source or org_eclipse_emf_ecore_editor_source
+constraint_155:~org_eclipse_emf_source or org_eclipse_emf_codegen_ecore_source
+constraint_156:~org_eclipse_emf_source or org_eclipse_emf_edit_source
+constraint_157:~org_eclipse_emf_source or org_eclipse_emf_edit_ui_source
+constraint_158:~org_eclipse_emf_source or org_eclipse_emf_mapping_ecore_editor_source
+constraint_159:~org_eclipse_emf_source or org_eclipse_emf_common_ui_source
+constraint_160:~org_eclipse_emf_source or org_eclipse_emf_mapping_source
+constraint_161:~org_eclipse_emf_source or org_eclipse_emf_codegen_ecore_ui_source
+constraint_162:~org_eclipse_emf_source or org_eclipse_emf_ecore_edit_source
+constraint_163:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_validation_sdk
+constraint_164:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_query_sdk
+constraint_165:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_transaction
+constraint_166:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_transaction_doc
+constraint_167:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_workspace
+constraint_168:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_workspace_doc
+constraint_169:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_transaction_source
+constraint_170:~org_eclipse_emf_transaction_sdk or org_eclipse_emf_workspace_source
+constraint_171:~org_eclipse_emf_validation_sdk or org_eclipse_emf_sdk
+constraint_172:~org_eclipse_emf_validation_sdk or org_eclipse_ocl_core_sdk
+constraint_173:~org_eclipse_emf_validation_sdk or org_eclipse_emf_validation
+constraint_174:~org_eclipse_emf_validation_sdk or org_eclipse_emf_validation_ocl
+constraint_175:~org_eclipse_emf_validation_sdk or org_eclipse_emf_validation_doc
+constraint_176:~org_eclipse_emf_validation_sdk or org_eclipse_emf_validation_source
+constraint_177:~org_eclipse_emf_validation_sdk or org_eclipse_emf_validation_ocl_source
+constraint_178:~org_eclipse_emf or org_eclipse_emf_common
+constraint_179:~org_eclipse_emf or org_eclipse_emf_common_ui
+constraint_180:~org_eclipse_emf or org_eclipse_emf_ecore
+constraint_181:~org_eclipse_emf or org_eclipse_emf_edit
+constraint_182:~org_eclipse_emf or org_eclipse_emf_edit_ui
+constraint_183:~org_eclipse_emf or org_eclipse_emf_ecore_edit
+constraint_184:~org_eclipse_emf or org_eclipse_emf_ecore_editor
+constraint_185:~org_eclipse_emf or org_eclipse_emf_codegen
+constraint_186:~org_eclipse_emf or org_eclipse_emf_codegen_ui
+constraint_187:~org_eclipse_emf or org_eclipse_emf_codegen_ecore
+constraint_188:~org_eclipse_emf or org_eclipse_emf_codegen_ecore_ui
+constraint_189:~org_eclipse_emf or org_eclipse_emf_converter
+constraint_190:~org_eclipse_emf or org_eclipse_emf_databinding
+constraint_191:~org_eclipse_emf or org_eclipse_emf_databinding_edit
+constraint_192:~org_eclipse_emf or org_eclipse_emf_mapping
+constraint_193:~org_eclipse_emf or org_eclipse_emf_mapping_ecore
+constraint_194:~org_eclipse_emf or org_eclipse_emf_mapping_ui
+constraint_195:~org_eclipse_emf or org_eclipse_emf_mapping_ecore_editor
+constraint_196:~org_eclipse_epp_mpc or org_eclipse_equinox_p2_discovery_feature
+constraint_197:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt
+constraint_198:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt_autotools
+constraint_199:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt_build_crossgcc
+constraint_200:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt_debug_ui_memory
+constraint_201:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt_launch_remote
+constraint_202:~org_eclipse_epp_package_automotive_feature or org_eclipse_cdt_msw
+constraint_203:~org_eclipse_epp_package_automotive_feature or org_eclipse_draw2d
+constraint_204:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf
+constraint_205:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_compare
+constraint_206:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_compare_uml2
+constraint_207:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_compare_ide_ui
+constraint_208:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_compare_diagram_gmf
+constraint_209:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_mwe_core
+constraint_210:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_mwe_ui
+constraint_211:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_transaction
+constraint_212:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_validation
+constraint_213:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_validation_ocl
+constraint_214:~org_eclipse_epp_package_automotive_feature or org_eclipse_emf_workspace
+constraint_215:~org_eclipse_epp_package_automotive_feature or org_eclipse_epp_package_common_feature
+constraint_216:~org_eclipse_epp_package_automotive_feature or org_eclipse_gef
+constraint_217:~org_eclipse_epp_package_automotive_feature or org_eclipse_gmf
+constraint_218:~org_eclipse_epp_package_automotive_feature or org_eclipse_gmf_runtime_notation
+constraint_219:~org_eclipse_epp_package_automotive_feature or org_eclipse_graphiti_feature
+constraint_220:~org_eclipse_epp_package_automotive_feature or org_eclipse_jdt
+constraint_221:~org_eclipse_epp_package_automotive_feature or org_eclipse_pde
+constraint_222:~org_eclipse_epp_package_automotive_feature or org_eclipse_platform
+constraint_223:~org_eclipse_epp_package_automotive_feature or org_eclipse_uml2
+constraint_224:~org_eclipse_epp_package_automotive_feature or org_eclipse_wst_xml_ui_feature
+constraint_225:~org_eclipse_epp_package_automotive_feature or org_eclipse_xpand
+constraint_226:~org_eclipse_epp_package_automotive_feature or org_eclipse_xpand_ui
+constraint_227:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd
+constraint_228:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd_ecore_converter
+constraint_229:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd_edit
+constraint_230:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd_editor
+constraint_231:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd_mapping
+constraint_232:~org_eclipse_epp_package_automotive_feature or org_eclipse_xsd_mapping_editor
+constraint_233:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtend
+constraint_234:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtend_typesystem_emf
+constraint_235:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtend_typesystem_uml2
+constraint_236:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtend_typesystem_xsd
+constraint_237:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtext_runtime
+constraint_238:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtext_ui
+constraint_239:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtext_xbase
+constraint_240:~org_eclipse_epp_package_automotive_feature or org_eclipse_xtext_xtext_ui
+constraint_241:~org_eclipse_epp_package_common_feature or org_eclipse_epp_mpc
+constraint_242:~org_eclipse_epp_package_cpp_feature or org_eclipse_cvs
+constraint_243:~org_eclipse_epp_package_cpp_feature or org_eclipse_equinox_p2_user_ui
+constraint_244:~org_eclipse_epp_package_cpp_feature or org_eclipse_help
+constraint_245:~org_eclipse_epp_package_cpp_feature or org_eclipse_platform
+constraint_246:~org_eclipse_epp_package_cpp_feature or org_eclipse_rcp
+constraint_247:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt
+constraint_248:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_debug_ui_memory
+constraint_249:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_msw
+constraint_250:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_build_crossgcc
+constraint_251:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_launch_remote
+constraint_252:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_autotools
+constraint_253:~org_eclipse_epp_package_cpp_feature or org_eclipse_cdt_mylyn
+constraint_254:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_feature
+constraint_255:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_context_feature
+constraint_256:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_team_feature
+constraint_257:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_ide_feature
+constraint_258:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_259:~org_eclipse_epp_package_cpp_feature or org_eclipse_mylyn_wikitext_feature
+constraint_260:~org_eclipse_epp_package_cpp_feature or org_eclipse_rse
+constraint_261:~org_eclipse_epp_package_cpp_feature or org_eclipse_egit
+constraint_262:~org_eclipse_epp_package_cpp_feature or org_eclipse_epp_package_common_feature
+constraint_263:~org_eclipse_epp_package_java_feature or org_eclipse_cvs
+constraint_264:~org_eclipse_epp_package_java_feature or org_eclipse_equinox_p2_user_ui
+constraint_265:~org_eclipse_epp_package_java_feature or org_eclipse_help
+constraint_266:~org_eclipse_epp_package_java_feature or org_eclipse_jdt
+constraint_267:~org_eclipse_epp_package_java_feature or org_eclipse_platform
+constraint_268:~org_eclipse_epp_package_java_feature or org_eclipse_rcp
+constraint_269:~org_eclipse_epp_package_java_feature or org_eclipse_wst_xml_ui_feature
+constraint_270:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_ide_feature
+constraint_271:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_java_feature
+constraint_272:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_273:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_context_feature
+constraint_274:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_feature
+constraint_275:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_wikitext_feature
+constraint_276:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_cvs
+constraint_277:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_git
+constraint_278:~org_eclipse_epp_package_java_feature or org_eclipse_mylyn_hudson
+constraint_279:~org_eclipse_epp_package_java_feature or org_eclipse_egit
+constraint_280:~org_eclipse_epp_package_java_feature or org_eclipse_egit_mylyn
+constraint_281:~org_eclipse_epp_package_java_feature or org_eclipse_m2e_feature
+constraint_282:~org_eclipse_epp_package_java_feature or org_eclipse_m2e_logback_feature
+constraint_283:~org_eclipse_epp_package_java_feature or org_eclipse_wb_core_feature
+constraint_284:~org_eclipse_epp_package_java_feature or org_eclipse_wb_core_ui_feature
+constraint_285:~org_eclipse_epp_package_java_feature or org_eclipse_wb_layout_group_feature
+constraint_286:~org_eclipse_epp_package_java_feature or org_eclipse_wb_swing_feature
+constraint_287:~org_eclipse_epp_package_java_feature or org_eclipse_recommenders_feature_rcp
+constraint_288:~org_eclipse_epp_package_java_feature or org_eclipse_epp_package_common_feature
+constraint_289:~org_eclipse_epp_package_jee_feature or org_eclipse_cvs
+constraint_290:~org_eclipse_epp_package_jee_feature or org_eclipse_help
+constraint_291:~org_eclipse_epp_package_jee_feature or org_eclipse_jdt
+constraint_292:~org_eclipse_epp_package_jee_feature or org_eclipse_platform
+constraint_293:~org_eclipse_epp_package_jee_feature or org_eclipse_pde
+constraint_294:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_ide_feature
+constraint_295:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_java_feature
+constraint_296:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_297:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_context_feature
+constraint_298:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_feature
+constraint_299:~org_eclipse_epp_package_jee_feature or org_eclipse_mylyn_wikitext_feature
+constraint_300:~org_eclipse_epp_package_jee_feature or org_eclipse_egit
+constraint_301:~org_eclipse_epp_package_jee_feature or org_eclipse_egit_mylyn
+constraint_302:~org_eclipse_epp_package_jee_feature or org_eclipse_rse
+constraint_303:~org_eclipse_epp_package_jee_feature or org_eclipse_rse_useractions
+constraint_304:~org_eclipse_epp_package_jee_feature or org_eclipse_tm_terminal
+constraint_305:~org_eclipse_epp_package_jee_feature or org_eclipse_tm_terminal_ssh
+constraint_306:~org_eclipse_epp_package_jee_feature or org_eclipse_tm_terminal_telnet
+constraint_307:~org_eclipse_epp_package_jee_feature or org_eclipse_tm_terminal_view
+constraint_308:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_modelbase_feature
+constraint_309:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_connectivity_feature
+constraint_310:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_311:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_intro
+constraint_312:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_doc_user
+constraint_313:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_common_doc_user
+constraint_314:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_connectivity_doc_user
+constraint_315:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_sqltools_doc_user
+constraint_316:~org_eclipse_epp_package_jee_feature or org_eclipse_datatools_enablement_feature
+constraint_317:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_common_fproj
+constraint_318:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_jsdt_feature
+constraint_319:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_xml_ui_feature
+constraint_320:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_web_ui_feature
+constraint_321:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_server_adapters_feature
+constraint_322:~org_eclipse_epp_package_jee_feature or org_eclipse_wst_xsl_feature
+constraint_323:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_324:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_server_ui_feature
+constraint_325:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_server_adapters_feature
+constraint_326:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_server_adapters_ext_feature
+constraint_327:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_web_ui_feature
+constraint_328:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_329:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_webpageeditor_feature
+constraint_330:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_jsf_apache_trinidad_tagsupport_feature
+constraint_331:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_ws_axis2tools_feature
+constraint_332:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_ws_axis2tools_feature
+constraint_333:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_common_feature
+constraint_334:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_common_eclipselink_feature
+constraint_335:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_dbws_eclipselink_feature
+constraint_336:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_jaxb_eclipselink_feature
+constraint_337:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_jaxb_feature
+constraint_338:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_jpa_eclipselink_feature
+constraint_339:~org_eclipse_epp_package_jee_feature or org_eclipse_jpt_jpa_feature
+constraint_340:~org_eclipse_epp_package_jee_feature or org_eclipse_jsf_feature
+constraint_341:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_webpageeditor_feature
+constraint_342:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_jsf_apache_trinidad_tagsupport_feature
+constraint_343:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_ws_jaxws_feature
+constraint_344:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_ws_cxf_feature
+constraint_345:~org_eclipse_epp_package_jee_feature or org_eclipse_jst_ws_jaxws_dom_feature
+constraint_346:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_feature
+constraint_347:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_logback_feature
+constraint_348:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_wtp_feature
+constraint_349:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_wtp_jaxrs_feature
+constraint_350:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_wtp_jpa_feature
+constraint_351:~org_eclipse_epp_package_jee_feature or org_eclipse_m2e_wtp_jsf_feature
+constraint_352:~org_eclipse_epp_package_jee_feature or org_eclipse_epp_package_common_feature
+constraint_353:~org_eclipse_epp_package_modeling_feature or org_eclipse_cvs
+constraint_354:~org_eclipse_epp_package_modeling_feature or org_eclipse_equinox_p2_user_ui
+constraint_355:~org_eclipse_epp_package_modeling_feature or org_eclipse_help
+constraint_356:~org_eclipse_epp_package_modeling_feature or org_eclipse_jdt
+constraint_357:~org_eclipse_epp_package_modeling_feature or org_eclipse_pde
+constraint_358:~org_eclipse_epp_package_modeling_feature or org_eclipse_sdk
+constraint_359:~org_eclipse_epp_package_modeling_feature or org_eclipse_rcp
+constraint_360:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_ide_feature
+constraint_361:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_java_feature
+constraint_362:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_pde_feature
+constraint_363:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_364:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_context_feature
+constraint_365:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_feature
+constraint_366:~org_eclipse_epp_package_modeling_feature or org_eclipse_mylyn_wikitext_feature
+constraint_367:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_sdk
+constraint_368:~org_eclipse_epp_package_modeling_feature or org_eclipse_gef_sdk
+constraint_369:~org_eclipse_epp_package_modeling_feature or org_eclipse_uml2_sdk
+constraint_370:~org_eclipse_epp_package_modeling_feature or org_eclipse_ocl_all_sdk
+constraint_371:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_transaction_sdk
+constraint_372:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_ecoretools_sdk
+constraint_373:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_query_sdk
+constraint_374:~org_eclipse_epp_package_modeling_feature or org_eclipse_xsd_sdk
+constraint_375:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_validation_sdk
+constraint_376:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_compare_source
+constraint_377:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_compare_ide_ui_source
+constraint_378:~org_eclipse_epp_package_modeling_feature or org_eclipse_amalgam_discovery
+constraint_379:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_cdo_epp
+constraint_380:~org_eclipse_epp_package_modeling_feature or org_eclipse_gmf_runtime_sdk
+constraint_381:~org_eclipse_epp_package_modeling_feature or org_eclipse_egit
+constraint_382:~org_eclipse_epp_package_modeling_feature or org_eclipse_emf_eef_codegen_ecore666666feature
+constraint_383:~org_eclipse_epp_package_modeling_feature or org_eclipse_epp_package_common_feature
+constraint_384:~org_eclipse_epp_package_modeling_feature or org_eclipse_platform
+constraint_385:~org_eclipse_epp_package_parallel_feature or org_eclipse_epp_package_common_feature
+constraint_386:~org_eclipse_epp_package_parallel_feature or org_eclipse_cvs
+constraint_387:~org_eclipse_epp_package_parallel_feature or org_eclipse_equinox_p2_user_ui
+constraint_388:~org_eclipse_epp_package_parallel_feature or org_eclipse_help
+constraint_389:~org_eclipse_epp_package_parallel_feature or org_eclipse_platform
+constraint_390:~org_eclipse_epp_package_parallel_feature or org_eclipse_rcp
+constraint_391:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_platform
+constraint_392:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt
+constraint_393:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_autotools
+constraint_394:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_debug_ui_memory
+constraint_395:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_core_parser_upc_feature
+constraint_396:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_xlc_feature
+constraint_397:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_bupc
+constraint_398:~org_eclipse_epp_package_parallel_feature or org_eclipse_cdt_mylyn
+constraint_399:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_feature
+constraint_400:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_context_feature
+constraint_401:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_team_feature
+constraint_402:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_ide_feature
+constraint_403:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_404:~org_eclipse_epp_package_parallel_feature or org_eclipse_mylyn_wikitext_feature
+constraint_405:~org_eclipse_epp_package_parallel_feature or org_eclipse_rse
+constraint_406:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp
+constraint_407:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_rdt
+constraint_408:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_rdt_sync
+constraint_409:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_rdt_xlc
+constraint_410:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_remote_rse
+constraint_411:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_pldt_upc
+constraint_412:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_rm_jaxb_contrib
+constraint_413:~org_eclipse_epp_package_parallel_feature or org_eclipse_jgit
+constraint_414:~org_eclipse_epp_package_parallel_feature or org_eclipse_wst_xml_ui_feature
+constraint_415:~org_eclipse_epp_package_parallel_feature or org_eclipse_egit
+constraint_416:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_fortran
+constraint_417:~org_eclipse_epp_package_parallel_feature or org_eclipse_ptp_debug_sdm
+constraint_418:~org_eclipse_epp_package_rcp_feature or org_eclipse_cvs
+constraint_419:~org_eclipse_epp_package_rcp_feature or org_eclipse_equinox_p2_user_ui
+constraint_420:~org_eclipse_epp_package_rcp_feature or org_eclipse_help
+constraint_421:~org_eclipse_epp_package_rcp_feature or org_eclipse_jdt
+constraint_422:~org_eclipse_epp_package_rcp_feature or org_eclipse_pde
+constraint_423:~org_eclipse_epp_package_rcp_feature or org_eclipse_platform
+constraint_424:~org_eclipse_epp_package_rcp_feature or org_eclipse_rcp
+constraint_425:~org_eclipse_epp_package_rcp_feature or org_eclipse_wst_xml_ui_feature
+constraint_426:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_ide_feature
+constraint_427:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_java_feature
+constraint_428:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_pde_feature
+constraint_429:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_430:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_context_feature
+constraint_431:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_feature
+constraint_432:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_wikitext_feature
+constraint_433:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_git
+constraint_434:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_hudson
+constraint_435:~org_eclipse_epp_package_rcp_feature or org_eclipse_mylyn_gerrit_feature
+constraint_436:~org_eclipse_epp_package_rcp_feature or org_eclipse_egit
+constraint_437:~org_eclipse_epp_package_rcp_feature or org_eclipse_egit_mylyn
+constraint_438:~org_eclipse_epp_package_rcp_feature or org_eclipse_jgit
+constraint_439:~org_eclipse_epp_package_rcp_feature or org_eclipse_platform_source
+constraint_440:~org_eclipse_epp_package_rcp_feature or org_eclipse_rap_tools_feature
+constraint_441:~org_eclipse_epp_package_rcp_feature or org_eclipse_epp_package_common_feature
+constraint_442:~org_eclipse_epp_package_rcp_feature or org_eclipse_m2e_feature
+constraint_443:~org_eclipse_epp_package_rcp_feature or org_eclipse_m2e_logback_feature
+constraint_444:~org_eclipse_epp_package_rcp_feature or org_eclipse_recommenders_feature_rcp
+constraint_445:~org_eclipse_epp_package_rcp_feature or org_eclipse_wb_core_feature
+constraint_446:~org_eclipse_epp_package_rcp_feature or org_eclipse_wb_core_ui_feature
+constraint_447:~org_eclipse_epp_package_rcp_feature or org_eclipse_wb_layout_group_feature
+constraint_448:~org_eclipse_epp_package_rcp_feature or org_eclipse_wb_swt_feature
+constraint_449:~org_eclipse_epp_package_rcp_feature or org_eclipse_wb_rcp_feature
+constraint_450:~org_eclipse_epp_package_reporting_feature or org_eclipse_cvs
+constraint_451:~org_eclipse_epp_package_reporting_feature or org_eclipse_help
+constraint_452:~org_eclipse_epp_package_reporting_feature or org_eclipse_jdt
+constraint_453:~org_eclipse_epp_package_reporting_feature or org_eclipse_platform
+constraint_454:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_ide_feature
+constraint_455:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_java_feature
+constraint_456:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_457:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_context_feature
+constraint_458:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_feature
+constraint_459:~org_eclipse_epp_package_reporting_feature or org_eclipse_mylyn_wikitext_feature
+constraint_460:~org_eclipse_epp_package_reporting_feature or org_eclipse_rse
+constraint_461:~org_eclipse_epp_package_reporting_feature or org_eclipse_rse_useractions
+constraint_462:~org_eclipse_epp_package_reporting_feature or org_eclipse_tm_terminal
+constraint_463:~org_eclipse_epp_package_reporting_feature or org_eclipse_tm_terminal_ssh
+constraint_464:~org_eclipse_epp_package_reporting_feature or org_eclipse_tm_terminal_telnet
+constraint_465:~org_eclipse_epp_package_reporting_feature or org_eclipse_tm_terminal_view
+constraint_466:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_modelbase_feature
+constraint_467:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_connectivity_feature
+constraint_468:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_469:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_intro
+constraint_470:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_doc_user
+constraint_471:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_common_doc_user
+constraint_472:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_connectivity_doc_user
+constraint_473:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_sqltools_doc_user
+constraint_474:~org_eclipse_epp_package_reporting_feature or org_eclipse_datatools_enablement_feature
+constraint_475:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_common_fproj
+constraint_476:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_jsdt_feature
+constraint_477:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_xml_ui_feature
+constraint_478:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_web_ui_feature
+constraint_479:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_server_adapters_feature
+constraint_480:~org_eclipse_epp_package_reporting_feature or org_eclipse_wst_xsl_feature
+constraint_481:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_482:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_server_ui_feature
+constraint_483:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_server_adapters_feature
+constraint_484:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_server_adapters_ext_feature
+constraint_485:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_web_ui_feature
+constraint_486:~org_eclipse_epp_package_reporting_feature or org_eclipse_jsf_feature
+constraint_487:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_488:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_webpageeditor_feature
+constraint_489:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_jsf_apache_trinidad_tagsupport_feature
+constraint_490:~org_eclipse_epp_package_reporting_feature or org_eclipse_jst_ws_axis2tools_feature
+constraint_491:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_common_feature
+constraint_492:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_common_eclipselink_feature
+constraint_493:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_dbws_eclipselink_feature
+constraint_494:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_jaxb_eclipselink_feature
+constraint_495:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_jaxb_feature
+constraint_496:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_jpa_eclipselink_feature
+constraint_497:~org_eclipse_epp_package_reporting_feature or org_eclipse_jpt_jpa_feature
+constraint_498:~org_eclipse_epp_package_reporting_feature or org_eclipse_persistence_jpa
+constraint_499:~org_eclipse_epp_package_reporting_feature or org_eclipse_persistence_moxy
+constraint_500:~org_eclipse_epp_package_reporting_feature or org_eclipse_persistence_sdo
+constraint_501:~org_eclipse_epp_package_reporting_feature or org_eclipse_birt
+constraint_502:~org_eclipse_epp_package_reporting_feature or org_eclipse_birt_doc
+constraint_503:~org_eclipse_epp_package_reporting_feature or org_eclipse_birt_example
+constraint_504:~org_eclipse_epp_package_reporting_feature or org_eclipse_birt_cshelp
+constraint_505:~org_eclipse_epp_package_reporting_feature or org_eclipse_birt_chart_cshelp
+constraint_506:~org_eclipse_epp_package_reporting_feature or org_eclipse_epp_package_common_feature
+constraint_507:~org_eclipse_epp_package_scout_feature or org_eclipse_scout
+constraint_508:~org_eclipse_epp_package_scout_feature or org_eclipse_scout_rt_rap_target
+constraint_509:~org_eclipse_epp_package_scout_feature or org_eclipse_equinox_p2_user_ui
+constraint_510:~org_eclipse_epp_package_scout_feature or org_eclipse_help
+constraint_511:~org_eclipse_epp_package_scout_feature or org_eclipse_help_source
+constraint_512:~org_eclipse_epp_package_scout_feature or org_eclipse_jdt
+constraint_513:~org_eclipse_epp_package_scout_feature or org_eclipse_jdt_source
+constraint_514:~org_eclipse_epp_package_scout_feature or org_eclipse_pde
+constraint_515:~org_eclipse_epp_package_scout_feature or org_eclipse_pde_source
+constraint_516:~org_eclipse_epp_package_scout_feature or org_eclipse_platform
+constraint_517:~org_eclipse_epp_package_scout_feature or org_eclipse_platform_source
+constraint_518:~org_eclipse_epp_package_scout_feature or org_eclipse_rcp
+constraint_519:~org_eclipse_epp_package_scout_feature or org_eclipse_rcp_source
+constraint_520:~org_eclipse_epp_package_scout_feature or org_eclipse_jst_web_ui_feature
+constraint_521:~org_eclipse_epp_package_scout_feature or org_eclipse_epp_package_common_feature
+constraint_522:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_ide_feature
+constraint_523:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_java_feature
+constraint_524:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_pde_feature
+constraint_525:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_526:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_context_feature
+constraint_527:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_feature
+constraint_528:~org_eclipse_epp_package_scout_feature or org_eclipse_mylyn_wikitext_feature
+constraint_529:~org_eclipse_epp_package_scout_feature or org_eclipse_egit
+constraint_530:~org_eclipse_epp_package_scout_feature or org_eclipse_egit_mylyn
+constraint_531:~org_eclipse_epp_package_scout_feature or org_eclipse_jgit
+constraint_532:~org_eclipse_epp_package_standard_feature or org_eclipse_platform
+constraint_533:~org_eclipse_epp_package_standard_feature or org_eclipse_platform_source
+constraint_534:~org_eclipse_epp_package_standard_feature or org_eclipse_rcp
+constraint_535:~org_eclipse_epp_package_standard_feature or org_eclipse_rcp_source
+constraint_536:~org_eclipse_epp_package_standard_feature or org_eclipse_jdt
+constraint_537:~org_eclipse_epp_package_standard_feature or org_eclipse_jdt_source
+constraint_538:~org_eclipse_epp_package_standard_feature or org_eclipse_pde
+constraint_539:~org_eclipse_epp_package_standard_feature or org_eclipse_pde_source
+constraint_540:~org_eclipse_epp_package_standard_feature or org_eclipse_cvs
+constraint_541:~org_eclipse_epp_package_standard_feature or org_eclipse_cvs_source
+constraint_542:~org_eclipse_epp_package_standard_feature or org_eclipse_equinox_p2_user_ui
+constraint_543:~org_eclipse_epp_package_standard_feature or org_eclipse_help
+constraint_544:~org_eclipse_epp_package_standard_feature or org_eclipse_egit
+constraint_545:~org_eclipse_epp_package_standard_feature or org_eclipse_jgit
+constraint_546:~org_eclipse_epp_package_standard_feature or org_eclipse_epp_package_common_feature
+constraint_547:~org_eclipse_epp_package_testing_feature or org_eclipse_cvs
+constraint_548:~org_eclipse_epp_package_testing_feature or org_eclipse_equinox_p2_user_ui
+constraint_549:~org_eclipse_epp_package_testing_feature or org_eclipse_help
+constraint_550:~org_eclipse_epp_package_testing_feature or org_eclipse_platform
+constraint_551:~org_eclipse_epp_package_testing_feature or org_eclipse_rcp
+constraint_552:~org_eclipse_epp_package_testing_feature or org_eclipse_mylyn_ide_feature
+constraint_553:~org_eclipse_epp_package_testing_feature or org_eclipse_mylyn_bugzilla_feature
+constraint_554:~org_eclipse_epp_package_testing_feature or org_eclipse_mylyn_context_feature
+constraint_555:~org_eclipse_epp_package_testing_feature or org_eclipse_mylyn_feature
+constraint_556:~org_eclipse_epp_package_testing_feature or org_eclipse_mylyn_wikitext_feature
+constraint_557:~org_eclipse_epp_package_testing_feature or org_eclipse_epp_package_common_feature
+constraint_558:~org_eclipse_epp_package_testing_feature or org_eclipse_jubula_feature
+constraint_559:~org_eclipse_equinox_p2_core_feature_source or org_eclipse_equinox_p2_core_feature
+constraint_560:~org_eclipse_equinox_p2_extras_feature_source or org_eclipse_equinox_p2_extras_feature
+constraint_561:~org_eclipse_equinox_p2_extras_feature_source or org_eclipse_equinox_p2_core_feature_source
+constraint_562:~org_eclipse_equinox_p2_extras_feature or org_eclipse_equinox_p2_core_feature
+constraint_563:~org_eclipse_equinox_p2_rcp_feature_source or org_eclipse_equinox_p2_rcp_feature
+constraint_564:~org_eclipse_equinox_p2_rcp_feature_source or org_eclipse_equinox_p2_core_feature_source
+constraint_565:~org_eclipse_equinox_p2_rcp_feature or org_eclipse_equinox_p2_core_feature
+constraint_566:~org_eclipse_equinox_p2_user_ui_source or org_eclipse_equinox_p2_user_ui
+constraint_567:~org_eclipse_equinox_p2_user_ui_source or org_eclipse_equinox_p2_core_feature_source
+constraint_568:~org_eclipse_equinox_p2_user_ui_source or org_eclipse_equinox_p2_extras_feature_source
+constraint_569:~org_eclipse_equinox_p2_user_ui_source or org_eclipse_equinox_p2_rcp_feature_source
+constraint_570:~org_eclipse_equinox_p2_user_ui or org_eclipse_equinox_p2_core_feature
+constraint_571:~org_eclipse_equinox_p2_user_ui or org_eclipse_equinox_p2_extras_feature
+constraint_572:~org_eclipse_equinox_p2_user_ui or org_eclipse_equinox_p2_rcp_feature
+constraint_573:~org_eclipse_gef_sdk or org_eclipse_draw2d_sdk
+constraint_574:~org_eclipse_gef_sdk or org_eclipse_gef
+constraint_575:~org_eclipse_gef_sdk or org_eclipse_gef_source
+constraint_576:~org_eclipse_gef or org_eclipse_draw2d
+constraint_577:~org_eclipse_gmf_examples_runtime_ui_pde or org_eclipse_gmf
+constraint_578:~org_eclipse_gmf_runtime_notation_sdk or org_eclipse_emf_sdk
+constraint_579:~org_eclipse_gmf_runtime_notation_sdk or org_eclipse_gmf_runtime_notation
+constraint_580:~org_eclipse_gmf_runtime_notation_sdk or org_eclipse_gmf_runtime_notation_source
+constraint_581:~org_eclipse_gmf_runtime_notation or org_eclipse_emf_ecore
+constraint_582:~org_eclipse_gmf_runtime_notation or org_eclipse_emf_ecore_edit
+constraint_583:~org_eclipse_gmf_runtime_notation or org_eclipse_emf_edit
+constraint_584:~org_eclipse_gmf_runtime_sdk or org_eclipse_gef_sdk
+constraint_585:~org_eclipse_gmf_runtime_sdk or org_eclipse_gmf_runtime_notation_sdk
+constraint_586:~org_eclipse_gmf_runtime_sdk or org_eclipse_emf_transaction_sdk
+constraint_587:~org_eclipse_gmf_runtime_sdk or org_eclipse_gmf
+constraint_588:~org_eclipse_gmf_runtime_sdk or org_eclipse_gmf_source
+constraint_589:~org_eclipse_gmf_runtime_sdk or org_eclipse_gmf_examples_runtime_ui_pde
+constraint_590:~org_eclipse_gmf_runtime_sdk or org_eclipse_gmf_runtime_thirdparty_source
+constraint_591:~org_eclipse_gmf or org_eclipse_gmf_runtime_notation
+constraint_592:~org_eclipse_gmf or org_eclipse_gef
+constraint_593:~org_eclipse_gmf or org_eclipse_emf_common
+constraint_594:~org_eclipse_gmf or org_eclipse_emf_ecore
+constraint_595:~org_eclipse_gmf or org_eclipse_emf_ecore_edit
+constraint_596:~org_eclipse_gmf or org_eclipse_emf_edit
+constraint_597:~org_eclipse_gmf or org_eclipse_emf_transaction
+constraint_598:~org_eclipse_gmf or org_eclipse_emf_validation
+constraint_599:~org_eclipse_gmf or org_eclipse_emf_workspace
+constraint_600:~org_eclipse_gmf or org_eclipse_gmf_runtime_thirdparty
+constraint_601:~org_eclipse_help_source or org_eclipse_help
+constraint_602:~org_eclipse_jdt_source or org_eclipse_jdt
+constraint_603:~org_eclipse_jdt or org_eclipse_platform
+constraint_604:~org_eclipse_jpt_common_eclipselink_feature or org_eclipse_jpt_common_feature
+constraint_605:~org_eclipse_jpt_dbws_eclipselink_feature or org_eclipse_jpt_common_eclipselink_feature
+constraint_606:~org_eclipse_jpt_jaxb_eclipselink_feature or org_eclipse_jpt_jaxb_feature
+constraint_607:~org_eclipse_jpt_jaxb_eclipselink_feature or org_eclipse_jpt_common_eclipselink_feature
+constraint_608:~org_eclipse_jpt_jaxb_feature or org_eclipse_jpt_common_feature
+constraint_609:~org_eclipse_jpt_jpa_eclipselink_feature or org_eclipse_jpt_jpa_feature
+constraint_610:~org_eclipse_jpt_jpa_eclipselink_feature or org_eclipse_jpt_common_eclipselink_feature
+constraint_611:~org_eclipse_jpt_jpa_feature or org_eclipse_jpt_common_feature
+constraint_612:~org_eclipse_jpt_jpa_feature or org_eclipse_datatools_enablement_feature
+constraint_613:~org_eclipse_jpt_jpa_feature or org_eclipse_datatools_sqldevtools_feature
+constraint_614:~org_eclipse_jpt_jpa_feature or org_eclipse_datatools_connectivity_feature
+constraint_615:~org_eclipse_jst_enterprise_ui_feature or org_eclipse_jst_enterprise_userdoc_feature
+constraint_616:~org_eclipse_jst_enterprise_ui_feature or org_eclipse_jst_enterprise_core_feature
+constraint_617:~org_eclipse_jst_server_ui_feature or org_eclipse_jst_server_userdoc_feature
+constraint_618:~org_eclipse_jst_server_ui_feature or org_eclipse_jst_server_core_feature
+constraint_619:~org_eclipse_jst_web_core_feature or org_eclipse_wst_ws_core_feature
+constraint_620:~org_eclipse_jst_web_ui_feature or org_eclipse_wst_ws_ui_feature
+constraint_621:~org_eclipse_jst_web_ui_feature or org_eclipse_jst_web_userdoc_feature
+constraint_622:~org_eclipse_jst_web_ui_feature or org_eclipse_jst_web_core_feature
+constraint_623:~org_eclipse_jst_ws_cxf_feature or org_eclipse_jst_ws_jaxws_userdoc_feature
+constraint_624:~org_eclipse_jubula_feature or org_eclipse_help
+constraint_625:~org_eclipse_linuxtools_gdbtrace or org_eclipse_linuxtools_tmf
+constraint_626:~org_eclipse_linuxtools_lttng2_kernel or org_eclipse_linuxtools_tmf
+constraint_627:~org_eclipse_linuxtools_lttng2_kernel or org_eclipse_linuxtools_lttng2
+constraint_628:~org_eclipse_linuxtools_lttng2_kernel or org_eclipse_linuxtools_ctf
+constraint_629:~org_eclipse_linuxtools_lttng2 or org_eclipse_rse
+constraint_630:~org_eclipse_linuxtools_lttng2 or org_eclipse_linuxtools_tmf
+constraint_631:~org_eclipse_linuxtools_lttng2 or org_eclipse_linuxtools_ctf
+constraint_632:~org_eclipse_linuxtools_tmf or org_eclipse_linuxtools_ctf
+constraint_633:~org_eclipse_m2e_feature or org_eclipse_platform
+constraint_634:~org_eclipse_m2e_feature or org_eclipse_rcp
+constraint_635:~org_eclipse_m2e_feature or org_eclipse_jdt
+constraint_636:~org_eclipse_m2e_wtp_feature or org_eclipse_platform
+constraint_637:~org_eclipse_m2e_wtp_feature or org_eclipse_rcp
+constraint_638:~org_eclipse_m2e_wtp_feature or org_eclipse_jdt
+constraint_639:~org_eclipse_m2e_wtp_feature or org_eclipse_wst_web_ui_feature
+constraint_640:~org_eclipse_m2e_wtp_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_641:~org_eclipse_m2e_wtp_feature or org_eclipse_wst_common_fproj
+constraint_642:~org_eclipse_m2e_wtp_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_643:~org_eclipse_m2e_wtp_feature or org_eclipse_m2e_feature
+constraint_644:~org_eclipse_m2e_wtp_feature or org_sonatype_m2e_mavenarchiver_feature
+constraint_645:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_platform
+constraint_646:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_rcp
+constraint_647:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_jdt
+constraint_648:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_wst_web_ui_feature
+constraint_649:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_650:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_wst_common_fproj
+constraint_651:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_652:~org_eclipse_m2e_wtp_jaxrs_feature or org_eclipse_m2e_feature
+constraint_653:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_platform
+constraint_654:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_rcp
+constraint_655:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_jdt
+constraint_656:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_wst_web_ui_feature
+constraint_657:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_658:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_wst_common_fproj
+constraint_659:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_660:~org_eclipse_m2e_wtp_jpa_feature or org_eclipse_m2e_feature
+constraint_661:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_platform
+constraint_662:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_rcp
+constraint_663:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_jdt
+constraint_664:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_wst_web_ui_feature
+constraint_665:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_jst_enterprise_ui_feature
+constraint_666:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_wst_common_fproj
+constraint_667:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_jst_common_fproj_enablement_jdt
+constraint_668:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_m2e_feature
+constraint_669:~org_eclipse_m2e_wtp_jsf_feature or org_eclipse_jsf_feature
+constraint_670:~org_eclipse_mylyn_bugzilla_feature or org_eclipse_mylyn_feature
+constraint_671:~org_eclipse_mylyn_builds or org_eclipse_mylyn_feature
+constraint_672:~org_eclipse_mylyn_builds or org_eclipse_mylyn_team_feature
+constraint_673:~org_eclipse_mylyn_builds or org_eclipse_mylyn_versions
+constraint_674:~org_eclipse_mylyn_commons_notifications or org_eclipse_mylyn_commons
+constraint_675:~org_eclipse_mylyn_commons_repositories_http or org_eclipse_mylyn_commons_repositories
+constraint_676:~org_eclipse_mylyn_commons_repositories or org_eclipse_mylyn_commons
+constraint_677:~org_eclipse_mylyn_context_feature or org_eclipse_mylyn_feature
+constraint_678:~org_eclipse_mylyn_cvs or org_eclipse_mylyn_versions
+constraint_679:~org_eclipse_mylyn_gerrit_feature or org_eclipse_mylyn_reviews_feature
+constraint_680:~org_eclipse_mylyn_gerrit_feature or org_eclipse_egit
+constraint_681:~org_eclipse_mylyn_git or org_eclipse_mylyn_versions
+constraint_682:~org_eclipse_mylyn_git or org_eclipse_egit
+constraint_683:~org_eclipse_mylyn_hudson or org_eclipse_mylyn_builds
+constraint_684:~org_eclipse_mylyn_hudson or org_eclipse_mylyn_commons_repositories_http
+constraint_685:~org_eclipse_mylyn_ide_feature or org_eclipse_mylyn_context_feature
+constraint_686:~org_eclipse_mylyn_ide_feature or org_eclipse_mylyn_team_feature
+constraint_687:~org_eclipse_mylyn_ide_feature or org_eclipse_mylyn_tasks_ide
+constraint_688:~org_eclipse_mylyn_ide_feature or org_eclipse_cvs
+constraint_689:~org_eclipse_mylyn_java_feature or org_eclipse_mylyn_context_feature
+constraint_690:~org_eclipse_mylyn_java_feature or org_eclipse_jdt
+constraint_691:~org_eclipse_mylyn_pde_feature or org_eclipse_mylyn_java_feature
+constraint_692:~org_eclipse_mylyn_pde_feature or org_eclipse_pde
+constraint_693:~org_eclipse_mylyn_reviews_feature or org_eclipse_mylyn_feature
+constraint_694:~org_eclipse_mylyn_tasks_ide or org_eclipse_mylyn_feature
+constraint_695:~org_eclipse_mylyn_team_feature or org_eclipse_mylyn_context_feature
+constraint_696:~org_eclipse_mylyn_versions or org_eclipse_mylyn_commons
+constraint_697:~org_eclipse_mylyn_wikitext_feature or org_eclipse_mylyn_feature
+constraint_698:~org_eclipse_mylyn_feature or org_eclipse_mylyn_discovery
+constraint_699:~org_eclipse_mylyn_feature or org_eclipse_mylyn_monitor
+constraint_700:~org_eclipse_mylyn_feature or org_eclipse_mylyn_commons
+constraint_701:~org_eclipse_mylyn_feature or org_eclipse_mylyn_commons_identity
+constraint_702:~org_eclipse_mylyn_feature or org_eclipse_mylyn_commons_repositories
+constraint_703:~org_eclipse_mylyn_feature or org_eclipse_mylyn_commons_notifications
+constraint_704:~org_eclipse_net4j_db or org_eclipse_net4j_db_h2
+constraint_705:~org_eclipse_net4j_examples_installer or org_eclipse_net4j_examples_installer_source
+constraint_706:~org_eclipse_net4j_util_ui or org_eclipse_net4j_util
+constraint_707:~org_eclipse_net4j or org_eclipse_net4j_util_ui
+constraint_708:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_core_sdk
+constraint_709:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_doc
+constraint_710:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_doc_source
+constraint_711:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_edit
+constraint_712:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_edit_source
+constraint_713:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_ui
+constraint_714:~org_eclipse_ocl_all_sdk or org_eclipse_ocl_ui_source
+constraint_715:~org_eclipse_ocl_all or org_eclipse_ocl
+constraint_716:~org_eclipse_ocl_all or org_eclipse_ocl_uml
+constraint_717:~org_eclipse_ocl_core_sdk or org_eclipse_ocl_all
+constraint_718:~org_eclipse_ocl_core_sdk or org_eclipse_ocl_source
+constraint_719:~org_eclipse_ocl_core_sdk or org_eclipse_ocl_uml_source
+constraint_720:~org_eclipse_pde_source or org_eclipse_pde
+constraint_721:~org_eclipse_pde or org_eclipse_jdt
+constraint_722:~org_eclipse_pde or org_eclipse_platform
+constraint_723:~org_eclipse_persistence_sdo or org_eclipse_persistence_moxy
+constraint_724:~org_eclipse_photran_intel or org_eclipse_photran
+constraint_725:~org_eclipse_photran_xlf or org_eclipse_photran
+constraint_726:~org_eclipse_photran or org_eclipse_cdt
+constraint_727:~org_eclipse_photran or org_eclipse_rephraserengine
+constraint_728:~org_eclipse_platform_source or org_eclipse_platform
+constraint_729:~org_eclipse_platform_source or org_eclipse_rcp_source
+constraint_730:~org_eclipse_platform_source or org_eclipse_equinox_p2_user_ui_source
+constraint_731:~org_eclipse_platform_source or org_eclipse_help_source
+constraint_732:~org_eclipse_platform or org_eclipse_rcp
+constraint_733:~org_eclipse_platform or org_eclipse_help
+constraint_734:~org_eclipse_ptp_fortran or org_eclipse_photran
+constraint_735:~org_eclipse_ptp_fortran or org_eclipse_photran_intel
+constraint_736:~org_eclipse_ptp_fortran or org_eclipse_photran_xlf
+constraint_737:~org_eclipse_ptp_pldt_fortran or org_eclipse_cdt
+constraint_738:~org_eclipse_ptp_pldt_fortran or org_eclipse_photran
+constraint_739:~org_eclipse_ptp_pldt_fortran or org_eclipse_ptp_pldt
+constraint_740:~org_eclipse_ptp_rdt or org_eclipse_ptp_remote_rse
+constraint_741:~org_eclipse_ptp_rdt or org_eclipse_rse_core
+constraint_742:~org_eclipse_ptp_rdt or org_eclipse_rse_dstore
+constraint_743:~org_eclipse_ptp_rdt or org_eclipse_rse_local
+constraint_744:~org_eclipse_ptp_rdt or org_eclipse_rse_ssh
+constraint_745:~org_eclipse_ptp_rdt or org_eclipse_rse_terminals
+constraint_746:~org_eclipse_ptp_rdt or org_eclipse_rse_useractions
+constraint_747:~org_eclipse_ptp_remote_terminal or org_eclipse_tm_terminal
+constraint_748:~org_eclipse_ptp_remote_terminal or org_eclipse_tm_terminal_view
+constraint_749:~org_eclipse_ptp_remote_terminal or org_eclipse_ptp_remote
+constraint_750:~org_eclipse_ptp_remote_terminal or org_eclipse_ptp_remote_remotetools
+constraint_751:~org_eclipse_ptp_remote_terminal or org_eclipse_ptp_remotetools
+constraint_752:~org_eclipse_ptp or org_eclipse_ptp_core
+constraint_753:~org_eclipse_ptp or org_eclipse_ptp_etfw
+constraint_754:~org_eclipse_ptp or org_eclipse_ptp_pldt
+constraint_755:~org_eclipse_ptp or org_eclipse_ptp_remote
+constraint_756:~org_eclipse_ptp or org_eclipse_ptp_remote_remotetools
+constraint_757:~org_eclipse_ptp or org_eclipse_ptp_remotetools
+constraint_758:~org_eclipse_ptp or org_eclipse_ptp_rm_ibm_ll
+constraint_759:~org_eclipse_ptp or org_eclipse_ptp_rm_ibm_pe
+constraint_760:~org_eclipse_ptp or org_eclipse_ptp_rm_slurm
+constraint_761:~org_eclipse_ptp or org_eclipse_ptp_rdt_remotetools
+constraint_762:~org_eclipse_ptp or org_eclipse_ptp_rdt_sync
+constraint_763:~org_eclipse_ptp or org_eclipse_ptp_remote_terminal
+constraint_764:~org_eclipse_ptp or org_eclipse_ptp_rm_ibm_platform_lsf
+constraint_765:~org_eclipse_ptp or org_eclipse_ptp_rdt_sync_cdt
+constraint_766:~org_eclipse_rcp_source or org_eclipse_rcp
+constraint_767:~org_eclipse_rcp_source or org_eclipse_e4_rcp_source
+constraint_768:~org_eclipse_rcp or org_eclipse_e4_rcp
+constraint_769:~org_eclipse_recommenders_feature_completion_rcp_chain or org_eclipse_recommenders_feature_rcp_core
+constraint_770:~org_eclipse_recommenders_feature_completion_rcp_intellig or org_eclipse_recommenders_feature_rcp_core
+constraint_771:~org_eclipse_recommenders_feature_completion_rcp_subwords or org_eclipse_recommenders_feature_rcp_core
+constraint_772:~org_eclipse_recommenders_feature_extdoc_rcp or org_eclipse_recommenders_feature_rcp_core
+constraint_773:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_3rd_orbit
+constraint_774:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_completion_rcp_chain
+constraint_775:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_completion_rcp_intellig
+constraint_776:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_completion_rcp_subwords
+constraint_777:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_extdoc_rcp
+constraint_778:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_rcp_core
+constraint_779:~org_eclipse_recommenders_feature_rcp or org_eclipse_recommenders_feature_3rd_rcp_nonorbit
+constraint_780:~org_eclipse_rse_terminals or org_eclipse_tm_terminal
+constraint_781:~org_eclipse_rse or org_eclipse_rse_core
+constraint_782:~org_eclipse_rse or org_eclipse_rse_dstore
+constraint_783:~org_eclipse_rse or org_eclipse_rse_ftp
+constraint_784:~org_eclipse_rse or org_eclipse_rse_local
+constraint_785:~org_eclipse_rse or org_eclipse_rse_ssh
+constraint_786:~org_eclipse_rse or org_eclipse_rse_telnet
+constraint_787:~org_eclipse_rse or org_eclipse_rse_terminals
+constraint_788:~org_eclipse_scout_rt_client_source or org_eclipse_scout_rt_client
+constraint_789:~org_eclipse_scout_rt_client or org_eclipse_scout_rt_core
+constraint_790:~org_eclipse_scout_rt_core_source or org_eclipse_scout_rt_core
+constraint_791:~org_eclipse_scout_rt_source or org_eclipse_scout_rt
+constraint_792:~org_eclipse_scout_rt_source or org_eclipse_scout_rt_core_source
+constraint_793:~org_eclipse_scout_rt_source or org_eclipse_scout_rt_swt_source
+constraint_794:~org_eclipse_scout_rt_source or org_eclipse_scout_rt_swing_source
+constraint_795:~org_eclipse_scout_rt_source or org_eclipse_scout_rt_client_source
+constraint_796:~org_eclipse_scout_rt_swing_source or org_eclipse_scout_rt_swing
+constraint_797:~org_eclipse_scout_rt_swing or org_eclipse_scout_rt_client
+constraint_798:~org_eclipse_scout_rt_swt_source or org_eclipse_scout_rt_swt
+constraint_799:~org_eclipse_scout_rt_swt or org_eclipse_scout_rt_client
+constraint_800:~org_eclipse_scout_rt_testing_core_source or org_eclipse_scout_rt_testing_core
+constraint_801:~org_eclipse_scout_rt_testing_core_source or org_eclipse_scout_rt_core_source
+constraint_802:~org_eclipse_scout_rt_testing_core or org_eclipse_scout_rt_core
+constraint_803:~org_eclipse_scout_rt_testing_source or org_eclipse_scout_rt_testing
+constraint_804:~org_eclipse_scout_rt_testing_source or org_eclipse_scout_rt_core_source
+constraint_805:~org_eclipse_scout_rt_testing_source or org_eclipse_scout_rt_testing_core_source
+constraint_806:~org_eclipse_scout_rt_testing_source or org_eclipse_scout_rt_testing_swing_source
+constraint_807:~org_eclipse_scout_rt_testing_source or org_eclipse_scout_rt_testing_swt_source
+constraint_808:~org_eclipse_scout_rt_testing_swing_source or org_eclipse_scout_rt_testing_swing
+constraint_809:~org_eclipse_scout_rt_testing_swing or org_eclipse_scout_rt_testing_core
+constraint_810:~org_eclipse_scout_rt_testing_swing or org_eclipse_scout_rt_swing
+constraint_811:~org_eclipse_scout_rt_testing_swt_source or org_eclipse_scout_rt_testing_swt
+constraint_812:~org_eclipse_scout_rt_testing_swt or org_eclipse_scout_rt_testing_core
+constraint_813:~org_eclipse_scout_rt_testing_swt or org_eclipse_scout_rt_swt
+constraint_814:~org_eclipse_scout_rt_testing or org_eclipse_scout_rt_core
+constraint_815:~org_eclipse_scout_rt_testing or org_eclipse_scout_rt_testing_core
+constraint_816:~org_eclipse_scout_rt_testing or org_eclipse_scout_rt_testing_swing
+constraint_817:~org_eclipse_scout_rt_testing or org_eclipse_scout_rt_testing_swt
+constraint_818:~org_eclipse_scout_rt or org_eclipse_platform
+constraint_819:~org_eclipse_scout_rt or org_eclipse_rcp
+constraint_820:~org_eclipse_scout_rt or org_eclipse_help
+constraint_821:~org_eclipse_scout_rt or org_eclipse_scout_rt_core
+constraint_822:~org_eclipse_scout_rt or org_eclipse_scout_rt_swt
+constraint_823:~org_eclipse_scout_rt or org_eclipse_scout_rt_swing
+constraint_824:~org_eclipse_scout_rt or org_eclipse_scout_rt_client
+constraint_825:~org_eclipse_scout_sdk_rap_source or org_eclipse_scout_sdk_rap
+constraint_826:~org_eclipse_scout_sdk_rap or org_eclipse_scout_sdk
+constraint_827:~org_eclipse_scout_sdk_rap or org_eclipse_scout_sdk_source
+constraint_828:~org_eclipse_scout_sdk_source or org_eclipse_scout_sdk
+constraint_829:~org_eclipse_scout_sdk or org_eclipse_pde
+constraint_830:~org_eclipse_scout_sdk or org_eclipse_platform
+constraint_831:~org_eclipse_scout_sdk or org_eclipse_jdt
+constraint_832:~org_eclipse_scout_sdk or org_eclipse_scout_rt
+constraint_833:~org_eclipse_scout_sdk or org_eclipse_scout_rt_source
+constraint_834:~org_eclipse_scout or org_eclipse_scout_rt_source
+constraint_835:~org_eclipse_scout or org_eclipse_scout_sdk_source
+constraint_836:~org_eclipse_scout or org_eclipse_scout_sdk_rap_source
+constraint_837:~org_eclipse_scout or org_eclipse_scout_rt_testing_source
+constraint_838:~org_eclipse_sdk or org_eclipse_platform
+constraint_839:~org_eclipse_sdk or org_eclipse_platform_source
+constraint_840:~org_eclipse_sdk or org_eclipse_cvs
+constraint_841:~org_eclipse_sdk or org_eclipse_cvs_source
+constraint_842:~org_eclipse_sdk or org_eclipse_jdt
+constraint_843:~org_eclipse_sdk or org_eclipse_jdt_source
+constraint_844:~org_eclipse_sdk or org_eclipse_pde
+constraint_845:~org_eclipse_sdk or org_eclipse_pde_source
+constraint_846:~org_eclipse_sdk or org_eclipse_help
+constraint_847:~org_eclipse_sdk or org_eclipse_help_source
+constraint_848:~org_eclipse_uml2_examples or org_eclipse_uml2_examples_source
+constraint_849:~org_eclipse_uml2_sdk or org_eclipse_uml2
+constraint_850:~org_eclipse_uml2_sdk or org_eclipse_uml2_source
+constraint_851:~org_eclipse_uml2_sdk or org_eclipse_uml2_examples
+constraint_852:~org_eclipse_uml2_sdk or org_eclipse_uml2_doc
+constraint_853:~org_eclipse_wb_core_java_feature or org_eclipse_wb_core_feature
+constraint_854:~org_eclipse_wb_core_ui_feature or org_eclipse_wb_core_feature
+constraint_855:~org_eclipse_wb_core_ui_feature or org_eclipse_wb_core_java_feature
+constraint_856:~org_eclipse_wb_layout_group_feature or org_eclipse_wb_core_feature
+constraint_857:~org_eclipse_wb_rcp_feature or org_eclipse_wb_layout_group_feature
+constraint_858:~org_eclipse_wb_rcp_feature or org_eclipse_wb_core_feature
+constraint_859:~org_eclipse_wb_rcp_feature or org_eclipse_wb_core_java_feature
+constraint_860:~org_eclipse_wb_rcp_feature or org_eclipse_wb_core_ui_feature
+constraint_861:~org_eclipse_wb_rcp_feature or org_eclipse_wb_swt_feature
+constraint_862:~org_eclipse_wb_rcp_feature or org_eclipse_pde
+constraint_863:~org_eclipse_wb_swing_feature or org_eclipse_wb_core_feature
+constraint_864:~org_eclipse_wb_swing_feature or org_eclipse_wb_core_java_feature
+constraint_865:~org_eclipse_wb_swing_feature or org_eclipse_wb_core_ui_feature
+constraint_866:~org_eclipse_wb_swing_feature or org_eclipse_wb_layout_group_feature
+constraint_867:~org_eclipse_wb_swt_feature or org_eclipse_wb_core_feature
+constraint_868:~org_eclipse_wb_swt_feature or org_eclipse_pde
+constraint_869:~org_eclipse_wst_common_ui_feature or org_eclipse_wst_common_core_feature
+constraint_870:~org_eclipse_wst_server_ui_feature or org_eclipse_wst_server_userdoc_feature
+constraint_871:~org_eclipse_wst_server_ui_feature or org_eclipse_wst_server_core_feature
+constraint_872:~org_eclipse_wst_web_core_feature or org_eclipse_wst_jsdt_feature
+constraint_873:~org_eclipse_wst_web_core_feature or org_eclipse_wst_common_core_feature
+constraint_874:~org_eclipse_wst_web_core_feature or org_eclipse_wst_xml_core_feature
+constraint_875:~org_eclipse_wst_web_core_feature or org_eclipse_wst_server_core_feature
+constraint_876:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_web_userdoc_feature
+constraint_877:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_web_core_feature
+constraint_878:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_jsdt_feature
+constraint_879:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_common_ui_feature
+constraint_880:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_server_ui_feature
+constraint_881:~org_eclipse_wst_web_ui_feature or org_eclipse_wst_xml_ui_feature
+constraint_882:~org_eclipse_wst_ws_core_feature or org_eclipse_wst_ws_wsdl15_feature
+constraint_883:~org_eclipse_wst_ws_ui_feature or org_eclipse_wst_ws_userdoc_feature
+constraint_884:~org_eclipse_wst_ws_ui_feature or org_eclipse_wst_ws_core_feature
+constraint_885:~org_eclipse_wst_ws_ui_feature or org_eclipse_wst_xml_ui_feature
+constraint_886:~org_eclipse_wst_xml_ui_feature or org_eclipse_wst_common_ui_feature
+constraint_887:~org_eclipse_wst_xml_ui_feature or org_eclipse_wst_xml_userdoc_feature
+constraint_888:~org_eclipse_wst_xml_ui_feature or org_eclipse_wst_xml_core_feature
+constraint_889:~org_eclipse_wst_xsl_feature or org_eclipse_wst_xml_ui_feature
+constraint_890:~org_eclipse_wst_xsl_feature or org_eclipse_wst_xml_xpath2_processor_feature
+constraint_891:~org_eclipse_xpand_ui or org_eclipse_xtend_ui
+constraint_892:~org_eclipse_xpand_ui or org_eclipse_xpand
+constraint_893:~org_eclipse_xpand or org_eclipse_xtend
+constraint_894:~org_eclipse_xsd_sdk or org_eclipse_xsd
+constraint_895:~org_eclipse_xsd_sdk or org_eclipse_xsd_source
+constraint_896:~org_eclipse_xsd_sdk or org_eclipse_xsd_ecore_converter
+constraint_897:~org_eclipse_xsd_sdk or org_eclipse_xsd_ecore_converter_source
+constraint_898:~org_eclipse_xsd_sdk or org_eclipse_xsd_edit
+constraint_899:~org_eclipse_xsd_sdk or org_eclipse_xsd_edit_source
+constraint_900:~org_eclipse_xsd_sdk or org_eclipse_xsd_editor
+constraint_901:~org_eclipse_xsd_sdk or org_eclipse_xsd_editor_source
+constraint_902:~org_eclipse_xsd_sdk or org_eclipse_xsd_mapping
+constraint_903:~org_eclipse_xsd_sdk or org_eclipse_xsd_mapping_source
+constraint_904:~org_eclipse_xsd_sdk or org_eclipse_xsd_mapping_editor
+constraint_905:~org_eclipse_xsd_sdk or org_eclipse_xsd_mapping_editor_source
+constraint_906:~org_eclipse_xsd_sdk or org_eclipse_xsd_doc
+constraint_907:~org_eclipse_xsd_sdk or org_eclipse_xsd_doc_source
+constraint_908:~org_eclipse_xtend_ui or org_eclipse_xtend
+constraint_909:~org_eclipse_xtend or org_eclipse_xtend_dependencies
+constraint_910:~org_eclipse_xtend or org_eclipse_xtend_typesystem_emf
+constraint_911:~org_eclipse_xtext_ui or org_eclipse_xtext_runtime
+constraint_912:~org_eclipse_xtext_xbase or org_eclipse_xtext_xbase_lib
+constraint_913:~org_eclipse_xtext_xtext_ui or org_eclipse_xtext_ui
 </constraints>
 </feature_model>
