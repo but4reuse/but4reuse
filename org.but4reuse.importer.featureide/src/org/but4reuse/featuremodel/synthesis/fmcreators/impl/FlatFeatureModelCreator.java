@@ -14,8 +14,10 @@ import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 
-import de.ovgu.featureide.fm.core.Feature;
-import de.ovgu.featureide.fm.core.FeatureModel;
+import de.ovgu.featureide.fm.core.base.FeatureUtils;
+import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.Feature;
+import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 
 /**
  * Flat feature model creator
@@ -28,7 +30,6 @@ public class FlatFeatureModelCreator implements IFeatureModelCreator {
 	public void createFeatureModel(URI outputContainer) {
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		FeatureModel fm = new FeatureModel();
-		Feature root = new Feature(fm);
 
 		String rootName = AdaptedModelHelper.getName(adaptedModel);
 		if (rootName == null) {
@@ -36,23 +37,24 @@ public class FlatFeatureModelCreator implements IFeatureModelCreator {
 		} else {
 			rootName = FeatureIDEUtils.validFeatureName(rootName);
 		}
-		root.setName(rootName);
-		root.setAND(true);
 
-		fm.setRoot(root);
+		IFeature root = new Feature(fm, rootName);
+		FeatureUtils.setAnd(root, true);
+		FeatureUtils.setRoot(fm, root);
+
 		fm.addFeature(root);
 
-		LinkedList<Feature> children = new LinkedList<Feature>();
+		LinkedList<IFeature> children = new LinkedList<IFeature>();
 		// Add blocks as features
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Feature f = new Feature(fm, FeatureIDEUtils.validFeatureName(block.getName()));
-			f.setAbstract(false);
-			f.setMandatory(false);
-			f.setParent(root);
+			FeatureUtils.setAbstract(f, false);
+			FeatureUtils.setMandatory(f, false);
+			FeatureUtils.setParent(f, root);
 			children.add(f);
 			fm.addFeature(f);
 		}
-		root.setChildren(children);
+		FeatureUtils.setChildren(root, children);
 
 		// Add constraints
 		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {

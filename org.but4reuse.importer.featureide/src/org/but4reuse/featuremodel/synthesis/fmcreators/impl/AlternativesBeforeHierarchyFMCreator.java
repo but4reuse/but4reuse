@@ -16,8 +16,10 @@ import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 
-import de.ovgu.featureide.fm.core.Feature;
-import de.ovgu.featureide.fm.core.FeatureModel;
+import de.ovgu.featureide.fm.core.base.FeatureUtils;
+import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.Feature;
+import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 
 /**
  * Feature Model synthesis: First we identify alternative groups, then we create
@@ -44,29 +46,31 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		FeatureModel fm = new FeatureModel();
 		// fm.getFeatures returns a collection with random ordering...
 		// let's keep our own list of features
-		List<Feature> fmFeatures = new ArrayList<Feature>();
+		List<IFeature> fmFeatures = new ArrayList<IFeature>();
 
-		Feature root = new Feature(fm);
 		String rootName = AdaptedModelHelper.getName(adaptedModel);
 		if (rootName == null) {
 			rootName = "FeatureModel";
 		} else {
 			rootName = FeatureIDEUtils.validFeatureName(rootName);
 		}
-		root.setName(rootName);
-		root.setAND(true);
+		IFeature root = new Feature(fm, rootName);
 
-		List<Feature> parentAssigned = new ArrayList<Feature>();
+		FeatureUtils.setAnd(root, true);
 
-		fm.setRoot(root);
+		List<IFeature> parentAssigned = new ArrayList<IFeature>();
+
+		FeatureUtils.setRoot(fm, root);
+		FeatureUtils.addFeature(fm, root);
+
 		fm.addFeature(root);
 		fmFeatures.add(root);
 
 		// Add blocks as features
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Feature f = new Feature(fm, FeatureIDEUtils.validFeatureName(block.getName()));
-			f.setAbstract(false);
-			f.setMandatory(false);
+			FeatureUtils.setAbstract(f, false);
+			FeatureUtils.setMandatory(f, false);
 			fm.addFeature(f);
 			fmFeatures.add(f);
 		}
@@ -82,8 +86,8 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		for (IConstraint constraint : constraints) {
 			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				Feature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()));
-				Feature feature2 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()));
+				IFeature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()));
+				IFeature feature2 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()));
 				// any of them exists in previous?
 				AltGroup altF1 = altGroupList.getAltGroupOfFeature(feature1);
 				AltGroup altF2 = altGroupList.getAltGroupOfFeature(feature2);
@@ -95,7 +99,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				// features of this alt group feature1 is also excluded
 				else if (altF1 == null) {
 					boolean allFound = true;
-					for (Feature f : altF2.features) {
+					for (IFeature f : altF2.features) {
 						if (!f.equals(feature2)) {
 							if (!FeatureIDEUtils.existsExcludeConstraint(constraints, f, feature1)) {
 								allFound = false;
@@ -110,7 +114,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				// feature1 already was in a alt group
 				else if (altF2 == null) {
 					boolean allFound = true;
-					for (Feature f : altF1.features) {
+					for (IFeature f : altF1.features) {
 						if (!f.equals(feature1)) {
 							if (!FeatureIDEUtils.existsExcludeConstraint(constraints, f, feature2)) {
 								allFound = false;
@@ -127,24 +131,24 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 
 		// Create alt groups in the fm
 		for (AltGroup altGroup : altGroupList.altGroups) {
-			Feature fakeAltFeature = new Feature(fm);
-			fakeAltFeature.setName("Alternative_" + altGroup.id);
+			IFeature fakeAltFeature = new Feature(fm, "Alternative_" + altGroup.id);
 			altGroup.altRoot = fakeAltFeature;
-			fakeAltFeature.setAlternative();
-			fakeAltFeature.setAbstract(true);
-			fakeAltFeature.setMandatory(false);
-			fakeAltFeature.setChildren(altGroup.features);
+			FeatureUtils.setAlternative(fakeAltFeature);
+			FeatureUtils.setAbstract(fakeAltFeature, true);
+			FeatureUtils.setMandatory(fakeAltFeature, false);
+			FeatureUtils.setChildren(fakeAltFeature, altGroup.features);
+			FeatureUtils.addFeature(fm, fakeAltFeature);
 			fm.addFeature(fakeAltFeature);
 			fmFeatures.add(fakeAltFeature);
 		}
 
 		// Create hierarchy with the Requires
-		for (Feature f : fmFeatures) {
+		for (IFeature f : fmFeatures) {
 
 			// check if the feature belongs to an alternative group
 			AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
 
-			List<Feature> parentCandidates;
+			List<IFeature> parentCandidates;
 			if (altGroup == null) {
 				// normal feature
 				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
@@ -153,18 +157,18 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				// the parent candidates will be those that are shared parent
 				// candidates for all the alt group
 				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
-				for (Feature altf : altGroup.features) {
+				for (IFeature altf : altGroup.features) {
 					parentCandidates.retainAll(FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, altf));
 				}
 			}
-			List<Feature> definitiveList = new ArrayList<Feature>();
-			for (Feature pc : parentCandidates) {
+			List<IFeature> definitiveList = new ArrayList<IFeature>();
+			for (IFeature pc : parentCandidates) {
 				definitiveList.add(pc);
 			}
 
 			// Reduce the parent candidates, remove ancestors
-			for (Feature pc1 : parentCandidates) {
-				for (Feature pc2 : parentCandidates) {
+			for (IFeature pc1 : parentCandidates) {
+				for (IFeature pc2 : parentCandidates) {
 					if (pc1 != pc2) {
 						if (FeatureIDEUtils.isAncestorFeature1ofFeature2(fm, constraints, pc1, pc2)) {
 							definitiveList.remove(pc1);
@@ -177,11 +181,11 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 
 			// Select one
 			if (!definitiveList.isEmpty()) {
-				Feature parent = null;
+				IFeature parent = null;
 
 				// Preference to parents in alternative groups
 				// TODO for the moment get the first alternative group
-				for (Feature dp : definitiveList) {
+				for (IFeature dp : definitiveList) {
 					if (altGroupList.getAltGroupOfFeature(dp) != null) {
 						parent = dp;
 						break;
@@ -193,7 +197,7 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				// constraint
 				if (parent == null) {
 					int maximumReasons = Integer.MIN_VALUE;
-					for (Feature dp : definitiveList) {
+					for (IFeature dp : definitiveList) {
 						int reasons = FeatureIDEUtils.getNumberOfReasonsOfRequiresConstraint(constraints, f, dp);
 						if (reasons > maximumReasons) {
 							parent = dp;
@@ -202,28 +206,26 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				}
 
 				// And add it
-				parent.setAND(true);
-				LinkedList<Feature> childs = parent.getChildren();
+				FeatureUtils.setAnd(parent, true);
+				Iterable<IFeature> childs = FeatureUtils.getChildren(parent);
 				if (altGroup == null) {
-					childs.add(f);
+					FeatureUtils.addChild(parent, f);
+					FeatureUtils.setParent(f, parent);
 					parentAssigned.add(f);
-					parent.setChildren(childs);
-					f.setParent(parent);
 				} else {
 					// Only once for the whole alt group
 					if (!parentAssigned.contains(altGroup.altRoot)) {
-						childs.add(altGroup.altRoot);
+						FeatureUtils.setChildren(parent, childs);
 						parentAssigned.add(altGroup.altRoot);
-						parent.setChildren(childs);
-						altGroup.altRoot.setParent(parent);
+						FeatureUtils.setParent(altGroup.altRoot, parent);
 					}
 				}
 			}
 		}
 
 		// Features without parent are added to the root
-		LinkedList<Feature> toTheRoot = new LinkedList<Feature>();
-		for (Feature f : fmFeatures) {
+		LinkedList<IFeature> toTheRoot = new LinkedList<IFeature>();
+		for (IFeature f : fmFeatures) {
 			if (!f.equals(root)) {
 				AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
 				if (altGroup != null) {
@@ -231,12 +233,12 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 				}
 				if (!parentAssigned.contains(f)) {
 					toTheRoot.add(f);
-					f.setParent(root);
+					FeatureUtils.setParent(f, root);
 					parentAssigned.add(f);
 				}
 			}
 		}
-		root.setChildren(toTheRoot);
+		FeatureUtils.setChildren(root, toTheRoot);
 
 		// Save
 		try {
@@ -253,15 +255,15 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 	 * Auxiliary classes
 	 */
 	public class AltGroup {
-		LinkedList<Feature> features = new LinkedList<Feature>();
+		LinkedList<IFeature> features = new LinkedList<IFeature>();
 		int id;
-		Feature altRoot;
+		IFeature altRoot;
 	}
 
 	public class AltGroupList {
 		List<AltGroup> altGroups = new ArrayList<AltGroup>();
 
-		public AltGroup getAltGroupOfFeature(Feature feature) {
+		public AltGroup getAltGroupOfFeature(IFeature feature) {
 			for (AltGroup altGroup : altGroups) {
 				if (altGroup.features.contains(feature)) {
 					return altGroup;
@@ -270,11 +272,11 @@ public class AlternativesBeforeHierarchyFMCreator implements IFeatureModelCreato
 			return null;
 		}
 
-		public void addAltGroup(Feature... features) {
+		public void addAltGroup(IFeature... features) {
 			AltGroup altGroup = new AltGroup();
 			// Automatically set the id
 			altGroup.id = altGroups.size() + 1;
-			for (Feature feature : features) {
+			for (IFeature feature : features) {
 				altGroup.features.add(feature);
 			}
 			altGroups.add(altGroup);

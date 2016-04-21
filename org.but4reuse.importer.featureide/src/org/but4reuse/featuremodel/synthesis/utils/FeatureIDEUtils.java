@@ -17,14 +17,16 @@ import org.eclipse.core.resources.IFile;
 import org.prop4j.Node;
 import org.prop4j.NodeReader;
 
-import de.ovgu.featureide.fm.core.Constraint;
-import de.ovgu.featureide.fm.core.Feature;
-import de.ovgu.featureide.fm.core.FeatureModel;
+import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.Constraint;
+import de.ovgu.featureide.fm.core.base.impl.Feature;
+import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 import de.ovgu.featureide.fm.core.io.FeatureModelWriterIFileWrapper;
 import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelWriter;
 
 /**
  * Feature IDE Utils
+ * 
  * @author jabier.martinez
  */
 public class FeatureIDEUtils {
@@ -79,6 +81,7 @@ public class FeatureIDEUtils {
 
 	/**
 	 * Get string representation of the constraint
+	 * 
 	 * @param constraint
 	 * @return
 	 */
@@ -98,6 +101,7 @@ public class FeatureIDEUtils {
 
 	/**
 	 * Save
+	 * 
 	 * @param featureModel
 	 * @param file
 	 */
@@ -107,46 +111,49 @@ public class FeatureIDEUtils {
 
 	/**
 	 * Add constraint
+	 * 
 	 * @param featureModel
 	 * @param constraint
 	 */
 	public static void addConstraint(FeatureModel featureModel, String constraint) {
 		NodeReader nodeReader = new NodeReader();
-		List<String> featureList = new ArrayList<String>(featureModel.getFeatureNames());
+		List<String> featureList = new ArrayList<String>(featureModel.getFeatureTable().keySet());
 		Node node = null;
-		try{
+		try {
 			node = nodeReader.stringToNode(constraint, featureList);
-		} catch(Exception e){
+		} catch (Exception e) {
 			System.out.println("Not valid constraint definition: " + constraint);
 		}
 		// TODO report error if node is null
-		if(node!=null){
+		if (node != null) {
 			Constraint c = new Constraint(featureModel, node);
 			featureModel.addConstraint(c);
 		} else {
 			System.out.println("Maybe problems with names: " + constraint);
 		}
 	}
-	
+
 	/**
-	 * Feature IDE has some restrictions like no whitespaces etc.
-	 * They say that the feature name must be a valid Java identifier.
+	 * Feature IDE has some restrictions like no whitespaces etc. They say that
+	 * the feature name must be a valid Java identifier.
+	 * 
 	 * @param name
 	 * @return
 	 */
-	public static String validFeatureName(String name){
+	public static String validFeatureName(String name) {
 		// TODO improve checks
 		return name.replaceAll(" ", "_");
 	}
-	
 
-	// For example 3 requires 2 (3 is child of 2). Then 2 requires 1. isAncestor 1 of 3 is true.
-	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, List<IConstraint> constraints, Feature f1, Feature f2) {
-		List<Feature> directRequired = getFeatureRequiredFeatures(fm, constraints, f2);
+	// For example 3 requires 2 (3 is child of 2). Then 2 requires 1. isAncestor
+	// 1 of 3 is true.
+	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, List<IConstraint> constraints, IFeature f1,
+			IFeature f2) {
+		List<IFeature> directRequired = getFeatureRequiredFeatures(fm, constraints, f2);
 		if (directRequired.contains(f1)) {
 			return true;
 		}
-		for (Feature direct : directRequired) {
+		for (IFeature direct : directRequired) {
 			if (isAncestorFeature1ofFeature2(fm, constraints, f1, direct)) {
 				return true;
 			}
@@ -154,7 +161,7 @@ public class FeatureIDEUtils {
 		return false;
 	}
 
-	public static boolean existsExcludeConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
+	public static boolean existsExcludeConstraint(List<IConstraint> constraints, IFeature f1, IFeature f2) {
 		for (IConstraint constraint : constraints) {
 			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 				// check f1 excludes f2 and viceversa
@@ -182,8 +189,8 @@ public class FeatureIDEUtils {
 		return false;
 	}
 
-	public static List<Feature> getFeatureRequiredFeatures(FeatureModel fm, List<IConstraint> constraints, Feature f1) {
-		List<Feature> required = new ArrayList<Feature>();
+	public static List<IFeature> getFeatureRequiredFeatures(FeatureModel fm, List<IConstraint> constraints, IFeature f1) {
+		List<IFeature> required = new ArrayList<IFeature>();
 		for (IConstraint constraint : constraints) {
 			if (constraint.getType().equals(IConstraint.REQUIRES)) {
 				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))) {
@@ -193,8 +200,8 @@ public class FeatureIDEUtils {
 		}
 		return required;
 	}
-	
-	public static int getNumberOfReasonsOfRequiresConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
+
+	public static int getNumberOfReasonsOfRequiresConstraint(List<IConstraint> constraints, IFeature f1, IFeature f2) {
 		for (IConstraint constraint : constraints) {
 			if (constraint.getType().equals(IConstraint.REQUIRES)) {
 				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))

@@ -53,7 +53,7 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 			}
 
 			// Refresh
-			if(output !=null){
+			if (output != null) {
 				WorkbenchUtils.refreshIResource(output);
 			} else {
 				WorkbenchUtils.refreshAllWorkspace();
