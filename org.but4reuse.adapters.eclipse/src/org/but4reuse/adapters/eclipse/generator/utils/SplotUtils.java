@@ -1,9 +1,9 @@
 package org.but4reuse.adapters.eclipse.generator.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -139,17 +139,34 @@ public class SplotUtils {
 		
 		splotARetourner+="</feature_model>\n";
 		
-		PrintWriter writer=null;
-		try {
-			writer = new PrintWriter("EclipseFeature.xml","UTF-8");
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+		
+		String filename="EclipseFeature.xml";
+		
+		BufferedWriter bufferedWriter=null;
+		
+		try{
+			FileWriter fileWriter=new FileWriter(filename);
+			
+			bufferedWriter = new BufferedWriter(fileWriter);
+			
+			bufferedWriter.write(splotARetourner);
+			bufferedWriter.close();
+			fileWriter.close();
+		}catch(IOException e){
 			e.printStackTrace();
 		}
-		if(writer!=null){
-			writer.print(splotARetourner);
-			writer.close();
+		
+		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		if (path.endsWith("bin/")) {
+			// On some OS, it gives "bin/" in more, but we don't want
+			path = path.substring(0, path.length() - 4);
 		}
-		return null;
+		path=path+filename;
+		System.out.println(path);
+		
+		File file = new File(path);
+		
+		return file;
 		
 	}
 	
@@ -165,5 +182,6 @@ public class SplotUtils {
 			return;
 
 		exportToSPLOT(allFeatures);
+		
 	}
 }
