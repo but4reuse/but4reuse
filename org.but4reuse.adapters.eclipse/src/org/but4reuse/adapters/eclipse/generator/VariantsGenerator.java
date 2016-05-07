@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.interfaces.ISender;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IVariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
+import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -61,12 +61,12 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			return;
 		}
 		
+		
 		// TODO: to remove !
 		try { // Clear the output
 			File outputFile = new File(output);
 			FileAndDirectoryUtils.deleteFile(outputFile);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 		
 		// if the eclipse dir is inside the input
 		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
@@ -79,7 +79,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		}
 		
 		// check if it's an eclipse directory
-		if(!Arrays.asList(eclipse.list()).containsAll(Arrays.asList(new String[]{"plugins", "features"}))) {
+		if(!VariantsUtils.isEclipseDir(eclipse)) {
 			sendToAll(input + " is not an eclipse !");
 			return;
 		}
@@ -105,22 +105,25 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					allFileElements.add((FileElement) elem);
 			}
 		}
+		// Permits to use PluginElement without launch an Eclipse Application
+		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
+		
 		sendToAll("Total features number in the input = " + allFeatures.size());
-		sendToAll("Total plugins number in the input = " + allPlugins.size() + "\n");
-
-		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPlugins,
+		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
+		
+		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPluginsGen,
 				inputURI.toString());
 
 		for (int i = 1; i <= nbVariants; i++) {
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + i;
 			int nbSelectedFeatures = 0;
 
-			List<PluginElement> pluginsList = null;
+			List<PluginElementGenerator> pluginsList = null;
 			List<ActualFeature> chosenFeatures = null;
 
 			if (percentage == 100) {
 				nbSelectedFeatures = allFeatures.size();
-				pluginsList = allPlugins;
+				pluginsList = allPluginsGen;
 				chosenFeatures = allFeatures;
 			} else {
 				pluginsList = new ArrayList<>();
@@ -154,9 +157,9 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
-					List<PluginElement> allPluginsDependencies = depAnalyzer.getPluginsDependencies(chosenFeature);
+					List<PluginElementGenerator> allPluginsDependencies = depAnalyzer.getPluginsDependencies(chosenFeature);
 					if (allPluginsDependencies != null) {
-						for (PluginElement depPlugin : allPluginsDependencies) {
+						for (PluginElementGenerator depPlugin : allPluginsDependencies) {
 							// Avoid duplicates dependencies in the plugins list
 							if (!pluginsList.contains(depPlugin)) {
 								pluginsList.add(depPlugin);
@@ -166,7 +169,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				}
 
 				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-				for(PluginElement one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
+				for(PluginElementGenerator one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
 					if(!pluginsList.contains(one_manda)) pluginsList.add(one_manda);
 				}
 				
@@ -233,10 +236,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			adapter.construct(inputURI, allElements, new NullProgressMonitor());
 
 		} // end of variants loop
-
-		sendToAll("\nGeneration finished !");
 		
-
+		sendToAll("\nGeneration finished !");
 	}
 
 	@Override

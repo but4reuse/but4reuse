@@ -14,6 +14,7 @@ import java.util.Properties;
 import java.util.Scanner;
 
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
+import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 
 /**
  * This class launch every variants in an output dir (from your preferences.properties), 
@@ -33,13 +34,45 @@ public class VariantsChecker {
 		
 		List<Process> allProcess = new ArrayList<>(3);
 		FileWriter log = new FileWriter(logFile, true);
-		String output =  PreferenceUtils.getPreferences().get(PreferenceUtils.PREF_OUTPUT);
 		Scanner scan = new Scanner(System.in);
-		File outputDir = new File(output);
+		System.out.print("Your directory of Eclipse output registered is : ");
 		
-		for(File variant : outputDir.listFiles()){
+		File outputDir;
+		try {
+			outputDir = new File(PreferenceUtils.getPreferences().get(PreferenceUtils.PREF_OUTPUT));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			scan.close();
+			log.close();
+			return;
+		}
+		System.out.println(outputDir);
+		
+		System.out.println("\nIf you want to use it, press enter, else, write the new :");
+		String newDir = null;
+		while(newDir==null) {
+			newDir = scan.nextLine();
+			if(newDir.isEmpty()) break;
+			else if (!new File(newDir).exists()){
+				System.out.println("Your path doesn't exists. Retry...");
+				newDir=null;
+			} else {
+				try {
+					PreferenceUtils.savePreferences(null, newDir, null, null);
+				} catch (IOException e) {
+					e.printStackTrace();
+					scan.close();
+					log.close();
+					return;
+				}
+				outputDir = new File(newDir);
+			}
+		}
+		
+		List<File> allVariants = getVariants(outputDir);
+		for(File variant : allVariants){
 			
-			System.out.println("Check variant : "+variant.getName()+"...");
+			System.out.println("Check variant : "+variant.getAbsolutePath()+"...");
 			
 			String outputVar = variant.getPath() + File.separator + "eclipse";
 			if(isWindows) outputVar += ".exe";
@@ -124,9 +157,27 @@ public class VariantsChecker {
 		
 		log.close();
 		scan.close();
-		System.out.println("Finish");
+		System.out.println("Variants checking process finished");
 	}
 	
+	private static List<File> getVariants(File outputDir) {
+		List<File> allVariants = new ArrayList<>();
+		if(outputDir.listFiles()!=null){
+			for(File dir : outputDir.listFiles()){
+				if(VariantsUtils.isEclipseDir(dir)){
+					allVariants.add(dir);
+				} else {
+					if(outputDir.listFiles()==null) return new ArrayList<>(0);
+					else {
+						List<File> allVariantsInside = getVariants(dir);
+						if(allVariantsInside!=null) allVariants.addAll(allVariantsInside);
+					}
+				}
+			}
+		}
+		return allVariants;
+	}
+
 	public static boolean isWindows(String osname) {
 		return osname.toLowerCase().contains("win");
 	}

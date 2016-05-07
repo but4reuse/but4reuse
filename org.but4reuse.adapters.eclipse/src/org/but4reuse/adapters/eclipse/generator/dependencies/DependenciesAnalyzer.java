@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureInfosExtractor;
+import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
 import org.but4reuse.utils.files.FileUtils;
 
 public class DependenciesAnalyzer {
@@ -23,13 +23,13 @@ public class DependenciesAnalyzer {
 	private Map<ActualFeature, List<String>> mapFeatureWithFeaturesDependencies;
 	private Map<ActualFeature, String> mapFeatureWithPath;
 
-	private List<PluginElement> allPlugins;
-	private Map<String, List<PluginElement>> mapSymbNameWithPlugin;
+	private List<PluginElementGenerator> allPlugins;
+	private Map<String, List<PluginElementGenerator>> mapSymbNameWithPlugin;
 	private Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies;
-	private List<PluginElement> allPluginsWithoutFeaturesDependencies;
-	private List<PluginElement> allPluginsMandatoriesForThisInput;
-	
-	public DependenciesAnalyzer(List<ActualFeature> allFeatures, List<PluginElement> allPlugins,
+	private List<PluginElementGenerator> allPluginsWithoutFeaturesDependencies;
+	private List<PluginElementGenerator> allPluginsMandatoriesForThisInput;
+
+	public DependenciesAnalyzer(List<ActualFeature> allFeatures, List<PluginElementGenerator> allPlugins,
 			String eclipseInstallationURI) {
 		this.allFeatures = allFeatures;
 		this.allPlugins = allPlugins;
@@ -147,34 +147,34 @@ public class DependenciesAnalyzer {
 	}
 
 	/*********** Plugins ************/
-	
-	public List<PluginElement> getPluginsDependencies(ActualFeature actual) {
+
+	public List<PluginElementGenerator> getPluginsDependencies(ActualFeature actual) {
 		List<String> pluginsDependencies = mapFeatureWithPluginsDependencies.get(actual);
 		if (pluginsDependencies != null && !pluginsDependencies.isEmpty()) {
 			return getPluginsFromListSymbName(pluginsDependencies);
 		}
 		return null;
 	}
-	
-	public List<PluginElement> getPluginsWithoutAnyFeaturesDependencies() {
+
+	public List<PluginElementGenerator> getPluginsWithoutAnyFeaturesDependencies() {
 		return allPluginsWithoutFeaturesDependencies;
 	}
-	
-	public List<PluginElement> getPluginsMandatoriesByInput() {
+
+	public List<PluginElementGenerator> getPluginsMandatoriesByInput() {
 		return allPluginsMandatoriesForThisInput;
 	}
-	
+
 	private void initMapNameWithPlugin() {
 		if (allPlugins == null || allPlugins.isEmpty())
 			return;
 
 		mapSymbNameWithPlugin = new HashMap<>();
-		for (PluginElement onePlugin : allPlugins) {
+		for (PluginElementGenerator onePlugin : allPlugins) {
 			if (mapSymbNameWithPlugin.containsKey(onePlugin.getSymbName())) {
 				mapSymbNameWithPlugin.get(onePlugin.getSymbName()).add(onePlugin);
 			} else {
 				// Most of times, there is only one version by SymbName
-				List<PluginElement> pluginVersionList = new ArrayList<>(1);
+				List<PluginElementGenerator> pluginVersionList = new ArrayList<>(1);
 				pluginVersionList.add(onePlugin);
 				mapSymbNameWithPlugin.put(onePlugin.getSymbName(), pluginVersionList);
 			}
@@ -209,22 +209,22 @@ public class DependenciesAnalyzer {
 		allPluginsWithoutFeaturesDependencies.addAll(allPlugins);
 		// eclipseFull Kepler = 2066 plugins
 		// all Plugins from Features dependencies = 1947
-		for (PluginElement oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) {
+		for (PluginElementGenerator oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) {
 			// We don't use removeAll because it remove all occurrences, but we
 			// want to remove just one at each time
 			allPluginsWithoutFeaturesDependencies.remove(oneP);
 		}
 	}
-	
+
 	private void initListPluginsMandatories(){
 		allPluginsMandatoriesForThisInput = new ArrayList<>(MandatoriesPlugins.list.length);
 		for(String manda : MandatoriesPlugins.list){
-			List<PluginElement> plugins_tmp = getPluginsThatContainsName(manda);
+			List<PluginElementGenerator> plugins_tmp = getPluginsThatStartsWithName(manda);
 			if(plugins_tmp!=null) allPluginsMandatoriesForThisInput.addAll(plugins_tmp);
 		}
 	}
 
-	private List<PluginElement> getAllPluginsDependencies(
+	private List<PluginElementGenerator> getAllPluginsDependencies(
 			Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies) {
 		List<String> plugins = new ArrayList<>();
 		for (List<String> list : mapFeatureWithPluginsDependencies.values()) {
@@ -237,14 +237,14 @@ public class DependenciesAnalyzer {
 		return getPluginsFromListSymbName(plugins);
 	}
 
-	private List<PluginElement> getPluginsFromListSymbName(List<String> listSymbName) {
+	private List<PluginElementGenerator> getPluginsFromListSymbName(List<String> listSymbName) {
 		if (listSymbName != null && !listSymbName.isEmpty()) {
-			List<PluginElement> listPlugins = new ArrayList<PluginElement>();
-			List<PluginElement> pluginVersions;
+			List<PluginElementGenerator> listPlugins = new ArrayList<PluginElementGenerator>();
+			List<PluginElementGenerator> pluginVersions;
 			for (int i = 0; i < listSymbName.size(); i++) {
 				pluginVersions = mapSymbNameWithPlugin.get(listSymbName.get(i));
 				if(pluginVersions!=null){
-					for (PluginElement onePlugin : pluginVersions) {
+					for (PluginElementGenerator onePlugin : pluginVersions) {
 						if (onePlugin != null && !listPlugins.contains(onePlugin)) {
 							listPlugins.add(onePlugin);
 						}
@@ -255,18 +255,18 @@ public class DependenciesAnalyzer {
 		}
 		return null;
 	}
-	
-	private List<PluginElement> getPluginsThatContainsName(String symbname){
+
+	private List<PluginElementGenerator> getPluginsThatStartsWithName(String symbname){
 		if(symbname==null || symbname.isEmpty()) return null;
-		
+
 		// Rarely more than 3 plugins with the same symbname
-		List<PluginElement> pluginsWithName = new ArrayList<>(3);
-		for(PluginElement plug : allPlugins){
-			if(plug.getSymbName().contains(symbname)){
+		List<PluginElementGenerator> pluginsWithName = new ArrayList<>(3);
+		for(PluginElementGenerator plug : allPlugins){
+			if(plug.getSymbName().startsWith(symbname)){
 				pluginsWithName.add(plug);
 			}
 		}
 		return pluginsWithName;
 	}
-	
+
 }

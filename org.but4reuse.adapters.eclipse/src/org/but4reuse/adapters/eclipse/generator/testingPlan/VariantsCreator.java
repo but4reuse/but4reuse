@@ -13,28 +13,25 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-import org.apache.commons.io.FileUtils;
+import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
+import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 
 /**
  * This class generate a lot of variants (following the testing plan
  * in src/resources/TestingPlan.txt), in specific directories.
  * Each line of this file lead a creation of 3 variants, with 
  * the inputs and random specified.
- * /!\ It's important to have exactly the same inputs as TestingPlan.txt   
+ * <br>/!\ It's important to have exactly the same inputs as TestingPlan.txt   
  */
 public class VariantsCreator {
 
 	public static final String TESTING_PLAN = "TestingPlan.txt";
-	public static final String value_separator = "-"; // input-random
-	public static final String input_separator = "_"; //RCP_Java
-	private static final long MB_DIVISEUR = 1048576;
+	public static final String value_separator = "-"; // ex: input-random
+	public static final String input_separator = "_"; // ex: RCP_Java
+	private static final int NB_VARIANTS = 3;
 	
-	
-	public static void main(String[] args) {
-		
-		// TODO: traduire en anglais
-		
+	public void process(){
 		System.out.print("Your directory of Eclipse inputs registered is : ");
 		File inputDir;
 		try {
@@ -43,7 +40,10 @@ public class VariantsCreator {
 			e1.printStackTrace();
 			return;
 		}
-		String input = inputDir.getParent();
+		String input;
+		if(VariantsUtils.isEclipseDir(inputDir)) input = inputDir.getParent();
+		else input = inputDir.getPath();
+		
 		System.out.println(input);
 		
 		Scanner scan = new Scanner(System.in);
@@ -87,7 +87,6 @@ public class VariantsCreator {
 			return;
 		}
 		
-		
 		System.out.println("\nWhat is your generation variants choice ?\n(Write the number)\n");
 		List<String> choices = null;
 		int nbChoices;
@@ -127,8 +126,6 @@ public class VariantsCreator {
 			}
 		}
 		
-		scan.close();
-		
 		Map<Integer, List<String>> allValues;
 		try {
 			allValues = getAllValuesFrom(testingPlan, choice);
@@ -138,24 +135,83 @@ public class VariantsCreator {
 			return;
 		}
 		
-		System.out.println("Content of \""+choice+"%\"");
+		System.out.println("\nContent of \""+choice+"%\"");
+		List<String> allExistingInputs = new ArrayList<>();
 		for(Entry<Integer, List<String>> entry : allValues.entrySet()){
 			for(String value : entry.getValue()){
 
 				if(new File(input + value).exists()){
-					System.out.printf("%s : %s (%s, size = %d Mb)\n", entry.getKey(), value, "exists", FileUtils.sizeOfDirectory(new File(input + value))/(MB_DIVISEUR));
+					System.out.printf("%s : %s (%s, size)\n", entry.getKey(), value, "exists");
+					allExistingInputs.add(value);
 				} else {
 					System.out.printf("%s : %s (%s)\n", entry.getKey(), value, "not exists");
 				}
 			}
 		}
 		
-		//TODO: Call VariantsGenerator(params...).generate();
+		System.out.print("\nYour directory of Eclipse output registered is : ");
+		File outputDir;
+		try {
+			outputDir = new File(PreferenceUtils.getPreferences().get(PreferenceUtils.PREF_OUTPUT));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			scan.close();
+			return;
+		}
+		System.out.println(outputDir);
 		
+		System.out.println("If you want to use it, press enter, else, write the new :");
+		String output = outputDir.getAbsolutePath();
+		newDir = null;
+		while(newDir==null) {
+			newDir = scan.nextLine();
+			if(newDir.isEmpty()) break;
+			else if (!new File(newDir).exists()){
+				System.out.println("Your path doesn't exists. Retry...");
+				newDir=null;
+			} else {
+				try {
+					PreferenceUtils.savePreferences(null, newDir, null, null);
+				} catch (IOException e) {
+					e.printStackTrace();
+					scan.close();
+					return;
+				}
+				output = newDir; // new output OK
+			}
+		}
+		
+		System.out.println("\nDémarrage de création des variantes ...");
+		for(String existingInput : allExistingInputs){
+			try{
+				String output_tmp = output;
+				if(!output_tmp.endsWith(File.separator)) output_tmp+=File.separator;
+				new VariantsGenerator(input+existingInput, output_tmp+existingInput, NB_VARIANTS, 
+						Integer.parseInt(choice)).generate();
+			} catch (Exception e){
+				System.out.println("Erreur avec la création de "+existingInput+" : "+e);
+				e.printStackTrace();
+			}
+			System.out.println("\n===================================================\n");
+		}
 		closeAll(testingPlan, fstream, scan);
 	}
 	
-	private static void closeAll(Closeable... flux) {
+	
+	public static void main(String[] args) {
+		VariantsCreator creator = new VariantsCreator();
+		
+		try{
+			creator.process();
+		} catch ( Error | Exception e){
+			StackTraceElement[] trace = e.getStackTrace();
+			for(StackTraceElement elem : trace){
+				System.out.println(elem);
+			}
+		}
+		
+	}	
+	private void closeAll(Closeable... flux) {
 		for(Closeable oneflux : flux){
 			try {
 				oneflux.close();
@@ -164,7 +220,7 @@ public class VariantsCreator {
 		
 	}
 
-	private static List<String> getAllChoices(BufferedReader testingPlan) throws IOException{
+	private List<String> getAllChoices(BufferedReader testingPlan) throws IOException{
 		if(testingPlan==null || !testingPlan.ready()) return null;
 		
 		List<String> allChoices = new ArrayList<String>(5);
@@ -178,7 +234,7 @@ public class VariantsCreator {
 		return allChoices;
 	}
 	
-	private static Map<Integer, List<String>> getAllValuesFrom(BufferedReader testingPlan, String tranche) throws IOException{
+	private Map<Integer, List<String>> getAllValuesFrom(BufferedReader testingPlan, String tranche) throws IOException{
 		if(testingPlan==null) return null;
 		
 		// keys = 10,20,50,100
