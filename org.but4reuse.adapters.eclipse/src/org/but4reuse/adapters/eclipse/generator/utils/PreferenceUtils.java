@@ -85,4 +85,29 @@ public class PreferenceUtils {
 		return map;
 	}
 
+	public static void savePreferences(String input, String output, String numberVar)
+			throws IOException {
+
+		Map<String, String> mapToSave = getPreferences();
+		
+		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
+		if(output!=null && !output.isEmpty()) mapToSave.put(PREF_OUTPUT, output);
+		if(numberVar!=null && !numberVar.isEmpty()) mapToSave.put(PREF_VARIANTS, numberVar);
+			
+		// Display OUR preferences (maybe an other preferences.properties was committed)
+		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));
+
+		Properties prop = new Properties();
+		OutputStream outputFOS = new FileOutputStream(getPrefFilePath());
+		for (String key : mapToSave.keySet()) {
+			prop.setProperty(key, mapToSave.get(key));
+		}
+		prop.store(outputFOS, null);
+
+		if (outputFOS != null) {
+			outputFOS.close();
+		}
+
+	}
+
 }
