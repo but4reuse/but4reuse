@@ -88,7 +88,6 @@ public class SplotUtils {
 		try {
 			prefMap = PreferenceUtils.getPreferences();
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		String input = prefMap.get(PreferenceUtils.PREF_INPUT);
@@ -315,7 +314,6 @@ public class SplotUtils {
 			}
 			for(int j=0;j<allDependence.size();j++){
 				if(allDependence.get(j)!=null){
-					
 					if(mapIdWithFeature.get(allDependence.get(j))!=null){
 						splotARetourner+="\n";
 						splotARetourner+="constraint_"+nbContrainte+":";
@@ -330,32 +328,31 @@ public class SplotUtils {
 		
 		splotARetourner+="</feature_model>\n";
 		
-		
 		String filename="EclipseFeature.xml";
+		try {
+			prefMap = PreferenceUtils.getPreferences();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		String output = prefMap.get(PreferenceUtils.PREF_OUTPUT);
+		output = output + File.separator + filename;
 		
 		BufferedWriter bufferedWriter=null;
 		
 		try{
-			FileWriter fileWriter=new FileWriter(filename);
+			FileWriter fileWriter=new FileWriter(output);
 			
 			bufferedWriter = new BufferedWriter(fileWriter);
 			
 			bufferedWriter.write(splotARetourner);
+			
 			bufferedWriter.close();
 			fileWriter.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 		
-		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		if (path.endsWith("bin/")) {
-			// On some OS, it gives "bin/" in more, but we don't want
-			path = path.substring(0, path.length() - 4);
-		}
-		path=path+filename;
-		System.out.println(path);
-		
-		File file = new File(path);
+		File file = new File(output);
 		
 		return file;
 		

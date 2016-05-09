@@ -60,12 +60,6 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		}
 		
 		
-		// TODO: to remove !
-		try { // Clear the output
-			File outputFile = new File(output);
-			FileAndDirectoryUtils.deleteFile(outputFile);
-		} catch (Exception e) {}
-		
 		// if the eclipse dir is inside the input
 		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
 			if(input.endsWith(File.separator)) input += "eclipse"+File.separator;
@@ -115,6 +109,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 
 		File f = SplotUtils.exportToSPLOT(allFeatures);
 		
+
 		ModelPLEDGE mp= new ModelPLEDGE();
 		try {
 			mp.loadFeatureModel(f.getAbsolutePath(), FeatureModelFormat.SPLOT);
