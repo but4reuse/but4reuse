@@ -137,16 +137,13 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			List<PluginElement> pluginsList = new ArrayList<PluginElement>();
 			List<ActualFeature> chosenFeatures = new ArrayList<ActualFeature>();
 			
-			
 			Product p = mp.getProducts().get(i-1);
 			
 			for (Integer j : p) {
 	           if (j > 0) {
 	        	   String id=mp.getFeaturesList().get(j-1);
-	        	   id = id.replace("555555", "(");
-	        	   id = id.replace("°°°°°°", "(");
-	        	   id = id.replace("111111", ".");
-	        	   id = id.replace("666666", "-");
+	        	   id = id.replace("555555", "(").replace("°°°°°°", "(")
+	        			   .replace("111111", ".").replace("666666", "-");
 	        	   for(ActualFeature oneFeat: allFeatures){
 	        		   if(oneFeat.getId().equals(id)){
 	        			   chosenFeatures.add(oneFeat);
@@ -156,6 +153,10 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 	            	}
 	            }
 			 }// end of iterate through allFeatures
+			
+			for(ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()){
+				if(!chosenFeatures.contains(one_manda)) chosenFeatures.add(one_manda);
+			}
 
 			// Get all plugins from chosen features
 			for (ActualFeature chosenFeature : chosenFeatures) {
@@ -171,10 +172,6 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			}
 
 			pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-			for(PluginElementGenerator one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
-				if(!pluginsList.contains(one_manda)) pluginsList.add(one_manda);
-			}
-			
 				
 			try {
 				// Create all dirs and copy features and plugins

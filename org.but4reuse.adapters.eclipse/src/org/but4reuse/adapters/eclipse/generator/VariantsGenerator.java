@@ -154,6 +154,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					}
 
 				} // end of iterate through allFeatures
+				
+				for(ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()){
+					if(!chosenFeatures.contains(one_manda)) chosenFeatures.add(one_manda);
+				}
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
@@ -169,9 +173,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				}
 
 				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-				for(PluginElementGenerator one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
-					if(!pluginsList.contains(one_manda)) pluginsList.add(one_manda);
-				}
 				
 			}
 			try {

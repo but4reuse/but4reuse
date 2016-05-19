@@ -27,7 +27,7 @@ public class DependenciesAnalyzer {
 	private Map<String, List<PluginElementGenerator>> mapSymbNameWithPlugin;
 	private Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies;
 	private List<PluginElementGenerator> allPluginsWithoutFeaturesDependencies;
-	private List<PluginElementGenerator> allPluginsMandatoriesForThisInput;
+	private List<ActualFeature> allFeaturesMandatoriesForThisInput;
 
 	public DependenciesAnalyzer(List<ActualFeature> allFeatures, List<PluginElementGenerator> allPlugins,
 			String eclipseInstallationURI) {
@@ -49,7 +49,7 @@ public class DependenciesAnalyzer {
 		initMapNameWithPlugin();
 		initMapFeatureWithPluginsDependencies();
 		initAllPluginsWithoutFeaturesDependencies();
-		initListPluginsMandatories();
+		initListFeaturesMandatories();
 	}
 
 
@@ -160,8 +160,8 @@ public class DependenciesAnalyzer {
 		return allPluginsWithoutFeaturesDependencies;
 	}
 
-	public List<PluginElementGenerator> getPluginsMandatoriesByInput() {
-		return allPluginsMandatoriesForThisInput;
+	public List<ActualFeature> getFeaturesMandatoriesByInput() {
+		return allFeaturesMandatoriesForThisInput;
 	}
 
 	private void initMapNameWithPlugin() {
@@ -216,11 +216,11 @@ public class DependenciesAnalyzer {
 		}
 	}
 
-	private void initListPluginsMandatories(){
-		allPluginsMandatoriesForThisInput = new ArrayList<>(MandatoriesPlugins.list.length);
-		for(String manda : MandatoriesPlugins.list){
-			List<PluginElementGenerator> plugins_tmp = getPluginsThatStartsWithName(manda);
-			if(plugins_tmp!=null) allPluginsMandatoriesForThisInput.addAll(plugins_tmp);
+	private void initListFeaturesMandatories(){
+		allFeaturesMandatoriesForThisInput = new ArrayList<>(MandatoriesFeatures.list.length);
+		for(String manda : MandatoriesFeatures.list){
+			List<ActualFeature> feat_tmp = getFeaturesThatStartsWithName(manda);
+			if(feat_tmp!=null) allFeaturesMandatoriesForThisInput.addAll(feat_tmp);
 		}
 	}
 
@@ -256,17 +256,16 @@ public class DependenciesAnalyzer {
 		return null;
 	}
 
-	private List<PluginElementGenerator> getPluginsThatStartsWithName(String symbname){
-		if(symbname==null || symbname.isEmpty()) return null;
+	private List<ActualFeature> getFeaturesThatStartsWithName(String name){
+		if(name==null || name.isEmpty()) return null;
 
-		// Rarely more than 3 plugins with the same symbname
-		List<PluginElementGenerator> pluginsWithName = new ArrayList<>(3);
-		for(PluginElementGenerator plug : allPlugins){
-			if(plug.getSymbName().startsWith(symbname)){
-				pluginsWithName.add(plug);
+		List<ActualFeature> featuresWithName = new ArrayList<>(10);
+		for(ActualFeature feature : allFeatures){
+			if(feature.getName().startsWith(name)){
+				featuresWithName.add(feature);
 			}
 		}
-		return pluginsWithName;
+		return featuresWithName;
 	}
 
 }

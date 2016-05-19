@@ -30,15 +30,14 @@ public class SplotUtils {
 	private static Map<String, String> prefMap;
 	private static Map<String, ActualFeature> mapIdWithFeature;
 	
-	
-	public static String getDependencieTree(String r, String id){
+	public static String getDependenciesTree(String r, String id){
 		
 		ActualFeature oneFeat = mapIdWithFeature.get(id);
 		if(oneFeat==null) return "";
 		String sousSplot="";
 		
-		List<String> allDependence= new ArrayList<String>();
-		allDependence=oneFeat.getIncludedFeatures();
+		List<String> allDependencies= new ArrayList<String>();
+		allDependencies=oneFeat.getIncludedFeatures();
 		
 		sousSplot+="\n";
 		for(int k=0;k<r.length();k+=2){
@@ -46,41 +45,39 @@ public class SplotUtils {
 		}
 		sousSplot +=" :m "+oneFeat.getId()+"("+oneFeat.getName()+")";
 		
-		for(int j=0;j<allDependence.size();j++){
-			sousSplot+=getDependencieTree(r+"_"+j,allDependence.get(j));
+		for(int j=0;j<allDependencies.size();j++){
+			sousSplot+=getDependenciesTree(r+"_"+j,allDependencies.get(j));
 		}	
 
 		return sousSplot;
 	}
 	
-	public static String getDependencieContraint(String r, String id){
+	public static String getDependenciesContraints(String r, String id){
 		
 		ActualFeature oneFeat = mapIdWithFeature.get(id);
 		if(oneFeat==null) return "";
 		String sousSplot="";
 		
-		List<String> allDependence= new ArrayList<String>();
+		List<String> allDependencies= new ArrayList<String>();
 		if(oneFeat.getRequiredFeatures()!=null){
-			allDependence=oneFeat.getRequiredFeatures();
+			allDependencies=oneFeat.getRequiredFeatures();
 		}
 		if(oneFeat.getIncludedFeatures()!=null){
 			for(String s : oneFeat.getIncludedFeatures()){
-				if(! allDependence.contains(s)) allDependence.add(s);
+				if(! allDependencies.contains(s)) allDependencies.add(s);
 			}
 		}
 		
 		sousSplot+="\n";
 		
-		for(int j=0;j<allDependence.size();j++){
-			sousSplot+=getDependencieContraint(r+"_"+j,allDependence.get(j));
+		for(int j=0;j<allDependencies.size();j++){
+			sousSplot+=getDependenciesContraints(r+"_"+j,allDependencies.get(j));
 		}	
 
 		return sousSplot;
 	}
 	
-	
 	public static void generate(){
-
 		int nbVariants=5;
 		int time=60;
 		
@@ -173,16 +170,14 @@ public class SplotUtils {
 			List<PluginElement> pluginsList = new ArrayList<PluginElement>();
 			List<ActualFeature> chosenFeatures = new ArrayList<ActualFeature>();
 			
-			
 			Product p = mp.getProducts().get(i-1);
 			
 			for (Integer j : p) {
 	           if (j > 0) {
 	        	   String id=mp.getFeaturesList().get(j-1);
-	        	   id = id.replace("555555", "(");
-	        	   id = id.replace("°°°°°°", "(");
-	        	   id = id.replace("111111", ".");
-	        	   id = id.replace("666666", "-");
+	        	   id = id.replace("555555", "(").replace("°°°°°°", "(")
+	        			   .replace("111111", ".").replace("666666", "-");
+	        	   
 	        	   for(ActualFeature oneFeat: allFeatures){
 	        		   if(oneFeat.getId().equals(id)){
 	        			   chosenFeatures.add(oneFeat);
@@ -192,6 +187,10 @@ public class SplotUtils {
 	            	}
 	            }
 			 }// end of iterate through allFeatures
+			
+			for(ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()){
+				if(!chosenFeatures.contains(one_manda)) chosenFeatures.add(one_manda);
+			}
 
 			// Get all plugins from chosen features
 			for (ActualFeature chosenFeature : chosenFeatures) {
@@ -207,10 +206,6 @@ public class SplotUtils {
 			}
 
 			pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-			for(PluginElementGenerator one_manda : depAnalyzer.getPluginsMandatoriesByInput()){
-				if(!pluginsList.contains(one_manda)) pluginsList.add(one_manda);
-			}
-			
 				
 			try {
 				// Create all dirs and copy features and plugins
@@ -264,69 +259,61 @@ public class SplotUtils {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return null;
 
-		String splotARetourner="";
+		String splotToReturn="";
 
 		mapIdWithFeature = new HashMap<>();
 		for (ActualFeature oneFeature : allFeatures) mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 
-		splotARetourner+="<feature_model name=\"Eclipse Feature\">\n";
-		splotARetourner+="<meta>\n";
-
-		splotARetourner+="</meta>\n";
-		splotARetourner+="<feature_tree>\n";
-		splotARetourner+="  :r Eclipse Feature(EclipseFeature)\n";
+		splotToReturn+="<feature_model name=\"Eclipse Feature\">\n";
+		splotToReturn+="<meta>\n";
+		splotToReturn+="</meta>\n";
+		splotToReturn+="<feature_tree>\n";
+		splotToReturn+="  :r Eclipse Feature(EclipseFeature)\n";
 		
 		for(int i=0;i<allFeatures.size();i++){
 			
 			ActualFeature oneFeat = allFeatures.get(i);
 			String name = oneFeat.getName().replace("(", "");
 			name = name.replace(")", "");
-
 			
-			String id = oneFeat.getId().replace("(", "555555");
-			id = id.replace(")", "°°°°°°");
-			id = id.replace(".", "111111");
-			id = id.replace("-", "666666");
+			String id = oneFeat.getId().replace("(", "555555").replace(")", "°°°°°°")
+					.replace(".", "111111").replace("-", "666666");
 			
-			splotARetourner+="\t:o "+name+"("+id+")";
-	
-			splotARetourner+="\n";
+			splotToReturn+="\t:o "+name+"("+id+")";
+			splotToReturn+="\n";
 		}
-		splotARetourner+="</feature_tree>\n";
-		splotARetourner+="<constraints>";
+		splotToReturn+="</feature_tree>\n";
+		splotToReturn+="<constraints>";
 		int nbContrainte=1;
 		for(int i=0;i<allFeatures.size();i++){
 			ActualFeature oneFeat = allFeatures.get(i);
 			
-			String id = oneFeat.getId().replace("(", "555555");
-			id = id.replace(")", "°°°°°°");
-			id = id.replace(".", "111111");
-			id = id.replace("-", "666666");
+			String id = oneFeat.getId().replace("(", "555555").replace(")", "°°°°°°")
+					.replace(".", "111111").replace("-", "666666");
 			
-			List<String> allDependence=new ArrayList<String>();
+			List<String> allDependencies=new ArrayList<String>();
 			if(oneFeat.getRequiredFeatures()!=null){
-				allDependence=oneFeat.getRequiredFeatures();
+				allDependencies=oneFeat.getRequiredFeatures();
 			}
 			if(oneFeat.getIncludedFeatures()!=null){
 				for(String s : oneFeat.getIncludedFeatures()){
-					if(! allDependence.contains(s)) allDependence.add(s);
+					if(! allDependencies.contains(s)) allDependencies.add(s);
 				}
 			}
-			for(int j=0;j<allDependence.size();j++){
-				if(allDependence.get(j)!=null){
-					if(mapIdWithFeature.get(allDependence.get(j))!=null){
-						splotARetourner+="\n";
-						splotARetourner+="constraint_"+nbContrainte+":";
-						splotARetourner+="~"+id+" or "
-								+mapIdWithFeature.get(allDependence.get(j)).getId().replace(".","111111").replace("-", "666666").replace("(", "555555").replace(")", "°°°°°°");
+			for(int j=0;j<allDependencies.size();j++){
+				if(allDependencies.get(j)!=null){
+					if(mapIdWithFeature.get(allDependencies.get(j))!=null){
+						splotToReturn+="\n";
+						splotToReturn+="constraint_"+nbContrainte+":";
+						splotToReturn+="~"+id+" or "
+								+mapIdWithFeature.get(allDependencies.get(j)).getId().replace(".","111111").replace("-", "666666").replace("(", "555555").replace(")", "°°°°°°");
 						nbContrainte++;
 					}
 				}
 			}
 		}
-		splotARetourner+= "\n</constraints>\n";
-		
-		splotARetourner+="</feature_model>\n";
+		splotToReturn+= "\n</constraints>\n";
+		splotToReturn+="</feature_model>\n";
 		
 		String filename="EclipseFeature.xml";
 		try {
@@ -341,26 +328,19 @@ public class SplotUtils {
 		
 		try{
 			FileWriter fileWriter=new FileWriter(output);
-			
 			bufferedWriter = new BufferedWriter(fileWriter);
-			
-			bufferedWriter.write(splotARetourner);
-			
+			bufferedWriter.write(splotToReturn);
+
 			bufferedWriter.close();
 			fileWriter.close();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 		
-		File file = new File(output);
-		
-		return file;
-		
+		return new File(output);
 	}
 	
 	public static void main(String[] args) throws Exception{
-		
 		generate();
-		
 	}
 }
