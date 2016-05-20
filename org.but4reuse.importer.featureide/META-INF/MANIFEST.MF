@@ -15,4 +15,4 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.feature.constraints
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.featuremodel.synthesis.fmcreators
+Export-Package: org.but4reuse.featuremodel.synthesis
