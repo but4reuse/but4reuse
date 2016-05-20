@@ -1,4 +1,4 @@
-package org.but4reuse.featuremodel.synthesis.fmcreators;
+package org.but4reuse.featuremodel.synthesis;
 
 import java.net.URI;
 
@@ -7,7 +7,7 @@ import java.net.URI;
  * 
  * @author jabier.martinez
  */
-public interface IFeatureModelCreator {
+public interface IFeatureModelSynthesis {
 
 	/**
 	 * Create feature model

@@ -2,8 +2,8 @@ package org.but4reuse.featuremodel.synthesis.ui.preferences;
 
 import java.util.List;
 
-import org.but4reuse.featuremodel.synthesis.fmcreators.FeatureModelCreatorsHelper;
-import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
+import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
+import org.but4reuse.featuremodel.synthesis.helper.FeatureModelSynthesisHelper;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -26,7 +26,7 @@ public class FeatureModelSynthesisPreferencePage extends FieldEditorPreferencePa
 
 	public FeatureModelSynthesisPreferencePage() {
 		super(GRID);
-		setPreferenceStore(FeatureModelCreatorsHelper.getPreferenceStore());
+		setPreferenceStore(FeatureModelSynthesisHelper.getPreferenceStore());
 		setDescription("Select");
 	}
 
@@ -34,9 +34,9 @@ public class FeatureModelSynthesisPreferencePage extends FieldEditorPreferencePa
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		List<IFeatureModelCreator> algos = FeatureModelCreatorsHelper.getAllFeatureModelCreators();
-		for (IFeatureModelCreator algo : algos) {
-			String algoName = FeatureModelCreatorsHelper.getAlgorithmName(algo);
+		List<IFeatureModelSynthesis> algos = FeatureModelSynthesisHelper.getAllFeatureModelCreators();
+		for (IFeatureModelSynthesis algo : algos) {
+			String algoName = FeatureModelSynthesisHelper.getAlgorithmName(algo);
 			BooleanFieldEditor bfe = new BooleanFieldEditor(algoName, algoName, getFieldEditorParent());
 			addField(bfe);
 		}

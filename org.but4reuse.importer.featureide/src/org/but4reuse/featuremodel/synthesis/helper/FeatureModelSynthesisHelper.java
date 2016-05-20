@@ -1,8 +1,9 @@
-package org.but4reuse.featuremodel.synthesis.fmcreators;
+package org.but4reuse.featuremodel.synthesis.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.activator.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -14,22 +15,22 @@ import org.eclipse.jface.preference.IPreferenceStore;
  * 
  * @author jabier.martinez
  */
-public class FeatureModelCreatorsHelper {
+public class FeatureModelSynthesisHelper {
 
-	private static final String FEATUREMODELCREATORS_EXTENSIONPOINT = "org.but4reuse.featuremodel.synthesis.fmcreators";
+	private static final String FEATUREMODELSYNTHESIS_EXTENSIONPOINT = "org.but4reuse.featuremodel.synthesis";
 
 	/**
 	 * Get all feature model creators
 	 * 
 	 * @return get the list
 	 */
-	public static List<IFeatureModelCreator> getAllFeatureModelCreators() {
-		List<IFeatureModelCreator> fmCreators = new ArrayList<IFeatureModelCreator>();
+	public static List<IFeatureModelSynthesis> getAllFeatureModelCreators() {
+		List<IFeatureModelSynthesis> fmCreators = new ArrayList<IFeatureModelSynthesis>();
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELCREATORS_EXTENSIONPOINT);
+				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement fmCreatorExtensionPoint : adapterExtensionPoints) {
 			try {
-				fmCreators.add((IFeatureModelCreator) fmCreatorExtensionPoint.createExecutableExtension("class"));
+				fmCreators.add((IFeatureModelSynthesis) fmCreatorExtensionPoint.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -43,13 +44,13 @@ public class FeatureModelCreatorsHelper {
 	 * @param name
 	 * @return null or the feature model creator
 	 */
-	public static IFeatureModelCreator getFeatureModelCreatorByName(String name) {
+	public static IFeatureModelSynthesis getFeatureModelCreatorByName(String name) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELCREATORS_EXTENSIONPOINT);
+				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement fmCreatorExtensionPoint : adapterExtensionPoints) {
 			if (fmCreatorExtensionPoint.getAttribute("name").equals(name)) {
 				try {
-					return (IFeatureModelCreator) fmCreatorExtensionPoint.createExecutableExtension("class");
+					return (IFeatureModelSynthesis) fmCreatorExtensionPoint.createExecutableExtension("class");
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -64,12 +65,12 @@ public class FeatureModelCreatorsHelper {
 	 * @param algo
 	 * @return the name
 	 */
-	public static String getAlgorithmName(IFeatureModelCreator algo) {
+	public static String getAlgorithmName(IFeatureModelSynthesis algo) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELCREATORS_EXTENSIONPOINT);
+				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
-				IFeatureModelCreator oneAlgo = (IFeatureModelCreator) adapterExtensionPoint
+				IFeatureModelSynthesis oneAlgo = (IFeatureModelSynthesis) adapterExtensionPoint
 						.createExecutableExtension("class");
 				if (oneAlgo.getClass().equals(algo.getClass())) {
 					String name = adapterExtensionPoint.getAttribute("name");
@@ -83,9 +84,9 @@ public class FeatureModelCreatorsHelper {
 		return "No name";
 	}
 
-	public static List<IFeatureModelCreator> getSelectedFeatureModelCreators() {
-		List<IFeatureModelCreator> selected = new ArrayList<IFeatureModelCreator>();
-		for (IFeatureModelCreator algo : getAllFeatureModelCreators()) {
+	public static List<IFeatureModelSynthesis> getSelectedFeatureModelCreators() {
+		List<IFeatureModelSynthesis> selected = new ArrayList<IFeatureModelSynthesis>();
+		for (IFeatureModelSynthesis algo : getAllFeatureModelCreators()) {
 			if (isAlgorithmSelected(algo)) {
 				selected.add(algo);
 			}
@@ -93,7 +94,7 @@ public class FeatureModelCreatorsHelper {
 		return selected;
 	}
 
-	public static boolean isAlgorithmSelected(IFeatureModelCreator algo) {
+	public static boolean isAlgorithmSelected(IFeatureModelSynthesis algo) {
 		String algoName = getAlgorithmName(algo);
 		IPreferenceStore prefs = getPreferenceStore();
 		return prefs.getBoolean(algoName);

@@ -1,4 +1,4 @@
-package org.but4reuse.featuremodel.synthesis.fmcreators.impl;
+package org.but4reuse.featuremodel.synthesis.impl;
 
 import java.io.File;
 import java.net.URI;
@@ -10,7 +10,7 @@ import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
-import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
+import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 
@@ -24,7 +24,7 @@ import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
  * 
  * @author jabier.martinez
  */
-public class FlatFeatureModelCreator implements IFeatureModelCreator {
+public class FlatFMSynthesis implements IFeatureModelSynthesis {
 
 	@Override
 	public void createFeatureModel(URI outputContainer) {
