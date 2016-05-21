@@ -1,14 +1,9 @@
 package org.but4reuse.adapters.eclipse.generator;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.EclipseAdapter;
@@ -45,8 +40,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 	}
 
 	public void generate() {
-		String inputDir;
-
 		sendToAll("Starting generation with :");
 		sendToAll("-input = " + input);
 		sendToAll("-output = " + output);
@@ -67,9 +60,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			else
 				input += File.separator + "eclipse" + File.separator;
 			eclipse = new File(input);
-			inputDir = eclipse.getParentFile().getName();
-		} else {
-			inputDir = eclipse.getName();
 		}
 
 		// check if it's an eclipse directory
@@ -199,24 +189,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				}
 				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.PLUGINS,
 						allFilesPlugins);
-
-				// We create a properties file in the variant, for
-				// VariantsChecker (to write the status variant in log)
-				Map<String, String> mapToSave = new HashMap<>();
-				mapToSave.put("random", Integer.toString(percentage));
-				mapToSave.put("input", inputDir);
-
-				Properties prop = new Properties();
-				OutputStream outputFOS = new FileOutputStream(output_variant + File.separator
-						+ "VariantParams.properties");
-				for (String key : mapToSave.keySet()) {
-					prop.setProperty(key, mapToSave.get(key));
-				}
-				prop.store(outputFOS, null);
-
-				if (outputFOS != null) {
-					outputFOS.close();
-				}
 
 				System.out.println("(Variant " + i + ") features created.");
 			} catch (Exception e) {
