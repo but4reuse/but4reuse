@@ -47,8 +47,9 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			try { // Load preferences
 				prefMap = PreferenceUtils.getPreferences();
 				if (prefMap.containsKey(PreferenceUtils.PREF_USERNAME)
-						&& prefMap.get(PreferenceUtils.PREF_USERNAME).equals(
-								System.getProperty(PreferenceUtils.PREF_USERNAME))) {
+						&& (prefMap.get(PreferenceUtils.PREF_USERNAME).isEmpty() || prefMap.get(
+								PreferenceUtils.PREF_USERNAME)
+								.equals(System.getProperty(PreferenceUtils.PREF_USERNAME)))) {
 					// Look below, in registration
 					paramDialog.addPreferenceParameters(prefMap);
 				}

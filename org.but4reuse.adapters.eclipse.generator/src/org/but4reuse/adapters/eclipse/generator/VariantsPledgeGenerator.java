@@ -58,20 +58,18 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			sendToAll(input + " not exists !");
 			return;
 		}
-		
-		
+
 		// if the eclipse dir is inside the input
-		if(eclipse.list().length==1 && eclipse.listFiles()[0].getName().equals("eclipse")){
-			if(input.endsWith(File.separator)) input += "eclipse"+File.separator;
-			else input += File.separator+"eclipse"+File.separator;
+		if (eclipse.list().length == 1 && eclipse.listFiles()[0].getName().equals("eclipse")) {
+			if (input.endsWith(File.separator))
+				input += "eclipse" + File.separator;
+			else
+				input += File.separator + "eclipse" + File.separator;
 			eclipse = new File(input);
-			eclipse.getParentFile().getName();
-		} else {
-			eclipse.getName();
 		}
-		
+
 		// check if it's an eclipse directory
-		if(!VariantsUtils.isEclipseDir(eclipse)) {
+		if (!VariantsUtils.isEclipseDir(eclipse)) {
 			sendToAll(input + " is not an eclipse !");
 			return;
 		}
@@ -99,18 +97,14 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		}
 		// Permits to use PluginElement without launch an Eclipse Application
 		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
-		
+
 		sendToAll("Total features number in the input = " + allFeatures.size());
 		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
-		
-		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPluginsGen,
-				inputURI.toString());
 
-
+		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
 		File f = SplotUtils.exportToSPLOT(allFeatures);
-		
+		ModelPLEDGE mp = new ModelPLEDGE();
 
-		ModelPLEDGE mp= new ModelPLEDGE();
 		try {
 			mp.loadFeatureModel(f.getAbsolutePath(), FeatureModelFormat.SPLOT);
 		} catch (Exception e1) {
@@ -118,9 +112,9 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			e1.printStackTrace();
 			return;
 		}
-		
+
 		mp.setNbProductsToGenerate(nbVariants);
-		mp.setGenerationTimeMSAllowed(time*1000L);
+		mp.setGenerationTimeMSAllowed(time * 1000L);
 		mp.SetPrioritizationTechniqueByName("SimilarityGreedy");
 		try {
 			mp.generateProducts();
@@ -129,33 +123,33 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			e1.printStackTrace();
 			return;
 		}
-		
+
 		for (int i = 1; i <= nbVariants; i++) {
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + i;
 			int nbSelectedFeatures = 0;
 
 			List<PluginElement> pluginsList = new ArrayList<PluginElement>();
 			List<ActualFeature> chosenFeatures = new ArrayList<ActualFeature>();
-			
-			Product p = mp.getProducts().get(i-1);
-			
+
+			Product p = mp.getProducts().get(i - 1);
+
 			for (Integer j : p) {
-	           if (j > 0) {
-	        	   String id=mp.getFeaturesList().get(j-1);
-	        	   id = id.replace("555555", "(").replace("°°°°°°", "(")
-	        			   .replace("111111", ".").replace("666666", "-");
-	        	   for(ActualFeature oneFeat: allFeatures){
-	        		   if(oneFeat.getId().equals(id)){
-	        			   chosenFeatures.add(oneFeat);
-	        			   nbSelectedFeatures++;
-	        			   break;
-	            		}
-	            	}
-	            }
-			 }// end of iterate through allFeatures
-			
-			for(ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()){
-				if(!chosenFeatures.contains(one_manda)) chosenFeatures.add(one_manda);
+				if (j > 0) {
+					String id = mp.getFeaturesList().get(j - 1);
+					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".").replace("666666", "-");
+					for (ActualFeature oneFeat : allFeatures) {
+						if (oneFeat.getId().equals(id)) {
+							chosenFeatures.add(oneFeat);
+							nbSelectedFeatures++;
+							break;
+						}
+					}
+				}
+			}// end of iterate through allFeatures
+
+			for (ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()) {
+				if (!chosenFeatures.contains(one_manda))
+					chosenFeatures.add(one_manda);
 			}
 
 			// Get all plugins from chosen features
@@ -172,7 +166,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			}
 
 			pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
-				
+
 			try {
 				// Create all dirs and copy features and plugins
 				File output_variantFile = new File(output_variant);
@@ -218,7 +212,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		} // end of variants loop
 
 		sendToAll("\nGeneration finished !");
-		
+
 	}
 
 	@Override
@@ -234,7 +228,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			for (IListener oneListener : listeners) {
 				oneListener.receive(msg);
 			}
-		} else { // TODO : to remove
+		} else {
 			System.out.println(msg);
 		}
 	}
@@ -246,6 +240,5 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			listeners.get(index).receive(msg);
 		}
 	}
-
 
 }

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Generator
+Bundle-SymbolicName: org.but4reuse.adapters.eclipse.generator;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.eclipse.generator.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.adapters.eclipse,
+ org.but4reuse.adapters,
+ org.but4reuse.artefactmodel
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: org.but4reuse.utils.files
+Bundle-ClassPath: lib/commons-io-2.4.jar,
+ .

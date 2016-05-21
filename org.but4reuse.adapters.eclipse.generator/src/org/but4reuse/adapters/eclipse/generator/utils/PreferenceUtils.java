@@ -21,7 +21,7 @@ public class PreferenceUtils {
 	public static final String PREF_USERNAME = "user.name";
 
 	public static String getPrefFilePath() {
-		// Give org.but4reuse.adapters.eclipse
+		// Give org.but4reuse.adapters.eclipse.generator
 		String path = PreferenceUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		if (path.endsWith("bin/")) {
 			// On some OS, it gives "bin/" in more, but we don't want
@@ -31,17 +31,21 @@ public class PreferenceUtils {
 		return path;
 	}
 
-	public static void savePreferences(String input, String output, String random, String numberVar)
-			throws IOException {
+	public static void savePreferences(String input, String output, String random, String numberVar) throws IOException {
 
 		Map<String, String> mapToSave = getPreferences();
-		
-		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
-		if(output!=null && !output.isEmpty()) mapToSave.put(PREF_OUTPUT, output);
-		if(random!=null && !random.isEmpty()) mapToSave.put(PREF_RANDOM, random);
-		if(numberVar!=null && !numberVar.isEmpty()) mapToSave.put(PREF_VARIANTS, numberVar);
-			
-		// Display OUR preferences (maybe an other preferences.properties was committed)
+
+		if (input != null && !input.isEmpty())
+			mapToSave.put(PREF_INPUT, input);
+		if (output != null && !output.isEmpty())
+			mapToSave.put(PREF_OUTPUT, output);
+		if (random != null && !random.isEmpty())
+			mapToSave.put(PREF_RANDOM, random);
+		if (numberVar != null && !numberVar.isEmpty())
+			mapToSave.put(PREF_VARIANTS, numberVar);
+
+		// Display OUR preferences (maybe an other preferences.properties was
+		// committed)
 		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));
 
 		Properties prop = new Properties();
@@ -54,7 +58,6 @@ public class PreferenceUtils {
 		if (outputFOS != null) {
 			outputFOS.close();
 		}
-
 	}
 
 	public static Map<String, String> getPreferences() throws IOException {
@@ -76,7 +79,7 @@ public class PreferenceUtils {
 
 		} catch (FileNotFoundException ex) {
 			throw new FileNotFoundException(
-					"Does the \"preferences.properties\" file exist in adapters.eclipse/src/resources ?");
+					"Does the \"preferences.properties\" file exist in adapters.eclipse.generator/src/resources ?");
 		} finally {
 			if (input != null) {
 				input.close();
@@ -85,16 +88,19 @@ public class PreferenceUtils {
 		return map;
 	}
 
-	public static void savePreferences(String input, String output, String numberVar)
-			throws IOException {
+	public static void savePreferences(String input, String output, String numberVar) throws IOException {
 
 		Map<String, String> mapToSave = getPreferences();
-		
-		if(input!=null && !input.isEmpty()) mapToSave.put(PREF_INPUT, input);
-		if(output!=null && !output.isEmpty()) mapToSave.put(PREF_OUTPUT, output);
-		if(numberVar!=null && !numberVar.isEmpty()) mapToSave.put(PREF_VARIANTS, numberVar);
-			
-		// Display OUR preferences (maybe an other preferences.properties was committed)
+
+		if (input != null && !input.isEmpty())
+			mapToSave.put(PREF_INPUT, input);
+		if (output != null && !output.isEmpty())
+			mapToSave.put(PREF_OUTPUT, output);
+		if (numberVar != null && !numberVar.isEmpty())
+			mapToSave.put(PREF_VARIANTS, numberVar);
+
+		// Display OUR preferences (maybe an other preferences.properties was
+		// committed)
 		mapToSave.put(PREF_USERNAME, System.getProperty("user.name"));
 
 		Properties prop = new Properties();

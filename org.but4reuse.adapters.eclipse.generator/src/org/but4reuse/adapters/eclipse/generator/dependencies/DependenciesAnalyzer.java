@@ -52,9 +52,8 @@ public class DependenciesAnalyzer {
 		initListFeaturesMandatories();
 	}
 
-
 	/********* Features **********/
-	
+
 	public List<ActualFeature> getFeaturesDependencies(ActualFeature actual) {
 		List<String> actuaDependencies = mapFeatureWithFeaturesDependencies.get(actual);
 		if (actuaDependencies != null && !actuaDependencies.isEmpty()) {
@@ -62,7 +61,7 @@ public class DependenciesAnalyzer {
 		}
 		return null;
 	}
-	
+
 	public List<String> getListPathFromListFeatures(List<ActualFeature> features) {
 		List<String> paths = new ArrayList<>(features.size());
 		for (ActualFeature feature : features) {
@@ -193,8 +192,9 @@ public class DependenciesAnalyzer {
 			List<String> required = oneFeature.getRequiredPlugins();
 			if (required != null && !required.isEmpty()) { // y'a un elem dedans
 				if (dependencies != null && !dependencies.isEmpty()) {
-					for(String req : required){
-						if (!dependencies.contains(req)) dependencies.add(req);
+					for (String req : required) {
+						if (!dependencies.contains(req))
+							dependencies.add(req);
 					}
 				} else {
 					dependencies = required;
@@ -216,11 +216,12 @@ public class DependenciesAnalyzer {
 		}
 	}
 
-	private void initListFeaturesMandatories(){
+	private void initListFeaturesMandatories() {
 		allFeaturesMandatoriesForThisInput = new ArrayList<>(MandatoriesFeatures.list.length);
-		for(String manda : MandatoriesFeatures.list){
+		for (String manda : MandatoriesFeatures.list) {
 			List<ActualFeature> feat_tmp = getFeaturesThatStartsWithName(manda);
-			if(feat_tmp!=null) allFeaturesMandatoriesForThisInput.addAll(feat_tmp);
+			if (feat_tmp != null)
+				allFeaturesMandatoriesForThisInput.addAll(feat_tmp);
 		}
 	}
 
@@ -243,7 +244,7 @@ public class DependenciesAnalyzer {
 			List<PluginElementGenerator> pluginVersions;
 			for (int i = 0; i < listSymbName.size(); i++) {
 				pluginVersions = mapSymbNameWithPlugin.get(listSymbName.get(i));
-				if(pluginVersions!=null){
+				if (pluginVersions != null) {
 					for (PluginElementGenerator onePlugin : pluginVersions) {
 						if (onePlugin != null && !listPlugins.contains(onePlugin)) {
 							listPlugins.add(onePlugin);
@@ -256,12 +257,13 @@ public class DependenciesAnalyzer {
 		return null;
 	}
 
-	private List<ActualFeature> getFeaturesThatStartsWithName(String name){
-		if(name==null || name.isEmpty()) return null;
+	private List<ActualFeature> getFeaturesThatStartsWithName(String name) {
+		if (name == null || name.isEmpty())
+			return null;
 
 		List<ActualFeature> featuresWithName = new ArrayList<>(10);
-		for(ActualFeature feature : allFeatures){
-			if(feature.getName().startsWith(name)){
+		for (ActualFeature feature : allFeatures) {
+			if (feature.getId().startsWith(name)) {
 				featuresWithName.add(feature);
 			}
 		}

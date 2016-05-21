@@ -47,8 +47,9 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 			try { // Load preferences
 				prefMap = PreferenceUtils.getPreferences();
 				if (prefMap.containsKey(PreferenceUtils.PREF_USERNAME)
-						&& prefMap.get(PreferenceUtils.PREF_USERNAME).equals(
-								System.getProperty(PreferenceUtils.PREF_USERNAME))) {
+						&& (prefMap.get(PreferenceUtils.PREF_USERNAME).isEmpty() || prefMap.get(
+								PreferenceUtils.PREF_USERNAME)
+								.equals(System.getProperty(PreferenceUtils.PREF_USERNAME)))) {
 					// Look below, in registration
 					pledgeDialog.addPreferenceParameters(prefMap);
 				}
@@ -114,8 +115,8 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 
 		// Saving preferences
 		try {
-			PreferenceUtils.savePreferences(pledgeDialog.getInputPath(), pledgeDialog.getOutputPath()
-					, pledgeDialog.getVariantsNumber());
+			PreferenceUtils.savePreferences(pledgeDialog.getInputPath(), pledgeDialog.getOutputPath(),
+					pledgeDialog.getVariantsNumber());
 		} catch (IOException e) {
 			System.out.println("Error for saving preferences");
 			e.printStackTrace();
@@ -130,7 +131,6 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 
 			@Override
 			public void run() {
-				//TODO
 				VariantsPledgeGenerator varGen = new VariantsPledgeGenerator(pledgeDialog.getInputPath(),
 						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread);
 				varGen.addListener(context);
