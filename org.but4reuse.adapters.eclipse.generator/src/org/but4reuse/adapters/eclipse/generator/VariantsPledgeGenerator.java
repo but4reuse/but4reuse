@@ -136,7 +136,8 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			for (Integer j : p) {
 				if (j > 0) {
 					String id = mp.getFeaturesList().get(j - 1);
-					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".").replace("666666", "-");
+					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".")
+							.replace("666666", "-");
 					for (ActualFeature oneFeat : allFeatures) {
 						if (oneFeat.getId().equals(id)) {
 							chosenFeatures.add(oneFeat);
