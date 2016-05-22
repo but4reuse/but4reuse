@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.utils;
+package org.but4reuse.adapters.eclipse.generator.dependencies;
 
 import java.io.File;
 import java.net.URI;
@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureInfosExtractor;
+import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
 import org.but4reuse.utils.files.FileUtils;
 
-public class FeaturesAndPluginsDependencies {
+public class DependenciesAnalyzer {
 
 	private String eclipseInstallationURI;
 
@@ -23,53 +23,81 @@ public class FeaturesAndPluginsDependencies {
 	private Map<ActualFeature, List<String>> mapFeatureWithFeaturesDependencies;
 	private Map<ActualFeature, String> mapFeatureWithPath;
 
-	private List<PluginElement> allPlugins;
-	private Map<String, List<PluginElement>> mapSymbNameWithPlugin;
+	private List<PluginElementGenerator> allPlugins;
+	private Map<String, List<PluginElementGenerator>> mapSymbNameWithPlugin;
 	private Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies;
-	private List<PluginElement> allPluginsWithoutFeaturesDependencies;
+	private List<PluginElementGenerator> allPluginsWithoutFeaturesDependencies;
+	private List<ActualFeature> allFeaturesMandatoriesForThisInput;
 
-	public FeaturesAndPluginsDependencies(List<ActualFeature> allFeatures, List<PluginElement> allPlugins,
+	public DependenciesAnalyzer(List<ActualFeature> allFeatures, List<PluginElementGenerator> allPlugins,
 			String eclipseInstallationURI) {
 		this.allFeatures = allFeatures;
 		this.allPlugins = allPlugins;
 		this.eclipseInstallationURI = eclipseInstallationURI;
-		initMaps();
+		initMapsAndLists();
 	}
 
-	private void initMaps() {
-		initMapIdWithFeature(allFeatures);
-		initMapFeatureWithFeaturesDependencies(allFeatures);
+	private void initMapsAndLists() {
+		initMapIdWithFeature();
+		initMapFeatureWithFeaturesDependencies();
 		try {
 			initMapFeaturesPath(eclipseInstallationURI);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 
-		initMapNameWithPlugin(allPlugins);
-		initMapFeatureWithPluginsDependencies(allFeatures);
-		initAllPluginsWithoutFeaturesDependencies(mapFeatureWithPluginsDependencies);
+		initMapNameWithPlugin();
+		initMapFeatureWithPluginsDependencies();
+		initAllPluginsWithoutFeaturesDependencies();
+		initListFeaturesMandatories();
 	}
 
 	/********* Features **********/
 
-	private void initMapIdWithFeature(List<ActualFeature> listAllFeatures) {
-		if (listAllFeatures == null || listAllFeatures.isEmpty())
+	public List<ActualFeature> getFeaturesDependencies(ActualFeature actual) {
+		List<String> actuaDependencies = mapFeatureWithFeaturesDependencies.get(actual);
+		if (actuaDependencies != null && !actuaDependencies.isEmpty()) {
+			return getFeaturesDependenciesFromListIds(actuaDependencies);
+		}
+		return null;
+	}
+
+	public List<String> getListPathFromListFeatures(List<ActualFeature> features) {
+		List<String> paths = new ArrayList<>(features.size());
+		for (ActualFeature feature : features) {
+			if (feature != null) {
+				paths.add(mapFeatureWithPath.get(feature));
+			}
+		}
+		return paths;
+	}
+
+	public String getPathFromFeature(ActualFeature feature) {
+		if (feature == null) {
+			return null;
+		} else {
+			return mapFeatureWithPath.get(feature);
+		}
+	}
+
+	private void initMapIdWithFeature() {
+		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
 		mapIdWithFeature = new HashMap<>();
-		for (ActualFeature oneFeature : listAllFeatures) {
+		for (ActualFeature oneFeature : allFeatures) {
 			mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 		}
 	}
 
-	private void initMapFeatureWithFeaturesDependencies(List<ActualFeature> listAllFeatures) {
-		if (listAllFeatures == null || listAllFeatures.isEmpty())
+	private void initMapFeatureWithFeaturesDependencies() {
+		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
 		mapFeatureWithFeaturesDependencies = new HashMap<>();
 		List<String> dependencies = null;
 
-		for (ActualFeature oneFeature : listAllFeatures) {
+		for (ActualFeature oneFeature : allFeatures) {
 			dependencies = oneFeature.getRequiredFeatures();
 			List<String> included = oneFeature.getIncludedFeatures();
 			if (included != null && !included.isEmpty()) {
@@ -99,14 +127,6 @@ public class FeaturesAndPluginsDependencies {
 		}
 	}
 
-	public List<ActualFeature> getFeaturesDependencies(ActualFeature actual) {
-		List<String> actuaDependencies = mapFeatureWithFeaturesDependencies.get(actual);
-		if (actuaDependencies != null && !actuaDependencies.isEmpty()) {
-			return getFeaturesDependenciesFromListIds(actuaDependencies);
-		}
-		return null;
-	}
-
 	private List<ActualFeature> getFeaturesDependenciesFromListIds(List<String> listIds) {
 		if (listIds != null && !listIds.isEmpty()) {
 			List<ActualFeature> listDependencies = new ArrayList<ActualFeature>();
@@ -125,59 +145,56 @@ public class FeaturesAndPluginsDependencies {
 		return null;
 	}
 
-	public List<String> getListPathFromListFeatures(List<ActualFeature> features) {
-		List<String> paths = new ArrayList<>(features.size());
-		for (ActualFeature feature : features) {
-			if (feature != null) {
-				paths.add(mapFeatureWithPath.get(feature));
-			}
-		}
-		return paths;
-	}
-
-	public String getPathFromFeature(ActualFeature feature) {
-		if (feature == null) {
-			return null;
-		} else {
-			return mapFeatureWithPath.get(feature);
-		}
-	}
-
 	/*********** Plugins ************/
 
-	private void initMapNameWithPlugin(List<PluginElement> listPlugins) {
-		if (listPlugins == null || listPlugins.isEmpty())
+	public List<PluginElementGenerator> getPluginsDependencies(ActualFeature actual) {
+		List<String> pluginsDependencies = mapFeatureWithPluginsDependencies.get(actual);
+		if (pluginsDependencies != null && !pluginsDependencies.isEmpty()) {
+			return getPluginsFromListSymbName(pluginsDependencies);
+		}
+		return null;
+	}
+
+	public List<PluginElementGenerator> getPluginsWithoutAnyFeaturesDependencies() {
+		return allPluginsWithoutFeaturesDependencies;
+	}
+
+	public List<ActualFeature> getFeaturesMandatoriesByInput() {
+		return allFeaturesMandatoriesForThisInput;
+	}
+
+	private void initMapNameWithPlugin() {
+		if (allPlugins == null || allPlugins.isEmpty())
 			return;
 
 		mapSymbNameWithPlugin = new HashMap<>();
-		for (PluginElement onePlugin : listPlugins) {
+		for (PluginElementGenerator onePlugin : allPlugins) {
 			if (mapSymbNameWithPlugin.containsKey(onePlugin.getSymbName())) {
 				mapSymbNameWithPlugin.get(onePlugin.getSymbName()).add(onePlugin);
 			} else {
 				// Most of times, there is only one version by SymbName
-				List<PluginElement> pluginVersionList = new ArrayList<>(1);
+				List<PluginElementGenerator> pluginVersionList = new ArrayList<>(1);
 				pluginVersionList.add(onePlugin);
 				mapSymbNameWithPlugin.put(onePlugin.getSymbName(), pluginVersionList);
 			}
 		}
 	}
 
-	private void initMapFeatureWithPluginsDependencies(List<ActualFeature> listAllFeatures) {
-		if (listAllFeatures == null || listAllFeatures.isEmpty())
+	private void initMapFeatureWithPluginsDependencies() {
+		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
 		mapFeatureWithPluginsDependencies = new HashMap<>();
 		List<String> dependencies = null;
 
-		for (ActualFeature oneFeature : listAllFeatures) {
+		for (ActualFeature oneFeature : allFeatures) {
 			dependencies = oneFeature.getPlugins();
 			List<String> required = oneFeature.getRequiredPlugins();
-			if (required != null && !required.isEmpty()) {
+			if (required != null && !required.isEmpty()) { // y'a un elem dedans
 				if (dependencies != null && !dependencies.isEmpty()) {
-					for (int i = 0; i < required.size(); i++) {
-						if (!dependencies.contains(required.get(i))) {
-							dependencies.add(required.get(i));
-						}
+					for (String req : required) {
+						if (!dependencies.contains(req))
+							dependencies.add(req);
 					}
 				} else {
 					dependencies = required;
@@ -187,28 +204,28 @@ public class FeaturesAndPluginsDependencies {
 		}
 	}
 
-	public List<PluginElement> getPluginsDependencies(ActualFeature actual) {
-		List<String> pluginsDependencies = mapFeatureWithPluginsDependencies.get(actual);
-		if (pluginsDependencies != null && !pluginsDependencies.isEmpty()) {
-			return getPluginsFromListSymbName(pluginsDependencies);
-		}
-		return null;
-	}
-
-	private void initAllPluginsWithoutFeaturesDependencies(
-			Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies) {
+	private void initAllPluginsWithoutFeaturesDependencies() {
 		allPluginsWithoutFeaturesDependencies = new ArrayList<>();
 		allPluginsWithoutFeaturesDependencies.addAll(allPlugins);
 		// eclipseFull Kepler = 2066 plugins
 		// all Plugins from Features dependencies = 1947
-		for (PluginElement oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) {
+		for (PluginElementGenerator oneP : getAllPluginsDependencies(mapFeatureWithPluginsDependencies)) {
 			// We don't use removeAll because it remove all occurrences, but we
 			// want to remove just one at each time
 			allPluginsWithoutFeaturesDependencies.remove(oneP);
 		}
 	}
 
-	private List<PluginElement> getAllPluginsDependencies(
+	private void initListFeaturesMandatories() {
+		allFeaturesMandatoriesForThisInput = new ArrayList<>(MandatoriesFeatures.list.length);
+		for (String manda : MandatoriesFeatures.list) {
+			List<ActualFeature> feat_tmp = getFeaturesThatStartsWithName(manda);
+			if (feat_tmp != null)
+				allFeaturesMandatoriesForThisInput.addAll(feat_tmp);
+		}
+	}
+
+	private List<PluginElementGenerator> getAllPluginsDependencies(
 			Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies) {
 		List<String> plugins = new ArrayList<>();
 		for (List<String> list : mapFeatureWithPluginsDependencies.values()) {
@@ -221,14 +238,17 @@ public class FeaturesAndPluginsDependencies {
 		return getPluginsFromListSymbName(plugins);
 	}
 
-	private List<PluginElement> getPluginsFromListSymbName(List<String> listSymbName) {
+	private List<PluginElementGenerator> getPluginsFromListSymbName(List<String> listSymbName) {
 		if (listSymbName != null && !listSymbName.isEmpty()) {
-			List<PluginElement> listPlugins = new ArrayList<PluginElement>();
+			List<PluginElementGenerator> listPlugins = new ArrayList<PluginElementGenerator>();
+			List<PluginElementGenerator> pluginVersions;
 			for (int i = 0; i < listSymbName.size(); i++) {
-				List<PluginElement> pluginVersions = mapSymbNameWithPlugin.get(listSymbName.get(i));
-				for (PluginElement onePlugin : pluginVersions) {
-					if (onePlugin != null && !listPlugins.contains(onePlugin)) {
-						listPlugins.add(onePlugin);
+				pluginVersions = mapSymbNameWithPlugin.get(listSymbName.get(i));
+				if (pluginVersions != null) {
+					for (PluginElementGenerator onePlugin : pluginVersions) {
+						if (onePlugin != null && !listPlugins.contains(onePlugin)) {
+							listPlugins.add(onePlugin);
+						}
 					}
 				}
 			}
@@ -237,17 +257,17 @@ public class FeaturesAndPluginsDependencies {
 		return null;
 	}
 
-	@SuppressWarnings("unused")
-	private List<String> listPluginToString(List<PluginElement> list) {
-		List<String> toList = new ArrayList<>(list.size());
-		for (PluginElement elem : list) {
-			toList.add(elem.getSymbName());
-		}
-		return toList;
-	}
+	private List<ActualFeature> getFeaturesThatStartsWithName(String name) {
+		if (name == null || name.isEmpty())
+			return null;
 
-	public List<PluginElement> getPluginsWithoutAnyFeaturesDependencies() {
-		return allPluginsWithoutFeaturesDependencies;
+		List<ActualFeature> featuresWithName = new ArrayList<>(10);
+		for (ActualFeature feature : allFeatures) {
+			if (feature.getId().startsWith(name)) {
+				featuresWithName.add(feature);
+			}
+		}
+		return featuresWithName;
 	}
 
 }
