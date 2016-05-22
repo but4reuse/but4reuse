@@ -4,8 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
-import org.but4reuse.featuremodel.synthesis.fmcreators.FeatureModelCreatorsHelper;
-import org.but4reuse.featuremodel.synthesis.fmcreators.IFeatureModelCreator;
+import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
+import org.but4reuse.featuremodel.synthesis.helper.FeatureModelSynthesisHelper;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.contribution.visualiser.views.Menu;
@@ -44,16 +44,16 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 			String constructionString = inputDialog.getValue();
 			URI constructionURI = new URI(constructionString);
 			// Get the selected fm creators
-			List<IFeatureModelCreator> featureModelCreators = FeatureModelCreatorsHelper
+			List<IFeatureModelSynthesis> featureModelCreators = FeatureModelSynthesisHelper
 					.getSelectedFeatureModelCreators();
 
 			// Create fm with each of them
-			for (IFeatureModelCreator fmc : featureModelCreators) {
+			for (IFeatureModelSynthesis fmc : featureModelCreators) {
 				fmc.createFeatureModel(constructionURI);
 			}
 
 			// Refresh
-			if(output !=null){
+			if (output != null) {
 				WorkbenchUtils.refreshIResource(output);
 			} else {
 				WorkbenchUtils.refreshAllWorkspace();

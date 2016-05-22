@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.block.identification.tests
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.junit,
+ org.but4reuse.block.identification,
+ org.eclipse.equinox.registry,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.tests,
+ org.but4reuse.adapters

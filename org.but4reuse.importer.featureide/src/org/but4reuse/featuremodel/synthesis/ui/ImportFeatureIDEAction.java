@@ -3,8 +3,8 @@ package org.but4reuse.featuremodel.synthesis.ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
@@ -30,7 +30,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import de.ovgu.featureide.fm.core.FeatureModel;
+import de.ovgu.featureide.fm.core.base.FeatureUtils;
+import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 import de.ovgu.featureide.fm.core.io.FeatureModelReaderIFileWrapper;
 import de.ovgu.featureide.fm.core.io.UnsupportedModelException;
 import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelReader;
@@ -56,7 +58,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 									"No linked artefact model.\nPlease, create and load an artefact model in this editor before");
 					return;
 				}
-				if(featureList.getArtefactModel()==null){
+				if (featureList.getArtefactModel() == null) {
 					featureList.setArtefactModel(artefactModel);
 				}
 				// Select the model
@@ -73,7 +75,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				IFile fmifile = (IFile)WorkbenchUtils.getIResourceFromURI(fmURI);
+				IFile fmifile = (IFile) WorkbenchUtils.getIResourceFromURI(fmURI);
 				FeatureModel featureModel = new FeatureModel();
 				FeatureModelReaderIFileWrapper modelReader = new FeatureModelReaderIFileWrapper(
 						new XmlFeatureModelReader(featureModel));
@@ -84,20 +86,20 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (UnsupportedModelException e) {
 					e.printStackTrace();
 				}
-				Hashtable<String, de.ovgu.featureide.fm.core.Feature> table = featureModel.getFeatureTable();
+				Map<String, IFeature> table = featureModel.getFeatureTable();
 
 				// Create/update features
 				for (String fID : table.keySet()) {
-					de.ovgu.featureide.fm.core.Feature f = table.get(fID);
+					IFeature f = table.get(fID);
 					Feature feat = FeatureListHelper.getFeature(featureList, fID);
-					if(feat==null){
+					if (feat == null) {
 						// it did not exist, create it
 						feat = FeatureListFactory.eINSTANCE.createFeature();
 						featureList.getOwnedFeatures().add(feat);
 					}
 					feat.setId(fID);
 					feat.setName(f.getName());
-					feat.setDescription(f.getDescription());
+					feat.setDescription(FeatureUtils.getDescription(f));
 				}
 
 				// Associate features to artefacts

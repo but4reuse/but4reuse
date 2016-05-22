@@ -82,7 +82,14 @@ public class CreateConfigurationsAction implements IViewActionDelegate {
 			}
 
 			FeatureIDEUtils.createConfigurations(configsURI, configsMap);
-			WorkbenchUtils.refreshAllWorkspace();
+
+			// Refresh
+			if (output != null) {
+				WorkbenchUtils.refreshIResource(output);
+			} else {
+				WorkbenchUtils.refreshAllWorkspace();
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -2,6 +2,7 @@ package org.but4reuse.block.identification.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class SimilarElementsBlockIdentification implements IBlockIdentification 
 
 		// In R we will have, for each element, the indexes of the artefacts
 		// where they appear
-		Map<IElement, List<Integer>> R = new HashMap<IElement, List<Integer>>();
+		Map<IElement, List<Integer>> R = new LinkedHashMap<IElement, List<Integer>>();
 
 		// A map from IElement to the IElementWrappers that contains similar
 		// IElement

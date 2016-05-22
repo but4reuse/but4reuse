@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.feature.location.tests
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.junit,
+ org.but4reuse.block.identification,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.tests,
+ org.eclipse.equinox.registry,
+ org.but4reuse.adapters,
+ org.but4reuse.featurelist,
+ org.but4reuse.feature.location

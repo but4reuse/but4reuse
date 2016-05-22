@@ -26,6 +26,11 @@ public class StrictFeatureSpecificFeatureLocation implements IFeatureLocation {
 			IProgressMonitor monitor) {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		for (Feature f : featureList.getOwnedFeatures()) {
+			// user cancel
+			if (monitor.isCanceled()) {
+				return locatedFeatures;
+			}
+
 			List<Block> featureBlocks = null;
 			// Here we calculate the common blocks of the artefacts that
 			// implements the features
