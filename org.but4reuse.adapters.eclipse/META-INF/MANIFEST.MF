@@ -15,6 +15,11 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.visualisation.graphs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.adapters.eclipse
+Export-Package: org.but4reuse.adapters.eclipse,
+ org.but4reuse.adapters.eclipse.benchmark
 Bundle-ClassPath: lib/commons-io-2.4.jar,
+ lib/PLEDGE.jar,
+ lib/org.sat4j.core_2_0_5.jar,
+ lib/org.sat4j.core_trunk.jar,
+ lib/splar.jar,
  .

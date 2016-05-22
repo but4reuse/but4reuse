@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.utils;
+package org.but4reuse.adapters.eclipse.generator.interfaces;
 
 public interface ISender {
 	void addListener(IListener listener);
