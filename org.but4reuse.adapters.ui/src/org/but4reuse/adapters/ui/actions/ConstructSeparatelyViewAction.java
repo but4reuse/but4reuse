@@ -148,8 +148,12 @@ public class ConstructSeparatelyViewAction implements IViewActionDelegate {
 			}
 		}
 
-		// TODO try to be more specific about the project to refresh
-		WorkbenchUtils.refreshAllWorkspace();
+		// Refresh
+		if (output != null) {
+			WorkbenchUtils.refreshIResource(output);
+		} else {
+			WorkbenchUtils.refreshAllWorkspace();
+		}
 	}
 
 	@Override

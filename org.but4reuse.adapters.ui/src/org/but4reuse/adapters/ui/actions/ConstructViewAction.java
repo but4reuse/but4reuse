@@ -136,8 +136,12 @@ public class ConstructViewAction implements IViewActionDelegate {
 			e.printStackTrace();
 		}
 
-		// TODO try to be more specific about the project to refresh
-		WorkbenchUtils.refreshAllWorkspace();
+		// Refresh
+		if (output != null) {
+			WorkbenchUtils.refreshIResource(output);
+		} else {
+			WorkbenchUtils.refreshAllWorkspace();
+		}
 	}
 
 	@Override
