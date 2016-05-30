@@ -13,22 +13,14 @@
                icon="icons/icon_eclipse.png"
                id="org.but4reuse.adapters.eclipse.generator.action"
                label="Generate Eclipse variants"
-               menubarPath="additions">
+               menubarPath="EFLBench/additions">
          </action>
-      </objectContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="false"
-            id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
-            objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
                class="org.but4reuse.adapters.eclipse.generator.actions.CreateEclipseVariantsPledgeAction"
                icon="icons/icon_eclipse.png"
                id="org.but4reuse.adapters.eclipse.generator.action"
                label="Generate Eclipse variants Pledge"
-               menubarPath="additions">
+               menubarPath="EFLBench/additions">
          </action>
       </objectContribution>
    </extension>
