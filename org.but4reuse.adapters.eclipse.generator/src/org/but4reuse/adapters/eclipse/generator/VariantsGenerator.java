@@ -240,12 +240,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 	}
 
 	private boolean wasChosen(ActualFeature feature) {
-		if (feature == null || percentage == 0)
+		if (feature == null || percentage == 0) {
 			return false;
-		else if (percentage == 100 || Math.random() * 100 < percentage)
+		} else if (percentage == 100 || Math.random() * 100 < percentage) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 }

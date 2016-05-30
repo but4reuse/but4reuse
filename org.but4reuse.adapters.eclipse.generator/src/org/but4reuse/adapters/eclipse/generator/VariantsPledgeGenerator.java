@@ -28,6 +28,7 @@ import pledge.core.ModelPLEDGE.FeatureModelFormat;
 
 public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 
+	private static final String SIMILARITY_GREEDY = "SimilarityGreedy";
 	private String input;
 	private String output;
 	private int nbVariants;
@@ -61,10 +62,11 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 
 		// if the eclipse dir is inside the input
 		if (eclipse.list().length == 1 && eclipse.listFiles()[0].getName().equals("eclipse")) {
-			if (input.endsWith(File.separator))
+			if (input.endsWith(File.separator)) {
 				input += "eclipse" + File.separator;
-			else
+			} else {
 				input += File.separator + "eclipse" + File.separator;
+			}
 			eclipse = new File(input);
 		}
 
@@ -108,18 +110,18 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		try {
 			mp.loadFeatureModel(f.getAbsolutePath(), FeatureModelFormat.SPLOT);
 		} catch (Exception e1) {
-			sendToAll("Error in generator : Errot to load FeatureModel.");
+			sendToAll("Error in generator : Error loading the FeatureModel.");
 			e1.printStackTrace();
 			return;
 		}
 
 		mp.setNbProductsToGenerate(nbVariants);
 		mp.setGenerationTimeMSAllowed(time * 1000L);
-		mp.SetPrioritizationTechniqueByName("SimilarityGreedy");
+		mp.SetPrioritizationTechniqueByName(SIMILARITY_GREEDY);
 		try {
 			mp.generateProducts();
 		} catch (Exception e1) {
-			sendToAll("Error in generator : Error to generate the product.");
+			sendToAll("Error in generator : Error generating the product.");
 			e1.printStackTrace();
 			return;
 		}
@@ -136,8 +138,8 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			for (Integer j : p) {
 				if (j > 0) {
 					String id = mp.getFeaturesList().get(j - 1);
-					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".")
-							.replace("666666", "-");
+					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".").replace("666666",
+							"-");
 					for (ActualFeature oneFeat : allFeatures) {
 						if (oneFeat.getId().equals(id)) {
 							chosenFeatures.add(oneFeat);
@@ -146,7 +148,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 						}
 					}
 				}
-			}// end of iterate through allFeatures
+			} // end of iterate through allFeatures
 
 			for (ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()) {
 				if (!chosenFeatures.contains(one_manda))
@@ -196,10 +198,8 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 				}
 				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.PLUGINS,
 						allFilesPlugins);
-
-				System.out.println("(Variant " + i + ") features created.");
 			} catch (Exception e) {
-				System.out.println("(Variant " + i + ") features error : " + e);
+				e.printStackTrace();
 			}
 
 			sendToAll("Total of features selected from Pledge for Variant " + i + " = " + nbSelectedFeatures
@@ -212,14 +212,15 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 
 		} // end of variants loop
 
-		sendToAll("\nGeneration finished !");
+		sendToAll("\nGeneration finished!");
 
 	}
 
 	@Override
 	public void addListener(IListener listener) {
-		if (listeners == null)
+		if (listeners == null) {
 			listeners = new ArrayList<IListener>();
+		}
 		listeners.add(listener);
 	}
 
