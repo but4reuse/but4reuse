@@ -3,8 +3,10 @@ package org.but4reuse.featuremodel.synthesis.impl;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -15,9 +17,13 @@ import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
+import de.ovgu.featureide.fm.core.ConstraintAttribute;
+import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.Constraint;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 
@@ -30,7 +36,8 @@ import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
  * select parent candidates belonging to alternative groups and in the case of
  * any, we select the parent candidate with the higher number of reasons in the
  * requires constraint description. Finally, the features without parent are
- * added to the root.
+ * added to the root. The common features are set as mandatory and redundant
+ * constraints are removed.
  * 
  * @author jabier.martinez
  */
@@ -66,11 +73,18 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		fm.addFeature(root);
 		fmFeatures.add(root);
 
+		// Common blocks (probably mandatory)
+		List<Block> common = AdaptedModelHelper.getCommonBlocks(adaptedModel);
+
 		// Add blocks as features
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Feature f = new Feature(fm, FeatureIDEUtils.validFeatureName(block.getName()));
 			FeatureUtils.setAbstract(f, false);
-			FeatureUtils.setMandatory(f, false);
+			if (common.contains(block)) {
+				FeatureUtils.setMandatory(f, true);
+			} else {
+				FeatureUtils.setMandatory(f, false);
+			}
 			fm.addFeature(f);
 			fmFeatures.add(f);
 		}
@@ -239,6 +253,19 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			}
 		}
 		FeatureUtils.setChildren(root, toTheRoot);
+
+		// Remove redundant
+		FeatureModelAnalyzer analyzer = FeatureUtils.getAnalyser(fm);
+		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullProgressMonitor());
+		for (Entry<Object, Object> entry : o.entrySet()) {
+			if (entry.getKey() instanceof Constraint) {
+				if (entry.getValue() instanceof ConstraintAttribute) {
+					if ((ConstraintAttribute) entry.getValue() == ConstraintAttribute.REDUNDANT) {
+						fm.removeConstraint((Constraint) entry.getKey());
+					}
+				}
+			}
+		}
 
 		// Save
 		try {
