@@ -1,15 +1,12 @@
 package org.but4reuse.adapters.eclipse.generator.actions;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Map;
 
 import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
 import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
-import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
@@ -36,30 +33,11 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 
 	private SummaryDialog summaryDialog;
 	private ParametersDialog paramDialog;
-	private Map<String, String> prefMap;
 
 	public void run(IAction action) {
 
 		if (paramDialog == null) {
-			// Not create a new dialog if it's a "re-open" (parameters not
-			// good).
 			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
-			try { // Load preferences
-				prefMap = PreferenceUtils.getPreferences();
-				if (prefMap.containsKey(PreferenceUtils.PREF_USERNAME)
-						&& (prefMap.get(PreferenceUtils.PREF_USERNAME).isEmpty() || prefMap.get(
-								PreferenceUtils.PREF_USERNAME)
-								.equals(System.getProperty(PreferenceUtils.PREF_USERNAME)))) {
-					// Look below, in registration
-					paramDialog.addPreferenceParameters(prefMap);
-				}
-			} catch (FileNotFoundException e) {
-				System.out.println(e.getMessage());
-			} catch (IOException e) {
-				e.printStackTrace();
-				if (e instanceof FileNotFoundException)
-					System.out.println("Error for loading preferences");
-			}
 		}
 
 		if (paramDialog.open() != Window.OK) {
@@ -113,15 +91,6 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			return;
 		}
 
-		// Saving preferences
-		try {
-			PreferenceUtils.savePreferences(paramDialog.getInputPath(), paramDialog.getOutputPath(),
-					paramDialog.getRandomSelector(), paramDialog.getVariantsNumber());
-		} catch (IOException e) {
-			System.out.println("Error for saving preferences");
-			e.printStackTrace();
-		}
-
 		// Start the generator process
 		// final for the thread and because nbVariants and valRand can't be
 		// final
@@ -169,12 +138,18 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			// create artefact and set some attributes
 			for (int i = 1; i <= nbVariantsForThread; i++) {
 				Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
-				String output_variant = paramDialog.getOutputPath() + File.separator + VariantsUtils.VARIANT + i;
-				a.setName("Variant" + i);
+				String variantName = VariantsUtils.VARIANT + "_" + i;
+				String output_variant = paramDialog.getOutputPath() + File.separator + variantName;
+				a.setName(variantName);
 				a.setArtefactURI(new File(output_variant).toURI().toString());
 				// add to the artefact model
 				artefactModel.getOwnedArtefacts().add(a);
 			}
+		}
+		try {
+			artefactModel.eResource().save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}

@@ -7,7 +7,7 @@ import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * Feature location TODO provisional API
+ * Feature location
  * 
  * @author jabier.martinez
  */

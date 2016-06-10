@@ -12,7 +12,7 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.generator.dependencies.DependenciesAnalyzer;
+import org.but4reuse.adapters.eclipse.generator.dependencies.DependencyAnalyzer;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.interfaces.ISender;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IVariantsGenerator;
@@ -103,12 +103,15 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		sendToAll("Total features number in the input = " + allFeatures.size());
 		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
 
-		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
-		File f = SplotUtils.exportToSPLOT(allFeatures);
+		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
+
+		File outputFile = new File(output + File.separator + "SPLOTFeatureModel.xml");
+		SplotUtils.exportToSPLOT(outputFile, allFeatures);
+
 		ModelPLEDGE mp = new ModelPLEDGE();
 
 		try {
-			mp.loadFeatureModel(f.getAbsolutePath(), FeatureModelFormat.SPLOT);
+			mp.loadFeatureModel(outputFile.getAbsolutePath(), FeatureModelFormat.SPLOT);
 		} catch (Exception e1) {
 			sendToAll("Error in generator : Error loading the FeatureModel.");
 			e1.printStackTrace();
@@ -127,7 +130,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		}
 
 		for (int i = 1; i <= nbVariants; i++) {
-			String output_variant = output + File.separator + VariantsUtils.VARIANT + i;
+			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 			int nbSelectedFeatures = 0;
 
 			List<PluginElement> pluginsList = new ArrayList<PluginElement>();
@@ -138,8 +141,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			for (Integer j : p) {
 				if (j > 0) {
 					String id = mp.getFeaturesList().get(j - 1);
-					id = id.replace("555555", "(").replace("°°°°°°", "(").replace("111111", ".").replace("666666",
-							"-");
+					id = SplotUtils.reverseFixIdForNonAcceptedChars(id);
 					for (ActualFeature oneFeat : allFeatures) {
 						if (oneFeat.getId().equals(id)) {
 							chosenFeatures.add(oneFeat);
@@ -230,8 +232,6 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			for (IListener oneListener : listeners) {
 				oneListener.receive(msg);
 			}
-		} else {
-			System.out.println(msg);
 		}
 	}
 

@@ -13,45 +13,35 @@ import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 
 public class SplotUtils {
 
-	public static File exportToSPLOT(List<ActualFeature> allFeatures) {
+	public static boolean exportToSPLOT(File outputFile, List<ActualFeature> allFeatures) {
 
 		if (allFeatures == null || allFeatures.isEmpty())
-			return null;
+			return false;
 
-		String splotToReturn = "";
+		StringBuilder splotToReturn = new StringBuilder();
 
 		Map<String, ActualFeature> mapIdWithFeature = new HashMap<>();
 		for (ActualFeature oneFeature : allFeatures) {
 			mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 		}
 
-		splotToReturn += "<feature_model name=\"Eclipse Feature\">\n";
-		splotToReturn += "<meta>\n";
-		splotToReturn += "</meta>\n";
-		splotToReturn += "<feature_tree>\n";
-		splotToReturn += "  :r Eclipse Feature(EclipseFeature)\n";
+		splotToReturn.append("<feature_model name=\"Eclipse Feature\">\n");
+		splotToReturn.append("<meta>\n");
+		splotToReturn.append("</meta>\n");
+		splotToReturn.append("<feature_tree>\n");
+		splotToReturn.append("  :r Eclipse Feature(EclipseFeature)\n");
 
 		for (int i = 0; i < allFeatures.size(); i++) {
 			ActualFeature oneFeat = allFeatures.get(i);
-			String name = oneFeat.getName().replace("(", "");
-			name = name.replace(")", "");
-
-			String id = oneFeat.getId().replace("(", "555555").replace(")", "°°°°°°").replace(".", "111111")
-					.replace("-", "666666");
-
-			splotToReturn += "\t:o " + name + "(" + id + ")";
-			splotToReturn += "\n";
+			splotToReturn.append("\t:o " + fixIdForNonAcceptedChars(oneFeat.getId()) + "\n");
 		}
 
-		splotToReturn += "</feature_tree>\n";
-		splotToReturn += "<constraints>";
+		splotToReturn.append("</feature_tree>\n");
+		splotToReturn.append("<constraints>");
 		int nbConstraints = 1;
 
 		for (int i = 0; i < allFeatures.size(); i++) {
 			ActualFeature oneFeat = allFeatures.get(i);
-
-			String id = oneFeat.getId().replace("(", "555555").replace(")", "°°°°°°").replace(".", "111111")
-					.replace("-", "666666");
 
 			List<String> allDependencies = new ArrayList<String>();
 			if (oneFeat.getRequiredFeatures() != null) {
@@ -59,53 +49,48 @@ public class SplotUtils {
 			}
 			if (oneFeat.getIncludedFeatures() != null) {
 				for (String s : oneFeat.getIncludedFeatures()) {
-					if (!allDependencies.contains(s))
+					if (!allDependencies.contains(s)) {
 						allDependencies.add(s);
+					}
 				}
 			}
 			for (int j = 0; j < allDependencies.size(); j++) {
 				if (allDependencies.get(j) != null) {
 					if (mapIdWithFeature.get(allDependencies.get(j)) != null) {
-						splotToReturn += "\n";
-						splotToReturn += "constraint_" + nbConstraints + ":";
-						splotToReturn += "~"
-								+ id
-								+ " or "
-								+ mapIdWithFeature.get(allDependencies.get(j)).getId().replace(".", "111111")
-										.replace("-", "666666").replace("(", "555555").replace(")", "°°°°°°");
+						splotToReturn.append("\n");
+						splotToReturn.append("constraint_" + nbConstraints + ":");
+						splotToReturn.append("~" + fixIdForNonAcceptedChars(oneFeat.getId()) + " or "
+								+ fixIdForNonAcceptedChars(mapIdWithFeature.get(allDependencies.get(j)).getId()));
 						nbConstraints++;
 					}
 				}
 			}
 		}
 
-		splotToReturn += "\n</constraints>\n";
-		splotToReturn += "</feature_model>\n";
+		splotToReturn.append("\n</constraints>\n");
+		splotToReturn.append("</feature_model>\n");
 
-		String filename = "EclipseFeature.xml";
-		Map<String, String> prefMap = null;
-		String output = "";
 		try {
-			prefMap = PreferenceUtils.getPreferences();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return null;
-		}
-		output = prefMap.get(PreferenceUtils.PREF_OUTPUT) + File.separator + filename;
-
-		BufferedWriter bufferedWriter = null;
-		try {
-			FileWriter fileWriter = new FileWriter(output);
-			bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write(splotToReturn);
+			FileWriter fileWriter = new FileWriter(outputFile);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			bufferedWriter.write(splotToReturn.toString());
 
 			bufferedWriter.close();
 			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
+	}
 
-		return new File(output);
+	// TODO find a cleaner solution to this. dot is not accepted
+	public static String fixIdForNonAcceptedChars(String id) {
+		return id.replace(".", "___").replace("-", "666666").replace("(", "555555").replace(")", "°°°°°°");
+	}
+
+	public static String reverseFixIdForNonAcceptedChars(String id) {
+		return id.replace("___", ".").replace("555555", "(").replace("°°°°°°", "(").replace("666666", "-");
 	}
 
 }

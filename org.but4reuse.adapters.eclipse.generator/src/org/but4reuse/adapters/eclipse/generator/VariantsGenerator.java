@@ -11,7 +11,7 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.generator.dependencies.DependenciesAnalyzer;
+import org.but4reuse.adapters.eclipse.generator.dependencies.DependencyAnalyzer;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.interfaces.ISender;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IVariantsGenerator;
@@ -95,10 +95,10 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		sendToAll("Total features number in the input = " + allFeatures.size());
 		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
 
-		DependenciesAnalyzer depAnalyzer = new DependenciesAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
+		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
 
 		for (int i = 1; i <= nbVariants; i++) {
-			String output_variant = output + File.separator + VariantsUtils.VARIANT + i;
+			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 			int nbSelectedFeatures = 0;
 
 			List<PluginElementGenerator> pluginsList = null;
@@ -189,10 +189,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				}
 				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.PLUGINS,
 						allFilesPlugins);
-
-				System.out.println("(Variant " + i + ") features created.");
 			} catch (Exception e) {
-				System.out.println("(Variant " + i + ") features error : " + e);
+				e.printStackTrace();
 			}
 
 			sendToAll("Total of features selected with the random for Variant " + i + " = " + nbSelectedFeatures
@@ -205,7 +203,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			allElements.addAll(pluginsList);
 
 			URI outputUri = new File(output_variant).toURI();
-			System.out.println("outputURI : " + outputUri);
 			adapter.construct(outputUri, allElements, new NullProgressMonitor());
 
 		} // end of variants loop
@@ -226,8 +223,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 			for (IListener oneListener : listeners) {
 				oneListener.receive(msg);
 			}
-		} else {
-			System.out.println(msg);
 		}
 	}
 

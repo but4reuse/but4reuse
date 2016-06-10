@@ -1,8 +1,5 @@
 package org.but4reuse.adapters.eclipse.generator.dialogs;
 
-import java.util.Map;
-
-import org.but4reuse.adapters.eclipse.generator.utils.PreferenceUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -207,16 +204,6 @@ public class PledgeDialog extends Dialog {
 
 	public void setTimeState(boolean isGood) {
 		isTimeOK = isGood;
-	}
-
-	/**
-	 * Call this method before the open method. It put all the preference
-	 * parameters into the dialog
-	 */
-	public void addPreferenceParameters(Map<String, String> params) {
-		inputContent = params.get(PreferenceUtils.PREF_INPUT);
-		outputContent = params.get(PreferenceUtils.PREF_OUTPUT);
-		variantsNumberContent = params.get(PreferenceUtils.PREF_VARIANTS);
 	}
 
 }

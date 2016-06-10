@@ -30,8 +30,7 @@ public class VariantsUtils {
 
 	public static boolean isEclipseDir(File eclipse) {
 		if (eclipse.list() != null
-				&& Arrays.asList(eclipse.list()).containsAll(
-						Arrays.asList(new String[] { "plugins", "features" }))) {
+				&& Arrays.asList(eclipse.list()).containsAll(Arrays.asList(new String[] { "plugins", "features" }))) {
 			return true;
 		}
 		return false;
@@ -60,7 +59,7 @@ public class VariantsUtils {
 	}
 
 	private static Map<String, Field> analyze(Object object) {
-		if (object == null){
+		if (object == null) {
 			throw new NullPointerException();
 		}
 
