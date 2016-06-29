@@ -105,4 +105,11 @@ public class JavaLanguage implements ILanguage {
 		return (terminal.getType().equals("ImportDeclaration"));
 	}
 
+	@Override
+	public String getQualifiedName(FSTNode node) {
+		if (node.getParent() == null)
+			return this.getPackageName((FSTNonTerminal)node);
+		return this.getQualifiedName((FSTNonTerminal)node.getParent())+"."+node.getName();
+	}
+
 }
