@@ -17,14 +17,12 @@ public class StringUtils {
 		if (string == null) {
 			return list;
 		}
-		
+
 		string = string.replaceAll("\\s", " ");
 		StringTokenizer tk = new StringTokenizer(string, " :!?*+²&~\"#'{}()[]|`_\\^°,.;/§");
 		while (tk.hasMoreTokens()) {
 			String token = tk.nextToken();
-			
 
-			
 			if (!token.equals("-")) {
 				list.add(token);
 			}
