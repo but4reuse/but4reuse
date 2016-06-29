@@ -16,9 +16,10 @@ import java.util.zip.ZipOutputStream;
  * 
  */
 public class ZipUtils {
-	
+
 	/**
 	 * Create zip output stream
+	 * 
 	 * @param path
 	 * @return
 	 * @throws FileNotFoundException
@@ -32,6 +33,7 @@ public class ZipUtils {
 
 	/**
 	 * Add a file to a zip file
+	 * 
 	 * @param zipOut
 	 * @param file
 	 * @param filename

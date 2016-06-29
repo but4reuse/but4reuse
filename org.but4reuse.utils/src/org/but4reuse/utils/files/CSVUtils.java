@@ -1,9 +1,14 @@
 package org.but4reuse.utils.files;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
@@ -79,13 +84,14 @@ public class CSVUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Import a CSV comma separated to a matrix of String
+	 * 
 	 * @param uri
 	 * @return
 	 */
-	public static String[][] importCSV(URI uri){
+	public static String[][] importCSV(URI uri) {
 		try {
 			File f = new File(uri);
 			FileReader input;
@@ -96,62 +102,62 @@ public class CSVUtils {
 			int tabs = countTabs(f);
 			String[][] stringMatrix = new String[lines][tabs];
 			int i = 0;
-			while ( (myLine = bufRead.readLine()) != null){    
-			    String[] array1 = myLine.split(";");
-			    if(array1.length == tabs){
-			    	for (int j = 0; j < tabs; j++) {
-			    		stringMatrix[i][j] = array1[j].trim();
+			while ((myLine = bufRead.readLine()) != null) {
+				String[] array1 = myLine.split(";");
+				if (array1.length == tabs) {
+					for (int j = 0; j < tabs; j++) {
+						stringMatrix[i][j] = array1[j].trim();
+					}
 				}
-			    }
-			    i++;
+				i++;
 			}
+			bufRead.close();
 			return stringMatrix;
-			
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
-	
+
 	/**
 	 * Count the number of line in a csv file
 	 * */
 	private static int countLines(File file) throws IOException {
-	    InputStream is = new BufferedInputStream(new FileInputStream(file));
-	    try {
-	        byte[] c = new byte[1024];
-	        int count = 0;
-	        int readChars = 0;
-	        boolean empty = true;
-	        while ((readChars = is.read(c)) != -1) {
-	            empty = false;
-	            for (int i = 0; i < readChars; ++i) {
-	                if (c[i] == '\n') {
-	                    ++count;
-	                }
-	            }
-	        }
-	        return (count == 0 && !empty) ? 1 : count;
-	    } finally {
-	        is.close();
-	    }
+		InputStream is = new BufferedInputStream(new FileInputStream(file));
+		try {
+			byte[] c = new byte[1024];
+			int count = 0;
+			int readChars = 0;
+			boolean empty = true;
+			while ((readChars = is.read(c)) != -1) {
+				empty = false;
+				for (int i = 0; i < readChars; ++i) {
+					if (c[i] == '\n') {
+						++count;
+					}
+				}
+			}
+			return (count == 0 && !empty) ? 1 : count;
+		} finally {
+			is.close();
+		}
 	}
-	
+
 	/**
 	 * Count the umber of tabs in a csv file
 	 */
 	private static int countTabs(File file) throws IOException {
-		
-	        int count = 0;
-	        FileReader input = new FileReader(file);
+
+		int count = 0;
+		FileReader input = new FileReader(file);
 		BufferedReader bufRead = new BufferedReader(input);
-	        String myLine = bufRead.readLine();
-	        
-	        count = myLine.split(";").length;
-	        
-	        return count;
+		String myLine = bufRead.readLine();
+
+		count = myLine.split(";").length;
+		bufRead.close();
+		return count;
 
 	}
 

@@ -121,17 +121,15 @@ public class DoubleScaleFieldEditor extends FieldEditor {
 				if ((int) e.character == 8) // It means backspace char so we
 											// remove the last char
 				{
-					int  ind = text.getCaretPosition();
-					
-					if(ind == 0)
+					int ind = text.getCaretPosition();
+
+					if (ind == 0)
 						return;
-					if(ind == value_t.length()){
+					if (ind == value_t.length()) {
 						value_t = value_t.substring(0, value_t.length() - 1);
-					}
-					else
-					{
-						String tmp = value_t.substring(0, ind-1);
-						value_t = tmp+value_t.substring(ind,value_t.length());
+					} else {
+						String tmp = value_t.substring(0, ind - 1);
+						value_t = tmp + value_t.substring(ind, value_t.length());
 					}
 					text.setText(value_t);
 					return;
