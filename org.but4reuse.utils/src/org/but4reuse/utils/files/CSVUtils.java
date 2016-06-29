@@ -101,7 +101,7 @@ public class CSVUtils {
 			    if(array1.length == tabs){
 			    	for (int j = 0; j < tabs; j++) {
 			    		stringMatrix[i][j] = array1[j].trim();
-					}
+				}
 			    }
 			    i++;
 			}
@@ -115,6 +115,9 @@ public class CSVUtils {
 		
 	}
 	
+	/**
+	 * Count the number of line in a csv file
+	 * */
 	private static int countLines(File file) throws IOException {
 	    InputStream is = new BufferedInputStream(new FileInputStream(file));
 	    try {
@@ -136,11 +139,14 @@ public class CSVUtils {
 	    }
 	}
 	
+	/**
+	 * Count the umber of tabs in a csv file
+	 */
 	private static int countTabs(File file) throws IOException {
 		
 	        int count = 0;
 	        FileReader input = new FileReader(file);
-			BufferedReader bufRead = new BufferedReader(input);
+		BufferedReader bufRead = new BufferedReader(input);
 	        String myLine = bufRead.readLine();
 	        
 	        count = myLine.split(";").length;
