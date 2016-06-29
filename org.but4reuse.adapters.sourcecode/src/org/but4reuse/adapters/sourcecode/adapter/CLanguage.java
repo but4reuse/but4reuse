@@ -112,5 +112,11 @@ public class CLanguage implements ILanguage {
 		// TODO ???
 		return "";
 	}
+	
+	@Override
+	public String getQualifiedName(FSTNode node) {
+		//TODO ???
+		return "";
+	}
 
 }
