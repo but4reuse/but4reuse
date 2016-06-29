@@ -68,5 +68,12 @@ public interface ILanguage {
 	 * @return package name or empty string
 	 */
 	public String getPackageName(FSTNonTerminal node);
+	
+		/**
+	 * Get qualified name
+	 * @param node
+	 * @return qualified name or empty string
+	 */
+	public String getQualifiedName(FSTNode node);
 
 }
