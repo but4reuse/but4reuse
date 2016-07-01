@@ -24,8 +24,7 @@ public class EMFAttributeElement extends AbstractElement {
 
 	@Override
 	public String getText() {
-		return "Attribute: [Owner->" + EMFUtils.getText(owner) + "] [Attr->" + this.eAttribute.getName() + "] [Value->"
-				+ value + "]";
+		return "Attr: " + eAttribute.getName() + " [Owner->" + EMFUtils.getText(owner) + "] [Value->" + value + "]";
 	}
 
 	@Override

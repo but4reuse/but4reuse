@@ -29,7 +29,7 @@ public class EMFClassElement extends AbstractElement {
 			return "Class: " + eObject.eClass().getName();
 		}
 		return ("Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "] [Owner->"
-				+ EMFUtils.getText(owner) + "] [Ref->" + reference.getName() + "]");
+				+ EMFUtils.getText(owner) + ", Ref->" + reference.getName() + "]");
 	}
 
 	@Override
