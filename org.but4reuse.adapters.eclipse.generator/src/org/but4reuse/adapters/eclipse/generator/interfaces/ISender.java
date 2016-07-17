@@ -4,6 +4,4 @@ public interface ISender {
 	void addListener(IListener listener);
 
 	void sendToAll(String msg);
-
-	void sendToOne(IListener listener, String msg);
 }

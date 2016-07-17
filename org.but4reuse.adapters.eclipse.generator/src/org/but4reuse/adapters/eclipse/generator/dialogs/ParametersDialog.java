@@ -24,6 +24,7 @@ public class ParametersDialog extends Dialog {
 	private Text output;
 	private Text variantsNumber;
 	private Text randomSelector;
+	private Button keepOnlyMetadataButton;
 
 	private Label lblInput;
 	private Label lblOutput;
@@ -39,6 +40,7 @@ public class ParametersDialog extends Dialog {
 	private String outputContent = "C:\\outputFolder";
 	private String variantsNumberContent = "3";
 	private String randomSelectorContent = "50";
+	private Boolean keepOnlyMetadata = true;
 
 	private Color red;
 
@@ -60,15 +62,28 @@ public class ParametersDialog extends Dialog {
 		addOutput(container);
 		addRandomSelector(container);
 		addVariantsNumber(container);
+		addKeepOnlyMetadataOption(container);
 
 		return container;
+	}
+
+	private void addKeepOnlyMetadataOption(Composite container) {
+		new Label(container, SWT.WRAP).setText("Keep only metadata");
+		keepOnlyMetadataButton = new Button(container, SWT.CHECK);
+		keepOnlyMetadataButton.setSelection(true);
+		keepOnlyMetadataButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				keepOnlyMetadata = keepOnlyMetadataButton.getSelection();
+			}
+		});
 	}
 
 	private void addInput(final Composite container) {
 		lblInput = new Label(container, SWT.WRAP);
 		lblInput.setText(VariantsUtils.INPUT_TEXT);
-		if (isInputOK != null && !isInputOK)
+		if (isInputOK != null && !isInputOK) {
 			lblInput.setForeground(red);
+		}
 
 		input = new Text(container, SWT.BORDER);
 		input.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -205,6 +220,10 @@ public class ParametersDialog extends Dialog {
 
 	public void setRandomSelectorState(boolean isGood) {
 		isRandomSelectorOK = isGood;
+	}
+
+	public boolean isKeepOnlyMetadata() {
+		return keepOnlyMetadata;
 	}
 
 }

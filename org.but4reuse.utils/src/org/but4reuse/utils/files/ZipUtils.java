@@ -7,6 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -97,6 +101,67 @@ public class ZipUtils {
 			zis.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	public static void unJar(File jarFile, File outputFolder) {
+		try {
+			JarFile jar = new JarFile(jarFile);
+			Enumeration<JarEntry> enumEntries = jar.entries();
+			while (enumEntries.hasMoreElements()) {
+				JarEntry file = enumEntries.nextElement();
+				File f = new File(outputFolder + java.io.File.separator + file.getName());
+				f.getParentFile().mkdirs();
+				if (file.isDirectory()) { // if its a directory, create it
+					f.mkdirs();
+					continue;
+				}
+				InputStream is = jar.getInputStream(file); // get the input
+															// stream
+				FileOutputStream fos = new FileOutputStream(f);
+				while (is.available() > 0) { // write contents of 'is' to 'fos'
+					fos.write(is.read());
+				}
+				fos.close();
+				is.close();
+			}
+			jar.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void unJarOnlyFilesOfGivenExtensions(File jarFile, File outputFolder, String[] extensions) {
+		try {
+			JarFile jar = new JarFile(jarFile);
+			Enumeration<JarEntry> enumEntries = jar.entries();
+			while (enumEntries.hasMoreElements()) {
+				JarEntry file = enumEntries.nextElement();
+				boolean validExtension = false;
+				for (String extension : extensions) {
+					if (file.getName() != null && FileUtils.getExtension(file.getName()).equalsIgnoreCase(extension)) {
+						validExtension = true;
+					}
+				}
+				if (validExtension) {
+					File f = new File(outputFolder + java.io.File.separator + file.getName());
+					f.getParentFile().mkdirs();
+					if (file.isDirectory()) {
+						f.mkdirs();
+						continue;
+					}
+					InputStream is = jar.getInputStream(file); 
+					FileOutputStream fos = new FileOutputStream(f);
+					while (is.available() > 0) { 
+						fos.write(is.read());
+					}
+					fos.close();
+					is.close();
+				}
+			}
+			jar.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

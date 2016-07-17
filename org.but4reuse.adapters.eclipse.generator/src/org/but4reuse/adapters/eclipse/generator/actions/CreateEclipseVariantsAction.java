@@ -96,12 +96,13 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		// final
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
+		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
-						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread);
+						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata);
 				varGen.addListener(context);
 				// Long time to execute
 				varGen.generate();

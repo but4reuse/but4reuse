@@ -105,4 +105,9 @@ public class ActualFeature implements Comparable<ActualFeature> {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		return "ActualFeature [id=" + id + ", name=" + name + "]";
+	}
+
 }

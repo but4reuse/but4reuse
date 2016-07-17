@@ -122,13 +122,14 @@ public class FileAndDirectoryUtils {
 	 * @param outputFile
 	 *            : The files to copy
 	 * @throws IOException
-	 *             if the copy is impossible
+	 *             if delete is impossible
 	 */
 	public static void deleteFile(File file) throws IOException {
-		if (file == null || !file.exists())
+		if (file == null || !file.exists()) {
 			throw new IOException("(Method deleteFileIfExist) file is null or not exist.");
-		else
+		} else {
 			FileUtils.forceDelete(file);
+		}
 	}
 
 	/**

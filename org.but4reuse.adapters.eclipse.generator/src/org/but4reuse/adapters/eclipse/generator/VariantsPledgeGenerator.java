@@ -235,12 +235,4 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		}
 	}
 
-	@Override
-	public void sendToOne(IListener listener, String msg) {
-		if (listeners != null && !listeners.isEmpty()) {
-			int index = listeners.indexOf(listener);
-			listeners.get(index).receive(msg);
-		}
-	}
-
 }

@@ -11,13 +11,13 @@
          <action
                class="org.but4reuse.adapters.eclipse.generator.actions.CreateEclipseVariantsAction"
                id="org.but4reuse.adapters.eclipse.generator.action"
-               label="Generate Eclipse variants"
+               label="Variants Generation: Percentage-based random selection of features"
                menubarPath="EFLBench/additions">
          </action>
          <action
                class="org.but4reuse.adapters.eclipse.generator.actions.CreateEclipseVariantsPledgeAction"
                id="org.but4reuse.adapters.eclipse.generator.action"
-               label="Generate Eclipse variants Pledge"
+               label="Variants Generation: PLEDGE"
                menubarPath="EFLBench/additions">
          </action>
       </objectContribution>

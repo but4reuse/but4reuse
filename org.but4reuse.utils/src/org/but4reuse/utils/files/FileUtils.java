@@ -201,9 +201,19 @@ public class FileUtils {
 	 * @return extension or empty string
 	 */
 	public static String getExtension(File file) {
-		int i = file.getName().lastIndexOf('.');
+		return getExtension(file.getName());
+	}
+	
+	/**
+	 * Get file extension
+	 * 
+	 * @param file name
+	 * @return extension or empty string
+	 */
+	public static String getExtension(String fileName) {
+		int i = fileName.lastIndexOf('.');
 		if (i > 0) {
-			return file.getName().substring(i + 1);
+			return fileName.substring(i + 1);
 		}
 		return "";
 	}
