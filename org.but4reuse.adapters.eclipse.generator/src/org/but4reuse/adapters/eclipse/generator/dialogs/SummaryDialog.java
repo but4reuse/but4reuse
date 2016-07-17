@@ -16,6 +16,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class SummaryDialog extends TitleAreaDialog {
 
 	private String title;

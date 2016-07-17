@@ -21,6 +21,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class CreateEclipseVariantsAction implements IListener, IObjectActionDelegate {
 
 	private ISelection selection;

@@ -18,6 +18,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class ParametersDialog extends Dialog {
 
 	private Text input;

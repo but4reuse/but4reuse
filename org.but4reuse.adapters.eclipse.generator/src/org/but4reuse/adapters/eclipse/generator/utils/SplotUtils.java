@@ -11,6 +11,12 @@ import java.util.Map;
 
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 
+/**
+ * SPLOT format utils, needed for the PLEDGE library
+ * 
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class SplotUtils {
 
 	public static boolean exportToSPLOT(File outputFile, List<ActualFeature> allFeatures) {

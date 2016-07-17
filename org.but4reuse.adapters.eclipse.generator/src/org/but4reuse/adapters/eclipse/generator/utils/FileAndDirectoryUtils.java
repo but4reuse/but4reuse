@@ -9,6 +9,12 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * File and directory utils
+ * 
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class FileAndDirectoryUtils {
 
 	/**

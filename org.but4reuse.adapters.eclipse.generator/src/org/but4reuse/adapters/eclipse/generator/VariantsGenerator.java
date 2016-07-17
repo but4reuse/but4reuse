@@ -63,7 +63,6 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 
 	public void generate() {
 
-
 		long startTime = System.currentTimeMillis();
 		sendToAll("Starting generation with :");
 		sendToAll("-input = " + input);
@@ -72,7 +71,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		sendToAll("-percentage = " + percentage + " %");
 		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata + "\n");
 
-		sendToAll("Please wait until Generation finished");
+		sendToAll("Please wait until Generation finished\n");
 
 		File eclipse = new File(input);
 
@@ -117,15 +116,15 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 
 		List<PluginElement> allPlugins = new ArrayList<PluginElement>();
 		List<FileElement> allFileElements = new ArrayList<FileElement>();
-		{
-			List<IElement> iElems = adapter.adapt(inputURI, new NullProgressMonitor());
-			for (IElement elem : iElems) {
-				if (elem instanceof PluginElement)
-					allPlugins.add((PluginElement) elem);
-				else if (elem instanceof FileElement)
-					allFileElements.add((FileElement) elem);
-			}
+
+		List<IElement> iElems = adapter.adapt(inputURI, new NullProgressMonitor());
+		for (IElement elem : iElems) {
+			if (elem instanceof PluginElement)
+				allPlugins.add((PluginElement) elem);
+			else if (elem instanceof FileElement)
+				allFileElements.add((FileElement) elem);
 		}
+
 		// Permits to use PluginElement without launch an Eclipse Application
 		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
 
@@ -138,7 +137,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
 		sendToAll("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
-		
+
 		sendToAll("\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"");
 
 		// Loop for each variant
@@ -266,13 +265,14 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
 		sendToAll("\nGeneration finished ! Miliseconds: " + elapsedTime);
-		
+
 	}
 
 	@Override
 	public void addListener(IListener listener) {
-		if (listeners == null)
+		if (listeners == null) {
 			listeners = new ArrayList<IListener>();
+		}
 		listeners.add(listener);
 	}
 

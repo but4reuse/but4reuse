@@ -18,12 +18,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class PledgeDialog extends Dialog {
 
 	private Text input;
 	private Text output;
 	private Text variantsNumber;
 	private Text time;
+	private Button keepOnlyMetadataButton;
 
 	private Label lblInput;
 	private Label lblOutput;
@@ -38,7 +43,8 @@ public class PledgeDialog extends Dialog {
 	private String inputContent = "C:\\eclipse";
 	private String outputContent = "C:\\outputFolder";
 	private String variantsNumberContent = "3";
-	private String timeContent = "60";
+	private String timeContent = "0";
+	private Boolean keepOnlyMetadata = true;
 
 	private Color red;
 
@@ -60,8 +66,20 @@ public class PledgeDialog extends Dialog {
 		addOutput(container);
 		addTime(container);
 		addVariantsNumber(container);
+		addKeepOnlyMetadataOption(container);
 
 		return container;
+	}
+
+	private void addKeepOnlyMetadataOption(Composite container) {
+		new Label(container, SWT.WRAP).setText("Keep only metadata");
+		keepOnlyMetadataButton = new Button(container, SWT.CHECK);
+		keepOnlyMetadataButton.setSelection(true);
+		keepOnlyMetadataButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				keepOnlyMetadata = keepOnlyMetadataButton.getSelection();
+			}
+		});
 	}
 
 	private void addInput(final Composite container) {
@@ -204,6 +222,10 @@ public class PledgeDialog extends Dialog {
 
 	public void setTimeState(boolean isGood) {
 		isTimeOK = isGood;
+	}
+
+	public boolean isKeepOnlyMetadata() {
+		return keepOnlyMetadata;
 	}
 
 }

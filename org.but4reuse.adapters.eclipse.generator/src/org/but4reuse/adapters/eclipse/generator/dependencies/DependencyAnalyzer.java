@@ -14,6 +14,10 @@ import org.but4reuse.adapters.eclipse.benchmark.FeatureInfosExtractor;
 import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
 import org.but4reuse.utils.files.FileUtils;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class DependencyAnalyzer {
 
 	private String eclipseInstallationURI;

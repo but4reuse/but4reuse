@@ -8,6 +8,9 @@ import org.but4reuse.adapters.eclipse.PluginElement;
 /**
  * Class for redefine equals method of PluginElement (equals not function out of
  * a Eclipse application context)
+ * 
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
  */
 public class PluginElementGenerator extends PluginElement {
 

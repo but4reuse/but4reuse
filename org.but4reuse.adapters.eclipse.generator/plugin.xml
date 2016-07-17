@@ -17,7 +17,7 @@
          <action
                class="org.but4reuse.adapters.eclipse.generator.actions.CreateEclipseVariantsPledgeAction"
                id="org.but4reuse.adapters.eclipse.generator.action"
-               label="Variants Generation: PLEDGE"
+               label="Variants Generation: Random or Dissimilar with PLEDGE"
                menubarPath="EFLBench/additions">
          </action>
       </objectContribution>

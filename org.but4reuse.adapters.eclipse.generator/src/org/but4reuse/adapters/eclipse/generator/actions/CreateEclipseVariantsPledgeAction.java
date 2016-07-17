@@ -21,6 +21,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * @author Julien Margarido
+ * @author Felix Lima Gorito
+ */
 public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActionDelegate {
 
 	private ISelection selection;
@@ -98,12 +102,13 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 		// final
 		final int nbVariantsForThread = nbVariants;
 		final int timeForThread = time;
+		final boolean keepOnlyMetadata = pledgeDialog.isKeepOnlyMetadata();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				VariantsPledgeGenerator varGen = new VariantsPledgeGenerator(pledgeDialog.getInputPath(),
-						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread);
+						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata);
 				varGen.addListener(context);
 				// Long time to execute
 				varGen.generate();
