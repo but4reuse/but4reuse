@@ -29,6 +29,7 @@ public class ParametersDialog extends Dialog {
 	private Text variantsNumber;
 	private Text randomSelector;
 	private Button keepOnlyMetadataButton;
+	private Button noOutputButton;
 
 	private Label lblInput;
 	private Label lblOutput;
@@ -45,6 +46,7 @@ public class ParametersDialog extends Dialog {
 	private String variantsNumberContent = "3";
 	private String randomSelectorContent = "50";
 	private Boolean keepOnlyMetadata = true;
+	private Boolean noOutputOnlyStatistics = false;
 
 	private Color red;
 
@@ -67,6 +69,7 @@ public class ParametersDialog extends Dialog {
 		addRandomSelector(container);
 		addVariantsNumber(container);
 		addKeepOnlyMetadataOption(container);
+		addNoOutputOption(container);
 
 		return container;
 	}
@@ -78,6 +81,18 @@ public class ParametersDialog extends Dialog {
 		keepOnlyMetadataButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {
 				keepOnlyMetadata = keepOnlyMetadataButton.getSelection();
+			}
+		});
+		new Label(container, SWT.WRAP);
+	}
+
+	private void addNoOutputOption(Composite container) {
+		new Label(container, SWT.WRAP).setText("No output, only statistics");
+		noOutputButton = new Button(container, SWT.CHECK);
+		noOutputButton.setSelection(false);
+		noOutputButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent event) {
+				noOutputOnlyStatistics = noOutputButton.getSelection();
 			}
 		});
 	}
@@ -228,6 +243,10 @@ public class ParametersDialog extends Dialog {
 
 	public boolean isKeepOnlyMetadata() {
 		return keepOnlyMetadata;
+	}
+
+	public boolean isNoOutputOnlyStatistics() {
+		return noOutputOnlyStatistics;
 	}
 
 }

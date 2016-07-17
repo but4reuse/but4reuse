@@ -101,12 +101,14 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
 		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
+		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
-						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata);
+						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
+						noOutputOnlyStatistics);
 				varGen.addListener(context);
 				// Long time to execute
 				varGen.generate();
@@ -135,28 +137,30 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 			e.printStackTrace();
 		}
 
-		// get the selection
-		ArtefactModel artefactModel = null;
-		if (selection instanceof IStructuredSelection) {
-			artefactModel = (ArtefactModel) ((IStructuredSelection) selection).getFirstElement();
-			artefactModel.getOwnedArtefacts().clear();
-			// create artefact and set some attributes
-			for (int i = 1; i <= nbVariantsForThread; i++) {
-				Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
-				String variantName = VariantsUtils.VARIANT + "_" + i;
-				String output_variant = paramDialog.getOutputPath() + File.separator + variantName;
-				a.setName(variantName);
-				a.setArtefactURI(new File(output_variant).toURI().toString());
-				// add to the artefact model
-				artefactModel.getOwnedArtefacts().add(a);
+		// Update the artefact model
+		if (!paramDialog.isNoOutputOnlyStatistics()) {
+			// get the selection
+			ArtefactModel artefactModel = null;
+			if (selection instanceof IStructuredSelection) {
+				artefactModel = (ArtefactModel) ((IStructuredSelection) selection).getFirstElement();
+				artefactModel.getOwnedArtefacts().clear();
+				// create artefact and set some attributes
+				for (int i = 1; i <= nbVariantsForThread; i++) {
+					Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
+					String variantName = VariantsUtils.VARIANT + "_" + i;
+					String output_variant = paramDialog.getOutputPath() + File.separator + variantName;
+					a.setName(variantName);
+					a.setArtefactURI(new File(output_variant).toURI().toString());
+					// add to the artefact model
+					artefactModel.getOwnedArtefacts().add(a);
+				}
+			}
+			try {
+				artefactModel.eResource().save(null);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		try {
-			artefactModel.eResource().save(null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override
