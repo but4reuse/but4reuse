@@ -53,6 +53,7 @@ public class JavaSourceCodeAdapter implements IAdapter {
 				}
 			}
 		}
+		addMoreDependencies(elements);
 		System.out.println(c + ";" + m);
 		return elements;
 	}
@@ -65,6 +66,10 @@ public class JavaSourceCodeAdapter implements IAdapter {
 		for (FSTNode n : nodesS) {
 			LanguageManager.getLanguage().generateCode(n, absPath);
 		}
+	}
+	
+	public void addMoreDependencies(List<IElement> elements) {
+		//Do Nothing
 	}
 
 }

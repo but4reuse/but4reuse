@@ -75,5 +75,12 @@ public interface ILanguage {
 	 * @return qualified name or empty string
 	 */
 	public String getQualifiedName(FSTNode node);
+	
+	/**
+	 * Get FSTNode using the nodes tree from a node.
+	 * @param nonTerminal
+	 * @return FSTNode or null
+	 */
+	public FSTNode getNodeWithName(FSTNode node, String name);
 
 }

@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.but4reuse.adapters.sourcecode.FSTNodeElement;
+import org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement;
+
 import printer.PrintVisitorException;
 import tmp.generated_java15.Java15Parser;
 import cide.gparser.OffsetCharStream;
@@ -108,8 +111,27 @@ public class JavaLanguage implements ILanguage {
 	@Override
 	public String getQualifiedName(FSTNode node) {
 		if (node.getParent() == null)
-			return this.getPackageName((FSTNonTerminal)node);
-		return this.getQualifiedName((FSTNonTerminal)node.getParent())+"."+node.getName();
+			return this.getPackageName((FSTNonTerminal) node);
+		return this.getQualifiedName((FSTNonTerminal) node.getParent()) + "." + node.getName();
 	}
+	
+	public FSTNode getNodeWithName(FSTNode node, String name) {
+		if(node.getName() == name)
+			return node;
+		if(node instanceof FSTNonTerminal)
+			return getNodeWithName((FSTNode) ((FSTNonTerminal) node).getChildren(),name);
+		return null;
+		
+	}
+	
+	/*public FSTNodeElement getNodeElementWithName(FSTNodeElement node, String name) {
+		if(node.getName() == name)
+			return node;
+		if(node instanceof FSTNonTerminalNodeElement)
+			return getNodeWithName(node.getChildren(),name);
+		return null;
+		
+	}*/
+
 
 }
