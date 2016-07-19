@@ -87,7 +87,7 @@ public class ParametersDialog extends Dialog {
 	}
 
 	private void addNoOutputOption(Composite container) {
-		new Label(container, SWT.WRAP).setText("No output, only statistics");
+		new Label(container, SWT.WRAP).setText("Only statistics, no output");
 		noOutputButton = new Button(container, SWT.CHECK);
 		noOutputButton.setSelection(false);
 		noOutputButton.addSelectionListener(new SelectionAdapter() {

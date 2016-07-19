@@ -42,17 +42,20 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 	private int nbVariants;
 	private int time;
 	private boolean keepOnlyMetadata;
+	private boolean noOutputOnlyStatistics;
 
 	String generatorSummary;
 	List<IListener> listeners;
 	EclipseAdapter adapter;
 
-	public VariantsPledgeGenerator(String input, String output, int nbVariants, int time, boolean keepOnlyMetadata) {
+	public VariantsPledgeGenerator(String input, String output, int nbVariants, int time, boolean keepOnlyMetadata,
+			boolean noOutputOnlyStatistics) {
 		this.input = input;
 		this.output = output;
 		this.nbVariants = nbVariants;
 		this.time = time;
 		this.keepOnlyMetadata = keepOnlyMetadata;
+		this.noOutputOnlyStatistics = noOutputOnlyStatistics;
 		adapter = new EclipseAdapter();
 	}
 
@@ -64,7 +67,8 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		sendToAll("-output = " + output);
 		sendToAll("-variants number = " + nbVariants);
 		sendToAll("-time = " + time);
-		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata + "\n");
+		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata);
+		sendToAll("-onlyStatistics= " + noOutputOnlyStatistics + "\n");
 
 		sendToAll("Please wait until Generation finished\n");
 
@@ -207,54 +211,56 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 					.getPluginsWithoutAnyFeaturesDependencies();
 			pluginsList.addAll(pluginsWithoutAnyFeatureDependencies);
 
-			try {
-				// Create all dirs and copy features and plugins
-				File output_variantFile = new File(output_variant);
-				FileUtils.forceMkdir(output_variantFile);
+			if (!noOutputOnlyStatistics) {
+				try {
+					// Create all dirs and copy features and plugins
+					File output_variantFile = new File(output_variant);
+					FileUtils.forceMkdir(output_variantFile);
 
-				for (File file_eclipse : eclipse.listFiles()) {
-					// Copy eclipse files & dirs (except features & plugins)
-					if (!file_eclipse.getName().equals(VariantsUtils.FEATURES)
-							&& !file_eclipse.getName().equals(VariantsUtils.PLUGINS)) {
-						FileAndDirectoryUtils.copyFilesAndDirectories(output_variant, file_eclipse);
+					for (File file_eclipse : eclipse.listFiles()) {
+						// Copy eclipse files & dirs (except features & plugins)
+						if (!file_eclipse.getName().equals(VariantsUtils.FEATURES)
+								&& !file_eclipse.getName().equals(VariantsUtils.PLUGINS)) {
+							FileAndDirectoryUtils.copyFilesAndDirectories(output_variant, file_eclipse);
+						}
 					}
+
+					// features copy
+					File[] allFilesFeatures = new File[chosenFeatures.size()];
+					for (int j = 0; j < chosenFeatures.size(); j++) {
+						allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
+					}
+					FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator
+							+ VariantsUtils.FEATURES, allFilesFeatures);
+
+					// plugins copy
+					File[] allFilesPlugins = new File[pluginsList.size()];
+					for (int j = 0; j < pluginsList.size(); j++) {
+						allFilesPlugins[j] = new File(pluginsList.get(j).getAbsolutePath());
+					}
+					FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator
+							+ VariantsUtils.PLUGINS, allFilesPlugins);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
-				// features copy
-				File[] allFilesFeatures = new File[chosenFeatures.size()];
-				for (int j = 0; j < chosenFeatures.size(); j++) {
-					allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
+				File output_VariantFile = new File(output_variant);
+
+				if (!keepOnlyMetadata) {
+					// This call adapter construct mainly to fix the bundle.info
+					// configuration file to have a functional eclipse
+					List<IElement> allElements = new ArrayList<IElement>();
+					allElements.addAll(allFileElements);
+					allElements.addAll(pluginsList);
+
+					URI outputUri = output_VariantFile.toURI();
+					adapter.construct(outputUri, allElements, new NullProgressMonitor());
 				}
-				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.FEATURES,
-						allFilesFeatures);
 
-				// plugins copy
-				File[] allFilesPlugins = new File[pluginsList.size()];
-				for (int j = 0; j < pluginsList.size(); j++) {
-					allFilesPlugins[j] = new File(pluginsList.get(j).getAbsolutePath());
+				if (keepOnlyMetadata) {
+					// We keep only manifests, properties and xmls
+					EclipseKeepOnlyMetadata.cleanAndKeepOnlyMetadata(output_VariantFile);
 				}
-				FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator + VariantsUtils.PLUGINS,
-						allFilesPlugins);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			File output_VariantFile = new File(output_variant);
-
-			if (!keepOnlyMetadata) {
-				// This call adapter construct mainly to fix the bundle.info
-				// configuration file to have a functional eclipse
-				List<IElement> allElements = new ArrayList<IElement>();
-				allElements.addAll(allFileElements);
-				allElements.addAll(pluginsList);
-
-				URI outputUri = output_VariantFile.toURI();
-				adapter.construct(outputUri, allElements, new NullProgressMonitor());
-			}
-
-			if (keepOnlyMetadata) {
-				// We keep only manifests, properties and xmls
-				EclipseKeepOnlyMetadata.cleanAndKeepOnlyMetadata(output_VariantFile);
 			}
 
 			long stopTimeThisVariant = System.currentTimeMillis();

@@ -103,12 +103,14 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 		final int nbVariantsForThread = nbVariants;
 		final int timeForThread = time;
 		final boolean keepOnlyMetadata = pledgeDialog.isKeepOnlyMetadata();
+		final boolean noOutputOnlyStatistics = pledgeDialog.isNoOutputOnlyStatistics();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				VariantsPledgeGenerator varGen = new VariantsPledgeGenerator(pledgeDialog.getInputPath(),
-						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata);
+						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
+						noOutputOnlyStatistics);
 				varGen.addListener(context);
 				// Long time to execute
 				varGen.generate();
@@ -137,27 +139,30 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 			e.printStackTrace();
 		}
 
-		// get the selection
-		ArtefactModel artefactModel = null;
-		if (selection instanceof IStructuredSelection) {
-			artefactModel = (ArtefactModel) ((IStructuredSelection) selection).getFirstElement();
-			artefactModel.getOwnedArtefacts().clear();
-			// create artefact and set some attributes
-			for (int i = 1; i <= nbVariantsForThread; i++) {
-				Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
-				String varName = VariantsUtils.VARIANT + "_" + i;
-				String output_variant = pledgeDialog.getOutputPath() + File.separator + varName;
-				a.setName(varName);
-				a.setArtefactURI(new File(output_variant).toURI().toString());
-				// add to the artefact model
-				artefactModel.getOwnedArtefacts().add(a);
+		// Update the artefact model
+		if (!pledgeDialog.isNoOutputOnlyStatistics()) {
+			// get the selection
+			ArtefactModel artefactModel = null;
+			if (selection instanceof IStructuredSelection) {
+				artefactModel = (ArtefactModel) ((IStructuredSelection) selection).getFirstElement();
+				artefactModel.getOwnedArtefacts().clear();
+				// create artefact and set some attributes
+				for (int i = 1; i <= nbVariantsForThread; i++) {
+					Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
+					String varName = VariantsUtils.VARIANT + "_" + i;
+					String output_variant = pledgeDialog.getOutputPath() + File.separator + varName;
+					a.setName(varName);
+					a.setArtefactURI(new File(output_variant).toURI().toString());
+					// add to the artefact model
+					artefactModel.getOwnedArtefacts().add(a);
+				}
 			}
-		}
 
-		try {
-			artefactModel.eResource().save(null);
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				artefactModel.eResource().save(null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
