@@ -29,122 +29,81 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * 
 	 */
 	@Override
-	public void addMoreDependencies(List<IElement> elements) {
+	public void addMoreDependencies(List<IElement> elements, File fileNode, File fileEdge) {
 
 		// TODO Auto-generated method stub
-		File fileNode;
 		fileNode = new File("/home/colympio/workspace/puckTest/out/nodes.csv");
-		File fileEdge = new File("/home/colympio/workspace/puckTest/out/edges.csv");
-
+		fileEdge = new File("/home/colympio/workspace/puckTest/out/edges.csv");
+		JavaLanguage java = new JavaLanguage();
+		for (IElement iElement : elements) {
+			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
+				System.out.println("a ::::" + java.getQualifiedName(((FSTNodeElement) iElement).getNode()));
+			} else {
+				System.out.println("b ::::" + iElement.getText());
+			}
+		}
 		List<EdgeFromCSV> edgeMap = createEdgeMap(CSVUtils.importCSV(fileEdge.toURI()));
-		System.out.println("edgesize = "+edgeMap.size());
-		System.out.println(edgeMap.toString());
+		System.out.println("edgesize = " + edgeMap.size());
 		List<NodeFromCSV> nodeMap = createNodeMap(CSVUtils.importCSV(fileNode.toURI()));
-		System.out.println("nodeMap size = "+nodeMap.size());
+		System.out.println("nodeMap size = " + nodeMap.size());
 		Map<String, String> DefMeth = createDefinitionMethode(nodeMap, edgeMap);
-		System.out.println("defmet size = "+DefMeth.size());
+		System.out.println("defmet size = " + DefMeth.size());
 		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, DefMeth);
-		System.out.println("resultlist size = "+resultList.size());
-		System.out.println("resultlist = "+resultList.toString());
+		System.out.println("resultlist size = " + resultList.size());
 
-		IElement e;
-		ArrayList<IDependencyObject> dependancies;
 		for (EdgeFromCSV edge : edgeMap) {
 			if (edge.getType().equals("Uses") || edge.getType().equals("Isa")) {
-				e = resultList.get(edge.getId());
-				dependancies = new ArrayList<IDependencyObject>();
-				for (String list : edge.getTarget()) {
-					dependancies.add(resultList.get(list));
+				IElement e = resultList.get(edge.getId());
+				if (e != null) {
+					for (String list : edge.getTarget()) {
+						System.out.println("target :" + edge.getTarget());
+						System.out.println("resultlistGEt: " + resultList.get(list));
+						((AbstractElement) e).addDependency(edge.getType(), resultList.get(list));
+					}
 				}
-				if(e!=null){
-					System.out.println("AAAAAAAAAAAAAADDDDDDDDDDDDDDDDD");
-					System.out.println(dependancies);
-					((AbstractElement) e).addDependencies(dependancies);
-				}
-				
 			}
 		}
 
 		for (IElement iElement : elements) {
-			JavaLanguage java = new JavaLanguage();
+			// JavaLanguage java = new JavaLanguage();
 			System.out.println(iElement.getClass());
 			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
 				System.out.println("Qualified Name:" + java.getQualifiedName(((FSTNodeElement) iElement).getNode()));
 			}
 			System.out.println("name: " + iElement.getText());
 			System.out.println("dependants: " + iElement.getDependants());
-			System.out.println("dependancies: " + iElement.getDependencies()+"\n");
+			System.out.println("dependancies: " + iElement.getDependencies() + "\n");
 		}
 
 	}
 
 	Map<String, IElement> getFSTNodeElement(List<NodeFromCSV> nodeMap, List<IElement> elements,
 			Map<String, String> defMeth) {
-		JavaLanguage java = new JavaLanguage();
 
-		
 		Map<String, IElement> list = new HashMap<String, IElement>();
 		NodeFromCSV nodeTemp;
 		boolean condition = false;
-		int i = 0;
-		// for node
-		// for element
-		// if element.type equals ClassDeclaration or MethodDeclaration
-		// if isNodeEqualsToElement(node,element)
-		// list.put(node.id,element)
 		for (NodeFromCSV node : nodeMap) {
 			Iterator<IElement> it = elements.iterator();
 			while (it.hasNext() && !condition) {
 				IElement iElement = (IElement) it.next();
 				if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
-					String id = getResearch(node, defMeth);
-					nodeTemp = getNodeByID(id, nodeMap);
-					if (isNodeEqualsToElement(nodeTemp, iElement)) {
-						list.put(id, iElement);
-						condition = true;
+					FSTNodeElement temp = ((FSTNodeElement) iElement);
+					while (temp != null && !condition) {
+						String id = getResearch(node, defMeth);
+						nodeTemp = getNodeByID(id, nodeMap);
+						if (isNodeEqualsToElement(nodeTemp, temp)) {
+							list.put(id, temp);
+							condition = true;
+						}
+						temp = temp.getParent();
 					}
+
 				}
 
 			}
 			condition = false;
 		}
-
-		/**
-		 * public static boolean isNodeEqualsToElement (node , element) {
-		 * nodequalified = node.qualified if(node is definition){ nodequalified
-		 * = nodequalified.replace(".Definition","") } elementqualified =
-		 * element.qualified if(nodequalified.equals(elementqualified)){
-		 * if(sameTypesParameters etc.){ return true } } return false }
-		 **/
-/*
-		int condition2 = 0;
-		for (IElement iElement : elements) {
-			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
-				Iterator<NodeFromCSV> it2 = nodeMap.iterator();
-				System.out.println("=====================================");
-				while (it2.hasNext() && condition2 == 0) {
-					nodeTemp = it2.next();
-
-					/*System.out.println(i);
-					System.out.println("Node Qualified name: " + nodeTemp.getQualifiedName());
-					System.out.println("iElement Qualified name: "
-							+ (java.getQualifiedName(((FSTNodeElement) iElement).getNode())));
-					System.out.println("Node name: " + nodeTemp.getName());
-					System.out.println("iElement name: " + ((FSTNodeElement) iElement).getNode().getName());
-					if (nodeTemp.getName().equals(((FSTNodeElement) iElement).getName())) {
-						System.out.println("Adding");
-						list.put(nodeTemp.getId(), iElement);
-						condition2 = 1;
-					}
-
-				}
-				System.out.println("=====================================");
-				i++;
-				condition2 = 0;
-			}
-
-		}
-*/
 		return list;
 
 	}
@@ -180,28 +139,11 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			JavaLanguage java = new JavaLanguage();
 			String iElementName = java.getQualifiedName(((FSTNodeElement) element).getNode());
 			iElementName = iElementName.replaceAll("[(].*[)]", "");
-			
-			//String elementString = null;
-			/*String[] tab2 = java.getQualifiedName(((FSTNodeElement) element).getNode()).split(".");
-			System.out.println(((FSTNodeElement) element).getNode());
-			System.out.println();
-			for (int i = 0; i < tab2.length - 1; i++) {
-				elementString += tab2[i] + ".";
-			}*/
-			
-			boolean resultat = iElementName.equals(nodeString);
-			System.out.println(iElementName);
-			System.out.println(nodeString);
-			System.out.println(resultat);
-			if (resultat) {
-				System.out.println("AAAAAA");
-			}
-			return resultat;
-		}
-		else {
+
+			return iElementName.equals(nodeString);
+		} else {
 			return false;
 		}
-		
 
 	}
 
@@ -231,13 +173,9 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 */
 	public List<NodeFromCSV> createNodeMap(String[][] matrixNodes) {
 		ArrayList<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
-		int condition = 0;
-		Iterator<NodeFromCSV> it;
 		for (int i = 0; i < matrixNodes.length; i++) {
 			nodeMap.add(new NodeFromCSV(matrixNodes[i][0], matrixNodes[i][1], matrixNodes[i][2], matrixNodes[i][3],
 					matrixNodes[i][4]));
-			//System.out.println("id : " + matrixNodes[i][0] + " ||kind : " + matrixNodes[i][1] + " ||name : "
-				//	+ matrixNodes[i][2] + " ||qualifiedName : " + matrixNodes[i][3] + " ||type : " + matrixNodes[i][4]);
 		}
 		return nodeMap;
 
@@ -263,14 +201,11 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 				EdgeFromCSV newEdge = new EdgeFromCSV(matrixEdge[i][0], matrixEdge[i][2]);
 				newEdge.addTarget(matrixEdge[i][1]);
 				map.add(newEdge);
-				
+
 			}
 			verif = false;
 		}
 		return map;
 	}
 
-	/*public List<EdgeFromCSV> Shrinklist(String[][] matrixEdge) {
-
-	}*/
 }
