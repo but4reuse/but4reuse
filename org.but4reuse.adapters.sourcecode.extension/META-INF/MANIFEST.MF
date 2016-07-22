@@ -8,6 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.adapters;bundle-version="1.0.0",
  org.but4reuse.utils;bundle-version="1.0.0",
- org.but4reuse.adapters.sourcecode
+ org.but4reuse.adapters.sourcecode,
+ org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

@@ -26,7 +26,7 @@ import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	/**
-	 * 
+	 * Add dependencies to the elements using 2 CSV files (node and edge)
 	 */
 	@Override
 	public void addMoreDependencies(List<IElement> elements, File fileNode, File fileEdge) {
@@ -77,6 +77,15 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	}
 
+	/**
+	 * Create a map of NodeFromCSV ids and FSTNodeElements. If NodeFromCSV is a
+	 * definition the node associated to the id is the methode one.
+	 * 
+	 * @param nodeMap
+	 * @param elements
+	 * @param defMeth
+	 * @return Map of corresponding NodeFromCSVElments ids and IElements
+	 */
 	Map<String, IElement> getFSTNodeElement(List<NodeFromCSV> nodeMap, List<IElement> elements,
 			Map<String, String> defMeth) {
 
@@ -108,6 +117,11 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	}
 
+	/**
+	 * @param id
+	 * @param nodeMap
+	 * @return
+	 */
 	public NodeFromCSV getNodeByID(String id, List<NodeFromCSV> nodeMap) {
 		for (NodeFromCSV nodeFromCSV : nodeMap) {
 			if (nodeFromCSV.getId().equals(id)) {
@@ -118,6 +132,14 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	}
 
+	/**
+	 * Return the id of the corresponding target in definotion/methode map if
+	 * the node is a definition
+	 * 
+	 * @param node
+	 * @param defMeth
+	 * @return
+	 */
 	public static String getResearch(NodeFromCSV node, Map<String, String> defMeth) {
 		String id = null;
 
@@ -129,6 +151,12 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @param node
+	 * @param element
+	 * @return
+	 */
 	public static boolean isNodeEqualsToElement(NodeFromCSV node, IElement element) {
 		if (node != null && element != null) {
 			String nodeString = node.getQualifiedName();
@@ -147,6 +175,13 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	}
 
+	/**
+	 * Create the map definition/methode
+	 * 
+	 * @param listNode
+	 * @param listEdge
+	 * @return
+	 */
 	public Map<String, String> createDefinitionMethode(List<NodeFromCSV> listNode, List<EdgeFromCSV> listEdge) {
 		Map<String, String> MapDefMeth = new HashMap<String, String>();
 

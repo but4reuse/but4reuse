@@ -1,5 +1,10 @@
 package org.but4reuse.adapter.sourcecode.extension;
 
+/**
+ * 
+ * @author colympio
+ * Object used to store the values of one line of CSV  file
+ */
 public class NodeFromCSV {
 
 	private String id;

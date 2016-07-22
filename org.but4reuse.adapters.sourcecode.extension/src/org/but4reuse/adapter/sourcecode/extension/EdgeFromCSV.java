@@ -2,7 +2,11 @@ package org.but4reuse.adapter.sourcecode.extension;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * @author colympio
+ * Object used to store the values of an edge file
+ */
 public class EdgeFromCSV {
 
 	private String id;
