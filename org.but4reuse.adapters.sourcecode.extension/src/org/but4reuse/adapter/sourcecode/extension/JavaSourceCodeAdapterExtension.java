@@ -137,7 +137,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	public static String getResearch(NodeFromCSV node, Map<String, String> defMeth) {
 		String id = null;
 
-		if (node.getType().equals("Definition"))
+		if (node.getKind().equals("Definition"))
 			id = defMeth.get(node.getId());
 		else
 			id = node.getId();

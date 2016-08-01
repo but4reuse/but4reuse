@@ -127,7 +127,6 @@ public class JavaSourceCodeAdapterExtensionTest {
 		};
 		((FSTNonTerminalNodeElement) element).setNode(nodetest);
 
-		IElement element2 = new FSTTerminalNodeElement();
 		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node2, element));
 		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node3, element));
 		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node4, element));
@@ -137,6 +136,12 @@ public class JavaSourceCodeAdapterExtensionTest {
 	@Test
 	public void testGetResearch() {
 
+		NodeFromCSV node = new NodeFromCSV("14", "class", "MyClass", "MyClass", "");;
+		NodeFromCSV node2 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");;
+		Map<String, String> defMeth = new HashMap<String, String>();
+		defMeth.put("14","18");
+		assertNotEquals("18", JavaSourceCodeAdapterExtension.getResearch(node, defMeth));
+		assertEquals("18", JavaSourceCodeAdapterExtension.getResearch(node2, defMeth));
 	}
 
 	@Test
