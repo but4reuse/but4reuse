@@ -108,9 +108,20 @@ public class JavaLanguage implements ILanguage {
 
 	@Override
 	public String getQualifiedName(FSTNode node) {
-		if (node.getParent() == null)
-			return this.getPackageName((FSTNonTerminal) node);
-		return this.getQualifiedName((FSTNonTerminal) node.getParent()) + "." + node.getName();
+		String qualifiedName = "";
+		if (node == null) {
+			return "";
+		}
+		if (node.getParent() == null && node instanceof FSTNonTerminal)
+			qualifiedName = this.getPackageName((FSTNonTerminal) node);
+		else{
+			qualifiedName = this.getQualifiedName((FSTNonTerminal) node.getParent());
+			if (!qualifiedName.equals("")) {
+				qualifiedName += ".";
+			}
+			qualifiedName += node.getName();
+		}
+		return qualifiedName;
 	}
 	
 	public FSTNode getNodeWithName(FSTNode node, String name) {

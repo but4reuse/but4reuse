@@ -14,6 +14,9 @@ import org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement;
 import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.junit.Test;
 
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTVisitor;
+
 public class JavaSourceCodeAdapterExtensionTest {
 
 	JavaSourceCodeAdapterExtension java;
@@ -87,7 +90,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 
 	@Test
 	public void testIsNodeEqualsToElement() {
-		JavaLanguage javalang = new JavaLanguage();
+		
 		// 14 ; Class ; MyClass ; mypackage.MyClass ;
 		NodeFromCSV node = new NodeFromCSV("14", "class", "MyClass", "MyClass", "");
 		NodeFromCSV node2 = new NodeFromCSV("15", "classe", "MyClass", "mypackage.MyClasse", "");
@@ -96,10 +99,39 @@ public class JavaSourceCodeAdapterExtensionTest {
 
 		IElement element = new FSTNonTerminalNodeElement();
 		((FSTNonTerminalNodeElement) element).setName("MyClass");
+		FSTNode nodetest = new FSTNode("type","MyClass") {
+			
+			@Override
+			public String printFST(int arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public FSTNode getShallowClone() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public FSTNode getDeepClone() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void accept(FSTVisitor arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+		((FSTNonTerminalNodeElement) element).setNode(nodetest);
 
 		IElement element2 = new FSTTerminalNodeElement();
-
-		assertTrue(java.isNodeEqualsToElement(node, element));
+		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node2, element));
+		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node3, element));
+		assertFalse(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node4, element));
+		assertTrue(JavaSourceCodeAdapterExtension.isNodeEqualsToElement(node, element));
 	}
 
 	@Test
