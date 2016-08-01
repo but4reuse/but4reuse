@@ -2,10 +2,10 @@ package org.but4reuse.adapter.sourcecode.extension;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * 
- * @author colympio
- * Object used to store the values of an edge file
+ * @author colympio Object used to store the values of an edge file
  */
 public class EdgeFromCSV {
 
@@ -13,7 +13,7 @@ public class EdgeFromCSV {
 	private String type;
 	private List<String> target;
 
-	public EdgeFromCSV(String id,String type) {
+	public EdgeFromCSV(String id, String type) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -27,15 +27,15 @@ public class EdgeFromCSV {
 	public List<String> getTarget() {
 		return target;
 	}
-	
+
 	public void addTarget(String t) {
 		this.target.add(t);
 	}
-	
-	public boolean contains(String id){
-		if(this.id == id)
+
+	public boolean contains(String id) {
+		if (this.id == id)
 			return true;
-		else if(this.target.contains(id))
+		else if (this.target.contains(id))
 			return true;
 		else
 			return false;
@@ -46,9 +46,35 @@ public class EdgeFromCSV {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EdgeFromCSV other = (EdgeFromCSV) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (target == null) {
+			if (other.target != null)
+				return false;
+		} else if (!target.equals(other.target))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "EdgeFromCSV [id=" + id + ", type=" + type + ", target=" + target + "]";
 	}
 
-	
 }
