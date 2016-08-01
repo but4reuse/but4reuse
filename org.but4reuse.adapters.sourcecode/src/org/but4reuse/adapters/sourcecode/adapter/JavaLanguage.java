@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import org.but4reuse.adapters.sourcecode.FSTNodeElement;
-import org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement;
 
 import printer.PrintVisitorException;
 import tmp.generated_java15.Java15Parser;

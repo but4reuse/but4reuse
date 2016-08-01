@@ -1,15 +1,13 @@
 package org.but4reuse.adapter.sourcecode.extension;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.but4reuse.adapters.IDependencyObject;
+
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.adapters.sourcecode.FSTNodeElement;
@@ -18,10 +16,6 @@ import org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement;
 import org.but4reuse.adapters.sourcecode.JavaSourceCodeAdapter;
 import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.but4reuse.utils.files.CSVUtils;
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import de.ovgu.cide.fstgen.ast.FSTNode;
-import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 
 public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
