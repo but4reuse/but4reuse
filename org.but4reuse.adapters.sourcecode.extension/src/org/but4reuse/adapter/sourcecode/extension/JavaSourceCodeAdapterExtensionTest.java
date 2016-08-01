@@ -3,8 +3,11 @@ package org.but4reuse.adapter.sourcecode.extension;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
@@ -147,11 +150,22 @@ public class JavaSourceCodeAdapterExtensionTest {
 	@Test
 	public void testGetNodeByID() {
 
+		List<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
+		
+		java = new JavaSourceCodeAdapterExtension();
+		NodeFromCSV node1 = new NodeFromCSV("1", "Class", "Myclass", "package.MyClass", "nothing");
+		NodeFromCSV node2 = new NodeFromCSV("2", "Class", "Myclass2", "package.MyClass2", "nothing");
+		NodeFromCSV node3 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");;
+		nodeMap.add(node2);
+		nodeMap.add(node3);
+		nodeMap.add(node1);
+		assertEquals(node2, java.getNodeByID("2",nodeMap));
+		assertEquals(node3, java.getNodeByID("14",nodeMap));
 	}
 
 	@Test
 	public void testGetFSTNodeElement() {
-
+		
 	}
 
 }
