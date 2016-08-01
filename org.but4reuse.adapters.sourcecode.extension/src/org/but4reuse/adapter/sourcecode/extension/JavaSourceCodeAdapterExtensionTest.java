@@ -62,6 +62,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 	@Test
 	public void testCreateDefinitionMethode() {
 		List<NodeFromCSV> listNode = new ArrayList<NodeFromCSV>();
+		java = new JavaSourceCodeAdapterExtension();
 		NodeFromCSV node1 = new NodeFromCSV("1", "Definition", "Myclass", "package.MyClass", "nothing");
 		NodeFromCSV node2 = new NodeFromCSV("2", "Class", "Myclass2", "package.MyClass2", "nothing");
 		listNode.add(node1);
@@ -71,7 +72,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 		EdgeFromCSV edge1 = new EdgeFromCSV("1", "Uses");
 		edge1.addTarget("2");
 		EdgeFromCSV edge2 = new EdgeFromCSV("2", "Contains");
-		edge1.addTarget("4");
+		edge2.addTarget("1");
 		listEdge.add(edge1);
 		listEdge.add(edge2);
 
