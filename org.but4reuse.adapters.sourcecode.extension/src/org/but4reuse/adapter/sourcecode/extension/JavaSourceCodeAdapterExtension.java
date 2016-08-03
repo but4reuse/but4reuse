@@ -26,8 +26,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	public void addMoreDependencies(List<IElement> elements, File fileNode, File fileEdge) {
 
 		// TODO Auto-generated method stub
-		fileNode = new File("/home/colympio/workspace/puckTest/out/nodes.csv");
-		fileEdge = new File("/home/colympio/workspace/puckTest/out/edges.csv");
+		//fileNode = new File("/home/colympio/workspace/puckTest/out/nodes.csv");
+		//fileEdge = new File("/home/colympio/workspace/puckTest/out/edges.csv");
 		JavaLanguage java = new JavaLanguage();
 		for (IElement iElement : elements) {
 			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
@@ -146,7 +146,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * 
+	 * Verifiy if a node is equal to a FSTNodeElement
 	 * @param node
 	 * @param element
 	 * @return

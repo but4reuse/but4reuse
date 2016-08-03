@@ -33,11 +33,6 @@ public class JavaSourceCodeAdapterExtensionTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testCreateEdgeMap() {
 		String[][] matrixEdge = { { "1", "2", "Uses" }, { "2", "4", "Contains" } };
 		java = new JavaSourceCodeAdapterExtension();
