@@ -1,12 +1,12 @@
 package org.but4reuse.adapter.sourcecode.extension;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
@@ -15,6 +15,7 @@ import org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement;
 import org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement;
 import org.but4reuse.adapters.sourcecode.JavaSourceCodeAdapter;
 import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
+import org.but4reuse.puck.PuckUtils;
 import org.but4reuse.utils.files.CSVUtils;
 
 public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
@@ -23,11 +24,12 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * Add dependencies to the elements using 2 CSV files (node and edge)
 	 */
 	@Override
-	public void addMoreDependencies(List<IElement> elements, File fileNode, File fileEdge) {
+	public void addMoreDependencies(List<IElement> elements, URI uri) {
 
 		// TODO Auto-generated method stub
-		//fileNode = new File("/home/colympio/workspace/puckTest/out/nodes.csv");
-		//fileEdge = new File("/home/colympio/workspace/puckTest/out/edges.csv");
+		PuckUtils.createCSV(uri.getPath());
+		File fileNode = new File("/tmp/out/nodes.csv");
+		File fileEdge = new File("/tmp/out/edges.csv");
 		JavaLanguage java = new JavaLanguage();
 		for (IElement iElement : elements) {
 			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
@@ -59,7 +61,6 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		}
 
 		for (IElement iElement : elements) {
-			// JavaLanguage java = new JavaLanguage();
 			System.out.println(iElement.getClass());
 			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
 				System.out.println("Qualified Name:" + java.getQualifiedName(((FSTNodeElement) iElement).getNode()));
@@ -68,6 +69,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			System.out.println("dependants: " + iElement.getDependants());
 			System.out.println("dependancies: " + iElement.getDependencies() + "\n");
 		}
+		PuckUtils.supressCSV();
 
 	}
 

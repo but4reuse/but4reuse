@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.but4reuse.puck
