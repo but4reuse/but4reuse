@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Extension
-Bundle-SymbolicName: org.but4reuse.adapters.sourcecode.extension
+Bundle-SymbolicName: org.but4reuse.adapters.sourcecode.extension;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapter.sourcecode.extension.Activator
 Require-Bundle: org.eclipse.ui,

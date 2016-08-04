@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
+import org.w3c.dom.ls.LSInput;
 
 /**
  * File Utils class
@@ -386,6 +387,26 @@ public class FileUtils {
 			getAllFiles(files, file);
 		}
 		return files;
+	}  
+	
+	public static void main(String[] args) {
+		StringBuffer sb = new StringBuffer();
+		List<File> files = getAllFiles(new File("/home/colympio/workspace/puckTest/src/argoumlVariants/Original/src/"));
+		for(File f : files){
+			if(isExtension(f, "java")){
+				sb.append(f.getAbsolutePath());
+				sb.append(" ");
+				
+			}
+			
+		}
+		try {
+			writeFile(new File("/home/colympio/workspace/puckTest/My.sh"),sb.toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }

@@ -53,7 +53,7 @@ public class JavaSourceCodeAdapter implements IAdapter {
 				}
 			}
 		}
-		addMoreDependencies(elements, null, null);
+		addMoreDependencies(elements, uri);
 		System.out.println(c + ";" + m);
 		return elements;
 	}
@@ -68,7 +68,7 @@ public class JavaSourceCodeAdapter implements IAdapter {
 		}
 	}
 	
-	public void addMoreDependencies(List<IElement> elements, File fileNode, File fileEdge) {
+	public void addMoreDependencies(List<IElement> elements, URI uri) {
 		//Do Nothing
 	}
 
