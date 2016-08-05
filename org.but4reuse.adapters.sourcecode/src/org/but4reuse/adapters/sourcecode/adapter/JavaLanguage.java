@@ -132,15 +132,5 @@ public class JavaLanguage implements ILanguage {
 		return null;
 		
 	}
-	
-	/*public FSTNodeElement getNodeElementWithName(FSTNodeElement node, String name) {
-		if(node.getName() == name)
-			return node;
-		if(node instanceof FSTNonTerminalNodeElement)
-			return getNodeWithName(node.getChildren(),name);
-		return null;
-		
-	}*/
-
 
 }
