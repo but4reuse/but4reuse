@@ -1,5 +1,6 @@
 package org.but4reuse.puck;
 
+import org.apache.commons.io.FilenameUtils;
 import org.extendj.*;
 import org.extendj.ast.JavaJastAddDG2AST;
 import org.extendj.ast.JavaJastAddDG2AST$;
@@ -35,19 +36,18 @@ public class PuckUtils {
 			// JavaConversions$.MODULE$.asScalaIterator(Arrays.asList(args).iterator()).toList();
 
 			scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
-					new File(uriRep.getPath()), ".java", fileEmptyIterator.toSeq());
+					new File(FilenameUtils.separatorsToSystem(uriRep.getPath())), ".java", fileEmptyIterator.toSeq());
 			JavaJastAddDG2AST dg2ast = JavaJastAddDG2AST$.MODULE$.fromFiles(fileFullPaths,
 					stringEmptyIterator.toList(), stringEmptyIterator.toList(), stringEmptyIterator.toList(),
 					tuple2emptyIterator.toList(), null, PuckNoopLogger$.MODULE$);
 
-			
-			File dir = new File(uriRep.getPath()+"/out");
+			File dir = new File(FilenameUtils.separatorsToSystem(uriRep.getPath()+"/out"));
 			if (!dir.exists())
 				dir.mkdir();
 
 			CSVPrinter$.MODULE$.apply(dg2ast.initialGraph(), dir, ";");
 			try {
-				output = new URI(dir.getPath());
+				output = new URI(FilenameUtils.separatorsToSystem(dir.getPath()));
 			} catch (URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
