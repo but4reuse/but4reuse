@@ -3,18 +3,12 @@ package org.but4reuse.adapter.sourcecode.extension;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.but4reuse.adapters.IElement;
-import org.but4reuse.adapters.sourcecode.FSTNodeElement;
 import org.but4reuse.adapters.sourcecode.FSTNonTerminalNodeElement;
-import org.but4reuse.adapters.sourcecode.FSTTerminalNodeElement;
-import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.junit.Test;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;

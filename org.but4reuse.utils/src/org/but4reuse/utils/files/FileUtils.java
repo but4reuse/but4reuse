@@ -398,12 +398,10 @@ public class FileUtils {
 				sb.append(" ");
 				
 			}
-			
 		}
 		try {
 			writeFile(new File("/home/colympio/workspace/puckTest/My.sh"),sb.toString());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

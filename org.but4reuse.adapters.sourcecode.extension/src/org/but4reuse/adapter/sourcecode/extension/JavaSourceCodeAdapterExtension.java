@@ -26,52 +26,33 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	@Override
 	public void addMoreDependencies(List<IElement> elements, URI uri) {
 
-		// TODO Auto-generated method stub
-		URI uriTempCSVfolder = null;
-		PuckUtils.createCSV(uri,uriTempCSVfolder);
-		File fileNode = new File("/tmp/out/nodes.csv");
-		File fileEdge = new File("/tmp/out/edges.csv");
-		JavaLanguage java = new JavaLanguage();
-		for (IElement iElement : elements) {
-			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
-				System.out.println("a ::::" + java.getQualifiedName(((FSTNodeElement) iElement).getNode()));
-			} else {
-				System.out.println("b ::::" + iElement.getText());
-			}
-		}
+		File uriTempCSVfolder = new File(org.but4reuse.utils.files.FileUtils.getFile(uri), "tempFolderForCSV");
+		uriTempCSVfolder.mkdirs();
+		System.out.println(uriTempCSVfolder.toURI().toString());
+		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
+
+		//Finish this
+		File fileNode = new File(uriTempCSVfolder.toURI().toString() + "/nodes.csv");
+		File fileEdge = new File(uriTempCSVfolder.toURI().toString() + "/edges.csv");
+
 		List<EdgeFromCSV> edgeMap = createEdgeMap(CSVUtils.importCSV(fileEdge.toURI()));
-		System.out.println("edgesize = " + edgeMap.size());
 		List<NodeFromCSV> nodeMap = createNodeMap(CSVUtils.importCSV(fileNode.toURI()));
-		System.out.println("nodeMap size = " + nodeMap.size());
 		Map<String, String> DefMeth = createDefinitionMethode(nodeMap, edgeMap);
-		System.out.println("defmet size = " + DefMeth.size());
 		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, DefMeth);
-		System.out.println("resultlist size = " + resultList.size());
 
 		for (EdgeFromCSV edge : edgeMap) {
 			if (edge.getType().equals("Uses") || edge.getType().equals("Isa")) {
 				IElement e = resultList.get(edge.getId());
 				if (e != null) {
 					for (String list : edge.getTarget()) {
-						System.out.println("target :" + edge.getTarget());
-						System.out.println("resultlistGEt: " + resultList.get(list));
 						((AbstractElement) e).addDependency(edge.getType(), resultList.get(list));
 					}
 				}
 			}
 		}
 
-		for (IElement iElement : elements) {
-			System.out.println(iElement.getClass());
-			if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
-				System.out.println("Qualified Name:" + java.getQualifiedName(((FSTNodeElement) iElement).getNode()));
-			}
-			System.out.println("name: " + iElement.getText());
-			System.out.println("dependants: " + iElement.getDependants());
-			System.out.println("dependancies: " + iElement.getDependencies() + "\n");
-		}
 		if (uriTempCSVfolder != null) {
-			PuckUtils.supressCSV(uriTempCSVfolder);
+			PuckUtils.supressCSV(uriTempCSVfolder.toURI());
 		}
 
 	}
@@ -152,6 +133,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	/**
 	 * Verifiy if a node is equal to a FSTNodeElement
+	 * 
 	 * @param node
 	 * @param element
 	 * @return
