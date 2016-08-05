@@ -27,7 +27,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	public void addMoreDependencies(List<IElement> elements, URI uri) {
 
 		// TODO Auto-generated method stub
-		PuckUtils.createCSV(uri.getPath());
+		URI uriTempCSVfolder = null;
+		PuckUtils.createCSV(uri,uriTempCSVfolder);
 		File fileNode = new File("/tmp/out/nodes.csv");
 		File fileEdge = new File("/tmp/out/edges.csv");
 		JavaLanguage java = new JavaLanguage();
@@ -69,7 +70,9 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			System.out.println("dependants: " + iElement.getDependants());
 			System.out.println("dependancies: " + iElement.getDependencies() + "\n");
 		}
-		PuckUtils.supressCSV();
+		if (uriTempCSVfolder != null) {
+			PuckUtils.supressCSV(uriTempCSVfolder);
+		}
 
 	}
 
