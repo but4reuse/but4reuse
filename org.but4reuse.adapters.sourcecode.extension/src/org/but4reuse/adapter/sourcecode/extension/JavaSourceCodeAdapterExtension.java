@@ -17,6 +17,7 @@ import org.but4reuse.adapters.sourcecode.JavaSourceCodeAdapter;
 import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.but4reuse.puck.PuckUtils;
 import org.but4reuse.utils.files.CSVUtils;
+import org.but4reuse.utils.files.FileUtils;
 
 public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
@@ -26,17 +27,23 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	@Override
 	public void addMoreDependencies(List<IElement> elements, URI uri) {
 
-		File uriTempCSVfolder = new File(org.but4reuse.utils.files.FileUtils.getFile(uri), "tempFolderForCSV");
+		File uriTempCSVfolder = new File(org.but4reuse.utils.files.FileUtils.getFile(uri).getParentFile(), "tempFolderForCSV");
 		uriTempCSVfolder.mkdirs();
 		System.out.println(uriTempCSVfolder.toURI().toString());
 		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
 
-		//Finish this
-		File fileNode = new File(uriTempCSVfolder.toURI().toString() + "/nodes.csv");
-		File fileEdge = new File(uriTempCSVfolder.toURI().toString() + "/edges.csv");
-
-		List<EdgeFromCSV> edgeMap = createEdgeMap(CSVUtils.importCSV(fileEdge.toURI()));
-		List<NodeFromCSV> nodeMap = createNodeMap(CSVUtils.importCSV(fileNode.toURI()));
+		List<EdgeFromCSV> edgeMap = null;
+		List<NodeFromCSV> nodeMap = null;
+		
+		for (File file : FileUtils.getAllFiles(uriTempCSVfolder)) {
+			if (file.getPath().contains("edges")) {
+				edgeMap = createEdgeMap(CSVUtils.importCSV(file.toURI()));
+			}
+			if (file.getPath().contains("nodes")) {
+				nodeMap = createNodeMap(CSVUtils.importCSV(file.toURI()));
+			}
+		}
+		
 		Map<String, String> DefMeth = createDefinitionMethode(nodeMap, edgeMap);
 		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, DefMeth);
 
@@ -167,7 +174,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		Map<String, String> MapDefMeth = new HashMap<String, String>();
 
 		for (NodeFromCSV nodeFromCSV : listNode) {
-			if (nodeFromCSV.getKind().contains("Definition")) {
+			if (nodeFromCSV.getKind()!= null && nodeFromCSV.getKind().contains("Definition")) {
 				for (EdgeFromCSV edgeFromCSV : listEdge) {
 
 					if (edgeFromCSV.getTarget().contains(nodeFromCSV.getId())) {
@@ -188,6 +195,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * @return
 	 */
 	public List<NodeFromCSV> createNodeMap(String[][] matrixNodes) {
+		//TODO correct the error
 		ArrayList<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
 		for (int i = 0; i < matrixNodes.length; i++) {
 			nodeMap.add(new NodeFromCSV(matrixNodes[i][0], matrixNodes[i][1], matrixNodes[i][2], matrixNodes[i][3],

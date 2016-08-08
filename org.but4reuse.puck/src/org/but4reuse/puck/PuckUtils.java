@@ -10,9 +10,16 @@ import scala.collection.JavaConversions$;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class PuckUtils {
+	
+	public static void main(String[] args) {
+		File one = new File("/home/colympio/runtime-New_configuration(1)/testWork/");
+		File two = new File("/home/colympio/runtime-New_configuration(1)/testWork");
+		createCSV(one.toURI(),two.toURI());
+	}
 
 	public static void createCSV(URI uriRep, URI output) {
 		if (uriRep != null && uriRep.getPath() != null) {
@@ -24,10 +31,15 @@ public class PuckUtils {
 
 			scala.collection.Iterator<File> fileEmptyIterator = JavaConversions$.MODULE$.asScalaIterator(Collections
 					.<File> emptyIterator());
-
-
+			URI uriForTry = null;
+			try {
+				uriForTry = new URI(uriRep.getScheme(), uriRep.getHost(), new File(uriRep.getPath()).getParent(), uriRep.getFragment());
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
-					org.but4reuse.utils.files.FileUtils.getFile(uriRep), ".java", fileEmptyIterator.toSeq());
+					org.but4reuse.utils.files.FileUtils.getFile(uriForTry), ".java", fileEmptyIterator.toSeq());
 			JavaJastAddDG2AST dg2ast = JavaJastAddDG2AST$.MODULE$.fromFiles(fileFullPaths,
 					stringEmptyIterator.toList(), stringEmptyIterator.toList(), stringEmptyIterator.toList(),
 					tuple2emptyIterator.toList(), null, PuckNoopLogger$.MODULE$);
