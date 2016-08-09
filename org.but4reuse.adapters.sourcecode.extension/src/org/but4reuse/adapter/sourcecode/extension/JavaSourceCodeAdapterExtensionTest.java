@@ -74,7 +74,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 		Map<String, String> defTest = new HashMap<String, String>();
 		defTest.put("1", "2");
 
-		Map<String, String> DefMeth = java.createDefinitionMethode(listNode, listEdge);
+		Map<String, String> DefMeth = java.createDefinitionMethod(listNode, listEdge);
 
 		assertEquals(defTest, DefMeth);
 

@@ -106,8 +106,18 @@ public class CSVUtils {
 				String[] array1 = myLine.split(";");
 				if (array1.length == tabs) {
 					for (int j = 0; j < tabs; j++) {
-						stringMatrix[i][j] = array1[j].trim();
+						stringMatrix[i][j] = array1[j];
 					}
+				}
+				if (array1.length < tabs) {
+					int j;
+					for (j = 0; j < tabs; j++) {
+						if(j<array1.length)
+							stringMatrix[i][j] = array1[j];
+						else
+							stringMatrix[i][j] = "";
+					}
+					
 				}
 				i++;
 			}
