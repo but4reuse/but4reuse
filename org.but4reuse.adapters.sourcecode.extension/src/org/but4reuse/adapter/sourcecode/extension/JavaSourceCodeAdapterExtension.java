@@ -61,6 +61,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 						IElement dep = resultList.get(target);
 						if(dep == null){
 							System.out.println("Error not found");
+							System.out.println("target : "+target);
 						}
 						else
 							((AbstractElement) e).addDependency(edge.getType(), dep);
