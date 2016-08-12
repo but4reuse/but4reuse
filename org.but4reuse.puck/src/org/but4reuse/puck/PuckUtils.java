@@ -78,6 +78,10 @@ public class PuckUtils {
 	public static void supressCSV(URI uriTempCSVfolder) {
 		File dir = org.but4reuse.utils.files.FileUtils.getFile(uriTempCSVfolder);
 		if (dir.exists()) {
+			List<File> files = FileUtils.getAllFiles(dir);
+			for (File file : files) {
+				file.delete();
+			}
 			dir.delete();
 		}
 	}

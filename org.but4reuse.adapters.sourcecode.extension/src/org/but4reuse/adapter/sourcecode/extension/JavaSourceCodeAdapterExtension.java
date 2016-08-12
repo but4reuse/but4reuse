@@ -101,7 +101,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 						String id = getResearch(node, defMeth);
 						nodeTemp = getNodeByID(id, nodeMap);
 						if (isNodeEqualsToElement(nodeTemp, temp)) {
-							list.put(id, temp);
+							list.put(node.getId(), temp);
 							condition = true;
 						}
 						temp = temp.getParent();
@@ -110,6 +110,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 				}
 
 			}
+			
 			condition = false;
 		}
 		return list;
