@@ -5,7 +5,7 @@
          point="org.but4reuse.adapters">
       <adapter
             class="org.but4reuse.adapter.sourcecode.extension.JavaSourceCodeAdapterExtension"
-            id="org.but4reuse.adapters.sourcecode.extension.adapter"
+            id="javaextension"
             name="Java source code extension">
          <elements>
             <element

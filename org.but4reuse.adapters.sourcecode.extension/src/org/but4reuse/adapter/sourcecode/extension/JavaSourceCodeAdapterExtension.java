@@ -37,7 +37,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		uriTempCSVfolder.mkdirs();
 		System.out.println(uriTempCSVfolder.toURI().toString());
 		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
-
+		
 		List<EdgeFromCSV> edgeMap = null;
 		List<NodeFromCSV> nodeMap = null;
 		
@@ -62,7 +62,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 						if(dep == null){
 							System.out.println("Error not found");
 						}
-						((AbstractElement) e).addDependency(edge.getType(), dep);
+						else
+							((AbstractElement) e).addDependency(edge.getType(), dep);
 					}
 				}
 			}
@@ -165,8 +166,11 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			JavaLanguage java = new JavaLanguage();
 			String iElementName = java.getQualifiedName(((FSTNodeElement) element).getNode());
 			iElementName = iElementName.replaceAll("[(].*[)]", "");
-			System.out.println(iElementName +"    "+nodeString);
-			System.out.println("equlas:" + iElementName.equals(nodeString));
+			if (iElementName.contains("lang")) {
+				System.out.println("Yes");
+			}
+			//System.out.println(iElementName +"    "+nodeString);
+			//System.out.println("equlas:" + iElementName.equals(nodeString));
 			return iElementName.equals(nodeString);
 		} else {
 			return false;
