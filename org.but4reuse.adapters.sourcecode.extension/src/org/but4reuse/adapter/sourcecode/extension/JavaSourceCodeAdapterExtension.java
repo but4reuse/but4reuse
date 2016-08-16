@@ -28,19 +28,19 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	public void addMoreDependencies(List<IElement> elements, URI uri) {
 		File uriTempCSVfolder = null;
 		File uriFile = org.but4reuse.utils.files.FileUtils.getFile(uri);
-		if(uriFile.isFile()){
-			uriTempCSVfolder = new File(uriFile.getParentFile(),"tempFolderForCSV");
-		}else{
-			uriTempCSVfolder = new File(uriFile,"tempFolderForCSV");
+		if (uriFile.isFile()) {
+			uriTempCSVfolder = new File(uriFile.getParentFile(), "tempFolderForCSV");
+		} else {
+			uriTempCSVfolder = new File(uriFile, "tempFolderForCSV");
 		}
 		//
 		uriTempCSVfolder.mkdirs();
 		System.out.println(uriTempCSVfolder.toURI().toString());
 		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
-		
+
 		List<EdgeFromCSV> edgeMap = null;
 		List<NodeFromCSV> nodeMap = null;
-		
+
 		for (File file : FileUtils.getAllFiles(uriTempCSVfolder)) {
 			if (file.getPath().contains("edges")) {
 				edgeMap = createEdgeMap(CSVUtils.importCSV(file.toURI()));
@@ -49,23 +49,22 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 				nodeMap = createNodeMap(CSVUtils.importCSV(file.toURI()));
 			}
 		}
-		
+
 		Map<String, ArrayList<String>> param = createParams(nodeMap);
-		edgeMap = addEdgeParamToList(edgeMap,param);
+		edgeMap = addEdgeParamToList(edgeMap, param);
 		Map<String, String> defMeth = createDefinitionMethod(nodeMap, edgeMap);
 		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, defMeth);
 
 		for (EdgeFromCSV edge : edgeMap) {
-			if (edge.getType().equals("Uses") || edge.getType().equals("Isa")) {
+			if (edge.getType().equals("Uses") || edge.getType().equals("Isa")||edge.getType().equals("Param")) {
 				IElement e = resultList.get(edge.getId());
 				if (e != null) {
 					for (String target : edge.getTarget()) {
 						IElement dep = resultList.get(target);
-						if(dep == null){
+						if (dep == null) {
 							System.out.println("Error not found");
-							System.out.println("target : "+target);
-						}
-						else
+							System.out.println("target : " + target);
+						} else
 							((AbstractElement) e).addDependency(edge.getType(), dep);
 					}
 				}
@@ -112,7 +111,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 				}
 
 			}
-			
+
 			condition = false;
 		}
 		return list;
@@ -173,8 +172,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			if (iElementName.contains("lang")) {
 				System.out.println("Yes");
 			}
-			//System.out.println(iElementName +"    "+nodeString);
-			//System.out.println("equlas:" + iElementName.equals(nodeString));
+			// System.out.println(iElementName +"    "+nodeString);
+			// System.out.println("equlas:" + iElementName.equals(nodeString));
 			return iElementName.equals(nodeString);
 		} else {
 			return false;
@@ -193,7 +192,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		Map<String, String> mapDefMeth = new HashMap<String, String>();
 
 		for (NodeFromCSV nodeFromCSV : listNode) {
-			if (nodeFromCSV.getKind()!= null && nodeFromCSV.getKind().contains("Definition")) {
+			if (nodeFromCSV.getKind() != null && nodeFromCSV.getKind().contains("Definition")) {
 				for (EdgeFromCSV edgeFromCSV : listEdge) {
 
 					if (edgeFromCSV.getTarget().contains(nodeFromCSV.getId())) {
@@ -214,31 +213,31 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * @return
 	 */
 	public List<NodeFromCSV> createNodeMap(String[][] matrixNodes) {
-		//TODO correct the error
+		// TODO correct the error
 		ArrayList<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
 		for (int i = 0; i < matrixNodes.length; i++) {
-			if(matrixNodes[i][0]!=null && matrixNodes[i][1]!=null && matrixNodes[i][2]!=null){
+			if (matrixNodes[i][0] != null && matrixNodes[i][1] != null && matrixNodes[i][2] != null) {
 				nodeMap.add(new NodeFromCSV(matrixNodes[i][0], matrixNodes[i][1], matrixNodes[i][2], matrixNodes[i][3],
 						matrixNodes[i][4]));
 			}
-			
+
 		}
 		return nodeMap;
 
 	}
-	
+
 	public Map<String, ArrayList<String>> createParams(List<NodeFromCSV> listNode) {
 		Map<String, ArrayList<String>> mapClassParams = new HashMap<String, ArrayList<String>>();
 		for (NodeFromCSV paramNode : listNode) {
-			if (paramNode!= null && paramNode.getKind()!=null && paramNode.getKind().equals("Param")) {
-				
+			if (paramNode != null && paramNode.getKind() != null && paramNode.getKind().equals("Param")) {
+
 				String idTarget = getIdTarget(listNode, paramNode);
-				String idKey = getIdKey(listNode,paramNode);
-				
+				String idKey = getIdKey(listNode, paramNode);
+
 				if (idKey != null && idTarget != null) {
-					if(mapClassParams.containsKey(idKey)) {
+					if (mapClassParams.containsKey(idKey)) {
 						mapClassParams.get(idKey).add(idTarget);
-					}else {
+					} else {
 						ArrayList<String> targetList = new ArrayList<String>();
 						targetList.add(idTarget);
 						mapClassParams.put(idKey, targetList);
@@ -248,29 +247,31 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		}
 		return mapClassParams;
 	}
-	
-	public String getIdTarget(List<NodeFromCSV> listNode,NodeFromCSV paramNode) {
+
+	public String getIdTarget(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
 		for (NodeFromCSV currentNode : listNode) {
-			if (currentNode != null && currentNode.getName()!=null && currentNode.getName().equals(paramNode.getType())) {
+			if (currentNode != null && currentNode.getName() != null
+					&& currentNode.getName().equals(paramNode.getType())) {
 				return currentNode.getId();
 			}
 		}
 		return null;
 	}
-	
-	public String getIdKey(List<NodeFromCSV> listNode,NodeFromCSV paramNode) {
+
+	public String getIdKey(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
 		String[] qualifiedNameParts = paramNode.getQualifiedName().split("[.]");//
 		for (String string : qualifiedNameParts) {
 			for (NodeFromCSV currentNode : listNode) {
-				if (currentNode!= null && currentNode.getKind()!=null && currentNode.getKind().equals("Class") && currentNode.getName().equals(string)) {
+				if (currentNode != null && currentNode.getKind() != null && currentNode.getKind().equals("Class")
+						&& currentNode.getName().equals(string)) {
 					return currentNode.getId();
 				}
 			}
 		}
 		return null;
 	}
-	
-	public List<EdgeFromCSV> addEdgeParamToList(List<EdgeFromCSV> list,Map<String, ArrayList<String>> param) {
+
+	public List<EdgeFromCSV> addEdgeParamToList(List<EdgeFromCSV> list, Map<String, ArrayList<String>> param) {
 		System.out.println(list.size());
 		for (String id : param.keySet()) {
 			if (id != null) {
@@ -283,11 +284,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		}
 		System.out.println(list.size());
 		return list;
-		
+
 	}
-
-		
-
 
 	/**
 	 * Create the edgeMap using the edge matrix
