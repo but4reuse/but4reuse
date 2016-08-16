@@ -25,8 +25,8 @@ public class PuckUtils {
 	public static void createCSV(URI uriRep, URI output) {
 
 		if (uriRep != null && uriRep.getPath() != null) {
-			scala.collection.Iterator<String> stringEmptyIterator = (JavaConversions$.MODULE$
-					.asScalaIterator(Collections.<String> emptyIterator()));
+			//scala.collection.Iterator<String> stringEmptyIterator = (JavaConversions$.MODULE$
+				//	.asScalaIterator(Collections.<String> emptyIterator()));
 
 			scala.collection.Iterator<scala.Tuple2<String, String>> tuple2emptyIterator = JavaConversions$.MODULE$
 					.asScalaIterator(Collections.<scala.Tuple2<String, String>> emptyIterator());

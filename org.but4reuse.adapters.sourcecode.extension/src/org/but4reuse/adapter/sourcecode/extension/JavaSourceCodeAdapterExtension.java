@@ -33,7 +33,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		}else{
 			uriTempCSVfolder = new File(uriFile,"tempFolderForCSV");
 		}
-		
+		//
 		uriTempCSVfolder.mkdirs();
 		System.out.println(uriTempCSVfolder.toURI().toString());
 		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
@@ -50,6 +50,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 			}
 		}
 		
+		Map<String, ArrayList<String>> param = createParams(nodeMap);
+		edgeMap = addEdgeParamToList(edgeMap,param);
 		Map<String, String> defMeth = createDefinitionMethod(nodeMap, edgeMap);
 		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, defMeth);
 
@@ -257,7 +259,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 	
 	public String getIdKey(List<NodeFromCSV> listNode,NodeFromCSV paramNode) {
-		String[] qualifiedNameParts = paramNode.getQualifiedName().split(".");
+		String[] qualifiedNameParts = paramNode.getQualifiedName().split("[.]");//
 		for (String string : qualifiedNameParts) {
 			for (NodeFromCSV currentNode : listNode) {
 				if (currentNode!= null && currentNode.getKind()!=null && currentNode.getKind().equals("Class") && currentNode.getName().equals(string)) {
@@ -267,6 +269,24 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		}
 		return null;
 	}
+	
+	public List<EdgeFromCSV> addEdgeParamToList(List<EdgeFromCSV> list,Map<String, ArrayList<String>> param) {
+		System.out.println(list.size());
+		for (String id : param.keySet()) {
+			if (id != null) {
+				EdgeFromCSV edge = new EdgeFromCSV(id, "Param");
+				for (String target : param.get(id)) {
+					edge.addTarget(target);
+				}
+				list.add(edge);
+			}
+		}
+		System.out.println(list.size());
+		return list;
+		
+	}
+
+		
 
 
 	/**
