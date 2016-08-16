@@ -224,6 +224,50 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		return nodeMap;
 
 	}
+	
+	public Map<String, ArrayList<String>> createParams(List<NodeFromCSV> listNode) {
+		Map<String, ArrayList<String>> mapClassParams = new HashMap<String, ArrayList<String>>();
+		for (NodeFromCSV paramNode : listNode) {
+			if (paramNode!= null && paramNode.getKind()!=null && paramNode.getKind().equals("Param")) {
+				
+				String idTarget = getIdTarget(listNode, paramNode);
+				String idKey = getIdKey(listNode,paramNode);
+				
+				if (idKey != null && idTarget != null) {
+					if(mapClassParams.containsKey(idKey)) {
+						mapClassParams.get(idKey).add(idTarget);
+					}else {
+						ArrayList<String> targetList = new ArrayList<String>();
+						targetList.add(idTarget);
+						mapClassParams.put(idKey, targetList);
+					}
+				}
+			}
+		}
+		return mapClassParams;
+	}
+	
+	public String getIdTarget(List<NodeFromCSV> listNode,NodeFromCSV paramNode) {
+		for (NodeFromCSV currentNode : listNode) {
+			if (currentNode != null && currentNode.getName()!=null && currentNode.getName().equals(paramNode.getType())) {
+				return currentNode.getId();
+			}
+		}
+		return null;
+	}
+	
+	public String getIdKey(List<NodeFromCSV> listNode,NodeFromCSV paramNode) {
+		String[] qualifiedNameParts = paramNode.getQualifiedName().split(".");
+		for (String string : qualifiedNameParts) {
+			for (NodeFromCSV currentNode : listNode) {
+				if (currentNode!= null && currentNode.getKind()!=null && currentNode.getKind().equals("Class") && currentNode.getName().equals(string)) {
+					return currentNode.getId();
+				}
+			}
+		}
+		return null;
+	}
+
 
 	/**
 	 * Create the edgeMap using the edge matrix
