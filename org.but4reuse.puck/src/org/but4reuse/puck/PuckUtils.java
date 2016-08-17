@@ -1,6 +1,7 @@
 package org.but4reuse.puck;
 
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.files.PropertiesFileUtils;
 import org.extendj.ast.JavaJastAddDG2AST;
 import org.extendj.ast.JavaJastAddDG2AST$;
 
@@ -14,7 +15,6 @@ import java.net.URI;
 import java.util.*;
 
 public class PuckUtils {
-	public final static int PROPERTIES_SIZE = 4;
 
 	public static void main(String[] args) {
 		File one = new File("/home/colympio/workspace/puckTest/src/argoumlVariants/AllDisabled/");
@@ -33,46 +33,36 @@ public class PuckUtils {
 
 			scala.collection.Iterator<File> fileEmptyIterator = JavaConversions$.MODULE$.asScalaIterator(Collections
 					.<File> emptyIterator());
-			File f = new File(FileUtils.getFile(uriRep), "puck.properties");
-			if (f.exists()) {
-				String[] propertieString = (FileUtils.getStringOfFile(f)).split("[=;]");
-				if (propertieString.length != PROPERTIES_SIZE) {
-					System.out.println("The properties file doesn't have the right format");
-				} else {
-					ArrayList<String> listClassPath = new ArrayList<>();
-					if (propertieString[0].contains("classpath")) {
-						if (!propertieString[1].equals("none")) {
-							for (File file : FileUtils.getAllFiles(new File(propertieString[1]))) {
-								listClassPath.add(file.getAbsolutePath());
-							}
-						}
-					}
-					scala.collection.Iterator<String> iteClasspath = JavaConversions$.MODULE$
-							.asScalaIterator(listClassPath.iterator());
-
-					ArrayList<String> listBootPath = new ArrayList<>();
-
-					if (propertieString[2].contains("bootclasspath")) {
-						listBootPath.add(propertieString[3]);
-					}
-					scala.collection.Iterator<String> iteBootpath = JavaConversions$.MODULE$
-							.asScalaIterator(listBootPath.iterator());
-
-					scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
-							org.but4reuse.utils.files.FileUtils.getFile(uriRep), ".java", fileEmptyIterator.toSeq());
-					System.gc();
-					JavaJastAddDG2AST dg2ast = JavaJastAddDG2AST$.MODULE$.fromFiles(fileFullPaths, fileFullPaths,
-							iteClasspath.toList(), iteBootpath.toList(), tuple2emptyIterator.toList(), null,
-							PuckNoopLogger$.MODULE$);
-
-					File folderForOutput = org.but4reuse.utils.files.FileUtils.getFile(output);
-					CSVPrinter$.MODULE$.apply(dg2ast.initialGraph(), folderForOutput, ";");
+			
+			Map<String, String> properties = PropertiesFileUtils.getPuckProperties(uriRep);	
+			ArrayList<String> listClassPath = new ArrayList<>();
+					
+			if (!properties.get("classpath").equals("none")) {
+				for (File file : FileUtils.getAllFiles(new File(properties.get("classpath")))) {
+					listClassPath.add(file.getAbsolutePath());
 				}
-			} else {
-				System.out.println("No properties file found : puck.properties not found");
 			}
+			
+			scala.collection.Iterator<String> iteClasspath = JavaConversions$.MODULE$
+					.asScalaIterator(listClassPath.iterator());
 
+			ArrayList<String> listBootPath = new ArrayList<>();
+			listBootPath.add(properties.get("bootclasspath"));
+			
+			scala.collection.Iterator<String> iteBootpath = JavaConversions$.MODULE$
+					.asScalaIterator(listBootPath.iterator());
+
+			scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
+					org.but4reuse.utils.files.FileUtils.getFile(uriRep), ".java", fileEmptyIterator.toSeq());
+			System.gc();
+			JavaJastAddDG2AST dg2ast = JavaJastAddDG2AST$.MODULE$.fromFiles(fileFullPaths, fileFullPaths,
+					iteClasspath.toList(), iteBootpath.toList(), tuple2emptyIterator.toList(), null,
+					PuckNoopLogger$.MODULE$);
+
+			File folderForOutput = org.but4reuse.utils.files.FileUtils.getFile(output);
+			CSVPrinter$.MODULE$.apply(dg2ast.initialGraph(), folderForOutput, ";");
 		}
+
 	}
 
 	public static void supressCSV(URI uriTempCSVfolder) {

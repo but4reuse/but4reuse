@@ -259,13 +259,12 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	public String getIdKey(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
-		String[] qualifiedNameParts = paramNode.getQualifiedName().split("[.]");//
-		for (String string : qualifiedNameParts) {
-			for (NodeFromCSV currentNode : listNode) {
-				if (currentNode != null && currentNode.getKind() != null && currentNode.getKind().equals("Class")
-						&& currentNode.getName().equals(string)) {
-					return currentNode.getId();
-				}
+		int index = paramNode.getQualifiedName().lastIndexOf(".");
+		String methodName = paramNode.getQualifiedName().substring(0, index);
+		for (NodeFromCSV currentNode : listNode) {
+			if (currentNode != null && currentNode.getKind() != null && currentNode.getKind().contains("Method")
+					&& currentNode.getQualifiedName().equals(methodName)) {
+				return currentNode.getId();
 			}
 		}
 		return null;

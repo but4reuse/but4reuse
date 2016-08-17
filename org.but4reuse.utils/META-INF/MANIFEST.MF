@@ -22,3 +22,4 @@ Export-Package: org.but4reuse.utils.emf,
  org.but4reuse.utils.ui.preferences,
  org.but4reuse.utils.workbench
 Bundle-Vendor: but4reuse.org
+Import-Package: org.apache.commons.io

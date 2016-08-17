@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
-import org.w3c.dom.ls.LSInput;
 
 /**
  * File Utils class
