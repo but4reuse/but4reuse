@@ -1,5 +1,6 @@
 package org.but4reuse.puck;
 
+import org.apache.commons.io.FilenameUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.files.PropertiesFileUtils;
 import org.extendj.ast.JavaJastAddDG2AST;
@@ -16,6 +17,8 @@ import java.util.*;
 
 public class PuckUtils {
 
+	public final static String PUCK_PROPERTIES_FILE_NAME = "puck.properties";
+
 	public static void main(String[] args) {
 		File one = new File("/home/colympio/workspace/puckTest/src/argoumlVariants/AllDisabled/");
 		File two = new File("/home/colympio/workspace/puckTest/src/argoumlVariants/AllDisabled/");
@@ -25,32 +28,49 @@ public class PuckUtils {
 	public static void createCSV(URI uriRep, URI output) {
 
 		if (uriRep != null && uriRep.getPath() != null) {
-			//scala.collection.Iterator<String> stringEmptyIterator = (JavaConversions$.MODULE$
-				//	.asScalaIterator(Collections.<String> emptyIterator()));
+			// scala.collection.Iterator<String> stringEmptyIterator =
+			// (JavaConversions$.MODULE$
+			// .asScalaIterator(Collections.<String> emptyIterator()));
 
 			scala.collection.Iterator<scala.Tuple2<String, String>> tuple2emptyIterator = JavaConversions$.MODULE$
 					.asScalaIterator(Collections.<scala.Tuple2<String, String>> emptyIterator());
 
 			scala.collection.Iterator<File> fileEmptyIterator = JavaConversions$.MODULE$.asScalaIterator(Collections
 					.<File> emptyIterator());
+
+			File f = new File(FileUtils.getFile(uriRep), PUCK_PROPERTIES_FILE_NAME);
+			String classPath = null;
+			String bootClassPath = null;
 			
-			Map<String, String> properties = PropertiesFileUtils.getPuckProperties(uriRep);	
+			if (f.exists()) {
+				classPath = PropertiesFileUtils.getValue(f, "classpath");
+				bootClassPath = PropertiesFileUtils.getValue(f, "bootclasspath");
+			} else {
+				System.out.println("No puck properties file found : puck.properties not found");
+			}
+
 			ArrayList<String> listClassPath = new ArrayList<>();
-					
-			if (!properties.get("classpath").equals("none")) {
-				for (File file : FileUtils.getAllFiles(new File(properties.get("classpath")))) {
-					listClassPath.add(file.getAbsolutePath());
+
+			if (classPath != null) {
+				if (!classPath.equals("none")) {
+					for (File file : FileUtils.getAllFiles(new File(classPath))) {
+						listClassPath.add(file.getAbsolutePath());
+					}
 				}
 			}
-			
-			scala.collection.Iterator<String> iteClasspath = JavaConversions$.MODULE$
-					.asScalaIterator(listClassPath.iterator());
+
+			scala.collection.Iterator<String> iteClasspath = JavaConversions$.MODULE$.asScalaIterator(listClassPath
+					.iterator());
 
 			ArrayList<String> listBootPath = new ArrayList<>();
-			listBootPath.add(properties.get("bootclasspath"));
-			
-			scala.collection.Iterator<String> iteBootpath = JavaConversions$.MODULE$
-					.asScalaIterator(listBootPath.iterator());
+			if (bootClassPath != null) {
+				listBootPath.add(bootClassPath);
+			} else {
+				listBootPath.add(FilenameUtils.separatorsToSystem((System.getProperty("java.home") + "\\lib\\rt.jar")));
+			}
+
+			scala.collection.Iterator<String> iteBootpath = JavaConversions$.MODULE$.asScalaIterator(listBootPath
+					.iterator());
 
 			scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
 					org.but4reuse.utils.files.FileUtils.getFile(uriRep), ".java", fileEmptyIterator.toSeq());

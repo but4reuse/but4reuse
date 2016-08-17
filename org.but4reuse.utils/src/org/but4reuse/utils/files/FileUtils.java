@@ -387,23 +387,6 @@ public class FileUtils {
 		}
 		return files;
 	}  
-	
-	public static void main(String[] args) {
-		StringBuffer sb = new StringBuffer();
-		List<File> files = getAllFiles(new File("/home/colympio/workspace/puckTest/src/argoumlVariants/Original/src/"));
-		for(File f : files){
-			if(isExtension(f, "java")){
-				sb.append(f.getAbsolutePath());
-				sb.append(" ");
-				
-			}
-		}
-		try {
-			writeFile(new File("/home/colympio/workspace/puckTest/My.sh"),sb.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+
 
 }
