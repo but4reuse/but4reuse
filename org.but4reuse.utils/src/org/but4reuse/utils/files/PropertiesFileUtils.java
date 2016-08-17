@@ -61,7 +61,7 @@ public class PropertiesFileUtils {
 				}
 				else if (!propertieString[0].contains("classpath") && propertieString[2].contains("bootclasspath")) {
 					properties = getPuckBasicProperties(false,true);
-					properties.put("bootclasspath", FilenameUtils.separatorsToSystem((System.getProperty("java.home")+"\\lib\\rt.java")));
+					properties.put("bootclasspath", propertieString[3]);
 				}
 				else{
 					System.out.println("Error in the puck properties file");
@@ -81,7 +81,7 @@ public class PropertiesFileUtils {
 		if (!containClasspath) 
 			properties.put("classpath", "none");
 		if (!containsBootclasspath)
-			properties.put("bootclasspath", FilenameUtils.separatorsToSystem((System.getProperty("java.home")+"\\lib\\rt.java")));
+			properties.put("bootclasspath", FilenameUtils.separatorsToSystem((System.getProperty("java.home")+"\\lib\\rt.jar")));
 		return properties;
 	}
 }
