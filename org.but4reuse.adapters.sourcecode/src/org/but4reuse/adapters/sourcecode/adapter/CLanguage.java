@@ -119,4 +119,10 @@ public class CLanguage implements ILanguage {
 		return "";
 	}
 
+	@Override
+	public FSTNode getNodeWithName(FSTNode node, String name) {
+		// TODO ???
+		return null;
+	}
+
 }

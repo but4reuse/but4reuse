@@ -184,7 +184,17 @@ public class GraphVisualisation implements IVisualisation {
 								System.err.println("GraphVisualisation error: edge target element was not found");
 							} else {
 								Vertex two = graph.getVertex(id2);
-								Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+								// the id of the edge is the concatenation of
+								// id1 id2 and depKey
+								// but in case that there is more than one with
+								// this id, we concatenate something at the end
+								String repeated = "";
+								Edge e = graph.getEdge(id1 + "-" + id2 + "-" + depKey);
+								if (e != null) {
+									repeated = "-r";
+								}
+								Edge edge = graph.addEdge(id1 + "-" + id2 + "-" + depKey + repeated, one, two, id1
+										+ "-" + id2);
 								edge.setProperty("dependencyType", depKey);
 								edge.setProperty("Label", depKey);
 							}

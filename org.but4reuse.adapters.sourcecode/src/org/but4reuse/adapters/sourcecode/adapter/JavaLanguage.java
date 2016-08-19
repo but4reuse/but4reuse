@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+
 import printer.PrintVisitorException;
 import tmp.generated_java15.Java15Parser;
 import cide.gparser.OffsetCharStream;
@@ -107,9 +108,29 @@ public class JavaLanguage implements ILanguage {
 
 	@Override
 	public String getQualifiedName(FSTNode node) {
-		if (node.getParent() == null)
-			return this.getPackageName((FSTNonTerminal)node);
-		return this.getQualifiedName((FSTNonTerminal)node.getParent())+"."+node.getName();
+		String qualifiedName = "";
+		if (node == null) {
+			return "";
+		}
+		if (node.getParent() == null && node instanceof FSTNonTerminal)
+			qualifiedName = this.getPackageName((FSTNonTerminal) node);
+		else{
+			qualifiedName = this.getQualifiedName((FSTNonTerminal) node.getParent());
+			if (!qualifiedName.equals("")) {
+				qualifiedName += ".";
+			}
+			qualifiedName += node.getName();
+		}
+		return qualifiedName;
+	}
+	
+	public FSTNode getNodeWithName(FSTNode node, String name) {
+		if(node.getName() == name)
+			return node;
+		if(node instanceof FSTNonTerminal)
+			return getNodeWithName((FSTNode) ((FSTNonTerminal) node).getChildren(),name);
+		return null;
+		
 	}
 
 }

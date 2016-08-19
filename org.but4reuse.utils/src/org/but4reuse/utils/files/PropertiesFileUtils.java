@@ -12,6 +12,8 @@ import java.util.Properties;
  * 
  */
 public class PropertiesFileUtils {
+	
+
 
 	public static String getValue(File propertiesFile, String key) {
 		if (propertiesFile.exists()) {
@@ -34,4 +36,5 @@ public class PropertiesFileUtils {
 		return keyWithPercentage.substring(1).replaceAll("\\s", "");
 	}
 
+	
 }
