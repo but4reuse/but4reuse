@@ -5,7 +5,9 @@ import java.util.List;
 
 /**
  * 
- * @author colympio Object used to store the values of an edge file
+ * @author colympio
+ * 
+ *         Object used to store the values of one edge file line
  */
 public class EdgeFromCSV {
 

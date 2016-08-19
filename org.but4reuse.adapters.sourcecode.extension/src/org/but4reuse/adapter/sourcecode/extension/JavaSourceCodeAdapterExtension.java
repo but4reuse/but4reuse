@@ -19,24 +19,32 @@ import org.but4reuse.puck.PuckUtils;
 import org.but4reuse.utils.files.CSVUtils;
 import org.but4reuse.utils.files.FileUtils;
 
+/**
+ * 
+ * @author colympio
+ * 
+ *         The JavaSourceCodeAdapterExtension enable to get the dependencies
+ *         with the called methods and parameters
+ */
 public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 	/**
-	 * Add dependencies to the elements using 2 CSV files (node and edge)
+	 * 
+	 * Add dependencies to the elements using the list of elements and the
+	 * sources folder uri
 	 */
 	@Override
-	public void addMoreDependencies(List<IElement> elements, URI uri) {
+	public void addMoreDependencies(List<IElement> elements, URI folderUri) {
 		File uriTempCSVfolder = null;
-		File uriFile = org.but4reuse.utils.files.FileUtils.getFile(uri);
+		File uriFile = org.but4reuse.utils.files.FileUtils.getFile(folderUri);
 		if (uriFile.isFile()) {
 			uriTempCSVfolder = new File(uriFile.getParentFile(), "tempFolderForCSV");
 		} else {
 			uriTempCSVfolder = new File(uriFile, "tempFolderForCSV");
 		}
-		//
 		uriTempCSVfolder.mkdirs();
 		System.out.println(uriTempCSVfolder.toURI().toString());
-		PuckUtils.createCSV(uri, uriTempCSVfolder.toURI());
+		PuckUtils.createCSV(folderUri, uriTempCSVfolder.toURI());
 
 		List<EdgeFromCSV> edgeMap = null;
 		List<NodeFromCSV> nodeMap = null;
@@ -52,20 +60,21 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 
 		Map<String, ArrayList<String>> param = createParams(nodeMap);
 		edgeMap = addEdgeParamToList(edgeMap, param);
-		Map<String, String> defMeth = createDefinitionMethod(nodeMap, edgeMap);
-		Map<String, IElement> resultList = getFSTNodeElement(nodeMap, elements, defMeth);
+		Map<String, String> definitionMethod = createDefinitionMethodMap(nodeMap, edgeMap);
+		Map<String, IElement> fstNodeMap = getFSTNodeElement(nodeMap, elements, definitionMethod);
 
-		for (EdgeFromCSV edge : edgeMap) {
-			if (edge.getType().equals("Uses") || edge.getType().equals("Isa")||edge.getType().equals("Param")) {
-				IElement e = resultList.get(edge.getId());
+		for (EdgeFromCSV currentEdge : edgeMap) {
+			if (currentEdge.getType().equals("Uses") || currentEdge.getType().equals("Isa")
+					|| currentEdge.getType().equals("Param")) {
+				IElement e = fstNodeMap.get(currentEdge.getId());
 				if (e != null) {
-					for (String target : edge.getTarget()) {
-						IElement dep = resultList.get(target);
+					for (String target : currentEdge.getTarget()) {
+						IElement dep = fstNodeMap.get(target);
 						if (dep == null) {
 							System.out.println("Error not found");
 							System.out.println("target : " + target);
 						} else
-							((AbstractElement) e).addDependency(edge.getType(), dep);
+							((AbstractElement) e).addDependency(currentEdge.getType(), dep);
 					}
 				}
 			}
@@ -78,34 +87,38 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Create a map of NodeFromCSV ids and FSTNodeElements. If NodeFromCSV is a
-	 * definition the node associated to the id is the methode one.
+	 * Create a map of NodeFromCSV ids and FSTNodeElements pairs. If the
+	 * NodeFromCSV is a definition, the node associated to the id is the
+	 * corresponding method one.
 	 * 
 	 * @param nodeMap
 	 * @param elements
-	 * @param defMeth
+	 * @param definitionMethod
 	 * @return Map of corresponding NodeFromCSVElments ids and IElements
 	 */
 	Map<String, IElement> getFSTNodeElement(List<NodeFromCSV> nodeMap, List<IElement> elements,
-			Map<String, String> defMeth) {
+			Map<String, String> definitionMethod) {
 
 		Map<String, IElement> list = new HashMap<String, IElement>();
-		NodeFromCSV nodeTemp;
+		NodeFromCSV tempNode;
 		boolean condition = false;
-		for (NodeFromCSV node : nodeMap) {
-			Iterator<IElement> it = elements.iterator();
-			while (it.hasNext() && !condition) {
-				IElement iElement = (IElement) it.next();
-				if (iElement instanceof FSTNonTerminalNodeElement || iElement instanceof FSTTerminalNodeElement) {
-					FSTNodeElement temp = ((FSTNodeElement) iElement);
-					while (temp != null && !condition) {
-						String id = getResearch(node, defMeth);
-						nodeTemp = getNodeByID(id, nodeMap);
-						if (isNodeEqualsToElement(nodeTemp, temp)) {
-							list.put(node.getId(), temp);
+		for (NodeFromCSV currentNode : nodeMap) {
+			Iterator<IElement> iterator = elements.iterator();
+			while (iterator.hasNext() && !condition) {
+				IElement currentElement = (IElement) iterator.next();
+				if (currentElement instanceof FSTNonTerminalNodeElement
+						|| currentElement instanceof FSTTerminalNodeElement) {
+					FSTNodeElement tempElement = ((FSTNodeElement) currentElement);
+					// TODO see if i can replace the while by :if(temp != null){
+					while (tempElement != null && !condition) {
+						String id = getTrueId(currentNode, definitionMethod);
+						tempNode = getNodeByID(id, nodeMap);
+						if (isNodeEqualsToElement(tempNode, tempElement)) {
+							list.put(currentNode.getId(), tempElement);
 							condition = true;
 						}
-						temp = temp.getParent();
+						// TODO remove that with the while
+						tempElement = tempElement.getParent();
 					}
 
 				}
@@ -119,14 +132,16 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
+	 * Search for a node by id
+	 * 
 	 * @param id
 	 * @param nodeMap
 	 * @return
 	 */
 	public NodeFromCSV getNodeByID(String id, List<NodeFromCSV> nodeMap) {
-		for (NodeFromCSV nodeFromCSV : nodeMap) {
-			if (nodeFromCSV.getId().equals(id)) {
-				return nodeFromCSV;
+		for (NodeFromCSV currentNode : nodeMap) {
+			if (currentNode.getId().equals(id)) {
+				return currentNode;
 			}
 		}
 		return null;
@@ -134,18 +149,17 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Return the id of the corresponding target in definotion/methode map if
-	 * the node is a definition
+	 * This method returns the method id if the node is a definition
 	 * 
 	 * @param node
-	 * @param defMeth
+	 * @param definitionMethod
 	 * @return
 	 */
-	public static String getResearch(NodeFromCSV node, Map<String, String> defMeth) {
+	public static String getTrueId(NodeFromCSV node, Map<String, String> definitionMethod) {
 		String id = null;
 
 		if (node.getKind().equals("Definition"))
-			id = defMeth.get(node.getId());
+			id = definitionMethod.get(node.getId());
 		else
 			id = node.getId();
 
@@ -153,7 +167,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Verifiy if a node is equal to a FSTNodeElement
+	 * Test if a NodeFromCSV is equals to an iElement by comparing their
+	 * qualified names
 	 * 
 	 * @param node
 	 * @param element
@@ -161,20 +176,16 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 */
 	public static boolean isNodeEqualsToElement(NodeFromCSV node, IElement element) {
 		if (node != null && element != null) {
-			String nodeString = node.getQualifiedName();
+			String nodeName = node.getQualifiedName();
 			if (node.getQualifiedName().contains(".")) {
-				nodeString = nodeString.replace(".Definition", "");
+				nodeName = nodeName.replace(".Definition", "");
 			}
 
 			JavaLanguage java = new JavaLanguage();
 			String iElementName = java.getQualifiedName(((FSTNodeElement) element).getNode());
 			iElementName = iElementName.replaceAll("[(].*[)]", "");
-			if (iElementName.contains("lang")) {
-				System.out.println("Yes");
-			}
-			// System.out.println(iElementName +"    "+nodeString);
-			// System.out.println("equlas:" + iElementName.equals(nodeString));
-			return iElementName.equals(nodeString);
+
+			return iElementName.equals(nodeName);
 		} else {
 			return false;
 		}
@@ -182,21 +193,22 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Create the map definition/methode
+	 * Create a definition id => method id maps, which give the corresponding
+	 * method id for a definition
 	 * 
 	 * @param listNode
 	 * @param listEdge
 	 * @return
 	 */
-	public Map<String, String> createDefinitionMethod(List<NodeFromCSV> listNode, List<EdgeFromCSV> listEdge) {
+	public Map<String, String> createDefinitionMethodMap(List<NodeFromCSV> listNode, List<EdgeFromCSV> listEdge) {
 		Map<String, String> mapDefMeth = new HashMap<String, String>();
 
-		for (NodeFromCSV nodeFromCSV : listNode) {
-			if (nodeFromCSV.getKind() != null && nodeFromCSV.getKind().contains("Definition")) {
-				for (EdgeFromCSV edgeFromCSV : listEdge) {
+		for (NodeFromCSV currentNode : listNode) {
+			if (currentNode.getKind() != null && currentNode.getKind().contains("Definition")) {
+				for (EdgeFromCSV currentEdge : listEdge) {
 
-					if (edgeFromCSV.getTarget().contains(nodeFromCSV.getId())) {
-						mapDefMeth.put(nodeFromCSV.getId(), edgeFromCSV.getId());
+					if (currentEdge.getTarget().contains(currentNode.getId())) {
+						mapDefMeth.put(currentNode.getId(), currentEdge.getId());
 					}
 				}
 			}
@@ -206,49 +218,61 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Create a nodeMap using the node matrix
+	 * Create a nodeMap using the nodes matrix
 	 * 
 	 * @param matrixNodes
 	 * @param edgeMap
 	 * @return
 	 */
 	public List<NodeFromCSV> createNodeMap(String[][] matrixNodes) {
-		// TODO correct the error
 		ArrayList<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
 		for (int i = 0; i < matrixNodes.length; i++) {
 			if (matrixNodes[i][0] != null && matrixNodes[i][1] != null && matrixNodes[i][2] != null) {
 				nodeMap.add(new NodeFromCSV(matrixNodes[i][0], matrixNodes[i][1], matrixNodes[i][2], matrixNodes[i][3],
 						matrixNodes[i][4]));
 			}
-
 		}
 		return nodeMap;
 
 	}
 
+	/**
+	 * Create a map for the parameters edges. The key are the methods and values
+	 * are the target the parameters.
+	 * 
+	 * @param listNode
+	 * @return
+	 */
 	public Map<String, ArrayList<String>> createParams(List<NodeFromCSV> listNode) {
-		Map<String, ArrayList<String>> mapClassParams = new HashMap<String, ArrayList<String>>();
+		Map<String, ArrayList<String>> mapMethodParams = new HashMap<String, ArrayList<String>>();
 		for (NodeFromCSV paramNode : listNode) {
 			if (paramNode != null && paramNode.getKind() != null && paramNode.getKind().equals("Param")) {
 
-				String idTarget = getIdTarget(listNode, paramNode);
-				String idKey = getIdKey(listNode, paramNode);
+				String idTarget = getParamClass(listNode, paramNode);
+				String idKey = getMethodUsingParam(listNode, paramNode);
 
 				if (idKey != null && idTarget != null) {
-					if (mapClassParams.containsKey(idKey)) {
-						mapClassParams.get(idKey).add(idTarget);
+					if (mapMethodParams.containsKey(idKey)) {
+						mapMethodParams.get(idKey).add(idTarget);
 					} else {
 						ArrayList<String> targetList = new ArrayList<String>();
 						targetList.add(idTarget);
-						mapClassParams.put(idKey, targetList);
+						mapMethodParams.put(idKey, targetList);
 					}
 				}
 			}
 		}
-		return mapClassParams;
+		return mapMethodParams;
 	}
 
-	public String getIdTarget(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
+	/**
+	 * Search for the id of the parameter class
+	 * 
+	 * @param listNode
+	 * @param paramNode
+	 * @return
+	 */
+	public String getParamClass(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
 		for (NodeFromCSV currentNode : listNode) {
 			if (currentNode != null && currentNode.getName() != null
 					&& currentNode.getName().equals(paramNode.getType())) {
@@ -258,7 +282,14 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		return null;
 	}
 
-	public String getIdKey(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
+	/**
+	 * Search for the id of the method using the parameter.
+	 * 
+	 * @param listNode
+	 * @param paramNode
+	 * @return
+	 */
+	public String getMethodUsingParam(List<NodeFromCSV> listNode, NodeFromCSV paramNode) {
 		int index = paramNode.getQualifiedName().lastIndexOf(".");
 		String methodName = paramNode.getQualifiedName().substring(0, index);
 		for (NodeFromCSV currentNode : listNode) {
@@ -270,6 +301,13 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 		return null;
 	}
 
+	/**
+	 * The method adds the new edges to the edgeFromCSV list
+	 * 
+	 * @param list
+	 * @param param
+	 * @return
+	 */
 	public List<EdgeFromCSV> addEdgeParamToList(List<EdgeFromCSV> list, Map<String, ArrayList<String>> param) {
 		System.out.println(list.size());
 		for (String id : param.keySet()) {
@@ -287,7 +325,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	}
 
 	/**
-	 * Create the edgeMap using the edge matrix
+	 * Create the edgeMap using the edges matrix
 	 * 
 	 * @param matrixEdge
 	 * @return

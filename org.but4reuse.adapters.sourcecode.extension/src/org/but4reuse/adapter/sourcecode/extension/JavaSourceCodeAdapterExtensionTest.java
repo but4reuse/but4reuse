@@ -74,7 +74,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 		Map<String, String> defTest = new HashMap<String, String>();
 		defTest.put("1", "2");
 
-		Map<String, String> DefMeth = java.createDefinitionMethod(listNode, listEdge);
+		Map<String, String> DefMeth = java.createDefinitionMethodMap(listNode, listEdge);
 
 		assertEquals(defTest, DefMeth);
 
@@ -82,7 +82,7 @@ public class JavaSourceCodeAdapterExtensionTest {
 
 	@Test
 	public void testIsNodeEqualsToElement() {
-		
+
 		// 14 ; Class ; MyClass ; mypackage.MyClass ;
 		NodeFromCSV node = new NodeFromCSV("14", "class", "MyClass", "MyClass", "");
 		NodeFromCSV node2 = new NodeFromCSV("15", "classe", "MyClass", "mypackage.MyClasse", "");
@@ -91,30 +91,30 @@ public class JavaSourceCodeAdapterExtensionTest {
 
 		IElement element = new FSTNonTerminalNodeElement();
 		((FSTNonTerminalNodeElement) element).setName("MyClass");
-		FSTNode nodetest = new FSTNode("type","MyClass") {
-			
+		FSTNode nodetest = new FSTNode("type", "MyClass") {
+
 			@Override
 			public String printFST(int arg0) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public FSTNode getShallowClone() {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public FSTNode getDeepClone() {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
 			public void accept(FSTVisitor arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		};
 		((FSTNonTerminalNodeElement) element).setNode(nodetest);
@@ -128,33 +128,36 @@ public class JavaSourceCodeAdapterExtensionTest {
 	@Test
 	public void testGetResearch() {
 
-		NodeFromCSV node = new NodeFromCSV("14", "class", "MyClass", "MyClass", "");;
-		NodeFromCSV node2 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");;
+		NodeFromCSV node = new NodeFromCSV("14", "class", "MyClass", "MyClass", "");
+		;
+		NodeFromCSV node2 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");
+		;
 		Map<String, String> defMeth = new HashMap<String, String>();
-		defMeth.put("14","18");
-		assertNotEquals("18", JavaSourceCodeAdapterExtension.getResearch(node, defMeth));
-		assertEquals("18", JavaSourceCodeAdapterExtension.getResearch(node2, defMeth));
+		defMeth.put("14", "18");
+		assertNotEquals("18", JavaSourceCodeAdapterExtension.getTrueId(node, defMeth));
+		assertEquals("18", JavaSourceCodeAdapterExtension.getTrueId(node2, defMeth));
 	}
 
 	@Test
 	public void testGetNodeByID() {
 
 		List<NodeFromCSV> nodeMap = new ArrayList<NodeFromCSV>();
-		
+
 		java = new JavaSourceCodeAdapterExtension();
 		NodeFromCSV node1 = new NodeFromCSV("1", "Class", "Myclass", "package.MyClass", "nothing");
 		NodeFromCSV node2 = new NodeFromCSV("2", "Class", "Myclass2", "package.MyClass2", "nothing");
-		NodeFromCSV node3 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");;
+		NodeFromCSV node3 = new NodeFromCSV("14", "Definition", "MyClass", "MyClass", "");
+		;
 		nodeMap.add(node2);
 		nodeMap.add(node3);
 		nodeMap.add(node1);
-		assertEquals(node2, java.getNodeByID("2",nodeMap));
-		assertEquals(node3, java.getNodeByID("14",nodeMap));
+		assertEquals(node2, java.getNodeByID("2", nodeMap));
+		assertEquals(node3, java.getNodeByID("14", nodeMap));
 	}
 
 	@Test
 	public void testGetFSTNodeElement() {
-		
+
 	}
 
 }
