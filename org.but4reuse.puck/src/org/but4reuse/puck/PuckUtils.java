@@ -28,12 +28,18 @@ public class PuckUtils {
 
 	/**
 	 * Create the CSV files using puck on the uriRep and the files are created
-	 * in the output URI
+	 * in the output URI. The method tries to find a puck.properties file inside
+	 * uriRep to get user-defined bootclasspath and classpath.
+	 * 
+	 * Example of puck.properties file:
+	 * 
+	 * bootclasspath=C:/Program Files/Java/jre1.5.0_22/lib/rt.jar
+	 * classpath=C:/something/libs
 	 * 
 	 * @param uriRep
 	 * @param output
 	 */
-	public static void createCSV(URI uriRep, URI output) {
+	public static void createCSV(URI uriRep, URI output) throws Exception, Error {
 
 		if (uriRep != null && uriRep.getPath() != null) {
 			// scala.collection.Iterator<String> stringEmptyIterator =
@@ -54,7 +60,8 @@ public class PuckUtils {
 				classPath = PropertiesFileUtils.getValue(propertyFile, "classpath");
 				bootClassPath = PropertiesFileUtils.getValue(propertyFile, "bootclasspath");
 			} else {
-				System.out.println("No puck properties file found : puck.properties not found");
+				System.out
+						.println("Using default settings, puck.properties not found (default rt.jar and empty classpath)");
 			}
 
 			ArrayList<String> listClassPath = new ArrayList<>();
@@ -83,11 +90,13 @@ public class PuckUtils {
 			scala.collection.immutable.List<String> fileFullPaths = FileHelper$.MODULE$.findAllFiles(
 					org.but4reuse.utils.files.FileUtils.getFile(uriRep), ".java", fileEmptyIterator.toSeq());
 			System.gc();
+
 			JavaJastAddDG2AST dg2ast = JavaJastAddDG2AST$.MODULE$.fromFiles(fileFullPaths, fileFullPaths,
 					iteratorClasspath.toList(), iteratorBootpath.toList(), tuple2emptyIterator.toList(), null,
 					PuckNoopLogger$.MODULE$);
 
 			File folderForOutput = org.but4reuse.utils.files.FileUtils.getFile(output);
+			folderForOutput.mkdirs();
 			CSVPrinter$.MODULE$.apply(dg2ast.initialGraph(), folderForOutput, ";");
 		}
 

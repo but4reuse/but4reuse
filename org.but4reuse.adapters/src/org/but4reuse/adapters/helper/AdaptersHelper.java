@@ -225,11 +225,14 @@ public class AdaptersHelper {
 				elements.addAll(getElements(a, adapter));
 			}
 		} else {
+			URI uri = null; 
 			try {
-				elements = adapter.adapt(new URI(artefact.getArtefactURI()), null);
+				uri = new URI(artefact.getArtefactURI());
 			} catch (Exception e) {
 				e.printStackTrace();
+				return elements;
 			}
+			elements = adapter.adapt(uri, new NullProgressMonitor());
 		}
 		return elements;
 	}

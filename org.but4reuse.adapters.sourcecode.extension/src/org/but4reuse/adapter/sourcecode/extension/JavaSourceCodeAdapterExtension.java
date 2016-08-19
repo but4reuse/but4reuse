@@ -18,6 +18,7 @@ import org.but4reuse.adapters.sourcecode.adapter.JavaLanguage;
 import org.but4reuse.puck.PuckUtils;
 import org.but4reuse.utils.files.CSVUtils;
 import org.but4reuse.utils.files.FileUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * 
@@ -34,54 +35,58 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * sources folder uri
 	 */
 	@Override
-	public void addMoreDependencies(List<IElement> elements, URI folderUri) {
-		File uriTempCSVfolder = null;
-		File uriFile = org.but4reuse.utils.files.FileUtils.getFile(folderUri);
-		if (uriFile.isFile()) {
-			uriTempCSVfolder = new File(uriFile.getParentFile(), "tempFolderForCSV");
-		} else {
-			uriTempCSVfolder = new File(uriFile, "tempFolderForCSV");
-		}
-		uriTempCSVfolder.mkdirs();
-		System.out.println(uriTempCSVfolder.toURI().toString());
-		PuckUtils.createCSV(folderUri, uriTempCSVfolder.toURI());
-
-		List<EdgeFromCSV> edgeMap = null;
-		List<NodeFromCSV> nodeMap = null;
-
-		for (File file : FileUtils.getAllFiles(uriTempCSVfolder)) {
-			if (file.getPath().contains("edges")) {
-				edgeMap = createEdgeMap(CSVUtils.importCSV(file.toURI()));
+	public void addMoreDependencies(List<IElement> elements, URI folderUri, IProgressMonitor monitor) {
+		monitor.subTask("Adding extra dependencies with the Java adapter extension");
+		try {
+			File uriTempCSVfolder = null;
+			File uriFile = org.but4reuse.utils.files.FileUtils.getFile(folderUri);
+			if (uriFile.isFile()) {
+				uriTempCSVfolder = new File(uriFile.getParentFile(), "tempFolderForCSV");
+			} else {
+				uriTempCSVfolder = new File(uriFile, "tempFolderForCSV");
 			}
-			if (file.getPath().contains("nodes")) {
-				nodeMap = createNodeMap(CSVUtils.importCSV(file.toURI()));
+			PuckUtils.createCSV(folderUri, uriTempCSVfolder.toURI());
+
+			List<EdgeFromCSV> edgeMap = null;
+			List<NodeFromCSV> nodeMap = null;
+
+			for (File file : FileUtils.getAllFiles(uriTempCSVfolder)) {
+				if (file.getPath().contains("edges")) {
+					edgeMap = createEdgeMap(CSVUtils.importCSV(file.toURI()));
+				}
+				if (file.getPath().contains("nodes")) {
+					nodeMap = createNodeMap(CSVUtils.importCSV(file.toURI()));
+				}
 			}
-		}
 
-		Map<String, ArrayList<String>> param = createParams(nodeMap);
-		edgeMap = addEdgeParamToList(edgeMap, param);
-		Map<String, String> definitionMethod = createDefinitionMethodMap(nodeMap, edgeMap);
-		Map<String, IElement> fstNodeMap = getFSTNodeElement(nodeMap, elements, definitionMethod);
+			Map<String, ArrayList<String>> param = createParams(nodeMap);
+			edgeMap = addEdgeParamToList(edgeMap, param);
+			Map<String, String> definitionMethod = createDefinitionMethodMap(nodeMap, edgeMap);
+			Map<String, IElement> fstNodeMap = getFSTNodeElement(nodeMap, elements, definitionMethod);
 
-		for (EdgeFromCSV currentEdge : edgeMap) {
-			if (currentEdge.getType().equals("Uses") || currentEdge.getType().equals("Isa")
-					|| currentEdge.getType().equals("Param")) {
-				IElement e = fstNodeMap.get(currentEdge.getId());
-				if (e != null) {
-					for (String target : currentEdge.getTarget()) {
-						IElement dep = fstNodeMap.get(target);
-						if (dep == null) {
-							System.out.println("Error not found");
-							System.out.println("target : " + target);
-						} else
-							((AbstractElement) e).addDependency(currentEdge.getType(), dep);
+			for (EdgeFromCSV currentEdge : edgeMap) {
+				if (currentEdge.getType().equals("Uses") || currentEdge.getType().equals("Isa")
+						|| currentEdge.getType().equals("Param")) {
+					IElement e = fstNodeMap.get(currentEdge.getId());
+					if (e != null) {
+						for (String target : currentEdge.getTarget()) {
+							IElement dep = fstNodeMap.get(target);
+							if (dep == null) {
+								System.out.println("Warnging while adding extra dependencies: Target not found: " + target);
+							} else
+								((AbstractElement) e).addDependency(currentEdge.getType(), dep);
+						}
 					}
 				}
 			}
-		}
 
-		if (uriTempCSVfolder != null) {
-			PuckUtils.supressCSV(uriTempCSVfolder.toURI());
+			if (uriTempCSVfolder != null) {
+				PuckUtils.supressCSV(uriTempCSVfolder.toURI());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} catch (Error e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -309,7 +314,6 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 	 * @return
 	 */
 	public List<EdgeFromCSV> addEdgeParamToList(List<EdgeFromCSV> list, Map<String, ArrayList<String>> param) {
-		System.out.println(list.size());
 		for (String id : param.keySet()) {
 			if (id != null) {
 				EdgeFromCSV edge = new EdgeFromCSV(id, "Param");
@@ -319,9 +323,7 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 				list.add(edge);
 			}
 		}
-		System.out.println(list.size());
 		return list;
-
 	}
 
 	/**

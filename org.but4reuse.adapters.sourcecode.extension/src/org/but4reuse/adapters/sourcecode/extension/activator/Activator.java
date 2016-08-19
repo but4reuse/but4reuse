@@ -1,4 +1,4 @@
-package org.but4reuse.adapter.sourcecode.extension;
+package org.but4reuse.adapters.sourcecode.extension.activator;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
