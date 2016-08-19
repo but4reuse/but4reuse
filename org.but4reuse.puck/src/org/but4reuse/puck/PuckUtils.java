@@ -27,7 +27,8 @@ public class PuckUtils {
 	public final static String PUCK_PROPERTIES_FILE_NAME = "puck.properties";
 
 	/**
-	 * Create the CSV files using puck on the uriRep and the files are created in the output URI
+	 * Create the CSV files using puck on the uriRep and the files are created
+	 * in the output URI
 	 * 
 	 * @param uriRep
 	 * @param output
@@ -66,8 +67,8 @@ public class PuckUtils {
 				}
 			}
 
-			scala.collection.Iterator<String> iteratorClasspath = JavaConversions$.MODULE$.asScalaIterator(listClassPath
-					.iterator());
+			scala.collection.Iterator<String> iteratorClasspath = JavaConversions$.MODULE$
+					.asScalaIterator(listClassPath.iterator());
 
 			ArrayList<String> listBootPath = new ArrayList<>();
 			if (bootClassPath != null) {
