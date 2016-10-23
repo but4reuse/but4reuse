@@ -60,19 +60,19 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 								InterruptedException {
 							try {
 
-								monitor.beginTask("Creating the Eclipse Benchmark", 1);
+								// number of artefacts and 2 for the graphs
+								monitor.beginTask("Creating the Eclipse Benchmark", artefactModel.getOwnedArtefacts().size() + 2);
 
 								List<ActualFeature> features = EclipseBenchmarkCreator.createBenchmark(artefactModel,
 										container, monitor);
 
-								Integer numberOfPlugins = null;
-
 								if (!monitor.isCanceled()) {
 									monitor.subTask("[Optional, you can Cancel now] Creating graphs. Plugins graph");
-									numberOfPlugins = EclipseBenchmarkCreator.createPluginsGraph(artefactModel,
+									EclipseBenchmarkCreator.createPluginsGraph(artefactModel,
 											container, monitor);
 								}
-
+								monitor.worked(1);
+								
 								if (!monitor.isCanceled()) {
 									monitor.subTask("[Optional, you can Cancel now] Creating graphs. Features graph");
 									// Save features graph
@@ -81,6 +81,7 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 											+ "/benchmark/actualFeatures.graphml"));
 									GraphUtils.saveGraph(graph, fileGraph);
 								}
+								monitor.worked(1);
 
 								// Preparing the message to display
 								HashSet<String> uniqueIds = new HashSet<String>();
@@ -101,10 +102,9 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 								String message = artefactModel.getOwnedArtefacts().size() + " packages.\n"
 										+ features.size() + " features found.\n" + nonUniquePlugins
 										+ " plugins are mapped to features.\n" + uniqueIds.size()
-										+ " unique plugins associated to features.\n" + numberOfPlugins
-										+ " unique plugins in all the Eclipse packages\n\n" + text.toString();
+										+ " unique plugins associated to features.\n\n";
 
-								dialog.scrollableText = message;
+								dialog.scrollableText = message + text.toString();
 
 								monitor.done();
 							} catch (Exception e) {

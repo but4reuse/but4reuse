@@ -77,6 +77,9 @@ public class SplotUtils {
 		splotToReturn.append("</feature_model>\n");
 
 		try {
+			if(!outputFile.getParentFile().exists()){
+				outputFile.getParentFile().mkdirs();
+			}
 			FileWriter fileWriter = new FileWriter(outputFile);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			bufferedWriter.write(splotToReturn.toString());

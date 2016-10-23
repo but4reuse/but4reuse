@@ -57,6 +57,7 @@ public class EclipseBenchmarkCreator {
 					p.getArtefacts().add(a);
 				}
 			}
+			monitor.worked(1);
 		}
 
 		// Sort list

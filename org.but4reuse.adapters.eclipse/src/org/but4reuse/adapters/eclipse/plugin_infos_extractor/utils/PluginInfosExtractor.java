@@ -88,6 +88,7 @@ public class PluginInfosExtractor {
 			Manifest manifest = new Manifest(ips);
 			fillPluginElementInfo(plugin, manifest);
 			ips.close();
+			manifest = null;
 			if (plugin.getName() != null && plugin.getName().contains("%")) {
 				File localizationFile = new File(f, currentLocalization + ".properties");
 				if (localizationFile.exists()) {
