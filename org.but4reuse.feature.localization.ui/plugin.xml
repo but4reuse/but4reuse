@@ -39,6 +39,18 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.calculatesimilarity.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.CalculateArtefactsSimilarityAction"
+               icon="icons/show.png"
+               id="org.but4reuse.feature.localization.ui.featurelist.calculatesimilarity.action"
+               label="Calculate artefacts similarity"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
