@@ -51,7 +51,7 @@
             category="org.but4reuse.page"
             class="org.but4reuse.featuremodel.synthesis.ui.preferences.FeatureModelSynthesisPreferencePage"
             id="org.but4reuse.featuremodel.synthesis.ui.page"
-            name="Feature model synteshis">
+            name="Feature model synthesis">
       </page>
    </extension>
       <extension
