@@ -250,12 +250,12 @@ public class WordCloudView extends ViewPart {
 		renameAll = new Button(c1, SWT.NONE);
 		renameAll.setLocation(5, 372);
 		renameAll.setSize(157, 25);
-		renameAll.setText("Rename All Auto");
+		renameAll.setText("Auto Rename All");
 
 		renameOne = new Button(c1, SWT.NONE);
 		renameOne.setLocation(5, 403);
 		renameOne.setSize(157, 25);
-		renameOne.setText("Rename Current Auto");
+		renameOne.setText("Auto Rename Current");
 
 		tabFolder = new TabFolder(parent, SWT.NONE);
 		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
@@ -309,7 +309,7 @@ public class WordCloudView extends ViewPart {
 
 		Button newWin = new Button(c3, SWT.NONE);
 		newWin.setBounds(171, 0, 150, 25);
-		newWin.setText("Show In New Window");
+		newWin.setText("Show in New Window");
 		newWin.addSelectionListener(new SelectionListener() {
 
 			@Override
