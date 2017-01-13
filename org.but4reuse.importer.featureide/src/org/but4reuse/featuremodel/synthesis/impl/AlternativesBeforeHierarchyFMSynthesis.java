@@ -24,8 +24,10 @@ import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.impl.Constraint;
+import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
+import de.ovgu.featureide.fm.core.job.monitor.NullMonitor;
 
 /**
  * Feature Model synthesis: First we identify alternative groups, then we create
@@ -50,7 +52,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		// Assumption is that there is no loops in the Requires constraints
 		// between blocks as it happens with the default block identification
 		// algorithm.
-		FeatureModel fm = new FeatureModel();
+		FeatureModel fm = new FeatureModel(DefaultFeatureModelFactory.ID);
 		// fm.getFeatures returns a collection with random ordering...
 		// let's keep our own list of features
 		List<IFeature> fmFeatures = new ArrayList<IFeature>();
@@ -256,7 +258,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 
 		// Remove redundant
 		FeatureModelAnalyzer analyzer = FeatureUtils.getAnalyser(fm);
-		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullProgressMonitor());
+		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullMonitor());
 		for (Entry<Object, Object> entry : o.entrySet()) {
 			if (entry.getKey() instanceof Constraint) {
 				if (entry.getValue() instanceof ConstraintAttribute) {

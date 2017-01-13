@@ -32,6 +32,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 import de.ovgu.featureide.fm.core.io.FeatureModelReaderIFileWrapper;
 import de.ovgu.featureide.fm.core.io.UnsupportedModelException;
@@ -76,7 +77,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 					e.printStackTrace();
 				}
 				IFile fmifile = (IFile) WorkbenchUtils.getIResourceFromURI(fmURI);
-				FeatureModel featureModel = new FeatureModel();
+				FeatureModel featureModel = new FeatureModel(DefaultFeatureModelFactory.ID);
 				FeatureModelReaderIFileWrapper modelReader = new FeatureModelReaderIFileWrapper(
 						new XmlFeatureModelReader(featureModel));
 				try {

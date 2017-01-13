@@ -16,6 +16,7 @@ import org.but4reuse.utils.files.FileUtils;
 
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 
@@ -29,7 +30,7 @@ public class FlatFMSynthesis implements IFeatureModelSynthesis {
 	@Override
 	public void createFeatureModel(URI outputContainer) {
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
-		FeatureModel fm = new FeatureModel();
+		FeatureModel fm = new FeatureModel(DefaultFeatureModelFactory.ID);
 
 		String rootName = AdaptedModelHelper.getName(adaptedModel);
 		if (rootName == null) {
