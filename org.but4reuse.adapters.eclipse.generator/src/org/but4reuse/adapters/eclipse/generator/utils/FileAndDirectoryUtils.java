@@ -1,13 +1,12 @@
 package org.but4reuse.adapters.eclipse.generator.utils;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import org.but4reuse.utils.files.FileUtils;
 
 /**
  * File and directory utils
@@ -36,70 +35,6 @@ public class FileAndDirectoryUtils {
 	}
 
 	/**
-	 * Return all the subdirectories files contains in a directory, null if the
-	 * parameter is null or not a directory.
-	 * 
-	 * @param dir
-	 *            : The directory
-	 */
-	public static File[] getAllSubDirectories(File dir) {
-		if (dir == null || dir.isFile())
-			return null;
-		return dir.listFiles(new FileFilter() {
-
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.isDirectory();
-			}
-		});
-	}
-
-	/**
-	 * Copy a directory to an output, with a filter.
-	 * 
-	 * @param dir
-	 *            : The directory to copy
-	 * @param output
-	 *            : The destination
-	 * @param filter
-	 *            : The FileFilter
-	 * @throws IOException
-	 *             if the copy is impossible
-	 */
-	public static void copyDirectoryWithFilters(File dir, String output, FileFilter filter) throws IOException {
-		try {
-			File newDir = new File(output + File.separator + dir.getName());
-			if (filter == null)
-				FileUtils.copyDirectory(dir, newDir);
-			else
-				FileUtils.copyDirectory(dir, newDir, filter);
-
-		} catch (IOException exc) {
-			throw new IOException("(Method copyDirectoryWithFilters) Copy impossible because : " + exc);
-		}
-	}
-
-	/**
-	 * Copy a directory to an output.
-	 * 
-	 * @param dir
-	 *            : The directory to copy
-	 * @param output
-	 *            : The destination
-	 * @throws IOException
-	 *             if the copy is impossible
-	 */
-	public static void copyDirectory(File dir, String output) throws IOException {
-		try {
-			File newDir = new File(output + File.separator + dir.getName());
-			FileUtils.copyDirectory(dir, newDir);
-
-		} catch (IOException exc) {
-			throw new IOException("(Method copyDirectory) Copy impossible because : " + exc);
-		}
-	}
-
-	/**
 	 * Copy all directories in parameter to an output.
 	 * 
 	 * @param output
@@ -109,16 +44,13 @@ public class FileAndDirectoryUtils {
 	 * @throws IOException
 	 *             if the copy is impossible
 	 */
-	public static void copyFilesAndDirectories(String output, File... files) throws IOException {
-		try {
-			for (File fic : files) {
-				if (fic.isDirectory())
-					copyDirectory(fic, output);
-				else
-					FileUtils.copyFileToDirectory(fic, new File(output));
+	public static void copyFilesAndDirectories(File output, File... files) throws IOException {
+		for (File fic : files) {
+			if (fic.isDirectory()) {
+				FileUtils.copyDirectoryToDirectory(fic, output);
+			} else {
+				FileUtils.copyFileToDirectory(fic, output);
 			}
-		} catch (IOException exc) {
-			throw new IOException("(Method copyFilesAndDirectories) Copy impossible because : " + exc);
 		}
 	}
 
@@ -134,14 +66,14 @@ public class FileAndDirectoryUtils {
 		if (file == null || !file.exists()) {
 			throw new IOException("(Method deleteFileIfExist) file is null or not exist.");
 		} else {
-			FileUtils.forceDelete(file);
+			file.delete();
 		}
 	}
 
 	/**
 	 * Return a random (based on the percentage parameter) list of File, from
-	 * one liste. For example, getSomeFiles( [2,8,9,1,13], 50 ) can return [8,
-	 * 1, 13].
+	 * one list. For example, getSomeFiles( [2,8,9,1,13], 50 ) can return [8, 1,
+	 * 13].
 	 * 
 	 * @param listFiles
 	 *            : The File list
@@ -153,8 +85,9 @@ public class FileAndDirectoryUtils {
 		if (listFiles != null || percentage == 100) {
 			List<File> res = new ArrayList<>();
 			for (File file : listFiles) {
-				if (Math.random() * 100 < percentage)
+				if (Math.random() * 100 < percentage) {
 					res.add(file);
+				}
 			}
 			return res.toArray(new File[res.size()]);
 		}

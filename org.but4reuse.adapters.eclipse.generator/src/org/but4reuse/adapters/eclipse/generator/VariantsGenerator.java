@@ -142,7 +142,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 		long elapsedTimePreparation = stopTimePreparation - startTime;
 		sendToAll("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
 
-		sendToAll("\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"");
+		sendToAll(
+				"\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"");
 
 		// Loop for each variant
 		for (int i = 1; i <= nbVariants; i++) {
@@ -214,13 +215,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				try {
 					// Create all dirs and copy features and plugins
 					File output_variantFile = new File(output_variant);
-					org.apache.commons.io.FileUtils.forceMkdir(output_variantFile);
+					output_variantFile.mkdirs();
 
 					for (File file_eclipse : eclipse.listFiles()) {
 						// Copy eclipse files & dirs (except features & plugins)
 						if (!file_eclipse.getName().equals(VariantsUtils.FEATURES)
 								&& !file_eclipse.getName().equals(VariantsUtils.PLUGINS)) {
-							FileAndDirectoryUtils.copyFilesAndDirectories(output_variant, file_eclipse);
+							FileAndDirectoryUtils.copyFilesAndDirectories(output_variantFile, file_eclipse);
 						}
 					}
 
@@ -229,16 +230,16 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					for (int j = 0; j < chosenFeatures.size(); j++) {
 						allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
 					}
-					FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator
-							+ VariantsUtils.FEATURES, allFilesFeatures);
+					FileAndDirectoryUtils.copyFilesAndDirectories(new File(output_variantFile, VariantsUtils.FEATURES),
+							allFilesFeatures);
 
 					// plugins copy
 					File[] allFilesPlugins = new File[pluginsList.size()];
 					for (int j = 0; j < pluginsList.size(); j++) {
 						allFilesPlugins[j] = new File(pluginsList.get(j).getAbsolutePath());
 					}
-					FileAndDirectoryUtils.copyFilesAndDirectories(output_variant + File.separator
-							+ VariantsUtils.PLUGINS, allFilesPlugins);
+					FileAndDirectoryUtils.copyFilesAndDirectories(new File(output_variantFile, VariantsUtils.PLUGINS),
+							allFilesPlugins);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

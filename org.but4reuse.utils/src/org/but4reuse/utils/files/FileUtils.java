@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.security.MessageDigest;
@@ -38,35 +39,6 @@ import org.osgi.framework.Bundle;
  * @author jabier.martinez
  */
 public class FileUtils {
-
-	/**
-	 * Try to return the expected icon for a file name
-	 * 
-	 * @param fileName
-	 * @return
-	 */
-	public static ImageDescriptor getIconFromFileName(String fileName) {
-		if (fileName != null && fileName.contains(".")) {
-			String extension = fileName.substring(fileName.lastIndexOf("."));
-			return PlatformUI.getWorkbench().getEditorRegistry().getImageDescriptor("random." + extension);
-		}
-		return null;
-	}
-
-	/**
-	 * Get an image from a plugin
-	 * 
-	 * @param pluginID
-	 * @param imagePath
-	 *            for example "/icons/myIcon.gif"
-	 * @return an imageDescriptor
-	 */
-	public static ImageDescriptor getImageFromPlugin(String pluginID, String imagePath) {
-		final Bundle pluginBundle = Platform.getBundle(pluginID);
-		final Path imageFilePath = new Path(imagePath);
-		final URL imageFileUrl = FileLocator.find(pluginBundle, imageFilePath, null);
-		return ImageDescriptor.createFromURL(imageFileUrl);
-	}
 
 	/**
 	 * Try to return a file related to a uri
@@ -203,11 +175,12 @@ public class FileUtils {
 	public static String getExtension(File file) {
 		return getExtension(file.getName());
 	}
-	
+
 	/**
 	 * Get file extension
 	 * 
-	 * @param file name
+	 * @param file
+	 *            name
 	 * @return extension or empty string
 	 */
 	public static String getExtension(String fileName) {
@@ -357,23 +330,64 @@ public class FileUtils {
 	}
 
 	/**
-	 * Copy file
+	 * Copy a file (not directory) to an output directory. Name is kept.
+	 * 
+	 * @param sourceFile
+	 * @param outputDirectory
+	 */
+	public static void copyFileToDirectory(File sourceFile, File outputDirectory) {
+		File destinationFile = new File(outputDirectory, sourceFile.getName());
+		copyFile(sourceFile, destinationFile);
+	}
+
+	/**
+	 * Copy file content (not directory) inside another file. It will replace
+	 * the content if it already exists.
 	 * 
 	 * @param sourceFile
 	 * @param destinationFile
 	 */
 	public static void copyFile(File sourceFile, File destinationFile) {
-		// TODO Improve this! copy it correctly
+		destinationFile.mkdirs();
 		try {
-			writeFile(destinationFile, FileUtils.getStringOfFile(sourceFile));
-		} catch (Exception e) {
-			e.printStackTrace();
+			Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 	}
 
 	/**
-	 * Get all files (not folders) inside one folder. Or the file itself if the
-	 * input is a file
+	 * Copy a directory and all its content to an output directory. Name is
+	 * kept.
+	 * 
+	 * @param dir
+	 * @param outputDirectory
+	 */
+	public static void copyDirectoryToDirectory(File dir, File outputDirectory) {
+		File newDir = new File(outputDirectory, dir.getName());
+		newDir.mkdirs();
+		FileUtils.copyDirectory(dir, newDir);
+	}
+
+	/**
+	 * Copy a directory and all its content inside another directory
+	 * 
+	 * @param dir
+	 * @param newDir
+	 */
+	public static void copyDirectory(File dir, File newDir) {
+		for (File file : dir.listFiles()) {
+			if (file.isDirectory()) {
+				copyDirectoryToDirectory(file, newDir);
+			} else {
+				copyFileToDirectory(file, newDir);
+			}
+		}
+	}
+
+	/**
+	 * Get all files recursively (not folders) inside one folder. Or the file
+	 * itself if the input is a file
 	 * 
 	 * @param dir
 	 * @return list of files
@@ -396,7 +410,35 @@ public class FileUtils {
 			getAllFiles(files, file);
 		}
 		return files;
-	}  
+	}
 
+	/**
+	 * Try to return the expected icon for a file name
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public static ImageDescriptor getIconFromFileName(String fileName) {
+		if (fileName != null && fileName.contains(".")) {
+			String extension = fileName.substring(fileName.lastIndexOf("."));
+			return PlatformUI.getWorkbench().getEditorRegistry().getImageDescriptor("random." + extension);
+		}
+		return null;
+	}
+
+	/**
+	 * Get an image from a plugin
+	 * 
+	 * @param pluginID
+	 * @param imagePath
+	 *            for example "/icons/myIcon.gif"
+	 * @return an imageDescriptor
+	 */
+	public static ImageDescriptor getImageFromPlugin(String pluginID, String imagePath) {
+		final Bundle pluginBundle = Platform.getBundle(pluginID);
+		final Path imageFilePath = new Path(imagePath);
+		final URL imageFileUrl = FileLocator.find(pluginBundle, imageFilePath, null);
+		return ImageDescriptor.createFromURL(imageFileUrl);
+	}
 
 }

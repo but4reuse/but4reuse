@@ -51,13 +51,10 @@ public class FeatureInfosExtractor {
 			if (description.contains("%")) {
 				description = description.replaceAll("\\s+", "");
 				String key = PropertiesFileUtils.getKey(description);
-				description = PropertiesFileUtils
-						.getValue(new File(xmlFile.getParentFile(), "feature.properties"), key);
+				description = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),
+						key);
 			}
 			actualFeature.setDescription(description);
-			if (description.contains("%")) {
-
-			}
 
 			// Get the list of plugins of the feature
 			List<String> plugins = new ArrayList<String>();
