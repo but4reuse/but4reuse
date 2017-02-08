@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.but4reuse.featuremodel.synthesis" name="Feature Model Creators" schema="schema/org.but4reuse.featuremodel.synthesis.fmcreators.exsd"/>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.extension.featureid.import"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.featuremodel.synthesis.ui.ImportFeatureIDEAction"
+               icon="IMG_TOOL_UP"
+               id="org.but4reuse.extension.featureid.import.action"
+               label="Import from Feature IDE"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.viewActions">
+<viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.featuremodel.synthesis.ui.CreateFeatureModelAction"
+               icon="icons/createFM.png"
+               id="org.but4reuse.extension.featureide.createfeatuermodel"
+               label="Create Feature Model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.exportation.featureide.viewContribution2"
+            targetID="org.eclipse.contribution.visualiser.views.Visualiser">
+         <action
+               class="org.but4reuse.featuremodel.synthesis.ui.CreateConfigurationsAction"
+               icon="icons/createConfigurations.png"
+               id="org.but4reuse.analysis.constructionprimitives.action2"
+               label="Create Configurations"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+   </extension>
+      <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.featuremodel.synthesis.ui.preferences.FeatureModelSynthesisPreferencePage"
+            id="org.but4reuse.featuremodel.synthesis.ui.page"
+            name="Feature model synthesis">
+      </page>
+   </extension>
+      <extension
+            point="org.eclipse.core.runtime.preferences">
+         <initializer
+               class="org.but4reuse.featuremodel.synthesis.ui.preferences.PreferenceInitializer">
+         </initializer>
+      </extension>
+   <extension
+         point="org.but4reuse.featuremodel.synthesis">
+      <fmsynthesis
+            class="org.but4reuse.featuremodel.synthesis.impl.FlatFMSynthesis"
+            description="A flat list of features and a set of cross tree constraints"
+            name="Flat Feature Model">
+      </fmsynthesis>
+      <fmsynthesis
+            class="org.but4reuse.featuremodel.synthesis.impl.AlternativesBeforeHierarchyFMSynthesis"
+            description="Create alternative groups with the excludes constraints and then the hierarchy with the requires constraints"
+            name="Alternatives Before Hierarchy">
+      </fmsynthesis>
+   </extension>
+</plugin>

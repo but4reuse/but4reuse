@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.visualisation">
+      <visualisation
+            class="org.but4reuse.feature.constraints.ui.visualisation.ConstraintsTextualVisualisation"
+            name="Constraints Textual Visualisation">
+      </visualisation>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.but4reuse.views.category"
+            class="org.but4reuse.feature.constraints.ui.visualisation.ConstraintsTextualView"
+            icon="icons/constraints.gif"
+            id="org.but4reuse.feature.constraints.ui.view"
+            name="Constraints Discovery"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.feature.constraints.ui.preferences.ConstraintsDiscoveryPreferencePage"
+            id="org.but4reuse.constraints.discovery.ui.page"
+            name="Constraints discovery">
+      </page>
+   </extension>
+</plugin>

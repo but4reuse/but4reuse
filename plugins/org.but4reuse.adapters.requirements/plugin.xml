@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.requirements.ReqAdapter"
+            icon="icons/requirements.png"
+            id="requirements"
+            name="Requirements">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.requirements.ReqElement"></element>
+         </elements>
+      </adapter>
+   </extension>
+
+</plugin>

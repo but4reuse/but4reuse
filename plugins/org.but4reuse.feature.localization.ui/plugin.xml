@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.FeatureLocationAction"
+               icon="icons/FeatureList.gif"
+               id="org.but4reuse.feature.localization.ui.action"
+               label="Feature Location"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+            <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.preprocessing.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.FeatureListPreprocessingAction"
+               icon="icons/FeatureList.gif"
+               id="org.but4reuse.feature.localization.ui.featurelist.preprocessing.action"
+               label="FeatureList Preprocessing"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+                  <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.showartefacts.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.ShowFeatureArtefactsMatrixAction"
+               icon="icons/show.png"
+               id="org.but4reuse.feature.localization.ui.featurelist.showartefacts.action"
+               label="Show features artefacts matrix"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.but4reuse.feature.localization.ui.featurelist.calculatesimilarity.action"
+            objectClass="org.but4reuse.featurelist.FeatureList">
+         <action
+               class="org.but4reuse.feature.location.ui.actions.CalculateArtefactsSimilarityAction"
+               icon="icons/show.png"
+               id="org.but4reuse.feature.localization.ui.featurelist.calculatesimilarity.action"
+               label="Calculate artefacts similarity"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.page"
+            class="org.but4reuse.feature.location.ui.preferences.FeatureLocationPreferencePage"
+            id="org.but4reuse.feature.location.ui.page"
+            name="Feature Location">
+      </page>
+   </extension>
+
+</plugin>
