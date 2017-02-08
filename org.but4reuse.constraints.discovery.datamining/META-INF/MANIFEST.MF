@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Data mining
+Bundle-SymbolicName: org.but4reuse.constraints.discovery.datamining;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.constraints.discovery.datamining.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.feature.constraints,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.utils,
+ org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Export-Package: org.but4reuse.constraints.discovery.datamining,
+ org.but4reuse.constraints.discovery.datamining.actions
+Bundle-ClassPath: .
