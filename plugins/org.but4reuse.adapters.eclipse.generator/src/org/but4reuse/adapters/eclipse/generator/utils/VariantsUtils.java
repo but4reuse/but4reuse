@@ -23,6 +23,7 @@ public class VariantsUtils {
 
 	public static final String INPUT_TEXT = "Input path of eclipse package";
 	public static final String OUTPUT_TEXT = "Output path for variants";
+	public static final String GENERATOR_TEXT = "Generator";
 	public static final String VARIANTS_NUMBER_TEXT = "Number of variants";
 	public static final String TIME_NUMBER_TEXT = "Time (seconds) for calculation (0 for Random)";
 	public static final String RANDOM_NUMBER_TEXT = "Value of random selector (between 0 and 100%)";

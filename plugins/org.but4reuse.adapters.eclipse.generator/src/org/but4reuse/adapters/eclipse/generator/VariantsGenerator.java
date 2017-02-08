@@ -189,7 +189,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 
 				} // end of iterate through allFeatures
 
-				for (ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()) {
+				for (ActualFeature one_manda : depAnalyzer.getMandatoryFeaturesForThisInput()) {
 					if (!chosenFeatures.contains(one_manda))
 						chosenFeatures.add(one_manda);
 				}

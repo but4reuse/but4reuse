@@ -163,7 +163,7 @@ public class DependencyAnalyzer {
 		return allPluginsWithoutFeatureDependencies;
 	}
 
-	public List<ActualFeature> getFeaturesMandatoriesByInput() {
+	public List<ActualFeature> getMandatoryFeaturesForThisInput() {
 		return allMandatoryFeaturesForThisInput;
 	}
 

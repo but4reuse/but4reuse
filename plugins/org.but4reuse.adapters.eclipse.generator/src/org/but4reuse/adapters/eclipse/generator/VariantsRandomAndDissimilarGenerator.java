@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.eclipse.generator;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +21,22 @@ import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.generator.utils.SplotUtils;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import pledge.core.ModelPLEDGE;
-import pledge.core.Product;
-import pledge.core.ModelPLEDGE.FeatureModelFormat;
-
 /**
- * Variants generation using PLEDGE
+ * Variants generation using Random selection with option to create dissimilar
+ * variants
  * 
  * @author Julien Margarido
  * @author Felix Lima Gorito
  * @author jabier.martinez
  */
-public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
+public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator, ISender {
 
-	private static final String SIMILARITY_GREEDY = "SimilarityGreedy";
 	private String input;
 	private String output;
+	private String generator;
 	private int nbVariants;
 	private int time;
 	private boolean keepOnlyMetadata;
@@ -47,10 +46,11 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 	List<IListener> listeners;
 	EclipseAdapter adapter;
 
-	public VariantsPledgeGenerator(String input, String output, int nbVariants, int time, boolean keepOnlyMetadata,
-			boolean noOutputOnlyStatistics) {
+	public VariantsRandomAndDissimilarGenerator(String input, String output, String generator, int nbVariants, int time,
+			boolean keepOnlyMetadata, boolean noOutputOnlyStatistics) {
 		this.input = input;
 		this.output = output;
+		this.generator = generator;
 		this.nbVariants = nbVariants;
 		this.time = time;
 		this.keepOnlyMetadata = keepOnlyMetadata;
@@ -64,6 +64,7 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		sendToAll("Starting generation with :");
 		sendToAll("-input = " + input);
 		sendToAll("-output = " + output);
+		sendToAll("-generator = " + generator);
 		sendToAll("-variants number = " + nbVariants);
 		sendToAll("-time = " + time);
 		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata);
@@ -130,39 +131,42 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 		sendToAll("Total features number in the input = " + allFeatures.size());
 		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
 
-		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
-
 		File outputFile = new File(output + File.separator + "SPLOTFeatureModel.xml");
 		SplotUtils.exportToSPLOT(outputFile, allFeatures);
 
-		ModelPLEDGE mp = new ModelPLEDGE();
+		File generatedConfigsFile = new File(output + File.separator + "generatedConfigs.txt");
+
+		ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", generator, "generate_products", "-fm",
+				outputFile.getAbsolutePath(), "-nbProds", Integer.toString(nbVariants), "-timeAllowedMS",
+				Integer.toString(time * 1000), "-o", generatedConfigsFile.getAbsolutePath());
 
 		try {
-			mp.loadFeatureModel(outputFile.getAbsolutePath(), FeatureModelFormat.SPLOT);
-		} catch (Exception e1) {
-			sendToAll("Error in generator : Error loading the FeatureModel.");
-			e1.printStackTrace();
-			return;
-		}
-
-		mp.setNbProductsToGenerate(nbVariants);
-		mp.setGenerationTimeMSAllowed(time * 1000L);
-		mp.SetPrioritizationTechniqueByName(SIMILARITY_GREEDY);
-		try {
-			mp.generateProducts();
-		} catch (Exception e1) {
-			sendToAll("Error in generator : Error generating the product.");
-			e1.printStackTrace();
-			return;
+			Process p = processBuilder.start();
+			while (p.isAlive()) {
+				// loop
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
 		sendToAll("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
 
-		sendToAll("\"Variant\";\"Name\";\"Selected features\";\"Plugins\";\"Milliseconds\"");
+		sendToAll("\"Variant\";\"Name\";\"Selectedfeatures\";\"Plugins\";\"Milliseconds\"");
+
+		List<String> generatedConfigs = FileUtils.getLinesOfFile(generatedConfigsFile);
+		// remove headers and empty line
+		List<String> linesToRemove = new ArrayList<String>();
+		for (String line : generatedConfigs) {
+			if (line.contains("->") || line.isEmpty()) {
+				linesToRemove.add(line);
+			}
+		}
+		generatedConfigs.removeAll(linesToRemove);
 
 		// Variants loop
+		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
 		for (int i = 1; i <= nbVariants; i++) {
 			long startTimeThisVariant = System.currentTimeMillis();
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
@@ -170,24 +174,31 @@ public class VariantsPledgeGenerator implements IVariantsGenerator, ISender {
 			List<PluginElement> pluginsList = new ArrayList<PluginElement>();
 			List<ActualFeature> chosenFeatures = new ArrayList<ActualFeature>();
 
-			Product p = mp.getProducts().get(i - 1);
-
-			// A product is an array of integers. 2 means that feature 2 is
+			// A config is an array of integers. 2 means that feature 2 is
 			// selected, -4 means that feature 4 is not selected
-			for (Integer j : p) {
+			String c = generatedConfigs.get(i - 1);
+			String[] numbers = c.split(";");
+
+			for (String x : numbers) {
+				int j = Integer.parseInt(x);
+				// positive number means that it was selected
 				if (j > 0) {
-					String id = mp.getFeaturesList().get(j - 1);
-					id = SplotUtils.reverseFixIdForNonAcceptedChars(id);
-					for (ActualFeature oneFeat : allFeatures) {
-						if (oneFeat.getId().equals(id)) {
-							chosenFeatures.add(oneFeat);
-							break;
+					// the file creates a fake root and it starts from 1
+					j = j - 2;
+					// do not consider the fake root (1st feature)
+					if (j != -1) {
+						String id = allFeatures.get(j).getId();
+						for (ActualFeature oneFeat : allFeatures) {
+							if (oneFeat.getId().equals(id)) {
+								chosenFeatures.add(oneFeat);
+								break;
+							}
 						}
 					}
 				}
 			} // end of iterate through allFeatures
 
-			for (ActualFeature one_manda : depAnalyzer.getFeaturesMandatoriesByInput()) {
+			for (ActualFeature one_manda : depAnalyzer.getMandatoryFeaturesForThisInput()) {
 				if (!chosenFeatures.contains(one_manda)) {
 					chosenFeatures.add(one_manda);
 				}

@@ -3,8 +3,8 @@ package org.but4reuse.adapters.eclipse.generator.actions;
 import java.io.File;
 import java.io.IOException;
 
-import org.but4reuse.adapters.eclipse.generator.VariantsPledgeGenerator;
-import org.but4reuse.adapters.eclipse.generator.dialogs.PledgeDialog;
+import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
+import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
@@ -25,70 +25,68 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Julien Margarido
  * @author Felix Lima Gorito
  */
-public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActionDelegate {
+public class CreateVariantsAction implements IListener, IObjectActionDelegate {
 
 	private ISelection selection;
-	private CreateEclipseVariantsPledgeAction context;
+	private CreateVariantsAction context;
 
-	public CreateEclipseVariantsPledgeAction() {
+	public CreateVariantsAction() {
 		super();
 		this.context = this;
 	}
 
 	private SummaryDialog summaryDialog;
-	private PledgeDialog pledgeDialog;
+	private ParametersDialog paramDialog;
 
 	public void run(IAction action) {
 
-		if (pledgeDialog == null) {
-			// Not create a new dialog if it's a "re-open" (parameters not
-			// good).
-			pledgeDialog = new PledgeDialog(Display.getCurrent().getActiveShell());
+		if (paramDialog == null) {
+			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
 		}
 
-		if (pledgeDialog.open() != Window.OK) {
+		if (paramDialog.open() != Window.OK) {
 			// Open the dialog and stop execution while a button is not pressed
-			pledgeDialog = null;
+			paramDialog = null;
 			return;
 		}
 
 		// Settings checking
-		int time = 0;
+		int valRand = 0;
 		int nbVariants = 0;
 		boolean isAllOK = true;
 
-		if (!new File(pledgeDialog.getInputPath()).exists()) {
-			pledgeDialog.setInputState(false);
+		if (!new File(paramDialog.getInputPath()).exists()) {
+			paramDialog.setInputState(false);
 			isAllOK = false;
 		} else {
-			pledgeDialog.setInputState(true);
+			paramDialog.setInputState(true);
 		}
 
 		try {
-			time = Integer.parseInt(pledgeDialog.getTime());
-			if ((time < 0)) {
+			valRand = Integer.parseInt(paramDialog.getRandomSelector());
+			if ((valRand < 0 || valRand > 100)) {
 				isAllOK = false;
-				pledgeDialog.setTimeState(false);
+				paramDialog.setRandomSelectorState(false);
 			} else {
-				pledgeDialog.setTimeState(true);
+				paramDialog.setRandomSelectorState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			pledgeDialog.setTimeState(false);
+			paramDialog.setRandomSelectorState(false);
 			e.printStackTrace();
 		}
 
 		try {
-			nbVariants = Integer.parseInt(pledgeDialog.getVariantsNumber());
+			nbVariants = Integer.parseInt(paramDialog.getVariantsNumber());
 			if (nbVariants <= 0) {
 				isAllOK = false;
-				pledgeDialog.setVariantsNumberState(false);
+				paramDialog.setVariantsNumberState(false);
 			} else {
-				pledgeDialog.setVariantsNumberState(true);
+				paramDialog.setVariantsNumberState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			pledgeDialog.setVariantsNumberState(false);
+			paramDialog.setVariantsNumberState(false);
 			e.printStackTrace();
 		}
 
@@ -98,18 +96,18 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 		}
 
 		// Start the generator process
-		// final for the thread and because nbVariants and time can't be
+		// final for the thread and because nbVariants and valRand can't be
 		// final
 		final int nbVariantsForThread = nbVariants;
-		final int timeForThread = time;
-		final boolean keepOnlyMetadata = pledgeDialog.isKeepOnlyMetadata();
-		final boolean noOutputOnlyStatistics = pledgeDialog.isNoOutputOnlyStatistics();
+		final int valRandForThread = valRand;
+		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
+		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				VariantsPledgeGenerator varGen = new VariantsPledgeGenerator(pledgeDialog.getInputPath(),
-						pledgeDialog.getOutputPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
+				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
+						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
 						noOutputOnlyStatistics);
 				varGen.addListener(context);
 				// Long time to execute
@@ -140,7 +138,7 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 		}
 
 		// Update the artefact model
-		if (!pledgeDialog.isNoOutputOnlyStatistics()) {
+		if (!paramDialog.isNoOutputOnlyStatistics()) {
 			// get the selection
 			ArtefactModel artefactModel = null;
 			if (selection instanceof IStructuredSelection) {
@@ -149,22 +147,20 @@ public class CreateEclipseVariantsPledgeAction implements IListener, IObjectActi
 				// create artefact and set some attributes
 				for (int i = 1; i <= nbVariantsForThread; i++) {
 					Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
-					String varName = VariantsUtils.VARIANT + "_" + i;
-					String output_variant = pledgeDialog.getOutputPath() + File.separator + varName;
-					a.setName(varName);
+					String variantName = VariantsUtils.VARIANT + "_" + i;
+					String output_variant = paramDialog.getOutputPath() + File.separator + variantName;
+					a.setName(variantName);
 					a.setArtefactURI(new File(output_variant).toURI().toString());
 					// add to the artefact model
 					artefactModel.getOwnedArtefacts().add(a);
 				}
 			}
-
 			try {
 				artefactModel.eResource().save(null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	@Override

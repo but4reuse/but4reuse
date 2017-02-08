@@ -3,8 +3,8 @@ package org.but4reuse.adapters.eclipse.generator.actions;
 import java.io.File;
 import java.io.IOException;
 
-import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
-import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
+import org.but4reuse.adapters.eclipse.generator.VariantsRandomAndDissimilarGenerator;
+import org.but4reuse.adapters.eclipse.generator.dialogs.RandomAndDissimilarDialog;
 import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
@@ -25,68 +25,70 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Julien Margarido
  * @author Felix Lima Gorito
  */
-public class CreateEclipseVariantsAction implements IListener, IObjectActionDelegate {
+public class CreateVariantsRandomAndDissimilarAction implements IListener, IObjectActionDelegate {
 
 	private ISelection selection;
-	private CreateEclipseVariantsAction context;
+	private CreateVariantsRandomAndDissimilarAction context;
 
-	public CreateEclipseVariantsAction() {
+	public CreateVariantsRandomAndDissimilarAction() {
 		super();
 		this.context = this;
 	}
 
 	private SummaryDialog summaryDialog;
-	private ParametersDialog paramDialog;
+	private RandomAndDissimilarDialog dialog;
 
 	public void run(IAction action) {
 
-		if (paramDialog == null) {
-			paramDialog = new ParametersDialog(Display.getCurrent().getActiveShell());
+		if (dialog == null) {
+			// Not create a new dialog if it's a "re-open" (parameters not
+			// good).
+			dialog = new RandomAndDissimilarDialog(Display.getCurrent().getActiveShell());
 		}
 
-		if (paramDialog.open() != Window.OK) {
+		if (dialog.open() != Window.OK) {
 			// Open the dialog and stop execution while a button is not pressed
-			paramDialog = null;
+			dialog = null;
 			return;
 		}
 
 		// Settings checking
-		int valRand = 0;
+		int time = 0;
 		int nbVariants = 0;
 		boolean isAllOK = true;
 
-		if (!new File(paramDialog.getInputPath()).exists()) {
-			paramDialog.setInputState(false);
+		if (!new File(dialog.getInputPath()).exists()) {
+			dialog.setInputState(false);
 			isAllOK = false;
 		} else {
-			paramDialog.setInputState(true);
+			dialog.setInputState(true);
 		}
 
 		try {
-			valRand = Integer.parseInt(paramDialog.getRandomSelector());
-			if ((valRand < 0 || valRand > 100)) {
+			time = Integer.parseInt(dialog.getTime());
+			if ((time < 0)) {
 				isAllOK = false;
-				paramDialog.setRandomSelectorState(false);
+				dialog.setTimeState(false);
 			} else {
-				paramDialog.setRandomSelectorState(true);
+				dialog.setTimeState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			paramDialog.setRandomSelectorState(false);
+			dialog.setTimeState(false);
 			e.printStackTrace();
 		}
 
 		try {
-			nbVariants = Integer.parseInt(paramDialog.getVariantsNumber());
+			nbVariants = Integer.parseInt(dialog.getVariantsNumber());
 			if (nbVariants <= 0) {
 				isAllOK = false;
-				paramDialog.setVariantsNumberState(false);
+				dialog.setVariantsNumberState(false);
 			} else {
-				paramDialog.setVariantsNumberState(true);
+				dialog.setVariantsNumberState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			paramDialog.setVariantsNumberState(false);
+			dialog.setVariantsNumberState(false);
 			e.printStackTrace();
 		}
 
@@ -96,18 +98,18 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		}
 
 		// Start the generator process
-		// final for the thread and because nbVariants and valRand can't be
+		// final for the thread and because nbVariants and time can't be
 		// final
 		final int nbVariantsForThread = nbVariants;
-		final int valRandForThread = valRand;
-		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
-		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
+		final int timeForThread = time;
+		final boolean keepOnlyMetadata = dialog.isKeepOnlyMetadata();
+		final boolean noOutputOnlyStatistics = dialog.isNoOutputOnlyStatistics();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
-						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
+				VariantsRandomAndDissimilarGenerator varGen = new VariantsRandomAndDissimilarGenerator(dialog.getInputPath(),
+						dialog.getOutputPath(), dialog.getGeneratorPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
 						noOutputOnlyStatistics);
 				varGen.addListener(context);
 				// Long time to execute
@@ -138,7 +140,7 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 		}
 
 		// Update the artefact model
-		if (!paramDialog.isNoOutputOnlyStatistics()) {
+		if (!dialog.isNoOutputOnlyStatistics()) {
 			// get the selection
 			ArtefactModel artefactModel = null;
 			if (selection instanceof IStructuredSelection) {
@@ -147,20 +149,22 @@ public class CreateEclipseVariantsAction implements IListener, IObjectActionDele
 				// create artefact and set some attributes
 				for (int i = 1; i <= nbVariantsForThread; i++) {
 					Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
-					String variantName = VariantsUtils.VARIANT + "_" + i;
-					String output_variant = paramDialog.getOutputPath() + File.separator + variantName;
-					a.setName(variantName);
+					String varName = VariantsUtils.VARIANT + "_" + i;
+					String output_variant = dialog.getOutputPath() + File.separator + varName;
+					a.setName(varName);
 					a.setArtefactURI(new File(output_variant).toURI().toString());
 					// add to the artefact model
 					artefactModel.getOwnedArtefacts().add(a);
 				}
 			}
+
 			try {
 				artefactModel.eResource().save(null);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	@Override

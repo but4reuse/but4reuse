@@ -22,10 +22,11 @@ import org.eclipse.swt.widgets.Text;
  * @author Julien Margarido
  * @author Felix Lima Gorito
  */
-public class PledgeDialog extends Dialog {
+public class RandomAndDissimilarDialog extends Dialog {
 
 	private Text input;
 	private Text output;
+	private Text generator;
 	private Text variantsNumber;
 	private Text time;
 	private Button keepOnlyMetadataButton;
@@ -43,6 +44,7 @@ public class PledgeDialog extends Dialog {
 
 	private String inputContent = "C:\\eclipse";
 	private String outputContent = "C:\\outputFolder";
+	private String generatorLocationContent = "C:\\dist\\PLEDGE.jar";
 	private String variantsNumberContent = "3";
 	private String timeContent = "0";
 	private Boolean keepOnlyMetadata = true;
@@ -50,7 +52,7 @@ public class PledgeDialog extends Dialog {
 
 	private Color red;
 
-	public PledgeDialog(Shell parentShell) {
+	public RandomAndDissimilarDialog(Shell parentShell) {
 		super(parentShell);
 		red = parentShell.getDisplay().getSystemColor(SWT.COLOR_RED);
 	}
@@ -66,6 +68,7 @@ public class PledgeDialog extends Dialog {
 
 		addInput(container);
 		addOutput(container);
+		addGenerator(container);
 		addTime(container);
 		addVariantsNumber(container);
 		addKeepOnlyMetadataOption(container);
@@ -150,6 +153,15 @@ public class PledgeDialog extends Dialog {
 			}
 		});
 	}
+	
+	private void addGenerator(final Composite container) {
+		Label gen = new Label(container, SWT.WRAP);
+		gen.setText(VariantsUtils.GENERATOR_TEXT);
+		generator = new Text(container, SWT.BORDER);
+		generator.setText(generatorLocationContent);
+		generator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		new Label(container, SWT.NONE).setVisible(false);
+	}
 
 	private void addVariantsNumber(Composite container) {
 		lblVariantsNumber = new Label(container, SWT.WRAP);
@@ -204,6 +216,7 @@ public class PledgeDialog extends Dialog {
 		outputContent = output.getText();
 		timeContent = time.getText();
 		variantsNumberContent = variantsNumber.getText();
+		generatorLocationContent = generator.getText();
 		super.okPressed();
 	}
 
@@ -213,6 +226,10 @@ public class PledgeDialog extends Dialog {
 
 	public String getOutputPath() {
 		return outputContent;
+	}
+	
+	public String getGeneratorPath() {
+		return generatorLocationContent;
 	}
 
 	public String getVariantsNumber() {

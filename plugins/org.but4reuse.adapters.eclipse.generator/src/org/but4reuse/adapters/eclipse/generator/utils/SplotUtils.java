@@ -12,7 +12,7 @@ import java.util.Map;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 
 /**
- * SPLOT format utils, needed for the PLEDGE library
+ * SPLOT format utils
  * 
  * @author Julien Margarido
  * @author Felix Lima Gorito

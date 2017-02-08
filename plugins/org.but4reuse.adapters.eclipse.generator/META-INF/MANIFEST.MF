@@ -12,8 +12,3 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/org.sat4j.core_2_0_5.jar,
- lib/org.sat4j.core_trunk.jar,
- lib/PLEDGE.jar,
- lib/splar.jar
