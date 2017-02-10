@@ -2,7 +2,7 @@ package org.but4reuse.wordclouds.filters;
 
 import java.util.List;
 
-import org.but4reuse.utils.nlp.similarity.WS4JSynonym;
+import org.but4reuse.utils.nlp.similarity.Synonyms;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -21,8 +21,8 @@ public class SynonymsFilter implements IWordsProcessing {
 					String word1 = words.get(i);
 					String word2 = words.get(j);
 					if (!word1.equals(word2)) {
-						double similarity = WS4JSynonym.getSimilaritySynonym(word1, word2);
-						if (similarity == 1) {
+						boolean synonym = Synonyms.isSynonym(word1, word2);
+						if (synonym) {
 							// replace with the smallest
 							if (word1.compareTo(word2) > 0) {
 								words.set(i, words.get(j));

@@ -2,7 +2,7 @@ package org.but4reuse.wordclouds.filters;
 
 import java.util.List;
 
-import org.but4reuse.utils.nlp.UselessWordsRemover;
+import org.but4reuse.utils.nlp.POSUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -15,7 +15,7 @@ public class PartOfSpeechTagsFilter implements IWordsProcessing {
 
 	@Override
 	public List<String> processWords(List<String> words, IProgressMonitor monitor) {
-		UselessWordsRemover.removeUselessWords(words);
+		POSUtils.removeUnnecessaryWords(words);
 		return words;
 	}
 

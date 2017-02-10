@@ -2,8 +2,7 @@ package org.but4reuse.adapters.requirements;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
-import org.but4reuse.utils.nlp.similarity.WS4JComparer;
-
+import org.but4reuse.utils.nlp.similarity.TextSimilarity;
 
 public class ReqElement extends AbstractElement {
 
@@ -14,7 +13,7 @@ public class ReqElement extends AbstractElement {
 		if(anotherElement instanceof ReqElement){
 			String anotherDescription = ((ReqElement)anotherElement).getDescription();
 			// integrating Natural Language Processing techniques
-			return WS4JComparer.getSimilarityWUP(description, anotherDescription);
+			return TextSimilarity.getSimilarityWUP(description, anotherDescription);
 		}
 		return 0;
 	}

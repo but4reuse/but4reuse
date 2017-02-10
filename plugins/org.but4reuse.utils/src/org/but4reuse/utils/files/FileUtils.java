@@ -435,10 +435,41 @@ public class FileUtils {
 	 * @return an imageDescriptor
 	 */
 	public static ImageDescriptor getImageFromPlugin(String pluginID, String imagePath) {
-		final Bundle pluginBundle = Platform.getBundle(pluginID);
-		final Path imageFilePath = new Path(imagePath);
-		final URL imageFileUrl = FileLocator.find(pluginBundle, imageFilePath, null);
+		final URL imageFileUrl = getFileURLFromPlugin(pluginID, imagePath);
 		return ImageDescriptor.createFromURL(imageFileUrl);
+	}
+
+	/**
+	 * Get file URL from a plugin
+	 * 
+	 * @param pluginID
+	 * @param path
+	 *            for example "/icons/myFile"
+	 * @return the url of the file
+	 */
+	public static URL getFileURLFromPlugin(String pluginID, String path) {
+		final Bundle pluginBundle = Platform.getBundle(pluginID);
+		final Path filePath = new Path(path);
+		return FileLocator.find(pluginBundle, filePath, null);
+	}
+
+	/**
+	 * Get file URL from a plugin with the file protocol. Use only if you are
+	 * sure that the plugin is exapnded (not inside a jar)
+	 * 
+	 * @param pluginID
+	 * @param path
+	 * @return
+	 */
+	public static URL getFileURLFromPluginFileProtocol(String pluginID, String path) {
+		URL url = getFileURLFromPlugin(pluginID, path);
+		try {
+			url = FileLocator.resolve(url);
+			return url;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return url;
+		}
 	}
 
 }

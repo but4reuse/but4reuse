@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
-import org.but4reuse.utils.nlp.similarity.WS4JComparer;
+import org.but4reuse.utils.nlp.similarity.TextSimilarity;
 import org.but4reuse.utils.strings.StringUtils;
 
 /**
@@ -30,7 +30,7 @@ public class SentenceElement extends AbstractElement {
 			return 0;
 		}
 		SentenceElement anotherSentence = (SentenceElement) anotherElement;
-		double similarity = WS4JComparer.getSimilarityWUP(sentence, anotherSentence.sentence);
+		double similarity = TextSimilarity.getSimilarityWUP(sentence, anotherSentence.sentence);
 		return similarity;
 	}
 
@@ -48,6 +48,10 @@ public class SentenceElement extends AbstractElement {
 		for (String s : StringUtils.tokenizeString(sentence))
 			words.add(s);
 		return words;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(TextSimilarity.getSimilarityWUP("hey", "ho"));
 	}
 
 }
