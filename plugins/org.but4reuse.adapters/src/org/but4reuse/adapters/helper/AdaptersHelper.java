@@ -48,8 +48,8 @@ public class AdaptersHelper {
 			return cache_adapters;
 		}
 		List<IAdapter> adapters = new ArrayList<IAdapter>();
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ADAPTERS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
 				adapters.add((IAdapter) adapterExtensionPoint.createExecutableExtension("class"));
@@ -103,8 +103,8 @@ public class AdaptersHelper {
 				return filteredAdapters;
 			}
 			// Check if URI exists, we use emf utils
-			org.eclipse.emf.common.util.URI emfuri = org.eclipse.emf.common.util.URI.createURI(artefact
-					.getArtefactURI());
+			org.eclipse.emf.common.util.URI emfuri = org.eclipse.emf.common.util.URI
+					.createURI(artefact.getArtefactURI());
 			ExtensibleURIConverterImpl conv = new ExtensibleURIConverterImpl();
 			if (!(conv.exists(emfuri, null))) {
 				// It does not exist report error
@@ -225,7 +225,7 @@ public class AdaptersHelper {
 				elements.addAll(getElements(a, adapter));
 			}
 		} else {
-			URI uri = null; 
+			URI uri = null;
 			try {
 				uri = new URI(artefact.getArtefactURI());
 			} catch (Exception e) {
@@ -244,8 +244,8 @@ public class AdaptersHelper {
 	 * @return adapter id
 	 */
 	public static String getAdapterId(IAdapter adapter) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ADAPTERS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			IAdapter ada = null;
 			try {
@@ -270,8 +270,8 @@ public class AdaptersHelper {
 	 * @return adapter name
 	 */
 	public static String getAdapterName(IAdapter adapter) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ADAPTERS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			IAdapter ada = null;
 			try {
@@ -296,8 +296,8 @@ public class AdaptersHelper {
 	 * @return image descriptor
 	 */
 	public static ImageDescriptor getAdapterIcon(IAdapter adapter) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ADAPTERS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			IAdapter ada = null;
 			try {
@@ -329,8 +329,8 @@ public class AdaptersHelper {
 	public static IAdapter getAdapter(IElement element) {
 		// loop through adapter extension points and check the declaration of
 		// elements
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				ADAPTERS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			IConfigurationElement[] a = adapterExtensionPoint.getChildren("elements");
 			if (a != null && a.length > 0) {

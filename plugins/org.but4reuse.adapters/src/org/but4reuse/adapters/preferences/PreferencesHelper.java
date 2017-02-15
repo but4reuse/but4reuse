@@ -12,8 +12,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class PreferencesHelper {
 
-	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
-			.getSymbolicName());
+	static IEclipsePreferences prefs = InstanceScope.INSTANCE
+			.getNode(Activator.getDefault().getBundle().getSymbolicName());
 
 	public static final String AUTOMATIC_EQUAL_THRESHOLD = "automatic_threshold";
 	public static final String ASK_USER_THRESHOLD = "ask_user_threshold";

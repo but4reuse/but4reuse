@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * IElement of a given software artefact Use AbstractElement default
- * implementation to implement this interface.
+ * IElement of a given software artefact. Use AbstractElement to implement this
+ * interface.
  * 
  * @author jabier.martinez
  */
@@ -52,13 +52,4 @@ public interface IElement extends IDependencyObject {
 	 *         that depends on the element.
 	 */
 	public Map<String, List<IDependencyObject>> getDependants();
-
-	/**
-	 * This is to get extra information that the element may provide for some
-	 * specific purpose. This way the adapters can provide extra information to
-	 * be used, for example, inside a visualisation
-	 * 
-	 * @return a map of string keys and its associated object
-	 */
-	public Map<String, Object> getData();
 }

@@ -29,12 +29,12 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	private Map<String, List<IDependencyObject>> dependants = new LinkedHashMap<String, List<IDependencyObject>>();
 	private Map<String, Integer> minDependencies = new HashMap<String, Integer>();
 	private Map<String, Integer> maxDependencies = new HashMap<String, Integer>();
-	private Map<String, Object> data = new HashMap<String, Object>();
 
 	@Override
 	/**
-	 * HashCode default implementation returns always 1 so it will be handled as a list.
-	 * This method is intended to be overridden if a hash method could be provided to improve performance.
+	 * HashCode default implementation returns always 1 so it will be handled as
+	 * a list. This method is intended to be overridden if a hash method could
+	 * be provided to improve performance.
 	 */
 	public int hashCode() {
 		return 1;
@@ -71,15 +71,6 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 		return minDependencies.get(dependencyID);
 	}
 
-	@Override
-	public Map<String, Object> getData() {
-		return data;
-	}
-
-	public void addData(String dataID, Object dataObject){
-		data.put(dataID, dataObject);
-	}
-
 	public void setMaximumDependencies(String dependencyID, int number) {
 		maxDependencies.put(dependencyID, number);
 	}
@@ -97,28 +88,38 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 */
 	public void addDependency(String dependencyID, IDependencyObject dependency) {
 		// Add dependencies
-		List<IDependencyObject> o = dependencies.get(dependencyID);
-		if (o == null) {
-			o = new ArrayList<IDependencyObject>();
+		List<IDependencyObject> dos = dependencies.get(dependencyID);
+		if (dos == null) {
+			dos = new ArrayList<IDependencyObject>();
 		}
-		o.add(dependency);
-		dependencies.put(dependencyID, o);
+		dos.add(dependency);
+		dependencies.put(dependencyID, dos);
 		// Add also dependants
 		if (dependency instanceof AbstractElement) {
 			AbstractElement ae = (AbstractElement) dependency;
-			List<IDependencyObject> oo = ae.getDependants().get(dependencyID);
-			if (oo == null) {
-				oo = new ArrayList<IDependencyObject>();
+			List<IDependencyObject> dependants = ae.getDependants().get(dependencyID);
+			if (dependants == null) {
+				dependants = new ArrayList<IDependencyObject>();
 			}
-			oo.add(this);
-			ae.getDependants().put(dependencyID, oo);
+			dependants.add(this);
+			ae.getDependants().put(dependencyID, dependants);
 		}
 	}
 
+	/**
+	 * Add a dependency without specifying a dependency type id.
+	 * 
+	 * @param dependency
+	 */
 	public void addDependency(IDependencyObject dependency) {
 		addDependency(MAIN_DEPENDENCY_ID, dependency);
 	}
 
+	/**
+	 * Add a list of dependencies without specifying a dependency type id.
+	 * 
+	 * @param dependencies
+	 */
 	public void addDependencies(List<IDependencyObject> dependencies) {
 		for (IDependencyObject dependency : dependencies) {
 			addDependency(MAIN_DEPENDENCY_ID, dependency);
@@ -204,6 +205,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 
 	/**
 	 * Default implementation of get words
+	 * 
 	 * @return tokenize and split CamelCase
 	 */
 	public List<String> getWords() {

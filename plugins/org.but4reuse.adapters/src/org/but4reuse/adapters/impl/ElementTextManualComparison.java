@@ -25,10 +25,11 @@ public class ElementTextManualComparison implements IManualComparison {
 	public void run() {
 		// TODO implement "Always" and "Never" buttons
 		// Default is No
-		MessageDialog dialog = new MessageDialog(null, "Manual decision for equal. Automatic said "
-				+ new DecimalFormat("#").format(calculatedSimilarity * 100) + "%", null, elementText1
-				+ "\n\n is equal to \n\n" + elementText2, MessageDialog.QUESTION, new String[] { "Yes", "No",
-				"Deactivate manual equal" }, 1);
+		MessageDialog dialog = new MessageDialog(null,
+				"Manual decision for equal. Automatic said " + new DecimalFormat("#").format(calculatedSimilarity * 100)
+						+ "%",
+				null, elementText1 + "\n\n is equal to \n\n" + elementText2, MessageDialog.QUESTION,
+				new String[] { "Yes", "No", "Deactivate manual equal" }, 1);
 		result = dialog.open();
 	}
 
