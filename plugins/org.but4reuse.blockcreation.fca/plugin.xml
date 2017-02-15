@@ -16,13 +16,6 @@
       </constraintsDiscovery>
    </extension>
    <extension
-         point="org.but4reuse.feature.location">
-      <feature.location
-            class="org.but4reuse.fca.feature.location.FCAFeatureLocation"
-            name="Formal Context Analysis feature location">
-      </feature.location>
-   </extension>
-   <extension
          point="org.but4reuse.visualisation">
       <visualisation
             class="org.but4reuse.fca.visualisation.FCAVisualisation"

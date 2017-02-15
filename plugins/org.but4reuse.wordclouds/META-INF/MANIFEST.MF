@@ -12,12 +12,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.but4reuse.utils,
  org.but4reuse.adaptedmodel,
- org.but4reuse.feature.constraints,
- org.but4reuse.feature.constraints,
  org.but4reuse.utils.nlp,
  org.but4reuse.visualisation,
  org.but4reuse.adapters,
- org.but4reuse.adapters.ui,
- org.but4reuse.feature.location
+ org.but4reuse.adapters.ui
 Export-Package: org.but4reuse.wordclouds.util,
  org.mcavallo.opencloud

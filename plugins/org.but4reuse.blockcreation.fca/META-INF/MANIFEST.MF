@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
  org.but4reuse.feature.constraints,
- org.but4reuse.feature.location,
  org.but4reuse.visualisation,
  org.but4reuse.utils,
  org.eclipse.core.resources
@@ -17,3 +16,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/galatea.jar,
  lib/org.apache.commons.logging.jar,
  .
+Export-Package: fr.labri.galatea,
+ org.but4reuse.fca.utils
