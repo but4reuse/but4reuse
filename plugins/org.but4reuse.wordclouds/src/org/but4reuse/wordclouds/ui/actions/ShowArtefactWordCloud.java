@@ -35,7 +35,7 @@ import org.mcavallo.opencloud.Cloud;
 public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 	ISelection selection;
-	
+
 	@Override
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
@@ -53,7 +53,8 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 					}
 
 					// Adapter selection by user
-					List<IAdapter> adap = AdaptersSelectionDialog.show("Show Word Cloud", selectedArtefact, defaultAdapters);
+					List<IAdapter> adap = AdaptersSelectionDialog.show("Show Word Cloud", selectedArtefact,
+							defaultAdapters);
 
 					if (!adap.isEmpty()) {
 						List<String> words = new ArrayList<String>();
@@ -67,8 +68,8 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 						Cloud cloud = Cloudifier.cloudify(words, new NullProgressMonitor());
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE
-								| SWT.RESIZE);
+						final Shell win = new Shell(Display.getCurrent().getActiveShell(),
+								SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
 						int widthWin = 700, heightWin = 700;
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for artefact " + AdaptedModelHelper.getArtefactName(selectedArtefact));

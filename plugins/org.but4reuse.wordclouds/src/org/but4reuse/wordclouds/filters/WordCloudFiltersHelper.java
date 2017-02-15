@@ -53,8 +53,8 @@ public class WordCloudFiltersHelper {
 	}
 
 	public static String getFilterName(IWordsProcessing algo) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FILTER_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(FILTER_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
 				IWordsProcessing oneAlgo = (IWordsProcessing) adapterExtensionPoint.createExecutableExtension("class");

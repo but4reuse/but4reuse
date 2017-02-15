@@ -50,8 +50,8 @@ public class WordCloudVisualisation implements IVisualisation {
 		// steps for notifying the user. 2 wordclouds per block
 		int step = 0;
 		for (Block b : adaptedModel.getOwnedBlocks()) {
-			monitor.subTask("Preparing word clouds visualisation. " + step + "/" + adaptedModel.getOwnedBlocks().size()
-					* 2);
+			monitor.subTask(
+					"Preparing word clouds visualisation. " + step + "/" + adaptedModel.getOwnedBlocks().size() * 2);
 			if (monitor.isCanceled()) {
 				break;
 			}
@@ -71,8 +71,8 @@ public class WordCloudVisualisation implements IVisualisation {
 		}
 
 		for (int i = 0; i < listWords.size(); i++) {
-			monitor.subTask("Preparing word clouds visualisation. " + step + "/" + adaptedModel.getOwnedBlocks().size()
-					* 2);
+			monitor.subTask(
+					"Preparing word clouds visualisation. " + step + "/" + adaptedModel.getOwnedBlocks().size() * 2);
 			if (monitor.isCanceled()) {
 				break;
 			}

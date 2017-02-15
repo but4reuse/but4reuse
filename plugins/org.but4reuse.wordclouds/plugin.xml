@@ -79,29 +79,6 @@
       </visualisation>
    </extension>
    <extension
-         point="org.but4reuse.feature.location">
-      <feature.location
-            class="org.but4reuse.wordclouds.feature.location.FeatureLocationWordCloud"
-            name="Word Cloud Feature Location">
-      </feature.location>
-   </extension>
-   <extension
-         point="org.but4reuse.constraints.discovery">
-      <constraintsDiscovery
-            class="org.but4reuse.wordclouds.similarity.WordCloudConstraintsDiscovery"
-            name="Term-based constraints discovery">
-      </constraintsDiscovery>
-   </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.but4reuse.constraints.discovery.ui.page"
-            class="org.but4reuse.wordclouds.preferences.TermBasedConstraintsDiscoveryPreferences"
-            id="org.but4reuse.wordcloud.similarity.TermBasedConstraintsDiscovery"
-            name="Term-Based">
-      </page>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.but4reuse.wordclouds.preferences.PreferenceInitializer">

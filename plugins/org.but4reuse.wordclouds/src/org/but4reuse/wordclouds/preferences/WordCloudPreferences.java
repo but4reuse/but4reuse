@@ -33,7 +33,8 @@ public class WordCloudPreferences extends FieldEditorPreferencePage implements I
 
 	@Override
 	public void init(IWorkbench workbench) {
-		setDescription("Filters: 0 means that they are not activated. Order is important, put bigger numbers for the ones that you want to be executed first. We agree that this user interface should be improved.");
+		setDescription(
+				"Filters: 0 means that they are not activated. Order is important, put bigger numbers for the ones that you want to be executed first. We agree that this user interface should be improved.");
 	}
 
 	@Override
@@ -58,10 +59,10 @@ public class WordCloudPreferences extends FieldEditorPreferencePage implements I
 		IntegerFieldEditor intAutoField = new IntegerFieldEditor(AUTORENAME_NB_WORDS, "Words for automatic renaming",
 				getFieldEditorParent(), 3);
 		addField(intAutoField);
-		
+
 		// Keep previous block name
-		BooleanFieldEditor keepPreviousName = new BooleanFieldEditor(AUTORENAME_KEEP_PREVIOUS, "Keep previous name for automatic renaming",
-				getFieldEditorParent());
+		BooleanFieldEditor keepPreviousName = new BooleanFieldEditor(AUTORENAME_KEEP_PREVIOUS,
+				"Keep previous name for automatic renaming", getFieldEditorParent());
 		addField(keepPreviousName);
 
 		// stop words
