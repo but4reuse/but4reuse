@@ -95,9 +95,8 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	 * 
 	 * @generated
 	 */
-	public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays
-			.asList(FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListEditorFilenameExtensions").split(
-					"\\s*,\\s*")));
+	public static final List<String> FILE_EXTENSIONS = Collections.unmodifiableList(Arrays.asList(
+			FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListEditorFilenameExtensions").split("\\s*,\\s*")));
 
 	/**
 	 * A formatted list of supported file extensions, suitable for display. <!--
@@ -105,8 +104,8 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	 * 
 	 * @generated
 	 */
-	public static final String FORMATTED_FILE_EXTENSIONS = FeatureListEditorPlugin.INSTANCE.getString(
-			"_UI_FeatureListEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
+	public static final String FORMATTED_FILE_EXTENSIONS = FeatureListEditorPlugin.INSTANCE
+			.getString("_UI_FeatureListEditorFilenameExtensions").replaceAll("\\s*,\\s*", ", ");
 
 	/**
 	 * This caches an instance of the model package. <!-- begin-user-doc -->
@@ -136,9 +135,11 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	 * This is the initial object creation page. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
-	protected FeatureListModelWizardInitialObjectCreationPage initialObjectCreationPage;
+	// not needed
+	// protected FeatureListModelWizardInitialObjectCreationPage
+	// initialObjectCreationPage;
 
 	/**
 	 * Remember the selection during initialization for populating the default
@@ -203,10 +204,11 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	/**
 	 * Create a new model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected EObject createInitialModel() {
-		EClass eClass = (EClass) featureListPackage.getEClassifier(initialObjectCreationPage.getInitialObjectName());
+		// Force feature list
+		EClass eClass = featureListPackage.getFeatureList();
 		EObject rootObject = featureListFactory.create(eClass);
 		return rootObject;
 	}
@@ -215,10 +217,11 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	 * Do the work after everything is specified. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public boolean performFinish() {
+		// We force UTF-8
 		try {
 			// Remember the file.
 			//
@@ -252,7 +255,8 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 						// Save the contents of the resource to the file system.
 						//
 						Map<Object, Object> options = new HashMap<Object, Object>();
-						options.put(XMLResource.OPTION_ENCODING, initialObjectCreationPage.getEncoding());
+						// forcing UTF-8
+						options.put(XMLResource.OPTION_ENCODING, "UTF-8");
 						resource.save(options);
 					} catch (Exception exception) {
 						FeatureListEditorPlugin.INSTANCE.log(exception);
@@ -284,10 +288,9 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 				page.openEditor(new FileEditorInput(modelFile),
 						workbench.getEditorRegistry().getDefaultEditor(modelFile.getFullPath().toString()).getId());
 			} catch (PartInitException exception) {
-				MessageDialog
-						.openError(workbenchWindow.getShell(),
-								FeatureListEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"),
-								exception.getMessage());
+				MessageDialog.openError(workbenchWindow.getShell(),
+						FeatureListEditorPlugin.INSTANCE.getString("_UI_OpenEditorError_label"),
+						exception.getMessage());
 				return false;
 			}
 
@@ -542,7 +545,7 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 				encodings = new ArrayList<String>();
 				for (StringTokenizer stringTokenizer = new StringTokenizer(
 						FeatureListEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer
-						.hasMoreTokens();) {
+								.hasMoreTokens();) {
 					encodings.add(stringTokenizer.nextToken());
 				}
 			}
@@ -554,7 +557,7 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 	 * The framework calls this to create the contents of the wizard. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addPages() {
@@ -562,10 +565,11 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 		//
 		newFileCreationPage = new FeatureListModelWizardNewFileCreationPage("Whatever", selection);
 		newFileCreationPage.setTitle(FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListModelWizard_label"));
-		newFileCreationPage.setDescription(FeatureListEditorPlugin.INSTANCE
-				.getString("_UI_FeatureListModelWizard_description"));
-		newFileCreationPage.setFileName(FeatureListEditorPlugin.INSTANCE
-				.getString("_UI_FeatureListEditorFilenameDefaultBase") + "." + FILE_EXTENSIONS.get(0));
+		newFileCreationPage
+				.setDescription(FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListModelWizard_description"));
+		newFileCreationPage
+				.setFileName(FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListEditorFilenameDefaultBase")
+						+ "." + FILE_EXTENSIONS.get(0));
 		addPage(newFileCreationPage);
 
 		// Try and get the resource selection to determine a current directory
@@ -603,12 +607,14 @@ public class FeatureListModelWizard extends Wizard implements INewWizard {
 				}
 			}
 		}
-		initialObjectCreationPage = new FeatureListModelWizardInitialObjectCreationPage("Whatever2");
-		initialObjectCreationPage.setTitle(FeatureListEditorPlugin.INSTANCE
-				.getString("_UI_FeatureListModelWizard_label"));
-		initialObjectCreationPage.setDescription(FeatureListEditorPlugin.INSTANCE
-				.getString("_UI_Wizard_initial_object_description"));
-		addPage(initialObjectCreationPage);
+		// Not needed as we force utf-8 encoding and initial model element
+		// initialObjectCreationPage = new
+		// FeatureListModelWizardInitialObjectCreationPage("Whatever2");
+		// initialObjectCreationPage
+		// .setTitle(FeatureListEditorPlugin.INSTANCE.getString("_UI_FeatureListModelWizard_label"));
+		// initialObjectCreationPage
+		// .setDescription(FeatureListEditorPlugin.INSTANCE.getString("_UI_Wizard_initial_object_description"));
+		// addPage(initialObjectCreationPage);
 	}
 
 	/**
