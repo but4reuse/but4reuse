@@ -49,12 +49,16 @@ public class StrictFeatureSpecificFeatureLocation implements IFeatureLocation {
 			for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 				if (!f.getImplementedInArtefacts().contains(aa.getArtefact())) {
 					List<Block> blocksOfAA = AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa);
-					featureBlocks.removeAll(blocksOfAA);
+					if (featureBlocks != null) {
+						featureBlocks.removeAll(blocksOfAA);
+					}
 				}
 			}
-			for (Block commonBlock : featureBlocks) {
-				// Add the located features
-				locatedFeatures.add(new LocatedFeature(f, commonBlock, 1));
+			if (featureBlocks != null) {
+				for (Block commonBlock : featureBlocks) {
+					// Add the located features
+					locatedFeatures.add(new LocatedFeature(f, commonBlock, 1));
+				}
 			}
 		}
 		return locatedFeatures;
