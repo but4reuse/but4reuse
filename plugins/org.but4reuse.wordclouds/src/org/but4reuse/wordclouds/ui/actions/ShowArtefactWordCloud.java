@@ -3,6 +3,7 @@ package org.but4reuse.wordclouds.ui.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
@@ -34,38 +35,33 @@ import org.mcavallo.opencloud.Cloud;
 public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 	ISelection selection;
-	Artefact artefact = null;
-	List<IAdapter> adap;
-	int widthWin = 700, heightWin = 700;
-
+	
 	@Override
 	public void run(IAction action) {
-		artefact = null;
 		if (selection instanceof IStructuredSelection) {
+			// Show a word cloud for each selected artefact
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
 				if (art instanceof Artefact) {
-					artefact = ((Artefact) art);
+					Artefact selectedArtefact = ((Artefact) art);
 
 					// check predefined
 					List<IAdapter> defaultAdapters = null;
-					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
+					EObject artefactModel = EcoreUtil.getRootContainer(selectedArtefact);
 					if (artefactModel instanceof ArtefactModel) {
 						defaultAdapters = AdaptersHelper
 								.getAdaptersByIds(((ArtefactModel) artefactModel).getAdapters());
 					}
 
 					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefact, defaultAdapters);
+					List<IAdapter> adap = AdaptersSelectionDialog.show("Show Word Cloud", selectedArtefact, defaultAdapters);
 
 					if (!adap.isEmpty()) {
 						List<String> words = new ArrayList<String>();
 						for (IAdapter adapter : adap) {
-							List<IElement> elements = AdaptersHelper.getElements(artefact, adapter);
+							List<IElement> elements = AdaptersHelper.getElements(selectedArtefact, adapter);
 							for (IElement element : elements) {
 								AbstractElement ab = (AbstractElement) element;
-								for (String s : ab.getWords()) {
-									words.add(s);
-								}
+								words.addAll(ab.getWords());
 							}
 						}
 
@@ -73,8 +69,9 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 
 						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE
 								| SWT.RESIZE);
+						int widthWin = 700, heightWin = 700;
 						win.setSize(widthWin, heightWin);
-						win.setText("Word Cloud for artefact " + artefact.getName());
+						win.setText("Word Cloud for artefact " + AdaptedModelHelper.getArtefactName(selectedArtefact));
 
 						Composite comp = new Composite(win, SWT.NORMAL);
 						comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);

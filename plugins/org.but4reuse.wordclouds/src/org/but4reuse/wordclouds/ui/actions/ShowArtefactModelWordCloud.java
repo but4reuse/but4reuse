@@ -35,18 +35,14 @@ import org.mcavallo.opencloud.Cloud;
 public class ShowArtefactModelWordCloud implements IObjectActionDelegate {
 
 	ISelection selection;
-	ArtefactModel artefactM = null;
-	List<IAdapter> adap;
-	int widthWin = 700, heightWin = 700;
 
 	@Override
 	public void run(IAction action) {
 
-		artefactM = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
 				if (art instanceof ArtefactModel) {
-					artefactM = ((ArtefactModel) art);
+					ArtefactModel artefactM = ((ArtefactModel) art);
 
 					// check predefined
 					List<IAdapter> defaultAdapters = null;
@@ -54,7 +50,8 @@ public class ShowArtefactModelWordCloud implements IObjectActionDelegate {
 					defaultAdapters = AdaptersHelper.getAdaptersByIds(((ArtefactModel) artefactM).getAdapters());
 
 					// Adapter selection by user
-					adap = AdaptersSelectionDialog.show("Show Word Cloud", artefactM, defaultAdapters);
+					List<IAdapter> adap = AdaptersSelectionDialog.show("Select adapter to show Word Cloud", artefactM,
+							defaultAdapters);
 
 					if (!adap.isEmpty()) {
 						List<String> words = new ArrayList<String>();
@@ -72,8 +69,9 @@ public class ShowArtefactModelWordCloud implements IObjectActionDelegate {
 
 						Cloud cloud = Cloudifier.cloudify(words, new NullProgressMonitor());
 
-						final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE
-								| SWT.RESIZE);
+						final Shell win = new Shell(Display.getCurrent().getActiveShell(),
+								SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
+						int widthWin = 700, heightWin = 700;
 						win.setSize(widthWin, heightWin);
 						win.setText("Word Cloud for Artefact Model " + artefactM.getName());
 

@@ -3,7 +3,6 @@ package org.but4reuse.wordclouds.ui.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.wordclouds.util.Cloudifier;
@@ -29,14 +28,9 @@ import org.mcavallo.opencloud.Cloud;
 public class ShowFeatureWordCloudTFIDF implements IObjectActionDelegate {
 
 	ISelection selection;
-	Feature feature = null;
-	List<IAdapter> adap;
-	Cloud c = new Cloud();
-	int widthWin = 600, heightWin = 600;
 
 	@Override
 	public void run(IAction action) {
-		feature = null;
 
 		List<List<String>> list = null;
 		FeatureList fList = null;
@@ -44,7 +38,7 @@ public class ShowFeatureWordCloudTFIDF implements IObjectActionDelegate {
 		if (selection instanceof IStructuredSelection) {
 			for (Object feat : ((IStructuredSelection) selection).toArray()) {
 				if (feat instanceof Feature) {
-					feature = ((Feature) feat);
+					Feature feature = ((Feature) feat);
 
 					if (list == null) {
 						list = new ArrayList<List<String>>();
@@ -55,19 +49,18 @@ public class ShowFeatureWordCloudTFIDF implements IObjectActionDelegate {
 						}
 					}
 
-					c.clear();
-
-					final Shell win = new Shell(Display.getCurrent().getActiveShell(), SWT.TITLE | SWT.CLOSE
-							| SWT.RESIZE);
+					final Shell win = new Shell(Display.getCurrent().getActiveShell(),
+							SWT.TITLE | SWT.CLOSE | SWT.RESIZE);
+					int widthWin = 600, heightWin = 600;
 					win.setSize(widthWin, heightWin);
-					win.setText("Word Cloud for feature " + feature.getName());
+					win.setText("TF-IDF Word Cloud for feature " + feature.getName());
 
 					Composite comp = new Composite(win, SWT.NORMAL);
 					comp.setBounds(0, 0, win.getBounds().width, win.getBounds().height);
 
 					win.open();
 					win.update();
-					c = Cloudifier.cloudifyTFIDF(list, fList.getOwnedFeatures().indexOf(feature),
+					Cloud c = Cloudifier.cloudifyTFIDF(list, fList.getOwnedFeatures().indexOf(feature),
 							new NullProgressMonitor());
 					WordCloudUtil.drawWordCloud(comp, c);
 
