@@ -21,7 +21,7 @@ import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
-import org.but4reuse.visualisation.graphs.GraphVisualisation;
+import org.but4reuse.visualisation.graphs.ElementsGraphVisualisation;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -116,7 +116,7 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									adaptedModel.getOwnedBlocks().add(fakeBlock);
 
 									// Create the graph
-									Graph graph = GraphVisualisation.createElementsGraph(adaptedModel, monitor);
+									Graph graph = ElementsGraphVisualisation.createElementsGraph(adaptedModel, monitor);
 
 									// Save
 									File graphFile = FileUtils.getFile(graphURI);

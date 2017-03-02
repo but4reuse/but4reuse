@@ -4,8 +4,12 @@
    <extension
          point="org.but4reuse.visualisation">
       <visualisation
-            class="org.but4reuse.visualisation.graphs.GraphVisualisation"
-            name="Graph visualisations of Blocks and Elements">
+            class="org.but4reuse.visualisation.graphs.ElementsGraphVisualisation"
+            name="Graph visualisations of Elements">
+      </visualisation>
+      <visualisation
+            class="org.but4reuse.visualisation.graphs.BlocksGraphVisualisation"
+            name="Graph visualisations of Blocks">
       </visualisation>
    </extension>
    <extension

@@ -16,8 +16,6 @@ import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.artefactmodel.Artefact;
-import org.but4reuse.feature.constraints.IConstraint;
-import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
@@ -32,17 +30,16 @@ import com.tinkerpop.blueprints.Vertex;
 import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 
 /**
- * Graph visualisation
+ * Elements Graph visualisation
  * 
  * @author jabier.martinez
  */
-public class GraphVisualisation implements IVisualisation {
+public class ElementsGraphVisualisation implements IVisualisation {
 
 	@Override
 	public void prepare(FeatureList featureList, AdaptedModel adaptedModel, Object extra, IProgressMonitor monitor) {
 		// Create the graphs
-		Graph graph = createElementsGraph(adaptedModel, monitor);
-		Graph graphBlocks = createBlocksGraph(adaptedModel, monitor);
+		Graph graph = createGraph(adaptedModel, monitor);
 
 		// Save them
 		monitor.subTask("Saving the graph visualisations");
@@ -63,13 +60,9 @@ public class GraphVisualisation implements IVisualisation {
 		File graphsFolder = new File(artefactModelFile.getParentFile(), "graphVisualisations");
 		graphsFolder.mkdir();
 
-		// Save 1
-		File file = new File(graphsFolder, artefactModelFile.getName() + "_elements.graphml");
+		// Save
+		File file = new File(graphsFolder, artefactModelFile.getName() + getNameAppendix());
 		GraphUtils.saveGraph(graph, file);
-
-		// Save 2
-		File file2 = new File(graphsFolder, artefactModelFile.getName() + "_blocks.graphml");
-		GraphUtils.saveGraph(graphBlocks, file2);
 
 		// Refresh
 		WorkbenchUtils.refreshIResource(res.getParent());
@@ -206,54 +199,17 @@ public class GraphVisualisation implements IVisualisation {
 		return graph;
 	}
 
-	/**
-	 * Create Elements Graph
-	 * 
-	 * @param adaptedModel
-	 * @param monitor
-	 * @return the graph
-	 */
-	public static Graph createBlocksGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
-		monitor.subTask("Creating the Blocks graph visualisation");
-		Graph graph = new TinkerGraph();
-		// Create vertices for each block in the list with the id of its
-		// position
-		List<Block> blocks = adaptedModel.getOwnedBlocks();
-		for (int id = 0; id < blocks.size(); id++) {
-			Vertex v = graph.addVertex(id);
-			v.setProperty("Label", blocks.get(id).getName());
-			v.setProperty("NumberOfBlockElements", blocks.get(id).getOwnedBlockElements().size());
-		}
-
-		// Create the edges with the constraints. For the mutually excludes add
-		// edges in both directions
-		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
-		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)
-					|| constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				int id1 = blocks.indexOf(constraint.getBlock1());
-				int id2 = blocks.indexOf(constraint.getBlock2());
-				Vertex one = graph.getVertex(id1);
-				Vertex two = graph.getVertex(id2);
-				Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
-				edge.setProperty("Label", constraint.getType());
-				edge.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
-				edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
-				if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-					// Add also the opposite in the case of mutually excludes
-					Edge edge2 = graph.addEdge(id2 + "-" + id1, two, one, id2 + "-" + id1);
-					edge2.setProperty("Label", constraint.getType());
-					edge2.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
-					edge2.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
-				}
-			}
-		}
-		return graph;
-	}
-
 	@Override
 	public void show() {
 		// Do nothing. Everything is done in the prepare method
+	}
+
+	public Graph createGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
+		return createElementsGraph(adaptedModel, monitor);
+	}
+
+	public String getNameAppendix() {
+		return "_elements.graphml";
 	}
 
 }
