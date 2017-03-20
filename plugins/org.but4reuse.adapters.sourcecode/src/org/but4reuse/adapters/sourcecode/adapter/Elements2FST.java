@@ -97,7 +97,8 @@ public class Elements2FST {
 			if (n.getParent() == null) {
 				if (!res.contains(n)) {
 					res.add(n);
-					// System.out.println(" Get Root Added "+n.getName()+" "+n.getType());
+					// System.out.println(" Get Root Added "+n.getName()+"
+					// "+n.getType());
 				}
 			}
 		}

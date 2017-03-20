@@ -58,8 +58,7 @@ public class BodyElement extends AbstractElement {
 	public ArrayList<String> getWords() {
 		ArrayList<String> words = new ArrayList<String>();
 
-		if(parent != null)
-		{
+		if (parent != null) {
 			words.addAll(parent.getWords());
 		}
 		return words;

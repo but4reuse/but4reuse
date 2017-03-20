@@ -18,21 +18,18 @@ public class CLanguage implements ILanguage {
 
 	@Override
 	public boolean isMethod(FSTNode node) {
-		// TODO Auto-generated method stub
+		// TODO ???
 		if (node instanceof FSTTerminal) {
 			FSTTerminal nt = (FSTTerminal) node;
 			return (nt.getType().equals("Func"));
-
 		}
-
 		return false;
 	}
 
 	@Override
 	public boolean isConstructor(FSTNode node) {
-		// TODO Auto-generated method stub
+		// TODO ???
 		return true;
-
 	}
 
 	public FSTNonTerminal parseFile(File path) {
@@ -48,34 +45,33 @@ public class CLanguage implements ILanguage {
 		try {
 			parser.TranslationUnit(false);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		FSTNonTerminal root = (FSTNonTerminal) parser.getRoot();
+		// Complete the information with the name which is not included by
+		// default
+		root.setName(path.getName());
 
-		// System.out.println(racine.toString());
 		LanguageManager.filesNames.put(root, path.getName());
 		return root;
 	}
 
 	@Override
-	public void generateCode(FSTNode n, String dir) {
+	public void generateCode(FSTNode n, String path) {
 
-		String rep = dir + "features";
-		File repit = new File(rep);
-		repit.mkdirs();
-		File fDir;
-
-		String path = rep; // +"/"+featName;
-
-		fDir = new File(path);
-		fDir.mkdirs();
-		if (!fDir.exists())
+		File fDir = new File(path);
+		if (!fDir.exists()) {
 			fDir.mkdirs();
+		}
 
 		CApproxPrintVisitor cpv = new CApproxPrintVisitor();
 		// cpv.setNameFiles( LanguageConfigurator.filesNames);
+		try {
+			cpv.processNode(n, fDir);
+		} catch (PrintVisitorException e) {
+			e.printStackTrace();
+		}
 
 		try {
 			System.out.println("C-Code Generation");
@@ -83,15 +79,14 @@ public class CLanguage implements ILanguage {
 			// System.out.println( n.toString());
 			cpv.processNode(n, fDir);
 		} catch (PrintVisitorException e) {
-
 			e.printStackTrace();
 		}
 		CApproxHeaderPrintVisitor cpvh = new CApproxHeaderPrintVisitor();
 		// cpvh.setcApproxPrintVisitor(cpv);
+
 		try {
 			cpvh.processNode(n, fDir);
 		} catch (PrintVisitorException e) {
-
 			e.printStackTrace();
 		}
 
@@ -112,7 +107,7 @@ public class CLanguage implements ILanguage {
 		// TODO ???
 		return "";
 	}
-	
+
 	@Override
 	public String getQualifiedName(FSTNode node) {
 		//TODO ???
@@ -121,7 +116,10 @@ public class CLanguage implements ILanguage {
 
 	@Override
 	public FSTNode getNodeWithName(FSTNode node, String name) {
-		// TODO ???
+		if (node.getName() == name)
+			return node;
+		if (node instanceof FSTNonTerminal)
+			return getNodeWithName((FSTNode) ((FSTNonTerminal) node).getChildren(), name);
 		return null;
 	}
 

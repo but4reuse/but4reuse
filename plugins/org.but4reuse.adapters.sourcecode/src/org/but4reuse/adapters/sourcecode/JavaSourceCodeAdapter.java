@@ -67,9 +67,9 @@ public class JavaSourceCodeAdapter implements IAdapter {
 			LanguageManager.getLanguage().generateCode(n, absPath);
 		}
 	}
-	
+
 	public void addMoreDependencies(List<IElement> elements, URI uri, IProgressMonitor monitor) {
-		//Do Nothing
+		// Do Nothing
 	}
 
 }

@@ -11,6 +11,7 @@ public class LanguageManager {
 
 	private static ILanguage LANGUAGE;
 
+	// TODO seems unused
 	public static HashMap<FSTNode, String> filesNames = new HashMap<FSTNode, String>();
 
 	public static ILanguage getLanguage() {

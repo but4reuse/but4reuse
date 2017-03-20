@@ -103,11 +103,12 @@ public abstract class FSTNodeElement extends AbstractElement {
 		FSTNodeElement element = (FSTNodeElement) anotherElement;
 
 		// Check same name and type
-		if (fstNode.getName().equals(element.getNode().getName()) && fstNode.getType().equals(element.getNode().getType())) {
+		if (fstNode.getName().equals(element.getNode().getName())
+				&& fstNode.getType().equals(element.getNode().getType())) {
 			// Check same package name
 			if (element.getNode() instanceof FSTNonTerminal && fstNode instanceof FSTNonTerminal) {
-				String anotherElementPackage = LanguageManager.getLanguage().getPackageName(
-						(FSTNonTerminal) element.getNode());
+				String anotherElementPackage = LanguageManager.getLanguage()
+						.getPackageName((FSTNonTerminal) element.getNode());
 				String thisPackageName = LanguageManager.getLanguage().getPackageName((FSTNonTerminal) fstNode);
 				if (!anotherElementPackage.equals(thisPackageName)) {
 					return 0;
