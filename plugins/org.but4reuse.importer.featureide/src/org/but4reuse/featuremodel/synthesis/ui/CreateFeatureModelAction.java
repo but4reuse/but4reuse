@@ -10,6 +10,7 @@ import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.contribution.visualiser.views.Menu;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -36,8 +37,8 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 				out = output.getFullPath().toString();
 			}
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Feature Models container URI", "Insert container URI for feature models", "platform:/resource"
-							+ out + "/featureModels/");
+					"Feature Models container URI", "Insert container URI for feature models",
+					"platform:/resource" + out + "/featureModels/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}
@@ -49,7 +50,7 @@ public class CreateFeatureModelAction implements IViewActionDelegate {
 
 			// Create fm with each of them
 			for (IFeatureModelSynthesis fmc : featureModelCreators) {
-				fmc.createFeatureModel(constructionURI);
+				fmc.createFeatureModel(constructionURI, new NullProgressMonitor());
 			}
 
 			// Refresh

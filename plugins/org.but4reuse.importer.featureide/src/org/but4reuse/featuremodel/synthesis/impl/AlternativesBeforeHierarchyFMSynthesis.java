@@ -17,8 +17,7 @@ import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
-import org.eclipse.core.runtime.NullProgressMonitor;
-
+import org.eclipse.core.runtime.IProgressMonitor;
 import de.ovgu.featureide.fm.core.ConstraintAttribute;
 import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
@@ -46,7 +45,7 @@ import de.ovgu.featureide.fm.core.job.monitor.NullMonitor;
 public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynthesis {
 
 	@Override
-	public void createFeatureModel(URI outputContainer) {
+	public void createFeatureModel(URI outputContainer, IProgressMonitor monitor) {
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		// TODO Check for loops in the Requires graph.
 		// Assumption is that there is no loops in the Requires constraints
