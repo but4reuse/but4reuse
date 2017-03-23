@@ -8,9 +8,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.but4reuse.visualisation,
  org.but4reuse.feature.constraints,
- org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
- org.eclipse.swt,
  org.but4reuse.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

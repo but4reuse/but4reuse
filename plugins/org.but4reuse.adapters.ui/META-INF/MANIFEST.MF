@@ -6,11 +6,7 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.ui.activator.Activator
 Bundle-Vendor: but4reuse.org
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.ui.workbench,
- org.but4reuse.artefactmodel,
- org.eclipse.swt,
  org.but4reuse.adapters,
- org.eclipse.jface,
  org.but4reuse.utils,
  org.eclipse.ui,
  org.eclipse.contribution.visualiser,

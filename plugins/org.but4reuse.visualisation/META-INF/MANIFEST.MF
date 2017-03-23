@@ -4,13 +4,14 @@ Bundle-Name: Visualisation
 Bundle-SymbolicName: org.but4reuse.visualisation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.visualisation.activator.Activator
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
  org.but4reuse.adaptedmodel,
  org.but4reuse.utils,
  org.eclipse.contribution.visualiser,
  org.but4reuse.adapters,
- org.eclipse.gmf.runtime.common.core,
- org.but4reuse.feature.constraints
+ org.but4reuse.feature.constraints,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.visualisation,

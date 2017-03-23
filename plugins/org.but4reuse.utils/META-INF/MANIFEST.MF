@@ -5,11 +5,8 @@ Bundle-SymbolicName: org.but4reuse.utils
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.utils.Activator
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.jface,
- org.eclipse.ui.workbench,
  org.eclipse.core.resources,
  org.eclipse.ui.ide,
- org.eclipse.emf.edit,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.emf.edit.ui,
  org.eclipse.emf.ecore.edit
@@ -22,4 +19,3 @@ Export-Package: org.but4reuse.utils.emf,
  org.but4reuse.utils.ui.preferences,
  org.but4reuse.utils.workbench
 Bundle-Vendor: but4reuse.org
-Import-Package: org.apache.commons.io

@@ -8,8 +8,7 @@ Bundle-Vendor: but4reuse.org
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.utils,
- org.but4reuse.utils.nlp
+ org.but4reuse.utils.nlp,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.internal.resources,
- org.eclipse.core.resources

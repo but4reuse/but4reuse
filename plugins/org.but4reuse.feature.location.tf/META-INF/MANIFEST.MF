@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.feature.location.tf.activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.feature.location,
- org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
  org.but4reuse.wordclouds,
  org.but4reuse.adapters

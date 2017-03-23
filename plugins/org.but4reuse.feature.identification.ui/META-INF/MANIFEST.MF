@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.feature.identification.ui.activator.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.but4reuse.artefactmodel,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
  org.but4reuse.adapters.ui,

@@ -5,16 +5,12 @@ Bundle-SymbolicName: org.but4reuse.feature.location.lsi;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.feature.location.lsi.activator.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
-Bundle-ActivationPolicy: lazy
-Import-Package: org.but4reuse.adaptedmodel,
- org.but4reuse.adaptedmodel.helpers,
- org.but4reuse.adapters,
- org.but4reuse.adapters.impl,
- org.but4reuse.artefactmodel,
+ org.eclipse.core.runtime,
  org.but4reuse.feature.location,
  org.but4reuse.featurelist,
- org.but4reuse.utils.ui.preferences,
- org.eclipse.emf.common.util
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.adapters,
+ org.but4reuse.utils
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: Jars/,
  .
