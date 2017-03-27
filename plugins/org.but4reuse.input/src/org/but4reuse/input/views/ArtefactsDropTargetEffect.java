@@ -64,7 +64,7 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 			IResource[] res = (IResource[]) event.data;
 			for (int i = 0; i < res.length; i++) {
 				String uriString = "platform:/resource/" + URI.encodeSegment(res[i].getProject().getName(), false)
-						+ "/" + res[i].getProjectRelativePath().toOSString().replace("\\", "/");
+						+ "/" + URI.encodeSegment(res[i].getProjectRelativePath().toOSString().replace("\\", "/"), false);
 				Date creationDate = FileUtils.getCreationDate(WorkbenchUtils.getFileFromIResource(res[i]));
 				Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
 				if (command != null) {
