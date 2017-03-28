@@ -49,7 +49,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 	public void createFeatureModel(URI outputContainer, IProgressMonitor monitor) {
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		// TODO Check for loops in the Requires graph.
-		// Assumption is that there is no loops in the Requires constraints
+		// Assumption is that there are no loops in the Requires constraints
 		// between blocks as it happens with the default block identification
 		// algorithm.
 		FeatureModel fm = new FeatureModel(DefaultFeatureModelFactory.ID);
@@ -127,7 +127,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 						altF2.features.add(feature1);
 					}
 				}
-				// feature1 already was in a alt group
+				// feature1 already was in an alt group
 				else if (altF2 == null) {
 					boolean allFound = true;
 					for (IFeature f : altF1.features) {
@@ -223,7 +223,6 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 
 				// And add it
 				FeatureUtils.setAnd(parent, true);
-				Iterable<IFeature> childs = FeatureUtils.getChildren(parent);
 				if (altGroup == null) {
 					FeatureUtils.addChild(parent, f);
 					FeatureUtils.setParent(f, parent);
@@ -231,7 +230,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 				} else {
 					// Only once for the whole alt group
 					if (!parentAssigned.contains(altGroup.altRoot)) {
-						FeatureUtils.setChildren(parent, childs);
+						FeatureUtils.addChild(parent, altGroup.altRoot);
 						parentAssigned.add(altGroup.altRoot);
 						FeatureUtils.setParent(altGroup.altRoot, parent);
 					}
@@ -250,6 +249,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 				if (!parentAssigned.contains(f)) {
 					toTheRoot.add(f);
 					FeatureUtils.setParent(f, root);
+					FeatureUtils.addChild(root, f);
 					parentAssigned.add(f);
 				}
 			}
@@ -263,9 +263,6 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		analyzer.calculateDeadConstraints = false;
 		analyzer.calculateFOConstraints = false;
 		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullMonitor());
-		// TODO FIXME there are NullPointer exceptions in analyzeFeatureModel so
-		// redundant constraints are not removed
-		if (o != null) {
 			for (Entry<Object, Object> entry : o.entrySet()) {
 				if (entry.getKey() instanceof Constraint) {
 					if (entry.getValue() instanceof ConstraintAttribute) {
@@ -275,7 +272,6 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 					}
 				}
 			}
-		}
 
 		// Save
 		try {
