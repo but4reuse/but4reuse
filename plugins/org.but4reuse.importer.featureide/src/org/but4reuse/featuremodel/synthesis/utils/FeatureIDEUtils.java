@@ -19,10 +19,11 @@ import org.prop4j.NodeReader;
 
 import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.impl.Constraint;
+import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
+import de.ovgu.featureide.fm.core.base.impl.FMFormatManager;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
-import de.ovgu.featureide.fm.core.io.FeatureModelWriterIFileWrapper;
-import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelWriter;
+import de.ovgu.featureide.fm.core.io.manager.FileHandler;
 
 /**
  * Feature IDE Utils
@@ -106,7 +107,25 @@ public class FeatureIDEUtils {
 	 * @param file
 	 */
 	public static void save(FeatureModel featureModel, File file) {
-		new FeatureModelWriterIFileWrapper(new XmlFeatureModelWriter(featureModel)).writeToFile(file);
+		String string = FileHandler.saveToString(featureModel,
+				FMFormatManager.getInstance().getFormatByExtension("xml"));
+		try {
+			FileUtils.writeFile(file, string);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Load
+	 * 
+	 * @param file
+	 */
+	public static FeatureModel load(File file) {
+		FeatureModel featureModel = new FeatureModel(DefaultFeatureModelFactory.ID);
+		FileHandler.loadFromString(FileUtils.getStringOfFile(file), featureModel,
+				FMFormatManager.getInstance().getFormatByExtension("xml"));
+		return featureModel;
 	}
 
 	/**
@@ -189,7 +208,8 @@ public class FeatureIDEUtils {
 		return false;
 	}
 
-	public static List<IFeature> getFeatureRequiredFeatures(FeatureModel fm, List<IConstraint> constraints, IFeature f1) {
+	public static List<IFeature> getFeatureRequiredFeatures(FeatureModel fm, List<IConstraint> constraints,
+			IFeature f1) {
 		List<IFeature> required = new ArrayList<IFeature>();
 		for (IConstraint constraint : constraints) {
 			if (constraint.getType().equals(IConstraint.REQUIRES)) {

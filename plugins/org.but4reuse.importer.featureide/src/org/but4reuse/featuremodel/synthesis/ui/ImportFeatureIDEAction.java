@@ -1,7 +1,6 @@
 package org.but4reuse.featuremodel.synthesis.ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.featurelist.FeatureListFactory;
 import org.but4reuse.featurelist.helpers.FeatureListHelper;
+import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
@@ -32,11 +32,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
-import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
-import de.ovgu.featureide.fm.core.io.FeatureModelReaderIFileWrapper;
-import de.ovgu.featureide.fm.core.io.UnsupportedModelException;
-import de.ovgu.featureide.fm.core.io.xml.XmlFeatureModelReader;
 
 /**
  * Import features and links from features to configurations
@@ -54,9 +50,8 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 
 				ArtefactModel artefactModel = FeatureListHelper.getArtefactModel(featureList);
 				if (artefactModel == null) {
-					MessageDialog
-							.openError(Display.getCurrent().getActiveShell(), "Error",
-									"No linked artefact model.\nPlease, create and load an artefact model in this editor before");
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error",
+							"No linked artefact model.\nPlease, create and load an artefact model in this editor before");
 					return;
 				}
 				if (featureList.getArtefactModel() == null) {
@@ -76,17 +71,10 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 				IFile fmifile = (IFile) WorkbenchUtils.getIResourceFromURI(fmURI);
-				FeatureModel featureModel = new FeatureModel(DefaultFeatureModelFactory.ID);
-				FeatureModelReaderIFileWrapper modelReader = new FeatureModelReaderIFileWrapper(
-						new XmlFeatureModelReader(featureModel));
-				try {
-					modelReader.readFromFile(fmifile);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (UnsupportedModelException e) {
-					e.printStackTrace();
-				}
+				File fmfile = fmifile.getRawLocation().makeAbsolute().toFile();
+				FeatureModel featureModel = FeatureIDEUtils.load(fmfile);
 				Map<String, IFeature> table = featureModel.getFeatureTable();
 
 				// Create/update features
@@ -105,7 +93,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 
 				// Associate features to artefacts
 				// TODO get project information about configs folder path.
-				// configs is only by defautl
+				// configs is only by default
 				IResource res = fmifile.getProject().findMember("configs");
 				if (res.exists() && res instanceof IFolder) {
 					IFolder resf = (IFolder) res;
