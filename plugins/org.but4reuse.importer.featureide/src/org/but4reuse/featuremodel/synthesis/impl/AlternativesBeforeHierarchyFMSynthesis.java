@@ -18,6 +18,7 @@ import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+
 import de.ovgu.featureide.fm.core.ConstraintAttribute;
 import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
@@ -256,13 +257,21 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		FeatureUtils.setChildren(root, toTheRoot);
 
 		// Remove redundant
-		FeatureModelAnalyzer analyzer = FeatureUtils.getAnalyser(fm);
+		FeatureModelAnalyzer analyzer = fm.getAnalyser();
+		analyzer.calculateRedundantConstraints = true;
+		analyzer.calculateTautologyConstraints = false;
+		analyzer.calculateDeadConstraints = false;
+		analyzer.calculateFOConstraints = false;
 		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullMonitor());
-		for (Entry<Object, Object> entry : o.entrySet()) {
-			if (entry.getKey() instanceof Constraint) {
-				if (entry.getValue() instanceof ConstraintAttribute) {
-					if ((ConstraintAttribute) entry.getValue() == ConstraintAttribute.REDUNDANT) {
-						fm.removeConstraint((Constraint) entry.getKey());
+		// TODO FIXME there are NullPointer exceptions in analyzeFeatureModel so
+		// redundant constraints are not removed
+		if (o != null) {
+			for (Entry<Object, Object> entry : o.entrySet()) {
+				if (entry.getKey() instanceof Constraint) {
+					if (entry.getValue() instanceof ConstraintAttribute) {
+						if ((ConstraintAttribute) entry.getValue() == ConstraintAttribute.REDUNDANT) {
+							fm.removeConstraint((Constraint) entry.getKey());
+						}
 					}
 				}
 			}
