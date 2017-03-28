@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.adapters,
  org.but4reuse.utils,
  org.but4reuse.adapters.sourcecode,
- org.junit,
  org.but4reuse.puck
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
