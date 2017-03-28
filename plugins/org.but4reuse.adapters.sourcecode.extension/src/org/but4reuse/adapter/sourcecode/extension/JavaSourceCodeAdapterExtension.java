@@ -72,7 +72,8 @@ public class JavaSourceCodeAdapterExtension extends JavaSourceCodeAdapter {
 						for (String target : currentEdge.getTarget()) {
 							IElement dep = fstNodeMap.get(target);
 							if (dep == null) {
-								System.out.println("Warnging while adding extra dependencies: Target not found: " + target);
+								System.out.println(
+										"Warnging while adding extra dependencies: Target not found: " + target);
 							} else
 								((AbstractElement) e).addDependency(currentEdge.getType(), dep);
 						}
