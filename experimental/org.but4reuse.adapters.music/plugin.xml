@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.music.MusicAdapter"
+            icon="icons/music.png"
+            id="music"
+            name="Music score">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.music.NoteElement"></element>
+         </elements>
+      </adapter>
+   </extension>
+
+</plugin>

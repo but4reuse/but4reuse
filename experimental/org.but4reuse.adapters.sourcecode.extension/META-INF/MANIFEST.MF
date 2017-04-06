@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Extension
+Bundle-SymbolicName: org.but4reuse.adapters.sourcecode.extension;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.sourcecode.extension.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.adapters,
+ org.but4reuse.utils,
+ org.but4reuse.adapters.sourcecode,
+ org.but4reuse.puck
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Scratch
+Bundle-SymbolicName: org.but4reuse.adapters.scratch;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.scratch.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.adapters,
+ org.but4reuse.adapters.json,
+ org.but4reuse.utils
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
