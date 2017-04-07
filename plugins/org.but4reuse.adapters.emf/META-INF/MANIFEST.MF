@@ -7,7 +7,9 @@ Bundle-Activator: org.but4reuse.adapters.emf.activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.utils,
- org.eclipse.emf.diffmerge.ui
+ org.eclipse.emf.diffmerge.ui,
+ org.eclipse.emf.ecore,
+ org.eclipse.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.emf
