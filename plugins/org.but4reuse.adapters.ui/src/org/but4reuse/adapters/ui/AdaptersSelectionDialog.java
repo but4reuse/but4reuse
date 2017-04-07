@@ -98,11 +98,8 @@ public class AdaptersSelectionDialog {
 		// No adapters
 		List<IAdapter> result = new ArrayList<IAdapter>();
 		if (correctAdapters == null || correctAdapters.isEmpty()) {
-			MessageDialog
-					.openWarning(
-							Display.getCurrent().getActiveShell(),
-							"Adapters selection",
-							"It seems that no adapter is available for your artefact type or some problems occurred. Please, check the Problems view.");
+			MessageDialog.openWarning(Display.getCurrent().getActiveShell(), "Adapters selection",
+					"It seems that no adapter is available for your artefact type or some problems occurred. Please, check the Problems view or Error log view.");
 			correctAdapters = new ArrayList<IAdapter>();
 		}
 
@@ -130,7 +127,11 @@ public class AdaptersSelectionDialog {
 		ListSelectionDialog lsd = new ListSelectionDialog(Display.getDefault().getActiveShell(), allAdapters,
 				new ArrayContentProvider(), new LabelProvider() {
 					public String getText(Object element) {
-						return element == null ? "" : AdaptersHelper.getAdapterName((IAdapter) element);
+						if (element == null) {
+							return "";
+						}
+						String name = AdaptersHelper.getAdapterName((IAdapter) element);
+						return name;
 					}
 
 					public Image getImage(Object element) {

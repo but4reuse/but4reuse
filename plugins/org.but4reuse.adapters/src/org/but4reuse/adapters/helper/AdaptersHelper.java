@@ -53,8 +53,11 @@ public class AdaptersHelper {
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
 				adapters.add((IAdapter) adapterExtensionPoint.createExecutableExtension("class"));
-			} catch (CoreException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
+				continue;
+			} catch (Throwable t) {
+				continue;
 			}
 		}
 		cache_adapters = adapters;
@@ -276,14 +279,17 @@ public class AdaptersHelper {
 			IAdapter ada = null;
 			try {
 				ada = (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-			if (ada.getClass().equals(adapter.getClass())) {
-				String name = adapterExtensionPoint.getAttribute("name");
-				if (name == null || name.length() > 0) {
-					return name;
+				if (ada != null && ada.getClass().equals(adapter.getClass())) {
+					String name = adapterExtensionPoint.getAttribute("name");
+					if (name == null || name.length() > 0) {
+						return name;
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			} catch (Throwable t) {
+				continue;
 			}
 		}
 		return null;
@@ -302,22 +308,27 @@ public class AdaptersHelper {
 			IAdapter ada = null;
 			try {
 				ada = (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-			if (ada.getClass().equals(adapter.getClass())) {
-				String path = adapterExtensionPoint.getAttribute("icon");
-				if (path == null) {
-					return PlatformUI.getWorkbench().getSharedImages()
-							.getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
+				if (ada != null && ada.getClass().equals(adapter.getClass())) {
+					String path = adapterExtensionPoint.getAttribute("icon");
+					// default if no icon defined
+					if (path == null) {
+						return PlatformUI.getWorkbench().getSharedImages()
+								.getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
+					}
+					Bundle bundle = Platform.getBundle(adapterExtensionPoint.getContributor().getName());
+					Path imageFilePath = new Path(path);
+					URL imageFileUrl = FileLocator.find(bundle, imageFilePath, null);
+					return ImageDescriptor.createFromURL(imageFileUrl);
 				}
-				Bundle bundle = Platform.getBundle(adapterExtensionPoint.getContributor().getName());
-				Path imageFilePath = new Path(path);
-				URL imageFileUrl = FileLocator.find(bundle, imageFilePath, null);
-				return ImageDescriptor.createFromURL(imageFileUrl);
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			} catch (Throwable t) {
+				continue;
 			}
 		}
-		return null;
+		// return default icon but some error happened
+		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ELEMENT);
 	}
 
 	/**
