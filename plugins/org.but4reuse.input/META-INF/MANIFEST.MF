@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Input
+Bundle-Name: Artefacts Input View
 Bundle-SymbolicName: org.but4reuse.input;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.input.Activator
@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: BUT4Reuse
 Export-Package: org.but4reuse.input.views

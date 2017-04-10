@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse adapter
+Bundle-Name: Adapter Eclipse and EFLBench
 Bundle-SymbolicName: org.but4reuse.adapters.eclipse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.eclipse.activator.Activator
@@ -17,3 +17,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.eclipse,
  org.but4reuse.adapters.eclipse.benchmark
+Bundle-Vendor: BUT4Reuse

@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.but4reuse.artefactmodel.edit;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.but4reuse.artefactmodel.provider.ArtefactModelEditPlugin$Implementation
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: org.but4reuse.artefactmodel.provider,

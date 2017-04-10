@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: BUT4Reuse
+Bundle-Name: Bottom-Up Technologies for Reuse
 Bundle-SymbolicName: org.but4reuse;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.Activator
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: BUT4Reuse
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.ui.console

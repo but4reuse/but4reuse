@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: File Structure adapter
+Bundle-Name: Adapter File structure
 Bundle-SymbolicName: org.but4reuse.adapters.filestructure;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.filestructure.activator.Activator
@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.filestructure
+Bundle-Vendor: BUT4Reuse

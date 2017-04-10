@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Graphs
+Bundle-Name: Adapter Graphs
 Bundle-SymbolicName: org.but4reuse.adapters.graphs;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.graphs.activator.Activator
@@ -12,3 +12,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/blueprints-core-2.6.0.jar,
  .
+Bundle-Vendor: BUT4Reuse

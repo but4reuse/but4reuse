@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Term frequency based feature location
+Bundle-Name: Feature Location Term Frequency
 Bundle-SymbolicName: org.but4reuse.feature.location.tf;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.feature.location.tf.activator.Activator
@@ -10,3 +10,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.wordclouds,
  org.but4reuse.adapters
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: BUT4Reuse

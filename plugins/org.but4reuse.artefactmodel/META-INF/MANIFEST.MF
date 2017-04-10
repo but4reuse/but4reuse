@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: org.but4reuse.artefactmodel;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-Activator: org.but4reuse.artefactmodel.activator.Activator
 Require-Bundle: org.eclipse.core.runtime,

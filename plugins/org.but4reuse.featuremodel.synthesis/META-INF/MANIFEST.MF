@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: FeatureModel Synthesis
+Bundle-Name: Feature Model Synthesis Core
 Bundle-SymbolicName: org.but4reuse.featuremodel.synthesis;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.featuremodel.synthesis.activator.Activator
@@ -18,3 +18,4 @@ Bundle-ClassPath: libs/org.sat4j.core.jar,
  libs/antlr-3.4.jar,
  libs/de.ovgu.featureide.lib.fm-v3.2.0.jar,
  .
+Bundle-Vendor: BUT4Reuse

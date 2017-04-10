@@ -18,3 +18,4 @@ Bundle-ClassPath: libs/galatea.jar,
  .
 Export-Package: fr.labri.galatea,
  org.but4reuse.fca.utils
+Bundle-Vendor: BUT4Reuse

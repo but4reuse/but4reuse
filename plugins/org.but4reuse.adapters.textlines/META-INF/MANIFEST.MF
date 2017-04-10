@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Textlines
+Bundle-Name: Adapter Text Lines
 Bundle-SymbolicName: org.but4reuse.adapters.textlines;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.textlines.activator.Activator
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: BUT4Reuse
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.utils,

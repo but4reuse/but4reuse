@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: Adapters Core UI
 Bundle-SymbolicName: org.but4reuse.adapters.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.ui.activator.Activator
-Bundle-Vendor: but4reuse.org
+Bundle-Vendor: BUT4Reuse
 Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters,
  org.but4reuse.utils,

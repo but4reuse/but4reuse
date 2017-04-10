@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Nlp
+Bundle-Name: Natural Language Processing Utils
 Bundle-SymbolicName: org.but4reuse.utils.nlp
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.utils.nlp.activator.Activator
@@ -85,3 +85,4 @@ Export-Package: edu.mit.jwi,
  org.but4reuse.utils.nlp.stemming,
  org.tartarus.snowball,
  org.tartarus.snowball.ext
+Bundle-Vendor: BUT4Reuse

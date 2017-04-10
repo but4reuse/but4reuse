@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Visualisation
+Bundle-Name: Visualisation Core
 Bundle-SymbolicName: org.but4reuse.visualisation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.visualisation.activator.Activator
@@ -18,3 +18,4 @@ Export-Package: org.but4reuse.visualisation,
  org.but4reuse.visualisation.helpers,
  org.but4reuse.visualisation.impl.visualiser.adaptedmodel,
  org.but4reuse.visualisation.impl.visualiser.featurelist
+Bundle-Vendor: BUT4Reuse
