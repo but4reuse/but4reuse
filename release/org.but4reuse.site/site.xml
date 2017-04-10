@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Bottom-Up Technologies for Reuse" url="https://but4reuse.github.io/">
+      Bottom-Up Technologies for Reuse
+   </description>
+   <feature url="features/org.but4reuse.feature_1.0.0.201704101323.jar" id="org.but4reuse.feature" version="1.0.0.201704101323">
+      <category name="Bottom-Up Technologies for Reuse"/>
+   </feature>
+   <category-def name="Bottom-Up Technologies for Reuse" label="Bottom-Up Technologies for Reuse"/>
+</site>
