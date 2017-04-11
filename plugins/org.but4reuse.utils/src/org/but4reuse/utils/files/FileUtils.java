@@ -413,6 +413,25 @@ public class FileUtils {
 	}
 
 	/**
+	 * Delete File or Folder. This method is helpful because File.toDelete()
+	 * does not work for non-empty folders.
+	 * 
+	 * @param fileOrDir to be deleted
+	 */
+	public static void deleteFile(File fileOrDir) {
+		if (fileOrDir.exists()) {
+			if (fileOrDir.isFile()) {
+				fileOrDir.delete();
+			} else if (fileOrDir.isDirectory()) {
+				for (File file : fileOrDir.listFiles()) {
+					deleteFile(file);
+				}
+				fileOrDir.delete();
+			}
+		}
+	}
+
+	/**
 	 * Try to return the expected icon for a file name
 	 * 
 	 * @param fileName
