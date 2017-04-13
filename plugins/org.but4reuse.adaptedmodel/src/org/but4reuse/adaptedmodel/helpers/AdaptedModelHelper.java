@@ -64,8 +64,8 @@ public class AdaptedModelHelper {
 				if (monitor.isCanceled()) {
 					return adaptedModel;
 				}
-				AdaptedModelManager.registerTime("Adapt " + artefact.getName(), System.currentTimeMillis()
-						- startTimeArtefact);
+				AdaptedModelManager.registerTime("Adapt " + artefact.getName(),
+						System.currentTimeMillis() - startTimeArtefact);
 			}
 		}
 		// Add info to the manager
@@ -93,14 +93,14 @@ public class AdaptedModelHelper {
 
 		// get the elements
 		List<IElement> list = AdaptersHelper.getElements(artefact, adapters);
-		
+
 		// create adapted artefact
 		AdaptedArtefact adaptedArtefact = wrapElementsToCreateAdaptedArtefact(list);
 		adaptedArtefact.setArtefact(artefact);
 		return adaptedArtefact;
 	}
-	
-	public static AdaptedArtefact wrapElementsToCreateAdaptedArtefact(List<IElement> elements){
+
+	public static AdaptedArtefact wrapElementsToCreateAdaptedArtefact(List<IElement> elements) {
 		AdaptedArtefact adaptedArtefact = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
 		for (IElement ele : elements) {
 			ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
@@ -111,11 +111,7 @@ public class AdaptedModelHelper {
 	}
 
 	public static boolean isIdentical(ElementWrapper e1, ElementWrapper e2) {
-		if (e1.getElement() != null && e2.getElement() != null) {
-			return ((IElement) e1).similarity((IElement) e2) == 1.0;
-		} else {
-			return false;
-		}
+		return (similarity(e1, e2) == 1.0);
 	}
 
 	public static double similarity(ElementWrapper e1, ElementWrapper e2) {
@@ -178,6 +174,12 @@ public class AdaptedModelHelper {
 		return result;
 	}
 
+	/**
+	 * Put default names to the blocks if they had no names
+	 * 
+	 * @param blocks
+	 * @return the list of blocks with the names changed
+	 */
 	public static List<Block> checkBlockNames(List<Block> blocks) {
 		int i = 0;
 		for (Block block : blocks) {
@@ -296,6 +298,21 @@ public class AdaptedModelHelper {
 	}
 
 	/**
+	 * Get the list of elements of a list of blocks
+	 * 
+	 * @param block
+	 * @return
+	 */
+	public static List<IElement> getElementsOfBlocks(List<Block> blocks) {
+		List<IElement> elements = new ArrayList<>();
+		for (Block block : blocks) {
+			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
+			elements.addAll(blockElements);
+		}
+		return elements;
+	}
+
+	/**
 	 * Get the list of elements of one block. To be used when the order is not
 	 * important. For example when using the contains method of the set
 	 * 
@@ -396,64 +413,70 @@ public class AdaptedModelHelper {
 	 * Get the number of ielements of a given type
 	 * 
 	 * @param adaptedModel
-	 * @param class1
+	 * @param className
 	 *            is the full qualified name with packages etc.
 	 * @return
 	 */
-	public static int getNumberOfElementsOfType(AdaptedModel adaptedModel, String class1) {
+	public static int getNumberOfElementsOfType(AdaptedModel adaptedModel, String className) {
 		int i = 0;
-		for (Block block : adaptedModel.getOwnedBlocks()) {
-			for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
-				if (e.getClass().getName().equals(class1)) {
-					i++;
-				}
+		for (IElement e : AdaptedModelHelper.getElementsOfBlocks(adaptedModel.getOwnedBlocks())) {
+			if (e.getClass().getName().equals(className)) {
+				i++;
 			}
 		}
 		return i;
 	}
 
-	public static int getNumberOfElementsOfType(Block block, String class1) {
+	public static int getNumberOfElementsOfType(Block block, String className) {
 		int i = 0;
 		for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
-			if (e.getClass().getName().equals(class1)) {
+			if (e.getClass().getName().equals(className)) {
 				i++;
 			}
 		}
 		return i;
 	}
 
-	public static int getNumberOfElementsOfType(AdaptedArtefact adaptedArtefact, String class1) {
+	public static int getNumberOfElementsOfType(AdaptedArtefact adaptedArtefact, String className) {
 		int i = 0;
 		for (IElement e : AdaptedModelHelper.getElementsOfAdaptedArtefact(adaptedArtefact)) {
-			if (e.getClass().getName().equals(class1)) {
+			if (e.getClass().getName().equals(className)) {
 				i++;
 			}
 		}
 		return i;
 	}
 
-	public static Set<IElement> getAllElementsFromAllBlocks(AdaptedModel adaptedModel) {
-		Set<IElement> all = new HashSet<IElement>();
-		for (Block block : adaptedModel.getOwnedBlocks()) {
-			for (IElement e : AdaptedModelHelper.getElementsOfBlock(block)) {
-				all.add(e);
-			}
-		}
-		return all;
+	public static List<IElement> getElementsFromAllBlocks(AdaptedModel adaptedModel) {
+		return getElementsOfBlocks(adaptedModel.getOwnedBlocks());
 	}
 
-	public static AdaptedArtefact getAdaptedArtefact(AdaptedModel adaptedModel, Artefact a) {
+	/**
+	 * Get adapted artefact of a given artefact
+	 * 
+	 * @param adaptedModel
+	 * @param artefact
+	 * @return the adapted artefact or null if not found
+	 */
+	public static AdaptedArtefact getAdaptedArtefact(AdaptedModel adaptedModel, Artefact artefact) {
 		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
-			if (aa.getArtefact().equals(a)) {
+			if (aa.getArtefact().equals(artefact)) {
 				return aa;
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * Get block by name
+	 * 
+	 * @param adaptedModel
+	 * @param blockName
+	 * @return the block or null if not found
+	 */
 	public static Block getBlockByName(AdaptedModel adaptedModel, String blockName) {
-		for(Block block : adaptedModel.getOwnedBlocks()){
-			if(block.getName().equals(blockName)){
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			if (block.getName().equals(blockName)) {
 				return block;
 			}
 		}
