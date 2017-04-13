@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Utils Tests
+Bundle-SymbolicName: org.but4reuse.utils.tests
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.but4reuse.utils
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit
+Bundle-Vendor: BUT4Reuse

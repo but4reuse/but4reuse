@@ -184,11 +184,29 @@ public class FileUtils {
 	 * @return extension or empty string
 	 */
 	public static String getExtension(String fileName) {
-		int i = fileName.lastIndexOf('.');
-		if (i > 0) {
-			return fileName.substring(i + 1);
+		if (fileName != null) {
+			int i = fileName.lastIndexOf('.');
+			if (i > 0) {
+				return fileName.substring(i + 1);
+			}
 		}
 		return "";
+	}
+
+	/**
+	 * Get file name without extension
+	 * 
+	 * @param file
+	 *            name
+	 * @return the name without the extension or the same name if there was no
+	 *         extension
+	 */
+	public static String getFileNameWithoutExtension(String fileName) {
+		String extension = getExtension(fileName);
+		if (extension.isEmpty()) {
+			return fileName;
+		}
+		return fileName.substring(0, fileName.lastIndexOf(extension) - 1);
 	}
 
 	/**
@@ -302,7 +320,7 @@ public class FileUtils {
 			while ((nread = fis.read(dataBytes)) != -1) {
 				md.update(dataBytes, 0, nread);
 			}
-			;
+
 			byte[] mdbytes = md.digest();
 
 			// Convert to hex format
@@ -416,7 +434,8 @@ public class FileUtils {
 	 * Delete File or Folder. This method is helpful because File.toDelete()
 	 * does not work for non-empty folders.
 	 * 
-	 * @param fileOrDir to be deleted
+	 * @param fileOrDir
+	 *            to be deleted
 	 */
 	public static void deleteFile(File fileOrDir) {
 		if (fileOrDir.exists()) {
@@ -438,8 +457,8 @@ public class FileUtils {
 	 * @return
 	 */
 	public static ImageDescriptor getIconFromFileName(String fileName) {
-		if (fileName != null && fileName.contains(".")) {
-			String extension = fileName.substring(fileName.lastIndexOf("."));
+		String extension = getExtension(fileName);
+		if (!extension.isEmpty()) {
 			return PlatformUI.getWorkbench().getEditorRegistry().getImageDescriptor("random." + extension);
 		}
 		return null;
@@ -474,7 +493,7 @@ public class FileUtils {
 
 	/**
 	 * Get file URL from a plugin with the file protocol. Use only if you are
-	 * sure that the plugin is exapnded (not inside a jar)
+	 * sure that the plugin is expanded (not inside a jar)
 	 * 
 	 * @param pluginID
 	 * @param path

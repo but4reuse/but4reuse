@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ * String Utils class
+ * 
+ * @author jabier.martinez
+ */
 public class StringUtils {
 
 	/**
-	 * Tokenize string by separating space and special characters like : etc.
+	 * Tokenize string by separating space and special characters like : ! )
+	 * etc.
 	 * 
 	 * @param string
 	 * @return a non null list of tokens
@@ -26,6 +32,26 @@ public class StringUtils {
 			if (!token.equals("-")) {
 				list.add(token);
 			}
+		}
+		return list;
+	}
+
+	/**
+	 * Tokenize string using the specified delimiters
+	 * 
+	 * @param string
+	 * @param delimiters
+	 * @return a non null list of tokens
+	 */
+	public static List<String> tokenizeString(String string, String delimiters) {
+		List<String> list = new ArrayList<String>();
+		if (string == null) {
+			return list;
+		}
+		StringTokenizer tk = new StringTokenizer(string, delimiters);
+		while (tk.hasMoreTokens()) {
+			String token = tk.nextToken();
+			list.add(token);
 		}
 		return list;
 	}
