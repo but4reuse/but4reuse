@@ -180,7 +180,7 @@ public class MusicXMLWriter {
 	 * @return
 	 */
 	public static List<List<NoteElement>> assignToVoices(List<NoteElement> measureNotes) {
-		List<List<NoteElement>> voices = new ArrayList<>();
+		List<List<NoteElement>> voices = new ArrayList<List<NoteElement>>();
 		// add the first voice
 		List<NoteElement> voice1 = new ArrayList<NoteElement>();
 		voices.add(voice1);

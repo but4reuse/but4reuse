@@ -304,7 +304,7 @@ public class AdaptedModelHelper {
 	 * @return
 	 */
 	public static List<IElement> getElementsOfBlocks(List<Block> blocks) {
-		List<IElement> elements = new ArrayList<>();
+		List<IElement> elements = new ArrayList<IElement>();
 		for (Block block : blocks) {
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 			elements.addAll(blockElements);

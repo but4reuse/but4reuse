@@ -36,7 +36,7 @@ public class PluginElementGenerator extends PluginElement {
 		if (elems == null)
 			return null;
 
-		List<PluginElementGenerator> generators = new ArrayList<>(elems.size());
+		List<PluginElementGenerator> generators = new ArrayList<PluginElementGenerator>(elems.size());
 		for (PluginElement one_elem : elems) {
 			generators.add(new PluginElementGenerator(one_elem));
 		}

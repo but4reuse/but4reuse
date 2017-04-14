@@ -67,7 +67,7 @@ public class DependencyAnalyzer {
 	}
 
 	public List<String> getListPathFromListFeatures(List<ActualFeature> features) {
-		List<String> paths = new ArrayList<>(features.size());
+		List<String> paths = new ArrayList<String>(features.size());
 		for (ActualFeature feature : features) {
 			if (feature != null) {
 				paths.add(mapFeatureWithPath.get(feature));
@@ -88,7 +88,7 @@ public class DependencyAnalyzer {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
-		mapIdWithFeature = new HashMap<>();
+		mapIdWithFeature = new HashMap<String, ActualFeature>();
 		for (ActualFeature oneFeature : allFeatures) {
 			mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 		}
@@ -98,7 +98,7 @@ public class DependencyAnalyzer {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
-		mapFeatureWithFeaturesDependencies = new HashMap<>();
+		mapFeatureWithFeaturesDependencies = new HashMap<ActualFeature, List<String>>();
 		List<String> dependencies = null;
 
 		for (ActualFeature oneFeature : allFeatures) {
@@ -120,7 +120,7 @@ public class DependencyAnalyzer {
 	}
 
 	private void initMapFeaturesPath(String eclipseInstallationURI) throws URISyntaxException {
-		mapFeatureWithPath = new HashMap<>();
+		mapFeatureWithPath = new HashMap<ActualFeature, String>();
 		File eclipseFile = FileUtils.getFile(new URI(eclipseInstallationURI));
 		File featuresFolder = new File(eclipseFile, "features");
 		for (File fFolder : featuresFolder.listFiles()) {
@@ -171,13 +171,13 @@ public class DependencyAnalyzer {
 		if (allPlugins == null || allPlugins.isEmpty())
 			return;
 
-		mapSymbNameWithPlugin = new HashMap<>();
+		mapSymbNameWithPlugin = new HashMap<String, List<PluginElementGenerator>>();
 		for (PluginElementGenerator onePlugin : allPlugins) {
 			if (mapSymbNameWithPlugin.containsKey(onePlugin.getSymbName())) {
 				mapSymbNameWithPlugin.get(onePlugin.getSymbName()).add(onePlugin);
 			} else {
 				// Most of times, there is only one version by SymbName
-				List<PluginElementGenerator> pluginVersionList = new ArrayList<>(1);
+				List<PluginElementGenerator> pluginVersionList = new ArrayList<PluginElementGenerator>(1);
 				pluginVersionList.add(onePlugin);
 				mapSymbNameWithPlugin.put(onePlugin.getSymbName(), pluginVersionList);
 			}
@@ -188,7 +188,7 @@ public class DependencyAnalyzer {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
-		mapFeatureWithPluginsDependencies = new HashMap<>();
+		mapFeatureWithPluginsDependencies = new HashMap<ActualFeature, List<String>>();
 		List<String> dependencies = null;
 
 		for (ActualFeature oneFeature : allFeatures) {
@@ -209,7 +209,7 @@ public class DependencyAnalyzer {
 	}
 
 	private void initAllPluginsWithoutFeaturesDependencies() {
-		allPluginsWithoutFeatureDependencies = new ArrayList<>();
+		allPluginsWithoutFeatureDependencies = new ArrayList<PluginElementGenerator>();
 		allPluginsWithoutFeatureDependencies.addAll(allPlugins);
 		// eclipseFull Kepler = 2066 plugins
 		// all Plugins from Features dependencies = 1947
@@ -221,7 +221,7 @@ public class DependencyAnalyzer {
 	}
 
 	private void initListFeaturesMandatories() {
-		allMandatoryFeaturesForThisInput = new ArrayList<>(MandatoryFeatures.list.length);
+		allMandatoryFeaturesForThisInput = new ArrayList<ActualFeature>(MandatoryFeatures.list.length);
 		for (String manda : MandatoryFeatures.list) {
 			List<ActualFeature> feat_tmp = getFeaturesThatStartsWithName(manda);
 			if (feat_tmp != null) {
@@ -232,7 +232,7 @@ public class DependencyAnalyzer {
 
 	private List<PluginElementGenerator> getAllPluginDependencies(
 			Map<ActualFeature, List<String>> mapFeatureWithPluginDependencies) {
-		List<String> plugins = new ArrayList<>();
+		List<String> plugins = new ArrayList<String>();
 		for (List<String> list : mapFeatureWithPluginDependencies.values()) {
 			for (String s : list) {
 				if (!plugins.contains(s)) {
@@ -266,7 +266,7 @@ public class DependencyAnalyzer {
 		if (name == null || name.isEmpty())
 			return null;
 
-		List<ActualFeature> featuresWithName = new ArrayList<>(10);
+		List<ActualFeature> featuresWithName = new ArrayList<ActualFeature>(10);
 		for (ActualFeature feature : allFeatures) {
 			if (feature.getId().startsWith(name)) {
 				featuresWithName.add(feature);

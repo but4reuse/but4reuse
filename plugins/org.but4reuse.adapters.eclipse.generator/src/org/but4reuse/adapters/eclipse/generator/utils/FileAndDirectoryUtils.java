@@ -83,7 +83,7 @@ public class FileAndDirectoryUtils {
 	 */
 	public static File[] getSomeFiles(File[] listFiles, int percentage) {
 		if (listFiles != null || percentage == 100) {
-			List<File> res = new ArrayList<>();
+			List<File> res = new ArrayList<File>();
 			for (File file : listFiles) {
 				if (Math.random() * 100 < percentage) {
 					res.add(file);

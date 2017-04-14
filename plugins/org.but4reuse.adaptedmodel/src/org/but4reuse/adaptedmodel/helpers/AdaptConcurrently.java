@@ -36,7 +36,7 @@ public class AdaptConcurrently {
 		// When we adapt we consider that we are starting a new analysis
 		AdaptedModelManager.getElapsedTimeRegistry().clear();
 		ExecutorService exec = Executors.newCachedThreadPool();
-		List<Future<AdaptedArtefact>> listAdaptedArtefact = new LinkedList<>();
+		List<Future<AdaptedArtefact>> listAdaptedArtefact = new LinkedList<Future<AdaptedArtefact>>();
 
 		long startTime = System.currentTimeMillis();
 

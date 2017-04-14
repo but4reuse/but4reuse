@@ -35,7 +35,7 @@ public class FeatureHelper {
 		if (allFeatures == null || feature == null)
 			return null;
 
-		List<ActualFeature> includedFeatures = new ArrayList<>(feature.getIncludedFeatures().size());
+		List<ActualFeature> includedFeatures = new ArrayList<ActualFeature>(feature.getIncludedFeatures().size());
 		for (String featureId : feature.getIncludedFeatures()) {
 			ActualFeature oneIncludedFeature = getFeatureById(allFeatures, featureId);
 			if (oneIncludedFeature != null)
@@ -49,7 +49,7 @@ public class FeatureHelper {
 		if (allFeatures == null || feature == null)
 			return null;
 
-		List<ActualFeature> requiredFeatures = new ArrayList<>(feature.getRequiredFeatures().size());
+		List<ActualFeature> requiredFeatures = new ArrayList<ActualFeature>(feature.getRequiredFeatures().size());
 		for (String featureId : feature.getRequiredFeatures()) {
 			ActualFeature oneRequiredFeature = getFeatureById(allFeatures, featureId);
 			if (oneRequiredFeature != null)

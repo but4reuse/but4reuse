@@ -159,8 +159,8 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				pluginsList = allPluginsGen;
 				chosenFeatures = allFeatures;
 			} else {
-				pluginsList = new ArrayList<>();
-				chosenFeatures = new ArrayList<>();
+				pluginsList = new ArrayList<PluginElementGenerator>();
+				chosenFeatures = new ArrayList<ActualFeature>();
 			}
 
 			if (percentage < 100 && percentage > 0) {

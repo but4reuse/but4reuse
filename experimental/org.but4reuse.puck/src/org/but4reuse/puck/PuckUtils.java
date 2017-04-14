@@ -64,7 +64,7 @@ public class PuckUtils {
 						.println("Using default settings, puck.properties not found (default rt.jar and empty classpath)");
 			}
 
-			ArrayList<String> listClassPath = new ArrayList<>();
+			ArrayList<String> listClassPath = new ArrayList<String>();
 
 			if (classPath != null) {
 				if (!classPath.equals("none")) {
@@ -77,7 +77,7 @@ public class PuckUtils {
 			scala.collection.Iterator<String> iteratorClasspath = JavaConversions$.MODULE$
 					.asScalaIterator(listClassPath.iterator());
 
-			ArrayList<String> listBootPath = new ArrayList<>();
+			ArrayList<String> listBootPath = new ArrayList<String>();
 			if (bootClassPath != null) {
 				listBootPath.add(bootClassPath);
 			} else {

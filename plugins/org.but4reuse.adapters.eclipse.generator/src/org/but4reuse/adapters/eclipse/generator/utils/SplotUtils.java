@@ -26,7 +26,7 @@ public class SplotUtils {
 
 		StringBuilder splotToReturn = new StringBuilder();
 
-		Map<String, ActualFeature> mapIdWithFeature = new HashMap<>();
+		Map<String, ActualFeature> mapIdWithFeature = new HashMap<String, ActualFeature>();
 		for (ActualFeature oneFeature : allFeatures) {
 			mapIdWithFeature.put(oneFeature.getId(), oneFeature);
 		}
