@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
+import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
+import org.eclipse.emf.diffmerge.ui.specification.ext.EObjectScopeDefinition;
 import org.eclipse.emf.diffmerge.util.ModelImplUtil;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -35,7 +37,6 @@ public class EMFAdapter implements IAdapter {
 	public static AdapterFactory ADAPTER_FACTORY = EMFUtils.getAllRegisteredAdapterFactories();
 
 	// This will store the comparison method used during the analysis
-	// TODO support different comparison methods for the same analysis
 	static IComparisonMethod comparisonMethod = null;
 
 	/**
@@ -69,7 +70,14 @@ public class EMFAdapter implements IAdapter {
 		refElements = new ArrayList<EMFReferenceElement>();
 		eobjectEMFClassElementMap = new HashMap<EObject, EMFClassElement>();
 		eobjectEMFClassElementMap.put(element.eObject, element);
+
+		// Initialize the comparison method
+		if (getComparisonMethod() == null) {
+			initializeComparisonMethod(element.eObject);
+		}
+
 		adapt(eObject, element.eObject, elements);
+
 		// After that we add the EReferences dependencies
 		addReferenceDependencies();
 		return elements;
@@ -88,12 +96,7 @@ public class EMFAdapter implements IAdapter {
 	 */
 	@SuppressWarnings("unchecked")
 	private void adapt(EObject eObject, EObject adaptedEObject, List<IElement> elements) {
-		// If it is not covered by the diff policy we are not going to consider
-		// it
-		// TODO we assume that we always use the same comparison method
-		if (comparisonMethod == null) {
-			comparisonMethod = DiffMergeUtils.getComparisonMethod(adaptedEObject, adaptedEObject);
-		}
+
 		// Current child to set the owner is the last element
 		AbstractElement ownerElement = (AbstractElement) elements.get(elements.size() - 1);
 
@@ -103,7 +106,7 @@ public class EMFAdapter implements IAdapter {
 			// is a real attribute
 			if (considerEStructuralFeature(eObject, attr)) {
 				// should it be covered by the diff policy
-				if (comparisonMethod.getDiffPolicy().coverFeature(attr)) {
+				if (getComparisonMethod().getDiffPolicy().coverFeature(attr)) {
 					Object o = eObject.eGet(attr);
 					if (o instanceof Enumerator) {
 						// because eGet will return a value even if it was
@@ -130,7 +133,7 @@ public class EMFAdapter implements IAdapter {
 		List<EReference> references = eObject.eClass().getEAllReferences();
 		for (EReference ref : references) {
 			if (considerEStructuralFeature(eObject, ref) && !ref.isContainment() && !ref.isContainer()) {
-				if (comparisonMethod.getDiffPolicy().coverFeature(ref)) {
+				if (getComparisonMethod().getDiffPolicy().coverFeature(ref)) {
 					List<EObject> refList = EMFUtils.getReferencedEObjects(eObject, ref);
 					EMFReferenceElement element = getEMFElementsFactory().createEMFReferenceElement();
 					element.owner = adaptedEObject;
@@ -186,6 +189,49 @@ public class EMFAdapter implements IAdapter {
 	}
 
 	/**
+	 * Initialize the comparison method that will be used
+	 * 
+	 * @param adaptedEObject
+	 */
+	private void initializeComparisonMethod(EObject adaptedEObject) {
+		// TODO once initialised, the same will be used always. It is not
+		// possible to change it, the user will need to relaunch the tool
+		List<IComparisonMethod> comparisonMethods = DiffMergeUtils.getApplicableComparisonMethods(adaptedEObject,
+				adaptedEObject);
+		if (comparisonMethods.size() == 1) {
+			comparisonMethod = comparisonMethods.get(0);
+		} else {
+			// There are several applicable comparison methods. Check if there
+			// is one user-defined
+			String selected = Activator.getDefault().getPreferenceStore()
+					.getString(EMFAdapterPreferencePage.COMPARISON_METHOD);
+			if (selected == null || selected.isEmpty()) {
+				// No user-defined selection. Take the first one
+				comparisonMethod = comparisonMethods.get(0);
+			} else {
+				// Take the one defined by the user
+				List<IComparisonMethodFactory> factories = DiffMergeUtils
+						.getApplicableComparisonMethodFactories(adaptedEObject, adaptedEObject);
+				for (IComparisonMethodFactory factory : factories) {
+					if (factory.getLabel().equalsIgnoreCase(selected)) {
+						EObjectScopeDefinition left = new EObjectScopeDefinition(adaptedEObject, "left", true);
+						EObjectScopeDefinition right = new EObjectScopeDefinition(adaptedEObject, "right", true);
+						comparisonMethod = factory.createComparisonMethod(left, right, null);
+						break;
+					}
+				}
+				// The one that the user selected is not found...
+				if (comparisonMethod == null) {
+					// TODO report error
+					System.err.println("User-defined comparison method in the preferences is not found.");
+					// Take the first one
+					comparisonMethod = comparisonMethods.get(0);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Once we have all the Elements, we prepare the dependencies
 	 * 
 	 * @param refElements2
@@ -209,7 +255,8 @@ public class EMFAdapter implements IAdapter {
 					// Probably the EObject is outside this resource! It
 					// references another model. Not supported.
 					// TODO provide feedback to user
-					// System.out.println("EMFAdapter.addReferencesDependencies() Warning: Referenced element not found "
+					// System.out.println("EMFAdapter.addReferencesDependencies()
+					// Warning: Referenced element not found "
 					// + referenced);
 				} else {
 					referenceElement.referencedElements.add(classElement);
@@ -262,11 +309,22 @@ public class EMFAdapter implements IAdapter {
 			int result = 1;
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
 			return result;
+		} else if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.MATCH_ID_HASHING)) {
+			String id = getComparisonMethod().getMatchPolicy().getMatchID(eObject, null).toString();
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((id == null) ? 0 : id.hashCode());
+			return result;
 		} else {
 			return 1;
 		}
 	}
 
+	/**
+	 * To override if needed.
+	 * 
+	 * @return
+	 */
 	public static IComparisonMethod getComparisonMethod() {
 		return comparisonMethod;
 	}

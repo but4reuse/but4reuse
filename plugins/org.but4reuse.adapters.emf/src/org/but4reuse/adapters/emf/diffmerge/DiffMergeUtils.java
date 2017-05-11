@@ -28,22 +28,40 @@ import org.eclipse.emf.ecore.EReference;
 public class DiffMergeUtils {
 
 	/**
-	 * Get the most appropriate comparison method
+	 * Get applicable comparison methods
 	 * 
 	 * @param leftEObject
 	 * @param rightEObject
 	 * @return
 	 */
-	public static IComparisonMethod getComparisonMethod(EObject leftEObject, EObject rightEObject) {
+	public static List<IComparisonMethod> getApplicableComparisonMethods(EObject leftEObject, EObject rightEObject) {
+		List<IComparisonMethod> methods = new ArrayList<IComparisonMethod>();
 		EObjectScopeDefinition left = new EObjectScopeDefinition(leftEObject, "left", true);
 		EObjectScopeDefinition right = new EObjectScopeDefinition(rightEObject, "right", true);
-		List<IComparisonMethodFactory> listcmf = EMFDiffMergeUIPlugin.getDefault().getSetupManager()
-				.getApplicableComparisonMethodFactories(left, right, null);
+		List<IComparisonMethodFactory> listcmf = getApplicableComparisonMethodFactories(leftEObject, rightEObject);
 		if (listcmf.isEmpty()) {
-			return new DefaultComparisonMethod(left, right, null);
+			methods.add(new DefaultComparisonMethod(left, right, null));
+		} else {
+			for (IComparisonMethodFactory factory : listcmf) {
+				methods.add(factory.createComparisonMethod(left, right, null));
+			}
 		}
-		IComparisonMethod icm = listcmf.get(0).createComparisonMethod(left, right, null);
-		return icm;
+		return methods;
+	}
+
+	/**
+	 * Get applicable comparison methods
+	 * 
+	 * @param leftEObject
+	 * @param rightEObject
+	 * @return
+	 */
+	public static List<IComparisonMethodFactory> getApplicableComparisonMethodFactories(EObject leftEObject,
+			EObject rightEObject) {
+		EObjectScopeDefinition left = new EObjectScopeDefinition(leftEObject, "left", true);
+		EObjectScopeDefinition right = new EObjectScopeDefinition(rightEObject, "right", true);
+		return EMFDiffMergeUIPlugin.getDefault().getSetupManager().getApplicableComparisonMethodFactories(left, right,
+				null);
 	}
 
 	/**
