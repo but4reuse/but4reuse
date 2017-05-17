@@ -185,6 +185,16 @@ public class WorkbenchUtils {
 		}
 		return root.getFile(path);
 	}
+	
+	public static URI getURIFromIResource(IResource resource) {
+		String projectName = org.eclipse.emf.common.util.URI.encodeSegment(resource.getProject().getName(), false);
+		String uriString = "platform:/resource/" + projectName;
+		String[] pathSegments = resource.getProjectRelativePath().segments();
+		for(String seg : pathSegments){
+			uriString += '/' + org.eclipse.emf.common.util.URI.encodeSegment(seg, false);
+		}
+		return URI.create(uriString);
+	}
 
 	/**
 	 * Error reporting

@@ -1,6 +1,7 @@
 package org.but4reuse.input.views;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Date;
 
 import org.but4reuse.artefactmodel.Artefact;
@@ -12,7 +13,6 @@ import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -53,9 +53,8 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 
 		IEditingDomainProvider editor = (IEditingDomainProvider) WorkbenchUtils.getActiveEditorOfAGivenId(EDITOR_ID);
 		if (editor == null) {
-			MessageDialog
-					.openInformation(getControl().getShell(), "Info",
-							"An artefacts model editor must be opened to add your artefacts. Open or create one and try again.");
+			MessageDialog.openInformation(getControl().getShell(), "Info",
+					"An artefacts model editor must be opened to add your artefacts. Open or create one and try again.");
 			return;
 		}
 
@@ -63,10 +62,10 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		if (event.data instanceof IResource[]) {
 			IResource[] res = (IResource[]) event.data;
 			for (int i = 0; i < res.length; i++) {
-				String uriString = "platform:/resource/" + URI.encodeSegment(res[i].getProject().getName(), false)
-						+ "/" + URI.encodeSegment(res[i].getProjectRelativePath().toOSString().replace("\\", "/"), false);
+				URI uri = WorkbenchUtils.getURIFromIResource(res[i]);
 				Date creationDate = FileUtils.getCreationDate(WorkbenchUtils.getFileFromIResource(res[i]));
-				Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
+				Command command = addArtefact(editor.getEditingDomain(), res[i].getName(), uri.toString(),
+						creationDate);
 				if (command != null) {
 					compoundCommand.append(command);
 				}
@@ -80,7 +79,7 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 				if (file.exists()) {
 					String uriString = file.toURI().toString();
 					Date creationDate = FileUtils.getCreationDate(file);
-					Command command = addArtefact(editor.getEditingDomain(), uriString, creationDate);
+					Command command = addArtefact(editor.getEditingDomain(), file.getName(), uriString, creationDate);
 					if (command != null) {
 						compoundCommand.append(command);
 					}
@@ -89,9 +88,6 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		}
 		if (compoundCommand.canExecute()) {
 			editor.getEditingDomain().getCommandStack().execute(compoundCommand);
-			// if (editor instanceof IWorkbenchPart){
-			// ((IWorkbenchPart)editor).setFocus();
-			// }
 		}
 		if (editor instanceof IWorkbenchPart) {
 			((IWorkbenchPart) editor).setFocus();
@@ -111,20 +107,15 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 		getControl().redraw();
 	}
 
-	private Command addArtefact(EditingDomain editingDomain, String uriString, Date date) {
+	private Command addArtefact(EditingDomain editingDomain, String name, String uriString, Date date) {
 		Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
+		a.setName(name);
 		a.setArtefactURI(uriString);
 		a.setDate(date);
-		String name = uriString;
-		if (name.endsWith("/")) {
-			name = name.substring(0, name.length() - 1);
-		}
-		name = name.substring(name.lastIndexOf("/") + 1, name.length());
-		a.setName(name);
 		XMIResource amr = (XMIResource) editingDomain.getResourceSet().getResources().get(0);
 		ArtefactModel am = (ArtefactModel) amr.getContents().get(0);
-		return AddCommand
-				.create(editingDomain, am, ArtefactModelPackage.eINSTANCE.getArtefactModel_OwnedArtefacts(), a);
+		return AddCommand.create(editingDomain, am, ArtefactModelPackage.eINSTANCE.getArtefactModel_OwnedArtefacts(),
+				a);
 	}
 
 	public boolean isDragOver() {
