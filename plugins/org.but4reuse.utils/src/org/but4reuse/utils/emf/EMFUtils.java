@@ -50,7 +50,7 @@ public class EMFUtils {
 				return null;
 			}
 			return resource.getContents().get(0);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
