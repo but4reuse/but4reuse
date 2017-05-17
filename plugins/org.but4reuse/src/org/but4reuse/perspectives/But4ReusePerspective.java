@@ -27,6 +27,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		addViewShortcuts();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addViews() {
 		// Creates the overall folder layout.
 		// Note that each new Folder uses a percentage of the remaining
@@ -34,7 +35,7 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 
 		IFolderLayout topLeft = factory.createFolder("topLeft", // NON-NLS-1
 				IPageLayout.LEFT, 0.25f, factory.getEditorArea());
-		topLeft.addView(IPageLayout.ID_PROJECT_EXPLORER);
+		topLeft.addView(IPageLayout.ID_RES_NAV);
 
 		IFolderLayout bottomRight = factory.createFolder("bottomRight", // NON-NLS-1
 				IPageLayout.BOTTOM, 0.75f, factory.getEditorArea());
@@ -72,9 +73,10 @@ public class But4ReusePerspective implements IPerspectiveFactory {
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");// NON-NLS-1
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addViewShortcuts() {
 		factory.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
-		factory.addShowViewShortcut(IPageLayout.ID_PROJECT_EXPLORER);
+		factory.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		factory.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
 		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		factory.addShowViewShortcut("org.but4reuse.input.inputdropview");// NON-NLS-1
