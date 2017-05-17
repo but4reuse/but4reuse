@@ -2,16 +2,16 @@ package org.but4reuse.fca.visualisation;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.fca.utils.FCAUtils;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
 
 import fr.labri.galatea.ConceptOrder;
 import fr.labri.galatea.Context;
@@ -32,26 +32,23 @@ public class FCAVisualisation implements IVisualisation {
 		monitor.subTask("Saving formal context analysis visualisations");
 
 		// Here we try to find the folder to save it
-		URI uri = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
-		java.net.URI uri2 = null;
-		try {
-			uri2 = new java.net.URI(uri.toString());
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		File outputFile = WorkbenchUtils.getFileFromIResource(output);
+		String name = AdaptedModelHelper.getName(adaptedModel);
+		if (name == null) {
+			name = "default";
 		}
-		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
-		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
-
+		
 		// create folder
-		File folder = new File(artefactModelFile.getParentFile(), "formalContextAnalysis");
+		File folder = new File(outputFile, "formalContextAnalysis");
 		folder.mkdir();
 
 		// Save conceptLattice
 		Context fc = FCAUtils.createArtefactsBlocksFormalContext(adaptedModel);
 		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
 		// Save
-		File file = new File(folder, artefactModelFile.getName() + "_artefactsBlocksConceptLattice.dot");
-		File fil = new File(folder, artefactModelFile.getName() + "_artefactsBlocks.html");
+		File file = new File(folder, name + "_artefactsBlocksConceptLattice.dot");
+		File fil = new File(folder, name + "_artefactsBlocks.html");
 		GenerateDot dot = new GenerateDot(cl);
 		GenerateHTML html = new GenerateHTML(fc);
 		dot.generateCode();
@@ -67,7 +64,7 @@ public class FCAVisualisation implements IVisualisation {
 		if (featureList != null) {
 			ConceptOrder cl2 = FCAUtils.createConceptLattice(FCAUtils
 					.createArtefactsFeaturesFormalContext(featureList));
-			File file2 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesConceptLattice.dot");
+			File file2 = new File(folder, name + "_artefactsFeaturesConceptLattice.dot");
 			GenerateDot dot2 = new GenerateDot(cl2);
 			dot2.generateCode();
 			try {
@@ -78,7 +75,7 @@ public class FCAVisualisation implements IVisualisation {
 
 			ConceptOrder cl3 = FCAUtils.createConceptLattice(FCAUtils.createArtefactsFeaturesAndBlocksFormalContext(
 					featureList, adaptedModel));
-			File file3 = new File(folder, artefactModelFile.getName() + "_artefactsFeaturesBlocksConceptLattice.dot");
+			File file3 = new File(folder, name + "_artefactsFeaturesBlocksConceptLattice.dot");
 			GenerateDot dot3 = new GenerateDot(cl3);
 			dot3.generateCode();
 			try {
@@ -87,7 +84,9 @@ public class FCAVisualisation implements IVisualisation {
 				e.printStackTrace();
 			}
 		}
-
+		
+		// Refresh
+		WorkbenchUtils.refreshIResource(output);
 	}
 
 	@Override

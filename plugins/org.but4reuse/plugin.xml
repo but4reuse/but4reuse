@@ -32,5 +32,18 @@
             name="BUT4Reuse">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="org.but4reuse.viewerContribution"
+            targetID="org.eclipse.ui.views.ResourceNavigator">
+         <menu
+               icon="icons/but4reuse.png"
+               id="but4reuse"
+               label="BUT4Reuse"
+               path="additions">
+         </menu>
+      </viewerContribution>
+   </extension>
 
 </plugin>

@@ -1,14 +1,15 @@
 package org.but4reuse.adapters.ui.actions;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.ElementWrapper;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
@@ -30,7 +31,7 @@ import org.eclipse.ui.IViewPart;
  */
 public class SerializeAction implements IViewActionDelegate {
 
-	URI constructionURI;
+	String containerURIString;
 
 	@Override
 	public void run(IAction action) {
@@ -41,17 +42,14 @@ public class SerializeAction implements IViewActionDelegate {
 		if (output != null) {
 			out = output.getFullPath().toString();
 		}
-		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Construction URI", "Insert Construction URI", "platform:/resource" + out + "/analysis.adaptedmodel");
+		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(), "Container URI",
+				"Insert Container URI", "platform:/resource" + out + "/");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
-		String constructionURIString = inputDialog.getValue();
-		constructionURI = null;
-		try {
-			constructionURI = new URI(constructionURIString);
-		} catch (Exception e) {
-			e.printStackTrace();
+		containerURIString = inputDialog.getValue();
+		if (!containerURIString.endsWith("/")) {
+			containerURIString += '/';
 		}
 
 		// Launch Progress dialog
@@ -62,19 +60,37 @@ public class SerializeAction implements IViewActionDelegate {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					// put texts and save
-					int totalWork = 2;
+					// check if artefact model file exists, then put texts and
+					// save
+					int totalWork = 3;
 					monitor.beginTask("Serialize Adapted Model", totalWork);
+
 					AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
+
+					// first check if we need to serialise also the artefact
+					// model
+					ArtefactModel artefactModel = AdaptedModelHelper.getArtefactModel(adaptedModel);
+					if (artefactModel.eResource() == null) {
+						try {
+							String artefactModelURI = containerURIString + "analysis.artefactmodel";
+							EMFUtils.saveEObject(new URI(artefactModelURI), artefactModel);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					monitor.worked(1);
+
 					for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
 						for (ElementWrapper ew : aa.getOwnedElementWrappers()) {
 							ew.setText(((IElement) ew.getElement()).getText());
 						}
 					}
 					monitor.worked(1);
+					
 					try {
-						EMFUtils.saveEObject(constructionURI, adaptedModel);
-					} catch (IOException e) {
+						String adaptedModelURI = containerURIString + "analysis.adaptedmodel";
+						EMFUtils.saveEObject(new URI(adaptedModelURI), adaptedModel);
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					monitor.worked(1);

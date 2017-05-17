@@ -1,6 +1,7 @@
 package org.but4reuse.feature.identification.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
+import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.artefactmodel.ArtefactModelFactory;
 import org.but4reuse.block.identification.IBlockIdentification;
 import org.but4reuse.block.identification.helper.BlockIdentificationHelper;
 import org.but4reuse.feature.constraints.IConstraint;
@@ -20,7 +23,9 @@ import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -29,6 +34,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
@@ -36,7 +43,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * 
  * @author jabier.martinez
  */
-public class FeatureIdentificationAction implements IObjectActionDelegate {
+public class FeatureIdentificationAction implements IObjectActionDelegate, IViewActionDelegate {
 
 	ArtefactModel artefactModel;
 	List<IAdapter> adapters;
@@ -45,28 +52,53 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 	public void run(IAction action) {
 		if (selection instanceof IStructuredSelection) {
 			Object art = ((IStructuredSelection) selection).getFirstElement();
+			if (art instanceof IResource) {
+				// This is the case where the files are directly selected from
+				// the navigator
+				List<?> list = ((IStructuredSelection) selection).toList();
+				artefactModel = ArtefactModelFactory.eINSTANCE.createArtefactModel();
+				for (Object sel : list) {
+					IResource resource = (IResource) sel;
+					Artefact artefact = ArtefactModelFactory.eINSTANCE.createArtefact();
+					URI uri = WorkbenchUtils.getURIFromIResource(resource);
+					artefact.setArtefactURI(uri.toString());
+					artefact.setName(resource.getName());
+					artefactModel.getOwnedArtefacts().add(artefact);
+				}
+			}
 			if (art instanceof ArtefactModel) {
 				artefactModel = ((ArtefactModel) art);
-
+			}
+			if (artefactModel != null) {
 				List<IAdapter> defaultAdapters = AdaptersHelper.getAdaptersByIds(artefactModel.getAdapters());
 
 				// Adapter selection by user
 				adapters = AdaptersSelectionDialog.show("Adapters selection", artefactModel, defaultAdapters);
 
 				if (!adapters.isEmpty()) {
+
+					// Set default output
+					IResource artefactModelResource = EMFUtils.getIResource(artefactModel.eResource());
+					if (artefactModelResource == null) {
+						Object res = ((IStructuredSelection) selection).getFirstElement();
+						if (res instanceof IResource) {
+							AdaptedModelManager.setDefaultOutput(((IResource) res).getProject());
+						} else {
+							AdaptedModelManager.setDefaultOutput(null);
+						}
+					} else {
+						AdaptedModelManager.setDefaultOutput(artefactModelResource.getParent());
+					}
+
 					// Launch Progress dialog
-					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
-							.getActiveShell());
+					ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(
+							Display.getCurrent().getActiveShell());
 
 					try {
 						progressDialog.run(true, true, new IRunnableWithProgress() {
 							@Override
-							public void run(IProgressMonitor monitor) throws InvocationTargetException,
-									InterruptedException {
-
-								// Set default output
-								AdaptedModelManager.setDefaultOutput(EMFUtils.getIResource(artefactModel.eResource())
-										.getParent());
+							public void run(IProgressMonitor monitor)
+									throws InvocationTargetException, InterruptedException {
 
 								// Adapting each active artefact + calculating
 								// blocks + constraints discovery + prepare
@@ -84,8 +116,8 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 								List<Block> blocks = a.identifyBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
 								long stopTime = System.currentTimeMillis();
 								long elapsedTime = stopTime - startTime;
-								AdaptedModelManager.registerTime(
-										"Block identification " + a.getClass().getSimpleName(), elapsedTime);
+								AdaptedModelManager.registerTime("Block identification " + a.getClass().getSimpleName(),
+										elapsedTime);
 
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 
@@ -102,8 +134,9 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 											null, monitor);
 									stopTime = System.currentTimeMillis();
 									elapsedTime = stopTime - startTime;
-									AdaptedModelManager.registerTime("Constraints discovery "
-											+ constraintsDiscovery.getClass().getSimpleName(), elapsedTime);
+									AdaptedModelManager.registerTime(
+											"Constraints discovery " + constraintsDiscovery.getClass().getSimpleName(),
+											elapsedTime);
 									// System.out.println(elapsedTime / 1000.0);
 									if (constraints.isEmpty()) {
 										constraints.addAll(discovered);
@@ -154,6 +187,11 @@ public class FeatureIdentificationAction implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+
+	}
+
+	@Override
+	public void init(IViewPart view) {
 
 	}
 

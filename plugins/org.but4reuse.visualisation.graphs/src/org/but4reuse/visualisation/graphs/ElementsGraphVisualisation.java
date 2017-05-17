@@ -1,7 +1,6 @@
 package org.but4reuse.visualisation.graphs;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +12,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.artefactmodel.Artefact;
@@ -20,9 +20,8 @@ import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.IVisualisation;
 import org.but4reuse.visualisation.graphs.utils.GraphUtils;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
 
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
@@ -46,26 +45,23 @@ public class ElementsGraphVisualisation implements IVisualisation {
 
 		// TODO improve checks!
 		// Here we try to find the folder to save it
-		URI uri = adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource().getURI();
-		java.net.URI uri2 = null;
-		try {
-			uri2 = new java.net.URI(uri.toString());
-		} catch (URISyntaxException e1) {
-			e1.printStackTrace();
+		IContainer output = AdaptedModelManager.getDefaultOutput();
+		File outputFile = WorkbenchUtils.getFileFromIResource(output);
+		String name = AdaptedModelHelper.getName(adaptedModel);
+		if (name == null) {
+			name = "default";
 		}
-		IResource res = WorkbenchUtils.getIResourceFromURI(uri2);
-		File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
 
 		// create folder
-		File graphsFolder = new File(artefactModelFile.getParentFile(), "graphVisualisations");
+		File graphsFolder = new File(outputFile, "graphVisualisations");
 		graphsFolder.mkdir();
 
 		// Save
-		File file = new File(graphsFolder, artefactModelFile.getName() + getNameAppendix());
+		File file = new File(graphsFolder, name + getNameAppendix());
 		GraphUtils.saveGraph(graph, file);
 
 		// Refresh
-		WorkbenchUtils.refreshIResource(res.getParent());
+		WorkbenchUtils.refreshIResource(output);
 	}
 
 	/**

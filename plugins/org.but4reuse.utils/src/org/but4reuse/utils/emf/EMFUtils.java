@@ -98,6 +98,9 @@ public class EMFUtils {
 	 * @return the iResource
 	 */
 	public static IResource getIResource(Resource eResource) {
+		if(eResource == null){
+			return null;
+		}
 		org.eclipse.emf.common.util.URI eUri = eResource.getURI();
 		if (eUri.isPlatformResource()) {
 			String platformString = eUri.toPlatformString(true);
