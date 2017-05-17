@@ -65,8 +65,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 					artefact.setName(resource.getName());
 					artefactModel.getOwnedArtefacts().add(artefact);
 				}
-			}
-			if (art instanceof ArtefactModel) {
+			} else if (art instanceof ArtefactModel) {
 				artefactModel = ((ArtefactModel) art);
 			}
 			if (artefactModel != null) {

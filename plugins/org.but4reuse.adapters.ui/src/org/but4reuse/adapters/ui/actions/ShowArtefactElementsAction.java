@@ -1,6 +1,7 @@
 package org.but4reuse.adapters.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,10 @@ import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.artefactmodel.ArtefactModelFactory;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -21,6 +25,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IViewActionDelegate;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
@@ -28,7 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * 
  * @author jabier.martinez
  */
-public class ShowArtefactElementsAction implements IObjectActionDelegate {
+public class ShowArtefactElementsAction implements IObjectActionDelegate, IViewActionDelegate {
 
 	Artefact artefact = null;
 	List<IAdapter> adap;
@@ -39,9 +45,16 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 		artefact = null;
 		if (selection instanceof IStructuredSelection) {
 			for (Object art : ((IStructuredSelection) selection).toArray()) {
-				if (art instanceof Artefact) {
+				if (art instanceof IResource) {
+					IResource resource = (IResource) art;
+					artefact = ArtefactModelFactory.eINSTANCE.createArtefact();
+					URI uri = WorkbenchUtils.getURIFromIResource(resource);
+					artefact.setArtefactURI(uri.toString());
+					artefact.setName(resource.getName());
+				} else if (art instanceof Artefact) {
 					artefact = ((Artefact) art);
-
+				}
+				if (artefact != null) {
 					// check predefined
 					List<IAdapter> defaultAdapters = null;
 					EObject artefactModel = EcoreUtil.getRootContainer(artefact);
@@ -55,17 +68,18 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 
 					if (!adap.isEmpty()) {
 						// Launch Progress dialog
-						ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
-								.getActiveShell());
+						ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(
+								Display.getCurrent().getActiveShell());
 
 						try {
 							progressDialog.run(true, true, new IRunnableWithProgress() {
 								@Override
-								public void run(IProgressMonitor monitor) throws InvocationTargetException,
-										InterruptedException {
+								public void run(IProgressMonitor monitor)
+										throws InvocationTargetException, InterruptedException {
 
 									int totalWork = 1;
-									monitor.beginTask("Calculating elements of " + artefact.getArtefactURI(), totalWork);
+									monitor.beginTask("Calculating elements of " + artefact.getArtefactURI(),
+											totalWork);
 
 									text.clear();
 									for (IAdapter adapter : adap) {
@@ -89,8 +103,9 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 							if (name == null || name.length() == 0) {
 								name = artefact.getArtefactURI();
 							}
-							ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent()
-									.getActiveShell(), name, text.size() + " Elements", sText.toString());
+							ScrollableMessageDialog dialog = new ScrollableMessageDialog(
+									Display.getCurrent().getActiveShell(), name, text.size() + " Elements",
+									sText.toString());
 							dialog.open();
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -110,6 +125,11 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+
+	}
+
+	@Override
+	public void init(IViewPart view) {
 
 	}
 

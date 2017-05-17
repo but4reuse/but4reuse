@@ -15,6 +15,18 @@
                menubarPath="additions">
          </action>
       </objectContribution>
+      <viewerContribution
+            id="org.but4reuse.adapters.ui.viewerContribution3"
+            targetID="org.eclipse.ui.views.ResourceNavigator">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowArtefactElementsAction"
+               enablesFor="*"
+               icon="icons/show.png"
+               id="org.but4reuse.adapters.ui.action2"
+               label="Show elements"
+               menubarPath="but4reuse/additions">
+         </action>
+      </viewerContribution>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
