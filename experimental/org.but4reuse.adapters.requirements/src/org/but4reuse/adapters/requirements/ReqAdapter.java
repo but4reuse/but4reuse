@@ -3,6 +3,7 @@ package org.but4reuse.adapters.requirements;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
@@ -15,9 +16,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.rmf.reqif10.AttributeValue;
 import org.eclipse.rmf.reqif10.AttributeValueString;
 import org.eclipse.rmf.reqif10.ReqIF;
-import org.eclipse.rmf.reqif10.SpecHierarchy;
 import org.eclipse.rmf.reqif10.SpecObject;
-import org.eclipse.rmf.reqif10.Specification;
 import org.eclipse.swt.widgets.Display;
 
 /**
@@ -52,11 +51,11 @@ public class ReqAdapter implements IAdapter {
 		EObject eObject = EMFUtils.getEObject(uri);
 		if (eObject != null && (eObject instanceof ReqIF)) {
 			ReqIF reqif = (ReqIF) eObject;
-			List<Specification> specs = reqif.getCoreContent().getSpecifications();
-			for (Specification spec : specs) {
-				List<SpecHierarchy> elems = spec.getChildren();
-				for (SpecHierarchy elem : elems) {
-					SpecObject specObject = elem.getObject();
+			Iterator<EObject> i = reqif.eAllContents();
+			while (i.hasNext()) {
+				EObject e = i.next();
+				if (e instanceof SpecObject) {
+					SpecObject specObject = ((SpecObject) e);
 					List<AttributeValue> attributeValues = specObject.getValues();
 					for (AttributeValue av : attributeValues) {
 						if (av instanceof AttributeValueString) {
