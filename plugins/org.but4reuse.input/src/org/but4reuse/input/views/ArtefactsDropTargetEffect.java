@@ -8,9 +8,12 @@ import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;
 import org.but4reuse.artefactmodel.ArtefactModelPackage;
+import org.but4reuse.utils.emf.EMFUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.xmi.XMIResource;
@@ -30,6 +33,8 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author jabier.martinez
  */
 public class ArtefactsDropTargetEffect extends DropTargetEffect {
+
+	private static final String DEFAULT_ARTEFACTMODEL = "default.artefactmodel";
 
 	public static final String EDITOR_ID = "org.but4reuse.artefactmodel.presentation.ArtefactModelEditorID";
 
@@ -53,9 +58,35 @@ public class ArtefactsDropTargetEffect extends DropTargetEffect {
 
 		IEditingDomainProvider editor = (IEditingDomainProvider) WorkbenchUtils.getActiveEditorOfAGivenId(EDITOR_ID);
 		if (editor == null) {
-			MessageDialog.openInformation(getControl().getShell(), "Info",
-					"An artefacts model editor must be opened to add your artefacts. Open or create one and try again.");
-			return;
+			// If there is no editor open, try to create the artefact model if
+			// they were IResources
+			if (event.data instanceof IResource[]) {
+				// Create the artefact model in the container of the first
+				// resource
+				IResource[] res = (IResource[]) event.data;
+				IContainer container = res[0].getParent();
+				try {
+					URI defaultUri = URI.create(container.getLocationURI() + "/" + DEFAULT_ARTEFACTMODEL);
+					// Check if it already exists
+					File f = FileUtils.getFile(defaultUri);
+					if (f == null || !f.exists()) {
+						ArtefactModel am = ArtefactModelFactory.eINSTANCE.createArtefactModel();
+						EMFUtils.saveEObject(defaultUri, am);
+						WorkbenchUtils.openInEditor(container.getFile(Path.fromOSString(DEFAULT_ARTEFACTMODEL)));
+						editor = (IEditingDomainProvider) WorkbenchUtils.getActiveEditorOfAGivenId(EDITOR_ID);
+					} else {
+						MessageDialog.openInformation(getControl().getShell(), "Info",
+								"default.artefactmodel already exists. Open it or create a new artefact model.");
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				MessageDialog.openInformation(getControl().getShell(), "Info",
+						"An artefact model editor must be opened to add your artefacts. Open or create one and try again.");
+				return;
+			}
 		}
 
 		// Resource transfer
