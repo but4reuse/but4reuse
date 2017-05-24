@@ -1074,7 +1074,6 @@ public class VisualiserCanvas extends Canvas {
 	 */
 	private void paint(GC gc) {
 		Rectangle clientRect = getClientArea();
-
 		if ((screenImg == null) || (clientRect.width > screenImg.getBounds().width)
 				|| clientRect.height > screenImg.getBounds().height) {
 			if (screenImg != null) {
@@ -1082,8 +1081,19 @@ public class VisualiserCanvas extends Canvas {
 			}
 			screenImg = new Image(getDisplay(), clientRect.width, clientRect.height);
 		}
-		GC sgc = new GC(screenImg);
-
+		
+		GC sgc;
+		try{
+			sgc = new GC(screenImg);
+		} catch(Exception e){
+			// Try to recover from exception
+			if (screenImg != null) {
+				screenImg.dispose();
+			}
+			screenImg = new Image(getDisplay(), clientRect.width, clientRect.height);
+			sgc = new GC(screenImg);
+		}
+		
 		// clear to bg colour
 		sgc.setBackground(VIS_BG_COLOUR);
 		sgc.fillRectangle(screenImg.getBounds());
