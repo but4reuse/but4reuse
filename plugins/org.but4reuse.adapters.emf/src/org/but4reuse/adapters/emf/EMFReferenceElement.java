@@ -34,8 +34,7 @@ public class EMFReferenceElement extends AbstractElement {
 			}
 			referenceText = referenceText.substring(0, referenceText.length() - ", ".length());
 		}
-		return "Ref: " + eReference.getName() + " [Owner->" + EMFUtils.getText(owner) + "] [Value->" + referenceText
-				+ "]";
+		return "Ref: " + eReference.getName() + " = " + referenceText + " [Owner->" + EMFUtils.getText(owner) + "]";
 	}
 
 	@Override

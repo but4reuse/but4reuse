@@ -8,7 +8,7 @@ public class BUT4ReusePreferencesPage extends FieldEditorPreferencePage implemen
 
 	public BUT4ReusePreferencesPage() {
 		super(GRID);
-		setDescription("General settings.\nMore info at www.but4reuse.org");
+		setDescription("General settings.\nMore info at http://but4reuse.github.io");
 	}
 
 	@Override

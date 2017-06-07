@@ -26,10 +26,10 @@ public class EMFClassElement extends AbstractElement {
 	@Override
 	public String getText() {
 		if (isResource) {
-			return "Class: " + eObject.eClass().getName();
+			return "Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "]";
 		}
-		return ("Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "] [Owner->"
-				+ EMFUtils.getText(owner) + ", Ref->" + reference.getName() + "]");
+		return "Class: " + eObject.eClass().getName() + " [Text->" + EMFUtils.getText(eObject) + "] [Owner->"
+				+ EMFUtils.getText(owner) + ", Ref->" + reference.getName() + "]";
 	}
 
 	@Override

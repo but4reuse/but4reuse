@@ -57,7 +57,7 @@ public class ConstructSeparatelyViewAction implements IViewActionDelegate {
 			out = output.getFullPath().toString();
 		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-				"Construction URI", "Insert Construction URI", "platform:/resource" + out + "/");
+				"Construction URI", "Insert Construction URI", "platform:/resource" + out + "/assets/");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
