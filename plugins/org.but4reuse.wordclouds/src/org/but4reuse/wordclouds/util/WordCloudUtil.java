@@ -8,20 +8,26 @@ import org.but4reuse.wordclouds.activator.Activator;
 import org.but4reuse.wordclouds.preferences.WordCloudPreferences;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
 
 /**
- * @author Arthur A Toolbox to draw word cloud
+ * @author Arthur, aarkoub A Toolbox to draw word cloud
  */
 public class WordCloudUtil {
 
 	/**
-	 * Draw the word cloud cloud in the canvas can.
+	 * Draw the word cloud in the canvas can.
 	 * 
 	 * @param cmp
 	 *            The ScrolledComposite the string will be drawn.
@@ -42,6 +48,7 @@ public class WordCloudUtil {
 		for (Tag t : cloud.tags()) {
 
 			Label l = new Label(cmp, SWT.NORMAL);
+			l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 			l.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 			Font f = new Font(Display.getCurrent(), "Arial", t.getWeightInt(), SWT.ITALIC);
@@ -62,6 +69,61 @@ public class WordCloudUtil {
 			l.setLocation(x, y);
 			x += spaceHint + l.getBounds().width;
 		}
+
+	}
+
+	/**
+	 * 
+	 * Save the word cloud into a png image
+	 * 
+	 * @param cloud
+	 *            This cloud contains strings that you want to draw in your
+	 *            canvas.
+	 * @param path
+	 *            This path is where you want to save the image
+	 */
+	public static void saveCloud(Cloud cloud, String path) {
+
+		Shell s = new Shell(Display.getDefault());
+		s.setLayout(new FillLayout());
+		s.update();
+
+		Composite toSave = new Composite(s, SWT.NORMAL);
+
+		WordCloudUtil.drawWordCloud(toSave, cloud);
+
+		s.open();
+
+		// Get the real size, otherwise a lot of white space in the
+		// margins
+		int maxWidth = 10;
+		int maxHeight = 10;
+		for (Control c : toSave.getChildren()) {
+			int x = c.getBounds().x + c.getBounds().width;
+			int y = c.getBounds().y + c.getBounds().height;
+			if (x > maxWidth) {
+				maxWidth = x;
+			}
+			if (y > maxHeight) {
+				maxHeight = y;
+			}
+		}
+
+		// a little bit of margin
+		maxWidth += 10;
+		maxHeight += 10;
+		s.setSize(maxWidth, maxHeight);
+		Image image = new Image(s.getDisplay(), maxWidth, maxHeight);
+		ImageLoader loader = new ImageLoader();
+
+		GC gc = new GC(image);
+		toSave.print(gc);
+		gc.dispose();
+
+		loader.data = new ImageData[] { image.getImageData() };
+		loader.save(path, SWT.IMAGE_PNG);
+
+		s.close();
 
 	}
 
