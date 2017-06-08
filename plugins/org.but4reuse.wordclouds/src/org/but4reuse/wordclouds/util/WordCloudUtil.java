@@ -86,9 +86,9 @@ public class WordCloudUtil {
 
 		Shell s = new Shell(Display.getDefault());
 		s.setLayout(new FillLayout());
-		s.update();
 
 		Composite toSave = new Composite(s, SWT.NORMAL);
+		toSave.setSize(1000, 1000);
 
 		WordCloudUtil.drawWordCloud(toSave, cloud);
 
@@ -112,7 +112,7 @@ public class WordCloudUtil {
 		// a little bit of margin
 		maxWidth += 10;
 		maxHeight += 10;
-		s.setSize(maxWidth, maxHeight);
+		s.setSize(maxWidth * 2, maxHeight * 2);
 		Image image = new Image(s.getDisplay(), maxWidth, maxHeight);
 		ImageLoader loader = new ImageLoader();
 
