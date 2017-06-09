@@ -19,10 +19,6 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,7 +40,7 @@ import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
 
 /**
- * @author Arthur This class is an eclipse view.
+ * @author Arthur, aarkoub This class is an eclipse view.
  */
 
 public class WordCloudView extends ViewPart {
@@ -99,6 +95,11 @@ public class WordCloudView extends ViewPart {
 	 * TabFolder from the view.
 	 */
 	private TabFolder tabFolder;
+
+	/**
+	 * Last index used to get the clouds
+	 */
+	private static int lastIndex = 0;
 
 	/**
 	 * Default constructor.
@@ -203,7 +204,7 @@ public class WordCloudView extends ViewPart {
 		singleton.getCombo().select(index);
 
 		Cloud c = null;
-
+		lastIndex = index;
 		if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
 			c = WordCloudVisualisation.getCloudsTFIDF().get(index);
 		else
@@ -354,38 +355,15 @@ public class WordCloudView extends ViewPart {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// Get the one selected
-				Composite toSave = cmp;
-				if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1) {
-					toSave = cmpTFIDF;
-				}
 
-				// Get the real size, otherwise a lot of white space in the
-				// margins
-				int maxWidth = 10;
-				int maxHeight = 10;
-				for (Control c : toSave.getChildren()) {
-					int x = c.getBounds().x + c.getBounds().width;
-					int y = c.getBounds().y + c.getBounds().height;
-					if (x > maxWidth) {
-						maxWidth = x;
-					}
-					if (y > maxHeight) {
-						maxHeight = y;
-					}
-				}
+				Cloud cloud = null;
 
-				// a little bit of margin
-				maxWidth += 10;
-				maxHeight += 10;
-				Image image = new Image(Display.getCurrent(), maxWidth, maxHeight);
-				ImageLoader loader = new ImageLoader();
+				if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
+					cloud = WordCloudVisualisation.getCloudsTFIDF().get(lastIndex);
+				else
+					cloud = WordCloudVisualisation.getClouds().get(lastIndex);
 
-				GC gc = new GC(image);
-				toSave.print(gc);
-				gc.dispose();
-				loader.data = new ImageData[] { image.getImageData() };
-
+				// To select the directory
 				DirectoryDialog dirDialog = new DirectoryDialog(Display.getCurrent().getActiveShell());
 				dirDialog.setText("Select output directory");
 
@@ -395,7 +373,10 @@ public class WordCloudView extends ViewPart {
 					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1) {
 						path += "_tfidf";
 					}
-					loader.save(path + ".png", SWT.IMAGE_PNG);
+					path += ".png";
+
+					// To save the image
+					WordCloudUtil.saveCloud(cloud, path);
 				}
 			}
 
