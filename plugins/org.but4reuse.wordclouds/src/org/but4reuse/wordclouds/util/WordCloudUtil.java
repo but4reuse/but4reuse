@@ -46,7 +46,6 @@ public class WordCloudUtil {
 		cmp.update();
 		int spaceHint = 10;
 		for (Tag t : cloud.tags()) {
-			System.out.println(t.getName());
 			Label l = new Label(cmp, SWT.NORMAL);
 			l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 			l.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -99,7 +98,6 @@ public class WordCloudUtil {
 		int maxWidth = 10;
 		int maxHeight = 10;
 		for (Control c : toSave.getChildren()) {
-			System.out.println("ICI");
 			int x = c.getBounds().x + c.getBounds().width;
 			int y = c.getBounds().y + c.getBounds().height;
 			if (x > maxWidth) {
