@@ -92,7 +92,7 @@ public class WordCloudUtil {
 		WordCloudUtil.drawWordCloud(toSave, cloud);
 
 		s.open();
-
+		
 		// Get the real size, otherwise a lot of white space in the
 		// margins
 		int maxWidth = 10;
