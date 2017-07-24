@@ -46,7 +46,6 @@ public class WordCloudUtil {
 		cmp.update();
 		int spaceHint = 10;
 		for (Tag t : cloud.tags()) {
-
 			Label l = new Label(cmp, SWT.NORMAL);
 			l.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_BLACK));
 			l.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
@@ -93,7 +92,7 @@ public class WordCloudUtil {
 		WordCloudUtil.drawWordCloud(toSave, cloud);
 
 		s.open();
-
+		
 		// Get the real size, otherwise a lot of white space in the
 		// margins
 		int maxWidth = 10;
@@ -118,10 +117,11 @@ public class WordCloudUtil {
 
 		GC gc = new GC(image);
 		toSave.print(gc);
-		gc.dispose();
 
 		loader.data = new ImageData[] { image.getImageData() };
 		loader.save(path, SWT.IMAGE_PNG);
+
+		gc.dispose();
 
 		s.close();
 
