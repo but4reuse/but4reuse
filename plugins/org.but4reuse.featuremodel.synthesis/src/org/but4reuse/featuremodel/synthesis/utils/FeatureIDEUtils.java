@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.featuremodel.synthesis.impl.FlatFMSynthesis;
 import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IFile;
@@ -18,6 +20,7 @@ import org.prop4j.Node;
 import org.prop4j.NodeReader;
 
 import de.ovgu.featureide.fm.core.base.IFeature;
+import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.base.impl.Constraint;
 import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.FMFormatManager;
@@ -31,6 +34,12 @@ import de.ovgu.featureide.fm.core.io.manager.FileHandler;
  * @author jabier.martinez
  */
 public class FeatureIDEUtils {
+	
+	public static IFeatureModel createFeatureModel(AdaptedModel adaptedModel){
+		FlatFMSynthesis synthesisMethod = new FlatFMSynthesis();
+		IFeatureModel fm = synthesisMethod.doCreateFeatureModel(adaptedModel);
+		return fm;
+	}
 
 	public static void exportFeatureModel(URI featureModelURI, FeatureModel fm) {
 		File fmFile = FileUtils.getFile(featureModelURI);
@@ -106,7 +115,7 @@ public class FeatureIDEUtils {
 	 * @param featureModel
 	 * @param file
 	 */
-	public static void save(FeatureModel featureModel, File file) {
+	public static void save(IFeatureModel featureModel, File file) {
 		String string = FileHandler.saveToString(featureModel,
 				FMFormatManager.getInstance().getFormatByExtension("xml"));
 		try {

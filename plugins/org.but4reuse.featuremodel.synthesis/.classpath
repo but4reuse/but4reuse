@@ -2,9 +2,12 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="lib" path="libs/de.ovgu.featureide.lib.fm-v3.2.0.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="libs/antlr-3.4.jar"/>
-	<classpathentry kind="lib" path="libs/org.sat4j.core.jar"/>
+	<classpathentry kind="lib" path="libs/annotations.jar"/>
+	<classpathentry kind="lib" path="libs/de.ovgu.featureide.lib.fm-v3.3.0.jar"/>
+	<classpathentry kind="lib" path="libs/guava-r09.jar"/>
+	<classpathentry kind="lib" path="libs/guidsl.jar"/>
+	<classpathentry kind="lib" path="libs/jakarta.jar"/>
+	<classpathentry kind="lib" path="libs/org.sat4j.pb.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
