@@ -14,7 +14,6 @@ import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
 import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.prop4j.solver.SatInstance;
 
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
@@ -22,8 +21,6 @@ import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
-import de.ovgu.featureide.fm.core.editing.AdvancedNodeCreator;
-import de.ovgu.featureide.fm.core.job.monitor.NullMonitor;
 
 /**
  * Flat feature model creator
