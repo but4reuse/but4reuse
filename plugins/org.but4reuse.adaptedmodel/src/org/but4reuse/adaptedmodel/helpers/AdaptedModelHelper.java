@@ -232,7 +232,7 @@ public class AdaptedModelHelper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get the name of the artefact model
 	 * 
@@ -241,7 +241,7 @@ public class AdaptedModelHelper {
 	 */
 	public static String getName(AdaptedModel adaptedModel) {
 		ArtefactModel am = getArtefactModel(adaptedModel);
-		if(am.getName() != null && am.getName().length() > 0) {
+		if (am.getName() != null && am.getName().length() > 0) {
 			return am.getName();
 		}
 		return null;
@@ -342,6 +342,48 @@ public class AdaptedModelHelper {
 		return elements;
 	}
 
+	/**
+	 * Get the elements of a block in the version found in a given artefact
+	 * 
+	 * @param block
+	 * @param adaptedArtefact
+	 * @return list of elements (non null)
+	 */
+	public static List<IElement> getElementsOfBlockFromAdaptedArtefact(Block block, AdaptedArtefact adaptedArtefact) {
+		List<IElement> elements = new ArrayList<IElement>();
+		adaptedArtefact.getOwnedElementWrappers();
+		for (BlockElement be : block.getOwnedBlockElements()) {
+			for (ElementWrapper ew : be.getElementWrappers()) {
+				if (adaptedArtefact.getOwnedElementWrappers().contains(ew)) {
+					elements.add((IElement) ew.getElement());
+				}
+			}
+		}
+		return elements;
+	}
+
+	/**
+	 * Get the elements of a set of blocks in the version found in a given
+	 * artefact
+	 * 
+	 * @param blocks
+	 * @param adaptedArtefact
+	 * @return list of elements (non null)
+	 */
+	public static List<IElement> getElementsOfBlocksFromAdaptedArtefact(List<Block> blocks,
+			AdaptedArtefact adaptedArtefact) {
+		List<IElement> elements = new ArrayList<IElement>();
+		for (Block block : blocks) {
+			elements.addAll(getElementsOfBlockFromAdaptedArtefact(block, adaptedArtefact));
+		}
+		return elements;
+	}
+
+	/**
+	 * Get elements of adapted artefact
+	 * @param adaptedArtefact
+	 * @return list of elements
+	 */
 	public static List<IElement> getElementsOfAdaptedArtefact(AdaptedArtefact adaptedArtefact) {
 		List<IElement> elements = new ArrayList<IElement>();
 		for (ElementWrapper ew : adaptedArtefact.getOwnedElementWrappers()) {
