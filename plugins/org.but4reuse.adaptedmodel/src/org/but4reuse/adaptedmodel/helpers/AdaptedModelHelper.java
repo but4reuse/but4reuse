@@ -381,6 +381,7 @@ public class AdaptedModelHelper {
 
 	/**
 	 * Get elements of adapted artefact
+	 * 
 	 * @param adaptedArtefact
 	 * @return list of elements
 	 */
@@ -449,15 +450,17 @@ public class AdaptedModelHelper {
 			Map<IElement, BlockElement> iebeMap) {
 		Set<IDependencyObject> result = new LinkedHashSet<IDependencyObject>();
 		BlockElement blockElement = iebeMap.get(element);
-		// Maybe only first...
-		for (ElementWrapper ew : blockElement.getElementWrappers()) {
-			IElement e = (IElement) ew.getElement();
-			Map<String, List<IDependencyObject>> dependants = e.getDependants();
-			// keep ordering
-			for (Entry<String, List<IDependencyObject>> entry : dependants.entrySet()) {
-				for (IDependencyObject ido : entry.getValue()) {
-					if (!result.contains(ido)) {
-						result.add(ido);
+		if (blockElement != null) {
+			// Maybe only first...
+			for (ElementWrapper ew : blockElement.getElementWrappers()) {
+				IElement e = (IElement) ew.getElement();
+				Map<String, List<IDependencyObject>> dependants = e.getDependants();
+				// keep ordering
+				for (Entry<String, List<IDependencyObject>> entry : dependants.entrySet()) {
+					for (IDependencyObject ido : entry.getValue()) {
+						if (!result.contains(ido)) {
+							result.add(ido);
+						}
 					}
 				}
 			}

@@ -9,8 +9,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.utils,
  org.eclipse.emf.diffmerge.ui,
  org.eclipse.emf.ecore,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.but4reuse.adaptedmodel
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.but4reuse.adapters.emf
+Export-Package: org.but4reuse.adapters.emf,
+ org.but4reuse.adapters.emf.helper
 Bundle-Vendor: BUT4Reuse

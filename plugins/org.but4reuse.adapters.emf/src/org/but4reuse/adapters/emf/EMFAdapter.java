@@ -6,10 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.AdaptedArtefact;
+import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.adaptedmodel.AdaptedModelFactory;
+import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.emf.activator.Activator;
 import org.but4reuse.adapters.emf.diffmerge.DiffMergeUtils;
+import org.but4reuse.adapters.emf.helper.EMFHelper;
 import org.but4reuse.adapters.emf.preferences.EMFAdapterPreferencePage;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -24,8 +31,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * EMF Adapter
@@ -282,14 +288,28 @@ public class EMFAdapter implements IAdapter {
 
 	@Override
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
-		// TODO construct fragments. Using CVL extraction for the moment
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Construction",
-						"For the moment, construction is not available. Use CVL extraction action instead.");
+		System.out.println("Basic EMF models construct (only BaseModel). Use the CVL construct instead!");
+		// TODO construct fragments. Right now there must be a resource element
+		// (EMFClassElement with isResource)
+		// Get current adaptedModel with all elements
+		AdaptedModel adaptedModel = EcoreUtil.copy(AdaptedModelManager.getAdaptedModel());
+
+		// Construct only the elements of the selected blocks
+		AdaptedModel newAdaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
+		for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+			AdaptedArtefact newaa = AdaptedModelFactory.eINSTANCE.createAdaptedArtefact();
+			newAdaptedModel.getOwnedAdaptedArtefacts().add(newaa);
+			newaa.getOwnedElementWrappers().addAll(aa.getOwnedElementWrappers());
+		}
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			if (elements.containsAll(AdaptedModelHelper.getElementsOfBlock(block))) {
+				Block newBlock = AdaptedModelFactory.eINSTANCE.createBlock();
+				newBlock.setName(block.getName());
+				newBlock.getOwnedBlockElements().addAll(block.getOwnedBlockElements());
+				newAdaptedModel.getOwnedBlocks().add(newBlock);
 			}
-		});
+		}
+		EMFHelper.constructMaximalEMFModel(newAdaptedModel, elements, uri);
 	}
 
 	/**

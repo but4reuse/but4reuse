@@ -19,6 +19,7 @@ import org.but4reuse.adapters.emf.EMFAdapter;
 import org.but4reuse.adapters.emf.EMFAttributeElement;
 import org.but4reuse.adapters.emf.EMFClassElement;
 import org.but4reuse.adapters.emf.EMFReferenceElement;
+import org.but4reuse.adapters.emf.helper.EMFHelper;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -71,15 +72,18 @@ public class CVLModelsExtractor {
 			/**
 			 * Construct the Base Model
 			 */
+			// TODO For the construction of the BaseModel refactor to use
+			// org.but4reuse.adapters.emf.helper.EMFHelper.constructMaximalEMFModel(AdaptedModel,
+			// List<IElement>, URI)
 			// Get emf adapter
 			// retrieve the common block
 			Block baseBlock = AdaptedModelHelper.getCommonBlocks(adaptedModel).get(0);
 			List<IElement> elements = AdaptedModelHelper.getElementsOfBlock(baseBlock);
-			String extension = getFileExtension(elements);
+			String extension = EMFHelper.getFileExtension(elements);
 			URI baseModelURI = new URI(constructionURI + "BaseModel." + extension);
 
 			// Get the initial class
-			EMFClassElement resource = getResourceClassElement(elements);
+			EMFClassElement resource = EMFHelper.getResourceClassElement(elements);
 			elements = new ArrayList<IElement>();
 
 			// A stack that is initialized with the resource EMF Class Element
@@ -450,8 +454,7 @@ public class CVLModelsExtractor {
 			for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
 				if (constraint.getType().equals(IConstraint.REQUIRES)) {
 					// Implies
-					CVLUtils.addRequiresConstraint(root,
-							map.get(constraint.getBlock1().getName().replaceAll(" ", "_")),
+					CVLUtils.addRequiresConstraint(root, map.get(constraint.getBlock1().getName().replaceAll(" ", "_")),
 							map.get(constraint.getBlock2().getName().replaceAll(" ", "_")));
 				} else if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
 					// Mutually excludes
@@ -506,45 +509,6 @@ public class CVLModelsExtractor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Get the resource emf class element
-	 * 
-	 * @param elements
-	 * @return
-	 */
-	public static EMFClassElement getResourceClassElement(List<IElement> elements) {
-		for (IElement e : elements) {
-			if (e instanceof EMFClassElement) {
-				EMFClassElement cl = ((EMFClassElement) e);
-				if (cl.isResource) {
-					return cl;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Get the extension of the model (uml or whatever we are dealing with)
-	 * 
-	 * @param block
-	 * @return
-	 */
-	public static String getFileExtension(List<IElement> elements) {
-		String extension = "model";
-		for (IElement e : elements) {
-			if (e instanceof EMFClassElement) {
-				String urio = ((EMFClassElement) e).eObject.eResource().getURI().toString();
-				int i = urio.lastIndexOf('.');
-				if (i > 0) {
-					extension = urio.substring(i + 1);
-					break;
-				}
-			}
-		}
-		return extension;
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -193,6 +194,16 @@ public class EMFUtils {
 			}
 		}
 		return refList;
+	}
+	
+	/**
+	 * Get model file extension
+	 * TODO check the case where the eObject was not serialized yet
+	 * @param eObject
+	 * @return the extension or null
+	 */
+	public static String getModelExtension(EObject eObject){
+		return FileUtils.getExtension(eObject.eResource().getURI().toString());
 	}
 
 }
