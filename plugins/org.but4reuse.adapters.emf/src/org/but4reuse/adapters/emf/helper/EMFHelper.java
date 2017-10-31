@@ -52,17 +52,18 @@ public class EMFHelper {
 		List<Block> commonBlocks = AdaptedModelHelper.getCommonBlocks(adaptedModel);
 		List<IElement> commonElements = AdaptedModelHelper.getElementsOfBlocks(commonBlocks);
 
-		// Fix the name
-		String extension = getFileExtension(commonElements);
-
+		// Do not try to fix the name as it might cause problems for other utils
+		// that expect the same uri used when you call construction
+		// String extension = getFileExtension(commonElements)
 		// check if it ends with the correct extension
-		if (!constructionURI.toString().endsWith("." + extension)) {
-			try {
-				constructionURI = new URI(constructionURI + "_model." + extension);
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
+		// TODO avoid to create ".uml" file
+		// if (!constructionURI.toString().endsWith("." + extension)) {
+		// try {
+		// constructionURI = new URI(constructionURI + "." + extension);
+		// } catch (URISyntaxException e) {
+		// e.printStackTrace();
+		// }
+		// }
 
 		// Get the initial class
 		EMFClassElement resource = getResourceClassElement(commonElements);
