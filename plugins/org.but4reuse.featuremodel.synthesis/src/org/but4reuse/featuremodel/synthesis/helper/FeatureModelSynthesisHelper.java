@@ -26,8 +26,8 @@ public class FeatureModelSynthesisHelper {
 	 */
 	public static List<IFeatureModelSynthesis> getAllFeatureModelCreators() {
 		List<IFeatureModelSynthesis> fmCreators = new ArrayList<IFeatureModelSynthesis>();
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement fmCreatorExtensionPoint : adapterExtensionPoints) {
 			try {
 				fmCreators.add((IFeatureModelSynthesis) fmCreatorExtensionPoint.createExecutableExtension("class"));
@@ -45,8 +45,8 @@ public class FeatureModelSynthesisHelper {
 	 * @return null or the feature model creator
 	 */
 	public static IFeatureModelSynthesis getFeatureModelCreatorByName(String name) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement fmCreatorExtensionPoint : adapterExtensionPoints) {
 			if (fmCreatorExtensionPoint.getAttribute("name").equals(name)) {
 				try {
@@ -66,8 +66,8 @@ public class FeatureModelSynthesisHelper {
 	 * @return the name
 	 */
 	public static String getAlgorithmName(IFeatureModelSynthesis algo) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
+		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+				.getConfigurationElementsFor(FEATUREMODELSYNTHESIS_EXTENSIONPOINT);
 		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
 			try {
 				IFeatureModelSynthesis oneAlgo = (IFeatureModelSynthesis) adapterExtensionPoint

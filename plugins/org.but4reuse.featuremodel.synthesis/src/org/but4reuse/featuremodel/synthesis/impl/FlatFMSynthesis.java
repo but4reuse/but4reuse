@@ -33,9 +33,12 @@ public class FlatFMSynthesis implements IFeatureModelSynthesis {
 	public void createFeatureModel(URI outputContainer, IProgressMonitor monitor) {
 		// Get current adaptedModel
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
-		
+
 		// Synthesize fm
 		IFeatureModel fm = doCreateFeatureModel(adaptedModel);
+
+		// Remove redundant constraints
+		FeatureIDEUtils.removeRedundantConstraints(fm);
 
 		// Save
 		try {
@@ -50,7 +53,9 @@ public class FlatFMSynthesis implements IFeatureModelSynthesis {
 	}
 
 	/**
-	 * Create a flat feature model with the constraints as cross-tree constraints
+	 * Create a flat feature model with the constraints as cross-tree
+	 * constraints
+	 * 
 	 * @param adaptedModel
 	 * @return the feature model
 	 */
@@ -68,7 +73,7 @@ public class FlatFMSynthesis implements IFeatureModelSynthesis {
 		FeatureUtils.setAnd(root, true);
 		FeatureUtils.setRoot(fm, root);
 		fm.addFeature(root);
-		fm.getStructure().setRoot(root.getStructure());		
+		fm.getStructure().setRoot(root.getStructure());
 
 		LinkedList<IFeature> children = new LinkedList<IFeature>();
 		// Add blocks as features

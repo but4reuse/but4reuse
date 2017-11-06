@@ -42,8 +42,8 @@ public class CreateConfigurationsAction implements IViewActionDelegate {
 				out = output.getFullPath().toString();
 			}
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Construction URI", "Insert folder URI for the configurations", "platform:/resource" + out
-							+ "/configs/");
+					"Construction URI", "Insert folder URI for the configurations",
+					"platform:/resource" + out + "/configs/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}

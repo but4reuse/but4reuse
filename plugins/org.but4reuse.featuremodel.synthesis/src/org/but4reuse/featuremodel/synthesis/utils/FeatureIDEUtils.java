@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.feature.constraints.IConstraint;
@@ -19,6 +21,8 @@ import org.eclipse.core.resources.IFile;
 import org.prop4j.Node;
 import org.prop4j.NodeReader;
 
+import de.ovgu.featureide.fm.core.ConstraintAttribute;
+import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.IFeature;
 import de.ovgu.featureide.fm.core.base.IFeatureModel;
 import de.ovgu.featureide.fm.core.base.impl.Constraint;
@@ -27,6 +31,7 @@ import de.ovgu.featureide.fm.core.base.impl.FMFormatManager;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
 import de.ovgu.featureide.fm.core.io.manager.FileHandler;
+import de.ovgu.featureide.fm.core.job.monitor.NullMonitor;
 
 /**
  * Feature IDE Utils
@@ -34,8 +39,8 @@ import de.ovgu.featureide.fm.core.io.manager.FileHandler;
  * @author jabier.martinez
  */
 public class FeatureIDEUtils {
-	
-	public static IFeatureModel createFeatureModel(AdaptedModel adaptedModel){
+
+	public static IFeatureModel createFeatureModel(AdaptedModel adaptedModel) {
 		FlatFMSynthesis synthesisMethod = new FlatFMSynthesis();
 		IFeatureModel fm = synthesisMethod.doCreateFeatureModel(adaptedModel);
 		return fm;
@@ -240,6 +245,29 @@ public class FeatureIDEUtils {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Remove redundant constraints
+	 * 
+	 * @param fm
+	 */
+	public static void removeRedundantConstraints(IFeatureModel fm) {
+		FeatureModelAnalyzer analyzer = fm.getAnalyser();
+		analyzer.calculateRedundantConstraints = true;
+		analyzer.calculateTautologyConstraints = false;
+		analyzer.calculateDeadConstraints = false;
+		analyzer.calculateFOConstraints = false;
+		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullMonitor());
+		for (Entry<Object, Object> entry : o.entrySet()) {
+			if (entry.getKey() instanceof Constraint) {
+				if (entry.getValue() instanceof ConstraintAttribute) {
+					if ((ConstraintAttribute) entry.getValue() == ConstraintAttribute.REDUNDANT) {
+						fm.removeConstraint((Constraint) entry.getKey());
+					}
+				}
+			}
+		}
 	}
 
 }

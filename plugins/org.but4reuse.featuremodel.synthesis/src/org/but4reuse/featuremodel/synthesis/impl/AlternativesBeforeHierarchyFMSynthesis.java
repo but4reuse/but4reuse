@@ -3,10 +3,8 @@ package org.but4reuse.featuremodel.synthesis.impl;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -19,15 +17,11 @@ import org.but4reuse.featuremodel.synthesis.utils.FeatureIDEUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import de.ovgu.featureide.fm.core.ConstraintAttribute;
-import de.ovgu.featureide.fm.core.FeatureModelAnalyzer;
 import de.ovgu.featureide.fm.core.base.FeatureUtils;
 import de.ovgu.featureide.fm.core.base.IFeature;
-import de.ovgu.featureide.fm.core.base.impl.Constraint;
 import de.ovgu.featureide.fm.core.base.impl.DefaultFeatureModelFactory;
 import de.ovgu.featureide.fm.core.base.impl.Feature;
 import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
-import de.ovgu.featureide.fm.core.job.monitor.NullMonitor;
 
 /**
  * Feature Model synthesis: First we identify alternative groups, then we create
@@ -91,8 +85,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			fmFeatures.add(f);
 		}
 
-		// Add constraints, maybe redundant after hierarchical fm creation but
-		// it is better to keep them if the user wants to move them
+		// Add constraints
 		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
 			FeatureIDEUtils.addConstraint(fm, FeatureIDEUtils.getConstraintString(constraint));
 		}
@@ -256,22 +249,8 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		}
 		FeatureUtils.setChildren(root, toTheRoot);
 
-		// Remove redundant
-		FeatureModelAnalyzer analyzer = fm.getAnalyser();
-		analyzer.calculateRedundantConstraints = true;
-		analyzer.calculateTautologyConstraints = false;
-		analyzer.calculateDeadConstraints = false;
-		analyzer.calculateFOConstraints = false;
-		HashMap<Object, Object> o = analyzer.analyzeFeatureModel(new NullMonitor());
-			for (Entry<Object, Object> entry : o.entrySet()) {
-				if (entry.getKey() instanceof Constraint) {
-					if (entry.getValue() instanceof ConstraintAttribute) {
-						if ((ConstraintAttribute) entry.getValue() == ConstraintAttribute.REDUNDANT) {
-							fm.removeConstraint((Constraint) entry.getKey());
-						}
-					}
-				}
-			}
+		// Remove redundant constraints
+		FeatureIDEUtils.removeRedundantConstraints(fm);
 
 		// Save
 		try {

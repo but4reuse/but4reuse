@@ -71,7 +71,7 @@ public class ImportFeatureIDEAction implements IObjectActionDelegate {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				IFile fmifile = (IFile) WorkbenchUtils.getIResourceFromURI(fmURI);
 				File fmfile = fmifile.getRawLocation().makeAbsolute().toFile();
 				FeatureModel featureModel = FeatureIDEUtils.load(fmfile);
