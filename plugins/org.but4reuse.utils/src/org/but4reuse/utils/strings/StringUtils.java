@@ -93,4 +93,14 @@ public class StringUtils {
 		}
 		return list;
 	}
+
+	/**
+	 * Remove new lines
+	 * 
+	 * @param string
+	 * @return a single line
+	 */
+	public static String removeNewLines(String string) {
+		return string.replaceAll("\n", " ").replaceAll("\r", "");
+	}
 }
