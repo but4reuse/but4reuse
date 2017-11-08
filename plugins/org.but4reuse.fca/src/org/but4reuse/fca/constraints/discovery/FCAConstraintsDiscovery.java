@@ -9,9 +9,11 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.fca.utils.FCAUtils;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
+import org.but4reuse.feature.constraints.Constraint;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.IConstraintsDiscovery;
-import org.but4reuse.feature.constraints.impl.ConstraintImpl;
 import org.but4reuse.featurelist.FeatureList;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -47,14 +49,8 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 							// add constraint
 							Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, owner.getName());
 							Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a.getName());
-							IConstraint constraint = new ConstraintImpl();
-							constraint.setType(IConstraint.REQUIRES);
-							constraint.setBlock1(ownerBlock);
-							constraint.setBlock2(block);
-							List<String> messages = new ArrayList<String>();
-							messages.add("Concept lattice found");
-							constraint.setExplanations(messages);
-							constraint.setNumberOfReasons(messages.size());
+							Constraint constraint = new BasicRequiresConstraint(ownerBlock, block);
+							constraint.addExplanation("Concept lattice found");
 							constraintList.add(constraint);
 						}
 					}
@@ -82,14 +78,8 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 						// add constraint
 						Block ownerBlock = AdaptedModelHelper.getBlockByName(adaptedModel, a1.getName());
 						Block block = AdaptedModelHelper.getBlockByName(adaptedModel, a2.getName());
-						IConstraint constraint = new ConstraintImpl();
-						constraint.setType(IConstraint.MUTUALLY_EXCLUDES);
-						constraint.setBlock1(ownerBlock);
-						constraint.setBlock2(block);
-						List<String> messages = new ArrayList<String>();
-						messages.add("No concept sharing both");
-						constraint.setExplanations(messages);
-						constraint.setNumberOfReasons(messages.size());
+						Constraint constraint = new BasicExcludesConstraint(ownerBlock, block);
+						constraint.addExplanation("No concept sharing both");
 						constraintList.add(constraint);
 					}
 				}

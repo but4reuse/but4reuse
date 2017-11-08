@@ -10,6 +10,7 @@ import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.featuremodel.synthesis.IFeatureModelSynthesis;
@@ -94,9 +95,10 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		AltGroupList altGroupList = new AltGroupList();
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				IFeature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()));
-				IFeature feature2 = fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()));
+			if (constraint instanceof BasicExcludesConstraint) {
+				BasicExcludesConstraint c = (BasicExcludesConstraint)constraint;
+				IFeature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()));
+				IFeature feature2 = fm.getFeature(FeatureIDEUtils.validFeatureName(c.getBlock2().getName()));
 				// any of them exists in previous?
 				AltGroup altF1 = altGroupList.getAltGroupOfFeature(feature1);
 				AltGroup altF2 = altGroupList.getAltGroupOfFeature(feature2);

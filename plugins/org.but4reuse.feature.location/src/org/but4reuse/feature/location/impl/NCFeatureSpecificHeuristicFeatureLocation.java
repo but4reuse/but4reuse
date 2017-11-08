@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
 import org.but4reuse.feature.constraints.IConstraint;
 
 /**
@@ -20,8 +21,9 @@ public class NCFeatureSpecificHeuristicFeatureLocation extends FeatureSpecificHe
 		// Calculate reduced list
 		List<Block> toBeRemoved = new ArrayList<Block>();
 		for (Block block : blocks) {
-			for (IConstraint c : constraints) {
-				if (c.getType().equals(IConstraint.REQUIRES)) {
+			for (IConstraint constraint : constraints) {
+				if (constraint instanceof BasicRequiresConstraint) {
+					BasicRequiresConstraint c = (BasicRequiresConstraint) constraint;
 					if (c.getBlock2().equals(block) && blocks.contains(c.getBlock1())) {
 						toBeRemoved.add(block);
 						break;

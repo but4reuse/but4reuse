@@ -23,6 +23,7 @@ import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.utils.strings.StringUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -536,6 +537,22 @@ public class AdaptedModelHelper {
 	public static Block getBlockByName(AdaptedModel adaptedModel, String blockName) {
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			if (block.getName().equals(blockName)) {
+				return block;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get block by valid name
+	 * 
+	 * @param adaptedModel
+	 * @param blockName
+	 * @return the block or null if not found
+	 */
+	public static Block getBlockByValidName(AdaptedModel adaptedModel, String blockValidName) {
+		for (Block block : adaptedModel.getOwnedBlocks()) {
+			if (StringUtils.validName(block.getName()).equals(blockValidName)) {
 				return block;
 			}
 		}

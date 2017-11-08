@@ -20,6 +20,8 @@ import org.but4reuse.adapters.emf.EMFAttributeElement;
 import org.but4reuse.adapters.emf.EMFClassElement;
 import org.but4reuse.adapters.emf.EMFReferenceElement;
 import org.but4reuse.adapters.emf.helper.EMFHelper;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -452,15 +454,17 @@ public class CVLModelsExtractor {
 			 * Add the constraints
 			 */
 			for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
-				if (constraint.getType().equals(IConstraint.REQUIRES)) {
+				if (constraint instanceof BasicRequiresConstraint) {
+					BasicRequiresConstraint c = (BasicRequiresConstraint)constraint;
 					// Implies
-					CVLUtils.addRequiresConstraint(root, map.get(constraint.getBlock1().getName().replaceAll(" ", "_")),
-							map.get(constraint.getBlock2().getName().replaceAll(" ", "_")));
-				} else if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
+					CVLUtils.addRequiresConstraint(root, map.get(c.getBlock1().getName().replaceAll(" ", "_")),
+							map.get(c.getBlock2().getName().replaceAll(" ", "_")));
+				} else if (constraint instanceof BasicExcludesConstraint) {
+					BasicExcludesConstraint c = (BasicExcludesConstraint)constraint;
 					// Mutually excludes
 					CVLUtils.addMutualExclusionConstraint(root,
-							map.get(constraint.getBlock1().getName().replaceAll(" ", "_")),
-							map.get(constraint.getBlock2().getName().replaceAll(" ", "_")));
+							map.get(c.getBlock1().getName().replaceAll(" ", "_")),
+							map.get(c.getBlock2().getName().replaceAll(" ", "_")));
 				}
 			}
 

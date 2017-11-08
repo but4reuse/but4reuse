@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,12 +23,12 @@ import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
 public class BlocksGraphVisualisation extends ElementsGraphVisualisation {
 
 	@Override
-	public Graph createGraph( AdaptedModel adaptedModel, IProgressMonitor monitor){
+	public Graph createGraph(AdaptedModel adaptedModel, IProgressMonitor monitor) {
 		return createBlocksGraph(adaptedModel, monitor);
 	}
-	
+
 	@Override
-	public String getNameAppendix(){
+	public String getNameAppendix() {
 		return "_blocks.graphml";
 	}
 
@@ -53,23 +55,31 @@ public class BlocksGraphVisualisation extends ElementsGraphVisualisation {
 		// edges in both directions
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)
-					|| constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				int id1 = blocks.indexOf(constraint.getBlock1());
-				int id2 = blocks.indexOf(constraint.getBlock2());
+			if (constraint instanceof BasicRequiresConstraint) {
+				BasicRequiresConstraint c = (BasicRequiresConstraint) constraint;
+				int id1 = blocks.indexOf(c.getBlock1());
+				int id2 = blocks.indexOf(c.getBlock2());
 				Vertex one = graph.getVertex(id1);
 				Vertex two = graph.getVertex(id2);
 				Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
-				edge.setProperty("Label", constraint.getType());
+				edge.setProperty("Label", "requires");
 				edge.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
 				edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
-				if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-					// Add also the opposite in the case of mutually excludes
-					Edge edge2 = graph.addEdge(id2 + "-" + id1, two, one, id2 + "-" + id1);
-					edge2.setProperty("Label", constraint.getType());
-					edge2.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
-					edge2.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
-				}
+			} else if (constraint instanceof BasicExcludesConstraint) {
+				BasicExcludesConstraint c = (BasicExcludesConstraint) constraint;
+				int id1 = blocks.indexOf(c.getBlock1());
+				int id2 = blocks.indexOf(c.getBlock2());
+				Vertex one = graph.getVertex(id1);
+				Vertex two = graph.getVertex(id2);
+				Edge edge = graph.addEdge(id1 + "-" + id2, one, two, id1 + "-" + id2);
+				edge.setProperty("Label", "excludes");
+				edge.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
+				edge.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
+				// Add also the opposite in the case of mutually excludes
+				Edge edge2 = graph.addEdge(id2 + "-" + id1, two, one, id2 + "-" + id1);
+				edge2.setProperty("Label", "excludes");
+				edge2.setProperty("Explanations", ConstraintsHelper.getTextWithExplanations(constraint));
+				edge2.setProperty("NumberOfReasons", constraint.getNumberOfReasons());
 			}
 		}
 		return graph;

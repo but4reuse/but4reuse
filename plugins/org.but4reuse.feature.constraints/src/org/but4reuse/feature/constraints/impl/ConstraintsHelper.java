@@ -3,6 +3,7 @@ package org.but4reuse.feature.constraints.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
@@ -10,7 +11,13 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.artefactmodel.Artefact;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
+import org.but4reuse.feature.constraints.Constraint;
+import org.but4reuse.feature.constraints.FeatureConstraintPart;
 import org.but4reuse.feature.constraints.IConstraint;
+import org.but4reuse.feature.constraints.ImpliesConstraintPart;
+import org.but4reuse.feature.constraints.NotConstraintPart;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 
@@ -142,12 +149,19 @@ public class ConstraintsHelper {
 		List<IConstraint> featureConstraints = new ArrayList<IConstraint>();
 		List<IConstraint> blockConstraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
 		// loop all the constraints
-		HashSet<String> alreadyAdded = new HashSet<String>();
+		Set<String> alreadyAdded = new HashSet<String>();
 		for (IConstraint constraint : blockConstraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)
-					|| constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				Block block1 = constraint.getBlock1();
-				Block block2 = constraint.getBlock2();
+			if (constraint instanceof BasicRequiresConstraint
+					|| constraint instanceof BasicExcludesConstraint) {
+				Block block1 = null;
+				Block block2 = null;
+				if(constraint instanceof BasicRequiresConstraint){
+					block1 = ((BasicRequiresConstraint)constraint).getBlock1();
+					block2 = ((BasicRequiresConstraint)constraint).getBlock2();
+				} else {
+					block1 = ((BasicExcludesConstraint)constraint).getBlock1();
+					block2 = ((BasicExcludesConstraint)constraint).getBlock2();
+				}
 				List<Feature> block1Features = block1.getCorrespondingFeatures();
 				List<Feature> block2Features = block2.getCorrespondingFeatures();
 				// check if they share the same feature
@@ -163,21 +177,24 @@ public class ConstraintsHelper {
 						break;
 					}
 				}
-				// wow, the blocks were in different features... constraint!
+				// the blocks were in different features... constraint!
 				if (!sameFeatureFound) {
 					for (Feature f1 : block1Features) {
 						for (Feature f2 : block2Features) {
-							String text = f1.getName() + " " + constraint.getType() + " " + f2.getName();
+							// constraint (for the moment only requires and excludes)
+							Constraint cons = new Constraint();
+							cons.addConstraintPart(new FeatureConstraintPart(f1));
+							cons.addConstraintPart(new ImpliesConstraintPart());
+							if(constraint instanceof BasicExcludesConstraint){
+								cons.addConstraintPart(new NotConstraintPart());
+							}
+							cons.addConstraintPart(new FeatureConstraintPart(f2));
+							
+							// check if new
+							String text = cons.getText();
 							if (!alreadyAdded.contains(text)) {
 								alreadyAdded.add(text);
-								// constraint
-								IConstraint cons = new ConstraintImpl();
-								cons.setType(IConstraint.FREETEXT);
-								cons.setText(text);
-								List<String> explanations = new ArrayList<String>();
-								explanations.add("Maybe more, but at least:" + constraint.getText());
-								cons.setExplanations(explanations);
-								cons.setNumberOfReasons(1);
+								cons.addExplanation("Maybe more, but at least:" + constraint.getText());
 								featureConstraints.add(cons);
 							}
 						}
@@ -215,74 +232,8 @@ public class ConstraintsHelper {
 	 * @return whether a constraint is equal to another
 	 */
 	public static boolean equalsConstraint(IConstraint c1, IConstraint c2) {
-		// same type
-		String type = c1.getType();
-		if (type.equals(c2.getType())) {
-			if (type.equals(IConstraint.FREETEXT)) {
-				if (c1.getText().equals(c2.getText())) {
-					return true;
-				}
-				// directional
-			} else if (type.equals(IConstraint.REQUIRES)) {
-				if (c1.getBlock1().equals(c2.getBlock1()) && c1.getBlock2().equals(c2.getBlock2())) {
-					return true;
-				}
-				// non directional
-			} else if (type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				if (c1.getBlock1().equals(c2.getBlock1()) && c1.getBlock2().equals(c2.getBlock2())
-						|| c1.getBlock1().equals(c2.getBlock2()) && c1.getBlock2().equals(c2.getBlock1())) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Number of reasons of requires constraint
-	 * 
-	 * @param adaptedModel
-	 * @param f1
-	 * @param f2
-	 * @return
-	 */
-	public static int getNumberOfReasonsOfRequiresConstraint(AdaptedModel adaptedModel, Feature f1, Feature f2) {
-		int numberOfReasons = 0;
-		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
-			// Only requires, no excludes for the moment
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
-				// The blocks corresponds to the features
-				if (getBlocksOfFeature(f1, adaptedModel).contains(constraint.getBlock1())
-						&& getBlocksOfFeature(f2, adaptedModel).contains(constraint.getBlock2())) {
-					// increase the number of reasons
-					numberOfReasons += constraint.getNumberOfReasons();
-				}
-			}
-		}
-		return numberOfReasons;
-	}
-
-	/**
-	 * Number of reasons of requires constraint
-	 * 
-	 * @param adaptedModel
-	 * @param b1
-	 * @param b2
-	 * @return
-	 */
-	public static int getNumberOfReasonsOfRequiresConstraint(AdaptedModel adaptedModel, Block b1, Block b2) {
-		int numberOfReasons = 0;
-		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
-			// Only requires, no excludes for the moment
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
-				// The blocks corresponds to the features
-				if (constraint.getBlock1().equals(b1) && constraint.getBlock2().equals(b2)) {
-					// increase the number of reasons
-					numberOfReasons += constraint.getNumberOfReasons();
-				}
-			}
-		}
-		return numberOfReasons;
+		// TODO check more complicated things like mutually exclude, or set of ands
+		return c1.getText().equals(c2.getText());
 	}
 
 	/**

@@ -13,9 +13,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
+import org.but4reuse.feature.constraints.BasicExcludesConstraint;
+import org.but4reuse.feature.constraints.BasicRequiresConstraint;
 import org.but4reuse.feature.constraints.IConstraint;
 import org.but4reuse.featuremodel.synthesis.impl.FlatFMSynthesis;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.eclipse.core.resources.IFile;
 import org.prop4j.Node;
@@ -101,16 +104,6 @@ public class FeatureIDEUtils {
 	 * @return
 	 */
 	public static String getConstraintString(IConstraint constraint) {
-		String type = constraint.getType();
-		// only this two supported for the moment
-		if (type.equals(IConstraint.REQUIRES) || type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
-			String text = validFeatureName(constraint.getBlock1().getName()) + " implies ";
-			if (type.equals(IConstraint.MUTUALLY_EXCLUDES)) {
-				text += "not ";
-			}
-			text += validFeatureName(constraint.getBlock2().getName());
-			return text;
-		}
 		return constraint.getText();
 	}
 
@@ -174,8 +167,7 @@ public class FeatureIDEUtils {
 	 * @return
 	 */
 	public static String validFeatureName(String name) {
-		// TODO improve checks
-		return name.replaceAll(" ", "_");
+		return StringUtils.validName(name);
 	}
 
 	// For example 3 requires 2 (3 is child of 2). Then 2 requires 1. isAncestor
@@ -196,13 +188,14 @@ public class FeatureIDEUtils {
 
 	public static boolean existsExcludeConstraint(List<IConstraint> constraints, IFeature f1, IFeature f2) {
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.MUTUALLY_EXCLUDES)) {
+			if (constraint instanceof BasicExcludesConstraint) {
+				BasicExcludesConstraint c = (BasicExcludesConstraint)constraint;
 				// check f1 excludes f2 and viceversa
-				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock2().getName()))) {
 					return true;
-				} else if (f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+				} else if (f2.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()))
+						&& f1.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock2().getName()))) {
 					return true;
 				}
 			}
@@ -212,9 +205,10 @@ public class FeatureIDEUtils {
 
 	public static boolean existsRequiresConstraint(List<IConstraint> constraints, Feature f1, Feature f2) {
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
-				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+			if (constraint instanceof BasicRequiresConstraint) {
+				BasicRequiresConstraint c = (BasicRequiresConstraint)constraint;
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock2().getName()))) {
 					return true;
 				}
 			}
@@ -226,9 +220,10 @@ public class FeatureIDEUtils {
 			IFeature f1) {
 		List<IFeature> required = new ArrayList<IFeature>();
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
-				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))) {
-					required.add(fm.getFeature(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName())));
+			if (constraint instanceof BasicRequiresConstraint) {
+				BasicRequiresConstraint c = (BasicRequiresConstraint)constraint;
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()))) {
+					required.add(fm.getFeature(FeatureIDEUtils.validFeatureName(c.getBlock2().getName())));
 				}
 			}
 		}
@@ -237,9 +232,10 @@ public class FeatureIDEUtils {
 
 	public static int getNumberOfReasonsOfRequiresConstraint(List<IConstraint> constraints, IFeature f1, IFeature f2) {
 		for (IConstraint constraint : constraints) {
-			if (constraint.getType().equals(IConstraint.REQUIRES)) {
-				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock1().getName()))
-						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(constraint.getBlock2().getName()))) {
+			if (constraint instanceof BasicRequiresConstraint) {
+				BasicRequiresConstraint c = (BasicRequiresConstraint)constraint;
+				if (f1.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()))
+						&& f2.getName().equals(FeatureIDEUtils.validFeatureName(c.getBlock2().getName()))) {
 					return constraint.getNumberOfReasons();
 				}
 			}
