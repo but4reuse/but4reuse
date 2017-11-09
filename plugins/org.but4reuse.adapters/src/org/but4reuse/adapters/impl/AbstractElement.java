@@ -87,6 +87,10 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 * @param dependency
 	 */
 	public void addDependency(String dependencyID, IDependencyObject dependency) {
+		// do not add anything if null
+		if(dependency == null){
+			return;
+		}
 		// Add dependencies
 		List<IDependencyObject> dos = dependencies.get(dependencyID);
 		if (dos == null) {
