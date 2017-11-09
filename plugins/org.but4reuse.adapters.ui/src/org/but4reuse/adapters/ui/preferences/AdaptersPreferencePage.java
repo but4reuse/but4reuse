@@ -23,8 +23,7 @@ public class AdaptersPreferencePage extends FieldEditorPreferencePage implements
 	 * Creates the field editors.
 	 */
 	public void createFieldEditors() {
-		BooleanFieldEditor bfe = new BooleanFieldEditor(
-				PreferencesHelper.ADAPT_CONCURRENTLY,
+		BooleanFieldEditor bfe = new BooleanFieldEditor(PreferencesHelper.ADAPT_CONCURRENTLY,
 				"Adapt concurrently (Known issue in file-system access. Do not use it for filestructure nor eclipse adapters)",
 				getFieldEditorParent());
 		addField(bfe);

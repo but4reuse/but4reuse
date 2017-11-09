@@ -5,6 +5,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.eclipse.contribution.visualiser.views.Menu;
 import org.eclipse.jface.action.IAction;
@@ -28,10 +29,13 @@ public class ShowAllBlockElementsAction implements IViewActionDelegate {
 		if (adaptedModel != null) {
 			StringBuilder sText = new StringBuilder();
 			for (Block block : adaptedModel.getOwnedBlocks()) {
-				sText.append("Block: " + block.getName() + "\n");
+				sText.append("Block: ");
+				sText.append(block.getName());
+				sText.append("\n");
 				for (BlockElement blockElement : block.getOwnedBlockElements()) {
 					IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
-					sText.append(element.getText() + "\n");
+					sText.append(StringUtils.removeNewLines(element.getText()));
+					sText.append("\n");
 				}
 				sText.append("\n");
 			}

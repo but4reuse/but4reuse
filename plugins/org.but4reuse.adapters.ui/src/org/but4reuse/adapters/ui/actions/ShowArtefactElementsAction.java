@@ -97,8 +97,8 @@ public class ShowArtefactElementsAction implements IObjectActionDelegate, IViewA
 							// Create the text to be shown
 							StringBuilder sText = new StringBuilder();
 							for (String t : text) {
-								t = StringUtils.removeNewLines(t);
-								sText.append(t + "\n");
+								sText.append(StringUtils.removeNewLines(t));
+								sText.append("\n");
 							}
 							String name = artefact.getName();
 							if (name == null || name.length() == 0) {

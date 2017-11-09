@@ -86,7 +86,7 @@ public class SerializeAction implements IViewActionDelegate {
 						}
 					}
 					monitor.worked(1);
-					
+
 					try {
 						String adaptedModelURI = containerURIString + "analysis.adaptedmodel";
 						EMFUtils.saveEObject(new URI(adaptedModelURI), adaptedModel);

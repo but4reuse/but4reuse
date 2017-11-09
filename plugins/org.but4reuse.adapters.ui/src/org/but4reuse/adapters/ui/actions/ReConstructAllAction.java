@@ -43,8 +43,8 @@ public class ReConstructAllAction implements IViewActionDelegate {
 				out = output.getFullPath().toString();
 			}
 			URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(),
-					"Re-Construction URI", "Insert folder URI for the artefacts re-construction", "platform:/resource"
-							+ out + "/reconstruction/");
+					"Re-Construction URI", "Insert folder URI for the artefacts re-construction",
+					"platform:/resource" + out + "/reconstruction/");
 			if (inputDialog.open() != Dialog.OK) {
 				return;
 			}

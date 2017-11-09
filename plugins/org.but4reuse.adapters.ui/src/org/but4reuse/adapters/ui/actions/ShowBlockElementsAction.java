@@ -5,6 +5,7 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
 import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsMarkupProvider;
 import org.but4reuse.visualisation.impl.visualiser.adaptedmodel.BlockElementsOnArtefactsVisualisation;
@@ -41,7 +42,8 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 					StringBuilder sText = new StringBuilder();
 					for (BlockElement blockElement : block.getOwnedBlockElements()) {
 						IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
-						sText.append(element.getText() + "\n");
+						sText.append(StringUtils.removeNewLines(element.getText()));
+						sText.append("\n");
 					}
 
 					// Remove the last \n
@@ -51,9 +53,9 @@ public class ShowBlockElementsAction implements IViewActionDelegate {
 
 					// Show
 					// TODO Show also the artefacts where the block is present
-					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(Display
-							.getCurrent().getActiveShell(), markupKind.getName(), block.getOwnedBlockElements().size()
-							+ " Elements", sText.toString());
+					ScrollableMessageChangeNameDialog dialog = new ScrollableMessageChangeNameDialog(
+							Display.getCurrent().getActiveShell(), markupKind.getName(),
+							block.getOwnedBlockElements().size() + " Elements", sText.toString());
 					dialog.open();
 					if (dialog.name != null && !dialog.name.equals(block.getName())) {
 						block.setName(dialog.name);
