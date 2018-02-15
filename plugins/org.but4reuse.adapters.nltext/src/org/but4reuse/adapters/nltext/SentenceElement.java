@@ -1,11 +1,8 @@
 package org.but4reuse.adapters.nltext;
 
-import java.util.ArrayList;
-
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.utils.nlp.similarity.TextSimilarity;
-import org.but4reuse.utils.strings.StringUtils;
 
 /**
  * SentenceElement
@@ -14,15 +11,7 @@ import org.but4reuse.utils.strings.StringUtils;
  */
 public class SentenceElement extends AbstractElement {
 
-	private String sentence = null;
-
-	public String getSentence() {
-		return sentence;
-	}
-
-	public void setSentence(String text) {
-		this.sentence = text;
-	}
+	protected String sentence = null;
 
 	@Override
 	public double similarity(IElement anotherElement) {
@@ -37,21 +26,6 @@ public class SentenceElement extends AbstractElement {
 	@Override
 	public String getText() {
 		return sentence;
-	}
-
-	@Override
-	public ArrayList<String> getWords() {
-		/*
-		 * We split the sentence with special char like : ' ' ',' '|' ...
-		 */
-		ArrayList<String> words = new ArrayList<String>();
-		for (String s : StringUtils.tokenizeString(sentence))
-			words.add(s);
-		return words;
-	}
-	
-	public static void main(String[] args) {
-		System.out.println(TextSimilarity.getSimilarityWUP("hey", "ho"));
 	}
 
 }

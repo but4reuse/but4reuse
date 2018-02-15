@@ -21,8 +21,15 @@ import edu.mit.jwi.item.Pointer;
  */
 public class TextSimilarity {
 
+	// We use a cache of wup because getRoots is a time expensive method
+	private static WuAndPalmer wup = null;
+
 	public static float getSimilarityWUP(String source, String target) {
-		IDictionary dict = WordNetUtils.getDictionary();
+		if (wup == null) {
+			IDictionary dict = WordNetUtils.getDictionary();
+			ArrayList<ISynsetID> roots = getRoots(dict);
+			wup = new WuAndPalmer(dict, roots);
+		}
 
 		List<String> sourceSentence = StringUtils.tokenizeString(source);
 		List<String> targetSentence = StringUtils.tokenizeString(target);
@@ -31,12 +38,10 @@ public class TextSimilarity {
 		String[] sourceTags = POSUtils.getTags(sourceSentence);
 		String[] targetTags = POSUtils.getTags(targetSentence);
 
-		ArrayList<ISynsetID> roots = getRoots(dict);
-		WuAndPalmer wup = new WuAndPalmer(dict, roots);
 		for (int r = 0; r < sourceSentence.size(); r++) {
 			for (int c = 0; c < targetSentence.size(); c++) {
 				// nouns and verbs are the accepted pairs
-				if (sourceTags[r].equalsIgnoreCase("NN") && targetTags[c].equalsIgnoreCase("NN")) {
+				if (sourceTags[r].startsWith("NN") && targetTags[c].startsWith("NN")) {
 					double max = wup.max(sourceSentence.get(r), targetSentence.get(c), "n");
 					simMatrix[r][c] = max;
 				} else if (sourceTags[r].startsWith("VB") && targetTags[c].startsWith("VB")) {
