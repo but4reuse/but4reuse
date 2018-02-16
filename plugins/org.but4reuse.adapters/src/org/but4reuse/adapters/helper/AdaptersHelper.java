@@ -249,19 +249,19 @@ public class AdaptersHelper {
 	public static String getAdapterId(IAdapter adapter) {
 		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(ADAPTERS_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
-			IAdapter ada = null;
-			try {
+		try {
+			for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+				IAdapter ada = null;
 				ada = (IAdapter) adapterExtensionPoint.createExecutableExtension("class");
-			} catch (CoreException e) {
-				e.printStackTrace();
-			}
-			if (ada.getClass().equals(adapter.getClass())) {
-				String id = adapterExtensionPoint.getAttribute("id");
-				if (id == null || id.length() > 0) {
-					return id;
+				if (ada.getClass().equals(adapter.getClass())) {
+					String id = adapterExtensionPoint.getAttribute("id");
+					if (id == null || id.length() > 0) {
+						return id;
+					}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
