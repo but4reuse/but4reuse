@@ -7,9 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
-import org.but4reuse.adapters.eclipse.benchmark.EclipseBenchmarkCreator;
+import org.but4reuse.adapters.eclipse.benchmark.EclipseBenchmarkConstruction;
 import org.but4reuse.artefactmodel.ArtefactModel;
+import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.graphs.utils.GraphUtils;
@@ -24,7 +27,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-
 import com.tinkerpop.blueprints.Graph;
 
 /**
@@ -47,39 +49,50 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 				final IContainer container = res.getParent();
 
 				// Show message
-				final ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent()
-						.getActiveShell(), "Creation of Eclipse Benchmark",
-						"Check the actualFeatures folder that was created. Here it is a summary:", "");
+				final ScrollableMessageDialog dialog = new ScrollableMessageDialog(
+						Display.getCurrent().getActiveShell(), "Creation of Eclipse Benchmark",
+						"Check the actualFeatures folder that was created. Here it is a summary (same content as summary.txt):",
+						"");
 
 				// Launch Progress dialog
 				ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 				try {
 					progressDialog.run(true, true, new IRunnableWithProgress() {
 						@Override
-						public void run(IProgressMonitor monitor) throws InvocationTargetException,
-								InterruptedException {
+						public void run(IProgressMonitor monitor)
+								throws InvocationTargetException, InterruptedException {
 							try {
 
 								// number of artefacts and 2 for the graphs
-								monitor.beginTask("Creating the Eclipse Benchmark", artefactModel.getOwnedArtefacts().size() + 2);
+								monitor.beginTask("Creating the Eclipse Benchmark",
+										artefactModel.getOwnedArtefacts().size() + 2);
 
-								List<ActualFeature> features = EclipseBenchmarkCreator.createBenchmark(artefactModel,
+								List<ActualFeature> features = EclipseBenchmarkConstruction
+										.getActualFeatures(artefactModel, monitor);
+
+								FeatureList fl = EclipseBenchmarkConstruction.createBenchmark(features, artefactModel,
 										container, monitor);
 
+								// plugins graph
+								Integer numberOfUniquePluginsInArtefacts = null;
 								if (!monitor.isCanceled()) {
-									monitor.subTask("[Optional, you can Cancel now] Creating graphs. Plugins graph");
-									EclipseBenchmarkCreator.createPluginsGraph(artefactModel,
-											container, monitor);
+									monitor.subTask("Creating graphs. Plugins graph");
+									numberOfUniquePluginsInArtefacts = EclipseBenchmarkConstruction
+											.createPluginsGraph(artefactModel, container, monitor);
 								}
 								monitor.worked(1);
-								
+
+								// features graph
+								Graph featuresGraph = null;
 								if (!monitor.isCanceled()) {
-									monitor.subTask("[Optional, you can Cancel now] Creating graphs. Features graph");
-									// Save features graph
-									Graph graph = EclipseBenchmarkCreator.createActualFeaturesGraph(features, monitor);
-									File fileGraph = new File(new URI(container.getLocationURI()
-											+ "/benchmark/actualFeatures.graphml"));
-									GraphUtils.saveGraph(graph, fileGraph);
+									monitor.subTask("Creating graphs. Features graph");
+									featuresGraph = EclipseBenchmarkConstruction.createActualFeaturesGraph(features,
+											monitor);
+									if (featuresGraph != null) {
+										File fileGraph = new File(new URI(
+												container.getLocationURI() + "/benchmark/actualFeatures.graphml"));
+										GraphUtils.saveGraph(featuresGraph, fileGraph);
+									}
 								}
 								monitor.worked(1);
 
@@ -99,12 +112,30 @@ public class CreateEclipseBenchmarkAction implements IObjectActionDelegate {
 									text.append('\n');
 								}
 
-								String message = artefactModel.getOwnedArtefacts().size() + " packages.\n"
-										+ features.size() + " features found.\n" + nonUniquePlugins
-										+ " plugins are mapped to features.\n" + uniqueIds.size()
-										+ " unique plugins associated to features.\n\n";
+								// Get Jaccard similarity
+								double averageJaccardSimilarity = FeatureListHelper.getJaccardSimilarity(fl);
+
+								String message = artefactModel.getOwnedArtefacts().size() + " artefacts\n"
+										+ features.size() + " features\n" + numberOfUniquePluginsInArtefacts
+										+ " unique plugins in all artefacts\n" + uniqueIds.size()
+										+ " unique plugins are associated to features\n";
+								if (numberOfUniquePluginsInArtefacts != null) {
+									message += (numberOfUniquePluginsInArtefacts - uniqueIds.size())
+											+ " unique plugins are not associated to any feature\n";
+								}
+								message += nonUniquePlugins
+										+ " plugins are associated to features (some plugins can be in more than one feature)\n"
+										+ (averageJaccardSimilarity * 100)
+										+ " average Jaccard similarity among artefacts' features (in percentage)\n\n";
 
 								dialog.scrollableText = message + text.toString();
+
+								// Save message to file
+								File fileF = new File(new URI(container.getLocationURI() + "/benchmark/summary.txt"));
+								if (!fileF.exists()) {
+									FileUtils.createFile(fileF);
+								}
+								FileUtils.writeFile(fileF, dialog.scrollableText);
 
 								monitor.done();
 							} catch (Exception e) {

@@ -24,7 +24,7 @@ public class FeatureInfosExtractor {
 	public static ActualFeature getFeatureInfos(String absolutePath) {
 		ActualFeature actualFeature = new ActualFeature();
 		try {
-			File xmlFile = new File(absolutePath + "/feature.xml");
+			File xmlFile = new File(absolutePath, FeatureHelper.FEATURE_XML);
 			// Use DOM xml parser
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -39,7 +39,7 @@ public class FeatureInfosExtractor {
 			String name = doc.getDocumentElement().getAttribute("label");
 			if (name.contains("%")) {
 				String key = PropertiesFileUtils.getKey(name);
-				name = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"), key);
+				name = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), FeatureHelper.FEATURE_PROPERTIES), key);
 			}
 			actualFeature.setName(name);
 
@@ -51,7 +51,7 @@ public class FeatureInfosExtractor {
 			if (description.contains("%")) {
 				description = description.replaceAll("\\s+", "");
 				String key = PropertiesFileUtils.getKey(description);
-				description = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), "feature.properties"),
+				description = PropertiesFileUtils.getValue(new File(xmlFile.getParentFile(), FeatureHelper.FEATURE_PROPERTIES),
 						key);
 			}
 			actualFeature.setDescription(description);

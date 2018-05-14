@@ -35,33 +35,19 @@ import com.tinkerpop.blueprints.impls.tg.TinkerGraph;
  * 
  * @author jabier.martinez
  */
-public class EclipseBenchmarkCreator {
+public class EclipseBenchmarkConstruction {
 
-	public static List<ActualFeature> createBenchmark(ArtefactModel artefactModel, IContainer container,
+	/**
+	 * Create benchmark ground-truth files
+	 * @param actual features
+	 * @param artefactModel
+	 * @param container
+	 * @param monitor
+	 * @return feature list
+	 * @throws Exception
+	 */
+	public static FeatureList createBenchmark(List<ActualFeature> features, ArtefactModel artefactModel, IContainer container,
 			IProgressMonitor monitor) throws Exception {
-		artefactModel.setAdapters("eclipse4benchmark");
-		artefactModel.eResource().save(null);
-		List<ActualFeature> features = new ArrayList<ActualFeature>();
-		for (Artefact a : AdaptersHelper.getActiveArtefacts(artefactModel)) {
-			monitor.subTask("Getting actual features of " + a.getArtefactURI());
-			// example of uri
-			// file:/C:/keplerPackages/eclipse-cpp-kepler-SR1-win32-x86_64/eclipse/
-			List<ActualFeature> currentFeatures = FeatureHelper.getFeaturesOfEclipse(a.getArtefactURI());
-			for (ActualFeature af : currentFeatures) {
-				int index = features.indexOf(af);
-				if (index == -1) {
-					af.getArtefacts().add(a);
-					features.add(af);
-				} else {
-					ActualFeature p = features.get(index);
-					p.getArtefacts().add(a);
-				}
-			}
-			monitor.worked(1);
-		}
-
-		// Sort list
-		Collections.sort(features);
 
 		String name = artefactModel.getName();
 		if (name == null || name.isEmpty()) {
@@ -104,9 +90,43 @@ public class EclipseBenchmarkCreator {
 			}
 			FileUtils.writeFile(fileF, sb.toString());
 		}
-		return features;
+		return fl;
 	}
 
+	
+	public static List<ActualFeature> getActualFeatures(ArtefactModel artefactModel, IProgressMonitor monitor)  throws Exception {
+		List<ActualFeature> features = new ArrayList<ActualFeature>();
+		artefactModel.setAdapters("eclipse4benchmark");
+		artefactModel.eResource().save(null);
+		for (Artefact a : AdaptersHelper.getActiveArtefacts(artefactModel)) {
+			monitor.subTask("Getting actual features of " + a.getArtefactURI());
+			// example of uri
+			// file:/C:/keplerPackages/eclipse-cpp-kepler-SR1-win32-x86_64/eclipse/
+			List<ActualFeature> currentFeatures = FeatureHelper.getFeaturesOfEclipse(a.getArtefactURI());
+			for (ActualFeature af : currentFeatures) {
+				int index = features.indexOf(af);
+				if (index == -1) {
+					af.getArtefacts().add(a);
+					features.add(af);
+				} else {
+					ActualFeature p = features.get(index);
+					p.getArtefacts().add(a);
+				}
+			}
+			monitor.worked(1);
+		}
+
+		// Sort list
+		Collections.sort(features);
+		return features;
+	}
+	
+	/**
+	 * Create features graph
+	 * @param features
+	 * @param monitor
+	 * @return graph
+	 */
 	public static Graph createActualFeaturesGraph(List<ActualFeature> features, IProgressMonitor monitor) {
 		Graph graph = new TinkerGraph();
 		// Add nodes
@@ -142,13 +162,20 @@ public class EclipseBenchmarkCreator {
 		return graph;
 	}
 
+	
+	/**
+	 * Create plugins graph
+	 * @param artefactModel
+	 * @param container
+	 * @param monitor
+	 * @return the number of unique plugins in all artefacts
+	 * @throws URISyntaxException
+	 */
 	public static Integer createPluginsGraph(ArtefactModel artefactModel, IContainer container, IProgressMonitor monitor)
-			throws URISyntaxException {
+			throws Exception {
 		// create plugin dependencies graph
 		EclipseAdapter4Benchmark adapter = new EclipseAdapter4Benchmark();
-		Integer id = 0;
-		// Map<PluginElement, Vertex> peMap = new
-		// HashMap<PluginElement, Vertex>();
+		Integer pluginIdsCounter = 0;
 		Map<String, Vertex> idMap = new HashMap<String, Vertex>();
 		HashSet<String> addedEdges = new HashSet<String>();
 		Graph pluginsGraph = new TinkerGraph();
@@ -157,35 +184,32 @@ public class EclipseBenchmarkCreator {
 			// nodes
 			for (IElement e : elements) {
 				if (monitor.isCanceled()) {
-					return 0;
+					return null;
 				}
 				if (e instanceof PluginElement) {
 					PluginElement pe = ((PluginElement) e);
 					Vertex v = idMap.get(pe.getSymbName());
 					if (v == null) {
-						v = pluginsGraph.addVertex(id);
+						v = pluginsGraph.addVertex(pluginIdsCounter);
 						v.setProperty("Label", pe.getSymbName());
 						if (pe.getName() != null) {
 							v.setProperty("Name", pe.getName());
 						}
 						idMap.put(pe.getSymbName(), v);
-						id++;
+						pluginIdsCounter++;
 					}
 				}
 			}
 			// edges
 			for (IElement e : elements) {
 				if (monitor.isCanceled()) {
-					return 0;
+					return null;
 				}
 				if (e instanceof PluginElement) {
 					PluginElement pe = ((PluginElement) e);
 					Vertex source = idMap.get(pe.getSymbName());
 					for (String dep : pe.getRequire_Bundles()) {
 						if (!addedEdges.contains(pe.getSymbName() + "-" + dep)) {
-							// if
-							// (pe.getSymbName().contains("org.eclipse.team.cvs"))
-							// {
 							addedEdges.add(pe.getSymbName() + "-" + dep);
 							Vertex target = idMap.get(dep);
 							if (target == null) {
@@ -193,7 +217,6 @@ public class EclipseBenchmarkCreator {
 							} else {
 								source.addEdge("requires", target);
 							}
-							// }
 						}
 					}
 					if (pe.isFragment() && pe.getFragmentHost() != null) {
@@ -211,8 +234,10 @@ public class EclipseBenchmarkCreator {
 				}
 			}
 		}
-		File fileGraph2 = new File(new URI(container.getLocationURI() + "/benchmark/pluginDependencies.graphml"));
-		GraphUtils.saveGraph(pluginsGraph, fileGraph2);
-		return id;
+		
+		File fileGraph = new File(new URI(
+				container.getLocationURI() + "/benchmark/pluginDependencies.graphml"));
+		GraphUtils.saveGraph(pluginsGraph, fileGraph);
+		return pluginIdsCounter;
 	}
 }

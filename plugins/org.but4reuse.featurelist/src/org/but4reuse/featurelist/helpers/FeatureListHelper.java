@@ -3,6 +3,7 @@ package org.but4reuse.featurelist.helpers;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -281,5 +282,40 @@ public class FeatureListHelper {
 			}
 		}
 		return features;
+	}
+	
+	/**
+	 * Average Jaccard similarity
+	 * @param featureList
+	 * @return Jaccard similarity
+	 */
+	public static double getJaccardSimilarity(FeatureList featureList) {
+		ArtefactModel am = FeatureListHelper.getArtefactModel(featureList);
+
+		List<List<Feature>> artefactAndFeatures = new ArrayList<List<Feature>>();
+		for (Artefact a : am.getOwnedArtefacts()) {
+			List<Feature> features = FeatureListHelper.getArtefactFeatures(featureList, a);
+			artefactAndFeatures.add(features);
+		}
+
+		double pairs = 0;
+		double accumulatedJaccard = 0;
+		for (int i = 0; i < artefactAndFeatures.size(); i++) {
+			for (int j = i + 1; j < artefactAndFeatures.size(); j++) {
+				pairs += 1;
+				double jaccard = getJaccardSimilarity(artefactAndFeatures.get(i), artefactAndFeatures.get(j));
+				accumulatedJaccard += jaccard;
+			}
+		}
+		double result = accumulatedJaccard / pairs;
+		return result;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static double getJaccardSimilarity(Collection<?> s1, Collection<?> s2) {
+		double sum = s1.size() + s2.size();
+		Set<?> intersection = new HashSet(s1); // use the copy constructor
+		intersection.retainAll(s2);
+		return 1 - ((sum - 2 * intersection.size()) / (sum - intersection.size()));
 	}
 }
