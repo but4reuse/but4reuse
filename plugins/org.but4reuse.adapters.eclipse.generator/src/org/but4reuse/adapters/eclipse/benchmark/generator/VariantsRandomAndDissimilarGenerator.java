@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator;
+package org.but4reuse.adapters.eclipse.benchmark.generator;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,15 +12,15 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.generator.dependencies.DependencyAnalyzer;
-import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
-import org.but4reuse.adapters.eclipse.generator.interfaces.ISender;
-import org.but4reuse.adapters.eclipse.generator.interfaces.IVariantsGenerator;
-import org.but4reuse.adapters.eclipse.generator.utils.EclipseKeepOnlyMetadata;
-import org.but4reuse.adapters.eclipse.generator.utils.FileAndDirectoryUtils;
-import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
-import org.but4reuse.adapters.eclipse.generator.utils.SplotUtils;
-import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.but4reuse.adapters.eclipse.benchmark.generator.dependencies.DependencyAnalyzer;
+import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
+import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.ISender;
+import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IVariantsGenerator;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.FileAndDirectoryUtils;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.SplotUtils;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 

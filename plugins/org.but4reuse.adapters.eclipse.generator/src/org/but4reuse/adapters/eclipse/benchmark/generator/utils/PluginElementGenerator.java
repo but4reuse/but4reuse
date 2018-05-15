@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.utils;
+package org.but4reuse.adapters.eclipse.benchmark.generator.utils;
 
 import java.util.ArrayList;
 import java.util.List;

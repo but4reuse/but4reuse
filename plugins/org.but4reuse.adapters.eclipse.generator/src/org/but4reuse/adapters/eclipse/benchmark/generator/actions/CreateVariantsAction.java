@@ -1,13 +1,13 @@
-package org.but4reuse.adapters.eclipse.generator.actions;
+package org.but4reuse.adapters.eclipse.benchmark.generator.actions;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.but4reuse.adapters.eclipse.generator.VariantsGenerator;
-import org.but4reuse.adapters.eclipse.generator.dialogs.ParametersDialog;
-import org.but4reuse.adapters.eclipse.generator.dialogs.SummaryDialog;
-import org.but4reuse.adapters.eclipse.generator.interfaces.IListener;
-import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsGenerator;
+import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.ParametersDialog;
+import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.SummaryDialog;
+import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;

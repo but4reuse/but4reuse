@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.dialogs;
+package org.but4reuse.adapters.eclipse.benchmark.generator.dialogs;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;

@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.dependencies;
+package org.but4reuse.adapters.eclipse.benchmark.generator.dependencies;
 
 import java.io.File;
 import java.net.URI;
@@ -11,7 +11,7 @@ import java.util.Map;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureInfosExtractor;
-import org.but4reuse.adapters.eclipse.generator.utils.PluginElementGenerator;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.utils.files.FileUtils;
 
 /**

@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.activator;
+package org.but4reuse.adapters.eclipse.benchmark.activator;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.but4reuse.adapters.eclipse.generator"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.but4reuse.adapters.eclipse.benchmark"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

@@ -1,6 +1,6 @@
-package org.but4reuse.adapters.eclipse.generator.dialogs;
+package org.but4reuse.adapters.eclipse.benchmark.generator.dialogs;
 
-import org.but4reuse.adapters.eclipse.generator.utils.VariantsUtils;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;

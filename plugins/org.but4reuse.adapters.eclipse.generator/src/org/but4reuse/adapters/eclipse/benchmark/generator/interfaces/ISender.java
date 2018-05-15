@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.generator.interfaces;
+package org.but4reuse.adapters.eclipse.benchmark.generator.interfaces;
 
 /**
  * @author Julien Margarido
