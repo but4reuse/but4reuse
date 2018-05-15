@@ -1,7 +1,6 @@
 package org.but4reuse.adapters.eclipse.benchmark.generator.utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,93 +24,86 @@ public class EclipseKeepOnlyMetadata {
 	 */
 	public static void cleanAndKeepOnlyMetadata(File eclipse) {
 		List<File> notDeletedYet = new ArrayList<File>();
-		try {
-			// Check that it is an eclipse
-			if (eclipse.exists() && new EclipseAdapter().isAdaptable(eclipse.toURI(), new NullProgressMonitor())) {
 
-				// first remove everything that is not plugins or features
-				List<File> filesToRemove = new ArrayList<File>();
-				for (File f : eclipse.listFiles()) {
-					if (f.getName().equals(VariantsUtils.FEATURES) || f.getName().equals(VariantsUtils.PLUGINS)) {
-						// we keep them
-					} else {
-						filesToRemove.add(f);
-					}
+		// Check that it is an eclipse
+		if (eclipse.exists() && new EclipseAdapter().isAdaptable(eclipse.toURI(), new NullProgressMonitor())) {
+
+			// first remove everything that is not plugins or features
+			List<File> filesToRemove = new ArrayList<File>();
+			for (File f : eclipse.listFiles()) {
+				if (f.getName().equals(VariantsUtils.FEATURES) || f.getName().equals(VariantsUtils.PLUGINS)) {
+					// we keep them
+				} else {
+					filesToRemove.add(f);
 				}
-				for (File f : filesToRemove) {
-					FileAndDirectoryUtils.deleteFile(f);
-				}
+			}
+			for (File f : filesToRemove) {
+				FileUtils.deleteFile(f);
+			}
 
-				// remove everything that it is not metadata from plugins and
-				// features
-				filesToRemove.clear();
+			// remove everything that it is not metadata from plugins and
+			// features
+			filesToRemove.clear();
 
-				// plugins
-				File pluginsFolder = new File(eclipse, VariantsUtils.PLUGINS);
-				for (File plu : pluginsFolder.listFiles()) {
-					// take only directories because we want to keep jars
-					if (plu.isDirectory()) {
-						List<File> files = FileUtils.getAllFiles(plu);
-						for (File f : files) {
-							if (!isMetadataFile(f)) {
-								filesToRemove.add(f);
-							}
+			// plugins
+			File pluginsFolder = new File(eclipse, VariantsUtils.PLUGINS);
+			for (File plu : pluginsFolder.listFiles()) {
+				// take only directories because we want to keep jars
+				if (plu.isDirectory()) {
+					List<File> files = FileUtils.getAllFiles(plu);
+					for (File f : files) {
+						if (!isMetadataFile(f)) {
+							filesToRemove.add(f);
 						}
-					}
-				}
-				for (File f : filesToRemove) {
-					FileAndDirectoryUtils.deleteFile(f);
-				}
-				filesToRemove.clear();
-
-				// features
-				File featuresFolder = new File(eclipse, VariantsUtils.FEATURES);
-				for (File feat : featuresFolder.listFiles()) {
-					if (feat.isDirectory()) {
-						List<File> files = FileUtils.getAllFiles(feat);
-						for (File f : files) {
-							if (!isMetadataFile(f)) {
-								filesToRemove.add(f);
-							}
-						}
-					}
-				}
-
-				for (File f : filesToRemove) {
-					FileAndDirectoryUtils.deleteFile(f);
-				}
-				filesToRemove.clear();
-
-				// plugins and features folder, unzip folders, remove everything
-				// that it is not xml or properties
-
-				File[] jars = FileAndDirectoryUtils.getAllJarsInDirectory(pluginsFolder);
-				for (File fi : jars) {
-					File output = new File(pluginsFolder, fi.getName().substring(0,
-							fi.getName().length() - ".jar".length()));
-					output.mkdirs();
-					ZipUtils.unJarOnlyFilesOfGivenExtensions(fi, output, metaDataExtensions);
-					try {
-						FileAndDirectoryUtils.deleteFile(fi);
-					} catch (Exception e) {
-						// try to delete later
-						notDeletedYet.add(fi);
-						continue;
 					}
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			for (File f : filesToRemove) {
+				FileUtils.deleteFile(f);
+			}
+			filesToRemove.clear();
+
+			// features
+			File featuresFolder = new File(eclipse, VariantsUtils.FEATURES);
+			for (File feat : featuresFolder.listFiles()) {
+				if (feat.isDirectory()) {
+					List<File> files = FileUtils.getAllFiles(feat);
+					for (File f : files) {
+						if (!isMetadataFile(f)) {
+							filesToRemove.add(f);
+						}
+					}
+				}
+			}
+
+			for (File f : filesToRemove) {
+				FileUtils.deleteFile(f);
+			}
+			filesToRemove.clear();
+
+			// plugins and features folder, unzip folders, remove everything
+			// that it is not xml or properties
+
+			File[] jars = FileAndDirectoryUtils.getAllJarsInDirectory(pluginsFolder);
+			for (File fi : jars) {
+				File output = new File(pluginsFolder,
+						fi.getName().substring(0, fi.getName().length() - ".jar".length()));
+				output.mkdirs();
+				ZipUtils.unJarOnlyFilesOfGivenExtensions(fi, output, metaDataExtensions);
+				try {
+					FileUtils.deleteFile(fi);
+				} catch (Exception e) {
+					// try to delete later
+					notDeletedYet.add(fi);
+					continue;
+				}
+			}
 		}
 
 		// delete
 		for (File f : notDeletedYet) {
 			if (f.exists()) {
-				try {
-					FileAndDirectoryUtils.deleteFile(f);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				FileUtils.deleteFile(f);
 			}
 		}
 	}

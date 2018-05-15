@@ -16,9 +16,9 @@ import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.ISender;
 import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IVariantsGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
-import org.but4reuse.adapters.eclipse.benchmark.generator.utils.FileAndDirectoryUtils;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
@@ -40,7 +40,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * @author jabier.martinez
  * 
  */
-public class VariantsGenerator implements IVariantsGenerator, ISender {
+public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISender {
 
 	private String input;
 	private String output;
@@ -53,7 +53,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 	List<IListener> listeners;
 	EclipseAdapter adapter;
 
-	public VariantsGenerator(String input, String output, int nbVariants, int percentage, boolean keepOnlyMetadata,
+	public VariantsPercentageBasedGenerator(String input, String output, int nbVariants, int percentage, boolean keepOnlyMetadata,
 			boolean noOutputOnlyStatistics) {
 		this.input = input;
 		this.output = output;
@@ -176,7 +176,7 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					}
 					chosenFeatures.add(oneFeature);
 
-					List<ActualFeature> allFeaturesDependencies = depAnalyzer.getFeaturesDependencies(oneFeature);
+					List<ActualFeature> allFeaturesDependencies = depAnalyzer.getFeatureDependencies(oneFeature);
 					if (allFeaturesDependencies != null) {
 						for (ActualFeature depFeat : allFeaturesDependencies) {
 							if (!chosenFeatures.contains(depFeat)) {
@@ -190,17 +190,18 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 				} // end of iterate through allFeatures
 
 				for (ActualFeature one_manda : depAnalyzer.getMandatoryFeaturesForThisInput()) {
-					if (!chosenFeatures.contains(one_manda))
+					if (!chosenFeatures.contains(one_manda)) {
 						chosenFeatures.add(one_manda);
+					}
 				}
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
 					List<PluginElementGenerator> allPluginsDependencies = depAnalyzer
-							.getPluginsDependencies(chosenFeature);
+							.getPluginDependencies(chosenFeature);
 					if (allPluginsDependencies != null) {
 						for (PluginElementGenerator depPlugin : allPluginsDependencies) {
-							// Avoid duplicates dependencies in the plugins list
+							// Avoid duplicated dependencies in the plugins list
 							if (!pluginsList.contains(depPlugin)) {
 								pluginsList.add(depPlugin);
 							}
@@ -208,43 +209,39 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					}
 				}
 
-				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeaturesDependencies());
+				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeatureDependencies());
 
 			}
+			
 			if (!noOutputOnlyStatistics) {
-				try {
-					// Create all dirs and copy features and plugins
-					File output_variantFile = new File(output_variant);
-					output_variantFile.mkdirs();
 
-					for (File file_eclipse : eclipse.listFiles()) {
-						// Copy eclipse files & dirs (except features & plugins)
-						if (!file_eclipse.getName().equals(VariantsUtils.FEATURES)
-								&& !file_eclipse.getName().equals(VariantsUtils.PLUGINS)) {
-							FileAndDirectoryUtils.copyFilesAndDirectories(output_variantFile, file_eclipse);
-						}
-					}
+				// Create all dirs and copy features and plugins
+				File output_variantFile = new File(output_variant);
+				output_variantFile.mkdirs();
 
-					// features copy
-					File[] allFilesFeatures = new File[chosenFeatures.size()];
-					for (int j = 0; j < chosenFeatures.size(); j++) {
-						allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
+				for (File file_eclipse : eclipse.listFiles()) {
+					// Copy eclipse files & dirs (except features & plugins)
+					if (!file_eclipse.getName().equals(VariantsUtils.FEATURES)
+							&& !file_eclipse.getName().equals(VariantsUtils.PLUGINS)) {
+						FileUtils.copyFileOrDirectoryToDirectory(file_eclipse, output_variantFile);
 					}
-					FileAndDirectoryUtils.copyFilesAndDirectories(new File(output_variantFile, VariantsUtils.FEATURES),
-							allFilesFeatures);
-
-					// plugins copy
-					File[] allFilesPlugins = new File[pluginsList.size()];
-					for (int j = 0; j < pluginsList.size(); j++) {
-						allFilesPlugins[j] = new File(pluginsList.get(j).getAbsolutePath());
-					}
-					FileAndDirectoryUtils.copyFilesAndDirectories(new File(output_variantFile, VariantsUtils.PLUGINS),
-							allFilesPlugins);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
 
-				File output_VariantFile = new File(output_variant);
+				// features copy
+				File featuresFolder = new File(output_variantFile, VariantsUtils.FEATURES);
+				File[] allFilesFeatures = new File[chosenFeatures.size()];
+				for (int j = 0; j < chosenFeatures.size(); j++) {
+					allFilesFeatures[j] = new File(depAnalyzer.getPathFromFeature(chosenFeatures.get(j)));
+					FileUtils.copyFileOrDirectoryToDirectory(allFilesFeatures[j], featuresFolder);
+				}
+
+				// plugins copy
+				File pluginsFolder = new File(output_variantFile, VariantsUtils.PLUGINS);
+				File[] allFilesPlugins = new File[pluginsList.size()];
+				for (int j = 0; j < pluginsList.size(); j++) {
+					allFilesPlugins[j] = new File(pluginsList.get(j).getAbsolutePath());
+					FileUtils.copyFileOrDirectoryToDirectory(allFilesPlugins[j], pluginsFolder);
+				}
 
 				if (!keepOnlyMetadata) {
 					// This call adapter construct mainly to fix the bundle.info
@@ -253,13 +250,13 @@ public class VariantsGenerator implements IVariantsGenerator, ISender {
 					allElements.addAll(allFileElements);
 					allElements.addAll(pluginsList);
 
-					URI outputUri = output_VariantFile.toURI();
+					URI outputUri = output_variantFile.toURI();
 					adapter.construct(outputUri, allElements, new NullProgressMonitor());
 				}
 
 				if (keepOnlyMetadata) {
 					// We keep only manifests, properties and xmls
-					EclipseKeepOnlyMetadata.cleanAndKeepOnlyMetadata(output_VariantFile);
+					EclipseKeepOnlyMetadata.cleanAndKeepOnlyMetadata(output_variantFile);
 				}
 			}
 

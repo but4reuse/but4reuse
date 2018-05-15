@@ -3,7 +3,7 @@ package org.but4reuse.adapters.eclipse.benchmark.generator.actions;
 import java.io.File;
 import java.io.IOException;
 
-import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsGenerator;
+import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsPercentageBasedGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.ParametersDialog;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.SummaryDialog;
 import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
@@ -106,7 +106,7 @@ public class CreateVariantsAction implements IListener, IObjectActionDelegate {
 
 			@Override
 			public void run() {
-				VariantsGenerator varGen = new VariantsGenerator(paramDialog.getInputPath(),
+				VariantsPercentageBasedGenerator varGen = new VariantsPercentageBasedGenerator(paramDialog.getInputPath(),
 						paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
 						noOutputOnlyStatistics);
 				varGen.addListener(context);

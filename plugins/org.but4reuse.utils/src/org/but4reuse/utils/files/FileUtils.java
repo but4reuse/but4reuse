@@ -404,6 +404,20 @@ public class FileUtils {
 	}
 
 	/**
+	 * Copy a file or a directory and all its content inside another directory
+	 * 
+	 * @param file
+	 * @param newDir
+	 */
+	public static void copyFileOrDirectoryToDirectory(File file, File newDir) {
+		if (file.isDirectory()) {
+			FileUtils.copyDirectoryToDirectory(file, newDir);
+		} else {
+			FileUtils.copyFileToDirectory(file, newDir);
+		}
+	}
+
+	/**
 	 * Get all files recursively (not folders) inside one folder. Or the file
 	 * itself if the input is a file
 	 * 

@@ -24,12 +24,12 @@ public class DependencyAnalyzer {
 
 	private List<ActualFeature> allFeatures;
 	private Map<String, ActualFeature> mapIdWithFeature;
-	private Map<ActualFeature, List<String>> mapFeatureWithFeaturesDependencies;
+	private Map<ActualFeature, List<String>> mapFeatureWithFeatureDependencies;
 	private Map<ActualFeature, String> mapFeatureWithPath;
 
 	private List<PluginElementGenerator> allPlugins;
 	private Map<String, List<PluginElementGenerator>> mapSymbNameWithPlugin;
-	private Map<ActualFeature, List<String>> mapFeatureWithPluginsDependencies;
+	private Map<ActualFeature, List<String>> mapFeatureWithPluginDependencies;
 	private List<PluginElementGenerator> allPluginsWithoutFeatureDependencies;
 	private List<ActualFeature> allMandatoryFeaturesForThisInput;
 
@@ -43,7 +43,7 @@ public class DependencyAnalyzer {
 
 	private void initMapsAndLists() {
 		initMapIdWithFeature();
-		initMapFeatureWithFeaturesDependencies();
+		initMapFeatureWithFeatureDependencies();
 		try {
 			initMapFeaturesPath(eclipseInstallationURI);
 		} catch (URISyntaxException e) {
@@ -51,17 +51,17 @@ public class DependencyAnalyzer {
 		}
 
 		initMapNameWithPlugin();
-		initMapFeatureWithPluginsDependencies();
-		initAllPluginsWithoutFeaturesDependencies();
-		initListFeaturesMandatories();
+		initMapFeatureWithPluginDependencies();
+		initAllPluginsWithoutFeatureDependencies();
+		initListMandatoryFeatures();
 	}
 
 	/********* Features **********/
 
-	public List<ActualFeature> getFeaturesDependencies(ActualFeature actual) {
-		List<String> actuaDependencies = mapFeatureWithFeaturesDependencies.get(actual);
+	public List<ActualFeature> getFeatureDependencies(ActualFeature actual) {
+		List<String> actuaDependencies = mapFeatureWithFeatureDependencies.get(actual);
 		if (actuaDependencies != null && !actuaDependencies.isEmpty()) {
-			return getFeaturesDependenciesFromListIds(actuaDependencies);
+			return getFeatureDependenciesFromListIds(actuaDependencies);
 		}
 		return null;
 	}
@@ -94,11 +94,11 @@ public class DependencyAnalyzer {
 		}
 	}
 
-	private void initMapFeatureWithFeaturesDependencies() {
+	private void initMapFeatureWithFeatureDependencies() {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
-		mapFeatureWithFeaturesDependencies = new HashMap<ActualFeature, List<String>>();
+		mapFeatureWithFeatureDependencies = new HashMap<ActualFeature, List<String>>();
 		List<String> dependencies = null;
 
 		for (ActualFeature oneFeature : allFeatures) {
@@ -115,7 +115,7 @@ public class DependencyAnalyzer {
 					dependencies = included;
 				}
 			}
-			mapFeatureWithFeaturesDependencies.put(oneFeature, dependencies);
+			mapFeatureWithFeatureDependencies.put(oneFeature, dependencies);
 		}
 	}
 
@@ -131,14 +131,14 @@ public class DependencyAnalyzer {
 		}
 	}
 
-	private List<ActualFeature> getFeaturesDependenciesFromListIds(List<String> listIds) {
+	private List<ActualFeature> getFeatureDependenciesFromListIds(List<String> listIds) {
 		if (listIds != null && !listIds.isEmpty()) {
 			List<ActualFeature> listDependencies = new ArrayList<ActualFeature>();
 			for (int i = 0; i < listIds.size(); i++) {
 				ActualFeature actFeat = mapIdWithFeature.get(listIds.get(i));
 				if (actFeat != null && !listDependencies.contains(actFeat)) {
 					listDependencies.add(actFeat);
-					List<ActualFeature> list_tmp = getFeaturesDependenciesFromListIds(mapFeatureWithFeaturesDependencies
+					List<ActualFeature> list_tmp = getFeatureDependenciesFromListIds(mapFeatureWithFeatureDependencies
 							.get(actFeat));
 					if (list_tmp != null && !list_tmp.isEmpty())
 						listDependencies.addAll(list_tmp);
@@ -151,15 +151,15 @@ public class DependencyAnalyzer {
 
 	/*********** Plugins ************/
 
-	public List<PluginElementGenerator> getPluginsDependencies(ActualFeature actual) {
-		List<String> pluginsDependencies = mapFeatureWithPluginsDependencies.get(actual);
+	public List<PluginElementGenerator> getPluginDependencies(ActualFeature actual) {
+		List<String> pluginsDependencies = mapFeatureWithPluginDependencies.get(actual);
 		if (pluginsDependencies != null && !pluginsDependencies.isEmpty()) {
 			return getPluginsFromListSymbName(pluginsDependencies);
 		}
 		return null;
 	}
 
-	public List<PluginElementGenerator> getPluginsWithoutAnyFeaturesDependencies() {
+	public List<PluginElementGenerator> getPluginsWithoutAnyFeatureDependencies() {
 		return allPluginsWithoutFeatureDependencies;
 	}
 
@@ -184,17 +184,18 @@ public class DependencyAnalyzer {
 		}
 	}
 
-	private void initMapFeatureWithPluginsDependencies() {
+	private void initMapFeatureWithPluginDependencies() {
 		if (allFeatures == null || allFeatures.isEmpty())
 			return;
 
-		mapFeatureWithPluginsDependencies = new HashMap<ActualFeature, List<String>>();
+		mapFeatureWithPluginDependencies = new HashMap<ActualFeature, List<String>>();
 		List<String> dependencies = null;
 
 		for (ActualFeature oneFeature : allFeatures) {
 			dependencies = oneFeature.getPlugins();
 			List<String> required = oneFeature.getRequiredPlugins();
-			if (required != null && !required.isEmpty()) { // y'a un elem dedans
+			if (required != null && !required.isEmpty()) {
+				// there is at least one
 				if (dependencies != null && !dependencies.isEmpty()) {
 					for (String req : required) {
 						if (!dependencies.contains(req))
@@ -204,23 +205,23 @@ public class DependencyAnalyzer {
 					dependencies = required;
 				}
 			}
-			mapFeatureWithPluginsDependencies.put(oneFeature, dependencies);
+			mapFeatureWithPluginDependencies.put(oneFeature, dependencies);
 		}
 	}
 
-	private void initAllPluginsWithoutFeaturesDependencies() {
+	private void initAllPluginsWithoutFeatureDependencies() {
 		allPluginsWithoutFeatureDependencies = new ArrayList<PluginElementGenerator>();
 		allPluginsWithoutFeatureDependencies.addAll(allPlugins);
 		// eclipseFull Kepler = 2066 plugins
 		// all Plugins from Features dependencies = 1947
-		for (PluginElementGenerator oneP : getAllPluginDependencies(mapFeatureWithPluginsDependencies)) {
+		for (PluginElementGenerator oneP : getAllPluginDependencies(mapFeatureWithPluginDependencies)) {
 			// We don't use removeAll because it remove all occurrences, but we
 			// want to remove just one at each time
 			allPluginsWithoutFeatureDependencies.remove(oneP);
 		}
 	}
 
-	private void initListFeaturesMandatories() {
+	private void initListMandatoryFeatures() {
 		allMandatoryFeaturesForThisInput = new ArrayList<ActualFeature>(MandatoryFeatures.list.length);
 		for (String manda : MandatoryFeatures.list) {
 			List<ActualFeature> feat_tmp = getFeaturesThatStartsWithName(manda);
@@ -263,10 +264,10 @@ public class DependencyAnalyzer {
 	}
 
 	private List<ActualFeature> getFeaturesThatStartsWithName(String name) {
-		if (name == null || name.isEmpty())
+		if (name == null || name.isEmpty()) {
 			return null;
-
-		List<ActualFeature> featuresWithName = new ArrayList<ActualFeature>(10);
+		}
+		List<ActualFeature> featuresWithName = new ArrayList<ActualFeature>();
 		for (ActualFeature feature : allFeatures) {
 			if (feature.getId().startsWith(name)) {
 				featuresWithName.add(feature);

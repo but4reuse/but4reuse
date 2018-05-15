@@ -2,11 +2,8 @@ package org.but4reuse.adapters.eclipse.benchmark.generator.utils;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.but4reuse.utils.files.FileUtils;
 
 /**
  * File and directory utils
@@ -17,7 +14,7 @@ import org.but4reuse.utils.files.FileUtils;
 public class FileAndDirectoryUtils {
 
 	/**
-	 * Return all the ".jar" files contains in a directory, null if the
+	 * Return all the ".jar" files contained in a directory, null if the
 	 * parameter is null or not a directory.
 	 * 
 	 * @param dir
@@ -32,42 +29,6 @@ public class FileAndDirectoryUtils {
 				return name.toLowerCase().endsWith(".jar");
 			}
 		});
-	}
-
-	/**
-	 * Copy all directories in parameter to an output.
-	 * 
-	 * @param output
-	 *            : The destination
-	 * @param files
-	 *            : All the files to copy
-	 * @throws IOException
-	 *             if the copy is impossible
-	 */
-	public static void copyFilesAndDirectories(File output, File... files) throws IOException {
-		for (File fic : files) {
-			if (fic.isDirectory()) {
-				FileUtils.copyDirectoryToDirectory(fic, output);
-			} else {
-				FileUtils.copyFileToDirectory(fic, output);
-			}
-		}
-	}
-
-	/**
-	 * Delete the file, if exist.
-	 * 
-	 * @param outputFile
-	 *            : The files to copy
-	 * @throws IOException
-	 *             if delete is impossible
-	 */
-	public static void deleteFile(File file) throws IOException {
-		if (file == null || !file.exists()) {
-			throw new IOException("(Method deleteFileIfExist) file is null or not exist.");
-		} else {
-			file.delete();
-		}
 	}
 
 	/**
