@@ -5,19 +5,16 @@ import java.io.IOException;
 
 import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsRandomAndDissimilarGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.RandomAndDissimilarDialog;
-import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.SummaryDialog;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -25,17 +22,14 @@ import org.eclipse.ui.IWorkbenchPart;
  * @author Julien Margarido
  * @author Felix Lima Gorito
  */
-public class CreateVariantsRandomAndDissimilarAction implements IListener, IObjectActionDelegate {
+public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDelegate {
 
 	private ISelection selection;
-	private CreateVariantsRandomAndDissimilarAction context;
 
 	public CreateVariantsRandomAndDissimilarAction() {
 		super();
-		this.context = this;
 	}
 
-	private SummaryDialog summaryDialog;
 	private RandomAndDissimilarDialog dialog;
 
 	public void run(IAction action) {
@@ -104,40 +98,13 @@ public class CreateVariantsRandomAndDissimilarAction implements IListener, IObje
 		final int timeForThread = time;
 		final boolean keepOnlyMetadata = dialog.isKeepOnlyMetadata();
 		final boolean noOutputOnlyStatistics = dialog.isNoOutputOnlyStatistics();
-		new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				VariantsRandomAndDissimilarGenerator varGen = new VariantsRandomAndDissimilarGenerator(dialog.getInputPath(),
-						dialog.getOutputPath(), dialog.getGeneratorPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
-						noOutputOnlyStatistics);
-				varGen.addListener(context);
-				// Long time to execute
-				varGen.generate();
-				Display.getDefault().syncExec(new Runnable() {
-					public void run() {
-						waitWhileParameterIsNull(summaryDialog);
-						if (!summaryDialog.isDisposed())
-							summaryDialog.setCloseable(true);
-					}
-
-				});
-			}
-		}, "Variant Generator Thread").start();
-
-		final Shell shell = Display.getCurrent().getActiveShell();
-
-		// Open the Summary Dialog
-		try {
-			summaryDialog = new SummaryDialog(shell, "Summary", null, "", false);
-			summaryDialog.open();
-			synchronized (this) {
-				this.notifyAll();
-			} // Security for not make things on a null dialog in receive method
-		} catch (Exception e) {
-			MessageDialog.openError(shell, "Error in summary dialog", e.toString());
-			e.printStackTrace();
-		}
+		VariantsRandomAndDissimilarGenerator varGen = new VariantsRandomAndDissimilarGenerator(dialog.getInputPath(),
+				dialog.getOutputPath(), dialog.getGeneratorPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
+				noOutputOnlyStatistics);
+		// Long time to execute
+		String message = varGen.generate(new NullProgressMonitor());
+		System.out.println(message);
 
 		// Update the artefact model
 		if (!dialog.isNoOutputOnlyStatistics()) {
@@ -174,46 +141,6 @@ public class CreateVariantsRandomAndDissimilarAction implements IListener, IObje
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
-
-	@Override
-	public void receive(final String msg) {
-		if (msg != null) {
-			Display.getDefault().syncExec(new Runnable() {
-				public void run() {
-
-					waitWhileParameterIsNull(summaryDialog);
-
-					if (!summaryDialog.isDisposed()) {
-						String scrollText = summaryDialog.getScrollableText();
-						if (scrollText == null)
-							scrollText = "";
-						scrollText += msg.replaceAll("\n", "\r\n") + "\r\n";
-
-						summaryDialog.setScrollableText(scrollText);
-					}
-				}
-			});
-		}
-	}
-
-	/**
-	 * This method interrupt the current thread while the parameter is null
-	 */
-	private <T> void waitWhileParameterIsNull(T param) {
-		// If dialog is null, we wait.
-		if (param == null) {
-			synchronized (this) {
-				try {
-					while (param == null) {
-						// Double checking method
-						this.wait();
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 }

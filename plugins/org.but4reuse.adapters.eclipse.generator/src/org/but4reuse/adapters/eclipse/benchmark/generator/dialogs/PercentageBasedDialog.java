@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Text;
  * @author Julien Margarido
  * @author Felix Lima Gorito
  */
-public class ParametersDialog extends Dialog {
+public class PercentageBasedDialog extends Dialog {
 
 	private Text input;
 	private Text output;
@@ -50,7 +50,7 @@ public class ParametersDialog extends Dialog {
 
 	private Color red;
 
-	public ParametersDialog(Shell parentShell) {
+	public PercentageBasedDialog(Shell parentShell) {
 		super(parentShell);
 		red = parentShell.getDisplay().getSystemColor(SWT.COLOR_RED);
 	}

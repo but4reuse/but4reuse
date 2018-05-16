@@ -13,14 +13,12 @@ import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dependencies.DependencyAnalyzer;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.ISender;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IVariantsGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.SplotUtils;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.utils.files.FileUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
@@ -31,7 +29,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * @author Felix Lima Gorito
  * @author jabier.martinez
  */
-public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator, ISender {
+public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator {
 
 	private String input;
 	private String output;
@@ -42,8 +40,8 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 	private boolean noOutputOnlyStatistics;
 
 	String generatorSummary;
-	List<IListener> listeners;
 	EclipseAdapter adapter;
+	StringBuffer message;
 
 	public VariantsRandomAndDissimilarGenerator(String input, String output, String generator, int nbVariants, int time,
 			boolean keepOnlyMetadata, boolean noOutputOnlyStatistics) {
@@ -55,27 +53,26 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 		this.keepOnlyMetadata = keepOnlyMetadata;
 		this.noOutputOnlyStatistics = noOutputOnlyStatistics;
 		adapter = new EclipseAdapter();
+		message = new StringBuffer();
 	}
-
-	public void generate() {
+	
+	public String generate(IProgressMonitor monitor) {
 		long startTime = System.currentTimeMillis();
 
-		sendToAll("Starting generation with :");
-		sendToAll("-input = " + input);
-		sendToAll("-output = " + output);
-		sendToAll("-generator = " + generator);
-		sendToAll("-variants number = " + nbVariants);
-		sendToAll("-time = " + time);
-		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata);
-		sendToAll("-onlyStatistics= " + noOutputOnlyStatistics + "\n");
-
-		sendToAll("Please wait until Generation finished\n");
+		message.append("RandomAndDissimilar generator. Parameters:\n");
+		message.append("-input = " + input + "\n");
+		message.append("-output = " + output + "\n");
+		message.append("-generator = " + generator + "\n");
+		message.append("-variants number = " + nbVariants + "\n");
+		message.append("-time = " + time + "\n");
+		message.append("-keepOnlyMetadata = " + keepOnlyMetadata + "\n");
+		message.append("-onlyStatistics= " + noOutputOnlyStatistics + "\n\n");
 
 		File eclipse = new File(input);
 
 		if (!eclipse.exists()) {
-			sendToAll(input + " not exists !");
-			return;
+			message.append(input + " not exists.\n");
+			return message.toString();
 		}
 
 		// if the eclipse dir is inside the input
@@ -90,8 +87,8 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 
 		// check if it's an eclipse directory
 		if (!VariantsUtils.isEclipseDir(eclipse)) {
-			sendToAll(input + " is not an eclipse !");
-			return;
+			message.append(input + " is not an eclipse.\n");
+			return message.toString();
 		}
 
 		URI inputURI = new File(input).toURI();
@@ -99,9 +96,9 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 		try {
 			allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
 		} catch (Exception e) {
-			sendToAll("Error in generator : Impossible to get all features.");
+			message.append("Error in generator: Impossible to get all features\n.");
 			e.printStackTrace();
-			return;
+			return message.toString();
 		}
 
 		// ignore epp package
@@ -127,8 +124,8 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 		// Permits to use PluginElement without launch an Eclipse Application
 		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
 
-		sendToAll("Total features number in the input = " + allFeatures.size());
-		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
+		message.append("Total features number in the input = " + allFeatures.size() + "\n");
+		message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
 
 		File outputFile = new File(output + File.separator + "SPLOTFeatureModel.xml");
 		SplotUtils.exportToSPLOT(outputFile, allFeatures);
@@ -150,9 +147,9 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
-		sendToAll("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
+		message.append("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
 
-		sendToAll("\"Variant\";\"Name\";\"Selectedfeatures\";\"Plugins\";\"Milliseconds\"");
+		message.append("\"Variant\";\"Name\";\"Selectedfeatures\";\"Plugins\";\"Milliseconds\"");
 
 		List<String> generatedConfigs = FileUtils.getLinesOfFile(generatedConfigsFile);
 		// remove headers and empty line
@@ -270,31 +267,15 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator,
 			long stopTimeThisVariant = System.currentTimeMillis();
 			long elapsedTimeThisVariant = stopTimeThisVariant - startTimeThisVariant;
 
-			sendToAll(i + ";Variant_" + i + ";" + chosenFeatures.size() + ";" + pluginsList.size() + ";"
+			message.append(i + ";Variant_" + i + ";" + chosenFeatures.size() + ";" + pluginsList.size() + ";"
 					+ elapsedTimeThisVariant);
 
 		} // end of variants loop
 
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		sendToAll("\nGeneration finished ! Miliseconds: " + elapsedTime);
-	}
-
-	@Override
-	public void addListener(IListener listener) {
-		if (listeners == null) {
-			listeners = new ArrayList<IListener>();
-		}
-		listeners.add(listener);
-	}
-
-	@Override
-	public void sendToAll(String msg) {
-		if (msg != null && listeners != null && !listeners.isEmpty()) {
-			for (IListener oneListener : listeners) {
-				oneListener.receive(msg);
-			}
-		}
+		message.append("\nGeneration finished! Miliseconds: " + elapsedTime);
+		return message.toString();
 	}
 
 }

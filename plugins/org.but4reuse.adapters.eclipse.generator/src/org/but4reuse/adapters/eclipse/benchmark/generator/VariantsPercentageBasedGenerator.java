@@ -12,13 +12,11 @@ import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dependencies.DependencyAnalyzer;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IListener;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.ISender;
-import org.but4reuse.adapters.eclipse.benchmark.generator.interfaces.IVariantsGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.utils.files.FileUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 /**
@@ -40,7 +38,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
  * @author jabier.martinez
  * 
  */
-public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISender {
+public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 
 	private String input;
 	private String output;
@@ -50,11 +48,11 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 	private boolean noOutputOnlyStatistics;
 
 	String generatorSummary;
-	List<IListener> listeners;
 	EclipseAdapter adapter;
+	StringBuffer message;
 
-	public VariantsPercentageBasedGenerator(String input, String output, int nbVariants, int percentage, boolean keepOnlyMetadata,
-			boolean noOutputOnlyStatistics) {
+	public VariantsPercentageBasedGenerator(String input, String output, int nbVariants, int percentage,
+			boolean keepOnlyMetadata, boolean noOutputOnlyStatistics) {
 		this.input = input;
 		this.output = output;
 		this.nbVariants = nbVariants;
@@ -62,26 +60,27 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 		this.keepOnlyMetadata = keepOnlyMetadata;
 		this.noOutputOnlyStatistics = noOutputOnlyStatistics;
 		adapter = new EclipseAdapter();
+		message = new StringBuffer();
 	}
 
-	public void generate() {
-
+	public String generate(IProgressMonitor monitor) {
+		message = new StringBuffer();
 		long startTime = System.currentTimeMillis();
-		sendToAll("Starting generation with :");
-		sendToAll("-input = " + input);
-		sendToAll("-output = " + output);
-		sendToAll("-variants number = " + nbVariants);
-		sendToAll("-percentage = " + percentage + " %");
-		sendToAll("-keepOnlyMetadata = " + keepOnlyMetadata);
-		sendToAll("-onlyStatistics= " + noOutputOnlyStatistics + "\n");
+		message.append("Percentage-based generator. Parameters:\n");
+		message.append("-input = " + input + "\n");
+		message.append("-output = " + output + "\n");
+		message.append("-variants number = " + nbVariants + "\n");
+		message.append("-percentage = " + percentage + " %" + "\n");
+		message.append("-keepOnlyMetadata = " + keepOnlyMetadata + "\n");
+		message.append("-onlyStatistics= " + noOutputOnlyStatistics + "\n\n");
 
-		sendToAll("Please wait until Generation finished\n");
+		message.append("Please wait until Generation finished\n");
 
 		File eclipse = new File(input);
 
 		if (!eclipse.exists()) {
-			sendToAll(input + " not exists !");
-			return;
+			message.append(input + " does not exist.\n");
+			return message.toString();
 		}
 
 		// if the eclipse dir is inside the input
@@ -95,8 +94,8 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 
 		// check if it's an eclipse directory
 		if (!VariantsUtils.isEclipseDir(eclipse)) {
-			sendToAll(input + " is not an eclipse !");
-			return;
+			message.append(input + " seems not to be an eclipse installation.\n");
+			return message.toString();
 		}
 
 		URI inputURI = new File(input).toURI();
@@ -104,9 +103,9 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 		try {
 			allFeatures = FeatureHelper.getFeaturesOfEclipse(inputURI.toString());
 		} catch (Exception e) {
-			sendToAll("Error in generator : Impossible to get all features.");
+			message.append("Error in generator : Impossible to get all features.\n");
 			e.printStackTrace();
-			return;
+			return message.toString();
 		}
 
 		// ignore epp package
@@ -123,27 +122,28 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 
 		List<IElement> iElems = adapter.adapt(inputURI, new NullProgressMonitor());
 		for (IElement elem : iElems) {
-			if (elem instanceof PluginElement)
+			if (elem instanceof PluginElement) {
 				allPlugins.add((PluginElement) elem);
-			else if (elem instanceof FileElement)
+			} else if (elem instanceof FileElement) {
 				allFileElements.add((FileElement) elem);
+			}
 		}
 
 		// Permits to use PluginElement without launch an Eclipse Application
 		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
 
-		sendToAll("Total features number in the input = " + allFeatures.size());
-		sendToAll("Total plugins number in the input = " + allPluginsGen.size() + "\n");
+		message.append("Total features number in the input = " + allFeatures.size() + "\n");
+		message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
 
 		// Analyse the dependencies only once before starting
 		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
 
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
-		sendToAll("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
+		message.append("Preparation time (milliseconds): " + elapsedTimePreparation + "\n\n");
 
-		sendToAll(
-				"\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"");
+		message.append(
+				"\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"\n");
 
 		// Loop for each variant
 		for (int i = 1; i <= nbVariants; i++) {
@@ -212,7 +212,7 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeatureDependencies());
 
 			}
-			
+
 			if (!noOutputOnlyStatistics) {
 
 				// Create all dirs and copy features and plugins
@@ -262,33 +262,22 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator, ISe
 
 			long stopTimeThisVariant = System.currentTimeMillis();
 			long elapsedTimeThisVariant = stopTimeThisVariant - startTimeThisVariant;
-			sendToAll(i + ";Variant_" + i + ";" + nbSelectedFeatures + ";" + chosenFeatures.size() + ";"
-					+ pluginsList.size() + ";" + elapsedTimeThisVariant);
+			message.append(i + ";Variant_" + i + ";" + nbSelectedFeatures + ";" + chosenFeatures.size() + ";"
+					+ pluginsList.size() + ";" + elapsedTimeThisVariant + "\n\n");
 		} // end of variants loop
 
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		sendToAll("\nGeneration finished ! Miliseconds: " + elapsedTime);
-
+		message.append("Generation finished! Miliseconds: " + elapsedTime);
+		return message.toString();
 	}
 
-	@Override
-	public void addListener(IListener listener) {
-		if (listeners == null) {
-			listeners = new ArrayList<IListener>();
-		}
-		listeners.add(listener);
-	}
-
-	@Override
-	public void sendToAll(String msg) {
-		if (msg != null && listeners != null && !listeners.isEmpty()) {
-			for (IListener oneListener : listeners) {
-				oneListener.receive(msg);
-			}
-		}
-	}
-
+	/**
+	 * Decide if a feature is chosen
+	 * 
+	 * @param feature
+	 * @return true or false
+	 */
 	private boolean wasChosen(ActualFeature feature) {
 		if (feature == null || percentage == 0) {
 			return false;
