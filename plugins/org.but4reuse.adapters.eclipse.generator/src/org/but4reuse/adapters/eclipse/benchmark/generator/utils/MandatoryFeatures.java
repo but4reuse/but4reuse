@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.eclipse.benchmark.generator.dependencies;
+package org.but4reuse.adapters.eclipse.benchmark.generator.utils;
 
 /**
  * @author Julien Margarido

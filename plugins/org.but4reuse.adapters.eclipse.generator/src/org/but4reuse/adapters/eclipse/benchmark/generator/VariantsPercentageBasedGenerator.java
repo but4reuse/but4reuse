@@ -11,9 +11,8 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.benchmark.generator.dependencies.DependencyAnalyzer;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.DependencyAnalyzer;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
-import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -130,13 +129,13 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 		}
 
 		// Permits to use PluginElement without launch an Eclipse Application
-		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
+		// List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
 
 		message.append("Total features number in the input = " + allFeatures.size() + "\n");
-		message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
+		//message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
 
 		// Analyse the dependencies only once before starting
-		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
+		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPlugins, inputURI.toString());
 
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
@@ -151,15 +150,15 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 			int nbSelectedFeatures = 0;
 
-			List<PluginElementGenerator> pluginsList = null;
+			List<PluginElement> pluginsList = null;
 			List<ActualFeature> chosenFeatures = null;
 
 			if (percentage == 100) {
 				nbSelectedFeatures = allFeatures.size();
-				pluginsList = allPluginsGen;
+				pluginsList = allPlugins;
 				chosenFeatures = allFeatures;
 			} else {
-				pluginsList = new ArrayList<PluginElementGenerator>();
+				pluginsList = new ArrayList<PluginElement>();
 				chosenFeatures = new ArrayList<ActualFeature>();
 			}
 
@@ -176,9 +175,9 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 					}
 					chosenFeatures.add(oneFeature);
 
-					List<ActualFeature> allFeaturesDependencies = depAnalyzer.getFeatureDependencies(oneFeature);
-					if (allFeaturesDependencies != null) {
-						for (ActualFeature depFeat : allFeaturesDependencies) {
+					List<ActualFeature> allFeatureDependencies = depAnalyzer.getFeatureDependencies(oneFeature);
+					if (allFeatureDependencies != null) {
+						for (ActualFeature depFeat : allFeatureDependencies) {
 							if (!chosenFeatures.contains(depFeat)) {
 								// Avoid duplicates dependencies in the
 								// chosenFeatures list
@@ -197,10 +196,10 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
-					List<PluginElementGenerator> allPluginsDependencies = depAnalyzer
+					List<PluginElement> allPluginDependencies = depAnalyzer
 							.getPluginDependencies(chosenFeature);
-					if (allPluginsDependencies != null) {
-						for (PluginElementGenerator depPlugin : allPluginsDependencies) {
+					if (allPluginDependencies != null) {
+						for (PluginElement depPlugin : allPluginDependencies) {
 							// Avoid duplicated dependencies in the plugins list
 							if (!pluginsList.contains(depPlugin)) {
 								pluginsList.add(depPlugin);
@@ -208,9 +207,7 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 						}
 					}
 				}
-
 				pluginsList.addAll(depAnalyzer.getPluginsWithoutAnyFeatureDependencies());
-
 			}
 
 			if (!noOutputOnlyStatistics) {

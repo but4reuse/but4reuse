@@ -12,9 +12,8 @@ import org.but4reuse.adapters.eclipse.FileElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.ActualFeature;
 import org.but4reuse.adapters.eclipse.benchmark.FeatureHelper;
-import org.but4reuse.adapters.eclipse.benchmark.generator.dependencies.DependencyAnalyzer;
+import org.but4reuse.adapters.eclipse.benchmark.generator.utils.DependencyAnalyzer;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.EclipseKeepOnlyMetadata;
-import org.but4reuse.adapters.eclipse.benchmark.generator.utils.PluginElementGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.SplotUtils;
 import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.utils.files.FileUtils;
@@ -121,11 +120,8 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 				allFileElements.add((FileElement) elem);
 		}
 
-		// Permits to use PluginElement without launch an Eclipse Application
-		List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
-
 		message.append("Total features number in the input = " + allFeatures.size() + "\n");
-		message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
+		message.append("Total plugins number in the input = " + allPlugins.size() + "\n\n");
 
 		File outputFile = new File(output + File.separator + "SPLOTFeatureModel.xml");
 		SplotUtils.exportToSPLOT(outputFile, allFeatures);
@@ -162,7 +158,7 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 		generatedConfigs.removeAll(linesToRemove);
 
 		// Variants loop
-		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPluginsGen, inputURI.toString());
+		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPlugins, inputURI.toString());
 		for (int i = 1; i <= nbVariants; i++) {
 			long startTimeThisVariant = System.currentTimeMillis();
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
@@ -202,9 +198,9 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 
 			// Get all plugins from chosen features
 			for (ActualFeature chosenFeature : chosenFeatures) {
-				List<PluginElementGenerator> allPluginsDependencies = depAnalyzer.getPluginDependencies(chosenFeature);
-				if (allPluginsDependencies != null) {
-					for (PluginElementGenerator depPlugin : allPluginsDependencies) {
+				List<PluginElement> allPluginDependencies = depAnalyzer.getPluginDependencies(chosenFeature);
+				if (allPluginDependencies != null) {
+					for (PluginElement depPlugin : allPluginDependencies) {
 						// Avoid duplicates dependencies in the plugins list
 						if (!pluginsList.contains(depPlugin)) {
 							pluginsList.add(depPlugin);
@@ -213,7 +209,7 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 				}
 			}
 
-			List<PluginElementGenerator> pluginsWithoutAnyFeatureDependencies = depAnalyzer
+			List<PluginElement> pluginsWithoutAnyFeatureDependencies = depAnalyzer
 					.getPluginsWithoutAnyFeatureDependencies();
 			pluginsList.addAll(pluginsWithoutAnyFeatureDependencies);
 
