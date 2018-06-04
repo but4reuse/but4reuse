@@ -54,11 +54,12 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 		adapter = new EclipseAdapter();
 		message = new StringBuffer();
 	}
-	
+
 	public String generate(IProgressMonitor monitor) {
+		monitor.subTask("Preparation");
 		long startTime = System.currentTimeMillis();
 
-		message.append("RandomAndDissimilar generator. Parameters:\n");
+		message.append("Parameters:\n");
 		message.append("-input = " + input + "\n");
 		message.append("-output = " + output + "\n");
 		message.append("-generator = " + generator + "\n");
@@ -143,9 +144,9 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 
 		long stopTimePreparation = System.currentTimeMillis();
 		long elapsedTimePreparation = stopTimePreparation - startTime;
-		message.append("Preparation time (milliseconds): " + elapsedTimePreparation + "\n");
+		message.append("Preparation time (milliseconds): " + elapsedTimePreparation + "\n\n");
 
-		message.append("\"Variant\";\"Name\";\"Selectedfeatures\";\"Plugins\";\"Milliseconds\"");
+		message.append("\"Variant\";\"Name\";\"Selectedfeatures\";\"Plugins\";\"Milliseconds\"\n");
 
 		List<String> generatedConfigs = FileUtils.getLinesOfFile(generatedConfigsFile);
 		// remove headers and empty line
@@ -157,9 +158,16 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 		}
 		generatedConfigs.removeAll(linesToRemove);
 
-		// Variants loop
+		// Analyse the dependencies only once before starting
+		monitor.subTask("Preparation: Dependency analysis");
 		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPlugins, inputURI.toString());
+
+		// preparation is finished
+		monitor.worked(1);
+
+		// Variants loop
 		for (int i = 1; i <= nbVariants; i++) {
+			monitor.subTask("Generating variant " + i + " out of " + nbVariants);
 			long startTimeThisVariant = System.currentTimeMillis();
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 
@@ -264,8 +272,9 @@ public class VariantsRandomAndDissimilarGenerator implements IVariantsGenerator 
 			long elapsedTimeThisVariant = stopTimeThisVariant - startTimeThisVariant;
 
 			message.append(i + ";Variant_" + i + ";" + chosenFeatures.size() + ";" + pluginsList.size() + ";"
-					+ elapsedTimeThisVariant);
+					+ elapsedTimeThisVariant + "\n");
 
+			monitor.worked(1);
 		} // end of variants loop
 
 		long stopTime = System.currentTimeMillis();

@@ -1,7 +1,8 @@
-package org.but4reuse.adapters.eclipse.benchmark.generator.actions;
+package org.but4reuse.adapters.eclipse.benchmark.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsRandomAndDissimilarGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.RandomAndDissimilarDialog;
@@ -9,8 +10,11 @@ import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -30,19 +34,19 @@ public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDel
 		super();
 	}
 
-	private RandomAndDissimilarDialog dialog;
+	private RandomAndDissimilarDialog paramDialog;
 
 	public void run(IAction action) {
 
-		if (dialog == null) {
+		if (paramDialog == null) {
 			// Not create a new dialog if it's a "re-open" (parameters not
 			// good).
-			dialog = new RandomAndDissimilarDialog(Display.getCurrent().getActiveShell());
+			paramDialog = new RandomAndDissimilarDialog(Display.getCurrent().getActiveShell());
 		}
 
-		if (dialog.open() != Window.OK) {
+		if (paramDialog.open() != Window.OK) {
 			// Open the dialog and stop execution while a button is not pressed
-			dialog = null;
+			paramDialog = null;
 			return;
 		}
 
@@ -51,38 +55,38 @@ public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDel
 		int nbVariants = 0;
 		boolean isAllOK = true;
 
-		if (!new File(dialog.getInputPath()).exists()) {
-			dialog.setInputState(false);
+		if (!new File(paramDialog.getInputPath()).exists()) {
+			paramDialog.setInputState(false);
 			isAllOK = false;
 		} else {
-			dialog.setInputState(true);
+			paramDialog.setInputState(true);
 		}
 
 		try {
-			time = Integer.parseInt(dialog.getTime());
+			time = Integer.parseInt(paramDialog.getTime());
 			if ((time < 0)) {
 				isAllOK = false;
-				dialog.setTimeState(false);
+				paramDialog.setTimeState(false);
 			} else {
-				dialog.setTimeState(true);
+				paramDialog.setTimeState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			dialog.setTimeState(false);
+			paramDialog.setTimeState(false);
 			e.printStackTrace();
 		}
 
 		try {
-			nbVariants = Integer.parseInt(dialog.getVariantsNumber());
+			nbVariants = Integer.parseInt(paramDialog.getVariantsNumber());
 			if (nbVariants <= 0) {
 				isAllOK = false;
-				dialog.setVariantsNumberState(false);
+				paramDialog.setVariantsNumberState(false);
 			} else {
-				dialog.setVariantsNumberState(true);
+				paramDialog.setVariantsNumberState(true);
 			}
 		} catch (NumberFormatException e) {
 			isAllOK = false;
-			dialog.setVariantsNumberState(false);
+			paramDialog.setVariantsNumberState(false);
 			e.printStackTrace();
 		}
 
@@ -92,22 +96,36 @@ public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDel
 		}
 
 		// Start the generator process
-		// final for the thread and because nbVariants and time can't be
-		// final
 		final int nbVariantsForThread = nbVariants;
 		final int timeForThread = time;
-		final boolean keepOnlyMetadata = dialog.isKeepOnlyMetadata();
-		final boolean noOutputOnlyStatistics = dialog.isNoOutputOnlyStatistics();
+		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
+		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
 
-		VariantsRandomAndDissimilarGenerator varGen = new VariantsRandomAndDissimilarGenerator(dialog.getInputPath(),
-				dialog.getOutputPath(), dialog.getGeneratorPath(), nbVariantsForThread, timeForThread, keepOnlyMetadata,
-				noOutputOnlyStatistics);
+		final VariantsRandomAndDissimilarGenerator varGen = new VariantsRandomAndDissimilarGenerator(
+				paramDialog.getInputPath(), paramDialog.getOutputPath(), paramDialog.getGeneratorPath(),
+				nbVariantsForThread, timeForThread, keepOnlyMetadata, noOutputOnlyStatistics);
+
+		final ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(),
+				"RandomAndDissimilar generator", "", "");
+
 		// Long time to execute
-		String message = varGen.generate(new NullProgressMonitor());
-		System.out.println(message);
+		// Launch Progress dialog
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		try {
+			progressDialog.run(true, true, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					// variants + 1 for the preparation
+					monitor.beginTask("Generating variants", nbVariantsForThread + 1);
+					dialog.scrollableText = varGen.generate(monitor);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Update the artefact model
-		if (!dialog.isNoOutputOnlyStatistics()) {
+		if (!paramDialog.isNoOutputOnlyStatistics()) {
 			// get the selection
 			ArtefactModel artefactModel = null;
 			if (selection instanceof IStructuredSelection) {
@@ -117,7 +135,7 @@ public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDel
 				for (int i = 1; i <= nbVariantsForThread; i++) {
 					Artefact a = ArtefactModelFactory.eINSTANCE.createArtefact();
 					String varName = VariantsUtils.VARIANT + "_" + i;
-					String output_variant = dialog.getOutputPath() + File.separator + varName;
+					String output_variant = paramDialog.getOutputPath() + File.separator + varName;
 					a.setName(varName);
 					a.setArtefactURI(new File(output_variant).toURI().toString());
 					// add to the artefact model
@@ -131,7 +149,8 @@ public class CreateVariantsRandomAndDissimilarAction implements IObjectActionDel
 				e.printStackTrace();
 			}
 		}
-
+		
+		dialog.open();
 	}
 
 	@Override

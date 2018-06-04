@@ -1,7 +1,8 @@
-package org.but4reuse.adapters.eclipse.benchmark.generator.actions;
+package org.but4reuse.adapters.eclipse.benchmark.actions;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import org.but4reuse.adapters.eclipse.benchmark.generator.VariantsPercentageBasedGenerator;
 import org.but4reuse.adapters.eclipse.benchmark.generator.dialogs.PercentageBasedDialog;
@@ -9,8 +10,11 @@ import org.but4reuse.adapters.eclipse.benchmark.generator.utils.VariantsUtils;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ArtefactModelFactory;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.but4reuse.utils.ui.dialogs.ScrollableMessageDialog;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -90,20 +94,33 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 		}
 
 		// Start the generator process
-		// final for the thread and because nbVariants and valRand can't be
-		// final
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
 		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
 		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
 
-		VariantsPercentageBasedGenerator varGen = new VariantsPercentageBasedGenerator(paramDialog.getInputPath(),
+		final VariantsPercentageBasedGenerator varGen = new VariantsPercentageBasedGenerator(paramDialog.getInputPath(),
 				paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
 				noOutputOnlyStatistics);
+
+		final ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(), "Percentage-based generator",
+				"", "");
 		
 		// Long time to execute
-		String message = varGen.generate(new NullProgressMonitor());
-		System.out.println(message);
+		// Launch Progress dialog
+		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+		try {
+			progressDialog.run(true, true, new IRunnableWithProgress() {
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					// variants + 1 for the preparation
+					monitor.beginTask("Generating variants", nbVariantsForThread + 1);
+					dialog.scrollableText = varGen.generate(monitor);
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Update the artefact model
 		if (!paramDialog.isNoOutputOnlyStatistics()) {
@@ -129,6 +146,8 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 				e.printStackTrace();
 			}
 		}
+
+		dialog.open();
 	}
 
 	@Override

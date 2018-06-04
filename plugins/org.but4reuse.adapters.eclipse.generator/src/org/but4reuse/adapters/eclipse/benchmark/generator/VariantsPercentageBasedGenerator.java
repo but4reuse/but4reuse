@@ -63,9 +63,10 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 	}
 
 	public String generate(IProgressMonitor monitor) {
+		monitor.subTask("Preparation");
 		message = new StringBuffer();
 		long startTime = System.currentTimeMillis();
-		message.append("Percentage-based generator. Parameters:\n");
+		message.append("Parameters:\n");
 		message.append("-input = " + input + "\n");
 		message.append("-output = " + output + "\n");
 		message.append("-variants number = " + nbVariants + "\n");
@@ -128,13 +129,11 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 			}
 		}
 
-		// Permits to use PluginElement without launch an Eclipse Application
-		// List<PluginElementGenerator> allPluginsGen = PluginElementGenerator.transformInto(allPlugins);
-
 		message.append("Total features number in the input = " + allFeatures.size() + "\n");
 		//message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
 
 		// Analyse the dependencies only once before starting
+		monitor.subTask("Preparation: Dependency analysis");
 		DependencyAnalyzer depAnalyzer = new DependencyAnalyzer(allFeatures, allPlugins, inputURI.toString());
 
 		long stopTimePreparation = System.currentTimeMillis();
@@ -144,8 +143,18 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 		message.append(
 				"\"Variant\";\"Name\";\"Randomly selected features\";\"Features after dependency resolution\";\"Plugins\";\"Milliseconds\"\n");
 
+		// preparation is finished
+		monitor.worked(1);
+		
 		// Loop for each variant
 		for (int i = 1; i <= nbVariants; i++) {
+			monitor.subTask("Generating variant " + i + " out of " + nbVariants);
+			
+			// User pressed the cancel button
+			if(monitor.isCanceled()) {
+				break;
+			}
+			
 			long startTimeThisVariant = System.currentTimeMillis();
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 			int nbSelectedFeatures = 0;
@@ -260,12 +269,15 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 			long stopTimeThisVariant = System.currentTimeMillis();
 			long elapsedTimeThisVariant = stopTimeThisVariant - startTimeThisVariant;
 			message.append(i + ";Variant_" + i + ";" + nbSelectedFeatures + ";" + chosenFeatures.size() + ";"
-					+ pluginsList.size() + ";" + elapsedTimeThisVariant + "\n\n");
+					+ pluginsList.size() + ";" + elapsedTimeThisVariant + "\n");
+			
+			monitor.worked(1);
 		} // end of variants loop
 
 		long stopTime = System.currentTimeMillis();
 		long elapsedTime = stopTime - startTime;
-		message.append("Generation finished! Miliseconds: " + elapsedTime);
+		message.append("\nGeneration finished! Miliseconds: " + elapsedTime);
+		monitor.done();
 		return message.toString();
 	}
 

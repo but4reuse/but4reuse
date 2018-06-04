@@ -52,13 +52,13 @@
             id="org.but4reuse.adapters.eclipse.benchmark.objectContribution"
             objectClass="org.but4reuse.artefactmodel.ArtefactModel">
          <action
-               class="org.but4reuse.adapters.eclipse.benchmark.generator.actions.CreateVariantsPercentageBasedAction"
+               class="org.but4reuse.adapters.eclipse.benchmark.actions.CreateVariantsPercentageBasedAction"
                id="org.but4reuse.adapters.eclipse.generator.action"
                label="Variants Generation: Percentage-based random selection of features"
                menubarPath="EFLBench/additions">
          </action>
          <action
-               class="org.but4reuse.adapters.eclipse.benchmark.generator.actions.CreateVariantsRandomAndDissimilarAction"
+               class="org.but4reuse.adapters.eclipse.benchmark.actions.CreateVariantsRandomAndDissimilarAction"
                id="org.but4reuse.adapters.eclipse.generator.action"
                label="Variants Generation: Random or Dissimilar"
                menubarPath="EFLBench/additions">
