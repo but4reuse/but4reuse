@@ -2,16 +2,20 @@ package org.but4reuse.adapters.eclipse.benchmark.visualisations;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.PluginElement;
 import org.but4reuse.adapters.eclipse.benchmark.PrecisionRecall;
+import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.LocatedFeaturesManager;
 import org.but4reuse.feature.location.LocatedFeaturesUtils;
+import org.but4reuse.feature.location.helper.FeatureLocationHelper;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
 import org.but4reuse.utils.emf.EMFUtils;
@@ -44,18 +48,26 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 		if (featureList != null && featureList.getName() != null && featureList.getName().contains("eclipse")) {
 
 			// TODO improve getting this resource
-			IResource res = EMFUtils.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact()
-					.eResource());
+			IResource res = EMFUtils
+					.getIResource(adaptedModel.getOwnedAdaptedArtefacts().get(0).getArtefact().eResource());
 			File artefactModelFile = WorkbenchUtils.getFileFromIResource(res);
 
 			// create folder
-			File folderForLocatedFeatures = new File(artefactModelFile.getParentFile(), "eclipseFeatureLocations");
-			folderForLocatedFeatures.mkdir();
+			File results = new File(artefactModelFile.getParentFile(), "benchmark_results");
+			results.mkdir();
+
+			IFeatureLocation algoUsed = FeatureLocationHelper.getSelectedFeatureLocation();
+			File currentResults = new File(results,
+					algoUsed.getClass().getSimpleName() + "_" + System.currentTimeMillis());
+			currentResults.mkdir();
+
+			File flocationsFolder = new File(currentResults, "retrievedFeatureLocations");
+			flocationsFolder.mkdir();
 
 			// put the calculated feature locations in one file per feature
 			for (Feature feature : featureList.getOwnedFeatures()) {
 				StringBuilder text = new StringBuilder();
-				File file = new File(folderForLocatedFeatures, feature.getId() + ".txt");
+				File file = new File(flocationsFolder, feature.getId() + ".txt");
 
 				List<LocatedFeature> locatedFeatures = LocatedFeaturesManager.getLocatedFeatures();
 
@@ -92,7 +104,23 @@ public class EclipseFeatureLocationPluginsVisualisation implements IVisualisatio
 			// Create precision and recall file
 			File actualFeatures = new File(artefactModelFile.getParentFile(), "benchmark/actualFeatures");
 			if (actualFeatures.exists()) {
-				PrecisionRecall.createResultsFile(actualFeatures, folderForLocatedFeatures);
+				String content = PrecisionRecall.createResultsFile(actualFeatures, flocationsFolder);
+				try {
+					FileUtils.writeFile(new File(currentResults, "metrics.csv"), content);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			// Create time measures file
+			StringBuilder text = new StringBuilder();
+			for (Entry<String, Long> entry : AdaptedModelManager.getElapsedTimeRegistry().entrySet()) {
+				text.append(entry.getKey() + ";" + entry.getValue() + "\n");
+			}
+			try {
+				FileUtils.writeFile(new File(currentResults, "timeMeasures.csv"), text.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 			// Refresh
