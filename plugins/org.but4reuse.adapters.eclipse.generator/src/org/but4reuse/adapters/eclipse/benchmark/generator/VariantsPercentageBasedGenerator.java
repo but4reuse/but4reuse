@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.eclipse.EclipseAdapter;
@@ -43,23 +44,32 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 	private String output;
 	private int nbVariants;
 	private int percentage;
+	private Long randomSeed;
 	private boolean keepOnlyMetadata;
 	private boolean noOutputOnlyStatistics;
 
 	String generatorSummary;
 	EclipseAdapter adapter;
 	StringBuffer message;
+	Random random;
 
 	public VariantsPercentageBasedGenerator(String input, String output, int nbVariants, int percentage,
-			boolean keepOnlyMetadata, boolean noOutputOnlyStatistics) {
+			Long randomSeed, boolean keepOnlyMetadata, boolean noOutputOnlyStatistics) {
 		this.input = input;
 		this.output = output;
 		this.nbVariants = nbVariants;
 		this.percentage = percentage;
+		this.randomSeed = randomSeed;
 		this.keepOnlyMetadata = keepOnlyMetadata;
 		this.noOutputOnlyStatistics = noOutputOnlyStatistics;
 		adapter = new EclipseAdapter();
 		message = new StringBuffer();
+		if (randomSeed == null) {
+			// this will use system time-stamp as seed
+			random = new Random();
+		} else {
+			random = new Random(randomSeed);
+		}
 	}
 
 	public String generate(IProgressMonitor monitor) {
@@ -71,10 +81,11 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 		message.append("-output = " + output + "\n");
 		message.append("-variants number = " + nbVariants + "\n");
 		message.append("-percentage = " + percentage + " %" + "\n");
+		if (randomSeed != null) {
+			message.append("-random seed = " + randomSeed + "\n");
+		}
 		message.append("-keepOnlyMetadata = " + keepOnlyMetadata + "\n");
 		message.append("-onlyStatistics= " + noOutputOnlyStatistics + "\n\n");
-
-		message.append("Please wait until Generation finished\n");
 
 		File eclipse = new File(input);
 
@@ -130,7 +141,8 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 		}
 
 		message.append("Total features number in the input = " + allFeatures.size() + "\n");
-		//message.append("Total plugins number in the input = " + allPluginsGen.size() + "\n\n");
+		// message.append("Total plugins number in the input = " +
+		// allPluginsGen.size() + "\n\n");
 
 		// Analyse the dependencies only once before starting
 		monitor.subTask("Preparation: Dependency analysis");
@@ -145,16 +157,16 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 
 		// preparation is finished
 		monitor.worked(1);
-		
+
 		// Loop for each variant
 		for (int i = 1; i <= nbVariants; i++) {
 			monitor.subTask("Generating variant " + i + " out of " + nbVariants);
-			
+
 			// User pressed the cancel button
-			if(monitor.isCanceled()) {
+			if (monitor.isCanceled()) {
 				break;
 			}
-			
+
 			long startTimeThisVariant = System.currentTimeMillis();
 			String output_variant = output + File.separator + VariantsUtils.VARIANT + "_" + i;
 			int nbSelectedFeatures = 0;
@@ -205,8 +217,7 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 
 				// Get all plugins from chosen features
 				for (ActualFeature chosenFeature : chosenFeatures) {
-					List<PluginElement> allPluginDependencies = depAnalyzer
-							.getPluginDependencies(chosenFeature);
+					List<PluginElement> allPluginDependencies = depAnalyzer.getPluginDependencies(chosenFeature);
 					if (allPluginDependencies != null) {
 						for (PluginElement depPlugin : allPluginDependencies) {
 							// Avoid duplicated dependencies in the plugins list
@@ -270,7 +281,7 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 			long elapsedTimeThisVariant = stopTimeThisVariant - startTimeThisVariant;
 			message.append(i + ";Variant_" + i + ";" + nbSelectedFeatures + ";" + chosenFeatures.size() + ";"
 					+ pluginsList.size() + ";" + elapsedTimeThisVariant + "\n");
-			
+
 			monitor.worked(1);
 		} // end of variants loop
 
@@ -290,7 +301,7 @@ public class VariantsPercentageBasedGenerator implements IVariantsGenerator {
 	private boolean wasChosen(ActualFeature feature) {
 		if (feature == null || percentage == 0) {
 			return false;
-		} else if (percentage == 100 || Math.random() * 100 < percentage) {
+		} else if (percentage == 100 || random.nextDouble() * 100 < percentage) {
 			return true;
 		} else {
 			return false;

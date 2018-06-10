@@ -28,6 +28,7 @@ public class PercentageBasedDialog extends Dialog {
 	private Text output;
 	private Text variantsNumber;
 	private Text randomSelector;
+	private Text randomSeed;
 	private Button keepOnlyMetadataButton;
 	private Button noOutputButton;
 
@@ -35,16 +36,19 @@ public class PercentageBasedDialog extends Dialog {
 	private Label lblOutput;
 	private Label lblVariantsNumber;
 	private Label lblRandomSelector;
+	private Label lblRandomSeed;
 
 	private Boolean isInputOK;
 	private Boolean isOutputOK;
 	private Boolean isVariantsNumberOK;
 	private Boolean isRandomSelectorOK;
+	private Boolean isRandomSeedOK;
 
 	private String inputContent = "C:\\eclipse";
 	private String outputContent = "C:\\outputFolder";
 	private String variantsNumberContent = "3";
 	private String randomSelectorContent = "50";
+	private String randomSeedContent = "";
 	private Boolean keepOnlyMetadata = true;
 	private Boolean noOutputOnlyStatistics = false;
 
@@ -68,6 +72,7 @@ public class PercentageBasedDialog extends Dialog {
 		addOutput(container);
 		addRandomSelector(container);
 		addVariantsNumber(container);
+		addRandomSeed(container);
 		addKeepOnlyMetadataOption(container);
 		addNoOutputOption(container);
 
@@ -172,13 +177,28 @@ public class PercentageBasedDialog extends Dialog {
 	private void addRandomSelector(Composite container) {
 		lblRandomSelector = new Label(container, SWT.WRAP);
 		lblRandomSelector.setText(VariantsUtils.RANDOM_NUMBER_TEXT);
-		if (isRandomSelectorOK != null && !isRandomSelectorOK)
+		if (isRandomSelectorOK != null && !isRandomSelectorOK) {
 			lblRandomSelector.setForeground(red);
+		}
 
 		randomSelector = new Text(container, SWT.BORDER);
 		randomSelector.setText(randomSelectorContent);
 		randomSelector.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		randomSelector.setTextLimit(3);
+		// Invisible element, because there are 3 columns
+		new Label(container, SWT.NONE).setVisible(false);
+	}
+	
+	private void addRandomSeed(Composite container) {
+		lblRandomSeed = new Label(container, SWT.WRAP);
+		lblRandomSeed.setText(VariantsUtils.RANDOM_SEED_TEXT);
+		if (isRandomSeedOK != null && !isRandomSeedOK) {
+			lblRandomSeed.setForeground(red);
+		}
+
+		randomSeed = new Text(container, SWT.BORDER);
+		randomSeed.setText(randomSeedContent);
+		randomSeed.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		// Invisible element, because there are 3 columns
 		new Label(container, SWT.NONE).setVisible(false);
 	}
@@ -206,6 +226,7 @@ public class PercentageBasedDialog extends Dialog {
 		outputContent = output.getText();
 		randomSelectorContent = randomSelector.getText();
 		variantsNumberContent = variantsNumber.getText();
+		randomSeedContent = randomSeed.getText();
 		super.okPressed();
 	}
 
@@ -224,6 +245,10 @@ public class PercentageBasedDialog extends Dialog {
 	public String getRandomSelector() {
 		return randomSelectorContent;
 	}
+	
+	public String getRandomSeed() {
+		return randomSeedContent;
+	}
 
 	public void setInputState(boolean isGood) {
 		isInputOK = isGood;
@@ -239,6 +264,10 @@ public class PercentageBasedDialog extends Dialog {
 
 	public void setRandomSelectorState(boolean isGood) {
 		isRandomSelectorOK = isGood;
+	}
+	
+	public void setRandomSeedState(boolean isGood) {
+		isRandomSeedOK = isGood;
 	}
 
 	public boolean isKeepOnlyMetadata() {

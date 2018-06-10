@@ -51,6 +51,7 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 		// Settings checking
 		int valRand = 0;
 		int nbVariants = 0;
+		Long seedRand = null;
 		boolean isAllOK = true;
 
 		if (!new File(paramDialog.getInputPath()).exists()) {
@@ -71,7 +72,6 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 		} catch (NumberFormatException e) {
 			isAllOK = false;
 			paramDialog.setRandomSelectorState(false);
-			e.printStackTrace();
 		}
 
 		try {
@@ -85,9 +85,18 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 		} catch (NumberFormatException e) {
 			isAllOK = false;
 			paramDialog.setVariantsNumberState(false);
-			e.printStackTrace();
 		}
 
+		try {
+			if (paramDialog.getRandomSeed() != null && !paramDialog.getRandomSeed().isEmpty()) {
+				seedRand = Long.parseLong(paramDialog.getRandomSeed());
+			}
+		} catch (NumberFormatException e) {
+			isAllOK = false;
+			paramDialog.setRandomSeedState(false);
+		}
+
+		// retry
 		if (!isAllOK) {
 			this.run(action);
 			return;
@@ -96,16 +105,17 @@ public class CreateVariantsPercentageBasedAction implements IObjectActionDelegat
 		// Start the generator process
 		final int nbVariantsForThread = nbVariants;
 		final int valRandForThread = valRand;
+		final Long seedRandForThread = seedRand;
 		final boolean keepOnlyMetadata = paramDialog.isKeepOnlyMetadata();
 		final boolean noOutputOnlyStatistics = paramDialog.isNoOutputOnlyStatistics();
 
 		final VariantsPercentageBasedGenerator varGen = new VariantsPercentageBasedGenerator(paramDialog.getInputPath(),
-				paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, keepOnlyMetadata,
+				paramDialog.getOutputPath(), nbVariantsForThread, valRandForThread, seedRandForThread, keepOnlyMetadata,
 				noOutputOnlyStatistics);
 
-		final ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(), "Percentage-based generator",
-				"", "");
-		
+		final ScrollableMessageDialog dialog = new ScrollableMessageDialog(Display.getCurrent().getActiveShell(),
+				"Percentage-based generator", "", "");
+
 		// Long time to execute
 		// Launch Progress dialog
 		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());

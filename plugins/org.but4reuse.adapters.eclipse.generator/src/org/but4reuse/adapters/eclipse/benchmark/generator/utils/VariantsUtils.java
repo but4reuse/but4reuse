@@ -11,7 +11,7 @@ public class VariantsUtils {
 	public static final String META_INF = "META-INF";
 	public static final String PROPERTIES = ".properties";
 
-	public static final String JAR = ".jar"; //$NON-NLS-N$
+	public static final String JAR = ".jar"; // $NON-NLS-N$
 
 	public static final String PARAMETERS_TITLE = "Generate Eclipse variants";
 	public static final String ADAPTER_NAME = "eclipse4generator";
@@ -22,6 +22,7 @@ public class VariantsUtils {
 	public static final String VARIANTS_NUMBER_TEXT = "Number of variants";
 	public static final String TIME_NUMBER_TEXT = "Time (seconds) for calculation (0 for Random)";
 	public static final String RANDOM_NUMBER_TEXT = "Value of random selector (between 0 and 100%)";
+	public static final String RANDOM_SEED_TEXT = "Random seed (Empty or enter a number)";
 	public static final String VALID = "Validate input";
 
 	public static boolean isEclipseDir(File eclipse) {
