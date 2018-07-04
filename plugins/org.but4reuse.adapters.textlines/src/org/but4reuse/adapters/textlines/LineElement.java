@@ -48,9 +48,9 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 			// why use prime?  The general principle is that when dealing with a pattern of inputs, 
 			// using a prime number modulus (%) will yield the best distribution.
 			
-			// Reasons to use 31: It's just one less than a power of two (32 = two to the power 5), so it permits bitwise operstions.
+			// Reasons to use 31: It's just one less than a power of two (32 = two to the power 5), so it permits bitwise operations.
 			//  31 * i == (i << 5) - i
-			// Just shifting and substraction improves the performance.
+			// Just shifting and subtraction improves the performance.
 			
 			int result = 1;
 			result = prime * result + ((line == null) ? 0 : line.hashCode());
