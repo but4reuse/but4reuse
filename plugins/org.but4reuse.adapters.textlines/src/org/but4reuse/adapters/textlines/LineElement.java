@@ -45,6 +45,13 @@ public class LineElement extends AbstractElement implements IMarkerElement {
 		// We use the hash from the line string only if we are on identical mode
 		if (PreferencesHelper.isOnlyIdenticalMode()) {
 			final int prime = 31;
+			// why use prime?  The general principle is that when dealing with a pattern of inputs, 
+			// using a prime number modulus (%) will yield the best distribution.
+			
+			// Reasons to use 31: It's just one less than a power of two (32 = two to the power 5), so it permits bitwise operations.
+			//  31 * i == (i << 5) - i
+			// Just shifting and subtraction improves the performance.
+			
 			int result = 1;
 			result = prime * result + ((line == null) ? 0 : line.hashCode());
 			return result;
