@@ -210,7 +210,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	/**
 	 * Default implementation of get words
 	 * 
-	 * @return tokenize and split CamelCase
+	 * @return tokenize
 	 */
 	public List<String> getWords() {
 		return StringUtils.tokenizeString(getText());
