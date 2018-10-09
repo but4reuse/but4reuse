@@ -254,7 +254,8 @@ public class FileUtils {
 		for (String line : getLinesOfFile(file)) {
 			string.append(line + "\n");
 		}
-		string.setLength(string.length() - 1);
+		if (string.length() > 0) // If the file is empty the -1 causes an exception
+			string.setLength(string.length() - 1);
 		return string.toString();
 	}
 
