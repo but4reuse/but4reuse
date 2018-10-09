@@ -2,6 +2,8 @@ package org.but4reuse.visualisation.graphs.utils;
 
 import java.io.File;
 
+import org.but4reuse.utils.files.FileUtils;
+
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Graph;
@@ -41,6 +43,13 @@ public class GraphUtils {
 		return graph2;
 	}
 
+	/**
+	 * Default save graph as GraphML
+	 * 
+	 * @param graph
+	 * @param file
+	 * @return
+	 */
 	public static boolean saveGraph(Graph graph, File file) {
 		try {
 			GraphMLWriter writer = new GraphMLWriter(graph);
@@ -49,6 +58,33 @@ public class GraphUtils {
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * Save as Trivial Graph Format
+	 * 
+	 * @param graph
+	 * @param file
+	 * @return
+	 */
+	public static boolean saveAsTGFGraph(Graph graph, File file) {
+		StringBuilder sb = new StringBuilder();
+		for (Vertex node : graph.getVertices()) {
+			sb.append(node.getId() + " " + node.getProperty("Label") + "\n");
+		}
+		sb.append("#\n");
+		for (Edge e : graph.getEdges()) {
+			sb.append(e.getVertex(Direction.OUT).getId() + " " + e.getVertex(Direction.IN).getId() + " "
+					+ e.getProperty("Label") + "\n");
+		}
+
+		try {
+			FileUtils.appendToFile(file, sb.toString());
+			return true;
+		} catch (Exception e1) {
+			e1.printStackTrace();
 			return false;
 		}
 	}

@@ -22,6 +22,7 @@ import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.ui.dialogs.URISelectionDialog;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.graphs.ElementsGraphVisualisation;
+import org.but4reuse.visualisation.graphs.utils.GraphUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,9 +37,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-
 import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.util.io.graphml.GraphMLWriter;
 
 /**
  * Create Elements Action
@@ -61,7 +60,7 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 			out = output.getFullPath().toString();
 		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(), "Graph URI",
-				"Insert Graph URI", "platform:/resource" + out + "/elements.graphml");
+				"Insert Graph URI (graphml or tgf extensions)", "platform:/resource" + out + "/elements.graphml");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
@@ -92,16 +91,17 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 
 					if (!adap.isEmpty()) {
 						// Launch Progress dialog
-						ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getCurrent()
-								.getActiveShell());
+						ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(
+								Display.getCurrent().getActiveShell());
 
 						try {
 							progressDialog.run(true, true, new IRunnableWithProgress() {
 								@Override
-								public void run(IProgressMonitor monitor) throws InvocationTargetException,
-										InterruptedException {
+								public void run(IProgressMonitor monitor)
+										throws InvocationTargetException, InterruptedException {
 									int totalWork = 1;
-									monitor.beginTask("Calculating elements of " + artefact.getArtefactURI(), totalWork);
+									monitor.beginTask("Calculating elements of " + artefact.getArtefactURI(),
+											totalWork);
 									AdaptedArtefact adaptedArtefact = AdaptedModelHelper.adapt(artefact, adap, monitor);
 									AdaptedModel adaptedModel = AdaptedModelFactory.eINSTANCE.createAdaptedModel();
 									adaptedModel.getOwnedAdaptedArtefacts().add(adaptedArtefact);
@@ -120,13 +120,13 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 
 									// Save
 									File graphFile = FileUtils.getFile(graphURI);
-									try {
-										FileUtils.createFile(graphFile);
-										GraphMLWriter writer = new GraphMLWriter(graph);
-										writer.setNormalize(true);
-										writer.outputGraph(graphFile.getAbsolutePath());
-									} catch (Exception e) {
-										e.printStackTrace();
+									// Trivial graph format
+									if (FileUtils.isExtension(graphFile, "tgf")) {
+										GraphUtils.saveAsTGFGraph(graph, graphFile);
+									} else {
+										// graphml or any other extension
+										// introduced by the user
+										GraphUtils.saveGraph(graph, graphFile);
 									}
 
 									// Refresh
