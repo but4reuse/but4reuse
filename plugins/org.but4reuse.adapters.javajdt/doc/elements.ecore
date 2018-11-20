@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+	name="">
+	<eClassifiers xsi:type="ecore:EClass" name="CompilationUnitElement"
+		eSuperTypes="#//JDTElement" />
+	<eClassifiers xsi:type="ecore:EClass" name="MethodElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="type" eType="#//TypeElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="FieldElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="type" eType="#//TypeElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="MethodBodyElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="methodBody" eType="#//MethodElement" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="body"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="PackageElement"
+		eSuperTypes="#//JDTElement" />
+	<eClassifiers xsi:type="ecore:EClass" name="TypeElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="compilationUnit" eType="#//CompilationUnitElement" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="package" eType="#//PackageElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="TypeExtendsElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="extends" eType="#//TypeElement" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="extendedType" eType="#//TypeElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="TypeImplementsElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="implements" eType="#//TypeElement" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="implementedType" eType="#//TypeElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="ImportElement"
+		eSuperTypes="#//JDTElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="compilationUnit" eType="#//CompilationUnitElement" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="importedType" eType="#//TypeElement" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="JDTElement"
+		abstract="true">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="id"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="name"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="ASTNode"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject" />
+	</eClassifiers>
+</ecore:EPackage>

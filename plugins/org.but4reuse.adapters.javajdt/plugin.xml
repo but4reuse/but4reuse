@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.adapters">
+      <adapter
+            class="org.but4reuse.adapters.javajdt.JavaJDTAdapter"
+            icon="icons/java.gif"
+            id="jdt"
+            name="Java JDT">
+         <elements>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.PackageElement"></element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.TypeElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.MethodElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.FieldElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.ImportElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.CompilationUnitElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.MethodBodyElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.TypeExtendsElement">
+            </element>
+            <element
+                  element="org.but4reuse.adapters.javajdt.elements.TypeImplementsElement">
+            </element>
+         </elements>
+      </adapter>
+   </extension>
+
+</plugin>

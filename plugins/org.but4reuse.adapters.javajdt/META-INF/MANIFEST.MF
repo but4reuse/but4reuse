@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Java JDT Adapter
+Bundle-SymbolicName: org.but4reuse.adapters.javajdt;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.javajdt.activator.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.but4reuse.adapters,
+ org.but4reuse.utils,
+ org.eclipse.jdt.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: org.but4reuse.adapters.javajdt,
+ org.but4reuse.adapters.javajdt.elements
