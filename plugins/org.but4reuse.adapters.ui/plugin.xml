@@ -87,7 +87,7 @@
                toolbarPath="additions">
          </action>
       </viewContribution>
-            <viewContribution
+      <viewContribution
             id="org.but4reuse.adapters.ui.showallblockelements"
             targetID="org.eclipse.contribution.visualiser.views.Menu">
          <action
@@ -131,6 +131,30 @@
                icon="icons/serialize.gif"
                id="org.but4reuse.adapters.ui.serializeaction"
                label="Serialize analysis model"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.showresultingraphs"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ShowResultInGraphs"
+               icon="icons/showInGraphs.png"
+               id="org.but4reuse.adapters.ui.showresultingraphsaction"
+               label="Show Result In Graphs"
+               style="push"
+               toolbarPath="additions">
+         </action>
+      </viewContribution>
+      <viewContribution
+            id="org.but4reuse.adapters.ui.constructxml"
+            targetID="org.eclipse.contribution.visualiser.views.Menu">
+         <action
+               class="org.but4reuse.adapters.ui.actions.ConstructXMLAction"
+               icon="icons/constructXML.png"
+               id="org.but4reuse.adapters.ui.constructxmlaction"
+               label="Construct XML"
                style="push"
                toolbarPath="additions">
          </action>
