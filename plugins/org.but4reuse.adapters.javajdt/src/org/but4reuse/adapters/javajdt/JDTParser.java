@@ -126,6 +126,11 @@ public class JDTParser {
 
 				// Methods
 				public boolean visit(MethodDeclaration node) {
+					if(currentTypeElement == null) {
+						// This can happen for example with Java enum methods
+						// TODO Java enum methods not supported. https://stackoverflow.com/questions/18883646/java-enum-methods
+						return false;
+					}
 					JDTElement element = new MethodElement();
 					element.node = node;
 					element.name = node.getName().getIdentifier();
