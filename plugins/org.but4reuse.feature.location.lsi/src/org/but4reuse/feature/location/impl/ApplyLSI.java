@@ -56,18 +56,19 @@ public class ApplyLSI {
 					for (IElement blockElement : blockElements) {
 						// builder query from each blockElement
 						List<String> query = buildQuery(blockElement);
-						if (query != null) {
+						// do nothing if no query is created (empty words)
+						if (query != null && !query.isEmpty()) {
 							// Get similarity from LSI Technique
 							double vecSimilarity[] = lsiTechnique.applyLSI(query);
 
 							// Get the position with the highest value
-							int higherSimilarity = getHigherSimilarity(vecSimilarity);
+							int higherSimilarityIndex = getHigherSimilarity(vecSimilarity);
 
 							// if there exist one highest value it means that it found a feature
-							if (higherSimilarity != -1) {
-								double confidence = (vecSimilarity[higherSimilarity] + 1) / 2;
+							if (vecSimilarity[higherSimilarityIndex] != -1) {
+								double confidence = (vecSimilarity[higherSimilarityIndex] + 1) / 2;
 								if (confidence > 0) {
-									locatedFeatures.add(new LocatedFeature(blockFeatures.get(higherSimilarity),
+									locatedFeatures.add(new LocatedFeature(blockFeatures.get(higherSimilarityIndex),
 											blockElement, confidence));
 								}
 							}
