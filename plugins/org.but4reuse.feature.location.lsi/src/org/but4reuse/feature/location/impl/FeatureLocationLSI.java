@@ -1,10 +1,7 @@
 package org.but4reuse.feature.location.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -17,131 +14,77 @@ import org.but4reuse.feature.location.lsi.activator.Activator;
 import org.but4reuse.feature.location.lsi.location.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.utils.strings.StringUtils;
+import org.but4reuse.wordclouds.util.Cloudifier;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
-import Jama.Matrix;
-import Jama.SingularValueDecomposition;
+import lsi4j.LSI4J;
 
+/**
+ * Feature Location LSI
+ * 
+ * @author jabier.martinez
+ * @author arthur joanny
+ */
 public class FeatureLocationLSI implements IFeatureLocation {
 
 	@Override
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
 			IProgressMonitor monitor) {
 
-		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
-		ArrayList<HashMap<String, Integer>> list = new ArrayList<HashMap<String, Integer>>();
-		ArrayList<Block> featureBlocks = new ArrayList<Block>();
+		List<List<String>> documents = new ArrayList<List<String>>();
+		List<Block> documentBlocks = new ArrayList<Block>();
 
-		/*
-		 * We gather all words for each block
-		 */
-
+		// Each block is a document
+		// We gather all words for each block
 		for (Block b : adaptedModel.getOwnedBlocks()) {
 
-			featureBlocks.add(b);
-			HashMap<String, Integer> t = new HashMap<String, Integer>();
+			ArrayList<String> currentListOfWords = new ArrayList<String>();
 
 			for (IElement e : AdaptedModelHelper.getElementsOfBlock(b)) {
 				List<String> words = ((AbstractElement) e).getWords();
-				for (String w : words) {
-					String tmp = w.toLowerCase();
-					if (t.containsKey(tmp))
-						t.put(tmp, t.get(tmp) + 1);
-					else
-						t.put(tmp, 1);
-				}
+				currentListOfWords.addAll(words);
 			}
-			/*
-			 * we add all words form the block in a list
-			 */
-			list.add(t);
+
+			// Only add them to documents if they have at least a word
+			if (currentListOfWords.size() > 0) {
+				documentBlocks.add(b);
+				documents.add(currentListOfWords);
+			}
 		}
 
-		/*
-		 * if the list is empty it means we found 0 zero block for the current
-		 * feature so it's not necessary to continue with the feature
-		 */
-		if (list.size() == 0)
-			return locatedFeatures;
+		// if the list is empty it means we found 0 zero block for the current feature
+		// so it's not necessary to continue with the feature
+		if (documents.size() == 0) {
+			return new ArrayList<LocatedFeature>();
+		}
 
+		// Preferences
+		boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
+		double approximationValue = Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
+		int approximationType;
+		if (fixed) {
+			approximationType = LSI4J.APPROXIMATION_K_VALUE;
+		} else {
+			approximationType = LSI4J.APPROXIMATION_PERCENTAGE;
+		}
+
+		// We create LSI
+		LSI4J lsi4j = new LSI4J(documents, approximationType, approximationValue);
+
+		// We apply the features as query
+		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 		for (Feature f : featureList.getOwnedFeatures()) {
-
-			double vecQ[] = createQuery(list, getFeatureWords(f));
-
-			/*
-			 * Here we use the LSI for comparing words from the feature and
-			 * words form the block
-			 * https://fr.wikipedia.org/wiki/Analyse_s%C3%A9mantique_latente
-			 */
-
-			Matrix m = new Matrix(createMatrix(list));
-			SingularValueDecomposition svd = m.svd();
-
-			// Here we get the singular value matix
-			Matrix s = svd.getS();
-			// Here the U matrix from SVD -> M = U*S*V
-			Matrix u = svd.getU();
-
-			/*
-			 * Here we get the number of dimensions
-			 */
-			boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
-			int nbDim;
-
-			double dim = Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
-			if (fixed)
-				nbDim = (int) dim;
-			else {
-				nbDim = (int) (dim * s.getRowDimension());
+			List<String> featureWords = getFeatureWords(f);
+			double[] results = lsi4j.applyLSI(featureWords);
+			if (results != null) {
+				for (int i = 0; i < documentBlocks.size(); i++) {
+					if (results[i] > 0) {
+						locatedFeatures.add(new LocatedFeature(f, documentBlocks.get(i), results[i]));
+					}
+				}
 			}
-
-			// We check if the matrix is not to small, and update the number of
-			// dimensions
-			nbDim = Math.min(nbDim, s.getRowDimension());
-
-			/*
-			 * Here, rand-reduce The the U and S matrix are sorted by singular
-			 * value the highest to the smallest so we just remove the last rows
-			 * and columns.
-			 */
-			Matrix sk = s.getMatrix(0, nbDim - 1, 0, nbDim - 1);
-			Matrix uk = u.getMatrix(0, u.getRowDimension() - 1, 0, nbDim - 1);
-
-			Matrix q = new Matrix(vecQ, vecQ.length);
-
-			/*
-			 * Here we define the new query vector in the new space. Formula For
-			 * the query q (column vector) : qk = Sk^-1 * Uk^t * q
-			 */
-			q = (sk.inverse().times(uk.transpose()).times(q));
-
-			for (int i = 0; i < m.getColumnDimension(); i++) {
-				Block b = featureBlocks.get(i);
-				// Here we get the document vector
-				Matrix ve = m.getMatrix(0, m.getRowDimension() - 1, i, i);
-				/*
-				 * Here we difine the document vector in the new space Formula
-				 * For a document d (columns vector) : dk = Sk^-1 * Uk^t * d
-				 */
-				Matrix vector = sk.inverse().times(uk.transpose()).times(ve);
-
-				double vecDoc[] = vector.getColumnPackedCopy();
-
-				double cos = cosine(q.getColumnPackedCopy(), vecDoc);
-				/*
-				 * If the cosine between the feature vector and the block vector
-				 * is > 0 it means that it's relevant to think that there are
-				 * links between words form block and words from feature.
-				 */
-
-				// We change value which is between -1 and 1 to a value between
-				// 0 and 1
-				cos++;
-				cos /= 2;
-				if (cos > 0.0)
-					locatedFeatures.add(new LocatedFeature(f, b, cos));
-			}
-
 		}
 		return locatedFeatures;
 	}
@@ -151,175 +94,15 @@ public class FeatureLocationLSI implements IFeatureLocation {
 	 * 
 	 * @param f
 	 *            The feature
-	 * @return A HashMap with the words from the description and feature name.
-	 *         For each words we have how many times it was found
+	 * @return processed list of words
 	 */
-	static public HashMap<String, Integer> getFeatureWords(Feature f) {
-		/*
-		 * We gather and count words from the feature name
-		 */
-		HashMap<String, Integer> featureWords = new HashMap<String, Integer>();
-		if (f.getName() != null) {
-			StringTokenizer tk = new StringTokenizer(f.getName(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-
-			while (tk.hasMoreTokens()) {
-				String tmp = tk.nextToken().toLowerCase();
-				if (featureWords.containsKey(tmp))
-					featureWords.put(tmp, featureWords.get(tmp) + 1);
-				else
-					featureWords.put(tmp, 1);
-			}
-		}
-
-		/*
-		 * We gather and count words from the feature description
-		 */
-		if (f.getDescription() != null) {
-			StringTokenizer tk = new StringTokenizer(f.getDescription(), " :!?*+²&~\"#'{}()[]-|`_\\^°,.;/§");
-			while (tk.hasMoreTokens()) {
-
-				String tmp = tk.nextToken().toLowerCase();
-				if (featureWords.containsKey(tmp))
-					featureWords.put(tmp, featureWords.get(tmp) + 1);
-				else
-					featureWords.put(tmp, 1);
-			}
-		}
-		/*
-		 * We return all words found
-		 */
-		return featureWords;
-	}
-
-	static public double[] createQuery(ArrayList<HashMap<String, Integer>> list, HashMap<String, Integer> map) {
-		ArrayList<String> words = new ArrayList<String>();
-
-		/*
-		 * We count all different words In the matrix we must have for each
-		 * words how many times it was found in the document even if it's 0
-		 */
-		int cpt = 0;
-		for (HashMap<String, Integer> t : list) {
-			for (String s : t.keySet()) {
-				if (!words.contains(s)) {
-					cpt++;
-					words.add(s);
-				}
-			}
-		}
-
-		/*
-		 * We sort the words list ( From LSI not necessary but made generally)
-		 */
-		Collections.sort(words);
-		if (cpt == 0)
-			return null;
-
-		double tab[] = new double[words.size()];
-
-		int i = 0;
-		for (String w : words) {
-			if (map.containsKey(w))
-				tab[i] = map.get(w);
-			else
-				// If a words isn't in the HashMap it means that the word
-				// did appear in the document so we see it time
-				tab[i] = 0;
-			i++;
-		}
-
-		return tab;
-	}
-
-	/**
-	 * A Matrix which represents the words found in several documents In rows
-	 * there are how many times a word is found in each document In columns
-	 * there are how many times each words is found in a document
-	 * 
-	 * @param list
-	 *            HashMap which contains for each document, words found and how
-	 *            many times each word was found.
-	 * @return A matrix
-	 */
-	public static double[][] createMatrix(ArrayList<HashMap<String, Integer>> list) {
-		ArrayList<String> words = new ArrayList<String>();
-
-		/*
-		 * We count all different words In the matrix we must have for each
-		 * words how many times it was found in the document even if it's 0
-		 */
-		int cpt = 0;
-		for (HashMap<String, Integer> t : list) {
-			for (String s : t.keySet()) {
-				if (!words.contains(s)) {
-					cpt++;
-					words.add(s);
-				}
-			}
-		}
-
-		/*
-		 * We sort the words list ( From LSI not necessary but made generally)
-		 */
-		Collections.sort(words);
-		if (cpt == 0)
-			return null;
-
-		/*
-		 * We fill the matrix we have one HashMap per document In the HashMap we
-		 * have a words and how many times it was found
-		 */
-		double matrix[][] = new double[cpt][list.size()];
-		int i = 0;
-		for (HashMap<String, Integer> t : list) {
-			for (String w : words) {
-				if (t.containsKey(w))
-					matrix[words.indexOf(w)][i] = t.get(w);
-				else
-					// If a words isn't in the HashMap it means that the word
-					// did appear in the document so we see it time
-					matrix[words.indexOf(w)][i] = 0;
-			}
-			i++;
-		}
-
-		return matrix;
-	}
-
-	/**
-	 * Calculate the cosine between two vector
-	 * 
-	 * @param u
-	 *            The vector U
-	 * @param v
-	 *            The vector V
-	 * @return The cosine
-	 */
-	public static double cosine(double u[], double v[]) {
-		/*
-		 * the formula for cosine between vector U and V is ( U * V ) / ( ||U||
-		 * * ||V|| )
-		 */
-
-		double scalaire = 0.0;
-		for (int i = 0; i < u.length; i++)
-			scalaire += u[i] * v[i];
-
-		double normeU = 0.0;
-		for (int i = 0; i < u.length; i++)
-			normeU += u[i] * u[i];
-		normeU = Math.sqrt(normeU);
-
-		double normeV = 0.0;
-		for (int i = 0; i < v.length; i++)
-			normeV += v[i] * v[i];
-		normeV = Math.sqrt(normeV);
-
-		double val = scalaire / (normeU * normeV);
-
-		if (Double.isNaN(val))
-			val = -1;
-		return val;
+	static public List<String> getFeatureWords(Feature feature) {
+		// Get each word of the name of the feature
+		List<String> featureTerms = StringUtils.tokenizeString(feature.getName());
+		// Get each word in the description of the feature
+		featureTerms.addAll(StringUtils.tokenizeString(feature.getDescription()));
+		List<String> processedWords = Cloudifier.processWords(featureTerms, new NullProgressMonitor());
+		return processedWords;
 	}
 
 }

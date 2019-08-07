@@ -10,8 +10,9 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
- org.but4reuse.utils
+ org.but4reuse.utils,
+ org.but4reuse.wordclouds
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: Jars/,
- .
+Bundle-ClassPath: .,
+ Jars/lsi4j.jar
 Bundle-Vendor: BUT4Reuse
