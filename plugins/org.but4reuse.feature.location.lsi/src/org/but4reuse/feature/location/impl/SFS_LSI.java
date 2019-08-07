@@ -45,11 +45,12 @@ public class SFS_LSI implements IFeatureLocation {
 			monitor.subTask("Feature location SFS and LSI. Features competing for Elements at " + block.getName() + " /"
 					+ adaptedModel.getOwnedBlocks().size());
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
+			List<LocatedFeature> blockLFeatures = LocatedFeaturesUtils.getLocatedFeaturesOfBlock(sfsLocatedBlocks, block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 
 			// Calculate LSI in each block
 			ApplyLSI flsi = new ApplyLSI();
-			List<LocatedFeature> lfs = flsi.locateFeaturesFromAnotherTechnique(block, blockFeatures, blockElements);
+			List<LocatedFeature> lfs = flsi.locateFeaturesFromAnotherTechnique(block, blockFeatures, blockElements, blockLFeatures);
 			if (lfs != null && !lfs.isEmpty()) {
 				locatedFeatures.addAll(lfs);
 			}

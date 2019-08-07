@@ -10,7 +10,6 @@ import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.lsi.activator.Activator;
 import org.but4reuse.feature.location.lsi.location.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
-import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.wordclouds.util.Cloudifier;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -28,7 +27,7 @@ public class ApplyLSI {
 	 * @author Nicolas Ordonez Chala
 	 */
 	public List<LocatedFeature> locateFeaturesFromAnotherTechnique(Block block, List<Feature> blockFeatures,
-			List<IElement> blockElements) {
+			List<IElement> blockElements, List<LocatedFeature> previousResultsForThisBlock) {
 
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
@@ -54,6 +53,7 @@ public class ApplyLSI {
 				LSI4J lsiTechnique = new LSI4J(documents, approximationType, approximationValue);
 				if (documents != null) {
 					for (IElement blockElement : blockElements) {
+						boolean added = false;
 						// builder query from each blockElement
 						List<String> query = buildQuery(blockElement);
 						// do nothing if no query is created (empty words)
@@ -62,7 +62,7 @@ public class ApplyLSI {
 							double vecSimilarity[] = lsiTechnique.applyLSI(query);
 
 							// Get the position with the highest value
-							int higherSimilarityIndex = getHigherSimilarity(vecSimilarity);
+							int higherSimilarityIndex = getHigherSimilarityIndex(vecSimilarity);
 
 							// if there exist one highest value it means that it found a feature
 							if (vecSimilarity[higherSimilarityIndex] != -1) {
@@ -70,7 +70,20 @@ public class ApplyLSI {
 								if (confidence > 0) {
 									locatedFeatures.add(new LocatedFeature(blockFeatures.get(higherSimilarityIndex),
 											blockElement, confidence));
+									added = true;
 								}
+							}
+						}
+						// It was not assigned to any feature. Add it to all features.
+						if (!added) {
+							for (Feature f : blockFeatures) {
+								// use confidence of the previous technique
+								// we use the confidence of the first one
+								double confidence = 1;
+								if(!previousResultsForThisBlock.isEmpty()) {
+									confidence = previousResultsForThisBlock.get(0).getConfidence();
+								}
+								locatedFeatures.add(new LocatedFeature(f, blockElement, confidence));
 							}
 						}
 					}
@@ -93,14 +106,7 @@ public class ApplyLSI {
 		List<List<String>> documents = new ArrayList<List<String>>();
 		// For each feature inside the block
 		for (Feature feature : featureBlocks) {
-
-			// Get each word of the name of the feature
-			List<String> featureTerms = StringUtils.tokenizeString(feature.getName());
-
-			// Get each word in the description of the feature
-			featureTerms.addAll(StringUtils.tokenizeString(feature.getDescription()));
-
-			List<String> processedWords = Cloudifier.processWords(featureTerms, new NullProgressMonitor());
+			List<String> processedWords = FeatureLocationLSI.getFeatureWords(feature);
 			if (processedWords != null && processedWords.size() > 0) {
 				documents.add(processedWords);
 			}
@@ -128,13 +134,12 @@ public class ApplyLSI {
 	 * @param similarities
 	 * @return
 	 */
-	static private int getHigherSimilarity(double[] similarities) {
+	static private int getHigherSimilarityIndex(double[] similarities) {
 		int maxValueIndex = -1;
 		double maxValue = 0;
-		if (similarities == null)
+		if (similarities == null || similarities.length < 1) {
 			return maxValueIndex;
-		if (similarities.length < 1)
-			return maxValueIndex;
+		}
 
 		for (int i = 0; i < similarities.length; i++) {
 			double actualValue = similarities[i];

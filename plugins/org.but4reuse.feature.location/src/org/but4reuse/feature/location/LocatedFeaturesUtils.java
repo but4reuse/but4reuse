@@ -36,11 +36,19 @@ public class LocatedFeaturesUtils {
 
 	public static List<Feature> getFeaturesOfBlock(List<LocatedFeature> locatedFeatures, Block block) {
 		List<Feature> features = new ArrayList<Feature>();
-		for (LocatedFeature lf : locatedFeatures) {
-			if(lf.getBlocks().contains(block)){
-				features.add(lf.getFeature());
-			}
+		for (LocatedFeature lf : getLocatedFeaturesOfBlock(locatedFeatures, block)) {
+			features.add(lf.getFeature());
 		}
 		return features;
+	}
+	
+	public static List<LocatedFeature> getLocatedFeaturesOfBlock(List<LocatedFeature> locatedFeatures, Block block) {
+		List<LocatedFeature> lfeatures = new ArrayList<LocatedFeature>();
+		for (LocatedFeature lf : locatedFeatures) {
+			if(lf.getBlocks().contains(block)){
+				lfeatures.add(lf);
+			}
+		}
+		return lfeatures;
 	}
 }
