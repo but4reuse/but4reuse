@@ -30,6 +30,7 @@ import org.eclipse.ui.dialogs.ListSelectionDialog;
 public class AdaptersSelectionDialog {
 
 	static List<IAdapter> correctAdapters = null;
+	static List<IAdapter> selectedAdapters = null;
 
 	public static List<IAdapter> show(String title, final ArtefactModel input, List<IAdapter> defaultAdapters) {
 		// Calculate adapters selected by default
@@ -152,7 +153,12 @@ public class AdaptersSelectionDialog {
 				result.add((IAdapter) a);
 			}
 		}
+		
+		selectedAdapters = result;
 		return result;
 	}
 
+	public static List<IAdapter> getSelectedAdapters(){
+		return selectedAdapters;
+	}
 }
