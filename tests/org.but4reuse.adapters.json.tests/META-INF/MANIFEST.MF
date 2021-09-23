@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JSON adapter Tests
+Bundle-SymbolicName: org.but4reuse.adapters.json.tests
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.but4reuse.adapters.json
+Automatic-Module-Name: org.but4reuse.adapters.json.tests
+Require-Bundle: org.junit

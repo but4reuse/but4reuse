@@ -1,10 +1,7 @@
 package org.but4reuse.adapters.json;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +62,7 @@ public class JsonAdapter implements IAdapter {
 		try {
 			// Load json file
 			File file = FileUtils.getFile(uri);
-			FileInputStream fstream = new FileInputStream(file);
-			DataInputStream in = new DataInputStream(fstream);
-			InputStreamReader isr = new InputStreamReader(in);
-			BufferedReader br = new BufferedReader(isr);
-			JsonObject root = JsonObject.readFrom(br);
+			JsonObject root = JsonObject.readFrom(new FileReader(file));
 
 			// Add root
 			ObjectElement rootElement = new ObjectElement(null);

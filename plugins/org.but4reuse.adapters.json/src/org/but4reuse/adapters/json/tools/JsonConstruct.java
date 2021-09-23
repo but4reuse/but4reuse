@@ -109,7 +109,11 @@ public class JsonConstruct {
 			if (this.objectMap.get(id) == null) {
 				JsonObject jsonObject = new JsonObject();
 				this.objectMap.put(id, jsonObject);
-				this.construct(objectElement.parent, jsonObject);
+				if (objectElement.parent != null) {
+					this.construct(objectElement.parent, jsonObject);
+				} else {
+					this.root = jsonObject;
+				}
 			}
 
 			return this.objectMap.get(id);
