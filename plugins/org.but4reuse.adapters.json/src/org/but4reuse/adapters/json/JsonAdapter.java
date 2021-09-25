@@ -204,7 +204,7 @@ public class JsonAdapter implements IAdapter {
 			JsonObject root = construct(elements, monitor);
 
 			// Save to file and pretty print
-			FileUtils.appendToFile(file, root.toString(WriterConfig.PRETTY_PRINT));
+			FileUtils.writeFile(file, root.toString(WriterConfig.PRETTY_PRINT));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
