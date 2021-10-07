@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Spectrum-based feature localization
+Bundle-SymbolicName: org.but4reuse.feature.location.spectrum;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.feature.location.spectrum.activator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.feature.location,
+ org.but4reuse.featurelist,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.adapters
+Automatic-Module-Name: org.but4reuse.feature.location.spectrum
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: BUT4Reuse
+Bundle-ClassPath: libs/FaKeller_stardust.jar,
+ .

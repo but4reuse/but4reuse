@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.but4reuse.feature.location">
+      <feature.location
+            class="org.but4reuse.feature.location.spectrum.SpectrumBasedLocalization"
+            description="Feature localization based on techniques traditionally used for fault localization"
+            name="Spectrum-based localization">
+      </feature.location>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.but4reuse.feature.location.ui.page"
+            class="org.but4reuse.feature.location.spectrum.preferences.SpectrumPreferencePage"
+            id="org.but4reuse.feature.location.spectrum.page"
+            name="Spectrum feature localization - Parameter">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.but4reuse.feature.location.spectrum.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
