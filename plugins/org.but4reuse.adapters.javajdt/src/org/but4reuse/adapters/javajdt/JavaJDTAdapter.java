@@ -52,7 +52,13 @@ public class JavaJDTAdapter implements IAdapter {
 	}
 
 	@Override
-	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {				
+	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		// TODO
+		System.out.println("Construct is not completely supported yet");
+		
+		JDTConstructor jdtConstructor = new JDTConstructor();
+		// Create file if it does not exist
+		File outputFolder = FileUtils.getFile(uri);
+		jdtConstructor.construct(outputFolder, elements);
 	}
 }

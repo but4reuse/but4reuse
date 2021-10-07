@@ -39,6 +39,16 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
  */
 public class JDTParser {
 
+	public static final String DEPENDENCY_IMPLEMENTS = "implements";
+	public static final String DEPENDENCY_IMPLEMENTED_TYPE = "implementedType";
+	public static final String DEPENDENCY_EXTENDS = "extends";
+	public static final String DEPENDENCY_EXTENDED_TYPE = "extendedType";
+	public static final String DEPENDENCY_IMPORTED_TYPE = "importedType";
+	public static final String DEPENDENCY_METHOD_BODY = "methodBody";
+	public static final String DEPENDENCY_PACKAGE = "package";
+	public static final String DEPENDENCY_TYPE = "type";
+	public static final String DEPENDENCY_COMPILATION_UNIT = "compilationUnit";
+	
 	// Hashmaps
 	Map<String, JDTElement> packagesMap;
 	Map<String, JDTElement> typesMap;
@@ -117,10 +127,10 @@ public class JDTParser {
 					typesMap.put(element.id, element);
 
 					// Add dependency to the Package
-					element.addDependency("package", currentPackageElement);
+					element.addDependency(DEPENDENCY_PACKAGE, currentPackageElement);
 
 					// Add dependency to compilation unit
-					element.addDependency("compilationUnit", currentCompilationUnitElement);
+					element.addDependency(DEPENDENCY_COMPILATION_UNIT, currentCompilationUnitElement);
 					return true;
 				}
 
@@ -159,12 +169,12 @@ public class JDTParser {
 					methodsMap.put(element.id, element);
 
 					// add dependency to the Type
-					element.addDependency("type", currentTypeElement);
+					element.addDependency(DEPENDENCY_TYPE, currentTypeElement);
 					
 					// Adding MethodBodyElement
 					MethodBodyElement methodBodyElement = new MethodBodyElement();
 					methodBodyElement.body = element.node.toString();
-					methodBodyElement.addDependency("methodBody", element);
+					methodBodyElement.addDependency(DEPENDENCY_METHOD_BODY, element);
 					elements.add(methodBodyElement);
 					return true;
 				}
@@ -178,7 +188,7 @@ public class JDTParser {
 					elements.add(element);
 
 					// add dependency to the compilation unit
-					element.addDependency("compilationUnit", currentCompilationUnitElement);
+					element.addDependency(DEPENDENCY_COMPILATION_UNIT, currentCompilationUnitElement);
 					return true;
 				}
 
@@ -193,7 +203,7 @@ public class JDTParser {
 						elements.add(element);
 
 						// add dependency to the Type
-						element.addDependency("type", currentTypeElement);
+						element.addDependency(DEPENDENCY_TYPE, currentTypeElement);
 					}
 					return true;
 				}
@@ -211,7 +221,7 @@ public class JDTParser {
 			if (element instanceof ImportElement) {
 				JDTElement imported = typesMap.get(((ImportElement) element).name);
 				if (imported != null) {
-					((AbstractElement) element).addDependency("importedType", imported);
+					((AbstractElement) element).addDependency(DEPENDENCY_IMPORTED_TYPE, imported);
 				}
 			}
 
@@ -225,8 +235,8 @@ public class JDTParser {
 					TypeExtendsElement typeExtendsElement = new TypeExtendsElement();
 					typeExtendsElement.type = typeElement;
 					typeExtendsElement.extendedType = superTypeElement;
-					typeExtendsElement.addDependency("extendedType", superTypeElement);
-					typeExtendsElement.addDependency("extends", typeElement);
+					typeExtendsElement.addDependency(DEPENDENCY_EXTENDED_TYPE, superTypeElement);
+					typeExtendsElement.addDependency(DEPENDENCY_EXTENDS, typeElement);
 					newElements.add(typeExtendsElement);
 				}
 
@@ -235,8 +245,8 @@ public class JDTParser {
 					TypeImplementsElement typeImplementsElement = new TypeImplementsElement();
 					typeImplementsElement.type = typeElement;
 					typeImplementsElement.implementedType = interfaceTE;
-					typeImplementsElement.addDependency("implementedType", interfaceTE);
-					typeImplementsElement.addDependency("implements", typeElement);
+					typeImplementsElement.addDependency(DEPENDENCY_IMPLEMENTED_TYPE, interfaceTE);
+					typeImplementsElement.addDependency(DEPENDENCY_IMPLEMENTS, typeElement);
 					newElements.add(typeImplementsElement);
 				}
 			}
@@ -324,11 +334,11 @@ public class JDTParser {
 		if (typeElementToReturn == null) {
 			// try in the same package
 			// getPackage, will be only one
-			List<IDependencyObject> packages = fromTypeElement.getDependencies().get("package");
+			List<IDependencyObject> packages = fromTypeElement.getDependencies().get(DEPENDENCY_PACKAGE);
 			if (packages != null && !packages.isEmpty()) {
 				PackageElement epackage = (PackageElement) packages.get(0);
 				// get all types within the same package
-				List<IDependencyObject> types = epackage.getDependants().get("package");
+				List<IDependencyObject> types = epackage.getDependants().get(DEPENDENCY_PACKAGE);
 				for (IDependencyObject type : types) {
 					if (type instanceof TypeElement) {
 						if (type != fromTypeElement) {
