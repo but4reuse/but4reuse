@@ -34,19 +34,19 @@ public class FeatureLocationHelper {
 		if (cache_featurelocation != null) {
 			return cache_featurelocation;
 		}
-		List<IFeatureLocation> blockCreationAlgorithms = new ArrayList<IFeatureLocation>();
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+		List<IFeatureLocation> algorithms = new ArrayList<IFeatureLocation>();
+		IConfigurationElement[] extensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				FEATURELOCATION_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+		for (IConfigurationElement extensionPoint : extensionPoints) {
 			try {
-				blockCreationAlgorithms
-						.add((IFeatureLocation) adapterExtensionPoint.createExecutableExtension("class"));
+				algorithms
+						.add((IFeatureLocation) extensionPoint.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		cache_featurelocation = blockCreationAlgorithms;
-		return blockCreationAlgorithms;
+		cache_featurelocation = algorithms;
+		return algorithms;
 	}
 
 	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
@@ -57,13 +57,13 @@ public class FeatureLocationHelper {
 	}
 
 	public static String getAlgorithmName(IFeatureLocation algo) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+		IConfigurationElement[] extensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				FEATURELOCATION_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+		for (IConfigurationElement extensionPoint : extensionPoints) {
 			try {
-				IFeatureLocation oneAlgo = (IFeatureLocation) adapterExtensionPoint.createExecutableExtension("class");
+				IFeatureLocation oneAlgo = (IFeatureLocation) extensionPoint.createExecutableExtension("class");
 				if (oneAlgo.getClass().equals(algo.getClass())) {
-					String name = adapterExtensionPoint.getAttribute("name");
+					String name = extensionPoint.getAttribute("name");
 					return name;
 				}
 			} catch (CoreException e) {

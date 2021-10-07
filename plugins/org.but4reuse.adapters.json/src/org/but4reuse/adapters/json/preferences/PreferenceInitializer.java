@@ -9,7 +9,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault("DELIMITER", ";");
+		store.setDefault(JsonAdapterPreferencePage.DELIMITER, ";");
 	}
 
 }

@@ -32,19 +32,19 @@ public class BlockIdentificationHelper {
 		if (cache_blockidentificationalgorithms != null) {
 			return cache_blockidentificationalgorithms;
 		}
-		List<IBlockIdentification> blockIdentificationAlgorithms = new ArrayList<IBlockIdentification>();
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+		List<IBlockIdentification> algorithms = new ArrayList<IBlockIdentification>();
+		IConfigurationElement[] extensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				BLOCKIDENTIFICATION_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+		for (IConfigurationElement extensionPoint : extensionPoints) {
 			try {
-				blockIdentificationAlgorithms.add((IBlockIdentification) adapterExtensionPoint
+				algorithms.add((IBlockIdentification) extensionPoint
 						.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		cache_blockidentificationalgorithms = blockIdentificationAlgorithms;
-		return blockIdentificationAlgorithms;
+		cache_blockidentificationalgorithms = algorithms;
+		return algorithms;
 	}
 
 	static IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.getDefault().getBundle()
@@ -55,14 +55,14 @@ public class BlockIdentificationHelper {
 	}
 
 	public static String getAlgorithmName(IBlockIdentification algo) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
+		IConfigurationElement[] extensionPoints = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				BLOCKIDENTIFICATION_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+		for (IConfigurationElement extensionPoint : extensionPoints) {
 			try {
-				IBlockIdentification oneAlgo = (IBlockIdentification) adapterExtensionPoint
+				IBlockIdentification oneAlgo = (IBlockIdentification) extensionPoint
 						.createExecutableExtension("class");
 				if (oneAlgo.getClass().equals(algo.getClass())) {
-					String name = adapterExtensionPoint.getAttribute("name");
+					String name = extensionPoint.getAttribute("name");
 					return name;
 				}
 			} catch (CoreException e) {

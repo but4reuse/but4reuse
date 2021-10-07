@@ -99,11 +99,19 @@ public class FeatureLocationAction implements IObjectActionDelegate {
 								PreferencesHelper.setDeactivateManualEqualOnlyForThisTime(false);
 								IBlockIdentification a = BlockIdentificationHelper.getSelectedBlockIdentification();
 								long startTime = System.currentTimeMillis();
-								List<Block> blocks = a.identifyBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
+								List<Block> blocks = null;
+								String blockIdentificationName = null;
+								if (a != null) {
+									blocks = a.identifyBlocks(adaptedModel.getOwnedAdaptedArtefacts(), monitor);
+									blockIdentificationName = a.getClass().getSimpleName();
+								} else {
+									blocks = new ArrayList<Block>();
+									blockIdentificationName = "None selected";
+								}
 								long stopTime = System.currentTimeMillis();
 								long elapsedTime = stopTime - startTime;
 								AdaptedModelManager.registerTime(
-										"Block identification " + a.getClass().getSimpleName(), elapsedTime);
+										"Block identification " + blockIdentificationName, elapsedTime);
 
 								blocks = AdaptedModelHelper.checkBlockNames(blocks);
 								adaptedModel.getOwnedBlocks().addAll(blocks);

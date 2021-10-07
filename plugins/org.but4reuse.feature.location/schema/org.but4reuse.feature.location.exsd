@@ -6,7 +6,7 @@
          <meta.schema plugin="org.but4reuse.feature.location" id="org.but4reuse.feature.location" name="Feature Location"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         Feature location algorithms
       </documentation>
    </annotation>
 
