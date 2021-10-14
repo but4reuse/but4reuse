@@ -12,6 +12,7 @@ import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.strings.StringUtils;
 import org.but4reuse.utils.ui.dialogs.ScrollableMessageLineColorsDialog;
 import org.eclipse.contribution.visualiser.core.ProviderDefinition;
 import org.eclipse.contribution.visualiser.interfaces.IGroup;
@@ -54,9 +55,22 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 		BlockElementsMarkupProvider markupProvider = (BlockElementsMarkupProvider) BlockElementsOnArtefactsVisualisation
 				.getBlockElementsOnVariantsProvider().getMarkupInstance();
 		Map<Block, IMarkupKind> map = markupProvider.getBlocksAndNames();
-
+		
+		List<String> usedMemberNames = new ArrayList<String>();
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
-			IMember member = new SimpleMember(adaptedArtefact.getArtefact().getName());
+			
+			// find a non-duplicated member name (otherwise there are problems)
+			String artefactName = adaptedArtefact.getArtefact().getName();
+			if (usedMemberNames.contains(artefactName)) {
+				int i = 1;
+				while (usedMemberNames.contains(artefactName + " (" + i + ")")) {
+					i++;
+				}
+				artefactName = artefactName + " (" + i + ")";
+			}
+			usedMemberNames.add(artefactName);
+			
+			IMember member = new SimpleMember(artefactName);
 			member.setSize(adaptedArtefact.getOwnedElementWrappers().size());
 			// TODO Do not touch tooltip, unfortunately it is used by Visualiser
 			// for the action when we right click an artefact
@@ -121,7 +135,8 @@ public class BlockElementsContentProvider extends SimpleContentProvider {
 			for (int i = 0; i < stripes.size(); i++) {
 				ElementStripe stripe = (ElementStripe) stripes.get(i);
 				lines.get(kindIndexMap.get(stripe.getKinds().get(0))).add(i);
-				String elementText = ((ElementStripe) stripe).getElement().getText().replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("\r", " ");
+				String elementText = ((ElementStripe) stripe).getElement().getText();
+				elementText = StringUtils.removeNewLines(elementText).replaceAll("\t", " ");
 				sText.append(elementText);
 				sText.append("\n");
 			}

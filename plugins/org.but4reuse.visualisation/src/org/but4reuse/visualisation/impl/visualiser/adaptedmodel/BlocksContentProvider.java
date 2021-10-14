@@ -50,8 +50,21 @@ public class BlocksContentProvider extends SimpleContentProvider {
 				.getBlocksOnArtefactsProvider().getMarkupInstance();
 		Map<Block, IMarkupKind> map = markupProvider.getBlocksAndNames();
 
+		List<String> usedMemberNames = new ArrayList<String>();
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
-			IMember member = new SimpleMember(adaptedArtefact.getArtefact().getName());
+
+			// find a non-duplicated member name (otherwise there are problems)
+			String artefactName = adaptedArtefact.getArtefact().getName();
+			if (usedMemberNames.contains(artefactName)) {
+				int i = 1;
+				while (usedMemberNames.contains(artefactName + " (" + i + ")")) {
+					i++;
+				}
+				artefactName = artefactName + " (" + i + ")";
+			}
+			usedMemberNames.add(artefactName);
+			
+			IMember member = new SimpleMember(artefactName);
 			member.setSize(adaptedArtefact.getOwnedElementWrappers().size());
 			// TODO Do not touch tooltip, unfortunately it is used by Visualiser
 			// for the action when we right click an artefact
