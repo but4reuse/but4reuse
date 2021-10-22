@@ -69,7 +69,10 @@ public class ShowArtefactWordCloudTFIDF implements IObjectActionDelegate {
 									List<IElement> elements = AdaptersHelper.getElements(a, adapter);
 									for (IElement element : elements) {
 										AbstractElement ab = (AbstractElement) element;
-										artefactWords.addAll(ab.getWords());
+										List<String> abwords = ab.getWords();
+										if (abwords!=null) {
+											artefactWords.addAll(ab.getWords());
+										}
 									}
 								}
 								artefactsWords.add(artefactWords);

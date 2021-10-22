@@ -62,7 +62,10 @@ public class ShowArtefactWordCloud implements IObjectActionDelegate {
 							List<IElement> elements = AdaptersHelper.getElements(selectedArtefact, adapter);
 							for (IElement element : elements) {
 								AbstractElement ab = (AbstractElement) element;
-								words.addAll(ab.getWords());
+								List<String> abwords = ab.getWords();
+								if (abwords!=null) {
+									words.addAll(ab.getWords());
+								}
 							}
 						}
 

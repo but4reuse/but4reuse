@@ -62,7 +62,10 @@ public class WordCloudVisualisation implements IVisualisation {
 			 */
 			List<String> words = new ArrayList<String>();
 			for (IElement e : (AdaptedModelHelper.getElementsOfBlock(b))) {
-				words.addAll(((AbstractElement) e).getWords());
+				List<String> ewords = ((AbstractElement) e).getWords();
+				if (ewords != null) {
+					words.addAll(ewords);
+				}
 			}
 			Cloud cloud = Cloudifier.cloudify(words, monitor);
 			clouds.add(cloud);
