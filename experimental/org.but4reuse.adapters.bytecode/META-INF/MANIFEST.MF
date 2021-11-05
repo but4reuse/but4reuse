@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Adapter Bytecode
+Bundle-SymbolicName: org.but4reuse.adapters.bytecode;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.but4reuse.adapters.bytecode.activator.Activator
+Bundle-Vendor: BUT4Reuse
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.but4reuse.utils,
+ org.but4reuse.adapters,
+ org.eclipse.swt
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ libs/asm-6.1.jar,
+ libs/asm-tree-6.0.jar
