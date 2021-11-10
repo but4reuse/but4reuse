@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.block.graphs.tests
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.junit,
+ org.but4reuse.block.identification,
+ org.but4reuse.adaptedmodel,
+ org.but4reuse.block.graphs,
+ org.but4reuse.tests,
+ org.but4reuse.adapters,
+ org.eclipse.equinox.registry
