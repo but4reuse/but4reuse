@@ -3,6 +3,7 @@ package org.but4reuse.visualisation.graphs.utils;
 import java.io.File;
 
 import org.but4reuse.utils.files.FileUtils;
+import org.but4reuse.utils.strings.StringUtils;
 
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -81,7 +82,35 @@ public class GraphUtils {
 		}
 
 		try {
-			FileUtils.appendToFile(file, sb.toString());
+			FileUtils.writeFile(file, sb.toString());
+			return true;
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Save as dot format
+	 * 
+	 * @param graph
+	 * @param file
+	 * @return
+	 */
+	public static boolean saveAsDot(Graph graph, File file) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("digraph G {\n");
+		for (Vertex node : graph.getVertices()) {
+			sb.append("\t" + node.getId() + " [label=\"" + StringUtils.removeNewLines(node.getProperty("Label").toString()).replaceAll("\"", "\\\\\"") + "\"];\n");
+		}
+
+		for (Edge e : graph.getEdges()) {
+			sb.append("\t" + e.getVertex(Direction.OUT).getId() + " -> " + e.getVertex(Direction.IN).getId() + " "
+					+ " [label=\"" + e.getProperty("Label") + "\"]\n");
+		}
+		sb.append("}");
+		try {
+			FileUtils.writeFile(file, sb.toString());
 			return true;
 		} catch (Exception e1) {
 			e1.printStackTrace();

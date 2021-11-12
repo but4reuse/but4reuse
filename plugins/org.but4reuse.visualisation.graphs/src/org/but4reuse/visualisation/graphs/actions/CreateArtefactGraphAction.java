@@ -60,7 +60,7 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 			out = output.getFullPath().toString();
 		}
 		URISelectionDialog inputDialog = new URISelectionDialog(Display.getCurrent().getActiveShell(), "Graph URI",
-				"Insert Graph URI (graphml or tgf extensions)", "platform:/resource" + out + "/elements.graphml");
+				"Insert Graph URI (graphml, tgf, or dot extensions)", "platform:/resource" + out + "/elements.graphml");
 		if (inputDialog.open() != Dialog.OK) {
 			return;
 		}
@@ -123,6 +123,9 @@ public class CreateArtefactGraphAction implements IObjectActionDelegate {
 									// Trivial graph format
 									if (FileUtils.isExtension(graphFile, "tgf")) {
 										GraphUtils.saveAsTGFGraph(graph, graphFile);
+									// Dot format
+									} else if (FileUtils.isExtension(graphFile, "dot")) {
+										GraphUtils.saveAsDot(graph, graphFile);
 									} else {
 										// graphml or any other extension
 										// introduced by the user
