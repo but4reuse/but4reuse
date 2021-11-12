@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.adapters.cppcdt.tests
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.but4reuse.adapters.cppcdt
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit
+Import-Package: org.but4reuse.adaptedmodel,
+ org.but4reuse.adaptedmodel.helpers,
+ org.but4reuse.block.identification,
+ org.but4reuse.block.identification.impl,
+ org.eclipse.emf.common.util

@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classDog" kind="class" language="C++" prot="public">
+    <compoundname>Dog</compoundname>
+    <basecompoundref refid="classAnimal" prot="public" virt="non-virtual">Animal</basecompoundref>
+    <includes refid="dog_8h" local="no">dog.h</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classDog_1ac00e101c569d7cf3a7695d9ddcd841db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Dog::Dog</definition>
+        <argsstring>(char const *name)</argsstring>
+        <name>Dog</name>
+        <param>
+          <type>char const *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="dog.h" line="16" column="1" bodyfile="dog.cpp" bodystart="13" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classDog_1a560f8b2eded2f5f14f139d7b05dcc8c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Dog::sound</definition>
+        <argsstring>()</argsstring>
+        <name>sound</name>
+        <reimplements refid="classAnimal_1a76c92e219ca52435c2905e232d03fe9e">sound</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="dog.h" line="18" column="1" bodyfile="dog.cpp" bodystart="15" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classDog_1a11b7d7dd8ccac6d0b0a8a2d211a893da" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Dog::sleep</definition>
+        <argsstring>()</argsstring>
+        <name>sleep</name>
+        <reimplements refid="classAnimal_1a1d0831b7f793daacc5e65b35b21a652e">sleep</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="dog.h" line="19" column="1" bodyfile="dog.cpp" bodystart="19" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="8">
+        <label>Dog</label>
+        <link refid="classDog"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>Animal</label>
+        <link refid="classAnimal"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="10">
+        <label>Dog</label>
+        <link refid="classDog"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>Animal</label>
+        <link refid="classAnimal"/>
+      </node>
+    </collaborationgraph>
+    <location file="dog.h" line="12" column="1" bodyfile="dog.h" bodystart="12" bodyend="21"/>
+    <listofallmembers>
+      <member refid="classAnimal_1a457bdd58bd66edc89c82b4f7e28b7394" prot="public" virt="non-virtual"><scope>Dog</scope><name>Animal</name></member>
+      <member refid="classDog_1ac00e101c569d7cf3a7695d9ddcd841db" prot="public" virt="non-virtual"><scope>Dog</scope><name>Dog</name></member>
+      <member refid="classAnimal_1a274e6d8f54cccdfb0b77aa7afa370856" prot="protected" virt="non-virtual"><scope>Dog</scope><name>m_name</name></member>
+      <member refid="classDog_1a11b7d7dd8ccac6d0b0a8a2d211a893da" prot="public" virt="virtual"><scope>Dog</scope><name>sleep</name></member>
+      <member refid="classDog_1a560f8b2eded2f5f14f139d7b05dcc8c8" prot="public" virt="virtual"><scope>Dog</scope><name>sound</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

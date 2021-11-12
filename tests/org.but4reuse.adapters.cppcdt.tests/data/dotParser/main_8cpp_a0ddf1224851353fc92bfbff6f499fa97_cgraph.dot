@@ -1,0 +1,22 @@
+digraph "main"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="main",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node0 -> Node1 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="Maze::InitialiseGraph",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#a3921af33279687f56a53e2251fd1eee8"];
+  Node0 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Maze::GenerateMaze",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#a56bca363af71816d157c19e835a697fa"];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="MinimumSpanningtreeAlgorithm\l::MinimumSpanningTree",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMinimumSpanningtreeAlgorithm.html#a5add15b687eb5b50264cc2221e2fb43c"];
+  Node2 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Maze::RemoveBorders",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#a6b200f5c63701711f8c4f0925bc73ace"];
+  Node0 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Maze::PrintMazeSVG",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#a085fbc8016ae849cf4eb0833f56f1685"];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="Maze::GetCoordinateBounds",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#a26033d336295ea4bbf3db60fdf4c93dd"];
+  Node0 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="Maze::PrintMazePNG",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMaze.html#af7c56bde66e17b4119a84d70740167e9"];
+  Node7 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

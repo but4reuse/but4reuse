@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classRectangularLabyrinth" kind="class" language="C++" prot="public">
+    <compoundname>RectangularLabyrinth</compoundname>
+    <includes refid="rectangularlabyrinth_8h" local="no">rectangularlabyrinth.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classRectangularLabyrinth_1ae9885b0ecb8ff94e94509d60b054aae4" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::vertices_</definition>
+        <argsstring></argsstring>
+        <name>vertices_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="22" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; int, std::shared_ptr&lt; <ref refid="classCellBorder" kindref="compound">CellBorder</ref> &gt; &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;int, std::shared_ptr&lt;CellBorder&gt; &gt; &gt; &gt; RectangularLabyrinth::adjacencylist_</definition>
+        <argsstring></argsstring>
+        <name>adjacencylist_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="23" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classRectangularLabyrinth_1a96e4ce6bc5e5656095dc482bdaf76a46" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::startvertex_</definition>
+        <argsstring></argsstring>
+        <name>startvertex_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="24" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classRectangularLabyrinth_1a58665e46156a6dac726d82a23b49eeef" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::endvertex_</definition>
+        <argsstring></argsstring>
+        <name>endvertex_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="24" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classRectangularLabyrinth_1afc1e8ca17bd40f48b24c0e306176050d" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::width_</definition>
+        <argsstring></argsstring>
+        <name>width_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Proper to rectangular maze </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="29" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classRectangularLabyrinth_1a7fcd588604cd80c8a4bd266140c89fc0" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::height_</definition>
+        <argsstring></argsstring>
+        <name>height_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="29" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classRectangularLabyrinth_1a4b3bbef834ed91b01381217e78e20e33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>RectangularLabyrinth::RectangularLabyrinth</definition>
+        <argsstring>(int, int)</argsstring>
+        <name>RectangularLabyrinth</name>
+        <param>
+          <type>int</type>
+          <defname>width</defname>
+        </param>
+        <param>
+          <type>int</type>
+          <defname>height</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Proper to rectangular maze </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="13" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="7" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classRectangularLabyrinth_1ad53b2603aeac750b0aaa5f81ca73903e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void RectangularLabyrinth::GenerateLabyrinth</definition>
+        <argsstring>(DepthFirstSearch *)</argsstring>
+        <name>GenerateLabyrinth</name>
+        <param>
+          <type><ref refid="classDepthFirstSearch" kindref="compound">DepthFirstSearch</ref> *</type>
+          <defname>algorithm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><hruler/>
+ </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="15" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="76" bodyend="80"/>
+        <references refid="classDepthFirstSearch_1a199aa9508fd039c62554bc321b834373" compoundref="depthfirstsearch_8cpp" startline="10" endline="17">DepthFirstSearch::MinimumSpanningTree</references>
+        <references refid="classRectangularLabyrinth_1ae9885b0ecb8ff94e94509d60b054aae4" compoundref="rectangularlabyrinth_8h" startline="22">vertices_</references>
+        <references refid="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" compoundref="rectangularlabyrinth_8h" startline="23">adjacencylist_</references>
+        <references refid="classRectangularLabyrinth_1a5beb4c55c895e91956d5cf0cdc114525" compoundref="rectangularlabyrinth_8cpp" startline="82" endline="98">RemoveBorders</references>
+      </memberdef>
+      <memberdef kind="function" id="classRectangularLabyrinth_1ac3bc1363810113201e963e808c3dad52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void RectangularLabyrinth::PrintLabyrinthSVG</definition>
+        <argsstring>(const std::string &amp;)</argsstring>
+        <name>PrintLabyrinthSVG</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>outputprefix</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="16" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="100" bodyend="129"/>
+        <references refid="classRectangularLabyrinth_1aeeacfa01e736c6153a59633b29a33285" compoundref="rectangularlabyrinth_8cpp" startline="72" endline="74">GetCoordinateBounds</references>
+        <references refid="classRectangularLabyrinth_1ae9885b0ecb8ff94e94509d60b054aae4" compoundref="rectangularlabyrinth_8h" startline="22">vertices_</references>
+        <references refid="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" compoundref="rectangularlabyrinth_8h" startline="23">adjacencylist_</references>
+      </memberdef>
+      <memberdef kind="function" id="classRectangularLabyrinth_1a5beb4c55c895e91956d5cf0cdc114525" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void RectangularLabyrinth::RemoveBorders</definition>
+        <argsstring>(const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</argsstring>
+        <name>RemoveBorders</name>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;</type>
+          <defname>edges</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="17" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="82" bodyend="98"/>
+        <references refid="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" compoundref="rectangularlabyrinth_8h" startline="23">adjacencylist_</references>
+      </memberdef>
+      <memberdef kind="function" id="classRectangularLabyrinth_1adbb69e80308acdc5bc8e2f74c98df9b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void RectangularLabyrinth::InitialiseGraph</definition>
+        <argsstring>()</argsstring>
+        <name>InitialiseGraph</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><hruler/>
+ </para>        </detaileddescription>
+        <inbodydescription>
+<para>Proper to rectangular maze</para><para><hruler/>
+ </para>        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="18" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="18" bodyend="70"/>
+        <references refid="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" compoundref="rectangularlabyrinth_8h" startline="23">adjacencylist_</references>
+        <references refid="classRectangularLabyrinth_1ae9885b0ecb8ff94e94509d60b054aae4" compoundref="rectangularlabyrinth_8h" startline="22">vertices_</references>
+        <references refid="classRectangularLabyrinth_1afc1e8ca17bd40f48b24c0e306176050d" compoundref="rectangularlabyrinth_8h" startline="29">width_</references>
+        <references refid="classRectangularLabyrinth_1aa1f70fa2e1b26d62dec6673fc1da38de" compoundref="rectangularlabyrinth_8cpp" startline="13" endline="15">VertexIndex</references>
+        <references refid="classRectangularLabyrinth_1a7fcd588604cd80c8a4bd266140c89fc0" compoundref="rectangularlabyrinth_8h" startline="29">height_</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classRectangularLabyrinth_1aeeacfa01e736c6153a59633b29a33285" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::tuple&lt; double, double, double, double &gt;</type>
+        <definition>std::tuple&lt; double, double, double, double &gt; RectangularLabyrinth::GetCoordinateBounds</definition>
+        <argsstring>()</argsstring>
+        <name>GetCoordinateBounds</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="26" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="72" bodyend="74"/>
+        <references refid="classRectangularLabyrinth_1afc1e8ca17bd40f48b24c0e306176050d" compoundref="rectangularlabyrinth_8h" startline="29">width_</references>
+        <references refid="classRectangularLabyrinth_1a7fcd588604cd80c8a4bd266140c89fc0" compoundref="rectangularlabyrinth_8h" startline="29">height_</references>
+      </memberdef>
+      <memberdef kind="function" id="classRectangularLabyrinth_1aa1f70fa2e1b26d62dec6673fc1da38de" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int RectangularLabyrinth::VertexIndex</definition>
+        <argsstring>(int, int)</argsstring>
+        <name>VertexIndex</name>
+        <param>
+          <type>int</type>
+          <defname>row</defname>
+        </param>
+        <param>
+          <type>int</type>
+          <defname>column</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Proper to rectangular maze </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="30" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.cpp" bodystart="13" bodyend="15"/>
+        <references refid="classRectangularLabyrinth_1afc1e8ca17bd40f48b24c0e306176050d" compoundref="rectangularlabyrinth_8h" startline="29">width_</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" line="9" column="1" bodyfile="runtime-EclipseApplication/Test/Product1/src/rectangularlabyrinth.h" bodystart="9" bodyend="32"/>
+    <listofallmembers>
+      <member refid="classRectangularLabyrinth_1a4a9854e3cd6fedb27a33a90c7ea174c3" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>adjacencylist_</name></member>
+      <member refid="classRectangularLabyrinth_1a58665e46156a6dac726d82a23b49eeef" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>endvertex_</name></member>
+      <member refid="classRectangularLabyrinth_1ad53b2603aeac750b0aaa5f81ca73903e" prot="public" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>GenerateLabyrinth</name></member>
+      <member refid="classRectangularLabyrinth_1aeeacfa01e736c6153a59633b29a33285" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>GetCoordinateBounds</name></member>
+      <member refid="classRectangularLabyrinth_1a7fcd588604cd80c8a4bd266140c89fc0" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>height_</name></member>
+      <member refid="classRectangularLabyrinth_1adbb69e80308acdc5bc8e2f74c98df9b6" prot="public" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>InitialiseGraph</name></member>
+      <member refid="classRectangularLabyrinth_1ac3bc1363810113201e963e808c3dad52" prot="public" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>PrintLabyrinthSVG</name></member>
+      <member refid="classRectangularLabyrinth_1a4b3bbef834ed91b01381217e78e20e33" prot="public" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>RectangularLabyrinth</name></member>
+      <member refid="classRectangularLabyrinth_1a5beb4c55c895e91956d5cf0cdc114525" prot="public" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>RemoveBorders</name></member>
+      <member refid="classRectangularLabyrinth_1a96e4ce6bc5e5656095dc482bdaf76a46" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>startvertex_</name></member>
+      <member refid="classRectangularLabyrinth_1aa1f70fa2e1b26d62dec6673fc1da38de" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>VertexIndex</name></member>
+      <member refid="classRectangularLabyrinth_1ae9885b0ecb8ff94e94509d60b054aae4" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>vertices_</name></member>
+      <member refid="classRectangularLabyrinth_1afc1e8ca17bd40f48b24c0e306176050d" prot="private" virt="non-virtual"><scope>RectangularLabyrinth</scope><name>width_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

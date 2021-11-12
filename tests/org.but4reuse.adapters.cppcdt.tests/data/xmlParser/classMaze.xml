@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classMaze" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>Maze</compoundname>
+    <derivedcompoundref refid="classCircularMaze" prot="public" virt="non-virtual">CircularMaze</derivedcompoundref>
+    <derivedcompoundref refid="classRectangularMaze" prot="public" virt="non-virtual">RectangularMaze</derivedcompoundref>
+    <includes refid="maze_8h" local="no">maze.h</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Maze::vertices_</definition>
+        <argsstring></argsstring>
+        <name>vertices_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="20" column="1" bodyfile="maze.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaze_1a0786cfbf14d10afbff25281236603e84" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; std::pair&lt; int, std::shared_ptr&lt; <ref refid="classCellBorder" kindref="compound">CellBorder</ref> &gt; &gt; &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;std::pair&lt;int, std::shared_ptr&lt;CellBorder&gt; &gt; &gt; &gt; Maze::adjacencylist_</definition>
+        <argsstring></argsstring>
+        <name>adjacencylist_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="21" column="1" bodyfile="maze.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaze_1aaaac7fe166cbe21f7cddf177602466ec" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Maze::startvertex_</definition>
+        <argsstring></argsstring>
+        <name>startvertex_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="22" column="1" bodyfile="maze.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMaze_1ab4112bf0c991b167c30b6c74245c8633" prot="protected" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Maze::endvertex_</definition>
+        <argsstring></argsstring>
+        <name>endvertex_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="22" column="1" bodyfile="maze.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classMaze_1ab77bd7986f146553c2addeba63da42f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Maze::Maze</definition>
+        <argsstring>(int=0, int=0, int=1)</argsstring>
+        <name>Maze</name>
+        <param>
+          <type>int</type>
+          <defname>vertices</defname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <defname>startvertex</defname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <defname>endvertex</defname>
+          <defval>1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="11" column="1" bodyfile="maze.cpp" bodystart="6" bodyend="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classMaze_1a56bca363af71816d157c19e835a697fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Maze::GenerateMaze</definition>
+        <argsstring>(MinimumSpanningtreeAlgorithm *)</argsstring>
+        <name>GenerateMaze</name>
+        <param>
+          <type><ref refid="classMinimumSpanningtreeAlgorithm" kindref="compound">MinimumSpanningtreeAlgorithm</ref> *</type>
+          <defname>algorithm</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="12" column="1" bodyfile="maze.cpp" bodystart="14" bodyend="18"/>
+        <references refid="classMinimumSpanningtreeAlgorithm_1a5add15b687eb5b50264cc2221e2fb43c">MinimumSpanningtreeAlgorithm::MinimumSpanningTree</references>
+        <references refid="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" compoundref="maze_8h" startline="20">vertices_</references>
+        <references refid="classMaze_1a0786cfbf14d10afbff25281236603e84" compoundref="maze_8h" startline="21">adjacencylist_</references>
+        <references refid="classMaze_1a6b200f5c63701711f8c4f0925bc73ace" compoundref="maze_8cpp" startline="20" endline="36">RemoveBorders</references>
+      </memberdef>
+      <memberdef kind="function" id="classMaze_1a085fbc8016ae849cf4eb0833f56f1685" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Maze::PrintMazeSVG</definition>
+        <argsstring>(const std::string &amp;) const</argsstring>
+        <name>PrintMazeSVG</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>outputprefix</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="13" column="1" bodyfile="maze.cpp" bodystart="38" bodyend="67"/>
+        <references refid="classMaze_1a26033d336295ea4bbf3db60fdf4c93dd">GetCoordinateBounds</references>
+        <references refid="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" compoundref="maze_8h" startline="20">vertices_</references>
+        <references refid="classMaze_1a0786cfbf14d10afbff25281236603e84" compoundref="maze_8h" startline="21">adjacencylist_</references>
+      </memberdef>
+      <memberdef kind="function" id="classMaze_1af7c56bde66e17b4119a84d70740167e9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Maze::PrintMazePNG</definition>
+        <argsstring>(const std::string &amp;) const</argsstring>
+        <name>PrintMazePNG</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <defname>outputprefix</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="14" column="1" bodyfile="maze.cpp" bodystart="69" bodyend="106"/>
+        <references refid="classMaze_1a26033d336295ea4bbf3db60fdf4c93dd">GetCoordinateBounds</references>
+        <references refid="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" compoundref="maze_8h" startline="20">vertices_</references>
+        <references refid="classMaze_1a0786cfbf14d10afbff25281236603e84" compoundref="maze_8h" startline="21">adjacencylist_</references>
+      </memberdef>
+      <memberdef kind="function" id="classMaze_1a6b200f5c63701711f8c4f0925bc73ace" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Maze::RemoveBorders</definition>
+        <argsstring>(const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;)</argsstring>
+        <name>RemoveBorders</name>
+        <param>
+          <type>const std::vector&lt; std::pair&lt; int, int &gt;&gt; &amp;</type>
+          <defname>edges</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="15" column="1" bodyfile="maze.cpp" bodystart="20" bodyend="36"/>
+        <references refid="classMaze_1a0786cfbf14d10afbff25281236603e84" compoundref="maze_8h" startline="21">adjacencylist_</references>
+      </memberdef>
+      <memberdef kind="function" id="classMaze_1a3921af33279687f56a53e2251fd1eee8" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>void Maze::InitialiseGraph</definition>
+        <argsstring>()=0</argsstring>
+        <name>InitialiseGraph</name>
+        <reimplementedby refid="classCircularMaze_1afc466f103781a8490d4d6c5a70231097">InitialiseGraph</reimplementedby>
+        <reimplementedby refid="classRectangularMaze_1a3483081dbd98259a799b8e577c41d81b">InitialiseGraph</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="16" column="1" bodyfile="maze.cpp" bodystart="9" bodyend="12"/>
+        <references refid="classMaze_1a0786cfbf14d10afbff25281236603e84" compoundref="maze_8h" startline="21">adjacencylist_</references>
+        <references refid="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" compoundref="maze_8h" startline="20">vertices_</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classMaze_1a26033d336295ea4bbf3db60fdf4c93dd" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>std::tuple&lt; double, double, double, double &gt;</type>
+        <definition>virtual std::tuple&lt;double, double, double, double&gt; Maze::GetCoordinateBounds</definition>
+        <argsstring>() const =0</argsstring>
+        <name>GetCoordinateBounds</name>
+        <reimplementedby refid="classCircularMaze_1a8439513f00a476e36478a2347cddf87f">GetCoordinateBounds</reimplementedby>
+        <reimplementedby refid="classRectangularMaze_1a703869aa9999abcb11754b573c588f1c">GetCoordinateBounds</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="maze.h" line="24" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="25">
+        <label>CircularMaze</label>
+        <link refid="classCircularMaze"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>RectangularMaze</label>
+        <link refid="classRectangularMaze"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>Maze</label>
+        <link refid="classMaze"/>
+      </node>
+    </inheritancegraph>
+    <location file="maze.h" line="9" column="1" bodyfile="maze.h" bodystart="9" bodyend="26"/>
+    <listofallmembers>
+      <member refid="classMaze_1a0786cfbf14d10afbff25281236603e84" prot="protected" virt="non-virtual"><scope>Maze</scope><name>adjacencylist_</name></member>
+      <member refid="classMaze_1ab4112bf0c991b167c30b6c74245c8633" prot="protected" virt="non-virtual"><scope>Maze</scope><name>endvertex_</name></member>
+      <member refid="classMaze_1a56bca363af71816d157c19e835a697fa" prot="public" virt="non-virtual"><scope>Maze</scope><name>GenerateMaze</name></member>
+      <member refid="classMaze_1a26033d336295ea4bbf3db60fdf4c93dd" prot="protected" virt="pure-virtual"><scope>Maze</scope><name>GetCoordinateBounds</name></member>
+      <member refid="classMaze_1a3921af33279687f56a53e2251fd1eee8" prot="public" virt="pure-virtual"><scope>Maze</scope><name>InitialiseGraph</name></member>
+      <member refid="classMaze_1ab77bd7986f146553c2addeba63da42f3" prot="public" virt="non-virtual"><scope>Maze</scope><name>Maze</name></member>
+      <member refid="classMaze_1af7c56bde66e17b4119a84d70740167e9" prot="public" virt="non-virtual"><scope>Maze</scope><name>PrintMazePNG</name></member>
+      <member refid="classMaze_1a085fbc8016ae849cf4eb0833f56f1685" prot="public" virt="non-virtual"><scope>Maze</scope><name>PrintMazeSVG</name></member>
+      <member refid="classMaze_1a6b200f5c63701711f8c4f0925bc73ace" prot="public" virt="non-virtual"><scope>Maze</scope><name>RemoveBorders</name></member>
+      <member refid="classMaze_1aaaac7fe166cbe21f7cddf177602466ec" prot="protected" virt="non-virtual"><scope>Maze</scope><name>startvertex_</name></member>
+      <member refid="classMaze_1a85301bf07b1f2ef6a02f5fb53f3a9054" prot="protected" virt="non-virtual"><scope>Maze</scope><name>vertices_</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
