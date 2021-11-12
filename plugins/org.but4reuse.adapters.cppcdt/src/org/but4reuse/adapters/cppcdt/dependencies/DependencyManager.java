@@ -14,11 +14,11 @@ import org.eclipse.cdt.core.dom.ast.IASTPreprocessorIncludeStatement;
 public class DependencyManager {
 
 	public static final String HEADER_DEPENDENCY_ID = "header";
-	public static final String STATEMENT_DEPENDENCY_ID = "statement";
+	public static final String STATEMENT_DEPENDENCY_ID = "parentStatement";
 	public static final String INHERITANCE_DEPENDENCY_ID = "inherits";
 	public static final String CONTAINMENT_DEPENDENCY_ID = "contained";
 	public static final String REFERENCE_DEPENDENCY_ID = "reference";
-	public static final String FUNCTION_CALL_DEPENDENCY_ID = "call";
+	public static final String FUNCTION_CALL_DEPENDENCY_ID = "calls";
 
 	private DependencyManager() {
 	};
