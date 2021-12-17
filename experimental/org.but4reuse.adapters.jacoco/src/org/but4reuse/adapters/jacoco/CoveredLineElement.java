@@ -37,8 +37,14 @@ public class CoveredLineElement extends AbstractElement {
 	@Override
 	public List<String> getWords() {
 		List<String> words = new ArrayList<String>();
-		words.add(packageName);
-		words.add(fileName);
+		for (String packagePart : packageName.split("/")) {
+			words.add(packagePart);
+		}
+		if (fileName.endsWith(".java")) {
+			words.add(fileName.substring(0, fileName.length() - ".java".length()));
+		} else {
+			words.add(fileName);
+		}
 		return words;
 	}
 
