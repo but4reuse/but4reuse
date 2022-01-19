@@ -114,4 +114,12 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 		}
 		return words;
 	}
+	
+	@Override
+	public boolean isContainment(String dependencyId) {
+		if (dependencyId.equals(FileStructureAdapter.DEPENDENCY_PARENTFOLDER)) {
+			return true;
+		}
+		return false;
+	}
 }

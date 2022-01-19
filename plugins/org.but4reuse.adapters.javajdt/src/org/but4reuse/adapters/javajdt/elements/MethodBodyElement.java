@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
+import org.but4reuse.adapters.javajdt.JDTParser;
 import org.but4reuse.utils.strings.StringUtils;
 
 /**
@@ -57,6 +58,11 @@ public class MethodBodyElement extends AbstractElement {
 		int result = 1;
 		result = prime * result + ((body == null) ? 0 : body.hashCode());
 		return result;
+	}
+	
+	@Override
+	public boolean isContainment(String dependencyId) {
+		return dependencyId.equals(JDTParser.DEPENDENCY_METHOD_BODY);
 	}
 
 }

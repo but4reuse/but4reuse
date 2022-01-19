@@ -32,9 +32,9 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 
 	@Override
 	/**
-	 * HashCode default implementation returns always 1 so it will be handled as
-	 * a list. This method is intended to be overridden if a hash method could
-	 * be provided to improve performance.
+	 * HashCode default implementation returns always 1 so it will be handled as a
+	 * list. This method is intended to be overridden if a hash method could be
+	 * provided to improve performance.
 	 */
 	public int hashCode() {
 		return 1;
@@ -88,7 +88,7 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 */
 	public void addDependency(String dependencyID, IDependencyObject dependency) {
 		// do not add anything if null
-		if(dependency == null){
+		if (dependency == null) {
 			return;
 		}
 		// Add dependencies
@@ -214,6 +214,17 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 	 */
 	public List<String> getWords() {
 		return StringUtils.tokenizeString(getText());
+	}
+
+	/**
+	 * Default implementation of is containment. False by default. Override to
+	 * refine the information about a dependency.
+	 * 
+	 * @param dependencyId
+	 * @return whether the dependency is containment
+	 */
+	public boolean isContainment(String dependencyId) {
+		return false;
 	}
 
 }

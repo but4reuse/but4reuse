@@ -1,5 +1,7 @@
 package org.but4reuse.adapters.javajdt.elements;
 
+import org.but4reuse.adapters.javajdt.JDTParser;
+
 /**
  * Type Element
  * 
@@ -16,6 +18,11 @@ public class TypeElement extends JDTElement {
 	@Override
 	public String getText() {
 		return "Type: " + id;
+	}
+	
+	@Override
+	public boolean isContainment(String dependencyId) {
+		return dependencyId.equals(JDTParser.DEPENDENCY_COMPILATION_UNIT);
 	}
 	
 }

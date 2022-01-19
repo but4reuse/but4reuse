@@ -24,6 +24,8 @@ public class FileStructureAdapter implements IAdapter {
 
 	private URI rootURI;
 	public boolean ignoreFolders;
+	
+	public static final String DEPENDENCY_PARENTFOLDER = "parentFolder";
 
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
@@ -74,7 +76,7 @@ public class FileStructureAdapter implements IAdapter {
 
 		// Add dependency to the parent folder
 		if (!ignoreFolders && container != null) {
-			newElement.addDependency(container);
+			newElement.addDependency(DEPENDENCY_PARENTFOLDER, container);
 		}
 
 		// Add to the list
