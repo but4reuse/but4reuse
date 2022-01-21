@@ -49,4 +49,8 @@ public class EMFAttributeElement extends AbstractElement {
 		String valueName = value.toString();
 		return StringUtils.tokenizeString(valueName);
 	}
+	
+	public boolean isContainment(String dependencyId) {
+		return dependencyId.equals(eAttribute.getName());
+	}
 }

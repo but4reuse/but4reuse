@@ -53,5 +53,12 @@ public class EMFClassElement extends AbstractElement {
 		String className = EMFUtils.getText(eObject);
 		return StringUtils.tokenizeString(className);
 	}
+	
+	public boolean isContainment(String dependencyId) {
+		if (reference == null) {
+			return false;
+		}
+		return dependencyId.equals(reference.getName());
+	}
 
 }

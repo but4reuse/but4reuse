@@ -60,5 +60,9 @@ public class EMFReferenceElement extends AbstractElement {
 		// empty for the moment
 		return words;
 	}
+	
+	public boolean isContainment(String dependencyId) {
+		return dependencyId.equals(eReference.getName());
+	}
 
 }
