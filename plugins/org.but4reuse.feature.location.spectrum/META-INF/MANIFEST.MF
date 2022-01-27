@@ -9,9 +9,11 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.feature.location,
  org.but4reuse.featurelist,
  org.but4reuse.adaptedmodel,
- org.but4reuse.adapters
+ org.but4reuse.adapters,
+ org.but4reuse.block.identification
 Automatic-Module-Name: org.but4reuse.feature.location.spectrum
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: BUT4Reuse
 Bundle-ClassPath: libs/FaKeller_stardust.jar,
  .
+Export-Package: org.but4reuse.feature.location.spectrum

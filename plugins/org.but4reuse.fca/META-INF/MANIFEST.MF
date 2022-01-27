@@ -17,5 +17,6 @@ Bundle-ClassPath: libs/galatea.jar,
  lib/org.apache.commons.logging.jar,
  .
 Export-Package: fr.labri.galatea,
+ org.but4reuse.fca.block.identification,
  org.but4reuse.fca.utils
 Bundle-Vendor: BUT4Reuse
