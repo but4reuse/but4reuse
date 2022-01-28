@@ -37,7 +37,7 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 		IFaultLocalizer<Block> rankingMetric = RankingMetrics.getRankingMetricByName(rankingMetricName);
 
 		// Call the location
-		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, rankingMetric);
+		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, rankingMetric, monitor);
 		return locatedFeatures;
 	}
 
@@ -50,9 +50,11 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 	 * @return located features
 	 */
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
-			IFaultLocalizer<Block> algo) {
+			IFaultLocalizer<Block> algo, IProgressMonitor monitor) {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
+		monitor.subTask("Feature location - Spectrum-based. RankingMetric: " + algo.getName());
+		
 		// for each feature
 		for (Feature feature : featureList.getOwnedFeatures()) {
 			try {
