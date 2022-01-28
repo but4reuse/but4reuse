@@ -16,4 +16,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: BUT4Reuse
 Bundle-ClassPath: libs/FaKeller_stardust.jar,
  .
-Export-Package: org.but4reuse.feature.location.spectrum
+Export-Package: fk.stardust.localizer,
+ org.but4reuse.feature.location.spectrum
