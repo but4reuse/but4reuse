@@ -25,6 +25,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class SimilarElementsBlockIdentification implements IBlockIdentification {
 
+	// order the blocks by frequency, default is true
+	private boolean orderByFrequency = true;
+
 	@Override
 	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor) {
 
@@ -41,8 +44,8 @@ public class SimilarElementsBlockIdentification implements IBlockIdentification 
 		int n = adaptedArtefacts.size();
 		for (int i = 0; i < n; i++) {
 			monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + n);
-			AdaptedArtefact currentList = adaptedArtefacts.get(i);
-			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
+			AdaptedArtefact currentAdaptedArtefact = adaptedArtefacts.get(i);
+			for (ElementWrapper ew : currentAdaptedArtefact.getOwnedElementWrappers()) {
 
 				// user cancel
 				if (monitor.isCanceled()) {
@@ -57,33 +60,64 @@ public class SimilarElementsBlockIdentification implements IBlockIdentification 
 				ews.add(ew);
 				eewmap.put(e, ews);
 
-				List<Integer> artefactIndexes = R.get(e);
-				if (artefactIndexes == null) {
-					artefactIndexes = new ArrayList<Integer>();
+				if (orderByFrequency) {
+					List<Integer> artefactIndexes = R.get(e);
+					if (artefactIndexes == null) {
+						artefactIndexes = new ArrayList<Integer>();
+					}
+					artefactIndexes.add(i);
+					R.put(e, artefactIndexes);
+				} else {
+					R.put(e, null);
 				}
-				artefactIndexes.add(i);
-				R.put(e, artefactIndexes);
 			}
 		}
 
 		monitor.subTask("Block Creation. Creating Blocks");
 
-		// Iterate on eewmap to create blocks with their block elements
-		while (!R.isEmpty()) {
-			IElement e = IntersectionsBlockIdentification.findMostFrequentElement(R);
-			// Create Block
-			Block block = AdaptedModelFactory.eINSTANCE.createBlock();
-			BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
-			for (ElementWrapper ew : eewmap.get(e)) {
-				be.getElementWrappers().add(ew);
+		if (orderByFrequency) {
+			// Iterate on eewmap to create blocks with their block elements
+			while (!R.isEmpty()) {
+				IElement e = IntersectionsBlockIdentification.findMostFrequentElement(R);
+				// Create Block
+				Block block = AdaptedModelFactory.eINSTANCE.createBlock();
+				BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
+				for (ElementWrapper ew : eewmap.get(e)) {
+					be.getElementWrappers().add(ew);
+				}
+				block.getOwnedBlockElements().add(be);
+				blocks.add(block);
+				R.remove(e);
 			}
-			block.getOwnedBlockElements().add(be);
-			blocks.add(block);
-			R.remove(e);
+		} else {
+			for (IElement e : R.keySet()) {
+				// Create Block
+				Block block = AdaptedModelFactory.eINSTANCE.createBlock();
+				BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
+				for (ElementWrapper ew : eewmap.get(e)) {
+					be.getElementWrappers().add(ew);
+				}
+				block.getOwnedBlockElements().add(be);
+				blocks.add(block);
+			}
 		}
 
 		// finished
 		return blocks;
+	}
+
+	/**
+	 * The same as the default but without ordering by frequency
+	 * 
+	 * @param adaptedArtefacts
+	 * @param monitor
+	 * @param orderByFrequency
+	 * @return list of blocks
+	 */
+	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor,
+			boolean orderByFrequency) {
+		this.orderByFrequency = orderByFrequency;
+		return identifyBlocks(adaptedArtefacts, monitor);
 	}
 
 }

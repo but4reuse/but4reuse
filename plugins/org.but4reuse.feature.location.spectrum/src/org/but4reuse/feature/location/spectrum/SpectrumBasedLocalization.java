@@ -33,11 +33,14 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 			IProgressMonitor monitor) {
 
 		// Get algorithm/ranking metric from preferences
-		String rankingMetricName = Activator.getDefault().getPreferenceStore().getString(SpectrumPreferencePage.RANKING_METRIC);
+		String rankingMetricName = Activator.getDefault().getPreferenceStore()
+				.getString(SpectrumPreferencePage.RANKING_METRIC);
 		IFaultLocalizer<Block> rankingMetric = RankingMetrics.getRankingMetricByName(rankingMetricName);
 
 		// Call the location
-		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, rankingMetric, monitor);
+		// add all locations with rankings greater than 0
+		// the threshold will be later applied as defined by the user
+		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, rankingMetric, 0.0, monitor);
 		return locatedFeatures;
 	}
 
@@ -50,32 +53,33 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 	 * @return located features
 	 */
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
-			IFaultLocalizer<Block> algo, IProgressMonitor monitor) {
+			IFaultLocalizer<Block> algo, double suspiciousnessThreshold, IProgressMonitor monitor) {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
 		monitor.subTask("Feature location - Spectrum-based. RankingMetric: " + algo.getName());
-		
+
 		// for each feature
 		for (Feature feature : featureList.getOwnedFeatures()) {
 			try {
 				// create the spectra
-				AdaptedModelSpectraProvider provider = new AdaptedModelSpectraProvider(featureList, adaptedModel, feature);
+				AdaptedModelSpectraProvider provider = new AdaptedModelSpectraProvider(featureList, adaptedModel,
+						feature);
 				ISpectra<Block> spectra = provider.loadSpectra();
-				
+
 				// launch the ranking algorithm
 				Ranking<Block> ranking = algo.localize(spectra);
-				
+
 				// normalize the ranking
 				NormalizedRanking<Block> normalizedRanking = new NormalizedRanking<Block>(ranking,
 						NormalizationStrategy.ZeroOne);
 
-				// add all locations with rankings greater than 0
-				// the threshold will be later applied as defined by the user
+				// add all locations with rankings greater than 0 and the suspiciousness
+				// threshold
 				Iterator<INode<Block>> i = normalizedRanking.iterator();
 				while (i.hasNext()) {
 					INode<Block> node = i.next();
 					double suspiciousness = normalizedRanking.getSuspiciousness(node);
-					if (suspiciousness > 0) {
+					if (suspiciousness > 0 && suspiciousness >= suspiciousnessThreshold) {
 						LocatedFeature located = new LocatedFeature(feature, node.getIdentifier(), suspiciousness);
 						locatedFeatures.add(located);
 					}
@@ -86,5 +90,5 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 		}
 		return locatedFeatures;
 	}
-	
+
 }
