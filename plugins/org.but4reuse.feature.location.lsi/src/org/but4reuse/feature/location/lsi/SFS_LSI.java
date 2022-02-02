@@ -45,7 +45,7 @@ public class SFS_LSI implements IFeatureLocation {
 		} else {
 			approximationType = LSI4J.APPROXIMATION_PERCENTAGE;
 		}
-		
+
 		List<IWordsProcessing> wordProcessors = WordCloudFiltersHelper.getSortedSelectedFilters();
 
 		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, approximationType,
@@ -54,7 +54,8 @@ public class SFS_LSI implements IFeatureLocation {
 	}
 
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
-			int approximationType, double approximationValue, List<IWordsProcessing> wordProcessors, IProgressMonitor monitor) {
+			int approximationType, double approximationValue, List<IWordsProcessing> wordProcessors,
+			IProgressMonitor monitor) {
 
 		// Get SFS results, all located features are 1 confidence
 		StrictFeatureSpecificFeatureLocation sfs = new StrictFeatureSpecificFeatureLocation();
@@ -63,15 +64,17 @@ public class SFS_LSI implements IFeatureLocation {
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
 		// Get all the features of a given block and all its elements
+		int i = 1;
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			// user cancel
 			if (monitor.isCanceled()) {
 				return locatedFeatures;
 			}
 
-			monitor.subTask("Feature location SFS and LSI. Features competing for Elements at " + block.getName() + " /"
-					+ adaptedModel.getOwnedBlocks().size());
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
+			monitor.subTask("Feature location SFS and LSI. " + blockFeatures.size()
+					+ " features competing for Elements inside a Block " + (i - 1) + " : " + i + " /"
+					+ adaptedModel.getOwnedBlocks().size());
 			List<LocatedFeature> blockLFeatures = LocatedFeaturesUtils.getLocatedFeaturesOfBlock(sfsLocatedBlocks,
 					block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
@@ -83,7 +86,7 @@ public class SFS_LSI implements IFeatureLocation {
 			if (lfs != null && !lfs.isEmpty()) {
 				locatedFeatures.addAll(lfs);
 			}
-
+			i++;
 		}
 		return locatedFeatures;
 	}
