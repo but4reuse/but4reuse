@@ -11,9 +11,15 @@ import org.but4reuse.feature.location.IFeatureLocation;
 import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.LocatedFeaturesUtils;
 import org.but4reuse.feature.location.impl.StrictFeatureSpecificFeatureLocation;
+import org.but4reuse.feature.location.lsi.activator.Activator;
+import org.but4reuse.feature.location.lsi.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.featurelist.FeatureList;
+import org.but4reuse.wordclouds.filters.IWordsProcessing;
+import org.but4reuse.wordclouds.filters.WordCloudFiltersHelper;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import lsi4j.LSI4J;
 
 /**
  * SFS + LSI. Features identified as relevant for a block through SFS are then
@@ -25,9 +31,30 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author Nicolas Ordonez Chala
  */
 public class SFS_LSI implements IFeatureLocation {
+
 	@Override
 	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
 			IProgressMonitor monitor) {
+
+		// Preferences
+		boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
+		double approximationValue = Activator.getDefault().getPreferenceStore().getDouble(LSIPreferencePage.DIM);
+		int approximationType;
+		if (fixed) {
+			approximationType = LSI4J.APPROXIMATION_K_VALUE;
+		} else {
+			approximationType = LSI4J.APPROXIMATION_PERCENTAGE;
+		}
+		
+		List<IWordsProcessing> wordProcessors = WordCloudFiltersHelper.getSortedSelectedFilters();
+
+		List<LocatedFeature> locatedFeatures = locateFeatures(featureList, adaptedModel, approximationType,
+				approximationValue, wordProcessors, monitor);
+		return locatedFeatures;
+	}
+
+	public List<LocatedFeature> locateFeatures(FeatureList featureList, AdaptedModel adaptedModel,
+			int approximationType, double approximationValue, List<IWordsProcessing> wordProcessors, IProgressMonitor monitor) {
 
 		// Get SFS results, all located features are 1 confidence
 		StrictFeatureSpecificFeatureLocation sfs = new StrictFeatureSpecificFeatureLocation();
@@ -45,12 +72,14 @@ public class SFS_LSI implements IFeatureLocation {
 			monitor.subTask("Feature location SFS and LSI. Features competing for Elements at " + block.getName() + " /"
 					+ adaptedModel.getOwnedBlocks().size());
 			List<Feature> blockFeatures = LocatedFeaturesUtils.getFeaturesOfBlock(sfsLocatedBlocks, block);
-			List<LocatedFeature> blockLFeatures = LocatedFeaturesUtils.getLocatedFeaturesOfBlock(sfsLocatedBlocks, block);
+			List<LocatedFeature> blockLFeatures = LocatedFeaturesUtils.getLocatedFeaturesOfBlock(sfsLocatedBlocks,
+					block);
 			List<IElement> blockElements = AdaptedModelHelper.getElementsOfBlock(block);
 
 			// Calculate LSI in each block
 			ApplyLSI flsi = new ApplyLSI();
-			List<LocatedFeature> lfs = flsi.locateFeaturesFromAnotherTechnique(block, blockFeatures, blockElements, blockLFeatures);
+			List<LocatedFeature> lfs = flsi.locateFeaturesFromAnotherTechnique(block, blockFeatures, blockElements,
+					blockLFeatures, approximationType, approximationValue, wordProcessors);
 			if (lfs != null && !lfs.isEmpty()) {
 				locatedFeatures.addAll(lfs);
 			}

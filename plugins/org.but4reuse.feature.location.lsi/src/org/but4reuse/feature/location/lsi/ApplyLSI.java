@@ -7,9 +7,8 @@ import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.feature.location.LocatedFeature;
-import org.but4reuse.feature.location.lsi.activator.Activator;
-import org.but4reuse.feature.location.lsi.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
+import org.but4reuse.wordclouds.filters.IWordsProcessing;
 import org.but4reuse.wordclouds.util.Cloudifier;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -24,10 +23,10 @@ public class ApplyLSI {
 	 * https://nlp.stanford.edu/IR-book/html/htmledition/latent-semantic-indexing-1.html
 	 * Based on the featureList and the adapted Model
 	 * 
-	 * @author Nicolas Ordonez Chala
+	 * @author Nicolas Ordoñez Chala
 	 */
 	public List<LocatedFeature> locateFeaturesFromAnotherTechnique(Block block, List<Feature> blockFeatures,
-			List<IElement> blockElements, List<LocatedFeature> previousResultsForThisBlock) {
+			List<IElement> blockElements, List<LocatedFeature> previousResultsForThisBlock, int approximationType, double approximationValue, List<IWordsProcessing> wordProcessors) {
 
 		List<LocatedFeature> locatedFeatures = new ArrayList<LocatedFeature>();
 
@@ -38,24 +37,14 @@ public class ApplyLSI {
 				locatedFeatures.add(new LocatedFeature(blockFeatures.get(0), block, 1));
 				return locatedFeatures;
 			} else {
-				// get lsi user parameters
-				boolean fixed = Activator.getDefault().getPreferenceStore().getBoolean(LSIPreferencePage.FIXED);
-				double approximationValue = Activator.getDefault().getPreferenceStore()
-						.getDouble(LSIPreferencePage.DIM);
-				int approximationType;
-				if (fixed) {
-					approximationType = LSI4J.APPROXIMATION_K_VALUE;
-				} else {
-					approximationType = LSI4J.APPROXIMATION_PERCENTAGE;
-				}
 				// build documents
-				List<List<String>> documents = buildDocuments(blockFeatures);
+				List<List<String>> documents = buildDocuments(blockFeatures, wordProcessors);
 				LSI4J lsiTechnique = new LSI4J(documents, approximationType, approximationValue);
 				if (documents != null) {
 					for (IElement blockElement : blockElements) {
 						boolean added = false;
 						// builder query from each blockElement
-						List<String> query = buildQuery(blockElement);
+						List<String> query = buildQuery(blockElement, wordProcessors);
 						// do nothing if no query is created (empty words)
 						if (query != null && !query.isEmpty()) {
 							// Get similarity from LSI Technique
@@ -102,11 +91,11 @@ public class ApplyLSI {
 	 * @param featureBlocks
 	 * @return documents
 	 */
-	static private List<List<String>> buildDocuments(List<Feature> featureBlocks) {
+	static private List<List<String>> buildDocuments(List<Feature> featureBlocks, List<IWordsProcessing> wordProcessors) {
 		List<List<String>> documents = new ArrayList<List<String>>();
 		// For each feature inside the block
 		for (Feature feature : featureBlocks) {
-			List<String> processedWords = FeatureLocationLSI.getFeatureWords(feature);
+			List<String> processedWords = FeatureLocationLSI.getFeatureWords(feature, wordProcessors);
 			if (processedWords != null && processedWords.size() > 0) {
 				documents.add(processedWords);
 			}
@@ -116,15 +105,16 @@ public class ApplyLSI {
 
 	/**
 	 * Build the query array based on the terms and the elements blocks
+	 * @param wordProcessors 
 	 * 
 	 * @param elementsBlocks
 	 * @return query
 	 */
-	static private List<String> buildQuery(IElement element) {
+	static private List<String> buildQuery(IElement element, List<IWordsProcessing> wordProcessors) {
 		List<String> query = new ArrayList<String>();
 		// Get the words of the element inside the block
 		List<String> elementWords = ((AbstractElement) element).getWords();
-		query = Cloudifier.processWords(elementWords, new NullProgressMonitor());
+		query = Cloudifier.processWords(elementWords, wordProcessors, new NullProgressMonitor());
 		return query;
 	}
 

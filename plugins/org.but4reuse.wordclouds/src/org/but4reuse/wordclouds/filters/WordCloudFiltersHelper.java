@@ -34,18 +34,18 @@ public class WordCloudFiltersHelper {
 		if (cache_wordsprocessing != null) {
 			return cache_wordsprocessing;
 		}
-		List<IWordsProcessing> visualisations = new ArrayList<IWordsProcessing>();
-		IConfigurationElement[] visualisationExtensionPoints = Platform.getExtensionRegistry()
+		List<IWordsProcessing> wordsProcessingMethods = new ArrayList<IWordsProcessing>();
+		IConfigurationElement[] filtersExtensionPoints = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(FILTER_EXTENSIONPOINT);
-		for (IConfigurationElement visualisationExtensionPoint : visualisationExtensionPoints) {
+		for (IConfigurationElement filterExtensionPoint : filtersExtensionPoints) {
 			try {
-				visualisations.add((IWordsProcessing) visualisationExtensionPoint.createExecutableExtension("class"));
+				wordsProcessingMethods.add((IWordsProcessing) filterExtensionPoint.createExecutableExtension("class"));
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		cache_wordsprocessing = visualisations;
-		return visualisations;
+		cache_wordsprocessing = wordsProcessingMethods;
+		return wordsProcessingMethods;
 	}
 
 	public static IPreferenceStore getPreferenceStore() {
@@ -53,13 +53,13 @@ public class WordCloudFiltersHelper {
 	}
 
 	public static String getFilterName(IWordsProcessing algo) {
-		IConfigurationElement[] adapterExtensionPoints = Platform.getExtensionRegistry()
+		IConfigurationElement[] filterExtensionPoints = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(FILTER_EXTENSIONPOINT);
-		for (IConfigurationElement adapterExtensionPoint : adapterExtensionPoints) {
+		for (IConfigurationElement filterExtensionPoint : filterExtensionPoints) {
 			try {
-				IWordsProcessing oneAlgo = (IWordsProcessing) adapterExtensionPoint.createExecutableExtension("class");
-				if (oneAlgo.getClass().equals(algo.getClass())) {
-					String name = adapterExtensionPoint.getAttribute("name");
+				IWordsProcessing oneFilter = (IWordsProcessing) filterExtensionPoint.createExecutableExtension("class");
+				if (oneFilter.getClass().equals(algo.getClass())) {
+					String name = filterExtensionPoint.getAttribute("name");
 					return name;
 				}
 			} catch (CoreException e) {

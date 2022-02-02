@@ -16,3 +16,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  Jars/lsi4j.jar
 Bundle-Vendor: BUT4Reuse
+Export-Package: lsi4j,
+ org.but4reuse.feature.location.lsi

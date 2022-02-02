@@ -13,10 +13,19 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  */
 public class StopWordsFilter implements IWordsProcessing {
+	
+	List<String> stopWords;
+	
+	public StopWordsFilter() {
+		stopWords = WordCloudUtil.getUserDefinedStopWords();
+	}
+	
+	public StopWordsFilter(List<String> stopWords) {
+		this.stopWords = stopWords;
+	}
 
 	@Override
 	public List<String> processWords(List<String> words, IProgressMonitor monitor) {
-		List<String> stopWords = WordCloudUtil.getUserDefinedStopWords();
 		return removeStopWords(words, stopWords);
 	}
 
