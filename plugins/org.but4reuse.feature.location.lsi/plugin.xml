@@ -4,11 +4,11 @@
    <extension
          point="org.but4reuse.feature.location">
       <feature.location
-            class="org.but4reuse.feature.location.impl.FeatureLocationLSI"
+            class="org.but4reuse.feature.location.lsi.FeatureLocationLSI"
             name="Latent Semantic Indexing (LSI)">
       </feature.location>
       <feature.location
-            class="org.but4reuse.feature.location.impl.SFS_LSI"
+            class="org.but4reuse.feature.location.lsi.SFS_LSI"
             name="SFS + LSI">
       </feature.location>
    </extension>
@@ -16,7 +16,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.but4reuse.feature.location.ui.page"
-            class="org.but4reuse.feature.location.lsi.location.preferences.LSIPreferencePage"
+            class="org.but4reuse.feature.location.lsi.preferences.LSIPreferencePage"
             id="org.but4reuse.feature.location.lsi.page"
             name="LSI - Parameter">
       </page>

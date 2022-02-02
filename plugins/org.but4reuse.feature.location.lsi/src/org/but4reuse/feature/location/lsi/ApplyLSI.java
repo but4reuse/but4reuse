@@ -1,4 +1,4 @@
-package org.but4reuse.feature.location.impl;
+package org.but4reuse.feature.location.lsi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.feature.location.LocatedFeature;
 import org.but4reuse.feature.location.lsi.activator.Activator;
-import org.but4reuse.feature.location.lsi.location.preferences.LSIPreferencePage;
+import org.but4reuse.feature.location.lsi.preferences.LSIPreferencePage;
 import org.but4reuse.featurelist.Feature;
 import org.but4reuse.wordclouds.util.Cloudifier;
 import org.eclipse.core.runtime.NullProgressMonitor;

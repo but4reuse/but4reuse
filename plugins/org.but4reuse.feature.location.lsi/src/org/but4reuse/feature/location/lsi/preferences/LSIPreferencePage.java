@@ -1,4 +1,4 @@
-package org.but4reuse.feature.location.lsi.location.preferences;
+package org.but4reuse.feature.location.lsi.preferences;
 
 import org.but4reuse.feature.location.lsi.activator.Activator;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
