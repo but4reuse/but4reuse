@@ -19,6 +19,7 @@ import org.but4reuse.adapters.javajdt.elements.PackageElement;
 import org.but4reuse.adapters.javajdt.elements.TypeElement;
 import org.but4reuse.adapters.javajdt.elements.TypeExtendsElement;
 import org.but4reuse.adapters.javajdt.elements.TypeImplementsElement;
+import org.but4reuse.adapters.javajdt.utils.IdUtils;
 import org.but4reuse.utils.files.FileUtils;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;

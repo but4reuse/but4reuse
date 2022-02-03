@@ -1,4 +1,4 @@
-package org.but4reuse.adapters.javajdt;
+package org.but4reuse.adapters.javajdt.utils;
 
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 
