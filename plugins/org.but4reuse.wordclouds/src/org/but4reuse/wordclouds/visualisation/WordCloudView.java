@@ -262,17 +262,17 @@ public class WordCloudView extends ViewPart {
 		GridData gd_tabFolder = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 		tabFolder.setLayoutData(gd_tabFolder);
 
-		TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
-		tbtmNewItem.setText("Word Cloud");
-
-		final ScrolledComposite sCmp = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		tbtmNewItem.setControl(sCmp);
-
 		TabItem tbtmNewItem_1 = new TabItem(tabFolder, SWT.NONE);
 		tbtmNewItem_1.setText("Word Cloud TF-IDF");
 
 		final ScrolledComposite sCmpIDF = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		tbtmNewItem_1.setControl(sCmpIDF);
+		
+		TabItem tbtmNewItem = new TabItem(tabFolder, SWT.NONE);
+		tbtmNewItem.setText("Word Cloud TF");
+
+		final ScrolledComposite sCmp = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmNewItem.setControl(sCmp);
 
 		cmp = new Composite(sCmp, SWT.NORMAL);
 		cmpTFIDF = new Composite(sCmpIDF, SWT.NORMAL);
