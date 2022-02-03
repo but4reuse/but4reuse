@@ -78,6 +78,7 @@ public class SimilarElementsBlockIdentification implements IBlockIdentification 
 		if (orderByFrequency) {
 			// Iterate on eewmap to create blocks with their block elements
 			while (!R.isEmpty()) {
+				System.out.println(R.size());
 				IElement e = IntersectionsBlockIdentification.findMostFrequentElement(R);
 				// Create Block
 				Block block = AdaptedModelFactory.eINSTANCE.createBlock();
@@ -114,8 +115,7 @@ public class SimilarElementsBlockIdentification implements IBlockIdentification 
 	 * @param orderByFrequency
 	 * @return list of blocks
 	 */
-	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, IProgressMonitor monitor,
-			boolean orderByFrequency) {
+	public List<Block> identifyBlocks(List<AdaptedArtefact> adaptedArtefacts, boolean orderByFrequency, IProgressMonitor monitor) {
 		this.orderByFrequency = orderByFrequency;
 		return identifyBlocks(adaptedArtefacts, monitor);
 	}
