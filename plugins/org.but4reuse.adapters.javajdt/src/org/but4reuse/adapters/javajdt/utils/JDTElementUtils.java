@@ -6,6 +6,7 @@ import java.util.List;
 import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.javajdt.JDTParser;
 import org.but4reuse.adapters.javajdt.elements.CompilationUnitElement;
+import org.but4reuse.adapters.javajdt.elements.FieldElement;
 import org.but4reuse.adapters.javajdt.elements.MethodElement;
 import org.but4reuse.adapters.javajdt.elements.TypeElement;
 
@@ -32,6 +33,30 @@ public class JDTElementUtils {
 			}
 		}
 		return methods;
+	}
+
+	public static CompilationUnitElement getCompilationUnit(TypeElement typeElement) {
+		List<IDependencyObject> cue = typeElement.getDependencies().get(JDTParser.DEPENDENCY_COMPILATION_UNIT);
+		if (cue == null || cue.isEmpty()) {
+			return null;
+		}
+		return (CompilationUnitElement) cue.get(0);
+	}
+
+	public static CompilationUnitElement getCompilationUnit(MethodElement methodElement) {
+		List<IDependencyObject> te = methodElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
+		if (te == null || te.isEmpty()) {
+			return null;
+		}
+		return getCompilationUnit((TypeElement) te.get(0));
+	}
+
+	public static CompilationUnitElement getCompilationUnit(FieldElement fieldElement) {
+		List<IDependencyObject> te = fieldElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
+		if (te == null || te.isEmpty()) {
+			return null;
+		}
+		return getCompilationUnit((TypeElement) te.get(0));
 	}
 
 }
