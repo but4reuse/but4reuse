@@ -132,7 +132,7 @@ public class CSVUtils {
 	}
 
 	/**
-	 * Count the number of line in a csv file
+	 * Count the number of lines in a csv file
 	 * */
 	private static int countLines(File file) throws IOException {
 		InputStream is = new BufferedInputStream(new FileInputStream(file));
@@ -156,7 +156,7 @@ public class CSVUtils {
 	}
 
 	/**
-	 * Count the umber of tabs in a csv file
+	 * Count the number of tabs in a csv file
 	 */
 	private static int countTabs(File file) throws IOException {
 

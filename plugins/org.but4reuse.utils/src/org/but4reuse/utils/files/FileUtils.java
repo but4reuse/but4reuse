@@ -236,6 +236,7 @@ public class FileUtils {
 			while ((strLine = br.readLine()) != null) {
 				lines.add(strLine);
 			}
+			br.close();
 			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,18 +245,22 @@ public class FileUtils {
 	}
 
 	/**
-	 * Get string
+	 * Get string from file
 	 * 
 	 * @param file
-	 * @return
+	 * @return the content of the file as a string
 	 */
 	public static String getStringOfFile(File file) {
 		StringBuilder string = new StringBuilder();
 		for (String line : getLinesOfFile(file)) {
-			string.append(line + "\n");
+			string.append(line);
+			string.append("\n");
 		}
-		if (string.length() > 0) // If the file is empty the -1 causes an exception
+		// remove last new line
+		// If the file is empty the -1 causes an exception
+		if (string.length() > 0) { 
 			string.setLength(string.length() - 1);
+		}
 		return string.toString();
 	}
 
