@@ -58,12 +58,14 @@ public class SpectrumBasedLocalization implements IFeatureLocation {
 
 		monitor.subTask("Feature location - Spectrum-based. RankingMetric: " + algo.getName());
 
+		// create the spectra only once
+		AdaptedModelSpectraProvider provider = new AdaptedModelSpectraProvider(adaptedModel);
+		
 		// for each feature
 		for (Feature feature : featureList.getOwnedFeatures()) {
 			try {
-				// create the spectra
-				AdaptedModelSpectraProvider provider = new AdaptedModelSpectraProvider(featureList, adaptedModel,
-						feature);
+				// update spectra with the different involvements for a target feature
+				provider.updateSpectraForFeature(featureList, feature);
 				ISpectra<Block> spectra = provider.loadSpectra();
 
 				// launch the ranking algorithm

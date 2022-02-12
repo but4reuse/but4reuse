@@ -13,7 +13,9 @@ import org.but4reuse.featurelist.helpers.FeatureListHelper;
 import fk.stardust.provider.ISpectraProvider;
 import fk.stardust.traces.IMutableTrace;
 import fk.stardust.traces.ISpectra;
+import fk.stardust.traces.ITrace;
 import fk.stardust.traces.Spectra;
+import fk.stardust.traces.Trace;
 
 /**
  * Spectra provider
@@ -22,43 +24,50 @@ import fk.stardust.traces.Spectra;
  */
 public class AdaptedModelSpectraProvider implements ISpectraProvider<Block> {
 
-	FeatureList featureList;
-	AdaptedModel adaptedModel;
-	Feature currentFeature;
+	Spectra<Block> s = null;
+	AdaptedModel adaptedModel = null;
 
-	public AdaptedModelSpectraProvider(FeatureList featureList, AdaptedModel adaptedModel, Feature feature) {
-		this.featureList = featureList;
+	public AdaptedModelSpectraProvider(AdaptedModel adaptedModel) {
 		this.adaptedModel = adaptedModel;
-		this.currentFeature = feature;
-	}
-
-	@Override
-	public ISpectra<Block> loadSpectra() throws Exception {
-		final Spectra<Block> s = new Spectra<>();
+		s = new Spectra<>();
 
 		// one trace per artefact
 		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
 
-			// is an artefact of currentFeature?
-			// Successful is false if it is the target feature (this is because the library
-			// is related to testing so if we want to locate a feature we need to say that
-			// the test is failing in this trace)
-			boolean currentFeat = false;
-			List<Feature> features = FeatureListHelper.getArtefactFeatures(featureList, adaptedArtefact.getArtefact());
-			if (features.contains(currentFeature)) {
-				currentFeat = true;
-			}
-
 			// create trace
-			final IMutableTrace<Block> trace = s.addTrace(!currentFeat);
-			
+			// for the moment all false
+			final IMutableTrace<Block> trace = s.addTrace(true);
+
 			// add blocks to the trace
 			List<Block> relevantBlocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(adaptedArtefact);
 			for (Block block : relevantBlocks) {
 				trace.setInvolvement(block, true);
 			}
 		}
+	}
+
+	@Override
+	public ISpectra<Block> loadSpectra() throws Exception {
 		return s;
+	}
+
+	public void updateSpectraForFeature(FeatureList featureList, Feature feature) {
+		// artefacts have the same index as traces
+		int i = 0;
+		for (AdaptedArtefact adaptedArtefact : adaptedModel.getOwnedAdaptedArtefacts()) {
+			// is an artefact of currentFeature?
+			// Successful is false if it is the target feature (this is because the library
+			// is related to testing so if we want to locate a feature we need to say that
+			// the test is failing in this trace)
+			boolean currentFeat = false;
+			List<Feature> features = FeatureListHelper.getArtefactFeatures(featureList, adaptedArtefact.getArtefact());
+			if (features.contains(feature)) {
+				currentFeat = true;
+			}
+			ITrace<Block> trace = s.getTraces().get(i);
+			((Trace<Block>)trace).setSuccessful(!currentFeat);
+			i++;
+		}
 	}
 
 }
