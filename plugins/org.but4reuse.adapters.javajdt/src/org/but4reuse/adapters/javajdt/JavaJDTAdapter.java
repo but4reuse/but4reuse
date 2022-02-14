@@ -17,6 +17,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class JavaJDTAdapter implements IAdapter {
 
+	private List<Class<?>> elementsToExclude = new ArrayList<Class<?>>();
+
+	public void setElementsToExclude(List<Class<?>> elementsToExclude) {
+		this.elementsToExclude = elementsToExclude;
+	}
+
 	@Override
 	public boolean isAdaptable(URI uri, IProgressMonitor monitor) {
 		// check the presence of a .java file
@@ -28,18 +34,18 @@ public class JavaJDTAdapter implements IAdapter {
 	}
 
 	@Override
-	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {		
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
 		File inputFile = FileUtils.getFile(uri);
-		
+
 		// The list of java files contained in this uri
 		List<File> javaFiles = new ArrayList<File>();
 		// it is just one java file
-		if(inputFile.isFile() && FileUtils.isExtension(inputFile, "java")){
+		if (inputFile.isFile() && FileUtils.isExtension(inputFile, "java")) {
 			javaFiles.add(inputFile);
 		} else {
 			// it is a folder containing java files
 			List<File> files = FileUtils.getAllFiles(inputFile);
-			for(File file : files){
+			for (File file : files) {
 				if (FileUtils.isExtension(file, "java")) {
 					javaFiles.add(file);
 				}
@@ -48,6 +54,17 @@ public class JavaJDTAdapter implements IAdapter {
 		// Parse all java files
 		JDTParser jdtParser = new JDTParser();
 		List<IElement> elements = jdtParser.parse(javaFiles);
+
+		if (!elementsToExclude.isEmpty()) {
+			List<IElement> finalElements = new ArrayList<IElement>();
+			for (IElement element : elements) {
+				if (!elementsToExclude.contains(element.getClass())) {
+					finalElements.add(element);
+				}
+			}
+			return finalElements;
+		}
+
 		return elements;
 	}
 
@@ -55,7 +72,7 @@ public class JavaJDTAdapter implements IAdapter {
 	public void construct(URI uri, List<IElement> elements, IProgressMonitor monitor) {
 		// TODO
 		System.out.println("Construct is not completely supported yet");
-		
+
 		JDTConstructor jdtConstructor = new JDTConstructor();
 		// Create file if it does not exist
 		File outputFolder = FileUtils.getFile(uri);

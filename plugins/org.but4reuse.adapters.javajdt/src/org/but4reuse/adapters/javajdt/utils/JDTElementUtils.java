@@ -7,9 +7,16 @@ import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.javajdt.JDTParser;
 import org.but4reuse.adapters.javajdt.elements.CompilationUnitElement;
 import org.but4reuse.adapters.javajdt.elements.FieldElement;
+import org.but4reuse.adapters.javajdt.elements.ImportElement;
+import org.but4reuse.adapters.javajdt.elements.MethodBodyElement;
 import org.but4reuse.adapters.javajdt.elements.MethodElement;
 import org.but4reuse.adapters.javajdt.elements.TypeElement;
 
+/**
+ * JDT element utils
+ * 
+ * @author jabier.martinez
+ */
 public class JDTElementUtils {
 
 	public static List<TypeElement> getTypes(CompilationUnitElement compilationUnitElement) {
@@ -44,19 +51,35 @@ public class JDTElementUtils {
 	}
 
 	public static CompilationUnitElement getCompilationUnit(MethodElement methodElement) {
-		List<IDependencyObject> te = methodElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
-		if (te == null || te.isEmpty()) {
+		List<IDependencyObject> me = methodElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
+		if (me == null || me.isEmpty()) {
 			return null;
 		}
-		return getCompilationUnit((TypeElement) te.get(0));
+		return getCompilationUnit((TypeElement) me.get(0));
+	}
+
+	public static CompilationUnitElement getCompilationUnit(MethodBodyElement methodBodyElement) {
+		List<IDependencyObject> mbe = methodBodyElement.getDependencies().get(JDTParser.DEPENDENCY_METHOD_BODY);
+		if (mbe == null || mbe.isEmpty()) {
+			return null;
+		}
+		return getCompilationUnit((MethodElement) mbe.get(0));
 	}
 
 	public static CompilationUnitElement getCompilationUnit(FieldElement fieldElement) {
-		List<IDependencyObject> te = fieldElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
-		if (te == null || te.isEmpty()) {
+		List<IDependencyObject> fe = fieldElement.getDependencies().get(JDTParser.DEPENDENCY_TYPE);
+		if (fe == null || fe.isEmpty()) {
 			return null;
 		}
-		return getCompilationUnit((TypeElement) te.get(0));
+		return getCompilationUnit((TypeElement) fe.get(0));
+	}
+
+	public static CompilationUnitElement getCompilationUnit(ImportElement importElement) {
+		List<IDependencyObject> ie = importElement.getDependencies().get(JDTParser.DEPENDENCY_COMPILATION_UNIT);
+		if (ie == null || ie.isEmpty()) {
+			return null;
+		}
+		return (CompilationUnitElement) ie.get(0);
 	}
 
 }
