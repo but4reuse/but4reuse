@@ -10,6 +10,7 @@ import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
+import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.block.identification.IBlockIdentification;
 import org.but4reuse.fca.block.identification.FCABlockIdentification;
@@ -46,7 +47,8 @@ public class FCAWeaklyConnectedComponents implements IBlockIdentification {
 			}
 			
 			// create graph
-			DirectedGraph<IElement, DefaultEdge> graph = GraphUtils.createDirectedGraph(b);
+			List<IElement> elements = AdaptedModelHelper.getElementsOfBlock(b);
+			DirectedGraph<IElement, DefaultEdge> graph = GraphUtils.createDirectedGraph(elements);
 			List<Set<IElement>> connectedSets = getConnectedSets(graph);
 			for (Set<IElement> connectedSet : connectedSets) {
 				Block newB = AdaptedModelFactory.eINSTANCE.createBlock();

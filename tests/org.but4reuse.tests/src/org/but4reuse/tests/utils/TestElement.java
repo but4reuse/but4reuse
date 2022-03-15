@@ -10,6 +10,8 @@ import org.but4reuse.adapters.impl.AbstractElement;
  */
 public class TestElement extends AbstractElement {
 
+	public static final String PARENT_DEPENDENCYID = "parent";
+	
 	public int id;
 
 	@Override
@@ -25,6 +27,14 @@ public class TestElement extends AbstractElement {
 	@Override
 	public String getText() {
 		return Integer.toString(id);
+	}
+	
+	@Override
+	public boolean isContainment(String dependencyId) {
+		if (dependencyId.equals(PARENT_DEPENDENCYID)) {
+			return true;
+		}
+		return false;
 	}
 
 }

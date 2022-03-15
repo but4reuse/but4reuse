@@ -218,7 +218,9 @@ public abstract class AbstractElement implements IElement, IDependencyObject {
 
 	/**
 	 * Default implementation of is containment. False by default. Override to
-	 * refine the information about a dependency.
+	 * refine the information about a dependency. For example, in the file structure
+	 * adapter, the dependencyId "parentFolder" is a containment dependency
+	 * (child-parent relation)
 	 * 
 	 * @param dependencyId
 	 * @return whether the dependency is containment

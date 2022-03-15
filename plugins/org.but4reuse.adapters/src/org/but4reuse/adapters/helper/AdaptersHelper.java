@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.IDependencyObject;
 import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.impl.AbstractElement;
 import org.but4reuse.artefactmodel.Artefact;
 import org.but4reuse.artefactmodel.ArtefactModel;
 import org.but4reuse.artefactmodel.ComposedArtefact;
@@ -409,8 +411,7 @@ public class AdaptersHelper {
 	/**
 	 * Get adapter by ids
 	 * 
-	 * @param adapter
-	 *            ids as a comma separated list
+	 * @param adapter ids as a comma separated list
 	 * @return a non null list
 	 */
 	public static List<IAdapter> getAdaptersByIds(String adapters) {
@@ -440,5 +441,52 @@ public class AdaptersHelper {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * The element-parent(s) relation
+	 * @param element
+	 * @return list of dependency objects
+	 */
+	public static List<IDependencyObject> getParentElements(IElement element) {
+		List<IDependencyObject> parents = new ArrayList<IDependencyObject>();
+		// No containment dependencies if it is not an abstract element
+		if (!(element instanceof AbstractElement)) {
+			return parents;
+		}
+		// Identify the containment dependencies
+		for (String dependencyId : element.getDependencies().keySet()) {
+			boolean isContainment = ((AbstractElement)element).isContainment(dependencyId);
+			if (isContainment) {
+				parents.addAll(element.getDependencies().get(dependencyId));
+			}
+		}
+		return parents;
+	}
+	
+	/**
+	 * The element-children relation
+	 * @param element
+	 * @return list of direct children
+	 */
+	public static List<IDependencyObject> getChildrenElements(IElement element) {
+		List<IDependencyObject> children = new ArrayList<IDependencyObject>();
+		// No containment dependencies if it is not an abstract element
+		if (!(element instanceof AbstractElement)) {
+			return children;
+		}
+		// Identify the containment dependencies
+		for (String dependencyId : element.getDependants().keySet()) {
+			List<IDependencyObject> dependants = element.getDependants().get(dependencyId);
+			if (dependants != null && !dependants.isEmpty()) {
+				if (dependants.get(0) instanceof AbstractElement) {
+					boolean isContainment = ((AbstractElement)dependants.get(0)).isContainment(dependencyId);
+					if (isContainment) {
+						children.addAll(element.getDependants().get(dependencyId));
+					}
+				}
+			}
+		}
+		return children;
 	}
 }

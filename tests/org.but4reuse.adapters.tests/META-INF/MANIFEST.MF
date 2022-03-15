@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.but4reuse.adapters.tests
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: BUT4Reuse
+Fragment-Host: org.but4reuse.adapters
+Automatic-Module-Name: org.but4reuse.adapters.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-15
+Require-Bundle: org.junit,
+ org.but4reuse.tests,
+ org.but4reuse.adapters
