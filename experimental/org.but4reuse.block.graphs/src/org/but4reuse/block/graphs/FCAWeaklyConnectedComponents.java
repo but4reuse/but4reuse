@@ -1,17 +1,18 @@
 package org.but4reuse.block.graphs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
-import org.but4reuse.adaptedmodel.ElementWrapper;
 import org.but4reuse.adapters.IElement;
 import org.but4reuse.block.identification.IBlockIdentification;
-import org.but4reuse.block.identification.impl.IntersectionsBlockIdentification;
+import org.but4reuse.fca.block.identification.FCABlockIdentification;
 import org.but4reuse.graphs.utils.GraphUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.jgrapht.DirectedGraph;
@@ -29,7 +30,7 @@ public class FCAWeaklyConnectedComponents implements IBlockIdentification {
 	@Override
 	public List<Block> identifyBlocks(List<AdaptedArtefact> artefacts, IProgressMonitor monitor) {
 		// Get the fca blocks
-		IntersectionsBlockIdentification blockIdentification = new IntersectionsBlockIdentification();
+		FCABlockIdentification blockIdentification = new FCABlockIdentification();
 		List<Block> fcaBlocks = blockIdentification.identifyBlocks(artefacts, monitor);
 
 		// Structural splitting
@@ -37,29 +38,38 @@ public class FCAWeaklyConnectedComponents implements IBlockIdentification {
 		int i = 0;
 		for (Block b : fcaBlocks) {
 			i++;
+			
+			// create a map to reuse the same block elements
+			Map<IElement,BlockElement> mapIEBE = new HashMap<IElement, BlockElement>();
+			for (BlockElement be : b.getOwnedBlockElements()) {
+				mapIEBE.put((IElement) be.getElementWrappers().get(0).getElement(), be);
+			}
+			
+			// create graph
 			DirectedGraph<IElement, DefaultEdge> graph = GraphUtils.createDirectedGraph(b);
-			ConnectivityInspector<IElement, DefaultEdge> algo = new ConnectivityInspector<IElement, DefaultEdge>(graph);
-			List<Set<IElement>> connectedSets = algo.connectedSets();
+			List<Set<IElement>> connectedSets = getConnectedSets(graph);
 			for (Set<IElement> connectedSet : connectedSets) {
 				Block newB = AdaptedModelFactory.eINSTANCE.createBlock();
 				for (IElement e : connectedSet) {
-					BlockElement be = AdaptedModelFactory.eINSTANCE.createBlockElement();
-					// TODO we need to use the elementWrappers of the artefact,
-					// otherwise
-					// org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper.getArtefactsContainingBlockElement(BlockElement)
-					// will have null pointer exception when creating for
-					// example the graph visualisation
-					ElementWrapper ew = AdaptedModelFactory.eINSTANCE.createElementWrapper();
-					ew.setElement(e);
-					be.getElementWrappers().add(ew);
+					BlockElement be = mapIEBE.get(e);
 					newB.getOwnedBlockElements().add(be);
 				}
 				allBlocks.add(newB);
 			}
-			monitor.subTask("Block identification. Structural splitting with weakly connected components " + i + "/"
+			monitor.subTask("Block identification. Structural splitting with " + getNameForMonitor() + " " + i + "/"
 					+ fcaBlocks.size());
 		}
 		return allBlocks;
+	}
+	
+	public List<Set<IElement>> getConnectedSets(DirectedGraph<IElement, DefaultEdge> graph){
+		ConnectivityInspector<IElement, DefaultEdge> algo = new ConnectivityInspector<IElement, DefaultEdge>(graph);
+		List<Set<IElement>> connectedSets = algo.connectedSets();
+		return connectedSets;
+	}
+	
+	public String getNameForMonitor() {
+		return "weakly connected components";
 	}
 
 }

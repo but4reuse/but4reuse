@@ -8,7 +8,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.block.identification,
  org.but4reuse.adaptedmodel,
  org.but4reuse.adapters,
- org.but4reuse.graphs
+ org.but4reuse.graphs,
+ org.but4reuse.fca
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.block.graphs
 Bundle-ClassPath: libs/jgrapht-core-1.0.1.jar,
