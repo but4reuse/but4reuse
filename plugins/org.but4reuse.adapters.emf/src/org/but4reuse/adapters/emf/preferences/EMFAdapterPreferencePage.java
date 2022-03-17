@@ -1,5 +1,6 @@
 package org.but4reuse.adapters.emf.preferences;
 
+import org.but4reuse.adapters.emf.EMFAdapter;
 import org.but4reuse.adapters.emf.activator.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -14,10 +15,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
  */
 public class EMFAdapterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public static final String XML_ID_HASHING = "XML_ID_HASHING";
-
-	public static final String MATCH_ID_HASHING = "MATCH_ID_HASHING";
-
 	public static final String COMPARISON_METHOD = "COMPARISON_METHOD";
 
 	public EMFAdapterPreferencePage() {
@@ -31,10 +28,10 @@ public class EMFAdapterPreferencePage extends FieldEditorPreferencePage implemen
 	public void createFieldEditors() {
 		// This is to be used at your own risk. Use it if you are sure that the
 		// matching is based on ids
-		BooleanFieldEditor bfe_xml = new BooleanFieldEditor(XML_ID_HASHING, "Hashing by the extrinsic XML ID",
+		BooleanFieldEditor bfe_xml = new BooleanFieldEditor(EMFAdapter.XML_ID_HASHING, "Hashing by the extrinsic XML ID",
 				getFieldEditorParent());
 		addField(bfe_xml);
-		BooleanFieldEditor bfe_match = new BooleanFieldEditor(MATCH_ID_HASHING,
+		BooleanFieldEditor bfe_match = new BooleanFieldEditor(EMFAdapter.MATCH_ID_HASHING,
 				"Hashing by the Match ID of the Comparison method", getFieldEditorParent());
 		addField(bfe_match);
 		StringFieldEditor sfe_comp = new StringFieldEditor(COMPARISON_METHOD,

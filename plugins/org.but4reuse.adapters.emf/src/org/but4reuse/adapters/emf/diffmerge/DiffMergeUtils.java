@@ -12,9 +12,9 @@ import org.eclipse.emf.diffmerge.api.scopes.IEditableModelScope;
 import org.eclipse.emf.diffmerge.diffdata.impl.EComparisonImpl;
 import org.eclipse.emf.diffmerge.impl.scopes.FilteredModelScope;
 import org.eclipse.emf.diffmerge.ui.EMFDiffMergeUIPlugin;
+import org.eclipse.emf.diffmerge.ui.gmf.GMFComparisonMethodFactory;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.IComparisonMethodFactory;
-import org.eclipse.emf.diffmerge.ui.specification.ext.DefaultComparisonMethod;
 import org.eclipse.emf.diffmerge.ui.specification.ext.EObjectScopeDefinition;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -39,12 +39,8 @@ public class DiffMergeUtils {
 		EObjectScopeDefinition left = new EObjectScopeDefinition(leftEObject, "left", true);
 		EObjectScopeDefinition right = new EObjectScopeDefinition(rightEObject, "right", true);
 		List<IComparisonMethodFactory> listcmf = getApplicableComparisonMethodFactories(leftEObject, rightEObject);
-		if (listcmf.isEmpty()) {
-			methods.add(new DefaultComparisonMethod(left, right, null));
-		} else {
-			for (IComparisonMethodFactory factory : listcmf) {
-				methods.add(factory.createComparisonMethod(left, right, null));
-			}
+		for (IComparisonMethodFactory factory : listcmf) {
+			methods.add(factory.createComparisonMethod(left, right, null));
 		}
 		return methods;
 	}
@@ -58,10 +54,19 @@ public class DiffMergeUtils {
 	 */
 	public static List<IComparisonMethodFactory> getApplicableComparisonMethodFactories(EObject leftEObject,
 			EObject rightEObject) {
+		List<IComparisonMethodFactory> comparisonMethodFactories = new ArrayList<IComparisonMethodFactory>();
 		EObjectScopeDefinition left = new EObjectScopeDefinition(leftEObject, "left", true);
 		EObjectScopeDefinition right = new EObjectScopeDefinition(rightEObject, "right", true);
-		return EMFDiffMergeUIPlugin.getDefault().getSetupManager().getApplicableComparisonMethodFactories(left, right,
-				null);
+		EMFDiffMergeUIPlugin emfDiffMergeUIPlugin = EMFDiffMergeUIPlugin.getDefault();
+		if (emfDiffMergeUIPlugin == null) {
+			// the emf diff merge plugin is not active... then use a default diff merge
+			// comparator
+			comparisonMethodFactories.add(new GMFComparisonMethodFactory());
+		} else {
+			comparisonMethodFactories = emfDiffMergeUIPlugin.getSetupManager()
+					.getApplicableComparisonMethodFactories(left, right, null);
+		}
+		return comparisonMethodFactories;
 	}
 
 	/**

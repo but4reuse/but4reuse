@@ -45,6 +45,10 @@ public class EMFAdapter implements IAdapter {
 	// This will store the comparison method used during the analysis
 	static IComparisonMethod comparisonMethod = null;
 
+	static String hashingMethod = null;
+	public static final String XML_ID_HASHING = "XML_ID_HASHING";
+	public static final String MATCH_ID_HASHING = "MATCH_ID_HASHING";
+
 	/**
 	 * Adaptable if we can load an EObject from the URI
 	 */
@@ -80,6 +84,15 @@ public class EMFAdapter implements IAdapter {
 		// Initialize the comparison method
 		if (getComparisonMethod() == null) {
 			initializeComparisonMethod(element.eObject);
+		}
+
+		// Initialize hashing method
+		if (hashingMethod == null && Activator.getDefault() != null) {
+			if (Activator.getDefault().getPreferenceStore().getBoolean(XML_ID_HASHING)) {
+				hashingMethod = XML_ID_HASHING;
+			} else if (Activator.getDefault().getPreferenceStore().getBoolean(MATCH_ID_HASHING)) {
+				hashingMethod = MATCH_ID_HASHING;
+			}
 		}
 
 		adapt(eObject, element.eObject, elements);
@@ -313,23 +326,27 @@ public class EMFAdapter implements IAdapter {
 	}
 
 	/**
-	 * Get the hash code of an eObject based on the extrensic id (e.g. xmi id).
-	 * To be activated or deactivated in the preferences page of the adapter.
-	 * Use it (it will boost the speed) if we can assume that two eObjects with
-	 * the same extrensic id must be the same and that it cannot happen that two
-	 * eObjects are different with the same extrensic id.
+	 * Get the hash code of an eObject based on the extrensic id (e.g. xmi id). To
+	 * be activated or deactivated in the preferences page of the adapter. Use it
+	 * (it will boost the speed) if we can assume that two eObjects with the same
+	 * extrensic id must be the same and that it cannot happen that two eObjects are
+	 * different with the same extrensic id.
 	 * 
 	 * @param eObject
 	 * @return
 	 */
 	public static int getHashCode(EObject eObject) {
-		if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.XML_ID_HASHING)) {
+		if (hashingMethod == null) {
+			// TODO can we do better in this case? e.g., when the eobject is of the same
+			// type
+			return 1;
+		} else if (hashingMethod.equals(XML_ID_HASHING)) {
 			String id = ModelImplUtil.getXMLID(eObject);
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((id == null) ? 0 : id.hashCode());
 			return result;
-		} else if (Activator.getDefault().getPreferenceStore().getBoolean(EMFAdapterPreferencePage.MATCH_ID_HASHING)) {
+		} else if (hashingMethod.equals(MATCH_ID_HASHING)) {
 			String id = getComparisonMethod().getMatchPolicy().getMatchID(eObject, null).toString();
 			final int prime = 31;
 			int result = 1;
@@ -349,9 +366,21 @@ public class EMFAdapter implements IAdapter {
 		return comparisonMethod;
 	}
 
+	public static void setComparisonMethod(IComparisonMethod comparisonMethod) {
+		EMFAdapter.comparisonMethod = comparisonMethod;
+	}
+
+	public static String getHashingMethod() {
+		return hashingMethod;
+	}
+
+	public static void setHashingMethod(String hashingMethod) {
+		EMFAdapter.hashingMethod = hashingMethod;
+	}
+
 	/**
-	 * get the EMF elements factory. This can be used to override and provide
-	 * your own elements that extend the default elements
+	 * get the EMF elements factory. This can be used to override and provide your
+	 * own elements that extend the default elements
 	 * 
 	 * @return emf elements factory
 	 */

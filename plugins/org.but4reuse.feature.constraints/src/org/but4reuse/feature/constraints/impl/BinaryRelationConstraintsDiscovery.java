@@ -35,6 +35,23 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery {
 
 	public static boolean onlyOneReason = false;
+	public boolean requires = true;
+	public boolean excludes = true;
+
+	public BinaryRelationConstraintsDiscovery() {
+		if (Activator.getDefault() != null) {
+			onlyOneReason = Activator.getDefault().getPreferenceStore()
+					.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
+			requires = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.REQUIRES);
+			excludes = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.EXCLUDES);
+		}
+	}
+
+	public BinaryRelationConstraintsDiscovery(boolean onlyOneReason, boolean requires, boolean excludes) {
+		BinaryRelationConstraintsDiscovery.onlyOneReason = onlyOneReason;
+		this.requires = requires;
+		this.excludes = excludes;
+	}
 
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
@@ -50,14 +67,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		// monitor.beginTask("Binary Relation Constraints discovery", (n * n -
 		// n) + ((n * n - n) / 2));
 
-		onlyOneReason = Activator.getDefault().getPreferenceStore()
-				.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
-
 		// REQUIRES
 		// Block Level
 		// TODO feature level
-		boolean requires = Activator.getDefault().getPreferenceStore()
-				.getBoolean(BinaryRelationPreferencePage.REQUIRES);
 		if (requires) {
 			long start = System.currentTimeMillis();
 			for (Block b1 : adaptedModel.getOwnedBlocks()) {
@@ -85,8 +97,6 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 			AdaptedModelManager.registerTime("Constraints discovery [Requires]", System.currentTimeMillis() - start);
 		}
 		// EXCLUDES
-		boolean excludes = Activator.getDefault().getPreferenceStore()
-				.getBoolean(BinaryRelationPreferencePage.EXCLUDES);
 		if (excludes) {
 			long start = System.currentTimeMillis();
 			for (int y = 0; y < n; y++) {
@@ -165,8 +175,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	}
 
 	/**
-	 * exists e1 in b1, exists e2 in b2 : exists de in (e1.dependencies
-	 * intersection e2.dependencies) and de.maxDependencies <=1
+	 * exists e1 in b1, exists e2 in b2 : exists de in (e1.dependencies intersection
+	 * e2.dependencies) and de.maxDependencies <=1
 	 * 
 	 * @param b1
 	 * @param b2
