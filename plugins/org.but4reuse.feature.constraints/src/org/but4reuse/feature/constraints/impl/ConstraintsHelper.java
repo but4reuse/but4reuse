@@ -104,7 +104,7 @@ public class ConstraintsHelper {
 			// calculate feature-specific heuristic
 			for (int r = 1; r < featuresSize; r++) {
 				for (int c = 1; c < blocksSize; c++) {
-					matrix[r][c] = new Double(percentageOfBlockInFeature(adaptedModel.getOwnedBlocks().get(c - 1),
+					matrix[r][c] = Double.valueOf(percentageOfBlockInFeature(adaptedModel.getOwnedBlocks().get(c - 1),
 							featureList.getOwnedFeatures().get(r - 1))).toString();
 				}
 			}
@@ -135,7 +135,7 @@ public class ConstraintsHelper {
 				}
 			}
 		}
-		return new Double(foundArtefacts.size()) / new Double(artefacts.size());
+		return Double.valueOf(foundArtefacts.size()) / Double.valueOf(artefacts.size());
 	}
 
 	/**

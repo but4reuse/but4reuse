@@ -18,5 +18,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.but4reuse.adapters.ui
 Export-Package: org.but4reuse.wordclouds.filters,
  org.but4reuse.wordclouds.util,
+ org.but4reuse.wordclouds.visualisation,
  org.mcavallo.opencloud
 Bundle-Vendor: BUT4Reuse

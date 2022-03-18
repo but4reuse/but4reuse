@@ -16,6 +16,7 @@ public class BinaryRelationPreferencePage extends FieldEditorPreferencePage impl
 	public static final String REQUIRES = "REQUIRES";
 	public static final String EXCLUDES = "EXCLUDES";
 	public static final String ONLY_ONE_REASON = "ONLY_ONE_REASON";
+	public static final String IGNORE_DISCOVERY_FROM_COMMON_BLOCK = "IGNORE_DISCOVERY_FROM_COMMON_BLOCK";
 
 	public BinaryRelationPreferencePage() {
 		super(GRID);
@@ -33,6 +34,9 @@ public class BinaryRelationPreferencePage extends FieldEditorPreferencePage impl
 		BooleanFieldEditor bfe = new BooleanFieldEditor(ONLY_ONE_REASON,
 				"Find only one reason for the constraint and continue", getFieldEditorParent());
 		addField(bfe);
+		BooleanFieldEditor bfei = new BooleanFieldEditor(IGNORE_DISCOVERY_FROM_COMMON_BLOCK,
+				"Ignore requires from the common block(s)", getFieldEditorParent());
+		addField(bfei);
 	}
 
 	@Override

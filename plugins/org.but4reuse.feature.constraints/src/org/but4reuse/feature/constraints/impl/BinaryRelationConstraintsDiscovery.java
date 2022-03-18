@@ -37,27 +37,36 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	public static boolean onlyOneReason = false;
 	public boolean requires = true;
 	public boolean excludes = true;
+	public boolean ignoresDiscoveryFromCommonBlock = false;
 
 	public BinaryRelationConstraintsDiscovery() {
-		if (Activator.getDefault() != null) {
-			onlyOneReason = Activator.getDefault().getPreferenceStore()
-					.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
-			requires = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.REQUIRES);
-			excludes = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.EXCLUDES);
-		}
+		// default constructor
 	}
 
-	public BinaryRelationConstraintsDiscovery(boolean onlyOneReason, boolean requires, boolean excludes) {
+	public BinaryRelationConstraintsDiscovery(boolean onlyOneReason, boolean requires, boolean excludes, boolean ignoresRequiresFromCommonBlock) {
 		BinaryRelationConstraintsDiscovery.onlyOneReason = onlyOneReason;
 		this.requires = requires;
 		this.excludes = excludes;
+		this.ignoresDiscoveryFromCommonBlock = ignoresRequiresFromCommonBlock;
 	}
 
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
 			IProgressMonitor monitor) {
-
 		List<IConstraint> constraintList = new ArrayList<IConstraint>();
+		
+		if (Activator.getDefault() != null) {
+			onlyOneReason = Activator.getDefault().getPreferenceStore()
+					.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
+			requires = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.REQUIRES);
+			excludes = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.EXCLUDES);
+			ignoresDiscoveryFromCommonBlock = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.IGNORE_DISCOVERY_FROM_COMMON_BLOCK);
+		}
+		
+		List<Block> commonBlocks = null;
+		if (ignoresDiscoveryFromCommonBlock) {
+			commonBlocks = AdaptedModelHelper.getCommonBlocks(adaptedModel);
+		}
 
 		// for binary relations we explore the matrix n*n where n is the number
 		// of blocks. We ignore the matrix diagonal so it is n*n - n for
@@ -73,6 +82,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		if (requires) {
 			long start = System.currentTimeMillis();
 			for (Block b1 : adaptedModel.getOwnedBlocks()) {
+				if (ignoresDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+					continue;
+				}
 				for (Block b2 : adaptedModel.getOwnedBlocks()) {
 					if (b1 != b2) {
 						monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
@@ -101,6 +113,9 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 			long start = System.currentTimeMillis();
 			for (int y = 0; y < n; y++) {
 				Block b1 = adaptedModel.getOwnedBlocks().get(y);
+				if (ignoresDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+					continue;
+				}
 				for (int x = 0; x < n; x++) {
 					// mutual exclusion, not(b1 and b2), as it is mutual we do
 					// not need to check the opposite
@@ -144,8 +159,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		// Get the elements of B1
 		HashSet<IElement> elementsOfB1 = AdaptedModelHelper.getElementsOfBlockHashSet(b1);
 		for (BlockElement e : b1.getOwnedBlockElements()) {
-			// TODO getAllDependencies is the bottleneck here
 			List<IDependencyObject> de = getAllDependencies(e);
+			
 			// Actually check
 			for (IDependencyObject deo : de) {
 				// Check if the dependency object is already in b1
@@ -153,7 +168,10 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 				if (!deoAlreadyInB1) {
 					for (BlockElement b2e : b2.getOwnedBlockElements()) {
 						for (ElementWrapper elementW2 : b2e.getElementWrappers()) {
-							if (deo.equals(elementW2.getElement())) {
+							// important to use == instead of equals as we want to compare objects.
+							// equals will launch similarity calculation which can be time consuming
+							// and not needed in this case
+							if (deo == elementW2.getElement()) {
 								String message = ((IElement) e.getElementWrappers().get(0).getElement()).getText()
 										+ "->" + ((IElement) elementW2.getElement()).getText();
 								messages.add(message);
