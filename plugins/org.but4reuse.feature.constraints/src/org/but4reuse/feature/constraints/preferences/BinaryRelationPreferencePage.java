@@ -17,7 +17,9 @@ public class BinaryRelationPreferencePage extends FieldEditorPreferencePage impl
 	public static final String EXCLUDES = "EXCLUDES";
 	public static final String ONLY_ONE_REASON = "ONLY_ONE_REASON";
 	public static final String IGNORE_DISCOVERY_FROM_COMMON_BLOCK = "IGNORE_DISCOVERY_FROM_COMMON_BLOCK";
-
+	public static final String IGNORE_REQUIRES_BLOCKS_NEVER_TOGETHER = "IGNORE_REQUIRES_BLOCKS_NEVER_TOGETHER";
+	public static final String IGNORE_EXCLUDES_BLOCKS_TOGETHER_ONCE = "IGNORE_EXCLUDES_BLOCKS_TOGETHER_ONCE";
+	
 	public BinaryRelationPreferencePage() {
 		super(GRID);
 		this.setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -35,8 +37,14 @@ public class BinaryRelationPreferencePage extends FieldEditorPreferencePage impl
 				"Find only one reason for the constraint and continue", getFieldEditorParent());
 		addField(bfe);
 		BooleanFieldEditor bfei = new BooleanFieldEditor(IGNORE_DISCOVERY_FROM_COMMON_BLOCK,
-				"Ignore requires from the common block(s)", getFieldEditorParent());
+				"Ignore Requires and Excludes from the common block(s)", getFieldEditorParent());
 		addField(bfei);
+		BooleanFieldEditor bfeir = new BooleanFieldEditor(IGNORE_REQUIRES_BLOCKS_NEVER_TOGETHER,
+				"Ignore Requires when the blocks never appeared together", getFieldEditorParent());
+		addField(bfeir);
+		BooleanFieldEditor bfeie = new BooleanFieldEditor(IGNORE_EXCLUDES_BLOCKS_TOGETHER_ONCE,
+				"Ignore Excludes when the blocks appeared together once", getFieldEditorParent());
+		addField(bfeie);
 	}
 
 	@Override

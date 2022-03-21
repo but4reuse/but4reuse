@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
 import org.but4reuse.adaptedmodel.BlockElement;
@@ -34,21 +35,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery {
 
-	public static boolean onlyOneReason = false;
+	// default settings
+	public boolean onlyOneReason = false;
 	public boolean requires = true;
 	public boolean excludes = true;
-	public boolean ignoresDiscoveryFromCommonBlock = false;
-
-	public BinaryRelationConstraintsDiscovery() {
-		// default constructor
-	}
-
-	public BinaryRelationConstraintsDiscovery(boolean onlyOneReason, boolean requires, boolean excludes, boolean ignoresRequiresFromCommonBlock) {
-		BinaryRelationConstraintsDiscovery.onlyOneReason = onlyOneReason;
-		this.requires = requires;
-		this.excludes = excludes;
-		this.ignoresDiscoveryFromCommonBlock = ignoresRequiresFromCommonBlock;
-	}
+	public boolean ignoreDiscoveryFromCommonBlock = false;
+	public boolean ignoreRequiresBlocksNeverTogether = false;
+	public boolean ignoreExcludesBlocksOnceTogether = false;
 
 	@Override
 	public List<IConstraint> discover(FeatureList featureList, AdaptedModel adaptedModel, Object extra,
@@ -60,11 +53,13 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					.getBoolean(BinaryRelationPreferencePage.ONLY_ONE_REASON);
 			requires = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.REQUIRES);
 			excludes = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.EXCLUDES);
-			ignoresDiscoveryFromCommonBlock = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.IGNORE_DISCOVERY_FROM_COMMON_BLOCK);
+			ignoreDiscoveryFromCommonBlock = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.IGNORE_DISCOVERY_FROM_COMMON_BLOCK);
+			ignoreRequiresBlocksNeverTogether = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.IGNORE_REQUIRES_BLOCKS_NEVER_TOGETHER);
+			ignoreExcludesBlocksOnceTogether = Activator.getDefault().getPreferenceStore().getBoolean(BinaryRelationPreferencePage.IGNORE_EXCLUDES_BLOCKS_TOGETHER_ONCE);
 		}
 		
 		List<Block> commonBlocks = null;
-		if (ignoresDiscoveryFromCommonBlock) {
+		if (ignoreDiscoveryFromCommonBlock) {
 			commonBlocks = AdaptedModelHelper.getCommonBlocks(adaptedModel);
 		}
 
@@ -82,11 +77,29 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 		if (requires) {
 			long start = System.currentTimeMillis();
 			for (Block b1 : adaptedModel.getOwnedBlocks()) {
-				if (ignoresDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+				if (ignoreDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+					monitor.subTask("Ignoring Requires " + b1.getName());
 					continue;
 				}
 				for (Block b2 : adaptedModel.getOwnedBlocks()) {
 					if (b1 != b2) {
+						
+						if (ignoreRequiresBlocksNeverTogether) {
+							boolean atLeastOnceFoundTogether = false;
+							for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+								List<Block> aaBlocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa);
+								if (aaBlocks.contains(b1) && aaBlocks.contains(b2)) {
+									atLeastOnceFoundTogether = true;
+									break;
+								}
+							}
+							if (!atLeastOnceFoundTogether) {
+								// if not found a case where they were together, skip b1 requires b2
+								monitor.subTask("Ignoring Requires " + b1.getName() + " with "+ b2.getName());
+								continue;
+							}
+						}
+						
 						monitor.subTask("Checking Requires relations of " + b1.getName() + " with " + b2.getName());
 						// check monitor
 						if (monitor.isCanceled()) {
@@ -95,7 +108,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 						// here we have all binary combinations A and B, B and A
 						// etc.
 						// requires b1 -> b2
-						List<String> messages = blockRequiresAnotherBlockB(b1, b2);
+						List<String> messages = blockRequiresAnotherBlockB(b1, b2, onlyOneReason);
 						if (messages.size() > 0) {
 							Constraint constraint = new BasicRequiresConstraint(b1, b2);
 							constraint.setExplanations(messages);
@@ -113,7 +126,8 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 			long start = System.currentTimeMillis();
 			for (int y = 0; y < n; y++) {
 				Block b1 = adaptedModel.getOwnedBlocks().get(y);
-				if (ignoresDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+				if (ignoreDiscoveryFromCommonBlock && commonBlocks.contains(b1)) {
+					monitor.subTask("Ignoring Excludes " + b1.getName());
 					continue;
 				}
 				for (int x = 0; x < n; x++) {
@@ -121,6 +135,23 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 					// not need to check the opposite
 					if (x != y && y < x) {
 						Block b2 = adaptedModel.getOwnedBlocks().get(x);
+						
+						if (ignoreExcludesBlocksOnceTogether) {
+							boolean atLeastOnceFoundTogether = false;
+							for (AdaptedArtefact aa : adaptedModel.getOwnedAdaptedArtefacts()) {
+								List<Block> aaBlocks = AdaptedModelHelper.getBlocksOfAdaptedArtefact(aa);
+								if (aaBlocks.contains(b1) && aaBlocks.contains(b2)) {
+									atLeastOnceFoundTogether = true;
+									break;
+								}
+							}
+							if (atLeastOnceFoundTogether) {
+								// skip b1 excludes b2 if they were found together at least once
+								monitor.subTask("Ignoring Excludes " + b1.getName() + " with "+ b2.getName());
+								continue;
+							}
+						}
+						
 						monitor.subTask(
 								"Checking Mutual Exclusion relations of " + b1.getName() + " with " + b2.getName());
 						// check monitor
@@ -128,7 +159,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 							return constraintList;
 						}
 						// mutual exclusion
-						List<String> messages = blockExcludesAnotherBlock(b1, b2);
+						List<String> messages = blockExcludesAnotherBlock(b1, b2, onlyOneReason);
 						if (messages.size() > 0) {
 							Constraint constraint = new BasicExcludesConstraint(b1, b2);
 							constraint.setExplanations(messages);
@@ -154,7 +185,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public static List<String> blockRequiresAnotherBlockB(Block b1, Block b2) {
+	public static List<String> blockRequiresAnotherBlockB(Block b1, Block b2, boolean onlyOneReason) {
 		List<String> messages = new ArrayList<String>();
 		// Get the elements of B1
 		HashSet<IElement> elementsOfB1 = AdaptedModelHelper.getElementsOfBlockHashSet(b1);
@@ -200,7 +231,7 @@ public class BinaryRelationConstraintsDiscovery implements IConstraintsDiscovery
 	 * @param b2
 	 * @return
 	 */
-	public static List<String> blockExcludesAnotherBlock(Block b1, Block b2) {
+	public static List<String> blockExcludesAnotherBlock(Block b1, Block b2, boolean onlyOneReason) {
 		List<String> messages = new ArrayList<String>();
 		// Create the global maps of dependency ids and dependency objects
 		Map<String, List<IDependencyObject>> map1 = new HashMap<String, List<IDependencyObject>>();

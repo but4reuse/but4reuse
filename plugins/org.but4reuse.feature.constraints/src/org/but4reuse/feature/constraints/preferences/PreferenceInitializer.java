@@ -18,6 +18,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(BinaryRelationPreferencePage.EXCLUDES, true);
 		store.setDefault(BinaryRelationPreferencePage.ONLY_ONE_REASON, false);
 		store.setDefault(BinaryRelationPreferencePage.IGNORE_DISCOVERY_FROM_COMMON_BLOCK, false);
+		store.setDefault(BinaryRelationPreferencePage.IGNORE_REQUIRES_BLOCKS_NEVER_TOGETHER, false);
+		store.setDefault(BinaryRelationPreferencePage.IGNORE_EXCLUDES_BLOCKS_TOGETHER_ONCE, false);
 	}
 
 }
