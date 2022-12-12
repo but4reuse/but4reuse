@@ -104,13 +104,19 @@ public class FCABlockIdentification implements IBlockIdentification {
 				fc.addPair(fc.getEntity("Artefact " + ia), attr);
 			}
 			R.remove(e);
+			monitor.subTask("Block Creation. Creating Blocks. Creating Formal Context." + R.size());
 		}
 
+		monitor.subTask("Block Creation. Creating concept lattice.");
 		// Generate concept lattice
 		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
 		
 		// Add a block for each non empty concept
+		int i = 0;
+		final Set<Concept> concepts = cl.getConcepts();
+		final int is = concepts.size();
 		for (Concept c : cl.getConcepts()) {
+			monitor.subTask("Block Creation. Creating Blocks." + " " + ++i + "/" + is);
 			// getIntent returns also the intent of the parents, we are only
 			// interested in the getSimplifiedIntent which is the one that only
 			// belongs to this concept
@@ -129,6 +135,7 @@ public class FCABlockIdentification implements IBlockIdentification {
 			}
 		}
 
+		monitor.subTask("Block Creation. Sorting blocks by frequency.");
 		blocks = reorderBlocksByFrequency(R, blocks);
 
 		// finished
