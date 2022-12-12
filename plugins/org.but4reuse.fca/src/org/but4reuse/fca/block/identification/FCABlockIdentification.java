@@ -16,6 +16,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.block.identification.IBlockIdentification;
 import org.but4reuse.fca.utils.FCAUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.EList;
 
 import fr.labri.galatea.Attribute;
 import fr.labri.galatea.BinaryAttribute;
@@ -57,7 +58,10 @@ public class FCABlockIdentification implements IBlockIdentification {
 
 			monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + adaptedArtefacts.size());
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
-			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
+			EList<ElementWrapper> ownedElementWrappers = currentList.getOwnedElementWrappers();
+			for(int j = 0; j < ownedElementWrappers.size(); ++j) {
+				ElementWrapper ew = ownedElementWrappers.get(j);
+				monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + adaptedArtefacts.size() + " " + (j + 1) + "/" + ownedElementWrappers.size());
 
 				// user cancel
 				if (monitor.isCanceled()) {
