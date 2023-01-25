@@ -11,9 +11,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.diffmerge.ui.gmf,
  org.eclipse.emf.ecore,
  org.eclipse.ui,
- org.but4reuse.adaptedmodel
+ org.but4reuse.adaptedmodel,
+ com.google.gson;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.but4reuse.adapters.emf,
- org.but4reuse.adapters.emf.helper
+ org.but4reuse.adapters.emf.helper,
+ serialization
 Bundle-Vendor: BUT4Reuse

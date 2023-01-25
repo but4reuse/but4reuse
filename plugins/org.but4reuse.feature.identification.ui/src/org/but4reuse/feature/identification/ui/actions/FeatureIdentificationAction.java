@@ -1,5 +1,9 @@
 package org.but4reuse.feature.identification.ui.actions;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -7,9 +11,14 @@ import java.util.List;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
+import org.but4reuse.adaptedmodel.BlockElement;
 import org.but4reuse.adaptedmodel.helpers.AdaptedModelHelper;
 import org.but4reuse.adaptedmodel.manager.AdaptedModelManager;
 import org.but4reuse.adapters.IAdapter;
+import org.but4reuse.adapters.IElement;
+import org.but4reuse.adapters.emf.EMFAttributeElement;
+import org.but4reuse.adapters.emf.EMFClassElement;
+import org.but4reuse.adapters.emf.EMFReferenceElement;
 import org.but4reuse.adapters.helper.AdaptersHelper;
 import org.but4reuse.adapters.preferences.PreferencesHelper;
 import org.but4reuse.adapters.ui.AdaptersSelectionDialog;
@@ -37,6 +46,16 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPart;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
+
+import serialization.EMFAttributeElementSerializer;
+import serialization.EMFClassElementSerializer;
+import serialization.EMFReferenceElementSerializer;
 
 /**
  * Feature identification action
@@ -122,6 +141,50 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
+
+								Gson gson = new GsonBuilder()
+										.registerTypeAdapter(EMFClassElement.class, new EMFClassElementSerializer())
+										.registerTypeAdapter(EMFAttributeElement.class, new EMFAttributeElementSerializer())
+										.registerTypeAdapter(EMFReferenceElement.class, new EMFReferenceElementSerializer())
+										.setPrettyPrinting().create();
+
+
+								for(int i = 0; i < blocks.size(); ++i) {
+									final Block block = blocks.get(i);
+
+									try {
+										// replace with individual user?
+										final JsonWriter jsonWriter = gson.newJsonWriter(
+												new BufferedWriter(
+														new FileWriter(new File(String.format("C:\\Users\\mauri\\Desktop\\test_models\\feature_elements\\feature_elements_%d.json", i)))));
+
+										final JsonObject jsonObject = new JsonObject();
+
+										final JsonArray elementsArray = new JsonArray();
+
+										for(final BlockElement blockElement : block.getOwnedBlockElements()) {
+											final IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
+
+											if(element instanceof EMFClassElement) {
+												elementsArray.add(gson.toJsonTree(element, EMFClassElement.class));
+											}
+											else if (element instanceof EMFAttributeElement) {
+												elementsArray.add(gson.toJsonTree(element, EMFAttributeElement.class));
+											}
+											else if (element instanceof EMFReferenceElement) {
+												elementsArray.add(gson.toJsonTree(element, EMFReferenceElement.class));
+											}
+											else {
+												System.out.println("Unknown element type!");
+											}
+										}
+
+										jsonObject.add("elements", elementsArray);
+										gson.toJson(jsonObject, jsonWriter);
+										jsonWriter.flush();
+									} catch (IOException | SecurityException e) {
+									}
+								}
 
 								monitor.subTask("Constraints discovery");
 								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
