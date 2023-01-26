@@ -72,5 +72,10 @@
             description="Create alternative groups with the excludes constraints and then the hierarchy with the requires constraints"
             name="Alternatives Before Hierarchy">
       </fmsynthesis>
+      <fmsynthesis
+            class="org.but4reuse.featuremodel.synthesis.impl.AlternativesBeforeHierarchyOptimizedFMSynthesis"
+            description="Create alternative groups with the excludes constraints and then the hierarchy with the requires constraints. (Optimized)"
+            name="Alternatives Before Hierarchy (Optimized)">
+      </fmsynthesis>
    </extension>
 </plugin>
