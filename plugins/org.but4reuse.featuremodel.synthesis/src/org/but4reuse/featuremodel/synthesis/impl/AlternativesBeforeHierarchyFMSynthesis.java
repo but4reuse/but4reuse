@@ -42,6 +42,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 
 	@Override
 	public void createFeatureModel(URI outputContainer, IProgressMonitor monitor) {
+		System.out.println("Creating Feature Model.");
 		AdaptedModel adaptedModel = AdaptedModelManager.getAdaptedModel();
 		// TODO Check for loops in the Requires graph.
 		// Assumption is that there are no loops in the Requires constraints
@@ -73,6 +74,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		// Common blocks (probably mandatory)
 		List<Block> common = AdaptedModelHelper.getCommonBlocks(adaptedModel);
 
+		System.out.println("Creating Feature Model. Adding Blocks.");
 		// Add blocks as features
 		for (Block block : adaptedModel.getOwnedBlocks()) {
 			Feature f = new Feature(fm, FeatureIDEUtils.validFeatureName(block.getName()));
@@ -86,15 +88,21 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			fmFeatures.add(f);
 		}
 
+		System.out.println("Creating Feature Model. Adding Constraints.");
 		// Add constraints
 		for (IConstraint constraint : ConstraintsHelper.getCalculatedConstraints(adaptedModel)) {
 			FeatureIDEUtils.addConstraint(fm, FeatureIDEUtils.getConstraintString(constraint));
 		}
 
+		System.out.println("Creating Feature Model. Identifying Alt Groups.");
 		// Identify alt groups
 		AltGroupList altGroupList = new AltGroupList();
 		List<IConstraint> constraints = ConstraintsHelper.getCalculatedConstraints(adaptedModel);
+		int i = 0;
+		int si = constraints.size();
 		for (IConstraint constraint : constraints) {
+			System.out.println("Creating Feature Model. Identifying Alt Groups. Constraints Loop " + i + "/" + si);
+			++i;
 			if (constraint instanceof BasicExcludesConstraint) {
 				BasicExcludesConstraint c = (BasicExcludesConstraint)constraint;
 				IFeature feature1 = fm.getFeature(FeatureIDEUtils.validFeatureName(c.getBlock1().getName()));
@@ -140,6 +148,8 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			}
 		}
 
+		System.out.println("Creating Feature Model. Create alt groups in the fm.");
+
 		// Create alt groups in the fm
 		for (AltGroup altGroup : altGroupList.altGroups) {
 			IFeature fakeAltFeature = new Feature(fm, "Alternative_" + altGroup.id);
@@ -153,9 +163,14 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			fmFeatures.add(fakeAltFeature);
 		}
 
-		// Create hierarchy with the Requires
-		for (IFeature f : fmFeatures) {
+		System.out.println("Creating Feature Model. Create hierarchy with the Requires.");
 
+		// Create hierarchy with the Requires
+		i = 0;
+		si = fmFeatures.size();
+		for (IFeature f : fmFeatures) {
+			System.out.println("Creating Feature Model. Create hierarchy with the Requires. Looping Features " + i + "/" + si);
+			++i;
 			// check if the feature belongs to an alternative group
 			AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
 
