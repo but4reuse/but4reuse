@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,10 @@ import org.but4reuse.feature.constraints.IConstraintsDiscovery;
 import org.but4reuse.feature.constraints.helper.ConstraintsDiscoveryHelper;
 import org.but4reuse.feature.constraints.impl.ConstraintsHelper;
 import org.but4reuse.utils.emf.EMFUtils;
+import org.but4reuse.utils.files.FileUtils;
 import org.but4reuse.utils.workbench.WorkbenchUtils;
 import org.but4reuse.visualisation.helpers.VisualisationsHelper;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
@@ -210,10 +213,15 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 			final Block block = blocks.get(i);
 
 			try {
-				// replace with individual user?
+				// Get default construction uri
+				String out = "/projectName";
+				IContainer output = AdaptedModelManager.getDefaultOutput();
+				if (output != null) {
+					out = output.getFullPath().toString();
+				}
 				final JsonWriter jsonWriter = gson.newJsonWriter(
 						new BufferedWriter(
-								new FileWriter(new File(String.format("C:\\Users\\mauri\\Desktop\\test_models\\feature_elements\\feature_elements_%d.json", i)))));
+								new FileWriter(FileUtils.getFile(new URI(String.format("platform:/resource" + out + "/featureElements/feature_elements_%d.json", i))))));
 
 				final JsonObject jsonObject = new JsonObject();
 
@@ -239,7 +247,8 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 				jsonObject.add("elements", elementsArray);
 				gson.toJson(jsonObject, jsonWriter);
 				jsonWriter.flush();
-			} catch (IOException | SecurityException e) {
+			} catch (IOException | SecurityException | URISyntaxException e) {
+				e.printStackTrace();
 			}
 		}
 	}
