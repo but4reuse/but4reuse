@@ -142,49 +142,7 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 								adaptedModel.getOwnedBlocks().addAll(blocks);
 								monitor.worked(1);
 
-								Gson gson = new GsonBuilder()
-										.registerTypeAdapter(EMFClassElement.class, new EMFClassElementSerializer())
-										.registerTypeAdapter(EMFAttributeElement.class, new EMFAttributeElementSerializer())
-										.registerTypeAdapter(EMFReferenceElement.class, new EMFReferenceElementSerializer())
-										.setPrettyPrinting().create();
-
-
-								for(int i = 0; i < blocks.size(); ++i) {
-									final Block block = blocks.get(i);
-
-									try {
-										// replace with individual user?
-										final JsonWriter jsonWriter = gson.newJsonWriter(
-												new BufferedWriter(
-														new FileWriter(new File(String.format("C:\\Users\\mauri\\Desktop\\test_models\\feature_elements\\feature_elements_%d.json", i)))));
-
-										final JsonObject jsonObject = new JsonObject();
-
-										final JsonArray elementsArray = new JsonArray();
-
-										for(final BlockElement blockElement : block.getOwnedBlockElements()) {
-											final IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
-
-											if(element instanceof EMFClassElement) {
-												elementsArray.add(gson.toJsonTree(element, EMFClassElement.class));
-											}
-											else if (element instanceof EMFAttributeElement) {
-												elementsArray.add(gson.toJsonTree(element, EMFAttributeElement.class));
-											}
-											else if (element instanceof EMFReferenceElement) {
-												elementsArray.add(gson.toJsonTree(element, EMFReferenceElement.class));
-											}
-											else {
-												System.out.println("Unknown element type!");
-											}
-										}
-
-										jsonObject.add("elements", elementsArray);
-										gson.toJson(jsonObject, jsonWriter);
-										jsonWriter.flush();
-									} catch (IOException | SecurityException e) {
-									}
-								}
+								gsonExport(blocks);
 
 								monitor.subTask("Constraints discovery");
 								List<IConstraintsDiscovery> constraintsDiscoveryAlgorithms = ConstraintsDiscoveryHelper
@@ -236,6 +194,52 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 					}
 				}
 
+			}
+		}
+	}
+
+	private static void gsonExport(List<Block> blocks) {
+		Gson gson = new GsonBuilder()
+				.registerTypeAdapter(EMFClassElement.class, new EMFClassElementSerializer())
+				.registerTypeAdapter(EMFAttributeElement.class, new EMFAttributeElementSerializer())
+				.registerTypeAdapter(EMFReferenceElement.class, new EMFReferenceElementSerializer())
+				.setPrettyPrinting().create();
+
+
+		for(int i = 0; i < blocks.size(); ++i) {
+			final Block block = blocks.get(i);
+
+			try {
+				// replace with individual user?
+				final JsonWriter jsonWriter = gson.newJsonWriter(
+						new BufferedWriter(
+								new FileWriter(new File(String.format("C:\\Users\\mauri\\Desktop\\test_models\\feature_elements\\feature_elements_%d.json", i)))));
+
+				final JsonObject jsonObject = new JsonObject();
+
+				final JsonArray elementsArray = new JsonArray();
+
+				for(final BlockElement blockElement : block.getOwnedBlockElements()) {
+					final IElement element = (IElement) blockElement.getElementWrappers().get(0).getElement();
+
+					if(element instanceof EMFClassElement) {
+						elementsArray.add(gson.toJsonTree(element, EMFClassElement.class));
+					}
+					else if (element instanceof EMFAttributeElement) {
+						elementsArray.add(gson.toJsonTree(element, EMFAttributeElement.class));
+					}
+					else if (element instanceof EMFReferenceElement) {
+						elementsArray.add(gson.toJsonTree(element, EMFReferenceElement.class));
+					}
+					else {
+						System.out.println("Unknown element type!");
+					}
+				}
+
+				jsonObject.add("elements", elementsArray);
+				gson.toJson(jsonObject, jsonWriter);
+				jsonWriter.flush();
+			} catch (IOException | SecurityException e) {
 			}
 		}
 	}
