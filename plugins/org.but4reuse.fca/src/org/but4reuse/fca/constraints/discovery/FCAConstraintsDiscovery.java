@@ -63,10 +63,10 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 							constraint.addExplanation("Concept lattice found");
 							constraintList.add(constraint);
 						}
+						++j;
 					}
-					++j;
+					++k;
 				}
-				++k;
 			}
 			++i;
 		}
