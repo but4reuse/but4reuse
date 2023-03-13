@@ -2,6 +2,7 @@ package org.but4reuse.graphs.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.but4reuse.adapters.IDependencyObject;
@@ -13,7 +14,7 @@ import org.jgrapht.graph.DefaultEdge;
 
 public class GraphUtils {
 	
-	public static DirectedGraph<IElement, DefaultEdge> createDirectedGraph(List<IElement> elements) {
+	public static DirectedGraph<IElement, DefaultEdge> createDirectedGraph(HashSet<IElement> elements) {
 		return createDirectedGraph(elements, false);
 	}
 
@@ -23,7 +24,7 @@ public class GraphUtils {
 	 * @param onlyContainment
 	 * @return A directed graph
 	 */
-	public static DirectedGraph<IElement, DefaultEdge> createDirectedGraph(List<IElement> elements,
+	public static DirectedGraph<IElement, DefaultEdge> createDirectedGraph(HashSet<IElement> elements,
 			boolean onlyContainment) {
 		DirectedGraph<IElement, DefaultEdge> graph = new DefaultDirectedGraph<IElement, DefaultEdge>(DefaultEdge.class);
 		// Add nodes

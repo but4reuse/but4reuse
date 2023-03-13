@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 
 import org.but4reuse.adaptedmodel.AdaptedArtefact;
 import org.but4reuse.adaptedmodel.AdaptedModelFactory;
@@ -47,7 +48,7 @@ public class FCAWeaklyConnectedComponents implements IBlockIdentification {
 			}
 			
 			// create graph
-			List<IElement> elements = AdaptedModelHelper.getElementsOfBlock(b);
+			HashSet<IElement> elements = AdaptedModelHelper.getElementsOfBlockHashSet(b);
 			DirectedGraph<IElement, DefaultEdge> graph = GraphUtils.createDirectedGraph(elements);
 			List<Set<IElement>> connectedSets = getConnectedSets(graph);
 			for (Set<IElement> connectedSet : connectedSets) {
