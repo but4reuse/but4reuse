@@ -201,6 +201,13 @@ public class FeatureIdentificationAction implements IObjectActionDelegate, IView
 		}
 	}
 
+	/**
+	 * Export the set of identified blocks into the folder featureElements
+	 * (has to be located in the same directory as e.g. featureModels), if present.
+	 * Create a separate gson-file for each block containing its atomic modelling elements (AMEs).
+	 *
+	 * @param blocks identified in the FeatureIdentification
+	 */
 	private static void gsonExport(List<Block> blocks) {
 		Gson gson = new GsonBuilder()
 				.registerTypeAdapter(EMFClassElement.class, new EMFClassElementSerializer())
