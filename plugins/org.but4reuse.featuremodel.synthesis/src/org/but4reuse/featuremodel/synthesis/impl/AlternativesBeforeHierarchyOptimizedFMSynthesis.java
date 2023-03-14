@@ -345,7 +345,7 @@ public class AlternativesBeforeHierarchyOptimizedFMSynthesis implements IFeature
 	 * @param f2 The name of IFeature f2 (s. FeatureIDEUtils.java)
 	 * @param requiredFeatures is a map, that replaces getFeatureRequiredFeatures (s. FeatureIDEUtils.java).
 	 *                         It could be analogously called getFeatureNameRequiredFeatureName, but that's too long...
-	 * @return
+	 * @return if (f2 requires directly or transitively f1) then true else false
 	 */
 	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, String f1,
 													   String f2, Map<String, List<String>> requiredFeatures) {
