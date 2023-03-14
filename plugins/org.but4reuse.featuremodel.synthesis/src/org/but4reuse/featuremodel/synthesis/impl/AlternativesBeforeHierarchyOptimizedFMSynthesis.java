@@ -335,6 +335,18 @@ public class AlternativesBeforeHierarchyOptimizedFMSynthesis implements IFeature
 		System.out.print("Time 1 = " + System.currentTimeMillis());
 	}
 
+	/**
+	 * For example 3 requires 2 (3 is child of 2). Then 2 requires 1.
+	 * isAncestor 1 of 3 is true.
+	 * (s. isAncestorFeature1ofFeature2 in FeatureIDEUtils.java)
+	 *
+	 * @param fm exactly the same as in FeatureIDEUtils.java
+	 * @param f1 The name of IFeature f1 (s. FeatureIDEUtils.java)
+	 * @param f2 The name of IFeature f2 (s. FeatureIDEUtils.java)
+	 * @param requiredFeatures is a map, that replaces getFeatureRequiredFeatures (s. FeatureIDEUtils.java).
+	 *                         It could be analogously called getFeatureNameRequiredFeatureName, but that's too long...
+	 * @return
+	 */
 	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, String f1,
 													   String f2, Map<String, List<String>> requiredFeatures) {
 		final List<String> directRequired = requiredFeatures.get(f2);
