@@ -37,13 +37,23 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 
 		// REQUIRES
 		monitor.subTask("FCA: Checking Requires relations");
-		for (Concept c : cl.getConcepts()) {
+		final Set<Concept> concepts = cl.getConcepts();
+		int i = 0;
+		final int si = concepts.size();
+		for (Concept c : concepts) {
+			monitor.subTask("FCA: Check Requires relations. Concept " + i + "/" + si);
 			// getIntent returns also the intent of the parents,
 			// getSimplifiedIntent which is the one that only belongs to this
 			// concept
 			if (!c.getSimplifiedIntent().isEmpty()) {
-				for (Attribute owner : c.getSimplifiedIntent()) {
-					for (Attribute a : c.getIntent()) {
+				final Set<Attribute> simplifiedIntent = c.getSimplifiedIntent();
+				int k = 0;
+				for (Attribute owner : simplifiedIntent) {
+					monitor.subTask("FCA: Check Requires relations. Concept " + i + "/" + si +". Attribute " + k + "/" + simplifiedIntent.size());
+					final Set<Attribute> intent = c.getIntent();
+					int j = 0;
+					for (Attribute a : intent) {
+						monitor.subTask("FCA: Check Requires relations. Concept " + i + "/" + si+". Attribute " + k + "/" + simplifiedIntent.size() +". Attribute " + j + "/" + intent.size());
 						if (!owner.equals(a)) {
 							// if (!owner.sameAs(a)) {
 							// add constraint
@@ -53,9 +63,12 @@ public class FCAConstraintsDiscovery implements IConstraintsDiscovery {
 							constraint.addExplanation("Concept lattice found");
 							constraintList.add(constraint);
 						}
+						++j;
 					}
+					++k;
 				}
 			}
+			++i;
 		}
 
 		// EXCLUDES
