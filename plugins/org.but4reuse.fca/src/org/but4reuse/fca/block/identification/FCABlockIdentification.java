@@ -135,26 +135,14 @@ public class FCABlockIdentification implements IBlockIdentification {
 			}
 		}
 
-		monitor.subTask("Block Creation. Sorting blocks by frequency.");
-		blocks = reorderBlocksByFrequency(R, blocks);
+		monitor.subTask("Block Creation. Sorting blocks by descending frequency.");
+		// Java8's built-in sort produces an ascending order, when using standard compare/compareTo.
+		// We define the compare-method such that b1 is smaller than b0, if b1...size is bigger than b0...size.
+		// (Notice: If b1...size - b0...size > 0, this indicates the need of swapping b1 and b0.)
+		// This leads to the desired descending order of the b...size.
+		blocks.sort((b0, b1) -> b1.getOwnedBlockElements().get(0).getElementWrappers().size() - b0.getOwnedBlockElements().get(0).getElementWrappers().size());
 
 		// finished
 		return blocks;
 	}
-
-	// insertion sort
-	private List<Block> reorderBlocksByFrequency(LinkedHashMap<IElement, List<Integer>> R, List<Block> blocks) {
-		Block temp;
-		for (int i = 1; i < blocks.size(); i++) {
-			for (int j = i; j > 0; j--) {
-				if(blocks.get(j).getOwnedBlockElements().get(0).getElementWrappers().size() > blocks.get(j-1).getOwnedBlockElements().get(0).getElementWrappers().size()){
-					temp = blocks.get(j);
-					blocks.set(j, blocks.get(j - 1));
-					blocks.set(j - 1, temp);
-				}
-			}
-		}
-		return blocks;
-	}
-
 }
