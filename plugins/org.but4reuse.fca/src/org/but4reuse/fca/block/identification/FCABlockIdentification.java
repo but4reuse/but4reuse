@@ -16,6 +16,7 @@ import org.but4reuse.adapters.IElement;
 import org.but4reuse.block.identification.IBlockIdentification;
 import org.but4reuse.fca.utils.FCAUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.EList;
 
 import fr.labri.galatea.Attribute;
 import fr.labri.galatea.BinaryAttribute;
@@ -57,7 +58,10 @@ public class FCABlockIdentification implements IBlockIdentification {
 
 			monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + adaptedArtefacts.size());
 			AdaptedArtefact currentList = adaptedArtefacts.get(i);
-			for (ElementWrapper ew : currentList.getOwnedElementWrappers()) {
+			EList<ElementWrapper> ownedElementWrappers = currentList.getOwnedElementWrappers();
+			for(int j = 0; j < ownedElementWrappers.size(); ++j) {
+				ElementWrapper ew = ownedElementWrappers.get(j);
+				monitor.subTask("Block Creation. Preparation step " + (i + 1) + "/" + adaptedArtefacts.size() + " " + (j + 1) + "/" + ownedElementWrappers.size());
 
 				// user cancel
 				if (monitor.isCanceled()) {
@@ -100,13 +104,19 @@ public class FCABlockIdentification implements IBlockIdentification {
 				fc.addPair(fc.getEntity("Artefact " + ia), attr);
 			}
 			R.remove(e);
+			monitor.subTask("Block Creation. Creating Blocks. Creating Formal Context." + R.size());
 		}
 
+		monitor.subTask("Block Creation. Creating concept lattice.");
 		// Generate concept lattice
 		ConceptOrder cl = FCAUtils.createConceptLattice(fc);
 		
 		// Add a block for each non empty concept
+		int i = 0;
+		final Set<Concept> concepts = cl.getConcepts();
+		final int is = concepts.size();
 		for (Concept c : cl.getConcepts()) {
+			monitor.subTask("Block Creation. Creating Blocks." + " " + ++i + "/" + is);
 			// getIntent returns also the intent of the parents, we are only
 			// interested in the getSimplifiedIntent which is the one that only
 			// belongs to this concept
@@ -125,25 +135,14 @@ public class FCABlockIdentification implements IBlockIdentification {
 			}
 		}
 
-		blocks = reorderBlocksByFrequency(R, blocks);
+		monitor.subTask("Block Creation. Sorting blocks by descending frequency.");
+		// Java8's built-in sort produces an ascending order, when using standard compare/compareTo.
+		// We define the compare-method such that b1 is smaller than b0, if b1...size is bigger than b0...size.
+		// (Notice: If b1...size - b0...size > 0, this indicates the need of swapping b1 and b0.)
+		// This leads to the desired descending order of the b...size.
+		blocks.sort((b0, b1) -> b1.getOwnedBlockElements().get(0).getElementWrappers().size() - b0.getOwnedBlockElements().get(0).getElementWrappers().size());
 
 		// finished
 		return blocks;
 	}
-
-	// insertion sort
-	private List<Block> reorderBlocksByFrequency(LinkedHashMap<IElement, List<Integer>> R, List<Block> blocks) {
-		Block temp;
-		for (int i = 1; i < blocks.size(); i++) {
-			for (int j = i; j > 0; j--) {
-				if(blocks.get(j).getOwnedBlockElements().get(0).getElementWrappers().size() > blocks.get(j-1).getOwnedBlockElements().get(0).getElementWrappers().size()){
-					temp = blocks.get(j);
-					blocks.set(j, blocks.get(j - 1));
-					blocks.set(j - 1, temp);
-				}
-			}
-		}
-		return blocks;
-	}
-
 }
