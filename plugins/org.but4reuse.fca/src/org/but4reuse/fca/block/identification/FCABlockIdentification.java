@@ -69,19 +69,9 @@ public class FCABlockIdentification implements IBlockIdentification {
 				}
 
 				IElement e = (IElement) ew.getElement();
-				List<ElementWrapper> ews = eewmap.get(e);
-				if (ews == null) {
-					ews = new ArrayList<ElementWrapper>();
-				}
-				ews.add(ew);
-				eewmap.put(e, ews);
+				eewmap.computeIfAbsent(e, k -> new ArrayList<ElementWrapper>()).add(ew);
 
-				List<Integer> artefactIndexes = R.get(e);
-				if (artefactIndexes == null) {
-					artefactIndexes = new ArrayList<Integer>();
-				}
-				artefactIndexes.add(i);
-				R.put(e, artefactIndexes);
+				R.computeIfAbsent(e, k -> new ArrayList<Integer>()).add(i);
 			}
 		}
 
