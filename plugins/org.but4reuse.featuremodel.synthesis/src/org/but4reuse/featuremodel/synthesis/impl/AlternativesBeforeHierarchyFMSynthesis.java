@@ -2,9 +2,7 @@ package org.but4reuse.featuremodel.synthesis.impl;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.but4reuse.adaptedmodel.AdaptedModel;
 import org.but4reuse.adaptedmodel.Block;
@@ -35,6 +33,8 @@ import de.ovgu.featureide.fm.core.base.impl.FeatureModel;
  * requires constraint description. Finally, the features without parent are
  * added to the root. The common features are set as mandatory and redundant
  * constraints are removed.
+ *
+ * This works with hashing since Lukas Selvaggio introduced it.
  * 
  * @author jabier.martinez
  */
@@ -62,7 +62,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 
 		FeatureUtils.setAnd(root, true);
 
-		List<IFeature> parentAssigned = new ArrayList<IFeature>();
+		Set<String> parentAssigned = new HashSet<>();
 
 		FeatureUtils.setRoot(fm, root);
 		FeatureUtils.addFeature(fm, root);
@@ -153,37 +153,86 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			fmFeatures.add(fakeAltFeature);
 		}
 
+		Map<String, List<String>> requiredFeaturesMap = new HashMap<>();
+		Map<String, AltGroup> altGroupsMap = new HashMap<>();
+		Map<String, Map<String, Boolean>> isAncestorMap = new HashMap<>();
+
+//		int i = 0;
+		for (final IFeature feature : fmFeatures) {
+//			System.out.println("Creating Feature Model. Prepare Loop 1 | " + i + "/" + fmFeatures.size());
+//			++i;
+			final String name = feature.getName();
+			if (requiredFeaturesMap.containsKey(name)) {
+//				System.out.println("Something went wrong 1");
+			} else {
+				final List<IFeature> requiredFeatures = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, feature);
+				final List<String> names = new ArrayList<>();
+				for (final IFeature requiredFeature : requiredFeatures) {
+					names.add(requiredFeature.getName());
+				}
+				requiredFeaturesMap.put(name, names);
+			}
+			if (altGroupsMap.containsKey(name)) {
+//				System.out.println("Something went wrong 2");
+			} else {
+				altGroupsMap.put(name, altGroupList.getAltGroupOfFeature(feature));
+			}
+		}
+
+//		i = 0;
+		for (final IFeature feature : fmFeatures) {
+//			System.out.println("Creating Feature Model. Prepare Loop 2 | " + i + "/" + fmFeatures.size());
+//			++i;
+			final String name = feature.getName();
+			if (isAncestorMap.containsKey(name)) {
+//				System.out.println("Something went wrong 3");
+			} else {
+				final Map<String, Boolean> isAncestor = new HashMap<>();
+				for (final IFeature feature2 : fmFeatures) {
+					final String name2 = feature2.getName();
+					if (isAncestor.containsKey(name2)) {
+//						System.out.println("Something went wrong 4");
+					} else {
+						isAncestor.put(name2, isAncestorFeature1ofFeature2(fm, name, name2, requiredFeaturesMap));
+					}
+				}
+				isAncestorMap.put(name, isAncestor);
+			}
+		}
+
 		// Create hierarchy with the Requires
 		for (IFeature f : fmFeatures) {
 
 			// check if the feature belongs to an alternative group
-			AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
+			AltGroup altGroup = altGroupsMap.get(f.getName());
 
-			List<IFeature> parentCandidates;
+			List<String> parentCandidates;
 			if (altGroup == null) {
 				// normal feature
-				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
+				parentCandidates = requiredFeaturesMap.get(f.getName());
 			} else {
 				// feature inside an alt group
 				// the parent candidates will be those that are shared parent
 				// candidates for all the alt group
-				parentCandidates = FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, f);
+				parentCandidates = requiredFeaturesMap.get(f.getName());
 				for (IFeature altf : altGroup.features) {
-					parentCandidates.retainAll(FeatureIDEUtils.getFeatureRequiredFeatures(fm, constraints, altf));
+					parentCandidates.retainAll(requiredFeaturesMap.get(altf.getName()));
 				}
 			}
 			List<IFeature> definitiveList = new ArrayList<IFeature>();
-			for (IFeature pc : parentCandidates) {
-				definitiveList.add(pc);
+			for (String s : parentCandidates) {
+				definitiveList.add(fm.getFeature(s));
 			}
 
 			// Reduce the parent candidates, remove ancestors
-			for (IFeature pc1 : parentCandidates) {
-				for (IFeature pc2 : parentCandidates) {
+			for (String s1 : parentCandidates) {
+				final IFeature pc1 = fm.getFeature(s1);
+				for (String s2 : parentCandidates) {
+					final IFeature pc2 = fm.getFeature(s2);
 					if (pc1 != pc2) {
-						if (FeatureIDEUtils.isAncestorFeature1ofFeature2(fm, constraints, pc1, pc2)) {
+						if (isAncestorMap.get(s1).get(s2)) {
 							definitiveList.remove(pc1);
-						} else if (FeatureIDEUtils.isAncestorFeature1ofFeature2(fm, constraints, pc2, pc1)) {
+						} else if (isAncestorMap.get(s2).get(s1)) {
 							definitiveList.remove(pc2);
 						}
 					}
@@ -197,7 +246,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 				// Preference to parents in alternative groups
 				// TODO for the moment get the first alternative group
 				for (IFeature dp : definitiveList) {
-					if (altGroupList.getAltGroupOfFeature(dp) != null) {
+					if (altGroupsMap.get(dp.getName()) != null) {
 						parent = dp;
 						break;
 					}
@@ -221,12 +270,12 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 				if (altGroup == null) {
 					FeatureUtils.addChild(parent, f);
 					FeatureUtils.setParent(f, parent);
-					parentAssigned.add(f);
+					parentAssigned.add(f.getName());
 				} else {
 					// Only once for the whole alt group
-					if (!parentAssigned.contains(altGroup.altRoot)) {
+					if (!parentAssigned.contains(altGroup.altRoot.getName())) {
 						FeatureUtils.addChild(parent, altGroup.altRoot);
-						parentAssigned.add(altGroup.altRoot);
+						parentAssigned.add(altGroup.altRoot.getName());
 						FeatureUtils.setParent(altGroup.altRoot, parent);
 					}
 				}
@@ -237,15 +286,15 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		LinkedList<IFeature> toTheRoot = new LinkedList<IFeature>();
 		for (IFeature f : fmFeatures) {
 			if (!f.equals(root)) {
-				AltGroup altGroup = altGroupList.getAltGroupOfFeature(f);
+				AltGroup altGroup = altGroupsMap.get(f.getName());
 				if (altGroup != null) {
 					f = altGroup.altRoot;
 				}
-				if (!parentAssigned.contains(f)) {
+				if (!parentAssigned.contains(f.getName())) {
 					toTheRoot.add(f);
 					FeatureUtils.setParent(f, root);
 					FeatureUtils.addChild(root, f);
-					parentAssigned.add(f);
+					parentAssigned.add(f.getName());
 				}
 			}
 		}
@@ -263,6 +312,32 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * For example 3 requires 2 (3 is child of 2). Then 2 requires 1.
+	 * isAncestor 1 of 3 is true.
+	 * (s. isAncestorFeature1ofFeature2 in FeatureIDEUtils.java)
+	 *
+	 * @param fm exactly the same as in FeatureIDEUtils.java
+	 * @param f1 The name of IFeature f1 (s. FeatureIDEUtils.java)
+	 * @param f2 The name of IFeature f2 (s. FeatureIDEUtils.java)
+	 * @param requiredFeatures is a map, that replaces getFeatureRequiredFeatures (s. FeatureIDEUtils.java).
+	 *                         It could be analogously called getFeatureNameRequiredFeatureName, but that's too long...
+	 * @return if (f2 requires directly or transitively f1) then true else false
+	 */
+	public static boolean isAncestorFeature1ofFeature2(FeatureModel fm, String f1, String f2,
+													   Map<String, List<String>> requiredFeatures) {
+		final List<String> directRequired = requiredFeatures.get(f2);
+		if (directRequired.contains(f1)) {
+			return true;
+		}
+		for (final String direct : directRequired) {
+			if (isAncestorFeature1ofFeature2(fm, f1, direct, requiredFeatures)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
