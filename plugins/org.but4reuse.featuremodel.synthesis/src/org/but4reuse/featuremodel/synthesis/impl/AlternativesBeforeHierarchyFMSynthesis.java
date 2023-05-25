@@ -186,8 +186,7 @@ public class AlternativesBeforeHierarchyFMSynthesis implements IFeatureModelSynt
 			final String name = feature.getName();
 			if (isAncestorMap.containsKey(name)) {
 //				System.out.println("Something went wrong 3");
-			}
-			else {
+			} else {
 				final Map<String, Boolean> isAncestor = new HashMap<>();
 				for (final IFeature feature2 : fmFeatures) {
 					final String name2 = feature2.getName();
