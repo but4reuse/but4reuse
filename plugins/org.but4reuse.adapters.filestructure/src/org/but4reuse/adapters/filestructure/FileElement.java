@@ -65,7 +65,7 @@ public class FileElement extends AbstractElement implements IMarkerElement {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getRelativeURI() == null) ? 0 : getRelativeURI().hashCode());
+		result = prime * result + ((getRelativeURI().toString().toLowerCase() == null) ? 0 : getRelativeURI().toString().toLowerCase().hashCode());
 		return result;
 	}
 

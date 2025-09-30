@@ -16,6 +16,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(FileStructureAdapterPreferencePage.CONTENT_CHECK, false);
 		store.setDefault(FileStructureAdapterPreferencePage.IGNORE_FOLDERS, false);
+		store.setDefault(FileStructureAdapterPreferencePage.INCLUDE_ONLY_EXTENSIONS, "");
 	}
 
 }

@@ -3,6 +3,7 @@ package org.but4reuse.adapters.filestructure.preferences;
 import org.but4reuse.adapters.filestructure.activator.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -15,6 +16,7 @@ public class FileStructureAdapterPreferencePage extends FieldEditorPreferencePag
 
 	public static final String CONTENT_CHECK = "CONTENT_CHECK";
 	public static final String IGNORE_FOLDERS = "IGNORE_FOLDERS";
+	public static final String INCLUDE_ONLY_EXTENSIONS = "INCLUDE_ONLY_EXTENSIONS";
 
 	public FileStructureAdapterPreferencePage() {
 		super(GRID);
@@ -30,6 +32,10 @@ public class FileStructureAdapterPreferencePage extends FieldEditorPreferencePag
 		addField(bfe);
 		BooleanFieldEditor bfe2 = new BooleanFieldEditor(IGNORE_FOLDERS, "Ignore folders", getFieldEditorParent());
 		addField(bfe2);
+		StringFieldEditor sfe = new StringFieldEditor(INCLUDE_ONLY_EXTENSIONS,
+				"Include only extensions (keep empty for all, use comma as separator): ",
+				getFieldEditorParent());
+		addField(sfe);
 	}
 
 	@Override

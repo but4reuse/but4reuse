@@ -24,6 +24,7 @@ public class FileStructureAdapter implements IAdapter {
 
 	private URI rootURI;
 	public boolean ignoreFolders;
+	public String[] includeOnlyExtensions = new String[0];
 	
 	public static final String DEPENDENCY_PARENTFOLDER = "parentFolder";
 
@@ -39,12 +40,21 @@ public class FileStructureAdapter implements IAdapter {
 
 	@Override
 	public List<IElement> adapt(URI uri, IProgressMonitor monitor) {
+		includeOnlyExtensions = new String[0];
+		String includeOnlyExtensionsString = Activator.getDefault().getPreferenceStore().getString(FileStructureAdapterPreferencePage.INCLUDE_ONLY_EXTENSIONS);
+		if (includeOnlyExtensionsString.trim().length() != 0) {
+			includeOnlyExtensions = includeOnlyExtensionsString.split(",");
+		}
 		ignoreFolders = Activator.getDefault().getPreferenceStore().getBoolean(FileStructureAdapterPreferencePage.IGNORE_FOLDERS);
-		return adapt(uri, monitor, ignoreFolders);
+		return adapt(uri, monitor, ignoreFolders, includeOnlyExtensions);
 	}
 	
-	public List<IElement> adapt(URI uri, IProgressMonitor monitor, boolean ignoreFolders){
+	public List<IElement> adapt(URI uri, IProgressMonitor monitor, boolean ignoreFolders, String[] includeOnlyExtensions){
 		this.ignoreFolders = ignoreFolders;
+		this.includeOnlyExtensions = includeOnlyExtensions;
+		if (this.includeOnlyExtensions == null) {
+			this.includeOnlyExtensions = new String[0];
+		}
 		List<IElement> elements = new ArrayList<IElement>();
 		File file = FileUtils.getFile(uri);
 		rootURI = file.toURI();
@@ -67,6 +77,21 @@ public class FileStructureAdapter implements IAdapter {
 		if (file.isDirectory()) {
 			newElement = new FolderElement();
 		} else {
+			// is file
+			// check if it is to be included
+			if (includeOnlyExtensions.length != 0) {
+				String extension = FileUtils.getExtension(file);
+				boolean found = false;
+				for (String include : includeOnlyExtensions) {
+					if (extension.equalsIgnoreCase(include)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					return;
+				}
+			}
 			newElement = new FileElement();
 		}
 
