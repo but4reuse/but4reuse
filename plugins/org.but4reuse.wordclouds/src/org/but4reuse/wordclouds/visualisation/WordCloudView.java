@@ -45,6 +45,9 @@ import org.mcavallo.opencloud.Tag;
 
 public class WordCloudView extends ViewPart {
 
+	private static final int IndexOfTFIDF_tab = 0;
+	private static final int IndexOfTF_tab = 1;
+
 	/**
 	 * The current WorldCloudVis.
 	 */
@@ -205,7 +208,7 @@ public class WordCloudView extends ViewPart {
 
 		Cloud c = null;
 		lastIndex = index;
-		if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
+		if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == IndexOfTFIDF_tab)
 			c = WordCloudVisualisation.getCloudsTFIDF().get(index);
 		else
 			c = WordCloudVisualisation.getClouds().get(index);
@@ -358,7 +361,7 @@ public class WordCloudView extends ViewPart {
 
 				Cloud cloud = null;
 
-				if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
+				if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == IndexOfTFIDF_tab)
 					cloud = WordCloudVisualisation.getCloudsTFIDF().get(lastIndex);
 				else
 					cloud = WordCloudVisualisation.getClouds().get(lastIndex);
@@ -370,7 +373,7 @@ public class WordCloudView extends ViewPart {
 				String selectedDir = dirDialog.open();
 				if (selectedDir != null) {
 					String path = selectedDir + File.separator + singleton.getCombo().getText();
-					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1) {
+					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == IndexOfTFIDF_tab) {
 						path += "_tfidf";
 					}
 					path += ".png";
@@ -398,7 +401,7 @@ public class WordCloudView extends ViewPart {
 				case SWT.Selection:
 					// Check if frequency or tfidf is selected
 					java.util.List<Cloud> clouds = null;
-					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 0) {
+					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == IndexOfTF_tab) {
 						clouds = WordCloudVisualisation.getClouds();
 					} else {
 						clouds = WordCloudVisualisation.getCloudsTFIDF();
@@ -453,7 +456,7 @@ public class WordCloudView extends ViewPart {
 						names.add(bl.getName());
 					}
 					Cloud c = WordCloudVisualisation.getClouds().get(ind);
-					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == 1)
+					if (WordCloudView.getSingleton().getTabFolder().getSelectionIndex() == IndexOfTFIDF_tab)
 						c = WordCloudVisualisation.getCloudsTFIDF().get(ind);
 					String name = WordCloudUtil.rename(names, c);
 					b.setName(name);
@@ -546,7 +549,7 @@ public class WordCloudView extends ViewPart {
 				int i = WordCloudView.getSingleton().getCombo().getSelectionIndex();
 				WordCloudView.getSingleton().getList().removeAll();
 				Cloud c = null;
-				if (ind == 0) {
+				if (ind == IndexOfTF_tab) {
 					c = WordCloudVisualisation.getClouds().get(i);
 					WordCloudUtil.drawWordCloud(cmp, c);
 					addWordCloudListeners(cmp, i);

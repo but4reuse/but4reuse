@@ -104,6 +104,10 @@
             name="Ignore upper case">
       </filter>
       <filter
+            class="org.but4reuse.wordclouds.filters.IgnoreAccentMarksProcessing"
+            name="Ignore accent marks">
+      </filter>
+      <filter
             class="org.but4reuse.wordclouds.filters.MultiWordsFilter"
             name="Multi words (user defined)">
       </filter>

@@ -17,7 +17,6 @@ public class StopWordsFilter implements IWordsProcessing {
 	List<String> stopWords;
 	
 	public StopWordsFilter() {
-		stopWords = WordCloudUtil.getUserDefinedStopWords();
 	}
 	
 	public StopWordsFilter(List<String> stopWords) {
@@ -26,6 +25,7 @@ public class StopWordsFilter implements IWordsProcessing {
 
 	@Override
 	public List<String> processWords(List<String> words, IProgressMonitor monitor) {
+		stopWords = WordCloudUtil.getUserDefinedStopWords();
 		return removeStopWords(words, stopWords);
 	}
 
