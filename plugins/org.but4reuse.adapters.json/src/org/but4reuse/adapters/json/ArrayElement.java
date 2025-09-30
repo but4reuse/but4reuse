@@ -27,7 +27,8 @@ public class ArrayElement extends AbstractElement {
 			if (this.id == arrayElement.id)
 				return 1;
 
-			if (this.parent.similarity(arrayElement.parent) == 1) {
+			// same parent
+			if ((parent == null && arrayElement.parent == null) || (this.parent.similarity(arrayElement.parent) == 1)) {
 				List<ArrayElement> similarArrays = new ArrayList<ArrayElement>();
 				similarArrays.addAll(this.similarArrays);
 				similarArrays.addAll(arrayElement.similarArrays);
@@ -45,6 +46,9 @@ public class ArrayElement extends AbstractElement {
 
 	@Override
 	public String getText() {
+		if (parent == null) {
+			return "[]";
+		}
 		return parent.getText() + "_[]";
 	}
 }

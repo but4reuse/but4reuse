@@ -27,6 +27,9 @@ public class ValueElement extends AbstractElement {
 
 	@Override
 	public String getText() {
+		if (parent == null) {
+			return jsonValue.toString();
+		}
 		return parent.getText() + "_" + jsonValue.toString();
 	}
 }

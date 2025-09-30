@@ -5,11 +5,44 @@ import java.util.Arrays;
 import org.but4reuse.adapters.json.activator.Activator;
 import org.but4reuse.adapters.json.preferences.JsonAdapterPreferencePage;
 
+import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
 public class PathsTools {
+
+	public static Paths getPathsToInclude() {
+		String delimiter = Activator.getDefault().getPreferenceStore().getString(JsonAdapterPreferencePage.DELIMITER);
+		String absolutePaths = Activator.getDefault().getPreferenceStore()
+				.getString(JsonAdapterPreferencePage.ABSOLUTE_PATHS_TO_INCLUDE);
+
+		Paths paths = new Paths();
+
+		if (absolutePaths.length() > 0) {
+			paths.addAbsolutePaths(Arrays.asList(absolutePaths.split(delimiter)));
+		}
+		
+		return paths;
+	}
+
+	public static Paths getPathsToOmit() {
+		String delimiter = Activator.getDefault().getPreferenceStore().getString(JsonAdapterPreferencePage.DELIMITER);
+		String absolutePaths = Activator.getDefault().getPreferenceStore()
+				.getString(JsonAdapterPreferencePage.ABSOLUTE_PATHS_TO_OMIT);
+		String relativePaths = Activator.getDefault().getPreferenceStore()
+				.getString(JsonAdapterPreferencePage.RELATIVE_PATHS_TO_OMIT);
+
+		Paths paths = new Paths();
+
+		if (absolutePaths.length() > 0)
+			paths.addAbsolutePaths(Arrays.asList(absolutePaths.split(delimiter)));
+		if (relativePaths.length() > 0)
+			paths.addRelativePaths(Arrays.asList(relativePaths.split(delimiter)));
+
+		return paths;
+	}
+
 	public static Paths getPathsToIgnore() {
 		String delimiter = Activator.getDefault().getPreferenceStore().getString(JsonAdapterPreferencePage.DELIMITER);
 		String absolutePaths = Activator.getDefault().getPreferenceStore()
@@ -46,14 +79,14 @@ public class PathsTools {
 
 	public static JsonValue removePaths(JsonValue jsonValue, Paths paths, Paths pathsToIgnore) {
 		if (paths.matches(pathsToIgnore))
-			return JsonValue.NULL;
+			return Json.NULL;
 
 		if (jsonValue.isObject()) {
 			paths = new Paths(paths);
 			paths.extend("{}");
 
 			if (paths.matches(pathsToIgnore))
-				return JsonValue.NULL;
+				return Json.NULL;
 
 			JsonObject jsonObject = new JsonObject();
 			for (String name : jsonValue.asObject().names()) {
@@ -68,7 +101,7 @@ public class PathsTools {
 			currentPaths.extend("[]");
 
 			if (currentPaths.matches(pathsToIgnore))
-				return JsonValue.NULL;
+				return Json.NULL;
 
 			JsonArray jsonArray = new JsonArray();
 			for (int index = 0; index < jsonValue.asArray().size(); index++) {

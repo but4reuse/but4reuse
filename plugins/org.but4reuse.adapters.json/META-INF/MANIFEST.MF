@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Adatper Json
+Bundle-Name: Adapter Json
 Bundle-SymbolicName: org.but4reuse.adapters.json;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.but4reuse.adapters.json.activator.Activator
@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.but4reuse.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/minimal-json-0.9.3.jar,
+Bundle-ClassPath: lib/minimal-json-0.9.5.jar,
  .
 Export-Package: com.eclipsesource.json,
  org.but4reuse.adapters.json,

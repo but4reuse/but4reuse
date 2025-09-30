@@ -14,6 +14,7 @@ import org.but4reuse.adapters.json.ObjectElement;
 import org.but4reuse.adapters.json.UnsplittableElement;
 import org.but4reuse.adapters.json.ValueElement;
 
+import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
@@ -95,7 +96,7 @@ public class JsonConstruct {
 
 			if (value == null) {
 				if (currentValue == null)
-					jsonObject.set(keyElement.name, JsonValue.NULL);
+					jsonObject.set(keyElement.name, Json.NULL);
 			} else {
 				jsonObject.set(keyElement.name, value);
 			}
